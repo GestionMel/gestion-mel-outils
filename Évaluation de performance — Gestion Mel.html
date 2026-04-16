@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)file:///C:/Users/Portable02/Downloads/evaluation_performance_light.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Évaluation de performance — Gestion Mel</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+
+  :root {
+    --noir: #0a0e1a;
+    --bleu: #1a6fa8;
+    --bleu-clair: #e8f3fb;
+    --bleu-accent: #2d8fcf;
+    --gris: #f5f6f8;
+    --gris-bord: #dde2ea;
+    --texte: #1c2333;
+    --texte-sec: #5a6278;
+    --vert: #1a8a5e;
+    --vert-clair: #e6f7f1;
+    --rouge: #c0392b;
+    --rouge-clair: #fdf0ee;
+    --or: #c9a227;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: #f0f2f7;
+    color: var(--texte);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .page-wrap { max-width: 860px; margin: 0 auto; padding: 32px 16px 60px; }
+
+  /* En-tête */
+  .entete {
+    background: var(--noir);
+    border-radius: 16px;
+    padding: 32px 40px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .entete-logo { font-family: 'Playfair Display', serif; color: white; font-size: 26px; font-weight: 600; }
+  .entete-logo span { color: var(--bleu-accent); }
+  .entete-titre { text-align: right; }
+  .entete-titre h1 { color: white; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; }
+  .entete-titre p { color: #8899bb; font-size: 13px; margin-top: 4px; }
+
+  /* Onglets */
+  .onglets { display: flex; gap: 8px; margin-bottom: 24px; }
+  .onglet {
+    flex: 1; padding: 12px; border-radius: 10px; border: 1.5px solid var(--gris-bord);
+    background: white; cursor: pointer; font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px; font-weight: 500; color: var(--texte-sec); transition: all .2s;
+    text-align: center;
+  }
+  .onglet:hover { border-color: var(--bleu); color: var(--bleu); }
+  .onglet.actif { background: var(--bleu); border-color: var(--bleu); color: white; }
+  .onglet .tag { display: block; font-size: 11px; font-weight: 300; margin-top: 2px; opacity: .8; }
+
+  /* Panneau */
+  .panneau { display: none; }
+  .panneau.actif { display: block; }
+
+  /* Section */
+  .section {
+    background: white; border-radius: 12px; padding: 28px 32px;
+    margin-bottom: 16px; border: 1px solid var(--gris-bord);
+  }
+  .section-titre {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    padding-bottom: 14px; border-bottom: 1.5px solid var(--gris);
+  }
+  .section-num {
+    width: 30px; height: 30px; border-radius: 50%; background: var(--bleu);
+    color: white; font-size: 13px; font-weight: 600; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .section-titre h2 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 500; }
+  .section-desc { font-size: 13px; color: var(--texte-sec); margin-bottom: 20px; font-style: italic; }
+
+  /* Champs */
+  .champ { margin-bottom: 16px; }
+  .champ label { display: block; font-size: 12px; font-weight: 600; color: var(--texte-sec); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }
+  .champ input[type=text], .champ input[type=date], .champ textarea, .champ input[type=number] {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--gris-bord);
+    border-radius: 8px; font-family: 'Source Sans 3', sans-serif; font-size: 14px;
+    color: var(--texte); background: white; transition: border-color .2s;
+  }
+  .champ input:focus, .champ textarea:focus { outline: none; border-color: var(--bleu); }
+  .champ textarea { resize: vertical; min-height: 80px; }
+  .grille2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grille3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  /* Échelle */
+  .echelle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+  .echelle-item {
+    background: var(--gris); border-radius: 8px; padding: 10px 14px;
+    border-left: 3px solid var(--bleu);
+  }
+  .echelle-item .niveau { font-weight: 600; font-size: 13px; color: var(--bleu); }
+  .echelle-item .desc { font-size: 12px; color: var(--texte-sec); margin-top: 2px; }
+
+  /* Critères */
+  .critere {
+    padding: 14px 16px; border-radius: 10px; background: var(--gris);
+    margin-bottom: 10px; border: 1px solid transparent; transition: border-color .2s;
+  }
+  .critere:hover { border-color: var(--bleu-accent); }
+  .critere-nom { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .critere-def { font-size: 12px; color: var(--texte-sec); margin-bottom: 10px; line-height: 1.5; }
+  .critere-notes { display: flex; gap: 8px; flex-wrap: wrap; }
+  .note-btn {
+    width: 44px; height: 36px; border-radius: 8px; border: 1.5px solid var(--gris-bord);
+    background: white; cursor: pointer; font-size: 13px; font-weight: 600;
+    color: var(--texte-sec); transition: all .15s;
+  }
+  .note-btn:hover { border-color: var(--bleu); color: var(--bleu); }
+  .note-btn.sel-1 { background: var(--rouge-clair); border-color: var(--rouge); color: var(--rouge); }
+  .note-btn.sel-2 { background: #fff8e6; border-color: var(--or); color: var(--or); }
+  .note-btn.sel-3 { background: var(--vert-clair); border-color: var(--vert); color: var(--vert); }
+  .note-btn.sel-4 { background: var(--bleu-clair); border-color: var(--bleu); color: var(--bleu); }
+  .note-btn.sel-na { background: #f0f0f0; border-color: #aaa; color: #666; }
+
+  /* Moyenne */
+  .moyenne-box {
+    background: linear-gradient(135deg, var(--bleu-clair), #f0f8ff);
+    border: 1.5px solid var(--bleu-accent); border-radius: 12px;
+    padding: 20px 24px; margin-top: 16px; display: flex;
+    align-items: center; justify-content: space-between;
+  }
+  .moyenne-label { font-weight: 600; font-size: 14px; color: var(--bleu); }
+  .moyenne-val { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 600; color: var(--bleu); }
+  .moyenne-sub { font-size: 12px; color: var(--texte-sec); }
+
+  /* Évaluation employeur — sections commentaires */
+  .eval-section { margin-bottom: 20px; }
+  .eval-section-titre { font-weight: 600; font-size: 14px; color: var(--texte); margin-bottom: 8px; border-left: 3px solid var(--bleu); padding-left: 10px; }
+
+  /* Radio oui/non */
+  .radio-group { display: flex; gap: 16px; margin-top: 6px; }
+  .radio-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; }
+  .radio-opt input { accent-color: var(--bleu); width: 16px; height: 16px; }
+
+  /* Signature */
+  .sig-bloc { border-top: 1.5px solid var(--texte); margin-top: 8px; padding-top: 6px; font-size: 12px; color: var(--texte-sec); }
+
+  /* Bas de page */
+  .bas-page {
+    background: var(--noir); border-radius: 12px; padding: 16px 24px;
+    display: flex; justify-content: space-between; align-items: center; margin-top: 24px;
+  }
+  .bas-copy { font-size: 12px; color: #5a6a88; }
+  .bas-logo { font-family: 'Playfair Display', serif; color: white; font-size: 16px; }
+  .bas-logo span { color: var(--bleu-accent); }
+
+  .btn-imprimer {
+    background: var(--bleu); color: white; border: none; border-radius: 8px;
+    padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif; transition: background .2s;
+  }
+  .btn-imprimer:hover { background: var(--bleu-accent); }
+
+  @media print {
+    body { background: white; }
+    .page-wrap { padding: 0; max-width: 100%; }
+    .onglets { display: none; }
+    .panneau { display: block !important; }
+    .btn-imprimer { display: none; }
+    .section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <div class="entete">
+    <span style="font-family:Georgia,serif;font-size:26px;font-weight:600;color:white">Gestion<span style="color:#2d8fcf">Mel</span></span>
+    <div class="entete-titre">
+      <h1>Évaluation de performance</h1>
+      <p>Revue salariale annuelle</p>
+    </div>
+  </div>
+
+  <div class="onglets">
+    <div class="onglet actif" onclick="switchTab(&#39;employe&#39;,this)">
+      Partie employé
+      <span class="tag">À compléter par l'employé(e)</span>
+    </div>
+    <div class="onglet" onclick="switchTab(&#39;employeur&#39;,this)">
+      Partie employeur
+      <span class="tag">À compléter par le gestionnaire</span>
+    </div>
+  </div>
+
+  <!-- ===== PARTIE EMPLOYÉ ===== -->
+  <div id="panneau-employe" class="panneau actif">
+
+    <!-- P1 Infos -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">1</div>
+        <h2>Informations de l'employé</h2>
+      </div>
+      <div class="grille2">
+        <div class="champ"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
+        <div class="champ"><label>Poste occupé</label><input type="text" placeholder="ex : Secrétaire dentaire"></div>
+        <div class="champ"><label>Date de l'évaluation</label><input type="date"></div>
+      </div>
+    </div>
+
+    <!-- P2 Échelle -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">2</div>
+        <h2>Échelle d'évaluation</h2>
+      </div>
+      <div class="echelle">
+        <div class="echelle-item"><div class="niveau">4 — Supérieur</div><div class="desc">Les performances dépassent largement les attentes.</div></div>
+        <div class="echelle-item"><div class="niveau">3 — Très bien</div><div class="desc">Les performances dépassent les attentes.</div></div>
+        <div class="echelle-item"><div class="niveau">2 — Satisfaisant</div><div class="desc">Les performances répondent aux attentes.</div></div>
+        <div class="echelle-item"><div class="niveau">1 — Insatisfaisant</div><div class="desc">Les performances ne répondent pas aux attentes.</div></div>
+      </div>
+    </div>
+
+    <!-- P3 Questionnaire -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">3</div>
+        <h2>Questionnaire d'autoévaluation</h2>
+      </div>
+      <p class="section-desc">Sélectionnez la note qui correspond le mieux à votre performance pour chaque critère.</p>
+      <div id="criteres-employe"><div class="critere">
+      <div class="critere-nom">Motivation</div>
+      <div class="critere-def">L'employé est désireux d'entreprendre de nouvelles tâches, fait preuve d'une attitude positive et travaille pour atteindre des résultats dépassant les attentes.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-0-1" onclick="setNote(0,1)">1</button><button class="note-btn" id="btn-0-2" onclick="setNote(0,2)">2</button><button class="note-btn" id="btn-0-3" onclick="setNote(0,3)">3</button><button class="note-btn" id="btn-0-4" onclick="setNote(0,4)">4</button>
+        <button class="note-btn" id="btn-0-na" onclick="setNote(0,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Organisation du travail</div>
+      <div class="critere-def">L'employé utilise son temps de manière efficace et fait preuve de solides compétences en matière d'organisation.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-1-1" onclick="setNote(1,1)">1</button><button class="note-btn" id="btn-1-2" onclick="setNote(1,2)">2</button><button class="note-btn" id="btn-1-3" onclick="setNote(1,3)">3</button><button class="note-btn" id="btn-1-4" onclick="setNote(1,4)">4</button>
+        <button class="note-btn" id="btn-1-na" onclick="setNote(1,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Rendement professionnel</div>
+      <div class="critere-def">L'employé termine les tâches complètement et efficacement tout en offrant un service de qualité aux clients.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-2-1" onclick="setNote(2,1)">1</button><button class="note-btn" id="btn-2-2" onclick="setNote(2,2)">2</button><button class="note-btn" id="btn-2-3" onclick="setNote(2,3)">3</button><button class="note-btn" id="btn-2-4" onclick="setNote(2,4)">4</button>
+        <button class="note-btn" id="btn-2-na" onclick="setNote(2,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Relations avec les pairs</div>
+      <div class="critere-def">L'employé entretient de solides relations avec ses coéquipiers, demande de l'aide en cas de besoin et est soucieux du développement de l'équipe.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-3-1" onclick="setNote(3,1)">1</button><button class="note-btn" id="btn-3-2" onclick="setNote(3,2)">2</button><button class="note-btn" id="btn-3-3" onclick="setNote(3,3)">3</button><button class="note-btn" id="btn-3-4" onclick="setNote(3,4)">4</button>
+        <button class="note-btn" id="btn-3-na" onclick="setNote(3,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Service à la clientèle</div>
+      <div class="critere-def">L'employé écoute attentivement les clients, donne des réponses complètes et claires à leurs questions et se montre poli et respectueux.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-4-1" onclick="setNote(4,1)">1</button><button class="note-btn" id="btn-4-2" onclick="setNote(4,2)">2</button><button class="note-btn" id="btn-4-3" onclick="setNote(4,3)">3</button><button class="note-btn" id="btn-4-4" onclick="setNote(4,4)">4</button>
+        <button class="note-btn" id="btn-4-na" onclick="setNote(4,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Initiative et autonomie</div>
+      <div class="critere-def">L'employé est capable de travailler sans supervision et de prendre des décisions efficaces de manière indépendante dans des situations complexes.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-5-1" onclick="setNote(5,1)">1</button><button class="note-btn" id="btn-5-2" onclick="setNote(5,2)">2</button><button class="note-btn" id="btn-5-3" onclick="setNote(5,3)">3</button><button class="note-btn" id="btn-5-4" onclick="setNote(5,4)">4</button>
+        <button class="note-btn" id="btn-5-na" onclick="setNote(5,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Ponctualité</div>
+      <div class="critere-def">L'employé fait preuve d'une bonne gestion du temps et est rarement en retard au travail.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-6-1" onclick="setNote(6,1)">1</button><button class="note-btn" id="btn-6-2" onclick="setNote(6,2)">2</button><button class="note-btn" id="btn-6-3" onclick="setNote(6,3)">3</button><button class="note-btn" id="btn-6-4" onclick="setNote(6,4)">4</button>
+        <button class="note-btn" id="btn-6-na" onclick="setNote(6,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Communication écrite</div>
+      <div class="critere-def">L'employé transmet de l'information claire, structurée et professionnelle à l'écrit en utilisant un langage approprié et sans erreurs majeures.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-7-1" onclick="setNote(7,1)">1</button><button class="note-btn" id="btn-7-2" onclick="setNote(7,2)">2</button><button class="note-btn" id="btn-7-3" onclick="setNote(7,3)">3</button><button class="note-btn" id="btn-7-4" onclick="setNote(7,4)">4</button>
+        <button class="note-btn" id="btn-7-na" onclick="setNote(7,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Communication orale</div>
+      <div class="critere-def">L'employé s'exprime clairement et efficacement à l'oral, adapte son discours à son interlocuteur et favorise une communication professionnelle respectueuse.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-8-1" onclick="setNote(8,1)">1</button><button class="note-btn" id="btn-8-2" onclick="setNote(8,2)">2</button><button class="note-btn" id="btn-8-3" onclick="setNote(8,3)">3</button><button class="note-btn" id="btn-8-4" onclick="setNote(8,4)">4</button>
+        <button class="note-btn" id="btn-8-na" onclick="setNote(8,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Jugement</div>
+      <div class="critere-def">L'employé analyse les situations, prend des décisions appropriées et agit de façon réfléchie en tenant compte du contexte, des priorités et des impacts.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-9-1" onclick="setNote(9,1)">1</button><button class="note-btn" id="btn-9-2" onclick="setNote(9,2)">2</button><button class="note-btn" id="btn-9-3" onclick="setNote(9,3)">3</button><button class="note-btn" id="btn-9-4" onclick="setNote(9,4)">4</button>
+        <button class="note-btn" id="btn-9-na" onclick="setNote(9,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Résolution de problème</div>
+      <div class="critere-def">L'employé trouve des solutions aux problèmes de façon efficace et autonome.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-10-1" onclick="setNote(10,1)">1</button><button class="note-btn" id="btn-10-2" onclick="setNote(10,2)">2</button><button class="note-btn" id="btn-10-3" onclick="setNote(10,3)">3</button><button class="note-btn" id="btn-10-4" onclick="setNote(10,4)">4</button>
+        <button class="note-btn" id="btn-10-na" onclick="setNote(10,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Prise de décisions</div>
+      <div class="critere-def">L'employé prend des décisions efficaces au travail, demande des éclaircissements si nécessaire et respecte la confidentialité des informations.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-11-1" onclick="setNote(11,1)">1</button><button class="note-btn" id="btn-11-2" onclick="setNote(11,2)">2</button><button class="note-btn" id="btn-11-3" onclick="setNote(11,3)">3</button><button class="note-btn" id="btn-11-4" onclick="setNote(11,4)">4</button>
+        <button class="note-btn" id="btn-11-na" onclick="setNote(11,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Qualité du travail</div>
+      <div class="critere-def">L'employé accomplit les tâches avec efficacité et précision et respecte le niveau de qualité requis pour le poste.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-12-1" onclick="setNote(12,1)">1</button><button class="note-btn" id="btn-12-2" onclick="setNote(12,2)">2</button><button class="note-btn" id="btn-12-3" onclick="setNote(12,3)">3</button><button class="note-btn" id="btn-12-4" onclick="setNote(12,4)">4</button>
+        <button class="note-btn" id="btn-12-na" onclick="setNote(12,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Planification et organisation</div>
+      <div class="critere-def">L'employé est bien organisé dans ses activités quotidiennes et sait structurer ses tâches et son environnement de travail.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-13-1" onclick="setNote(13,1)">1</button><button class="note-btn" id="btn-13-2" onclick="setNote(13,2)">2</button><button class="note-btn" id="btn-13-3" onclick="setNote(13,3)">3</button><button class="note-btn" id="btn-13-4" onclick="setNote(13,4)">4</button>
+        <button class="note-btn" id="btn-13-na" onclick="setNote(13,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div><div class="critere">
+      <div class="critere-nom">Innovation</div>
+      <div class="critere-def">L'employé donne son avis sur la façon dont l'environnement de travail peut être amélioré.</div>
+      <div class="critere-notes">
+        <button class="note-btn" id="btn-14-1" onclick="setNote(14,1)">1</button><button class="note-btn" id="btn-14-2" onclick="setNote(14,2)">2</button><button class="note-btn" id="btn-14-3" onclick="setNote(14,3)">3</button><button class="note-btn" id="btn-14-4" onclick="setNote(14,4)">4</button>
+        <button class="note-btn" id="btn-14-na" onclick="setNote(14,&#39;na&#39;)" style="width:52px">N/A</button>
+      </div>
+    </div></div>
+      <div class="moyenne-box">
+        <div>
+          <div class="moyenne-label">Moyenne de l'évaluation</div>
+          <div class="moyenne-sub">Calculée automatiquement</div>
+        </div>
+        <div class="moyenne-val" id="moy-employe">—</div>
+      </div>
+    </div>
+
+    <!-- P4 Sommaire -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">4</div>
+        <h2>Sommaire de l'évaluation</h2>
+      </div>
+      <div class="champ"><label>Points forts</label><textarea placeholder="Décrivez vos points forts..."></textarea></div>
+      <div class="champ"><label>Points à améliorer</label><textarea placeholder="Identifiez les aspects à travailler..."></textarea></div>
+    </div>
+
+    <!-- P5 Recommandations -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">5</div>
+        <h2>Recommandations et commentaires</h2>
+      </div>
+      <div class="champ"><label>De quelle façon puis-je améliorer mes performances ?</label><textarea placeholder="Vos réflexions..."></textarea></div>
+      <div class="champ"><label>Que peut faire l'équipe de gestion pour m'aider à réussir ?</label><textarea placeholder="Vos suggestions..."></textarea></div>
+    </div>
+
+    <!-- P6 Plan d'action -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">6</div>
+        <h2>Plan d'action</h2>
+      </div>
+      <p class="section-desc">Identifiez trois objectifs à atteindre avant la prochaine évaluation de performance.</p>
+      <div class="champ"><label>Objectif 1</label><textarea placeholder="Décrivez votre premier objectif..."></textarea></div>
+      <div class="champ"><label>Objectif 2</label><textarea placeholder="Décrivez votre deuxième objectif..."></textarea></div>
+      <div class="champ"><label>Objectif 3</label><textarea placeholder="Décrivez votre troisième objectif..."></textarea></div>
+      <div class="champ"><label>Comment travaillerons-nous ensemble pour réaliser ces objectifs ?</label><textarea placeholder="Stratégie de collaboration..."></textarea></div>
+    </div>
+
+    <!-- P7 Développement -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">7</div>
+        <h2>Plan de développement</h2>
+      </div>
+      <div class="champ"><label>Qu'est-ce qui est nécessaire pour m'aider à me développer ?</label><textarea placeholder="Formation, mentorat, nouvelles responsabilités..."></textarea></div>
+      <div class="champ"><label>Suis-je satisfait(e) de mon poste actuel ?</label><textarea placeholder="Expliquez votre niveau de satisfaction..."></textarea></div>
+      <div class="champ"><label>Quel poste aimerais-je occuper dans le futur ?</label><textarea placeholder="Vos aspirations professionnelles..."></textarea></div>
+      <div class="champ"><label>Ai-je le potentiel pour atteindre ce poste ? Comment puis-je continuer à me développer ?</label><textarea placeholder="Votre analyse..."></textarea></div>
+    </div>
+
+    <!-- P8 Requêtes -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">8</div>
+        <h2>Requêtes</h2>
+      </div>
+      <div class="eval-section-titre">Rémunération</div>
+      <div class="grille2">
+        <div class="champ"><label>Salaire demandé (taux horaire ou annuel)</label><input type="text" placeholder="ex : 22$/h ou 45 000$/an"></div>
+      </div>
+      <div class="champ"><label>De quelle façon justifiez-vous cette demande salariale ?</label><textarea placeholder="Vos arguments..."></textarea></div>
+      <div class="eval-section-titre" style="margin-top:16px">Autres avantages</div>
+      <div class="champ"><label>Avez-vous une demande particulière ?</label><input type="text" placeholder="ex : horaire flexible, formation..."></div>
+      <div class="champ"><label>Justification de cette demande</label><textarea placeholder="Vos arguments..."></textarea></div>
+    </div>
+
+  </div>
+
+  <!-- ===== PARTIE EMPLOYEUR ===== -->
+  <div id="panneau-employeur" class="panneau">
+
+    <!-- P1 Infos -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">1</div>
+        <h2>Informations de l'employé</h2>
+      </div>
+      <div class="grille2">
+        <div class="champ"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
+        <div class="champ"><label>Poste occupé</label><input type="text" placeholder="ex : Secrétaire dentaire"></div>
+        <div class="champ"><label>Date de l'évaluation</label><input type="date"></div>
+        <div class="champ"><label>Date d'embauche</label><input type="date"></div>
+        <div class="champ"><label>Salaire actuel</label><input type="text" placeholder="ex : 20$/h"></div>
+        <div class="champ"><label>% de vacances</label><input type="text" placeholder="ex : 4%"></div>
+        <div class="champ"><label>Moyenne d'heures hebdomadaires</label><input type="text" placeholder="ex : 35h"></div>
+      </div>
+      <div class="champ"><label>Notes particulières</label><textarea placeholder="Observations importantes..."></textarea></div>
+    </div>
+
+    <!-- P2 Attitude -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">2</div>
+        <h2>Attitude et comportement</h2>
+      </div>
+      <p class="section-desc">Une attitude positive est indispensable pour bâtir une bonne dynamique de travail.</p>
+      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez l&#39;attitude et le comportement de l&#39;employé(e)..."></textarea></div>
+    </div>
+
+    <!-- P3 Flexibilité -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">3</div>
+        <h2>Flexibilité et fiabilité</h2>
+      </div>
+      <p class="section-desc">La flexibilité et la fiabilité vont très souvent de pair.</p>
+      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la flexibilité et la fiabilité de l&#39;employé(e)..."></textarea></div>
+    </div>
+
+    <!-- P4 Performance -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">4</div>
+        <h2>Performance et réussite</h2>
+      </div>
+      <p class="section-desc">Concentrez-vous sur les réussites de vos employés.</p>
+      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la performance et les réussites de l&#39;employé(e)..."></textarea></div>
+    </div>
+
+    <!-- P5 Travail d'équipe -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">5</div>
+        <h2>Travail d'équipe et communication</h2>
+      </div>
+      <p class="section-desc">La collaboration et le travail d'équipe doivent figurer au premier plan.</p>
+      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la collaboration et les habiletés de communication..."></textarea></div>
+    </div>
+
+    <!-- P6 Gestion du temps -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">6</div>
+        <h2>Gestion du temps et ponctualité</h2>
+      </div>
+      <p class="section-desc">Ces compétences représentent des atouts essentiels pour l'équilibre organisationnel.</p>
+      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la gestion du temps et la ponctualité..."></textarea></div>
+    </div>
+
+    <!-- P7 Progrès -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">7</div>
+        <h2>Progrès et potentiel</h2>
+      </div>
+      <p class="section-desc">Prenez le temps de vous concentrer sur les progrès et le potentiel de l'employé(e).</p>
+      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez les progrès réalisés et le potentiel futur..."></textarea></div>
+    </div>
+
+    <!-- P8 Révision conditions -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">8</div>
+        <h2>Révision des conditions de travail</h2>
+      </div>
+      <div class="grille2">
+        <div class="champ"><label>Salaire actuel</label><input type="text" placeholder="ex : 20$/h"></div>
+        <div class="champ"><label>Salaire demandé par l'employé(e)</label><input type="text" placeholder="ex : 22$/h"></div>
+        <div class="champ"><label>Salaire offert</label><input type="text" placeholder="ex : 21$/h"></div>
+        <div class="champ"><label>% vacances actuel</label><input type="text" placeholder="ex : 4%"></div>
+        <div class="champ"><label>% vacances demandé</label><input type="text" placeholder="ex : 6%"></div>
+        <div class="champ"><label>% vacances offert</label><input type="text" placeholder="ex : 5%"></div>
+      </div>
+      <div class="champ"><label>Autres demandes de l'employé(e)</label><textarea placeholder="Avantages ou conditions demandés..."></textarea></div>
+      <div class="champ"><label>Autres avantages offerts</label><textarea placeholder="Ce qui est offert en réponse..."></textarea></div>
+      <div class="champ"><label>Notes particulières</label><textarea placeholder="À noter : tous les avantages sociaux offerts (stationnement, assurances, uniformes, etc.) doivent être considérés dans l&#39;évaluation de l&#39;offre."></textarea></div>
+    </div>
+
+    <!-- P9 Entente -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">9</div>
+        <h2>Entente</h2>
+      </div>
+      <div class="champ">
+        <label>L'employé(e) est satisfait(e) des résultats de cette évaluation</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="sat1"> Oui</label>
+          <label class="radio-opt"><input type="radio" name="sat1"> Non</label>
+        </div>
+      </div>
+      <div class="champ">
+        <label>L'employé(e) est satisfait(e) de son plan de développement professionnel</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="sat2"> Oui</label>
+          <label class="radio-opt"><input type="radio" name="sat2"> Non</label>
+        </div>
+      </div>
+      <div class="champ"><label>Autres commentaires</label><textarea placeholder="Commentaires finaux..."></textarea></div>
+    </div>
+
+    <!-- P10 Signatures -->
+    <div class="section">
+      <div class="section-titre">
+        <div class="section-num">10</div>
+        <h2>Signatures</h2>
+      </div>
+      <div class="grille2" style="margin-top:8px">
+        <div>
+          <div class="champ"><label>Signature de l'employé(e)</label><input type="text" placeholder="Nom complet"></div>
+          <div class="champ"><label>Date</label><input type="date"></div>
+          <div class="sig-bloc">Signature</div>
+        </div>
+        <div>
+          <div class="champ"><label>Signature de l'employeur / gestionnaire</label><input type="text" placeholder="Nom complet"></div>
+          <div class="champ"><label>Date</label><input type="date"></div>
+          <div class="sig-bloc">Signature</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center;margin-top:20px">
+    <button class="btn-imprimer" onclick="window.print()">Imprimer / Sauvegarder en PDF</button>
+  </div>
+
+  <div class="bas-page">
+    <div class="bas-copy">© 2026 Gestion Mel — Tous droits réservés</div>
+    <span style="font-family:Georgia,serif;font-size:18px;font-weight:600;color:white">Gestion<span style="color:#2d8fcf">Mel</span></span>
+  </div>
+
+</div>
+
+<script>
+const criteres = [
+  { nom: "Motivation", def: "L'employé est désireux d'entreprendre de nouvelles tâches, fait preuve d'une attitude positive et travaille pour atteindre des résultats dépassant les attentes." },
+  { nom: "Organisation du travail", def: "L'employé utilise son temps de manière efficace et fait preuve de solides compétences en matière d'organisation." },
+  { nom: "Rendement professionnel", def: "L'employé termine les tâches complètement et efficacement tout en offrant un service de qualité aux clients." },
+  { nom: "Relations avec les pairs", def: "L'employé entretient de solides relations avec ses coéquipiers, demande de l'aide en cas de besoin et est soucieux du développement de l'équipe." },
+  { nom: "Service à la clientèle", def: "L'employé écoute attentivement les clients, donne des réponses complètes et claires à leurs questions et se montre poli et respectueux." },
+  { nom: "Initiative et autonomie", def: "L'employé est capable de travailler sans supervision et de prendre des décisions efficaces de manière indépendante dans des situations complexes." },
+  { nom: "Ponctualité", def: "L'employé fait preuve d'une bonne gestion du temps et est rarement en retard au travail." },
+  { nom: "Communication écrite", def: "L'employé transmet de l'information claire, structurée et professionnelle à l'écrit en utilisant un langage approprié et sans erreurs majeures." },
+  { nom: "Communication orale", def: "L'employé s'exprime clairement et efficacement à l'oral, adapte son discours à son interlocuteur et favorise une communication professionnelle respectueuse." },
+  { nom: "Jugement", def: "L'employé analyse les situations, prend des décisions appropriées et agit de façon réfléchie en tenant compte du contexte, des priorités et des impacts." },
+  { nom: "Résolution de problème", def: "L'employé trouve des solutions aux problèmes de façon efficace et autonome." },
+  { nom: "Prise de décisions", def: "L'employé prend des décisions efficaces au travail, demande des éclaircissements si nécessaire et respecte la confidentialité des informations." },
+  { nom: "Qualité du travail", def: "L'employé accomplit les tâches avec efficacité et précision et respecte le niveau de qualité requis pour le poste." },
+  { nom: "Planification et organisation", def: "L'employé est bien organisé dans ses activités quotidiennes et sait structurer ses tâches et son environnement de travail." },
+  { nom: "Innovation", def: "L'employé donne son avis sur la façon dont l'environnement de travail peut être amélioré." }
+];
+
+const notes = {};
+
+function rendreCriteres() {
+  const cont = document.getElementById('criteres-employe');
+  cont.innerHTML = '';
+  criteres.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'critere';
+    div.innerHTML = `
+      <div class="critere-nom">${c.nom}</div>
+      <div class="critere-def">${c.def}</div>
+      <div class="critere-notes">
+        ${[1,2,3,4].map(n => `<button class="note-btn" id="btn-${i}-${n}" onclick="setNote(${i},${n})">${n}</button>`).join('')}
+        <button class="note-btn" id="btn-${i}-na" onclick="setNote(${i},'na')" style="width:52px">N/A</button>
+      </div>
+    `;
+    cont.appendChild(div);
+  });
+}
+
+function setNote(idx, val) {
+  notes[idx] = val;
+  [1,2,3,4,'na'].forEach(n => {
+    const btn = document.getElementById(`btn-${idx}-${n}`);
+    if(btn) { btn.className = 'note-btn'; }
+  });
+  const sel = document.getElementById(`btn-${idx}-${val}`);
+  if(sel) sel.className = `note-btn sel-${val}`;
+  calculerMoyenne();
+}
+
+function calculerMoyenne() {
+  const vals = Object.values(notes).filter(v => v !== 'na').map(Number);
+  if(vals.length === 0) { document.getElementById('moy-employe').textContent = '—'; return; }
+  const moy = vals.reduce((a,b) => a+b, 0) / vals.length;
+  document.getElementById('moy-employe').textContent = moy.toFixed(2) + ' / 4';
+}
+
+function switchTab(id, el) {
+  document.querySelectorAll('.panneau').forEach(p => p.classList.remove('actif'));
+  document.querySelectorAll('.onglet').forEach(o => o.classList.remove('actif'));
+  document.getElementById('panneau-' + id).classList.add('actif');
+  el.classList.add('actif');
+}
+
+rendreCriteres();
+</script>
+
+
+</body></html>
