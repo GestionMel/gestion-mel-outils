@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)file:///C:/Users/Portable02/Downloads/calculateur_roulement_gestionmel.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur de taux de roulement — Gestion Mel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',sans-serif;background:#f0f2f7;color:#1c2333;font-size:14px}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 50px}
+.entete{background:#0a0e1a;border-radius:14px;padding:22px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:white}
+.logo span{color:#2d8fcf}
+.entete-titre h1{font-family:'Playfair Display',serif;font-size:18px;font-weight:500;color:white;text-align:right}
+.entete-titre p{color:#8899bb;font-size:12px;margin-top:3px;text-align:right}
+.card{background:white;border-radius:12px;border:1px solid #dde2ea;padding:22px 26px;margin-bottom:16px}
+.card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:#1a6fa8;margin-bottom:16px;padding-bottom:10px;border-bottom:1.5px solid #f0f2f7}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;font-weight:600;color:#5a6278;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.field input{width:100%;padding:8px 10px;border:1px solid #dde2ea;border-radius:8px;font-family:'Source Sans 3',sans-serif;font-size:14px;color:#1c2333}
+.field input:focus{outline:none;border-color:#1a6fa8}
+.calc-btn{background:#1a6fa8;color:white;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Source Sans 3',sans-serif;margin-top:8px}
+.calc-btn:hover{background:#2d8fcf}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.metric{background:#f5f6f8;border-radius:10px;padding:14px}
+.metric-label{font-size:11px;color:#5a6278;margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:600;color:#1c2333}
+.ok{color:#1a8a5e!important}.warn{color:#ba7517!important}.danger{color:#c0392b!important}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.badge-ok{background:#e6f7f1;color:#085041}
+.badge-warn{background:#faeeda;color:#633806}
+.badge-danger{background:#fcebeb;color:#791f1f}
+.add-btn{background:none;border:1px solid #dde2ea;border-radius:8px;padding:6px 14px;font-size:12px;color:#5a6278;cursor:pointer;margin-bottom:12px}
+.add-btn:hover{background:#f5f6f8}
+.del-btn{background:none;border:none;cursor:pointer;color:#c0392b;font-size:14px;padding:2px 6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#5a6278;margin-top:12px}
+.legend-item{display:flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.bas{background:#0a0e1a;border-radius:10px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.bas-copy{font-size:11px;color:#5a6a88}
+.bas-logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:white}
+.bas-logo span{color:#2d8fcf}
+table.t{width:100%;border-collapse:collapse;margin-bottom:12px}
+table.t th{background:#f5f6f8;font-size:11px;font-weight:600;color:#5a6278;text-transform:uppercase;padding:8px 10px;text-align:left;border-bottom:1px solid #dde2ea}
+table.t td{padding:7px 8px;border-bottom:1px solid #f5f6f8;font-size:13px}
+table.t input{width:100%;border:none;background:transparent;font-family:'Source Sans 3',sans-serif;font-size:13px;color:#1c2333;padding:2px 4px}
+table.t input:focus{outline:1px solid #1a6fa8;border-radius:4px;background:white}
+.res-row{display:grid;gap:8px;padding:8px 0;border-bottom:1px solid #f5f6f8;font-size:13px;align-items:center}
+.res-row:last-child{border-bottom:none}
+.res-head{font-size:11px;font-weight:600;color:#5a6278;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="entete">
+  <div class="logo">Gestion<span>Mel</span></div>
+  <div class="entete-titre">
+    <h1>Calculateur de taux de roulement</h1>
+    <p>Clinique dentaire — suivi des départs et embauches</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Paramètres</div>
+  <div class="grid2">
+    <div class="field"><label>Période</label><input type="text" id="periode" value="Année 2025"></div>
+    <div class="field"><label>Effectif moyen</label><input type="number" id="effectif" placeholder="ex: 8" min="1"></div>
+  </div>
+  <div class="grid3">
+    <div class="field"><label>Départs volontaires</label><input type="number" id="vol" placeholder="ex: 2" min="0"></div>
+    <div class="field"><label>Départs involontaires</label><input type="number" id="invol" placeholder="ex: 1" min="0"></div>
+    <div class="field"><label>Nouvelles embauches</label><input type="number" id="emb" placeholder="ex: 2" min="0"></div>
+  </div>
+  <button class="calc-btn" onclick="calculer()">Calculer</button>
+</div>
+
+<div id="results" style="display:none">
+  <div class="card">
+    <div class="card-title">Résultats — <span id="res-periode"></span></div>
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Taux de roulement</div><div class="metric-val" id="taux">—</div></div>
+      <div class="metric"><div class="metric-label">Total départs</div><div class="metric-val" id="departs">—</div></div>
+      <div class="metric"><div class="metric-label">Statut</div><div id="statut">—</div></div>
+    </div>
+    <div id="detail"></div>
+    <div class="legend">
+      <div class="legend-item"><span class="dot" style="background:#1a8a5e"></span>Moins de 10% — sain</div>
+      <div class="legend-item"><span class="dot" style="background:#ba7517"></span>10% à 20% — à surveiller</div>
+      <div class="legend-item"><span class="dot" style="background:#c0392b"></span>Plus de 20% — préoccupant</div>
+    </div>
+  </div>
+</div>
+
+<div class="bas"><span class="bas-copy">© 2026 Gestion Mel — Tous droits réservés</span><div class="bas-logo">Gestion<span>Mel</span></div></div>
+</div>
+<script>
+function badge(t,s){
+  if(t<10)return`<span class="badge badge-ok">${s}</span>`;
+  if(t<=20)return`<span class="badge badge-warn">${s}</span>`;
+  return`<span class="badge badge-danger">${s}</span>`;
+}
+function calculer(){
+  const eff=parseFloat(document.getElementById("effectif").value)||0;
+  const vol=parseFloat(document.getElementById("vol").value)||0;
+  const inv=parseFloat(document.getElementById("invol").value)||0;
+  const emb=parseFloat(document.getElementById("emb").value)||0;
+  const p=document.getElementById("periode").value||"Période";
+  if(!eff)return;
+  const dep=vol+inv;
+  const t=(dep/eff)*100;
+  const cl=t<10?"ok":t<=20?"warn":"danger";
+  const lab=t<10?"Sain":t<=20?"À surveiller":"Préoccupant";
+  document.getElementById("res-periode").textContent=p;
+  document.getElementById("taux").textContent=t.toFixed(1)+"%";
+  document.getElementById("taux").className="metric-val "+cl;
+  document.getElementById("departs").textContent=dep;
+  document.getElementById("statut").innerHTML=badge(t,lab);
+  document.getElementById("detail").innerHTML=`
+    <div style="margin-top:8px">
+      <div class="res-row" style="grid-template-columns:1fr 100px;border-bottom:1px solid #f5f6f8;padding:8px 0;font-size:13px"><span style="color:#5a6278">Départs volontaires</span><span style="font-weight:600">${vol}</span></div>
+      <div class="res-row" style="grid-template-columns:1fr 100px;border-bottom:1px solid #f5f6f8;padding:8px 0;font-size:13px"><span style="color:#5a6278">Départs involontaires</span><span style="font-weight:600">${inv}</span></div>
+      <div class="res-row" style="grid-template-columns:1fr 100px;border-bottom:1px solid #f5f6f8;padding:8px 0;font-size:13px"><span style="color:#5a6278">Nouvelles embauches</span><span style="font-weight:600">${emb}</span></div>
+      <div class="res-row" style="grid-template-columns:1fr 100px;padding:8px 0;font-size:13px"><span style="color:#5a6278">Formule appliquée</span><span style="font-weight:600">(${dep} ÷ ${eff}) × 100 = ${t.toFixed(1)}%</span></div>
+    </div>`;
+  document.getElementById("results").style.display="block";
+}
+</script>
+
+</body></html>

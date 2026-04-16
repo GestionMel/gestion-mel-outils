@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)file:///C:/Users/Portable02/Downloads/calculateur_absenteisme_gestionmel.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur de taux d'absentéisme — Gestion Mel</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Source Sans 3',sans-serif;background:#f0f2f7;color:#1c2333;font-size:14px}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 50px}
+.entete{background:#0a0e1a;border-radius:14px;padding:22px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;color:white}
+.logo span{color:#2d8fcf}
+.entete-titre h1{font-family:'Playfair Display',serif;font-size:18px;font-weight:500;color:white;text-align:right}
+.entete-titre p{color:#8899bb;font-size:12px;margin-top:3px;text-align:right}
+.card{background:white;border-radius:12px;border:1px solid #dde2ea;padding:22px 26px;margin-bottom:16px}
+.card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:500;color:#1a6fa8;margin-bottom:16px;padding-bottom:10px;border-bottom:1.5px solid #f0f2f7}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;font-weight:600;color:#5a6278;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+.field input{width:100%;padding:8px 10px;border:1px solid #dde2ea;border-radius:8px;font-family:'Source Sans 3',sans-serif;font-size:14px;color:#1c2333}
+.field input:focus{outline:none;border-color:#1a6fa8}
+.calc-btn{background:#1a6fa8;color:white;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Source Sans 3',sans-serif;margin-top:8px}
+.calc-btn:hover{background:#2d8fcf}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.metric{background:#f5f6f8;border-radius:10px;padding:14px}
+.metric-label{font-size:11px;color:#5a6278;margin-bottom:4px}
+.metric-val{font-size:22px;font-weight:600;color:#1c2333}
+.ok{color:#1a8a5e!important}.warn{color:#ba7517!important}.danger{color:#c0392b!important}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:500}
+.badge-ok{background:#e6f7f1;color:#085041}
+.badge-warn{background:#faeeda;color:#633806}
+.badge-danger{background:#fcebeb;color:#791f1f}
+.add-btn{background:none;border:1px solid #dde2ea;border-radius:8px;padding:6px 14px;font-size:12px;color:#5a6278;cursor:pointer;margin-bottom:12px}
+.add-btn:hover{background:#f5f6f8}
+.del-btn{background:none;border:none;cursor:pointer;color:#c0392b;font-size:14px;padding:2px 6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:#5a6278;margin-top:12px}
+.legend-item{display:flex;align-items:center;gap:5px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.bas{background:#0a0e1a;border-radius:10px;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.bas-copy{font-size:11px;color:#5a6a88}
+.bas-logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:white}
+.bas-logo span{color:#2d8fcf}
+table.t{width:100%;border-collapse:collapse;margin-bottom:12px}
+table.t th{background:#f5f6f8;font-size:11px;font-weight:600;color:#5a6278;text-transform:uppercase;padding:8px 10px;text-align:left;border-bottom:1px solid #dde2ea}
+table.t td{padding:7px 8px;border-bottom:1px solid #f5f6f8;font-size:13px}
+table.t input{width:100%;border:none;background:transparent;font-family:'Source Sans 3',sans-serif;font-size:13px;color:#1c2333;padding:2px 4px}
+table.t input:focus{outline:1px solid #1a6fa8;border-radius:4px;background:white}
+.res-row{display:grid;gap:8px;padding:8px 0;border-bottom:1px solid #f5f6f8;font-size:13px;align-items:center}
+.res-row:last-child{border-bottom:none}
+.res-head{font-size:11px;font-weight:600;color:#5a6278;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="entete">
+  <div class="logo">Gestion<span>Mel</span></div>
+  <div class="entete-titre">
+    <h1>Calculateur de taux d'absentéisme</h1>
+    <p>Clinique dentaire — par employé et pour l'équipe complète</p>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Paramètres de la période</div>
+  <div class="grid2">
+    <div class="field"><label>Période</label><input type="text" id="periode" value="Avril 2026"></div>
+    <div class="field"><label>Jours ouvrables dans la période</label><input type="number" id="jours" value="21" min="1"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Employés</div>
+  <table class="t">
+    <thead><tr><th>Nom</th><th>Jours absents</th><th></th></tr></thead>
+    <tbody id="employes"><tr><td><input type="text" value="" placeholder="Prénom Nom" oninput="emps[0].nom=this.value"></td><td><input type="number" value="" placeholder="0" min="0" oninput="emps[0].abs=this.value"></td><td><button class="del-btn" onclick="suppEmp(0)">✕</button></td></tr><tr><td><input type="text" value="" placeholder="Prénom Nom" oninput="emps[1].nom=this.value"></td><td><input type="number" value="" placeholder="0" min="0" oninput="emps[1].abs=this.value"></td><td><button class="del-btn" onclick="suppEmp(1)">✕</button></td></tr><tr><td><input type="text" value="" placeholder="Prénom Nom" oninput="emps[2].nom=this.value"></td><td><input type="number" value="" placeholder="0" min="0" oninput="emps[2].abs=this.value"></td><td><button class="del-btn" onclick="suppEmp(2)">✕</button></td></tr></tbody>
+  </table>
+  <button class="add-btn" onclick="ajouterEmp()">+ Ajouter un employé</button><br>
+  <button class="calc-btn" onclick="calculer()">Calculer les taux d'absentéisme</button>
+</div>
+
+<div id="results" style="display:none">
+  <div class="card">
+    <div class="card-title">Résultats — <span id="res-periode"></span></div>
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">Taux équipe</div><div class="metric-val" id="taux-equipe">—</div></div>
+      <div class="metric"><div class="metric-label">Total jours absents</div><div class="metric-val" id="total-abs">—</div></div>
+      <div class="metric"><div class="metric-label">Nb employés</div><div class="metric-val" id="nb-emp">—</div></div>
+    </div>
+    <div>
+      <div class="res-row res-head" style="grid-template-columns:1fr 80px 110px"><div>Employé</div><div>Jours absents</div><div>Taux</div></div>
+      <div id="emp-liste"></div>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><span class="dot" style="background:#1a8a5e"></span>Moins de 3% — normal</div>
+      <div class="legend-item"><span class="dot" style="background:#ba7517"></span>3% à 6% — à surveiller</div>
+      <div class="legend-item"><span class="dot" style="background:#c0392b"></span>Plus de 6% — préoccupant</div>
+    </div>
+  </div>
+</div>
+
+<div class="bas"><span class="bas-copy">© 2026 Gestion Mel — Tous droits réservés</span><div class="bas-logo">Gestion<span>Mel</span></div></div>
+</div>
+<script>
+let emps=[{nom:"",abs:""},{nom:"",abs:""},{nom:"",abs:""}];
+function rendu(){
+  const tb=document.getElementById("employes");tb.innerHTML="";
+  emps.forEach((e,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td><input type="text" value="${e.nom}" placeholder="Prénom Nom" oninput="emps[${i}].nom=this.value"></td><td><input type="number" value="${e.abs}" placeholder="0" min="0" oninput="emps[${i}].abs=this.value"></td><td><button class="del-btn" onclick="suppEmp(${i})">✕</button></td>`;
+    tb.appendChild(tr);
+  });
+}
+function ajouterEmp(){emps.push({nom:"",abs:""});rendu();}
+function suppEmp(i){if(emps.length>1){emps.splice(i,1);rendu();}}
+function badge(t){
+  if(t<3)return`<span class="badge badge-ok">${t.toFixed(1)}%</span>`;
+  if(t<=6)return`<span class="badge badge-warn">${t.toFixed(1)}%</span>`;
+  return`<span class="badge badge-danger">${t.toFixed(1)}%</span>`;
+}
+function calculer(){
+  const j=parseFloat(document.getElementById("jours").value)||21;
+  const p=document.getElementById("periode").value||"Période";
+  let totA=0,cnt=0,liste="";
+  emps.forEach(e=>{
+    const a=parseFloat(e.abs)||0;
+    if(e.nom||e.abs){cnt++;totA+=a;const t=(a/j)*100;liste+=`<div class="res-row" style="grid-template-columns:1fr 80px 110px"><div>${e.nom||"Employé"}</div><div>${a} j</div><div>${badge(t)}</div></div>`;}
+  });
+  if(!cnt)return;
+  const tq=(totA/(j*cnt))*100;
+  const cl=tq<3?"ok":tq<=6?"warn":"danger";
+  document.getElementById("res-periode").textContent=p;
+  document.getElementById("taux-equipe").textContent=tq.toFixed(1)+"%";
+  document.getElementById("taux-equipe").className="metric-val "+cl;
+  document.getElementById("total-abs").textContent=totA+" j";
+  document.getElementById("nb-emp").textContent=cnt;
+  document.getElementById("emp-liste").innerHTML=liste;
+  document.getElementById("results").style.display="block";
+}
+rendu();
+</script>
+
+</body></html>
