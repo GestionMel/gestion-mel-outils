@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Vérification des références | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:820px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.85rem;opacity:0.75;}.section{padding:22px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}.field.full{grid-column:1/-1;}label{font-size:0.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:0.5px;}input[type=text],input[type=date]{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus{outline:none;border-color:var(--accent);background:white;}.ref-card{border:1.5px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:14px;background:#fafcff;}.ref-card-title{font-size:0.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}.tip-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:10px 14px;font-size:0.83rem;color:#0d3a6e;margin:10px 0;line-height:1.6;}.btn{padding:11px 28px;border-radius:7px;font-size:0.92rem;font-weight:600;cursor:pointer;border:none;}.btn-primary{background:var(--blue);color:white;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:0.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Ressources humaines</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Consentement à la vérification des références</h1><p>Autorisation du (de la) candidat(e) — Ressources humaines</p></div>
+  <div class="section">
+    <div class="section-title">Identification du (de la) candidat(e)</div>
+    <div class="grid">
+      <div class="field"><label>Nom et prénom</label><input type="text" placeholder="Nom, Prénom"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field full"><label>Poste convoité</label><input type="text" placeholder="ex. : Secrétaire dentaire, Assistante dentaire..."></div>
+    </div>
+    <div class="tip-box" style="margin-top:12px;">Par la présente, j'autorise la clinique dentaire à communiquer avec les personnes nommées ci-dessous afin d'obtenir des données factuelles ainsi que des opinions sur mon travail à chacun de ces endroits.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Références</div>
+    <div id="refs-container">
+      <div class="ref-card"><div class="ref-card-title">📋 Référence 1</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div></div>
+      <div class="ref-card"><div class="ref-card-title">📋 Référence 2</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div></div>
+      <div class="ref-card"><div class="ref-card-title">📋 Référence 3</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div></div>
+    </div>
+    <button onclick="ajouterRef()" style="background:none;border:2px dashed var(--accent);border-radius:8px;padding:10px;width:100%;color:var(--blue);font-weight:700;cursor:pointer;font-size:0.88rem;margin-top:6px;">+ Ajouter une référence</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Signature du (de la) candidat(e)</div>
+    <div class="grid">
+      <div class="field"><label>Signature (manuscrite à l'impression)</label><input type="text"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document RH</div>
+</div>
+<script>
+let n=3;
+function ajouterRef(){
+  n++;
+  const d=document.createElement('div');
+  d.className='ref-card';
+  d.innerHTML=`<div class="ref-card-title">📋 Référence ${n}</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div>`;
+  document.getElementById('refs-container').appendChild(d);
+}
+</script>
+</body></html>

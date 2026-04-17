@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Cessation de traitement | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:820px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.85rem;opacity:0.75;}.section{padding:22px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}.field.full{grid-column:1/-1;}label{font-size:0.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:0.5px;}input[type=text],input[type=date],textarea{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}textarea{resize:vertical;min-height:60px;}.motifs-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0;}.check-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:0.87rem;cursor:pointer;background:var(--light);transition:all 0.15s;}.check-item:hover{border-color:var(--accent);background:white;}.check-item input{width:16px;height:16px;flex-shrink:0;}.lettre-zone{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:24px 28px;margin:10px 0;font-size:0.9rem;line-height:1.8;}.lettre-zone p{margin-bottom:12px;}.btn{padding:11px 28px;border-radius:7px;font-size:0.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:0.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Gestion des dossiers</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Cessation de traitement et fermeture de dossier</h1><p>Lettre officielle au patient — Document confidentiel</p></div>
+  <div class="section">
+    <div class="section-title">Informations de la clinique et du patient</div>
+    <div class="grid">
+      <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique dentaire ..."></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Nom du (de la) patient(e)</label><input type="text" placeholder="Nom, Prénom"></div>
+      <div class="field"><label>No de dossier</label><input type="text"></div>
+      <div class="field full"><label>Adresse du (de la) patient(e)</label><input type="text" placeholder="Adresse complète"></div>
+      <div class="field"><label>Dentiste / Responsable signataire</label><input type="text" placeholder="Dr. / Dre. ..."></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Motif(s) de la fermeture de dossier</div>
+    <div class="motifs-grid">
+      <label class="check-item"><input type="checkbox"> Manque de diligence dans le paiement des honoraires</label>
+      <label class="check-item"><input type="checkbox"> Attitude irrespectueuse envers le dentiste et le personnel</label>
+      <label class="check-item"><input type="checkbox"> Non-respect des instructions cliniques</label>
+      <label class="check-item"><input type="checkbox"> Absence de collaboration dans le traitement</label>
+      <label class="check-item"><input type="checkbox"> Conflit de personnalité</label>
+      <label class="check-item"><input type="checkbox"> Non-respect des rendez-vous fixés</label>
+      <label class="check-item"><input type="checkbox"> Comportement agressif ou menaçant</label>
+      <label class="check-item"><input type="checkbox"> Fraude ou tentative de fraude</label>
+    </div>
+    <div class="field" style="margin-top:8px;"><label>Autre motif (préciser)</label><input type="text" placeholder=""></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Aperçu de la lettre</div>
+    <div class="lettre-zone">
+      <p>Madame / Monsieur,</p>
+      <p>Par la présente, nous vous informons que nous avons fermé votre dossier client au sein de notre clinique dentaire en raison du bris de confiance suite aux situations suivantes : <em>(motifs cochés ci-dessus)</em>.</p>
+      <p>Sur demande, il nous fera plaisir de vous fournir une copie de votre dossier dentaire afin d'assurer la continuité de vos soins.</p>
+      <p>Nous vous souhaitons bonne continuation.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Notes internes (non incluses dans la lettre)</div>
+    <div class="field"><textarea placeholder="Documentation interne : dates des incidents, témoins, démarches entreprises..."></textarea></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Signature</div>
+    <div class="grid">
+      <div class="field"><label>Dentiste / Responsable</label><input type="text" placeholder="(signature manuscrite à l'impression)"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Outil de gestion clinique</div>
+</div></body></html>

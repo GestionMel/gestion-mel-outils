@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consentement éclairé — Implants dentaires | Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;--green:#1a9e5a;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}
+  .container{max-width:880px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.85rem;opacity:0.75;}
+  .section{padding:22px 36px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .field{display:flex;flex-direction:column;gap:4px;}.field.full{grid-column:1/-1;}
+  label{font-size:0.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:0.5px;}
+  input[type=text],input[type=date],select,textarea{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;color:var(--text);background:var(--light);transition:border-color 0.2s;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea{resize:vertical;min-height:70px;}
+  .btn{padding:11px 28px;border-radius:7px;font-size:0.92rem;font-weight:600;cursor:pointer;border:none;}
+  .btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+  .actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}
+  .footer-note{text-align:center;font-size:0.75rem;color:#8a9ab0;padding:12px;}
+  .tip-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:10px 14px;font-size:0.83rem;color:#0d3a6e;margin:10px 0;line-height:1.6;}
+  .avert-box{background:#fff8e1;border-left:4px solid var(--orange);border-radius:4px;padding:10px 14px;font-size:0.83rem;color:#7a4400;margin:10px 0;line-height:1.6;}
+  .danger-box{background:#fce4e1;border-left:4px solid var(--red);border-radius:4px;padding:10px 14px;font-size:0.83rem;color:#7a1200;margin:10px 0;line-height:1.6;}
+  .initials-row{display:flex;align-items:center;gap:12px;background:#fff8e1;border:1.5px solid #f0c040;border-radius:6px;padding:10px 16px;margin:14px 0;}
+  .initials-row span{font-size:0.85rem;font-weight:700;color:#7a5500;white-space:nowrap;}
+  .initials-row input{width:100px;text-align:center;font-weight:700;font-size:1rem;}
+  ol.risques{padding-left:18px;}ol.risques li{margin-bottom:9px;font-size:0.88rem;line-height:1.65;}
+  ul.liste{padding-left:18px;}ul.liste li{margin-bottom:7px;font-size:0.88rem;line-height:1.6;}
+  p.desc{font-size:0.88rem;line-height:1.7;margin-bottom:10px;}
+  @media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Consentement éclairé</div></div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Consentement éclairé — Implants dentaires</h1>
+    <p>Chirurgie implantaire — Information et consentement du patient — Conforme aux exigences de l'ODQ</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid">
+      <div class="field"><label>Nom et prénom du (de la) patient(e)</label><input type="text" placeholder="Nom, Prénom"></div>
+      <div class="field"><label>Date de naissance</label><input type="date"></div>
+      <div class="field"><label>No de dossier</label><input type="text"></div>
+      <div class="field"><label>Dentiste traitant(e)</label><input type="text" placeholder="Dr. / Dre."></div>
+      <div class="field full"><label>Site(s) implantaire(s) prévu(s)</label><input type="text" placeholder="ex. : région #16, #46 — après extraction"></div>
+      <div class="field"><label>Date de la chirurgie</label><input type="date"></div>
+      <div class="field"><label>Date du consentement</label><input type="date"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Nature du traitement</div>
+    <p class="desc">Un implant dentaire est une vis en titane insérée dans l'os de la mâchoire pour servir de racine artificielle, sur laquelle une couronne, un pont ou une prothèse peut être fixé(e). L'utilisation d'implants pour remplacer des dents manquantes est une intervention avec un <strong>taux de succès de 90 à 95 %</strong> à long terme.</p>
+    <p class="desc">Des <strong>greffes osseuses ou gingivales</strong> peuvent être nécessaires pour améliorer le pronostic de l'implant, engendrant des frais supplémentaires. Un temps de guérison de <strong>4 à 6 mois</strong> est généralement nécessaire entre la pose et la restauration définitive.</p>
+    <div class="tip-box">ℹ️ <strong>Alternatives de traitement :</strong> Pont conventionnel (couronnes sur les dents adjacentes), prothèse amovible partielle ou complète, ou absence de traitement. Chaque option a ses avantages, inconvénients et coûts qui vous ont été expliqués.</div>
+    <div class="initials-row"><span>✍️ Initiales du (de la) patient(e) :</span><input type="text" maxlength="6" placeholder="___"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Complications possibles</div>
+    <ol class="risques">
+      <li><strong>Enflure et ecchymoses :</strong> l'enflure augmente pendant 48 h puis diminue. Des ecchymoses (bleus) peuvent apparaître et disparaître en 14 jours.</li>
+      <li><strong>Douleur :</strong> normale post-opératoire, contrôlée par les médicaments prescrits.</li>
+      <li><strong>Saignements légers :</strong> normaux pendant 24 à 48 heures.</li>
+      <li><strong>Infection :</strong> fièvre, enflure persistante après 48 h, douleur intense. Traitée par antibiothérapie.</li>
+      <li><strong>Péri-implantite :</strong> maladie inflammatoire autour de l'implant si l'hygiène est inadéquate, pouvant mener à la perte osseuse et à la perte de l'implant.</li>
+      <li><strong>Échec d'intégration (ostéointégration) :</strong> dans jusqu'à 10 % des cas, l'implant ne s'intègre pas à l'os et doit être retiré. Un nouvel implant peut être tenté après guérison.</li>
+      <li><strong>Dommages aux structures adjacentes :</strong> racines des dents voisines, nerf alvéolaire inférieur ou sinus maxillaire.</li>
+      <li><strong>Paresthésie :</strong> engourdissement temporaire ou, très rarement, permanent du menton ou de la langue.</li>
+      <li><strong>Sinusite :</strong> possible pour les implants maxillaires postérieurs; peut nécessiter une intervention supplémentaire.</li>
+      <li><strong>Fracture de la mâchoire :</strong> très rare — peut survenir en cas d'atrophie osseuse sévère.</li>
+    </ol>
+    <div class="avert-box">⚠️ <strong>Conditions médicales à signaler :</strong> diabète · tabagisme · bisphosphonates (Fosamax, Actonel, Reclast) · ostéoporose · radiothérapie à la tête et au cou · immunosuppresseurs · maladies auto-immunes · bruxisme. Ces conditions peuvent affecter le succès de l'implant.</div>
+    <div class="initials-row"><span>✍️ Initiales du (de la) patient(e) :</span><input type="text" maxlength="6" placeholder="___"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Responsabilités et engagements du patient</div>
+    <ul class="liste">
+      <li>Respecter scrupuleusement les instructions post-opératoires (médicaments, alimentation, hygiène)</li>
+      <li>Maintenir une <strong>hygiène buccale impeccable à vie</strong> — essentielle au maintien des implants</li>
+      <li>Se présenter à tous les rendez-vous de rappel et de suivi</li>
+      <li>Aviser la clinique de tout changement dans l'état de santé</li>
+      <li>Limiter ou cesser la consommation de tabac et d'alcool</li>
+      <li>Porter la plaque occlusale si prescrite (bruxisme)</li>
+    </ul>
+    <div class="danger-box">⚠️ <strong>Garantie de résultat :</strong> La médecine dentaire ne permet pas de garantir les résultats d'une chirurgie. Des retards de guérison ou des situations de rejet pourraient entraîner des délais ou rendre la complétion du plan de traitement impossible. Des frais supplémentaires pourraient s'appliquer.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Autorisation photographique</div>
+    <div class="grid">
+      <div class="field"><label>Autorisation de photographies / radiographies à des fins pédagogiques (identité non divulguée)</label>
+        <select><option>-- Sélectionner --</option><option>J'autorise</option><option>Je n'autorise pas</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Déclaration de consentement</div>
+    <ul class="liste">
+      <li>J'ai reçu, lu et compris les informations relatives à la pose d'implant(s) dentaire(s) incluant la nature du traitement, les bénéfices, les risques, les alternatives et mes responsabilités.</li>
+      <li>J'ai eu l'opportunité de poser toutes mes questions et d'obtenir des réponses satisfaisantes.</li>
+      <li>Je comprends que je peux retirer mon consentement à tout moment avant la procédure.</li>
+    </ul>
+    <p class="desc" style="margin-top:12px;font-weight:700;">Je consens donc au traitement implantaire tel que discuté et planifié avec mon dentiste traitant.</p>
+    <div class="initials-row"><span>✍️ Initiales du (de la) patient(e) :</span><input type="text" maxlength="6" placeholder="___"></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Signatures</div>
+    <div class="grid" style="margin-bottom:14px;">
+      <div class="field"><label>Signé à (ville)</label><input type="text" placeholder="Québec"></div>
+      <div class="field"><label>Le (date)</label><input type="date"></div>
+    </div>
+    <div class="grid">
+      <div class="field"><label>Nom du (de la) patient(e) / Tuteur légal</label><input type="text"></div>
+      <div class="field"><label>Signature (manuscrite à l'impression)</label><input type="text"></div>
+      <div class="field"><label>Nom du (de la) dentiste traitant(e)</label><input type="text"></div>
+      <div class="field"><label>Signature (manuscrite à l'impression)</label><input type="text"></div>
+      <div class="field"><label>Témoin (le cas échéant)</label><input type="text"></div>
+    </div>
+  </div>
+
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Modèle conforme aux exigences générales de l'ODQ — À adapter aux besoins de votre clinique</div>
+</div>
+</body></html>

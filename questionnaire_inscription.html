@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Questionnaire d'inscription | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);font-size:13px;}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:980px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 36px;}.doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.82rem;opacity:0.75;}.section{padding:18px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:0.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;}.field{display:flex;flex-direction:column;gap:3px;}.field.full{grid-column:1/-1;}label{font-size:0.7rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:0.4px;}input[type=text],input[type=date],select,textarea{border:1.5px solid var(--border);border-radius:5px;padding:7px 10px;font-size:0.85rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}.med-cols{display:grid;grid-template-columns:1fr 1fr;gap:0;}.med-item{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-bottom:1px solid #eee;font-size:0.82rem;}.med-item:nth-child(odd){background:#f9f9f9;}.oui-non{display:flex;gap:10px;flex-shrink:0;}.oui-non label{display:flex;align-items:center;gap:4px;font-size:0.78rem;font-weight:600;text-transform:none;letter-spacing:0;color:var(--text);cursor:pointer;}.ref-grid{display:flex;flex-wrap:wrap;gap:10px;}.ref-item{display:flex;align-items:center;gap:6px;font-size:0.83rem;font-weight:600;}.sig-bloc{background:#f0f4fb;border-radius:6px;padding:14px 16px;}.sig-bloc h4{font-size:0.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}.btn{padding:10px 22px;border-radius:7px;font-size:0.88rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:20px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:0.72rem;color:#8a9ab0;padding:10px;}@media print{body{background:white;font-size:11px;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Questionnaire d'inscription</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Questionnaire d'inscription — CONFIDENTIEL</h1><p>Antécédents médicaux et dentaires du patient</p></div>
+
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid-3" style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;"><label style="text-transform:none;letter-spacing:0;font-size:0.85rem;font-weight:700;">Sexe :</label><label style="text-transform:none;letter-spacing:0;display:flex;align-items:center;gap:4px;"><input type="radio" name="sexe"> M</label><label style="text-transform:none;letter-spacing:0;display:flex;align-items:center;gap:4px;"><input type="radio" name="sexe"> F</label></div>
+      <div class="field"><label>Nom</label><input type="text"></div>
+      <div class="field"><label>Prénom</label><input type="text"></div>
+    </div>
+    <div class="grid-4" style="margin-bottom:10px;">
+      <div class="field"><label>Adresse</label><input type="text"></div>
+      <div class="field"><label>App.</label><input type="text"></div>
+      <div class="field"><label>Ville</label><input type="text"></div>
+      <div class="field"><label>Code postal</label><input type="text"></div>
+      <div class="field"><label>Tél. domicile</label><input type="text"></div>
+      <div class="field"><label>Tél. travail</label><input type="text"></div>
+      <div class="field"><label>Poste</label><input type="text"></div>
+      <div class="field"><label>Courriel</label><input type="text"></div>
+    </div>
+    <div class="grid-4" style="margin-bottom:10px;">
+      <div class="field"><label>Date de naissance</label><input type="date"></div>
+      <div class="field"><label>No d'ass. maladie</label><input type="text"></div>
+      <div class="field"><label>Expiration</label><input type="text"></div>
+      <div class="field"><label>Tuteur (si mineur)</label><input type="text"></div>
+    </div>
+    <div class="grid" style="margin-bottom:10px;">
+      <div class="field"><label>Assurance dentaire</label><select><option>Non</option><option>Oui</option></select></div>
+      <div class="field"><label>Compagnie d'assurance</label><input type="text"></div>
+      <div class="field"><label>Raison de la visite</label><input type="text"></div>
+    </div>
+    <div>
+      <label style="display:block;margin-bottom:8px;">Référé par :</label>
+      <div class="ref-grid">
+        <label class="ref-item"><input type="checkbox"> Agenda Université Laval</label>
+        <label class="ref-item"><input type="checkbox"> Cégep Sainte-Foy</label>
+        <label class="ref-item"><input type="checkbox"> Cégep FXG</label>
+        <label class="ref-item"><input type="checkbox"> Pages jaunes</label>
+        <label class="ref-item"><input type="checkbox"> Parents / amis</label>
+        <div style="display:flex;align-items:center;gap:6px;"><label class="ref-item"><input type="checkbox"> Autre :</label><input type="text" style="width:140px;padding:4px 8px;font-size:0.82rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Antécédents médicaux</div>
+    <div class="grid" style="margin-bottom:12px;">
+      <div class="field"><label>Poids</label><input type="text" placeholder="kg"></div>
+      <div class="field"><label>Taille</label><input type="text" placeholder="cm"></div>
+    </div>
+    <div class="med-cols">
+      <div>
+        <div class="med-item"><span>1. Sous les soins d'un médecin ?</span><div class="oui-non"><label><input type="radio" name="q1"> Oui</label><label><input type="radio" name="q1"> Non</label></div></div>
+        <div class="med-item"><span>2. Médicaments (6 derniers mois) ?</span><div class="oui-non"><label><input type="radio" name="q2"> Oui</label><label><input type="radio" name="q2"> Non</label></div></div>
+        <div class="med-item"><span>3. Perte / gain de poids marqué ?</span><div class="oui-non"><label><input type="radio" name="q3"> Oui</label><label><input type="radio" name="q3"> Non</label></div></div>
+        <div class="med-item"><span>4. Enceinte ?</span><div class="oui-non"><label><input type="radio" name="q4"> Oui</label><label><input type="radio" name="q4"> Non</label></div></div>
+        <div class="med-item"><span>5. Anovulants ?</span><div class="oui-non"><label><input type="radio" name="q5"> Oui</label><label><input type="radio" name="q5"> Non</label></div></div>
+        <div class="med-item"><span>6. Troubles cardiaques ?</span><div class="oui-non"><label><input type="radio" name="q6"> Oui</label><label><input type="radio" name="q6"> Non</label></div></div>
+        <div class="med-item"><span>7. Fièvre rhumatismale ?</span><div class="oui-non"><label><input type="radio" name="q7"> Oui</label><label><input type="radio" name="q7"> Non</label></div></div>
+        <div class="med-item"><span>8. Saignements prolongés ?</span><div class="oui-non"><label><input type="radio" name="q8"> Oui</label><label><input type="radio" name="q8"> Non</label></div></div>
+        <div class="med-item"><span>9. Anémie ?</span><div class="oui-non"><label><input type="radio" name="q9"> Oui</label><label><input type="radio" name="q9"> Non</label></div></div>
+        <div class="med-item"><span>10. Tension artérielle (haute / basse) ?</span><div class="oui-non"><label><input type="radio" name="q10"> Oui</label><label><input type="radio" name="q10"> Non</label></div></div>
+        <div class="med-item"><span>11. Rhumes fréquents / sinusite ?</span><div class="oui-non"><label><input type="radio" name="q11"> Oui</label><label><input type="radio" name="q11"> Non</label></div></div>
+        <div class="med-item"><span>12. Tuberculose / problèmes pulmonaires ?</span><div class="oui-non"><label><input type="radio" name="q12"> Oui</label><label><input type="radio" name="q12"> Non</label></div></div>
+        <div class="med-item"><span>13. Troubles digestifs ?</span><div class="oui-non"><label><input type="radio" name="q13"> Oui</label><label><input type="radio" name="q13"> Non</label></div></div>
+        <div class="med-item"><span>14. Ulcère de l'estomac ?</span><div class="oui-non"><label><input type="radio" name="q14"> Oui</label><label><input type="radio" name="q14"> Non</label></div></div>
+        <div class="med-item"><span>15. Problèmes du foie (hépatite, cirrhose) ?</span><div class="oui-non"><label><input type="radio" name="q15"> Oui</label><label><input type="radio" name="q15"> Non</label></div></div>
+        <div class="med-item"><span>16. Troubles du rein ?</span><div class="oui-non"><label><input type="radio" name="q16"> Oui</label><label><input type="radio" name="q16"> Non</label></div></div>
+        <div class="med-item"><span>17. MTS ?</span><div class="oui-non"><label><input type="radio" name="q17"> Oui</label><label><input type="radio" name="q17"> Non</label></div></div>
+        <div class="med-item"><span>18. Diabète ?</span><div class="oui-non"><label><input type="radio" name="q18"> Oui</label><label><input type="radio" name="q18"> Non</label></div></div>
+        <div class="med-item"><span>19. Troubles thyroïdiens ?</span><div class="oui-non"><label><input type="radio" name="q19"> Oui</label><label><input type="radio" name="q19"> Non</label></div></div>
+      </div>
+      <div>
+        <div class="med-item"><span>20. Maladies de la peau ?</span><div class="oui-non"><label><input type="radio" name="q20"> Oui</label><label><input type="radio" name="q20"> Non</label></div></div>
+        <div class="med-item"><span>21. Problèmes oculaires ?</span><div class="oui-non"><label><input type="radio" name="q21"> Oui</label><label><input type="radio" name="q21"> Non</label></div></div>
+        <div class="med-item"><span>22. Arthrite ?</span><div class="oui-non"><label><input type="radio" name="q22"> Oui</label><label><input type="radio" name="q22"> Non</label></div></div>
+        <div class="med-item"><span>23. Épilepsie ?</span><div class="oui-non"><label><input type="radio" name="q23"> Oui</label><label><input type="radio" name="q23"> Non</label></div></div>
+        <div class="med-item"><span>24. Troubles nerveux ?</span><div class="oui-non"><label><input type="radio" name="q24"> Oui</label><label><input type="radio" name="q24"> Non</label></div></div>
+        <div class="med-item"><span>25. Maux de tête fréquents ?</span><div class="oui-non"><label><input type="radio" name="q25"> Oui</label><label><input type="radio" name="q25"> Non</label></div></div>
+        <div class="med-item"><span>26. Étourdissements / évanouissements ?</span><div class="oui-non"><label><input type="radio" name="q26"> Oui</label><label><input type="radio" name="q26"> Non</label></div></div>
+        <div class="med-item"><span>27. Maux d'oreilles ?</span><div class="oui-non"><label><input type="radio" name="q27"> Oui</label><label><input type="radio" name="q27"> Non</label></div></div>
+        <div class="med-item"><span>28. Rhume des foins ?</span><div class="oui-non"><label><input type="radio" name="q28"> Oui</label><label><input type="radio" name="q28"> Non</label></div></div>
+        <div class="med-item"><span>29. Asthme ?</span><div class="oui-non"><label><input type="radio" name="q29"> Oui</label><label><input type="radio" name="q29"> Non</label></div></div>
+        <div class="med-item"><span>30. Fumez-vous ?</span><div class="oui-non"><label><input type="radio" name="q30"> Oui</label><label><input type="radio" name="q30"> Non</label></div></div>
+        <div class="med-item"><span>31. Radiothérapie / chimiothérapie ?</span><div class="oui-non"><label><input type="radio" name="q31"> Oui</label><label><input type="radio" name="q31"> Non</label></div></div>
+        <div class="med-item"><span>32. Atteint(e) du sida / séropositif(ve) ?</span><div class="oui-non"><label><input type="radio" name="q32"> Oui</label><label><input type="radio" name="q32"> Non</label></div></div>
+        <div class="med-item"><span>33. Prothèses articulaires ?</span><div class="oui-non"><label><input type="radio" name="q33"> Oui</label><label><input type="radio" name="q33"> Non</label></div></div>
+        <div class="med-item"><span>34. Allergie : Pénicilline ?</span><div class="oui-non"><label><input type="radio" name="q34"> Oui</label><label><input type="radio" name="q34"> Non</label></div></div>
+        <div class="med-item"><span>35. Allergie : Aspirine ?</span><div class="oui-non"><label><input type="radio" name="q35"> Oui</label><label><input type="radio" name="q35"> Non</label></div></div>
+        <div class="med-item"><span>36. Allergie : Codéine ?</span><div class="oui-non"><label><input type="radio" name="q36"> Oui</label><label><input type="radio" name="q36"> Non</label></div></div>
+        <div class="med-item"><span>37. Allergie : Anesthésie locale ?</span><div class="oui-non"><label><input type="radio" name="q37"> Oui</label><label><input type="radio" name="q37"> Non</label></div></div>
+        <div class="med-item"><span>38. Hospitalisations / chirurgies ?</span><div class="oui-non"><label><input type="radio" name="q38"> Oui</label><label><input type="radio" name="q38"> Non</label></div></div>
+      </div>
+    </div>
+    <div class="field" style="margin-top:10px;"><label>Remarques / Précisions (si oui à l'une des questions ci-dessus)</label><textarea style="min-height:50px;" placeholder="Précisez ici les conditions, médicaments, allergies..."></textarea></div>
+    <div class="field" style="margin-top:8px;background:#fce4e1;border-radius:6px;padding:10px 14px;"><label style="color:#7a1200;">À l'usage du professionnel — PRÉCAUTIONS</label><textarea style="min-height:40px;background:white;" placeholder=""></textarea></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Antécédents dentaires</div>
+    <div class="grid-3" style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;"><label style="text-transform:none;letter-spacing:0;font-size:0.85rem;font-weight:700;">Dernière visite :</label><label class="ref-item"><input type="checkbox"> 0-6 mois</label><label class="ref-item"><input type="checkbox"> 6-12 mois</label><label class="ref-item"><input type="checkbox"> + 12 mois</label></div>
+      <div class="field full"><label>Traitements reçus</label><input type="text"></div>
+    </div>
+    <div class="med-cols">
+      <div>
+        <div class="med-item"><span>1. Démonstration d'hygiène buccale</span><div class="oui-non"><label><input type="radio" name="d1"> Oui</label><label><input type="radio" name="d1"> Non</label></div></div>
+        <div class="med-item"><span>2. Traitement des gencives</span><div class="oui-non"><label><input type="radio" name="d2"> Oui</label><label><input type="radio" name="d2"> Non</label></div></div>
+        <div class="med-item"><span>3. Traitements d'orthodontie</span><div class="oui-non"><label><input type="radio" name="d3"> Oui</label><label><input type="radio" name="d3"> Non</label></div></div>
+        <div class="med-item"><span>4. Traitement de canal</span><div class="oui-non"><label><input type="radio" name="d4"> Oui</label><label><input type="radio" name="d4"> Non</label></div></div>
+        <div class="med-item"><span>5. Obturations (plombages)</span><div class="oui-non"><label><input type="radio" name="d5"> Oui</label><label><input type="radio" name="d5"> Non</label></div></div>
+      </div>
+      <div>
+        <div class="med-item"><span>6. Couronne(s) et/ou ponts</span><div class="oui-non"><label><input type="radio" name="d6"> Oui</label><label><input type="radio" name="d6"> Non</label></div></div>
+        <div class="med-item"><span>7. Prothèses complètes / partielles</span><div class="oui-non"><label><input type="radio" name="d7"> Oui</label><label><input type="radio" name="d7"> Non</label></div></div>
+        <div class="med-item"><span>8. Chirurgie buccale / extraction</span><div class="oui-non"><label><input type="radio" name="d8"> Oui</label><label><input type="radio" name="d8"> Non</label></div></div>
+        <div class="med-item"><span>9. Implants dentaires</span><div class="oui-non"><label><input type="radio" name="d9"> Oui</label><label><input type="radio" name="d9"> Non</label></div></div>
+        <div class="med-item"><span>10. Radiographies dentaires</span><div class="oui-non"><label><input type="radio" name="d10"> Oui</label><label><input type="radio" name="d10"> Non</label></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Signatures</div>
+    <div class="grid">
+      <div class="sig-bloc">
+        <h4>Réservé au dentiste</h4>
+        <div class="field" style="margin-bottom:8px;"><label>Signature — Dentiste traitant</label><input type="text"></div>
+        <div class="field"><label>Date</label><input type="date"></div>
+      </div>
+      <div class="sig-bloc">
+        <h4>Déclaration du patient</h4>
+        <div style="font-size:0.78rem;color:#555;margin-bottom:8px;line-height:1.5;">Je déclare avoir répondu au questionnaire au meilleur de ma connaissance et m'engage à aviser la clinique de tout changement de mon état de santé.</div>
+        <div class="field" style="margin-bottom:8px;"><label>Signature — Patient ou responsable</label><input type="text"></div>
+        <div class="field"><label>Date</label><input type="date"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Questionnaire confidentiel — Clinique dentaire</div>
+</div></body></html>

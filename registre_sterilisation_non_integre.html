@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Registre stérilisation — Autoclave non intégré | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;--green:#1a9e5a;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:1100px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.85rem;opacity:0.75;}.avert-banner{background:#c0392b;color:white;padding:10px 36px;font-weight:700;font-size:0.85rem;letter-spacing:0.5px;}.section{padding:18px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px;}select,input[type=text]{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:0.88rem;font-family:inherit;color:var(--text);background:var(--light);}select:focus,input:focus{outline:none;border-color:var(--accent);}.label{font-size:0.8rem;font-weight:600;color:#5a6a80;}.tracker-table{width:100%;border-collapse:collapse;font-size:0.82rem;}.tracker-table th{background:var(--dark);color:white;padding:9px 8px;font-size:0.77rem;text-align:left;letter-spacing:0.3px;}.tracker-table td{padding:6px 8px;border-bottom:1px solid var(--border);}.tracker-table tr:nth-child(even) td{background:var(--light);}.tracker-table td input{border:none;background:transparent;width:100%;font-size:0.82rem;padding:2px;font-family:inherit;color:var(--text);}.tracker-table td input:focus{background:#fffde7;outline:none;}.tracker-table td select{border:none;background:transparent;width:100%;font-size:0.82rem;font-family:inherit;color:var(--text);}.add-row-btn{color:var(--blue);cursor:pointer;font-size:0.83rem;padding:8px;font-weight:700;width:100%;text-align:left;border:none;background:none;}.btn{padding:10px 22px;border-radius:7px;font-size:0.88rem;font-weight:600;cursor:pointer;border:none;}.btn-primary{background:var(--blue);color:white;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:20px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;align-items:center;}.tip-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:8px 12px;font-size:0.8rem;color:#0d3a6e;margin-top:10px;}.footer-note{text-align:center;font-size:0.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions,.controls button{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}.tracker-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Contrôle de la stérilisation</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Registre de stérilisation — Autoclave non intégré</h1><p>Réf. 3.3.6 — Enregistrement des cycles de stérilisation</p></div>
+  <div class="avert-banner">⚠️ LES INDICATEURS DOIVENT ÊTRE VÉRIFIÉS À LA FIN DE CHAQUE CYCLE AVANT DE LIBÉRER LA CHARGE</div>
+  <div class="section">
+    <div class="section-title">Informations du registre</div>
+    <div class="controls">
+      <span class="label">Clinique :</span><input type="text" placeholder="Nom de la clinique" style="width:200px;">
+      <span class="label">Mois :</span>
+      <select id="moisSel"><option>Janvier</option><option>Février</option><option>Mars</option><option>Avril</option><option>Mai</option><option>Juin</option><option>Juillet</option><option>Août</option><option>Septembre</option><option>Octobre</option><option>Novembre</option><option>Décembre</option></select>
+      <select id="anneeSel"></select>
+      <button class="btn btn-primary" onclick="ajouterLigne()">+ Ajouter une ligne</button>
+    </div>
+    <table class="tracker-table">
+      <thead><tr><th style="width:80px;">Date</th><th style="width:65px;">No stérilisateur</th><th style="width:65px;">No charge</th><th style="width:90px;">Type de cycle</th><th style="width:75px;">Durée</th><th>Contenu</th><th style="width:65px;">Heure entrée</th><th style="width:65px;">Heure sortie</th><th style="width:65px;">Température</th><th style="width:65px;">Pression</th><th style="width:100px;">Réussite DEP/Cl.5</th><th style="width:70px;">Initiales</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <button class="add-row-btn" onclick="ajouterLigne()">+ Ajouter une ligne</button>
+    <div class="tip-box">💡 <strong>Types de cycles courants :</strong> 134°C — Instruments emballés · 121°C — Liquides · Vide fractionné · Pré-vide &nbsp;|&nbsp; <strong>DEP/Cl.5 :</strong> ✅ Réussi · ❌ Échoué · ⚠️ N/A</div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Réf. 3.3.6 — Autoclave non intégré</div>
+</div>
+<script>
+const anneeSel=document.getElementById('anneeSel');
+const yr=new Date().getFullYear();
+for(let y=yr;y>=yr-3;y--){const o=document.createElement('option');o.value=y;o.textContent=y;anneeSel.appendChild(o);}
+document.getElementById('moisSel').selectedIndex=new Date().getMonth();
+function creerLigne(){
+  const tr=document.createElement('tr');
+  const cols=[true,true,true,false,true,true,true,true,true,true,false,true];
+  const types=['134°C','121°C','Vide fractionné','Pré-vide'];
+  cols.forEach((isInput,i)=>{
+    const td=document.createElement('td');
+    if(i===9){const sel=document.createElement('select');[['','-- --'],['✅ Réussi','✅ Réussi'],['❌ Échoué','❌ Échoué'],['⚠️ N/A','⚠️ N/A']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;sel.appendChild(o);});td.appendChild(sel);}
+    else if(i===3){const sel=document.createElement('select');['',...types].forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t||'-- --';sel.appendChild(o);});td.appendChild(sel);}
+    else{const inp=document.createElement('input');inp.type='text';td.appendChild(inp);}
+    tr.appendChild(td);
+  });
+  return tr;
+}
+function ajouterLigne(){document.getElementById('tbody').appendChild(creerLigne());}
+for(let i=0;i<20;i++)document.getElementById('tbody').appendChild(creerLigne());
+</script>
+</body></html>

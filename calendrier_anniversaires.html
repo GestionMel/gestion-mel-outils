@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Calendrier des anniversaires | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:1100px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.85rem;opacity:0.75;}.section{padding:18px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}.btn{padding:10px 20px;border-radius:7px;font-size:0.88rem;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;}.btn-primary{background:var(--blue);color:white;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.mois-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:20px 36px;}.mois-card{border:1.5px solid var(--border);border-radius:8px;overflow:hidden;}.mois-card-header{padding:8px 14px;font-weight:700;font-size:0.85rem;display:flex;align-items:center;justify-content:space-between;color:white;}.mois-card-body{padding:8px 14px;min-height:80px;}.ann-item{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border);font-size:0.83rem;}.ann-item:last-child{border-bottom:none;}.ann-jour{background:var(--blue);color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;}.ann-nom{flex:1;}.ann-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:0.9rem;padding:0;}.ann-del:hover{color:#c0392b;}.empty-msg{color:#aaa;font-size:0.8rem;font-style:italic;padding:6px 0;}.prochain-banner{margin:0 36px 16px;background:#e8f4fd;border-left:4px solid var(--accent);border-radius:4px;padding:10px 16px;font-size:0.88rem;color:#0d3a6e;display:none;}.overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:none;align-items:center;justify-content:center;z-index:100;}.overlay.active{display:flex;}.modal{background:white;border-radius:12px;padding:28px;width:380px;max-width:95vw;box-shadow:0 10px 40px rgba(0,0,0,0.2);}.modal h2{font-size:1.1rem;font-weight:700;color:var(--dark);margin-bottom:18px;}.modal label{display:block;font-size:0.73rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;margin-top:12px;}input[type=text],input[type=number],select{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;width:100%;}input:focus,select:focus{outline:none;border-color:var(--accent);}.modal-btns{display:flex;gap:10px;margin-top:18px;justify-content:flex-end;}.footer-note{text-align:center;font-size:0.75rem;color:#8a9ab0;padding:12px;}.actions{padding:18px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}
+.couleurs{color:#1a6abf,#e74c3c,#9b59b6,#2980b9,#f39c12,#1abc9c,#e67e22,#e91e63,#2ecc71,#16a085,#8e44ad,#c0392b;}
+@media(max-width:900px){.mois-grid{grid-template-columns:repeat(3,1fr);}}@media print{body{background:white;}.page-header,.overlay,.actions,.controls button{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}.mois-card-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Gestion de l'équipe</div></div>
+<div class="container">
+  <div class="doc-header"><h1>🎂 C'est la fête à qui ?</h1><p>Calendrier des anniversaires de l'équipe — Cliquez sur un mois pour ajouter un membre</p></div>
+  <div class="section">
+    <div class="section-title">Gestion du calendrier</div>
+    <div class="controls">
+      <button class="btn btn-primary" onclick="ouvrirModal()">🎂 Ajouter un anniversaire</button>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+  <div id="prochainBanner" class="prochain-banner"></div>
+  <div class="mois-grid" id="grille"></div>
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>🎂 Ajouter un anniversaire</h2>
+      <label>Nom de l'employé(e)</label><input type="text" id="inputNom" placeholder="Prénom Nom">
+      <label>Mois</label><select id="inputMois"><option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option><option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option><option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option></select>
+      <label>Jour</label><input type="number" id="inputJour" min="1" max="31" placeholder="ex. : 15">
+      <div class="modal-btns">
+        <button class="btn btn-secondary" onclick="fermerModal()">Annuler</button>
+        <button class="btn btn-primary" onclick="sauvegarder()">Ajouter ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const MOIS=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const EMOJIS=['❄️','💜','🌸','🌷','🌿','☀️','🏖️','🌻','🍂','🎃','🌧️','🎄'];
+const COLORS=['#1a6abf','#c0392b','#8e44ad','#2980b9','#d4ac0d','#1a9e5a','#e67e22','#c0392b','#1a9e5a','#16a085','#7d3c98','#c0392b'];
+let donnees={};
+try{donnees=JSON.parse(localStorage.getItem('ann_equipe')||'{}');}catch(e){}
+function sauverLocal(){try{localStorage.setItem('ann_equipe',JSON.stringify(donnees));}catch(e){}}
+function rendreMois(){
+  const g=document.getElementById('grille');g.innerHTML='';
+  MOIS.forEach((m,i)=>{
+    const items=(donnees[i]||[]).sort((a,b)=>a.j-b.j);
+    const card=document.createElement('div');card.className='mois-card';
+    card.innerHTML=`<div class="mois-card-header" style="background:${COLORS[i]}"><span>${EMOJIS[i]} ${m}</span><button onclick="ouvrirModal(${i})" style="background:rgba(255,255,255,0.2);border:none;border-radius:50%;width:22px;height:22px;color:white;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;">+</button></div><div class="mois-card-body" id="mois-${i}"></div>`;
+    g.appendChild(card);
+    const body=document.getElementById('mois-'+i);
+    if(!items.length){body.innerHTML='<div class="empty-msg">Aucun anniversaire</div>';}
+    else items.forEach(p=>{const d=document.createElement('div');d.className='ann-item';d.innerHTML=`<div class="ann-jour">${p.j}</div><div class="ann-nom">${p.n}</div><button class="ann-del" onclick="supprimer(${i},'${p.n.replace(/'/g,"\\'")}',${p.j})" title="Supprimer">✕</button>`;body.appendChild(d);});
+  });
+  afficherProchain();
+}
+function afficherProchain(){
+  const auj=new Date(),ma=auj.getMonth(),ja=auj.getDate();
+  let prochain=null,min=Infinity;
+  for(let m=0;m<12;m++){(donnees[m]||[]).forEach(p=>{let d=(m-ma)*30+(p.j-ja);if(d<0)d+=365;if(d<min){min=d;prochain={n:p.n,m,j:p.j,d};}});}
+  const b=document.getElementById('prochainBanner');
+  if(prochain){b.style.display='block';b.innerHTML=`🎉 <strong>Prochain anniversaire : ${prochain.n}</strong> — Le ${prochain.j} ${MOIS[prochain.m]}${prochain.d===0?' (aujourd\'hui !)':' — dans '+prochain.d+' jour'+(prochain.d>1?'s':'')}`;}
+  else b.style.display='none';
+}
+function ouvrirModal(m){
+  if(m!==undefined)document.getElementById('inputMois').value=m;
+  document.getElementById('overlay').classList.add('active');
+  document.getElementById('inputNom').focus();
+}
+function fermerModal(){document.getElementById('overlay').classList.remove('active');document.getElementById('inputNom').value='';document.getElementById('inputJour').value='';}
+function sauvegarder(){
+  const n=document.getElementById('inputNom').value.trim(),m=parseInt(document.getElementById('inputMois').value),j=parseInt(document.getElementById('inputJour').value);
+  if(!n||!j||j<1||j>31){alert('Veuillez remplir tous les champs.');return;}
+  if(!donnees[m])donnees[m]=[];
+  donnees[m].push({n,j});sauverLocal();fermerModal();rendreMois();
+}
+function supprimer(m,n,j){if(!confirm(`Supprimer l'anniversaire de ${n} ?`))return;donnees[m]=(donnees[m]||[]).filter(p=>!(p.n===n&&p.j===j));sauverLocal();rendreMois();}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))fermerModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fermerModal();});
+rendreMois();
+</script>
+<div class="footer-note">© Gestion Mel — gestionmel.com | Outil de gestion d'équipe — Les données sont sauvegardées localement</div>
+</body></html>
