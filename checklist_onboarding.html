@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Checklist d'intégration (onboarding) | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:900px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.75;}.section{padding:18px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}label{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}input[type=text],input[type=date]{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus{outline:none;border-color:var(--accent);background:white;}.check-table{width:100%;border-collapse:collapse;font-size:.85rem;}.check-table th{background:var(--dark);color:white;padding:8px 12px;text-align:left;font-size:.77rem;}.check-table td{border:1px solid var(--border);padding:7px 12px;vertical-align:middle;}.check-table tr:nth-child(even) td{background:var(--light);}.check-table td:first-child{width:32px;text-align:center;}.check-table td:last-child{width:140px;}.check-table td input[type=text]{border:none;background:transparent;width:100%;font-size:.82rem;font-family:inherit;padding:2px;}.check-table td input[type=text]:focus{outline:none;background:#fffde7;}.phase-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:700;margin-bottom:12px;color:white;}.badge-j1{background:var(--blue);}.badge-sem1{background:var(--green);}.badge-mois1{background:var(--orange);}.badge-probation{background:#8e44ad;}.btn{padding:11px 28px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;font-size:11px;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}.check-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Ressources humaines</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Checklist d'intégration — Nouvel(le) employé(e)</h1><p>Parcours d'accueil et d'intégration — Clinique dentaire</p></div>
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid">
+      <div class="field"><label>Nom et prénom</label><input type="text"></div>
+      <div class="field"><label>Poste</label><input type="text" placeholder="ex. : Secrétaire dentaire"></div>
+      <div class="field"><label>Date d'entrée en fonction</label><input type="date"></div>
+      <div class="field"><label>Responsable de l'intégration</label><input type="text"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Avant l'arrivée</div>
+    <table class="check-table"><thead><tr><th>✓</th><th>Tâche</th><th>Responsable</th><th>Date réalisée</th></tr></thead><tbody>
+      <tr><td><input type="checkbox"></td><td>Préparer le poste de travail (ordinateur, identifiants, téléphone)</td><td><input type="text" placeholder="Qui ?"></td><td><input type="text" placeholder="JJ/MM/AAAA"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Créer les accès logiciels (Dentitek, Progident, courriel, etc.)</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Préparer le dossier d'emploi (contrat, politiques, formulaires fiscaux)</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Prévenir l'équipe de l'arrivée du (de la) nouvel(le) employé(e)</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Préparer un badge ou accès à la clinique</td><td><input type="text"></td><td><input type="text"></td></tr>
+    </tbody></table>
+  </div>
+  <div class="section">
+    <div class="section-title">Jour 1 <span class="phase-badge badge-j1">📅 Jour 1</span></div>
+    <table class="check-table"><thead><tr><th>✓</th><th>Tâche</th><th>Responsable</th><th>Fait le</th></tr></thead><tbody>
+      <tr><td><input type="checkbox"></td><td>Accueil par la direction / dentiste — Tour de la clinique</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Présentation à l'équipe</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Remise du manuel de l'employé / politiques et procédures</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Explication du code de conduite et de la politique de confidentialité</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Formation sur la politique d'annulation et de no-show</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Visite des espaces (salles de traitement, stérilisation, vestiaire, urgences)</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Formation de base sur le logiciel de gestion clinique</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Signature du contrat de travail et des documents RH</td><td><input type="text"></td><td><input type="text"></td></tr>
+    </tbody></table>
+  </div>
+  <div class="section">
+    <div class="section-title">Première semaine <span class="phase-badge badge-sem1">📅 Semaine 1</span></div>
+    <table class="check-table"><thead><tr><th>✓</th><th>Tâche</th><th>Responsable</th><th>Fait le</th></tr></thead><tbody>
+      <tr><td><input type="checkbox"></td><td>Formation complète sur le logiciel de prise de rendez-vous</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Apprentissage de la facturation et soumissions d'assurance</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Formation sur la terminologie dentaire de base</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Observation des processus de stérilisation et d'hygiène (Loi 25)</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Formation sur la gestion des appels téléphoniques</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Connaissance des urgences dentaires courantes et protocoles</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Première rencontre de suivi avec le (la) superviseur(e)</td><td><input type="text"></td><td><input type="text"></td></tr>
+    </tbody></table>
+  </div>
+  <div class="section">
+    <div class="section-title">Premier mois <span class="phase-badge badge-mois1">📅 Mois 1</span></div>
+    <table class="check-table"><thead><tr><th>✓</th><th>Tâche</th><th>Responsable</th><th>Fait le</th></tr></thead><tbody>
+      <tr><td><input type="checkbox"></td><td>Maîtrise complète de la gestion de l'agenda</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Formation sur la gestion des comptes à recevoir</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Formation sur la Loi 25 — protection des renseignements personnels</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Connaissance de l'ensemble des formulaires et documents cliniques</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Accueil et intégration complète dans l'équipe</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Rencontre de mi-probation (30 jours)</td><td><input type="text"></td><td><input type="text"></td></tr>
+    </tbody></table>
+  </div>
+  <div class="section">
+    <div class="section-title">Fin de probation <span class="phase-badge badge-probation">📅 90 jours</span></div>
+    <table class="check-table"><thead><tr><th>✓</th><th>Tâche</th><th>Responsable</th><th>Fait le</th></tr></thead><tbody>
+      <tr><td><input type="checkbox"></td><td>Évaluation de fin de période de probation complétée</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Objectifs annuels fixés</td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="checkbox"></td><td>Confirmation du statut d'emploi (réussite / prolongation / fin)</td><td><input type="text"></td><td><input type="text"></td></tr>
+    </tbody></table>
+  </div>
+  <div class="section">
+    <div class="section-title">Signatures</div>
+    <div class="grid">
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="(manuscrite à l'impression)"></div>
+      <div class="field"><label>Signature du (de la) responsable RH</label><input type="text" placeholder="(manuscrite à l'impression)"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document RH — Outil de gestion d'équipe</div>
+</div></body></html>

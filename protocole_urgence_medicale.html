@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Protocole d'urgence médicale | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;--green:#1a9e5a;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:860px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,#7a0000 0%,var(--red) 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.85;}.section{padding:20px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}label{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}input[type=text]{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus{outline:none;border-color:var(--accent);background:white;}.urgence-card{border-radius:10px;margin-bottom:14px;overflow:hidden;}.urgence-card .card-header{padding:10px 18px;font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:10px;}.urgence-card .card-body{padding:14px 18px;font-size:.87rem;}.urgence-card.rouge .card-header{background:var(--red);color:white;}.urgence-card.orange .card-header{background:var(--orange);color:white;}.urgence-card.bleu .card-header{background:var(--blue);color:white;}.urgence-card.vert .card-header{background:var(--green);color:white;}.urgence-card .card-body{background:var(--light);}.step-list{list-style:none;padding:0;}.step-list li{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;line-height:1.6;}.step-num{background:var(--dark);color:white;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0;margin-top:2px;}.danger-box{background:#fce4e1;border-left:4px solid var(--red);border-radius:4px;padding:10px 14px;font-size:.84rem;color:#7a1200;margin:10px 0;line-height:1.6;font-weight:700;}.tip-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#0d3a6e;margin:10px 0;line-height:1.6;}.kit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}.kit-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--light);}.kit-item input{width:16px;height:16px;}.btn{padding:11px 28px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}.doc-header,.urgence-card .card-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Protocole d'urgence</div></div>
+<div class="container">
+  <div class="doc-header"><h1>🚨 Protocole d'urgence médicale en cabinet</h1><p>Afficher en salle de traitement et au poste de stérilisation — Révision annuelle requise</p></div>
+
+  <div class="section">
+    <div class="section-title">Informations de la clinique</div>
+    <div class="grid-3">
+      <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique dentaire ..."></div>
+      <div class="field"><label>Adresse complète</label><input type="text" placeholder="Pour donner aux services d'urgence"></div>
+      <div class="field"><label>No de téléphone clinique</label><input type="text" placeholder="(418) 000-0000"></div>
+      <div class="field"><label>Dentiste responsable</label><input type="text" placeholder="Dr. / Dre."></div>
+      <div class="field"><label>Emplacement du défibrillateur (DEA)</label><input type="text" placeholder="ex. : couloir principal, 1re porte"></div>
+      <div class="field"><label>Emplacement du kit d'urgence</label><input type="text" placeholder="ex. : armoire stérilisation"></div>
+    </div>
+    <div class="danger-box">🚨 EN CAS D'URGENCE — COMPOSEZ LE 911 EN PREMIER. Donnez l'adresse exacte de la clinique et restez en ligne.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Rôles en cas d'urgence</div>
+    <div class="grid">
+      <div class="urgence-card rouge" style="margin-bottom:0;">
+        <div class="card-header">🩺 Dentiste traitant</div>
+        <div class="card-body"><ul class="step-list">
+          <li><div class="step-num">1</div>Évaluer la situation et prendre en charge le patient</li>
+          <li><div class="step-num">2</div>Diriger les interventions médicales</li>
+          <li><div class="step-num">3</div>Utiliser le DEA / administrer les médicaments d'urgence si nécessaire</li>
+          <li><div class="step-num">4</div>Parler au répartiteur du 911</li>
+        </ul></div>
+      </div>
+      <div class="urgence-card orange" style="margin-bottom:0;">
+        <div class="card-header">📞 Secrétaire</div>
+        <div class="card-body"><ul class="step-list">
+          <li><div class="step-num">1</div>Composer le 911 immédiatement</li>
+          <li><div class="step-num">2</div>Donner l'adresse exacte de la clinique</li>
+          <li><div class="step-num">3</div>Aller accueillir les ambulanciers à l'entrée</li>
+          <li><div class="step-num">4</div>Gérer les autres patients (les éloigner calmement)</li>
+        </ul></div>
+      </div>
+      <div class="urgence-card bleu" style="margin-bottom:0;margin-top:10px;">
+        <div class="card-header">🤝 Assistant(e) dentaire / Hygiéniste</div>
+        <div class="card-body"><ul class="step-list">
+          <li><div class="step-num">1</div>Apporter le kit d'urgence et le DEA à la salle</li>
+          <li><div class="step-num">2</div>Assister le dentiste (position patient, O₂, médicaments)</li>
+          <li><div class="step-num">3</div>Documenter les signes vitaux si possible</li>
+          <li><div class="step-num">4</div>Libérer l'accès à la salle (retirer équipements encombrants)</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Scénarios d'urgence courants</div>
+
+    <div class="urgence-card rouge">
+      <div class="card-header">❤️ Arrêt cardio-respiratoire</div>
+      <div class="card-body"><ul class="step-list">
+        <li><div class="step-num">1</div>Appeler le 911 — coucher le patient sur le plancher</li>
+        <li><div class="step-num">2</div>Commencer la RCR (30 compressions : 2 insufflations)</li>
+        <li><div class="step-num">3</div>Brancher le DEA dès qu'il est disponible — suivre les instructions vocales</li>
+        <li><div class="step-num">4</div>Continuer jusqu'à l'arrivée des secours</li>
+      </ul></div>
+    </div>
+
+    <div class="urgence-card orange">
+      <div class="card-header">😵 Syncope (évanouissement)</div>
+      <div class="card-body"><ul class="step-list">
+        <li><div class="step-num">1</div>Allonger le patient et élever les jambes (position Trendelenburg)</li>
+        <li><div class="step-num">2</div>Desserrer les vêtements serrés, assurer la ventilation</li>
+        <li><div class="step-num">3</div>Administrer O₂ si disponible</li>
+        <li><div class="step-num">4</div>Surveiller — si pas de récupération en 1-2 min, appeler le 911</li>
+      </ul></div>
+    </div>
+
+    <div class="urgence-card orange">
+      <div class="card-header">😮 Réaction allergique / anaphylaxie</div>
+      <div class="card-body"><ul class="step-list">
+        <li><div class="step-num">1</div>Appeler le 911 immédiatement si signes systémiques (gonflement de la gorge, difficultés respiratoires, urticaire généralisé)</li>
+        <li><div class="step-num">2</div>Administrer l'épinéphrine (Épi-Pen) si disponible — cuisse externe</li>
+        <li><div class="step-num">3</div>Allonger le patient, jambes élevées</li>
+        <li><div class="step-num">4</div>Administrer O₂ — surveiller jusqu'à l'arrivée des secours</li>
+      </ul></div>
+    </div>
+
+    <div class="urgence-card bleu">
+      <div class="card-header">🩸 Hypoglycémie (patient diabétique)</div>
+      <div class="card-body"><ul class="step-list">
+        <li><div class="step-num">1</div>Si le patient est conscient : donner 15 g de sucre rapide (jus, glucose en gel, bonbons)</li>
+        <li><div class="step-num">2</div>Attendre 15 minutes, réévaluer</li>
+        <li><div class="step-num">3</div>Si inconscient ou pas d'amélioration : appeler le 911</li>
+        <li><div class="step-num">4</div>Ne jamais forcer une substance dans la bouche d'un patient inconscient</li>
+      </ul></div>
+    </div>
+
+    <div class="urgence-card bleu">
+      <div class="card-header">💨 Crise d'asthme</div>
+      <div class="card-body"><ul class="step-list">
+        <li><div class="step-num">1</div>Aider le patient à utiliser son inhalateur bronchodilatateur (Ventolin)</li>
+        <li><div class="step-num">2</div>Asseoir le patient droit, le calmer</li>
+        <li><div class="step-num">3</div>Administrer O₂ si disponible</li>
+        <li><div class="step-num">4</div>Appeler le 911 si pas d'amélioration après 10 min ou détresse sévère</li>
+      </ul></div>
+    </div>
+
+    <div class="urgence-card vert">
+      <div class="card-header">😨 Crise d'anxiété / hyperventilation</div>
+      <div class="card-body"><ul class="step-list">
+        <li><div class="step-num">1</div>Parler calmement au patient, le rassurer</li>
+        <li><div class="step-num">2</div>Demander de ralentir la respiration (inspirer 4 sec, expirer 4 sec)</li>
+        <li><div class="step-num">3</div>Interrompre le traitement — éloigner les instruments du champ de vision</li>
+        <li><div class="step-num">4</div>Si pas d'amélioration, évaluer pour d'autres causes et appeler le 911 si nécessaire</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Contenu du kit d'urgence — Vérification mensuelle</div>
+    <div class="kit-grid">
+      <label class="kit-item"><input type="checkbox">Épinéphrine (Épi-Pen ou seringues)</label>
+      <label class="kit-item"><input type="checkbox">Nitroglycérine sublinguale</label>
+      <label class="kit-item"><input type="checkbox">Antihistaminique (Benadryl)</label>
+      <label class="kit-item"><input type="checkbox">Aspirin 325 mg (croquable)</label>
+      <label class="kit-item"><input type="checkbox">Salbutamol (Ventolin) — bronchodilatateur</label>
+      <label class="kit-item"><input type="checkbox">Glucose oral (gel, jus, sucre)</label>
+      <label class="kit-item"><input type="checkbox">O₂ portable avec masques</label>
+      <label class="kit-item"><input type="checkbox">Ambu-bag (ballon-masque)</label>
+      <label class="kit-item"><input type="checkbox">Diazépam (Valium) injectable — si prescrit</label>
+      <label class="kit-item"><input type="checkbox">Tensiomètre et stéthoscope</label>
+      <label class="kit-item"><input type="checkbox">Canules orales / nasopharyngées</label>
+      <label class="kit-item"><input type="checkbox">DEA disponible et chargé</label>
+    </div>
+    <div class="tip-box">📋 Dates de vérification du kit : <input type="text" style="border:none;border-bottom:1.5px solid var(--border);background:transparent;width:400px;font-size:.85rem;padding:2px 4px;" placeholder="Indiquer les dates de révision et les initiales du vérificateur..."></div>
+  </div>
+
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer et afficher</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Réviser annuellement — Formation RCR recommandée pour tout le personnel</div>
+</div></body></html>

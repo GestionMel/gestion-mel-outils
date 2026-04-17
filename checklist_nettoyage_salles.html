@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Checklist nettoyage et décontamination | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--green:#1a9e5a;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:900px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.75;}.section{padding:18px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}label{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}input[type=text],input[type=date],select{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus,select:focus{outline:none;border-color:var(--accent);background:white;}.check-section{margin-bottom:16px;}.check-section h4{font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;background:var(--light);padding:6px 12px;border-radius:4px;}.check-row{display:flex;align-items:center;gap:12px;padding:7px 12px;border-bottom:1px solid #f0f0f0;font-size:.86rem;}.check-row:last-child{border-bottom:none;}.check-row input[type=checkbox]{width:17px;height:17px;flex-shrink:0;cursor:pointer;}.check-row span{flex:1;}.check-row input[type=text]{border:none;border-bottom:1.5px solid var(--border);background:transparent;width:100px;font-size:.82rem;padding:2px 4px;flex-shrink:0;}.avert-box{background:#fff8e1;border-left:4px solid var(--orange);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#7a4400;margin:10px 0;line-height:1.6;}.btn{padding:11px 28px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Contrôle des infections</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Checklist de nettoyage et décontamination des salles</h1><p>Protocole de contrôle des infections — Entre chaque patient et fin de journée</p></div>
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid">
+      <div class="field"><label>Salle de traitement</label><select><option>Salle 1</option><option>Salle 2</option><option>Salle 3</option><option>Salle 4</option><option>Salle d'hygiène</option><option>Salle de radio</option></select></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Initiales du responsable</label><input type="text" placeholder="___"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Entre chaque patient</div>
+    <div class="check-section">
+      <h4>🧤 Protection individuelle (EPI)</h4>
+      <div class="check-row"><input type="checkbox"><span>Porter les EPI appropriés (gants, masque, lunettes, blouse) avant de commencer</span></div>
+      <div class="check-row"><input type="checkbox"><span>Jeter les EPI contaminés après chaque patient</span></div>
+    </div>
+    <div class="check-section">
+      <h4>🗑️ Élimination des déchets</h4>
+      <div class="check-row"><input type="checkbox"><span>Éliminer les déchets contaminés dans le contenant approprié (rouge/biomédicaux)</span></div>
+      <div class="check-row"><input type="checkbox"><span>Déposer les instruments tranchants dans le contenant à objets piquants / coupants</span></div>
+      <div class="check-row"><input type="checkbox"><span>Retirer et éliminer les bavettes de protection de la tablette, du fauteuil et de la lumière</span></div>
+    </div>
+    <div class="check-section">
+      <h4>🧹 Nettoyage et désinfection</h4>
+      <div class="check-row"><input type="checkbox"><span>Nettoyer et désinfecter le fauteuil dentaire (dossier, appui-tête, accoudoirs)</span></div>
+      <div class="check-row"><input type="checkbox"><span>Désinfecter la tablette d'instruments et le plan de travail</span></div>
+      <div class="check-row"><input type="checkbox"><span>Désinfecter les poignées de la lampe opératoire</span></div>
+      <div class="check-row"><input type="checkbox"><span>Désinfecter le crachoir et la tubulure d'aspiration (purge)</span></div>
+      <div class="check-row"><input type="checkbox"><span>Désinfecter la turbine, le contre-angle et le détartreur (ou éliminer si à usage unique)</span></div>
+      <div class="check-row"><input type="checkbox"><span>Purger les conduites d'eau (faire couler 20-30 secondes)</span></div>
+      <div class="check-row"><input type="checkbox"><span>Désinfecter le clavier de l'unité et les poignées tactiles</span></div>
+    </div>
+    <div class="check-section">
+      <h4>🔬 Instruments</h4>
+      <div class="check-row"><input type="checkbox"><span>Transporter les instruments contaminés vers la salle de stérilisation (contenant fermé)</span></div>
+      <div class="check-row"><input type="checkbox"><span>Mettre en place les nouvelles barrières de protection pour le prochain patient</span></div>
+      <div class="check-row"><input type="checkbox"><span>Installer le plateau d'instruments stérilisés pour le prochain patient</span></div>
+    </div>
+    <div class="avert-box">⚠️ Le temps de contact du désinfectant doit être respecté selon les directives du fabricant. Ne jamais essuyer avant la fin du temps de contact.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Fin de journée (en plus des étapes entre patients)</div>
+    <div class="check-section">
+      <h4>🌙 Nettoyage approfondi</h4>
+      <div class="check-row"><input type="checkbox"><span>Nettoyer et désinfecter le plancher de la salle de traitement</span></div>
+      <div class="check-row"><input type="checkbox"><span>Nettoyer les cuvettes de l'évier et les robinets</span></div>
+      <div class="check-row"><input type="checkbox"><span>Nettoyer et désinfecter la salle de stérilisation</span></div>
+      <div class="check-row"><input type="checkbox"><span>Vider et nettoyer les pièges de l'aspiration</span></div>
+      <div class="check-row"><input type="checkbox"><span>Compléter le registre de stérilisation de l'autoclave</span></div>
+      <div class="check-row"><input type="checkbox"><span>Vérifier et réapprovisionner les fournitures (gants, masques, bavettes, etc.)</span></div>
+      <div class="check-row"><input type="checkbox"><span>Éliminer les déchets biomédicaux selon le protocole</span></div>
+      <div class="check-row"><input type="checkbox"><span>Éteindre les équipements et fermer les robinets à gaz et eau</span></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Signature</div>
+    <div class="grid">
+      <div class="field"><label>Effectué par</label><input type="text"></div>
+      <div class="field"><label>Heure de fin</label><input type="text" placeholder="HH:MM"></div>
+      <div class="field"><label>Vérifié par (superviseur)</label><input type="text"></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Protocole de contrôle des infections — Clinique dentaire</div>
+</div></body></html>

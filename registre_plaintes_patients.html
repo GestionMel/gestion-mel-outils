@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Registre des plaintes patients | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;--green:#1a9e5a;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:1100px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.75;}.section{padding:18px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}label{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}input[type=text]{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus{outline:none;border-color:var(--accent);background:white;}.registre-table{width:100%;border-collapse:collapse;font-size:.82rem;}.registre-table th{background:var(--dark);color:white;padding:9px 8px;font-size:.74rem;text-align:left;}.registre-table td{padding:7px 6px;border-bottom:1px solid var(--border);vertical-align:top;}.registre-table tr:nth-child(even) td{background:var(--light);}.registre-table td input[type=text]{border:none;background:transparent;width:100%;font-size:.81rem;font-family:inherit;padding:2px;}.registre-table td input:focus{outline:none;background:#fffde7;}.registre-table td select{border:none;background:transparent;font-size:.8rem;font-family:inherit;width:100%;}.statut-r{color:var(--orange);font-weight:700;}.statut-v{color:var(--green);font-weight:700;}.statut-b{color:var(--blue);font-weight:700;}.add-row-btn{background:none;border:2px dashed var(--accent);border-radius:6px;padding:8px;width:100%;color:var(--blue);font-weight:700;cursor:pointer;font-size:.83rem;margin-top:8px;}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}.stat-card{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px;text-align:center;}.stat-card .num{font-size:2rem;font-weight:700;color:var(--blue);}.stat-card .lbl{font-size:.75rem;color:#888;margin-top:4px;}.btn{padding:11px 28px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions,.add-row-btn{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}.registre-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Service à la clientèle</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Registre des plaintes et insatisfactions — Patients</h1><p>Outil de suivi de direction — Document confidentiel</p></div>
+  <div class="section">
+    <div class="section-title">Informations de la clinique</div>
+    <div class="grid">
+      <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique dentaire ..."></div>
+      <div class="field"><label>Responsable du registre</label><input type="text"></div>
+      <div class="field"><label>Année</label><input type="text" id="yr_reg"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Tableau de bord — Statistiques</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num" id="total">0</div><div class="lbl">Total des plaintes</div></div>
+      <div class="stat-card"><div class="num" id="en_cours" style="color:var(--orange)">0</div><div class="lbl">En traitement</div></div>
+      <div class="stat-card"><div class="num" id="resolues" style="color:var(--green)">0</div><div class="lbl">Résolues</div></div>
+      <div class="stat-card"><div class="num" id="fermees" style="color:#888">0</div><div class="lbl">Fermées</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Registre de suivi</div>
+    <table class="registre-table">
+      <thead><tr><th>#</th><th>Date réception</th><th>Nom patient</th><th>Nature de la plainte</th><th>Intervenant(e) impliqué(e)</th><th>Responsable du suivi</th><th>Actions prises</th><th>Date réponse</th><th>Statut</th></tr></thead>
+      <tbody id="reg-tbody">
+        <tr><td style="text-align:center;font-weight:700;color:#aaa;">1</td><td><input type="text" placeholder="JJ/MM/AA"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><select onchange="majStats()"><option>Reçue</option><option>En traitement</option><option>Résolue</option><option>Fermée</option></select></td></tr>
+        <tr><td style="text-align:center;font-weight:700;color:#aaa;">2</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><select onchange="majStats()"><option>Reçue</option><option>En traitement</option><option>Résolue</option><option>Fermée</option></select></td></tr>
+        <tr><td style="text-align:center;font-weight:700;color:#aaa;">3</td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><select onchange="majStats()"><option>Reçue</option><option>En traitement</option><option>Résolue</option><option>Fermée</option></select></td></tr>
+      </tbody>
+    </table>
+    <button class="add-row-btn" onclick="ajouterLigne()">+ Ajouter une plainte</button>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Registre de direction — Outil de suivi de la qualité</div>
+</div>
+<script>
+document.getElementById('yr_reg').value = new Date().getFullYear();
+let compteur = 3;
+function ajouterLigne(){
+  compteur++;
+  const tbody = document.getElementById('reg-tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="text-align:center;font-weight:700;color:#aaa;">${compteur}</td><td><input type="text" placeholder="JJ/MM/AA"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><select onchange="majStats()"><option>Reçue</option><option>En traitement</option><option>Résolue</option><option>Fermée</option></select></td>`;
+  tbody.appendChild(tr);
+  majStats();
+}
+function majStats(){
+  const selects = document.querySelectorAll('#reg-tbody select');
+  let total=0, enCours=0, resolues=0, fermees=0;
+  selects.forEach(s => {
+    const v = s.value;
+    if(v !== 'Reçue' || s.closest('tr').querySelector('input').value) total++;
+    if(v === 'En traitement') enCours++;
+    if(v === 'Résolue') resolues++;
+    if(v === 'Fermée') fermees++;
+  });
+  document.getElementById('total').textContent = selects.length;
+  document.getElementById('en_cours').textContent = enCours;
+  document.getElementById('resolues').textContent = resolues;
+  document.getElementById('fermees').textContent = fermees;
+}
+</script>
+</body></html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Lettre de référencement | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:780px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.75;}.section{padding:22px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}.field.full{grid-column:1/-1;}label{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}input[type=text],input[type=date],select,textarea{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}textarea{resize:vertical;min-height:80px;}.lettre-preview{background:var(--light);border:1px solid var(--border);border-radius:8px;padding:28px 32px;font-size:.9rem;line-height:1.85;}.lettre-preview p{margin-bottom:12px;}.lettre-field{border:none;border-bottom:1.5px solid var(--border);background:transparent;font-size:.9rem;font-family:inherit;color:var(--text);padding:2px 4px;}.lettre-field:focus{outline:none;border-bottom-color:var(--blue);background:#fffde7;}.lettre-field.lg{width:280px;}.lettre-field.md{width:180px;}.lettre-field.sm{width:100px;}.btn{padding:11px 28px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions,.section:first-of-type{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}.lettre-preview{border:none;background:white;}.lettre-field{background:transparent !important;}}</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Lettre de référencement</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Lettre de référencement vers un spécialiste</h1><p>Compléter les champs avant impression — La lettre s'affiche ci-dessous</p></div>
+  <div class="section">
+    <div class="section-title">Informations à remplir</div>
+    <div class="grid">
+      <div class="field"><label>Clinique référente</label><input type="text" id="clinique" placeholder="Clinique dentaire ..."></div>
+      <div class="field"><label>Dentiste référent(e)</label><input type="text" id="dentiste" placeholder="Dr. / Dre. ..."></div>
+      <div class="field"><label>Téléphone clinique</label><input type="text" id="tel" placeholder="(418) 000-0000"></div>
+      <div class="field"><label>Date de la lettre</label><input type="date" id="date_lettre"></div>
+      <div class="field"><label>Spécialiste destinataire</label><input type="text" id="specialiste" placeholder="Dr. / Dre. ..."></div>
+      <div class="field"><label>Spécialité</label><select id="specialite"><option>Endodontiste</option><option>Parodontiste</option><option>Orthodontiste</option><option>Chirurgien buccal et maxillo-facial</option><option>Prosthodontiste</option><option>Pédodontiste</option><option>Omnipraticien(ne)</option><option>Autre</option></select></div>
+      <div class="field"><label>Nom du (de la) patient(e)</label><input type="text" id="patient" placeholder="Nom, Prénom"></div>
+      <div class="field"><label>Date de naissance du patient</label><input type="date" id="ddn"></div>
+      <div class="field"><label>Motif du référencement</label><input type="text" id="motif" placeholder="ex. : Traitement de canal #26, complexité anatomique"></div>
+      <div class="field"><label>Degré d'urgence</label><select id="urgence"><option>Électif — dans les prochains mois</option><option>Semi-urgent — dans les 2 à 4 semaines</option><option>Urgent — dès que possible</option></select></div>
+    </div>
+    <div class="field" style="margin-top:10px;"><label>Informations cliniques pertinentes / Radiographies jointes</label><textarea id="notes" placeholder="Résumé clinique, traitements déjà effectués, radiographies annexées, notes importantes..."></textarea></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Aperçu de la lettre — Imprimer cette section</div>
+    <div class="lettre-preview">
+      <p style="text-align:right;color:#888;font-size:.85rem;" id="date-display">Date : </p>
+      <p><strong>À l'attention de :</strong> <span id="disp-spec"></span><br><span id="disp-specialite" style="font-style:italic;"></span></p>
+      <br>
+      <p><strong>Objet : Référencement — Patient(e) :</strong> <span id="disp-patient"></span> &nbsp;|&nbsp; Né(e) le : <span id="disp-ddn"></span></p>
+      <br>
+      <p>Chère consœur / Cher confrère,</p>
+      <p>Je vous réfère <span id="disp-patient2"></span>, patient(e) de notre clinique, pour la raison suivante :</p>
+      <p><strong><span id="disp-motif" style="color:var(--blue);"></span></strong></p>
+      <p><strong>Degré d'urgence : <span id="disp-urgence"></span></strong></p>
+      <p><strong>Informations cliniques pertinentes :</strong></p>
+      <p><span id="disp-notes" style="white-space:pre-wrap;"></span></p>
+      <p>N'hésitez pas à communiquer avec notre clinique pour toute question. Nous vous remercions de l'attention portée à notre patient(e).</p>
+      <br>
+      <p>Cordialement,</p>
+      <p><strong><span id="disp-dentiste"></span></strong><br><span id="disp-clinique"></span><br>Tél. : <span id="disp-tel"></span></p>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer la lettre</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Outil de gestion clinique</div>
+</div>
+<script>
+const fields=['clinique','dentiste','tel','specialiste','specialite','patient','motif','urgence','notes'];
+const maps={clinique:'disp-clinique',dentiste:'disp-dentiste',tel:'disp-tel',specialiste:'disp-spec',specialite:'disp-specialite',patient:'disp-patient',motif:'disp-motif',urgence:'disp-urgence',notes:'disp-notes'};
+fields.forEach(f=>{
+  const el=document.getElementById(f);
+  if(el)el.addEventListener('input',()=>{const t=document.getElementById(maps[f]);if(t)t.textContent=el.value;if(f==='patient'){const p2=document.getElementById('disp-patient2');if(p2)p2.textContent=el.value;}});
+});
+document.getElementById('date_lettre').addEventListener('input',e=>{
+  const d=new Date(e.target.value);
+  document.getElementById('date-display').textContent='Québec, le '+d.toLocaleDateString('fr-CA',{day:'numeric',month:'long',year:'numeric'});
+});
+document.getElementById('ddn').addEventListener('input',e=>{
+  const d=new Date(e.target.value);
+  document.getElementById('disp-ddn').textContent=d.toLocaleDateString('fr-CA',{day:'numeric',month:'long',year:'numeric'});
+});
+</script>
+</body></html>
