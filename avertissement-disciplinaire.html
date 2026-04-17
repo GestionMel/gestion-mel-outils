@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avertissement disciplinaire — Gestion Mel</title>
+<style>
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --orange: #e67e22; --red: #c0392b; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 780px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .niveau-selector { padding: 24px 36px; background: var(--light); border-bottom: 1px solid var(--border); }
+  .niveau-selector h3 { font-size: 0.85rem; font-weight: 700; color: #5a6a80; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .niveau-btns { display: flex; gap: 12px; }
+  .niveau-btn { flex: 1; padding: 14px; border-radius: 8px; border: 2px solid; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: white; text-align: center; }
+  .niveau-btn.n1 { border-color: var(--orange); color: var(--orange); }
+  .niveau-btn.n1.active { background: var(--orange); color: white; }
+  .niveau-btn.n2 { border-color: var(--red); color: var(--red); }
+  .niveau-btn.n2.active { background: var(--red); color: white; }
+  .doc-header { padding: 28px 36px; color: white; }
+  .doc-header.n1 { background: linear-gradient(135deg, #a04010 0%, #e67e22 100%); }
+  .doc-header.n2 { background: linear-gradient(135deg, #7a0000 0%, #c0392b 100%); }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.8; }
+  .doc-header .badge { display: inline-block; background: rgba(255,255,255,0.25); border-radius: 20px; padding: 3px 12px; font-size: 0.78rem; font-weight: 700; margin-top: 8px; }
+  .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 0.75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select, textarea { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.9rem; font-family: inherit; color: var(--text); background: var(--light); transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea { resize: vertical; min-height: 80px; }
+  .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
+  .checkbox-group label { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 400; color: var(--text); text-transform: none; letter-spacing: 0; cursor: pointer; }
+  .warning-box { border-radius: 8px; padding: 14px 18px; margin: 10px 0; font-size: 0.85rem; line-height: 1.6; }
+  .warning-box.n1 { background: #fff3e0; border-left: 4px solid var(--orange); color: #7a4000; }
+  .warning-box.n2 { background: #ffebee; border-left: 4px solid var(--red); color: #7a0000; }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; }
+  .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
+  @media print { body { background: white; } .page-header, .actions, .niveau-selector { display: none; } .container { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Gestion RH</div>
+</div>
+<div class="container">
+  <div class="niveau-selector">
+    <h3>Sélectionner le niveau d'avertissement</h3>
+    <div class="niveau-btns">
+      <button class="niveau-btn n1 active" onclick="setNiveau(1)">⚠️ 1er avertissement</button>
+      <button class="niveau-btn n2" onclick="setNiveau(2)">🚨 2e avertissement</button>
+    </div>
+  </div>
+
+  <div class="doc-header n1" id="doc-header">
+    <h1 id="doc-title">Avertissement disciplinaire — 1er avertissement</h1>
+    <p>Document officiel à conserver au dossier de l'employé(e)</p>
+    <span class="badge" id="doc-badge">NIVEAU 1 — AVERTISSEMENT VERBAL / ÉCRIT</span>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid">
+      <div class="field"><label>Nom de l'employé(e)</label><input type="text" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Poste occupé</label><input type="text" placeholder="Titre du poste"></div>
+      <div class="field"><label>Date de l'incident / manquement</label><input type="date"></div>
+      <div class="field"><label>Date de l'avertissement</label><input type="date"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Motif de l'avertissement</div>
+    <div class="checkbox-group" style="margin-bottom: 14px;">
+      <label><input type="checkbox"> Retards répétés ou absences non justifiées</label>
+      <label><input type="checkbox"> Non-respect du code de conduite ou des politiques internes</label>
+      <label><input type="checkbox"> Comportement inapproprié envers un(e) collègue ou patient(e)</label>
+      <label><input type="checkbox"> Négligence dans l'exécution des tâches</label>
+      <label><input type="checkbox"> Non-respect des protocoles de santé et sécurité</label>
+      <label><input type="checkbox"> Utilisation inappropriée des équipements ou ressources</label>
+      <label><input type="checkbox"> Autre (préciser ci-dessous)</label>
+    </div>
+    <div class="field"><label>Description détaillée des faits</label><textarea placeholder="Décrire avec précision les faits reprochés : date, heure, lieu, témoins, comportement observé..."></textarea></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Mesures correctives demandées</div>
+    <div class="field"><textarea placeholder="Indiquer clairement les comportements attendus, les changements requis et le délai pour les mettre en œuvre..." style="min-height: 80px;"></textarea></div>
+    <div class="warning-box n1" id="warning-box">
+      ⚠️ <strong>1er avertissement :</strong> Cet avertissement est émis à titre de mise en garde formelle. Si la situation ne se corrige pas, un deuxième avertissement ou d'autres mesures disciplinaires pourront être envisagés, pouvant mener jusqu'au congédiement.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Commentaires de l'employé(e)</div>
+    <div class="field"><textarea placeholder="L'employé(e) peut inscrire ses commentaires, sa version des faits ou ses observations ici..."></textarea></div>
+    <div style="display:flex; align-items: center; gap: 8px; margin-top: 10px;">
+      <input type="checkbox" id="refuse-signer" style="width: 16px; height: 16px;">
+      <label for="refuse-signer" style="font-size: 0.85rem; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--text); cursor: pointer;">L'employé(e) refuse de signer ce document (sera noté au dossier)</label>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Signatures</div>
+    <div class="grid">
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Nom du gestionnaire</label><input type="text" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Signature du gestionnaire</label><input type="text" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Témoin (si applicable)</label><input type="text" placeholder="Nom du témoin"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+    <button class="btn btn-primary">💾 Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
+</div>
+<script>
+function setNiveau(n) {
+  const btns = document.querySelectorAll('.niveau-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  btns[n-1].classList.add('active');
+  const header = document.getElementById('doc-header');
+  const title = document.getElementById('doc-title');
+  const badge = document.getElementById('doc-badge');
+  const wbox = document.getElementById('warning-box');
+  if (n === 1) {
+    header.className = 'doc-header n1';
+    title.textContent = 'Avertissement disciplinaire — 1er avertissement';
+    badge.textContent = 'NIVEAU 1 — AVERTISSEMENT VERBAL / ÉCRIT';
+    wbox.className = 'warning-box n1';
+    wbox.innerHTML = '⚠️ <strong>1er avertissement :</strong> Cet avertissement est émis à titre de mise en garde formelle. Si la situation ne se corrige pas, un deuxième avertissement ou d\'autres mesures disciplinaires pourront être envisagés, pouvant mener jusqu\'au congédiement.';
+  } else {
+    header.className = 'doc-header n2';
+    title.textContent = 'Avertissement disciplinaire — 2e avertissement';
+    badge.textContent = 'NIVEAU 2 — AVERTISSEMENT FINAL';
+    wbox.className = 'warning-box n2';
+    wbox.innerHTML = '🚨 <strong>2e avertissement — Avertissement final :</strong> Cet avertissement constitue un ultime avertissement formel. Tout manquement supplémentaire pourra entraîner une suspension ou un congédiement pour cause juste et suffisante, conformément à la Loi sur les normes du travail du Québec.';
+  }
+}
+</script>
+</body>
+</html>

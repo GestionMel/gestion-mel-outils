@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Politique d'harcèlement — Gestion Mel</title>
+<style>
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 860px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.75; }
+  .clinic-info { background: var(--light); padding: 16px 36px; border-bottom: 1px solid var(--border); display: flex; gap: 20px; }
+  .clinic-info input { border: 1.5px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 0.9rem; color: var(--text); background: white; flex: 1; }
+  .article { padding: 20px 36px; border-bottom: 1px solid var(--border); }
+  .article h2 { font-size: 1rem; font-weight: 700; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .article h2::before { content: ''; display: block; width: 3px; height: 16px; background: var(--accent); border-radius: 2px; flex-shrink: 0; }
+  .article p { font-size: 0.88rem; line-height: 1.75; color: #2a3a4a; margin-bottom: 8px; }
+  .article ul { margin: 6px 0 8px 20px; }
+  .article ul li { font-size: 0.88rem; line-height: 1.8; color: #2a3a4a; }
+  .highlight-box { background: #e8f4fd; border-left: 4px solid var(--blue); border-radius: 4px; padding: 12px 16px; margin: 10px 0; font-size: 0.85rem; color: #0d3a6e; line-height: 1.6; }
+  .signature-section { padding: 24px 36px; background: #f8fafd; border-bottom: 1px solid var(--border); }
+  .sig-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 0.75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input[type="text"], input[type="date"] { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.9rem; font-family: inherit; color: var(--text); background: var(--light); }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; }
+  .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
+  @media print { body { background: white; } .page-header, .actions, .clinic-info { display: none; } .container { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Gestion RH</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Politique de prévention du harcèlement au travail</h1>
+    <p>Conformément à la Loi sur les normes du travail du Québec (art. 81.18 à 81.20)</p>
+  </div>
+
+  <div class="clinic-info">
+    <input type="text" placeholder="Nom de la clinique">
+    <input type="text" placeholder="Date d'entrée en vigueur (ex. : 1er mai 2025)">
+  </div>
+
+  <div class="article">
+    <h2>Engagement de la direction</h2>
+    <p>La direction de cette clinique dentaire s'engage fermement à maintenir un milieu de travail sain, respectueux et exempt de toute forme de harcèlement psychologique ou sexuel. Cette politique s'applique à tous les membres du personnel, peu importe leur statut ou leur ancienneté.</p>
+  </div>
+
+  <div class="article">
+    <h2>Définitions</h2>
+    <p><strong>Harcèlement psychologique :</strong> Conduite vexatoire se manifestant par des comportements, paroles, actes ou gestes répétés qui sont hostiles ou non désirés et qui portent atteinte à la dignité ou à l'intégrité psychologique ou physique d'une personne, créant un milieu de travail néfaste.</p>
+    <p><strong>Harcèlement sexuel :</strong> Comportement à caractère sexuel non souhaité qui porte atteinte à la dignité d'une personne ou crée un environnement de travail intimidant, hostile ou offensant.</p>
+    <div class="highlight-box">📌 Une seule conduite grave peut constituer du harcèlement si elle porte atteinte et produit un effet nocif continu sur l'employé(e).</div>
+  </div>
+
+  <div class="article">
+    <h2>Exemples de comportements interdits</h2>
+    <ul>
+      <li>Propos humiliants, insultes, surnoms dégradants ou moqueries répétées</li>
+      <li>Isolement social, exclusion délibérée ou ignorance systématique</li>
+      <li>Surcharge de travail excessive ou retrait injustifié de responsabilités</li>
+      <li>Menaces, intimidation ou comportements agressifs</li>
+      <li>Commentaires ou blagues à caractère sexiste, raciste ou discriminatoire</li>
+      <li>Contacts physiques non désirés ou avances non souhaitées</li>
+      <li>Surveillance abusive ou contrôle excessif du travail</li>
+    </ul>
+  </div>
+
+  <div class="article">
+    <h2>Procédure de plainte</h2>
+    <p>Toute personne qui croit être victime de harcèlement au travail peut :</p>
+    <ul>
+      <li><strong>Étape 1 :</strong> Informer verbalement la personne que son comportement est inacceptable (si sécuritaire de le faire).</li>
+      <li><strong>Étape 2 :</strong> Déposer une plainte écrite auprès du gestionnaire ou de la personne désignée.</li>
+      <li><strong>Étape 3 :</strong> Si la plainte implique le gestionnaire, s'adresser directement à la direction ou aux ressources humaines.</li>
+      <li><strong>Étape 4 :</strong> En dernier recours, porter plainte à la Commission des normes, de l'équité, de la santé et de la sécurité du travail (CNESST).</li>
+    </ul>
+    <div class="highlight-box">⏰ <strong>Délai :</strong> La plainte doit être déposée dans les <strong>2 ans</strong> suivant la dernière conduite vexatoire.</div>
+  </div>
+
+  <div class="article">
+    <h2>Enquête et mesures</h2>
+    <p>Toute plainte sera traitée avec confidentialité, diligence et impartialité. L'employeur s'engage à :</p>
+    <ul>
+      <li>Prendre la plainte au sérieux et agir rapidement</li>
+      <li>Protéger la personne plaignante contre toute représaille</li>
+      <li>Mener une enquête équitable si nécessaire</li>
+      <li>Imposer des mesures correctives ou disciplinaires appropriées</li>
+    </ul>
+  </div>
+
+  <div class="article">
+    <h2>Responsabilités</h2>
+    <p><strong>Employeur :</strong> Prévenir le harcèlement, intervenir rapidement, offrir un milieu de travail sain.</p>
+    <p><strong>Gestionnaires :</strong> Donner l'exemple, traiter les plaintes avec sérieux, ne pas tolérer ni encourager des comportements harcelants.</p>
+    <p><strong>Employé(e)s :</strong> Respecter leurs collègues, signaler toute situation de harcèlement dont ils sont témoins ou victimes.</p>
+  </div>
+
+  <div class="signature-section">
+    <div class="sig-title">Attestation de lecture et d'acceptation</div>
+    <p style="font-size:0.85rem; margin-bottom:16px; color:#2a3a4a;">Je soussigné(e) confirme avoir reçu, lu et compris la Politique de prévention du harcèlement au travail de la clinique. Je m'engage à respecter cette politique en tout temps.</p>
+    <div class="grid">
+      <div class="field"><label>Nom de l'employé(e)</label><input type="text" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Poste</label><input type="text"></div>
+      <div class="field"><label>Signature</label><input type="text" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Signature du gestionnaire</label><input type="text" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+    <button class="btn btn-primary">💾 Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Ce document est conforme à la Loi sur les normes du travail du Québec</div>
+</div>
+</body>
+</html>

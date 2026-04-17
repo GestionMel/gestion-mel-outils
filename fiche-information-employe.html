@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche d'information employé — Gestion Mel</title>
+<style>
+  :root {
+    --blue: #1a6abf;
+    --dark: #0d1b2a;
+    --accent: #2196f3;
+    --light: #f4f8ff;
+    --border: #d0dff0;
+    --text: #1a2535;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); min-height: 100vh; }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
+  .page-header .brand span { color: var(--accent); }
+  .page-header .doc-title { font-size: 0.9rem; opacity: 0.7; }
+  .container { max-width: 860px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.75; }
+  .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
+  .section:last-of-type { border-bottom: none; }
+  .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 0.75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select, textarea { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.9rem; font-family: inherit; color: var(--text); background: var(--light); transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea { resize: vertical; min-height: 70px; }
+  .radio-group { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 4px; }
+  .radio-group label { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 400; color: var(--text); text-transform: none; letter-spacing: 0; cursor: pointer; }
+  .radio-group input[type="radio"] { width: 16px; height: 16px; accent-color: var(--accent); }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; }
+  .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #1558a0; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-secondary:hover { background: var(--light); }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
+  @media print {
+    body { background: white; }
+    .page-header, .actions { display: none; }
+    .container { box-shadow: none; margin: 0; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div class="doc-title">Clinique dentaire — outil de gestion RH</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Fiche d'information employé</h1>
+    <p>À compléter lors de l'embauche et à mettre à jour au besoin</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Informations personnelles</div>
+    <div class="grid">
+      <div class="field"><label>Nom de famille</label><input type="text" placeholder="Nom"></div>
+      <div class="field"><label>Prénom</label><input type="text" placeholder="Prénom"></div>
+      <div class="field"><label>Date de naissance</label><input type="date"></div>
+      <div class="field"><label>No. d'assurance sociale (NAS)</label><input type="text" placeholder="XXX XXX XXX"></div>
+      <div class="field full"><label>Adresse</label><input type="text" placeholder="Numéro civique, rue, appartement"></div>
+      <div class="field"><label>Ville</label><input type="text" placeholder="Ville"></div>
+      <div class="field"><label>Province</label><select><option>Québec</option><option>Ontario</option><option>Autre</option></select></div>
+      <div class="field"><label>Code postal</label><input type="text" placeholder="A1A 1A1"></div>
+      <div class="field"><label>Téléphone principal</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
+      <div class="field"><label>Téléphone secondaire</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
+      <div class="field full"><label>Adresse courriel personnelle</label><input type="email" placeholder="courriel@exemple.com"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Informations sur le poste</div>
+    <div class="grid">
+      <div class="field"><label>Titre du poste</label><input type="text" placeholder="Ex. : Secrétaire dentaire"></div>
+      <div class="field"><label>Date d'entrée en fonction</label><input type="date"></div>
+      <div class="field"><label>Type d'emploi</label>
+        <div class="radio-group">
+          <label><input type="radio" name="type-emploi" value="temps-plein"> Temps plein</label>
+          <label><input type="radio" name="type-emploi" value="temps-partiel"> Temps partiel</label>
+          <label><input type="radio" name="type-emploi" value="occasionnel"> Occasionnel</label>
+        </div>
+      </div>
+      <div class="field"><label>Taux horaire / Salaire</label><input type="text" placeholder="Ex. : 22,00 $/h"></div>
+      <div class="field"><label>No. d'employé</label><input type="text" placeholder="Ex. : EMP-001"></div>
+      <div class="field"><label>Département / Équipe</label><input type="text" placeholder="Ex. : Accueil"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Personne à contacter en cas d'urgence</div>
+    <div class="grid">
+      <div class="field"><label>Nom complet</label><input type="text" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Lien avec l'employé</label><input type="text" placeholder="Ex. : Conjoint(e), parent"></div>
+      <div class="field"><label>Téléphone</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
+      <div class="field"><label>Téléphone alternatif</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Santé et allergies</div>
+    <div class="grid">
+      <div class="field full"><label>Allergies connues (médicaments, latex, aliments, etc.)</label><textarea placeholder="Indiquer toute allergie ou intolérance connue. Écrire AUCUNE si applicable."></textarea></div>
+      <div class="field full"><label>Conditions médicales importantes à signaler (facultatif)</label><textarea placeholder="Information pertinente pour la sécurité au travail uniquement."></textarea></div>
+      <div class="field full"><label>Groupe sanguin (facultatif)</label><input type="text" placeholder="Ex. : O+"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Informations bancaires (paie par dépôt direct)</div>
+    <div class="grid">
+      <div class="field"><label>Nom de l'institution financière</label><input type="text" placeholder="Ex. : Desjardins, TD"></div>
+      <div class="field"><label>No. de transit</label><input type="text" placeholder="5 chiffres"></div>
+      <div class="field"><label>No. d'institution</label><input type="text" placeholder="3 chiffres"></div>
+      <div class="field"><label>No. de compte</label><input type="text" placeholder="7 chiffres"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Signature</div>
+    <div class="grid">
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="Signature manuscrite sur version imprimée"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+    <button class="btn btn-primary" onclick="alert('Veuillez imprimer ou sauvegarder en PDF pour conserver ce document.')">💾 Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
+</div>
+</body>
+</html>
