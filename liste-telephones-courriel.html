@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liste téléphonique et courriel — Gestion Mel</title>
+<style>
+:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+
+.page-header{background:var(--dark);color:white;padding:14px 34px;display:flex;align-items:center;justify-content:space-between;}
+.page-header .brand{font-size:1.4rem;font-weight:700;}
+.page-header .brand span{color:var(--accent);}
+
+.container{max-width:1080px;margin:24px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.12);overflow:hidden;}
+
+.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 32px;}
+.doc-header h1{font-size:1.35rem;font-weight:700;margin-bottom:3px;}
+.doc-header p{font-size:0.8rem;opacity:0.7;}
+
+.toolbar{padding:14px 26px;background:#f7faff;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.search-box{flex:1;min-width:200px;display:flex;align-items:center;gap:8px;background:white;border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;}
+.search-box svg{flex-shrink:0;color:#9aa8b8;}
+.search-box input{border:none;outline:none;font-size:0.88rem;color:var(--text);font-family:inherit;flex:1;background:transparent;}
+
+.filter-select{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:0.85rem;font-family:inherit;color:var(--text);background:white;cursor:pointer;outline:none;}
+.filter-select:focus{border-color:var(--accent);}
+
+.btn{padding:8px 18px;border-radius:7px;font-size:0.84rem;font-weight:600;cursor:pointer;border:none;transition:all 0.18s;font-family:inherit;display:flex;align-items:center;gap:5px;}
+.btn-primary{background:var(--blue);color:white;} .btn-primary:hover{background:#1558a0;}
+.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+.btn-danger{background:white;color:#dc2626;border:1.5px solid #dc2626;}
+
+/* CATEGORY TABS */
+.cat-tabs{display:flex;gap:6px;padding:12px 26px;background:#f0f6ff;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.cat-tab{padding:5px 14px;border-radius:20px;font-size:0.76rem;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s;}
+.cat-tab.active{background:var(--blue);color:white;border-color:var(--blue);}
+.cat-tab:not(.active){background:white;color:var(--text);border-color:var(--border);}
+.cat-tab:not(.active):hover{border-color:var(--blue);color:var(--blue);}
+
+/* CONTACTS LIST */
+.contacts-wrap{padding:16px 26px;}
+.contacts-count{font-size:0.76rem;color:#6b7280;margin-bottom:10px;}
+
+.contact-card{background:white;border:1.5px solid var(--border);border-radius:9px;margin-bottom:8px;transition:all 0.15s;overflow:hidden;}
+.contact-card:hover{border-color:#a8c4e8;box-shadow:0 2px 12px rgba(26,106,191,0.1);}
+.card-head{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;}
+.avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;color:white;flex-shrink:0;font-family:inherit;}
+.card-info{flex:1;min-width:0;}
+.card-name{font-size:0.92rem;font-weight:700;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-role{font-size:0.76rem;color:#6b7280;margin-top:1px;}
+.card-quick{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;}
+.quick-link{display:flex;align-items:center;gap:4px;font-size:0.76rem;color:var(--blue);text-decoration:none;padding:4px 8px;border:1px solid #c8daf4;border-radius:6px;transition:all 0.15s;white-space:nowrap;}
+.quick-link:hover{background:#e8f0ff;border-color:var(--blue);}
+.cat-badge{font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap;}
+
+/* CARD DETAIL (expanded) */
+.card-detail{border-top:1px solid var(--border);padding:12px 16px 14px 68px;background:#fafcff;display:none;}
+.card-detail.open{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
+.detail-group{display:flex;flex-direction:column;gap:3px;}
+.detail-lbl{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#8a9ab0;}
+.detail-val{font-size:0.84rem;color:var(--text);}
+.detail-val a{color:var(--blue);text-decoration:none;}
+.detail-val a:hover{text-decoration:underline;}
+.notes-val{font-size:0.8rem;color:#5a6a80;font-style:italic;grid-column:1/-1;}
+
+/* CARD ACTIONS */
+.card-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px;color:#9aa8b8;}
+.empty svg{margin-bottom:10px;opacity:0.4;}
+.empty p{font-size:0.9rem;}
+
+/* MODAL OVERLAY */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,20,40,0.45);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:12px;width:100%;max-width:560px;box-shadow:0 8px 40px rgba(0,0,0,0.2);overflow:hidden;}
+.modal-hd{background:linear-gradient(135deg,var(--dark),#1a3a5c);color:white;padding:18px 22px;font-size:1rem;font-weight:700;}
+.modal-body{padding:20px 22px;max-height:70vh;overflow-y:auto;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mfield{display:flex;flex-direction:column;gap:4px;}
+.mfield.full{grid-column:1/-1;}
+.mlbl{font-size:0.71rem;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:#5a6a80;}
+.minp{border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-size:0.88rem;font-family:inherit;color:var(--text);background:var(--light);width:100%;}
+.minp:focus{outline:none;border-color:var(--accent);background:white;}
+.modal-ft{padding:14px 22px;background:#f7faff;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;}
+
+/* PRINT */
+@media print{
+  body{background:white;}
+  .container{box-shadow:none;margin:0;max-width:100%;}
+  .page-header,.toolbar,.cat-tabs,.card-actions,.btn{display:none!important;}
+  .contact-card{border:1px solid #ddd;break-inside:avoid;margin-bottom:6px;}
+  .card-detail{display:grid!important;}
+  .contacts-wrap{padding:8px;}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:0.82rem;opacity:0.65">Répertoire téléphonique et courriel</div>
+</div>
+
+<div class="container">
+<div class="doc-header">
+  <h1>📋 Liste téléphonique et courriel</h1>
+  <p>Répertoire complet des contacts · Clinique · Fournisseurs · Spécialistes · Urgences</p>
+</div>
+
+<div class="toolbar">
+  <div class="search-box">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Rechercher un nom, rôle, téléphone..." oninput="filterContacts()">
+  </div>
+  <select class="filter-select" id="filterCat" onchange="filterContacts()">
+    <option value="">Toutes catégories</option>
+  </select>
+  <button class="btn btn-primary" onclick="openModal()">➕ Nouveau contact</button>
+  <button class="btn btn-secondary" onclick="exportCSV()">📤 Exporter CSV</button>
+  <button class="btn btn-secondary" onclick="window.print()">🖨 Imprimer</button>
+</div>
+
+<div class="cat-tabs" id="catTabs"></div>
+
+<div class="contacts-wrap">
+  <div class="contacts-count" id="contactsCount"></div>
+  <div id="contactsList"></div>
+  <div class="empty" id="emptyState" style="display:none">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <p>Aucun contact trouvé</p>
+  </div>
+</div>
+</div>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-hd" id="modalTitle">➕ Nouveau contact</div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="mfield"><label class="mlbl">Prénom</label><input class="minp" id="fPrenom" placeholder="Marie"></div>
+        <div class="mfield"><label class="mlbl">Nom</label><input class="minp" id="fNom" placeholder="Tremblay"></div>
+        <div class="mfield full"><label class="mlbl">Titre / Rôle</label><input class="minp" id="fRole" placeholder="ex: Hygiéniste dentaire, Comptable..."></div>
+        <div class="mfield full">
+          <label class="mlbl">Catégorie</label>
+          <select class="minp" id="fCat">
+            <option value="Équipe clinique">👩‍⚕️ Équipe clinique</option>
+            <option value="Administration">📁 Administration</option>
+            <option value="Fournisseurs">🏭 Fournisseurs</option>
+            <option value="Spécialistes">🩺 Spécialistes</option>
+            <option value="Laboratoires">🔬 Laboratoires</option>
+            <option value="Urgences">🚨 Urgences</option>
+            <option value="Autre">📌 Autre</option>
+          </select>
+        </div>
+        <div class="mfield"><label class="mlbl">Téléphone bureau</label><input class="minp" id="fTel" placeholder="514-555-1234" type="tel"></div>
+        <div class="mfield"><label class="mlbl">Poste</label><input class="minp" id="fPoste" placeholder="ex: 101"></div>
+        <div class="mfield"><label class="mlbl">Cellulaire</label><input class="minp" id="fCell" placeholder="514-555-5678" type="tel"></div>
+        <div class="mfield"><label class="mlbl">Télécopieur</label><input class="minp" id="fFax" placeholder="514-555-9012" type="tel"></div>
+        <div class="mfield full"><label class="mlbl">Courriel principal</label><input class="minp" id="fEmail" placeholder="marie.tremblay@clinique.com" type="email"></div>
+        <div class="mfield full"><label class="mlbl">Courriel secondaire</label><input class="minp" id="fEmail2" placeholder="(optionnel)" type="email"></div>
+        <div class="mfield full"><label class="mlbl">Adresse</label><input class="minp" id="fAdresse" placeholder="123 rue Principale, Québec, QC"></div>
+        <div class="mfield full"><label class="mlbl">Site web</label><input class="minp" id="fWeb" placeholder="https://www.exemple.com" type="url"></div>
+        <div class="mfield full"><label class="mlbl">Notes</label><input class="minp" id="fNotes" placeholder="ex: Disponible 8h–17h, urgences par cell..."></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn btn-danger" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="saveContact()">💾 Sauvegarder</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══ DATA ═══════════════════════════════════════════════════════════════════
+const CATEGORIES = ['Équipe clinique','Administration','Fournisseurs','Spécialistes','Laboratoires','Urgences','Autre'];
+const CAT_COLORS = {
+  'Équipe clinique':'#1d4ed8','Administration':'#7c3aed','Fournisseurs':'#0f766e',
+  'Spécialistes':'#b45309','Laboratoires':'#065f46','Urgences':'#b91c1c','Autre':'#374151'
+};
+const CAT_BG = {
+  'Équipe clinique':'#dbeafe','Administration':'#ede9fe','Fournisseurs':'#ccfbf1',
+  'Spécialistes':'#fef3c7','Laboratoires':'#d1fae5','Urgences':'#fee2e2','Autre':'#f3f4f6'
+};
+const CAT_EMO = {
+  'Équipe clinique':'👩‍⚕️','Administration':'📁','Fournisseurs':'🏭',
+  'Spécialistes':'🩺','Laboratoires':'🔬','Urgences':'🚨','Autre':'📌'
+};
+
+let contacts = [];
+let editingId = null;
+let activeFilter = '';
+
+// Sample / default contacts
+const DEFAULTS = [
+  {id:1,prenom:'Dr.',nom:'Martin Leblanc',role:'Dentiste principal',cat:'Équipe clinique',tel:'514-555-0100',poste:'',cell:'514-555-0101',fax:'',email:'drlleblanc@clinique.com',email2:'',adresse:'',web:'',notes:'Urgences par cellulaire'},
+  {id:2,prenom:'Marie',nom:'Tremblay',role:'Hygiéniste dentaire',cat:'Équipe clinique',tel:'514-555-0100',poste:'102',cell:'514-555-0102',fax:'',email:'m.tremblay@clinique.com',email2:'',adresse:'',web:'',notes:''},
+  {id:3,prenom:'Sophie',nom:'Gagné',role:'Secrétaire / Réception',cat:'Administration',tel:'514-555-0100',poste:'100',cell:'',fax:'',email:'reception@clinique.com',email2:'',adresse:'',web:'',notes:'Poste principal de réception'},
+  {id:4,prenom:'Jean',nom:'Fortin',role:'Comptable',cat:'Administration',tel:'418-555-0200',poste:'',cell:'418-555-0201',fax:'418-555-0202',email:'j.fortin@comptable.com',email2:'',adresse:'456 rue du Commerce, Québec',web:'',notes:'Disponible lun–ven'},
+  {id:5,prenom:'Dentitek',nom:'Support technique',role:'Support logiciel dentaire',cat:'Fournisseurs',tel:'1-800-555-3688',poste:'',cell:'',fax:'',email:'support@dentitek.com',email2:'',adresse:'',web:'https://www.dentitek.com',notes:'Support: lun–ven 8h–17h'},
+  {id:6,prenom:'Henry Schein',nom:'Représentant',role:'Fournisseur de matériel dentaire',cat:'Fournisseurs',tel:'1-800-555-4229',poste:'',cell:'514-555-0300',fax:'',email:'rep@henryschein.com',email2:'',adresse:'',web:'https://www.henryschein.ca',notes:'Représentant local: Marc Dubois'},
+  {id:7,prenom:'Dr.',nom:'Caroline Roy',role:'Parodontiste',cat:'Spécialistes',tel:'514-555-0400',poste:'',cell:'',fax:'514-555-0401',email:'dr.roy@parodontie.com',email2:'',adresse:'789 av. des Spécialistes, Montréal',web:'',notes:'Référence paro, délai 2-3 sem'},
+  {id:8,prenom:'Labo',nom:'Dental Pro',role:'Prothèses et couronnes',cat:'Laboratoires',tel:'514-555-0500',poste:'',cell:'',fax:'514-555-0501',email:'commandes@dentalpro.ca',email2:'',adresse:'',web:'',notes:'Délai standard 10 jours ouvrables'},
+  {id:9,prenom:'URGENCE',nom:'Dentaire Montréal',role:'Clinique urgences dentaires',cat:'Urgences',tel:'514-555-0911',poste:'',cell:'',fax:'',email:'',email2:'',adresse:'1 rue Urgence, Montréal',web:'',notes:'Ouvert 7j/7 · Référer les cas complexes'},
+];
+
+function load(){
+  const raw=localStorage.getItem('gm_contacts');
+  contacts = raw ? JSON.parse(raw) : [...DEFAULTS];
+}
+function save(){localStorage.setItem('gm_contacts',JSON.stringify(contacts));}
+
+// ═══ RENDER ═══════════════════════════════════════════════════════════════════
+function initials(c){
+  return ((c.prenom[0]||'')+( c.nom[0]||'')).toUpperCase().slice(0,2);
+}
+function avatarColor(cat){return CAT_COLORS[cat]||'#374151';}
+
+function renderContact(c){
+  const col=CAT_COLORS[c.cat]||'#374151';
+  const bg=CAT_BG[c.cat]||'#f3f4f6';
+  const emo=CAT_EMO[c.cat]||'📌';
+
+  const telLink=c.tel?`<a href="tel:${c.tel.replace(/\D/g,'')}" class="quick-link">📞 ${c.tel}${c.poste?' #'+c.poste:''}</a>`:'';
+  const cellLink=c.cell?`<a href="tel:${c.cell.replace(/\D/g,'')}" class="quick-link">📱 ${c.cell}</a>`:'';
+  const mailLink=c.email?`<a href="mailto:${c.email}" class="quick-link">✉️ ${c.email}</a>`:'';
+
+  const telDetail= c.tel?`<a href="tel:${c.tel.replace(/\D/g,'')}">${c.tel}${c.poste?' · poste '+c.poste:''}</a>`:'—';
+  const cellDetail=c.cell?`<a href="tel:${c.cell.replace(/\D/g,'')}">${c.cell}</a>`:'—';
+  const faxDetail= c.fax||'—';
+  const mailDetail=c.email?`<a href="mailto:${c.email}">${c.email}</a>`:'—';
+  const mail2Detail=c.email2?`<a href="mailto:${c.email2}">${c.email2}</a>`:'—';
+  const webDetail= c.web?`<a href="${c.web}" target="_blank">${c.web}</a>`:'—';
+
+  return `<div class="contact-card" id="card-${c.id}">
+    <div class="card-head" onclick="toggleCard(${c.id})">
+      <div class="avatar" style="background:${col}">${initials(c)}</div>
+      <div class="card-info">
+        <div class="card-name">${c.prenom} ${c.nom}</div>
+        <div class="card-role">${c.role||'—'}</div>
+      </div>
+      <div class="card-quick">
+        ${telLink}${cellLink}${mailLink}
+        <span class="cat-badge" style="background:${bg};color:${col}">${emo} ${c.cat}</span>
+      </div>
+    </div>
+    <div class="card-detail" id="detail-${c.id}">
+      <div class="detail-group"><div class="detail-lbl">📞 Téléphone bureau</div><div class="detail-val">${telDetail}</div></div>
+      <div class="detail-group"><div class="detail-lbl">📱 Cellulaire</div><div class="detail-val">${cellDetail}</div></div>
+      <div class="detail-group"><div class="detail-lbl">📠 Télécopieur</div><div class="detail-val">${faxDetail}</div></div>
+      <div class="detail-group"><div class="detail-lbl">✉️ Courriel</div><div class="detail-val">${mailDetail}</div></div>
+      ${c.email2?`<div class="detail-group"><div class="detail-lbl">✉️ Courriel 2</div><div class="detail-val">${mail2Detail}</div></div>`:''}
+      ${c.adresse?`<div class="detail-group"><div class="detail-lbl">📍 Adresse</div><div class="detail-val">${c.adresse}</div></div>`:''}
+      ${c.web?`<div class="detail-group"><div class="detail-lbl">🌐 Site web</div><div class="detail-val">${webDetail}</div></div>`:''}
+      ${c.notes?`<div class="notes-val">💬 ${c.notes}</div>`:''}
+      <div class="card-actions">
+        <button class="btn btn-secondary" onclick="editContact(${c.id},event)">✏️ Modifier</button>
+        <button class="btn btn-danger" onclick="deleteContact(${c.id},event)">🗑 Supprimer</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function toggleCard(id){
+  const d=document.getElementById('detail-'+id);
+  d.classList.toggle('open');
+}
+
+function renderAll(){
+  const q=(document.getElementById('searchInput').value||'').toLowerCase();
+  const cat=document.getElementById('filterCat').value||activeFilter;
+  const list=contacts.filter(c=>{
+    const matchCat=!cat||c.cat===cat;
+    const matchQ=!q||(c.prenom+' '+c.nom+' '+c.role+' '+c.tel+' '+c.cell+' '+c.email+' '+c.notes).toLowerCase().includes(q);
+    return matchCat&&matchQ;
+  });
+  const el=document.getElementById('contactsList');
+  el.innerHTML=list.length?list.map(renderContact).join(''):'';
+  document.getElementById('emptyState').style.display=list.length?'none':'block';
+  document.getElementById('contactsCount').textContent=`${list.length} contact${list.length!==1?'s':''} affiché${list.length!==1?'s':''}`;
+}
+
+function filterContacts(){
+  activeFilter=document.getElementById('filterCat').value;
+  // sync tabs
+  document.querySelectorAll('.cat-tab').forEach(t=>{
+    t.classList.toggle('active',t.dataset.cat===activeFilter||(!activeFilter&&t.dataset.cat===''));
+  });
+  renderAll();
+}
+
+// ═══ CATEGORY TABS ═══════════════════════════════════════════════════════════
+function buildCatTabs(){
+  const sel=document.getElementById('filterCat');
+  const tabsEl=document.getElementById('catTabs');
+  const all=[''].concat(CATEGORIES);
+  tabsEl.innerHTML='';
+  sel.innerHTML='<option value="">Toutes catégories</option>';
+  all.forEach(c=>{
+    const tab=document.createElement('span');
+    tab.className='cat-tab'+(c===''?' active':'');
+    tab.dataset.cat=c;
+    tab.textContent=c===''?'Tous les contacts':(CAT_EMO[c]||'')+'  '+c;
+    tab.onclick=()=>{
+      document.getElementById('filterCat').value=c;
+      filterContacts();
+    };
+    tabsEl.appendChild(tab);
+    if(c){
+      const opt=document.createElement('option');
+      opt.value=c; opt.textContent=(CAT_EMO[c]||'')+' '+c;
+      sel.appendChild(opt);
+    }
+  });
+}
+
+// ═══ MODAL ════════════════════════════════════════════════════════════════════
+function openModal(id){
+  editingId=id||null;
+  document.getElementById('modalTitle').textContent=id?'✏️ Modifier le contact':'➕ Nouveau contact';
+  const fields=['Prenom','Nom','Role','Cat','Tel','Poste','Cell','Fax','Email','Email2','Adresse','Web','Notes'];
+  if(id){
+    const c=contacts.find(x=>x.id===id);
+    if(c) fields.forEach(f=>{ const el=document.getElementById('f'+f);if(el)el.value=c[f.toLowerCase()]||''; });
+  } else {
+    fields.forEach(f=>{ const el=document.getElementById('f'+f);if(el)el.value=''; });
+    document.getElementById('fCat').value='Équipe clinique';
+  }
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('fPrenom').focus();
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  editingId=null;
+}
+
+function saveContact(){
+  const prenom=document.getElementById('fPrenom').value.trim();
+  const nom=document.getElementById('fNom').value.trim();
+  if(!prenom&&!nom){alert('Veuillez entrer au moins un nom.');return;}
+  const data={
+    prenom,nom,
+    role:document.getElementById('fRole').value.trim(),
+    cat:document.getElementById('fCat').value,
+    tel:document.getElementById('fTel').value.trim(),
+    poste:document.getElementById('fPoste').value.trim(),
+    cell:document.getElementById('fCell').value.trim(),
+    fax:document.getElementById('fFax').value.trim(),
+    email:document.getElementById('fEmail').value.trim(),
+    email2:document.getElementById('fEmail2').value.trim(),
+    adresse:document.getElementById('fAdresse').value.trim(),
+    web:document.getElementById('fWeb').value.trim(),
+    notes:document.getElementById('fNotes').value.trim(),
+  };
+  if(editingId){
+    const idx=contacts.findIndex(c=>c.id===editingId);
+    if(idx>=0) contacts[idx]={...data,id:editingId};
+  } else {
+    data.id=Date.now();
+    contacts.push(data);
+  }
+  save(); renderAll(); closeModal();
+}
+
+function editContact(id,e){
+  e.stopPropagation();
+  openModal(id);
+}
+
+function deleteContact(id,e){
+  e.stopPropagation();
+  const c=contacts.find(x=>x.id===id);
+  if(!c||!confirm(`Supprimer ${c.prenom} ${c.nom} ?`)) return;
+  contacts=contacts.filter(x=>x.id!==id);
+  save(); renderAll();
+}
+
+// ═══ EXPORT CSV ══════════════════════════════════════════════════════════════
+function exportCSV(){
+  const headers=['Prénom','Nom','Rôle','Catégorie','Téléphone','Poste','Cellulaire','Télécopieur','Courriel','Courriel 2','Adresse','Site web','Notes'];
+  const rows=contacts.map(c=>[c.prenom,c.nom,c.role,c.cat,c.tel,c.poste,c.cell,c.fax,c.email,c.email2,c.adresse,c.web,c.notes]
+    .map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv='\uFEFF'+headers.join(',')+'\n'+rows.join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='liste-telephones-courriel.csv';
+  a.click();
+}
+
+// ═══ CLOSE MODAL ON OUTSIDE CLICK ════════════════════════════════════════════
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if(e.target===this) closeModal();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ═══ INIT ═════════════════════════════════════════════════════════════════════
+load();
+buildCatTabs();
+renderAll();
+</script>
+</body>
+</html>
