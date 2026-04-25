@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic clinique &mdash; Gestion Mel</title>
+<style>
+:root{--blue:#1a6abf;--dark:#0d1b2a;--acc:#2196f3;--lt:#f4f8ff;--brd:#d0dff0;--txt:#1a2535;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--txt);}
+.phdr{background:var(--dark);color:white;padding:12px 28px;display:flex;align-items:center;justify-content:space-between;}
+.brand{font-size:1.2rem;font-weight:700;}.brand span{color:var(--acc);}
+.layout{display:grid;grid-template-columns:255px 1fr;height:calc(100vh - 47px);}
+.sidebar{background:var(--dark);overflow-y:auto;padding:14px 0;}
+.cbox{margin:0 10px 12px;padding:10px 13px;background:rgba(255,255,255,.08);border-radius:8px;}
+.clbl{font-size:.6rem;color:#8aa0b8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.cinp{width:100%;background:transparent;border:none;color:white;font-size:.84rem;font-family:inherit;outline:none;}
+.cinp::placeholder{color:#4a6080;}
+.nlbl{font-size:.6rem;color:#4a6080;text-transform:uppercase;letter-spacing:.8px;padding:7px 14px 3px;}
+.nav-btn{width:100%;text-align:left;padding:8px 14px;background:none;border:none;color:#8aa0b8;
+  font-size:.8rem;font-family:inherit;cursor:pointer;display:flex;align-items:center;gap:6px;
+  border-left:3px solid transparent;transition:all .14s;}
+.nav-btn:hover{background:rgba(255,255,255,.05);color:white;}
+.nav-btn.active{color:white;background:rgba(33,150,243,.15);border-left-color:var(--acc);}
+.nav-btn.done{color:#4ade80;}
+.nscore{margin-left:auto;font-size:.68rem;font-weight:700;padding:2px 5px;border-radius:9px;}
+.pbar-wrap{padding:9px 13px 5px;}
+.plbl{font-size:.68rem;color:#8aa0b8;display:flex;justify-content:space-between;}
+.pbar{height:5px;background:rgba(255,255,255,.1);border-radius:3px;margin:5px 0;}
+.pfill{height:100%;background:var(--acc);border-radius:3px;transition:width .4s;}
+.resbtn{margin:4px 10px;width:calc(100% - 20px);padding:9px;border-radius:7px;
+  background:#15803d;color:white;border:none;font-size:.83rem;font-weight:600;cursor:pointer;font-family:inherit;}
+.main{overflow-y:auto;padding:20px 26px;}
+.welcome-hdr{background:linear-gradient(135deg,var(--dark),#1a3a5c);color:white;border-radius:10px;padding:22px 26px;margin-bottom:16px;}
+.welcome-hdr h1{font-size:1.25rem;font-weight:700;margin-bottom:4px;}
+.welcome-hdr p{font-size:.82rem;opacity:.72;}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin-bottom:14px;}
+.wcard{background:white;border:1.5px solid var(--brd);border-radius:8px;padding:12px;}
+.wcard .wi{font-size:1.1rem;margin-bottom:4px;}.wcard .wt{font-weight:700;font-size:.85rem;margin-bottom:2px;}
+.wcard .ws{font-size:.73rem;color:#6b7280;}
+.info-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:11px 15px;font-size:.83rem;color:#0d3a6e;line-height:1.6;margin-bottom:16px;}
+.hybrid-note{background:#fef9c3;border-left:4px solid #f59e0b;border-radius:4px;padding:9px 14px;font-size:.78rem;color:#78350f;line-height:1.5;margin-bottom:14px;}
+.start-btn{display:block;margin:0 auto;padding:12px 34px;border-radius:8px;background:var(--blue);color:white;border:none;font-size:.92rem;font-weight:700;cursor:pointer;font-family:inherit;}
+.shdr{display:flex;align-items:center;gap:11px;padding:13px 17px;background:var(--lt);border-radius:8px;margin-bottom:14px;border-left:4px solid var(--acc);}
+.sname{font-size:.98rem;font-weight:700;color:var(--dark);}.scnt{font-size:.74rem;color:#6b7280;margin-top:2px;}
+.open-sub-title{font-size:.72rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.8px;padding:7px 12px;background:var(--lt);border-left:3px solid var(--acc);border-radius:4px;margin:12px 0 7px;}
+.open-qcard{background:white;border:1.5px solid var(--brd);border-radius:8px;padding:12px 15px;margin-bottom:8px;}
+.open-q-text{font-size:.86rem;font-weight:600;color:var(--dark);margin-bottom:7px;line-height:1.5;}
+.open-field{width:100%;border:1.5px solid var(--brd);border-radius:6px;padding:7px 10px;font-size:.85rem;font-family:inherit;color:var(--txt);background:var(--lt);outline:none;}
+.open-field:focus{border-color:var(--acc);background:white;}
+textarea.open-field{resize:vertical;min-height:48px;}
+.qcard{background:white;border:1.5px solid var(--brd);border-radius:8px;padding:14px 17px;margin-bottom:9px;display:flex;gap:11px;align-items:flex-start;transition:border-color .2s;}
+.qcard.answered{border-color:#86efac;background:#f0fdf4;}
+.qnum{min-width:25px;height:25px;background:var(--lt);border:1.5px solid var(--brd);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--blue);flex-shrink:0;}
+.qcard.answered .qnum{background:#dcfce7;border-color:#86efac;color:#15803d;}
+.qbody{flex:1;}
+.qtxt{font-size:.87rem;font-weight:600;color:var(--dark);margin-bottom:9px;line-height:1.5;}
+.rgroup{display:flex;flex-direction:column;gap:5px;}
+.radio-opt{display:flex;align-items:center;gap:7px;cursor:pointer;padding:6px 9px;border-radius:6px;border:1.5px solid transparent;transition:all .13s;}
+.radio-opt:hover{background:#f0f6ff;border-color:var(--brd);}
+.radio-opt input[type=radio]{accent-color:var(--blue);width:14px;height:14px;cursor:pointer;flex-shrink:0;}
+.radio-opt:has(input:checked){background:#e8f0ff;border-color:var(--acc);}
+.opt-txt{font-size:.83rem;color:#374151;line-height:1.4;}
+.qcmt{margin-top:8px;border-top:1px dashed #e0eaf5;padding-top:7px;}
+.qcmt textarea{width:100%;border:1.5px solid #e8eff8;border-radius:5px;padding:5px 9px;font-size:.77rem;font-family:inherit;color:#374151;background:#fafcff;resize:none;min-height:32px;outline:none;transition:border-color .18s;}
+.qcmt textarea:focus{border-color:var(--acc);background:white;}
+.qcmt textarea::placeholder{color:#b0bec5;font-style:italic;}
+.nav-acts{display:flex;justify-content:space-between;margin-top:18px;padding-top:12px;border-top:1px solid var(--brd);}
+.btn{padding:9px 21px;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .17s;}
+.bpri{background:var(--blue);color:white;}.bpri:hover{background:#1558a0;}
+.bsec{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+.bdgr{background:white;color:#dc2626;border:1.5px solid #dc2626;}
+.spanel{display:none;}
+.res-hdr{background:linear-gradient(135deg,var(--dark),#1a3a5c);color:white;border-radius:10px;padding:22px 26px;margin-bottom:18px;}
+.res-hdr h2{font-size:1.25rem;font-weight:700;margin-bottom:4px;}.res-hdr p{font-size:.8rem;opacity:.72;}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:11px;margin-bottom:18px;}
+.scard{background:white;border:1.5px solid var(--brd);border-radius:8px;padding:13px;}
+.scard-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.scard-name{font-size:.78rem;font-weight:700;color:var(--dark);}
+.sbar{height:7px;background:#e5e7eb;border-radius:4px;overflow:hidden;}
+.sbar-fill{height:100%;border-radius:4px;transition:width 1s;}
+.sval{display:flex;justify-content:space-between;align-items:center;margin-top:5px;}
+.snum{font-size:1rem;font-weight:800;}.sbadge{font-size:.67rem;font-weight:700;padding:2px 7px;border-radius:9px;}
+.pri-sec{background:white;border:1.5px solid var(--brd);border-radius:8px;padding:16px;margin-bottom:12px;}
+.pri-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--blue);margin-bottom:11px;}
+.pi{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--brd);}
+.pi:last-child{border-bottom:none;}
+.prank{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.74rem;font-weight:800;color:white;flex-shrink:0;}
+.pname{font-size:.85rem;font-weight:700;color:var(--dark);}
+.prec{font-size:.77rem;color:#6b7280;margin-top:2px;line-height:1.4;}
+.narea{background:white;border:1.5px solid var(--brd);border-radius:8px;padding:16px;margin-bottom:11px;}
+.narea label{font-size:.7rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:6px;}
+.narea textarea{width:100%;border:1.5px solid var(--brd);border-radius:6px;padding:9px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:85px;outline:none;}
+.narea textarea:focus{border-color:var(--acc);}
+.res-acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px;}
+@media print{
+  .sidebar,.phdr,.nav-acts,.res-acts,.spanel{display:none!important;}
+  .layout{display:block;}#resultsPanel{display:block!important;}
+  .main{padding:6px;max-height:none;overflow:visible;}
+  .sgrid{grid-template-columns:repeat(3,1fr);}body{background:white;}
+}
+</style>
+</head>
+<body>
+<div class="phdr">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.76rem;opacity:.65">Diagnostic organisationnel &mdash; Clinique dentaire</div>
+</div>
+<div class="layout">
+<div class="sidebar">
+  <div class="cbox">
+    <div class="clbl">Clinique</div><input class="cinp" id="cName" placeholder="Nom de la clinique..." oninput="sv()">
+    <div class="clbl" style="margin-top:7px">Date</div><input class="cinp" id="cDate" type="date" oninput="sv()">
+    <div class="clbl" style="margin-top:7px">Conseill&egrave;re</div><input class="cinp" id="cCons" placeholder="M&eacute;lanie Fortin" oninput="sv()">
+  </div>
+  <div class="nlbl">Portrait de la clinique</div>
+  <button class="nav-btn" data-sec="0" onclick="goSec(0)">&#128203; Portrait factuel</button>
+  <div class="nlbl" style="margin-top:5px">&Eacute;valuation scor&eacute;e</div>
+  <button class="nav-btn" data-sec="1" onclick="goSec(1)">🏗️ Structure organisationnelle</button>
+<button class="nav-btn" data-sec="2" onclick="goSec(2)">👥 Gestion des ressources humaines</button>
+<button class="nav-btn" data-sec="3" onclick="goSec(3)">📋 Secrétariat et Administration</button>
+<button class="nav-btn" data-sec="4" onclick="goSec(4)">📅 Gestion des rendez-vous et des horaires</button>
+<button class="nav-btn" data-sec="5" onclick="goSec(5)">🗂️ Gestion des patients et des dossiers</button>
+<button class="nav-btn" data-sec="6" onclick="goSec(6)">🔄 Répartition des tâches et des rôles</button>
+<button class="nav-btn" data-sec="7" onclick="goSec(7)">💬 Équipe et Communication</button>
+<button class="nav-btn" data-sec="8" onclick="goSec(8)">🎓 Formation et Compétences</button>
+<button class="nav-btn" data-sec="9" onclick="goSec(9)">💻 Logiciels et Technologie</button>
+<button class="nav-btn" data-sec="10" onclick="goSec(10)">💰 Rentabilité et Productivité</button>
+<button class="nav-btn" data-sec="11" onclick="goSec(11)">🦷 Protocoles Cliniques et Conformité</button>
+
+  <div class="pbar-wrap">
+    <div class="plbl"><span>Progression</span><span id="pPct">0%</span></div>
+    <div class="pbar"><div class="pfill" id="pFill" style="width:0%"></div></div>
+    <div class="plbl"><span id="pAns">0</span><span>&nbsp;/&nbsp;<span id="pTot">0</span></span></div>
+  </div>
+  <button class="resbtn" onclick="showRes()">&#128202; Voir les r&eacute;sultats</button>
+</div>
+<div class="main" id="mainArea">
+<div id="welcomePanel">
+  <div class="welcome-hdr">
+    <h1>&#x1F9B7; Diagnostic organisationnel &mdash; Clinique dentaire</h1>
+    <p>20 questions factuelles + 75 questions scor&eacute;es en 11 sections &mdash; diagnostic complet et pr&eacute;cis</p>
+  </div>
+  <div class="wgrid">
+    <div class="wcard"><div class="wi">&#128203;</div><div class="wt">Portrait factuel</div><div class="ws">20 questions descriptives</div></div>
+    <div class="wcard"><div class="wi">&#128202;</div><div class="wt">11 sections scor&eacute;es</div><div class="ws">75 questions avec options</div></div>
+    <div class="wcard"><div class="wi">&#127919;</div><div class="wt">Rapport complet</div><div class="ws">Scores, priorit&eacute;s, recommandations</div></div>
+    <div class="wcard"><div class="wi">&#128190;</div><div class="wt">Sauvegarde auto</div><div class="ws">Tout est conserv&eacute;</div></div>
+  </div>
+  <div class="hybrid-note">&#x1F4CA; <strong>Nouveau :</strong> Les questions chiffr&eacute;es cl&eacute;s (comptes &agrave; recevoir, nouveaux patients, rendez-vous manqu&eacute;s, dossiers actifs, roulement) sont int&eacute;gr&eacute;es directement dans les sections scor&eacute;es pour un diagnostic encore plus pr&eacute;cis.</div>
+  <div class="info-box">&#x1F4A1; <strong>Mode d'emploi :</strong> Commencez par le <strong>Portrait factuel</strong> (donn&eacute;es descriptives), puis &eacute;valuez chaque section avec les questions scor&eacute;es. Le rapport final classe automatiquement les 5 priorit&eacute;s d'intervention.</div>
+  <button class="start-btn" onclick="goSec(0)">&#9654; Commencer le diagnostic</button>
+</div>
+<div class="spanel" id="sp_0">
+  <div class="shdr"><span style="font-size:1.5rem">&#128203;</span>
+  <div><div class="sname">Portrait factuel de la clinique</div>
+  <div class="scnt">Questions descriptives &mdash; Section 1 sur 12</div></div></div>
+  <div class="open-sub-title">🏥 Informations générales</div>
+<div class="open-qcard">
+  <div class="open-q-text">Nom de la clinique et adresse complète</div>
+  <input type="text" class="open-field" id="of_0" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Depuis combien d'années la clinique est-elle en activité ?</div>
+  <input type="text" class="open-field" id="of_1" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Heures d'ouverture (jours et heures par professionnel)</div>
+  <textarea class="open-field" id="of_2" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Quels types de traitements faites-vous à l'interne ?</div>
+  <textarea class="open-field" id="of_3" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Pour quels types de traitements référez-vous à des spécialistes externes ?</div>
+  <textarea class="open-field" id="of_4" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Logiciel de gestion dentaire utilisé (et depuis combien d'années ?)</div>
+  <input type="text" class="open-field" id="of_5" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Qui s'occupe de votre parc informatique ?</div>
+  <input type="text" class="open-field" id="of_6" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Qui est votre principal fournisseur / représentant dentaire ?</div>
+  <input type="text" class="open-field" id="of_7" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Qui s'occupe de la comptabilité (interne ou externe) ?</div>
+  <input type="text" class="open-field" id="of_8" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-sub-title">👥 Portrait de l'équipe</div>
+<div class="open-qcard">
+  <div class="open-q-text">Combien d'employés avez-vous ? Listez les postes occupés</div>
+  <textarea class="open-field" id="of_9" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Nommez chaque employé, son poste, ses années d'expérience dans le domaine ET depuis combien de temps dans votre clinique</div>
+  <textarea class="open-field" id="of_10" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Quels sont les salaires de chacun des membres de l'équipe ?</div>
+  <textarea class="open-field" id="of_11" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Quels avantages offrez-vous à vos employés ?</div>
+  <textarea class="open-field" id="of_12" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Avez-vous des hygiénistes indépendantes de façon récurrente ?</div>
+  <input type="text" class="open-field" id="of_13" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Faites-vous affaires avec des agences de placement ?</div>
+  <input type="text" class="open-field" id="of_14" placeholder="Réponse..." oninput="sv()">
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-sub-title">🎯 Besoins et vision</div>
+<div class="open-qcard">
+  <div class="open-q-text">Quelle est votre plainte principale en ce moment ?</div>
+  <textarea class="open-field" id="of_15" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Quel est, selon vous, le besoin prioritaire à régler dans votre clinique ?</div>
+  <textarea class="open-field" id="of_16" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Y a-t-il une raison principale qui explique la situation actuelle ?</div>
+  <textarea class="open-field" id="of_17" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Songez-vous à prendre votre retraite ou vendre la clinique ? Si oui, dans combien d'années ?</div>
+  <textarea class="open-field" id="of_18" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+<div class="open-qcard">
+  <div class="open-q-text">Avez-vous des projets d'expansion ou d'agrandissement de l'équipe ?</div>
+  <textarea class="open-field" id="of_19" placeholder="Réponse..." oninput="sv()"></textarea>
+  <div class="qcmt"><textarea placeholder="💬 Notes..." oninput="sv()"></textarea></div>
+</div>
+
+  <div class="nav-acts"><div></div><button class="btn bpri" onclick="goSec(1)">Section suivante &#9654;</button></div>
+</div>
+<div class="spanel" id="sp_1">
+  <div class="shdr" style="border-left-color:#1a6abf"><span style="font-size:1.5rem">🏗️</span>
+  <div><div class="sname">Structure organisationnelle</div>
+  <div class="scnt">6 questions &middot; Section 2 sur 12</div></div></div>
+  <div class="qcard" id="qc_1_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Un organigramme clair et à jour existe-t-il ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_1_0" value="0" onchange="onAns(1,0,0)"><span class="opt-txt">Oui, écrit, affiché et connu de tous</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_0" value="1" onchange="onAns(1,0,1)"><span class="opt-txt">Oui, mais pas à jour</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_0" value="2" onchange="onAns(1,0,2)"><span class="opt-txt">Informel, dans la tête du propriétaire</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_0" value="3" onchange="onAns(1,0,3)"><span class="opt-txt">Non, il n'existe pas</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_1_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Les rôles et responsabilités de chaque employé sont-ils définis par écrit ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_1_1" value="0" onchange="onAns(1,1,0)"><span class="opt-txt">Oui, descriptions de poste complètes et signées</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_1" value="1" onchange="onAns(1,1,1)"><span class="opt-txt">Partiellement définis</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_1" value="2" onchange="onAns(1,1,2)"><span class="opt-txt">Non définis, chacun fait ce qu'il peut</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_1" value="3" onchange="onAns(1,1,3)"><span class="opt-txt">Conflits de rôles fréquents</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_1_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il une personne désignée pour la gestion quotidienne ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_1_2" value="0" onchange="onAns(1,2,0)"><span class="opt-txt">Oui, un gestionnaire dédié et outillé</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_2" value="1" onchange="onAns(1,2,1)"><span class="opt-txt">Oui, mais c'est le dentiste en plus de clinique</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_2" value="2" onchange="onAns(1,2,2)"><span class="opt-txt">Partagé entre plusieurs sans clarté</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_2" value="3" onchange="onAns(1,2,3)"><span class="opt-txt">Personne n'a ce rôle clairement</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_1_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">Les processus et procédures sont-ils documentés ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_1_3" value="0" onchange="onAns(1,3,0)"><span class="opt-txt">Oui, manuel complet et à jour</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_3" value="1" onchange="onAns(1,3,1)"><span class="opt-txt">Quelques procédures écrites</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_3" value="2" onchange="onAns(1,3,2)"><span class="opt-txt">Très peu de documentation</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_3" value="3" onchange="onAns(1,3,3)"><span class="opt-txt">Aucune documentation</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_1_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">La vision et les objectifs sont-ils communiqués à l'équipe ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_1_4" value="0" onchange="onAns(1,4,0)"><span class="opt-txt">Oui, régulièrement, clairement et mesurés</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_4" value="1" onchange="onAns(1,4,1)"><span class="opt-txt">Parfois, lors de réunions</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_4" value="2" onchange="onAns(1,4,2)"><span class="opt-txt">Rarement ou jamais</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_4" value="3" onchange="onAns(1,4,3)"><span class="opt-txt">Aucun objectif défini</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_1_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">Les décisions importantes sont-elles prises de façon structurée ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_1_5" value="0" onchange="onAns(1,5,0)"><span class="opt-txt">Oui, processus de décision clair et transparent</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_5" value="1" onchange="onAns(1,5,1)"><span class="opt-txt">Parfois structurées, souvent réactives</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_5" value="2" onchange="onAns(1,5,2)"><span class="opt-txt">Décisions impulsives ou évitées</span></label>
+<label class="radio-opt"><input type="radio" name="q_1_5" value="3" onchange="onAns(1,5,3)"><span class="opt-txt">Confusion et manque de direction</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(0)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(2)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_2">
+  <div class="shdr" style="border-left-color:#7c3aed"><span style="font-size:1.5rem">👥</span>
+  <div><div class="sname">Gestion des ressources humaines</div>
+  <div class="scnt">9 questions &middot; Section 3 sur 12</div></div></div>
+  <div class="qcard" id="qc_2_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Le processus d'embauche est-il structuré ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_0" value="0" onchange="onAns(2,0,0)"><span class="opt-txt">Oui — affichage, entrevue structurée, test, vérification de références</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_0" value="1" onchange="onAns(2,0,1)"><span class="opt-txt">Partiellement structuré</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_0" value="2" onchange="onAns(2,0,2)"><span class="opt-txt">Informel, selon les besoins du moment</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_0" value="3" onchange="onAns(2,0,3)"><span class="opt-txt">On embauche au feeling, sans processus</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il un processus d'intégration pour les nouveaux employés ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_1" value="0" onchange="onAns(2,1,0)"><span class="opt-txt">Oui, programme complet de 2 à 4 semaines avec accompagnement</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_1" value="1" onchange="onAns(2,1,1)"><span class="opt-txt">Quelques jours d'accompagnement informel</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_1" value="2" onchange="onAns(2,1,2)"><span class="opt-txt">On les lance dans le bain</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_1" value="3" onchange="onAns(2,1,3)"><span class="opt-txt">Aucun processus d'intégration</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Les évaluations de performance sont-elles faites régulièrement ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_2" value="0" onchange="onAns(2,2,0)"><span class="opt-txt">Oui, annuellement avec formulaire structuré et objectifs</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_2" value="1" onchange="onAns(2,2,1)"><span class="opt-txt">Informellement, sans document ni suivi</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_2" value="2" onchange="onAns(2,2,2)"><span class="opt-txt">Seulement quand il y a un problème</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_2" value="3" onchange="onAns(2,2,3)"><span class="opt-txt">Jamais</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">Les révisions salariales sont-elles structurées et équitables ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_3" value="0" onchange="onAns(2,3,0)"><span class="opt-txt">Oui, grille salariale, date définie, rencontre formelle</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_3" value="1" onchange="onAns(2,3,1)"><span class="opt-txt">Révisions irrégulières, sans structure claire</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_3" value="2" onchange="onAns(2,3,2)"><span class="opt-txt">À la demande de l'employé seulement</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_3" value="3" onchange="onAns(2,3,3)"><span class="opt-txt">Aléatoires ou ignorées</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Avez-vous des politiques RH écrites (absences, retards, comportements) ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_4" value="0" onchange="onAns(2,4,0)"><span class="opt-txt">Oui, politique complète, signée par tous</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_4" value="1" onchange="onAns(2,4,1)"><span class="opt-txt">Quelques règles informelles connues</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_4" value="2" onchange="onAns(2,4,2)"><span class="opt-txt">Les règles sont verbales seulement</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_4" value="3" onchange="onAns(2,4,3)"><span class="opt-txt">Aucune politique en place</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">Comment gérez-vous les situations disciplinaires ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_5" value="0" onchange="onAns(2,5,0)"><span class="opt-txt">Processus progressif documenté : verbal, avertissement écrit, mesures</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_5" value="1" onchange="onAns(2,5,1)"><span class="opt-txt">Discussions verbales rarement documentées</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_5" value="2" onchange="onAns(2,5,2)"><span class="opt-txt">On évite le conflit autant que possible</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_5" value="3" onchange="onAns(2,5,3)"><span class="opt-txt">Aucune gestion, les problèmes perdurent</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_6">
+  <div class="qnum">7</div>
+  <div class="qbody">
+    <div class="qtxt">Avez-vous un dossier complet pour chacun des employés ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_6" value="0" onchange="onAns(2,6,0)"><span class="opt-txt">Oui, dossier complet actifs ET anciens employés</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_6" value="1" onchange="onAns(2,6,1)"><span class="opt-txt">Dossiers partiels, informations manquantes</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_6" value="2" onchange="onAns(2,6,2)"><span class="opt-txt">Très peu d'archivage, tout est dans les e-mails</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_6" value="3" onchange="onAns(2,6,3)"><span class="opt-txt">Aucun dossier employé structuré</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_7">
+  <div class="qnum">8</div>
+  <div class="qbody">
+    <div class="qtxt">Quel est votre taux de roulement du personnel annuel ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_7" value="0" onchange="onAns(2,7,0)"><span class="opt-txt">Moins de 10% — équipe très stable</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_7" value="1" onchange="onAns(2,7,1)"><span class="opt-txt">10% à 20% — quelques départs normaux</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_7" value="2" onchange="onAns(2,7,2)"><span class="opt-txt">20% à 35% — roulement préoccupant</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_7" value="3" onchange="onAns(2,7,3)"><span class="opt-txt">Plus de 35% — problème majeur de rétention</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_2_8">
+  <div class="qnum">9</div>
+  <div class="qbody">
+    <div class="qtxt">Comment établissez-vous vos normes salariales selon le marché ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_2_8" value="0" onchange="onAns(2,8,0)"><span class="opt-txt">Veille régulière : guide ACDQ, enquêtes de rémunération, comparatifs</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_8" value="1" onchange="onAns(2,8,1)"><span class="opt-txt">Approximativement, basé sur l'expérience personnelle</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_8" value="2" onchange="onAns(2,8,2)"><span class="opt-txt">Peu de référence, surtout par bouche-à-oreille</span></label>
+<label class="radio-opt"><input type="radio" name="q_2_8" value="3" onchange="onAns(2,8,3)"><span class="opt-txt">Aucune référence, on offre ce qu'on peut</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(1)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(3)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_3">
+  <div class="shdr" style="border-left-color:#0f766e"><span style="font-size:1.5rem">📋</span>
+  <div><div class="sname">Secrétariat et Administration</div>
+  <div class="scnt">8 questions &middot; Section 4 sur 12</div></div></div>
+  <div class="qcard" id="qc_3_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">L'accueil téléphonique est-il professionnel et standardisé ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_0" value="0" onchange="onAns(3,0,0)"><span class="opt-txt">Oui, script d'accueil, formation en place, suivi des appels manqués</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_0" value="1" onchange="onAns(3,0,1)"><span class="opt-txt">Variable selon la personne qui répond</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_0" value="2" onchange="onAns(3,0,2)"><span class="opt-txt">Souvent débordé, appels manqués non rappelés</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_0" value="3" onchange="onAns(3,0,3)"><span class="opt-txt">Non structuré, source de plaintes patients</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_3_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Comment procédez-vous aux confirmations de rendez-vous ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_1" value="0" onchange="onAns(3,1,0)"><span class="opt-txt">Système automatisé (texto/courriel) + rappel téléphonique 48h avant</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_1" value="1" onchange="onAns(3,1,1)"><span class="opt-txt">Appels manuels la plupart du temps</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_1" value="2" onchange="onAns(3,1,2)"><span class="opt-txt">Confirmations irrégulières, seulement les gros cas</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_1" value="3" onchange="onAns(3,1,3)"><span class="opt-txt">Aucune confirmation systématique</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_3_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Faites-vous du prébooking (prochain RDV donné au départ du patient) ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_2" value="0" onchange="onAns(3,2,0)"><span class="opt-txt">Oui, systématiquement pour tous les patients à chaque visite</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_2" value="1" onchange="onAns(3,2,1)"><span class="opt-txt">La plupart du temps, selon le professionnel</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_2" value="2" onchange="onAns(3,2,2)"><span class="opt-txt">Rarement, laissé à l'initiative du patient</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_2" value="3" onchange="onAns(3,2,3)"><span class="opt-txt">Non, les patients rappellent eux-mêmes</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_3_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">La gestion des dossiers patients est-elle rigoureuse et à jour ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_3" value="0" onchange="onAns(3,3,0)"><span class="opt-txt">Oui, dossiers complets, notes à jour, zéro dossier incomplet</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_3" value="1" onchange="onAns(3,3,1)"><span class="opt-txt">Quelques lacunes mais globalement bien tenu</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_3" value="2" onchange="onAns(3,3,2)"><span class="opt-txt">Dossiers souvent incomplets ou en retard</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_3" value="3" onchange="onAns(3,3,3)"><span class="opt-txt">Désorganisée, source de problèmes fréquents</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_3_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Le processus de facturation est-il efficace ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_4" value="0" onchange="onAns(3,4,0)"><span class="opt-txt">Facturation le jour même, vérification systématique, zéro erreur</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_4" value="1" onchange="onAns(3,4,1)"><span class="opt-txt">Quelques délais, erreurs corrigées rapidement</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_4" value="2" onchange="onAns(3,4,2)"><span class="opt-txt">Erreurs fréquentes, retards de facturation réguliers</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_4" value="3" onchange="onAns(3,4,3)"><span class="opt-txt">Pertes de revenus liées à la facturation</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_3_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">Les ententes financières avec les patients sont-elles documentées ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_5" value="0" onchange="onAns(3,5,0)"><span class="opt-txt">Oui, formulaire signé systématiquement avant tout traitement</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_5" value="1" onchange="onAns(3,5,1)"><span class="opt-txt">Expliquées verbalement, rarement signées</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_5" value="2" onchange="onAns(3,5,2)"><span class="opt-txt">Rarement expliquées, source de conflits fréquents</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_5" value="3" onchange="onAns(3,5,3)"><span class="opt-txt">Jamais documentées</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_3_6">
+  <div class="qnum">7</div>
+  <div class="qbody">
+    <div class="qtxt">La facturation RAMQ est-elle maîtrisée (si applicable) ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_6" value="0" onchange="onAns(3,6,0)"><span class="opt-txt">Oui, maîtrisée, peu de rejets, suivi rigoureux</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_6" value="1" onchange="onAns(3,6,1)"><span class="opt-txt">Quelques difficultés et rejets fréquents</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_6" value="2" onchange="onAns(3,6,2)"><span class="opt-txt">Beaucoup d'erreurs, rejets non suivis</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_6" value="3" onchange="onAns(3,6,3)"><span class="opt-txt">Non applicable à cette clinique</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_3_7">
+  <div class="qnum">8</div>
+  <div class="qbody">
+    <div class="qtxt">Le balancement des fins de journée est-il fait quotidiennement ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_3_7" value="0" onchange="onAns(3,7,0)"><span class="opt-txt">Oui, systématiquement avec rapport et résolution des écarts le jour même</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_7" value="1" onchange="onAns(3,7,1)"><span class="opt-txt">La plupart du temps</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_7" value="2" onchange="onAns(3,7,2)"><span class="opt-txt">Rarement, seulement quand il y a un problème évident</span></label>
+<label class="radio-opt"><input type="radio" name="q_3_7" value="3" onchange="onAns(3,7,3)"><span class="opt-txt">Jamais</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(2)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(4)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_4">
+  <div class="shdr" style="border-left-color:#9d174d"><span style="font-size:1.5rem">📅</span>
+  <div><div class="sname">Gestion des rendez-vous et des horaires</div>
+  <div class="scnt">8 questions &middot; Section 5 sur 12</div></div></div>
+  <div class="qcard" id="qc_4_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Les horaires sont-ils optimisés par type de soins et par opérateur ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_0" value="0" onchange="onAns(4,0,0)"><span class="opt-txt">Oui, séquences intelligentes, salles dédiées, production maximisée</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_0" value="1" onchange="onAns(4,0,1)"><span class="opt-txt">Partiellement optimisés, quelques inefficacités</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_0" value="2" onchange="onAns(4,0,2)"><span class="opt-txt">Peu optimisés, beaucoup de temps morts non planifiés</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_0" value="3" onchange="onAns(4,0,3)"><span class="opt-txt">Non, source de stress et de perte de production</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_4_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Le taux d'occupation des salles de traitement est-il mesuré ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_1" value="0" onchange="onAns(4,1,0)"><span class="opt-txt">Oui, mesuré et optimisé activement chaque semaine</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_1" value="1" onchange="onAns(4,1,1)"><span class="opt-txt">Estimé approximativement</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_1" value="2" onchange="onAns(4,1,2)"><span class="opt-txt">Non mesuré, on remarque les périodes creuses sans agir</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_1" value="3" onchange="onAns(4,1,3)"><span class="opt-txt">Non mesuré du tout</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_4_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Combien de rendez-vous manqués ou annulés avez-vous par mois ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_2" value="0" onchange="onAns(4,2,0)"><span class="opt-txt">Moins de 5 — excellent contrôle des no-shows</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_2" value="1" onchange="onAns(4,2,1)"><span class="opt-txt">5 à 15 — quelques pertes gérables</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_2" value="2" onchange="onAns(4,2,2)"><span class="opt-txt">15 à 30 — problème important de production perdue</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_2" value="3" onchange="onAns(4,2,3)"><span class="opt-txt">Plus de 30 — situation critique non contrôlée</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_4_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">La clinique utilise-t-elle une liste d'attente pour combler les annulations ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_3" value="0" onchange="onAns(4,3,0)"><span class="opt-txt">Oui, liste active gérée quotidiennement, trous rares</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_3" value="1" onchange="onAns(4,3,1)"><span class="opt-txt">Liste existante mais peu utilisée</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_3" value="2" onchange="onAns(4,3,2)"><span class="opt-txt">On tente de combler sans processus formel</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_3" value="3" onchange="onAns(4,3,3)"><span class="opt-txt">Aucune liste, les trous restent vides</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_4_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il des plages horaires dédiées aux urgences ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_4" value="0" onchange="onAns(4,4,0)"><span class="opt-txt">Oui, plages réservées quotidiennement et gérées efficacement</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_4" value="1" onchange="onAns(4,4,1)"><span class="opt-txt">Quelques plages, pas toujours respectées</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_4" value="2" onchange="onAns(4,4,2)"><span class="opt-txt">On case les urgences où on peut, déséquilibre l'horaire</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_4" value="3" onchange="onAns(4,4,3)"><span class="opt-txt">Aucune plage, les urgences désorganisent tout</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_4_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">La gestion des rappels hygiène est-elle efficace ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_5" value="0" onchange="onAns(4,5,0)"><span class="opt-txt">Oui, système automatisé, liste active, taux de renouvellement élevé</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_5" value="1" onchange="onAns(4,5,1)"><span class="opt-txt">Manuel mais fonctionnel, quelques patients perdus</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_5" value="2" onchange="onAns(4,5,2)"><span class="opt-txt">Lacunaire, beaucoup de patients perdus de vue</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_5" value="3" onchange="onAns(4,5,3)"><span class="opt-txt">Non fonctionnel, perte de revenus importante</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_4_6">
+  <div class="qnum">7</div>
+  <div class="qbody">
+    <div class="qtxt">Les temps de rendez-vous sont-ils standardisés par traitement et par professionnel ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_6" value="0" onchange="onAns(4,6,0)"><span class="opt-txt">Oui, grille de temps établie, respectée et révisée annuellement</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_6" value="1" onchange="onAns(4,6,1)"><span class="opt-txt">Approximativement standardisés, des variations fréquentes</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_6" value="2" onchange="onAns(4,6,2)"><span class="opt-txt">Chaque professionnel fait à sa façon</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_6" value="3" onchange="onAns(4,6,3)"><span class="opt-txt">Aucune standardisation, source d'inefficacité</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_4_7">
+  <div class="qnum">8</div>
+  <div class="qbody">
+    <div class="qtxt">Les heures supplémentaires sont-elles contrôlées ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_4_7" value="0" onchange="onAns(4,7,0)"><span class="opt-txt">Oui, rares et toujours justifiées et approuvées</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_7" value="1" onchange="onAns(4,7,1)"><span class="opt-txt">Occasionnelles, acceptées sans trop de contrôle</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_7" value="2" onchange="onAns(4,7,2)"><span class="opt-txt">Fréquentes et problématiques pour le budget</span></label>
+<label class="radio-opt"><input type="radio" name="q_4_7" value="3" onchange="onAns(4,7,3)"><span class="opt-txt">Non contrôlées, coût important non mesuré</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(3)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(5)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_5">
+  <div class="shdr" style="border-left-color:#1e3a5c"><span style="font-size:1.5rem">🗂️</span>
+  <div><div class="sname">Gestion des patients et des dossiers</div>
+  <div class="scnt">7 questions &middot; Section 6 sur 12</div></div></div>
+  <div class="qcard" id="qc_5_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Combien de dossiers actifs avez-vous approximativement ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_5_0" value="0" onchange="onAns(5,0,0)"><span class="opt-txt">Plus de 2 500 — clinique à fort volume</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_0" value="1" onchange="onAns(5,0,1)"><span class="opt-txt">1 500 à 2 500 — volume standard solide</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_0" value="2" onchange="onAns(5,0,2)"><span class="opt-txt">800 à 1 500 — volume moyen, potentiel de croissance</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_0" value="3" onchange="onAns(5,0,3)"><span class="opt-txt">Moins de 800 — clinique en développement ou en déclin</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_5_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Combien de nouveaux patients recevez-vous par mois ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_5_1" value="0" onchange="onAns(5,1,0)"><span class="opt-txt">Plus de 25 nouveaux patients — excellente croissance</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_1" value="1" onchange="onAns(5,1,1)"><span class="opt-txt">15 à 25 — croissance stable et saine</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_1" value="2" onchange="onAns(5,1,2)"><span class="opt-txt">5 à 15 — stagnation, efforts de recrutement nécessaires</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_1" value="3" onchange="onAns(5,1,3)"><span class="opt-txt">Moins de 5 — déclin préoccupant</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_5_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Quel est le taux de fermeture de dossiers patients par année ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_5_2" value="0" onchange="onAns(5,2,0)"><span class="opt-txt">Moins de 5% des dossiers actifs — excellente rétention</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_2" value="1" onchange="onAns(5,2,1)"><span class="opt-txt">5% à 10% — rétention acceptable</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_2" value="2" onchange="onAns(5,2,2)"><span class="opt-txt">10% à 20% — pertes préoccupantes à analyser</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_2" value="3" onchange="onAns(5,2,3)"><span class="opt-txt">Plus de 20% — problème majeur de fidélisation</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_5_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">Qui fait les plans de traitement et comment sont-ils communiqués au patient ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_5_3" value="0" onchange="onAns(5,3,0)"><span class="opt-txt">Dentiste fait le plan, secrétaire présente avec document signé</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_3" value="1" onchange="onAns(5,3,1)"><span class="opt-txt">Dentiste fait le plan, explication partielle</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_3" value="2" onchange="onAns(5,3,2)"><span class="opt-txt">Plan établi mais peu expliqué ou documenté</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_3" value="3" onchange="onAns(5,3,3)"><span class="opt-txt">Processus flou, peu de plans formels</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_5_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Le suivi des plans de traitement non débutés est-il fait ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_5_4" value="0" onchange="onAns(5,4,0)"><span class="opt-txt">Oui, suivi systématique par la secrétaire avec relance</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_4" value="1" onchange="onAns(5,4,1)"><span class="opt-txt">Suivi occasionnel, certains plans tombent dans l'oubli</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_4" value="2" onchange="onAns(5,4,2)"><span class="opt-txt">Peu de suivi, beaucoup de plans perdus</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_4" value="3" onchange="onAns(5,4,3)"><span class="opt-txt">Aucun suivi des plans non débutés</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_5_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">Le suivi des plans de traitement envoyés aux assurances est-il rigoureux ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_5_5" value="0" onchange="onAns(5,5,0)"><span class="opt-txt">Oui, suivi hebdomadaire, relance dans les délais</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_5" value="1" onchange="onAns(5,5,1)"><span class="opt-txt">Suivi irrégulier, des délais importants</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_5" value="2" onchange="onAns(5,5,2)"><span class="opt-txt">Peu de suivi, des montants non réclamés</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_5" value="3" onchange="onAns(5,5,3)"><span class="opt-txt">Aucun suivi systématique</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_5_6">
+  <div class="qnum">7</div>
+  <div class="qbody">
+    <div class="qtxt">La clinique a-t-elle une approche structurée pour les nouveaux patients ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_5_6" value="0" onchange="onAns(5,6,0)"><span class="opt-txt">Oui, protocole d'accueil, questionnaire, présentation complète des services</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_6" value="1" onchange="onAns(5,6,1)"><span class="opt-txt">Accueil chaleureux mais peu structuré</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_6" value="2" onchange="onAns(5,6,2)"><span class="opt-txt">Peu de différence avec les patients réguliers</span></label>
+<label class="radio-opt"><input type="radio" name="q_5_6" value="3" onchange="onAns(5,6,3)"><span class="opt-txt">Aucun processus particulier pour les nouveaux</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(4)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(6)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_6">
+  <div class="shdr" style="border-left-color:#065f46"><span style="font-size:1.5rem">🔄</span>
+  <div><div class="sname">Répartition des tâches et des rôles</div>
+  <div class="scnt">6 questions &middot; Section 7 sur 12</div></div></div>
+  <div class="qcard" id="qc_6_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Qui donne les prochains rendez-vous aux patients sortant des salles d'hygiène ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_6_0" value="0" onchange="onAns(6,0,0)"><span class="opt-txt">L'hygiéniste replanifie elle-même au départ — prébooking systématique</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_0" value="1" onchange="onAns(6,0,1)"><span class="opt-txt">La secrétaire prend le relai systématiquement après signal</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_0" value="2" onchange="onAns(6,0,2)"><span class="opt-txt">C'est variable selon la journée et la personne</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_0" value="3" onchange="onAns(6,0,3)"><span class="opt-txt">Laissé au patient, beaucoup ne reprennent pas rendez-vous</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_6_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Qui donne les rendez-vous aux patients sortant des salles de dentisterie ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_6_1" value="0" onchange="onAns(6,1,0)"><span class="opt-txt">Dentiste ou assistante remet une fiche, secrétaire planifie aussitôt</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_1" value="1" onchange="onAns(6,1,1)"><span class="opt-txt">La secrétaire gère au cas par cas</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_1" value="2" onchange="onAns(6,1,2)"><span class="opt-txt">Variable, certains patients repartent sans rendez-vous</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_1" value="3" onchange="onAns(6,1,3)"><span class="opt-txt">Aucun processus clair, perte de production</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_6_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Qui s'occupe de l'inventaire et de la gestion des stocks ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_6_2" value="0" onchange="onAns(6,2,0)"><span class="opt-txt">Personne désignée, protocole écrit, commandes automatisées ou planifiées</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_2" value="1" onchange="onAns(6,2,1)"><span class="opt-txt">Personne désignée mais sans processus formel</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_2" value="2" onchange="onAns(6,2,2)"><span class="opt-txt">Chacun commande ce qu'il voit manquer</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_2" value="3" onchange="onAns(6,2,3)"><span class="opt-txt">Aucune gestion, ruptures ou surplus fréquents</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_6_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">La gestion financière quotidienne est-elle bien répartie ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_6_3" value="0" onchange="onAns(6,3,0)"><span class="opt-txt">Rôles clairs : facturation, balancement, comptes à recevoir bien définis</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_3" value="1" onchange="onAns(6,3,1)"><span class="opt-txt">Partiellement définie, quelques zones grises</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_3" value="2" onchange="onAns(6,3,2)"><span class="opt-txt">Tout repose sur une seule personne</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_3" value="3" onchange="onAns(6,3,3)"><span class="opt-txt">Désorganisée, source d'erreurs et de tensions</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_6_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">La configuration et la mise à jour de l'horaire dans le logiciel sont-elles bien gérées ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_6_4" value="0" onchange="onAns(6,4,0)"><span class="opt-txt">Personne désignée, formation adéquate, horaire toujours à jour</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_4" value="1" onchange="onAns(6,4,1)"><span class="opt-txt">Gérée mais avec des lacunes et erreurs fréquentes</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_4" value="2" onchange="onAns(6,4,2)"><span class="opt-txt">Plusieurs personnes le font sans coordination</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_4" value="3" onchange="onAns(6,4,3)"><span class="opt-txt">Problèmes fréquents avec l'horaire informatique</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_6_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il un document de référence où chaque employé peut trouver les normes et procédures ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_6_5" value="0" onchange="onAns(6,5,0)"><span class="opt-txt">Oui, guide complet et à jour pour chaque poste</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_5" value="1" onchange="onAns(6,5,1)"><span class="opt-txt">Quelques documents épars pas centralisés</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_5" value="2" onchange="onAns(6,5,2)"><span class="opt-txt">Informations transmises verbalement seulement</span></label>
+<label class="radio-opt"><input type="radio" name="q_6_5" value="3" onchange="onAns(6,5,3)"><span class="opt-txt">Rien n'est documenté, tout est dans les têtes</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(5)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(7)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_7">
+  <div class="shdr" style="border-left-color:#b45309"><span style="font-size:1.5rem">💬</span>
+  <div><div class="sname">Équipe et Communication</div>
+  <div class="scnt">6 questions &middot; Section 8 sur 12</div></div></div>
+  <div class="qcard" id="qc_7_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Des réunions d'équipe régulières sont-elles tenues ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_7_0" value="0" onchange="onAns(7,0,0)"><span class="opt-txt">Oui, hebdomadaires ou bimensuelles avec ordre du jour et compte-rendu</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_0" value="1" onchange="onAns(7,0,1)"><span class="opt-txt">Occasionnellement, sans fréquence fixe</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_0" value="2" onchange="onAns(7,0,2)"><span class="opt-txt">Rarement, seulement en cas de crise</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_0" value="3" onchange="onAns(7,0,3)"><span class="opt-txt">Jamais</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_7_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">L'ambiance et le climat de travail sont-ils positifs ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_7_1" value="0" onchange="onAns(7,1,0)"><span class="opt-txt">Excellent — équipe soudée, motivée, peu de tension</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_1" value="1" onchange="onAns(7,1,1)"><span class="opt-txt">Bien dans l'ensemble, quelques frictions ponctuelles</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_1" value="2" onchange="onAns(7,1,2)"><span class="opt-txt">Tendu, conflits récurrents affectant la productivité</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_1" value="3" onchange="onAns(7,1,3)"><span class="opt-txt">Très difficile, le roulement est lié à l'ambiance</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_7_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Les conflits interpersonnels sont-ils gérés rapidement ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_7_2" value="0" onchange="onAns(7,2,0)"><span class="opt-txt">Oui, adressés rapidement par le gestionnaire avec suivi</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_2" value="1" onchange="onAns(7,2,1)"><span class="opt-txt">Parfois gérés, parfois ignorés</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_2" value="2" onchange="onAns(7,2,2)"><span class="opt-txt">Les conflits traînent et s'enveniment</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_2" value="3" onchange="onAns(7,2,3)"><span class="opt-txt">Les conflits ne sont jamais gérés directement</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_7_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">La communication entre les départements (clinique et admin) est-elle fluide ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_7_3" value="0" onchange="onAns(7,3,0)"><span class="opt-txt">Oui, canaux clairs, peu de malentendus</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_3" value="1" onchange="onAns(7,3,1)"><span class="opt-txt">Quelques problèmes de communication récurrents</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_3" value="2" onchange="onAns(7,3,2)"><span class="opt-txt">Communication difficile, source d'erreurs et tensions</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_3" value="3" onchange="onAns(7,3,3)"><span class="opt-txt">Cloisonnement important, chacun dans son monde</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_7_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Le ou la dentiste est-il/elle accessible et impliqué(e) avec l'équipe ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_7_4" value="0" onchange="onAns(7,4,0)"><span class="opt-txt">Très accessible, leader positif, communication ouverte</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_4" value="1" onchange="onAns(7,4,1)"><span class="opt-txt">Correct, parfois difficile d'approche</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_4" value="2" onchange="onAns(7,4,2)"><span class="opt-txt">Peu accessible, décisions descendantes seulement</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_4" value="3" onchange="onAns(7,4,3)"><span class="opt-txt">Source de tensions, communication problématique</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_7_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">Les réunions cliniques (cas complexes, nouveaux protocoles) sont-elles tenues ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_7_5" value="0" onchange="onAns(7,5,0)"><span class="opt-txt">Oui, régulièrement avec toute l'équipe clinique</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_5" value="1" onchange="onAns(7,5,1)"><span class="opt-txt">Occasionnellement, selon les besoins</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_5" value="2" onchange="onAns(7,5,2)"><span class="opt-txt">Rarement, chacun se débrouille</span></label>
+<label class="radio-opt"><input type="radio" name="q_7_5" value="3" onchange="onAns(7,5,3)"><span class="opt-txt">Jamais</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(6)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(8)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_8">
+  <div class="shdr" style="border-left-color:#65a30d"><span style="font-size:1.5rem">🎓</span>
+  <div><div class="sname">Formation et Compétences</div>
+  <div class="scnt">5 questions &middot; Section 9 sur 12</div></div></div>
+  <div class="qcard" id="qc_8_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Les secrétaires ont-elles été formées spécifiquement pour leur poste dentaire ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_8_0" value="0" onchange="onAns(8,0,0)"><span class="opt-txt">Oui, formation complète initiale ET continue à jour</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_0" value="1" onchange="onAns(8,0,1)"><span class="opt-txt">Formation de base, peu de mises à jour depuis</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_0" value="2" onchange="onAns(8,0,2)"><span class="opt-txt">Formées sur le tas uniquement par les collègues</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_0" value="3" onchange="onAns(8,0,3)"><span class="opt-txt">Aucune formation structurée pour le poste dentaire</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_8_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Les assistantes dentaires sont-elles adéquatement formées et certifiées ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_8_1" value="0" onchange="onAns(8,1,0)"><span class="opt-txt">Oui, certifications à jour, formation continue planifiée</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_1" value="1" onchange="onAns(8,1,1)"><span class="opt-txt">Formation de base, peu de développement récent</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_1" value="2" onchange="onAns(8,1,2)"><span class="opt-txt">Lacunes importantes dans les compétences pratiques</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_1" value="3" onchange="onAns(8,1,3)"><span class="opt-txt">Formation nettement insuffisante pour les besoins</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_8_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Les hygiénistes participent-elles à la formation continue ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_8_2" value="0" onchange="onAns(8,2,0)"><span class="opt-txt">Oui, formation continue annuelle et partagée en équipe</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_2" value="1" onchange="onAns(8,2,1)"><span class="opt-txt">Quelques formations sur initiative personnelle</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_2" value="2" onchange="onAns(8,2,2)"><span class="opt-txt">Rarement, faute de temps ou de budget</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_2" value="3" onchange="onAns(8,2,3)"><span class="opt-txt">Jamais depuis leur embauche</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_8_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il un budget et un plan de formation annuel pour l'équipe ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_8_3" value="0" onchange="onAns(8,3,0)"><span class="opt-txt">Oui, budget défini et plan personnalisé par poste</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_3" value="1" onchange="onAns(8,3,1)"><span class="opt-txt">Budget approximatif, formation ad hoc selon les demandes</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_3" value="2" onchange="onAns(8,3,2)"><span class="opt-txt">Très rarement, seulement si urgent</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_3" value="3" onchange="onAns(8,3,3)"><span class="opt-txt">Jamais — aucun investissement en formation</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_8_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Les employés connaissent-ils les protocoles cliniques et administratifs ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_8_4" value="0" onchange="onAns(8,4,0)"><span class="opt-txt">Oui, tous formés, testés et mis à jour régulièrement</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_4" value="1" onchange="onAns(8,4,1)"><span class="opt-txt">La plupart les connaissent globalement</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_4" value="2" onchange="onAns(8,4,2)"><span class="opt-txt">Connaissances variables et inégales</span></label>
+<label class="radio-opt"><input type="radio" name="q_8_4" value="3" onchange="onAns(8,4,3)"><span class="opt-txt">Non, chacun développe ses propres façons de faire</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(7)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(9)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_9">
+  <div class="shdr" style="border-left-color:#1e40af"><span style="font-size:1.5rem">💻</span>
+  <div><div class="sname">Logiciels et Technologie</div>
+  <div class="scnt">6 questions &middot; Section 10 sur 12</div></div></div>
+  <div class="qcard" id="qc_9_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">L'équipe utilise-t-elle le logiciel dentaire à son plein potentiel ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_9_0" value="0" onchange="onAns(9,0,0)"><span class="opt-txt">Oui, utilisation avancée — production, rappels, statistiques, facturation</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_0" value="1" onchange="onAns(9,0,1)"><span class="opt-txt">Utilisation intermédiaire, beaucoup de fonctions ignorées</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_0" value="2" onchange="onAns(9,0,2)"><span class="opt-txt">Utilisation de base seulement (agenda et facturation)</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_0" value="3" onchange="onAns(9,0,3)"><span class="opt-txt">Utilisation minimale, beaucoup de processus manuels</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_9_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">Les nouveaux employés reçoivent-ils une formation sur le logiciel ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_9_1" value="0" onchange="onAns(9,1,0)"><span class="opt-txt">Oui, formation structurée par une personne désignée</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_1" value="1" onchange="onAns(9,1,1)"><span class="opt-txt">Formation informelle par les collègues, variable en qualité</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_1" value="2" onchange="onAns(9,1,2)"><span class="opt-txt">On se débrouille en cherchant soi-même</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_1" value="3" onchange="onAns(9,1,3)"><span class="opt-txt">Aucune formation, apprentissage au fil des erreurs</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_9_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Les rapports de gestion du logiciel sont-ils consultés régulièrement ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_9_2" value="0" onchange="onAns(9,2,0)"><span class="opt-txt">Oui, rapports de production, créances, statistiques patients analysés</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_2" value="1" onchange="onAns(9,2,1)"><span class="opt-txt">Quelques rapports occasionnellement</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_2" value="2" onchange="onAns(9,2,2)"><span class="opt-txt">Rarement, on ne sait pas toujours comment les générer</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_2" value="3" onchange="onAns(9,2,3)"><span class="opt-txt">Jamais — potentiel inexploité</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_9_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">La gestion des dossiers numériques est-elle optimale ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_9_3" value="0" onchange="onAns(9,3,0)"><span class="opt-txt">Oui, tout numérique, organisé, accessible facilement</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_3" value="1" onchange="onAns(9,3,1)"><span class="opt-txt">Mixte numérique et papier, quelques inefficacités</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_3" value="2" onchange="onAns(9,3,2)"><span class="opt-txt">Surtout papier, peu de numérisation</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_3" value="3" onchange="onAns(9,3,3)"><span class="opt-txt">Désorganisée, temps perdu à retrouver les informations</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_9_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il une solution de sauvegarde des données informatiques ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_9_4" value="0" onchange="onAns(9,4,0)"><span class="opt-txt">Oui, sauvegarde automatique quotidienne hors site vérifiée</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_4" value="1" onchange="onAns(9,4,1)"><span class="opt-txt">Sauvegarde en place mais rarement vérifiée</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_4" value="2" onchange="onAns(9,4,2)"><span class="opt-txt">Sauvegarde manuelle et irrégulière</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_4" value="3" onchange="onAns(9,4,3)"><span class="opt-txt">Aucune sauvegarde — risque majeur</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_9_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">La clinique est-elle en voie de devenir sans papier (paperless) ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_9_5" value="0" onchange="onAns(9,5,0)"><span class="opt-txt">Oui, sans papier total — tout numérisé et archivé électroniquement</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_5" value="1" onchange="onAns(9,5,1)"><span class="opt-txt">En transition active vers le sans papier</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_5" value="2" onchange="onAns(9,5,2)"><span class="opt-txt">Mixte — papier encore dominant</span></label>
+<label class="radio-opt"><input type="radio" name="q_9_5" value="3" onchange="onAns(9,5,3)"><span class="opt-txt">Tout papier — aucune numérisation planifiée</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(8)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(10)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_10">
+  <div class="shdr" style="border-left-color:#92400e"><span style="font-size:1.5rem">💰</span>
+  <div><div class="sname">Rentabilité et Productivité</div>
+  <div class="scnt">8 questions &middot; Section 11 sur 12</div></div></div>
+  <div class="qcard" id="qc_10_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">À combien s'élève actuellement le montant total de vos comptes à recevoir ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_0" value="0" onchange="onAns(10,0,0)"><span class="opt-txt">Moins de 10 000$ — contrôle excellent des créances</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_0" value="1" onchange="onAns(10,0,1)"><span class="opt-txt">10 000$ à 25 000$ — à surveiller et optimiser</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_0" value="2" onchange="onAns(10,0,2)"><span class="opt-txt">25 000$ à 60 000$ — problème important de recouvrement</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_0" value="3" onchange="onAns(10,0,3)"><span class="opt-txt">Plus de 60 000$ — situation critique, pertes significatives</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_10_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">La liste de prix des honoraires est-elle à jour et compétitive ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_1" value="0" onchange="onAns(10,1,0)"><span class="opt-txt">Oui, révisée annuellement selon le guide ACDQ + stratégie de prix</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_1" value="1" onchange="onAns(10,1,1)"><span class="opt-txt">Révisée irrégulièrement, souvent en retard sur le marché</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_1" value="2" onchange="onAns(10,1,2)"><span class="opt-txt">Rarement mise à jour, honoraires sous le marché</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_1" value="3" onchange="onAns(10,1,3)"><span class="opt-txt">Jamais révisée depuis plusieurs années</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_10_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Les indicateurs de performance (KPIs) sont-ils suivis régulièrement ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_2" value="0" onchange="onAns(10,2,0)"><span class="opt-txt">Oui, tableau de bord mensuel — production, créances, nouveaux patients</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_2" value="1" onchange="onAns(10,2,1)"><span class="opt-txt">Quelques indicateurs suivis de façon irrégulière</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_2" value="2" onchange="onAns(10,2,2)"><span class="opt-txt">Très peu de données analysées formellement</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_2" value="3" onchange="onAns(10,2,3)"><span class="opt-txt">Aucun indicateur — gestion à l'aveugle</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_10_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">La production horaire par professionnel est-elle connue et optimisée ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_3" value="0" onchange="onAns(10,3,0)"><span class="opt-txt">Oui, connue, comparée aux objectifs et travaillée activement</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_3" value="1" onchange="onAns(10,3,1)"><span class="opt-txt">Estimée approximativement sans objectifs clairs</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_3" value="2" onchange="onAns(10,3,2)"><span class="opt-txt">Non connue, jamais calculée</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_3" value="3" onchange="onAns(10,3,3)"><span class="opt-txt">Non applicable</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_10_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il des fuites de revenus identifiées dans la clinique ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_4" value="0" onchange="onAns(10,4,0)"><span class="opt-txt">Non, processus bien contrôlés, peu de pertes</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_4" value="1" onchange="onAns(10,4,1)"><span class="opt-txt">Quelques fuites mineures connues et travaillées</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_4" value="2" onchange="onAns(10,4,2)"><span class="opt-txt">Fuites importantes connues mais non corrigées</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_4" value="3" onchange="onAns(10,4,3)"><span class="opt-txt">Fuites probables mais non identifiées</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_10_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">Le taux d'acceptation des plans de traitement est-il suivi ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_5" value="0" onchange="onAns(10,5,0)"><span class="opt-txt">Oui, suivi mensuel avec stratégies d'amélioration</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_5" value="1" onchange="onAns(10,5,1)"><span class="opt-txt">Estimé sans mesure précise</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_5" value="2" onchange="onAns(10,5,2)"><span class="opt-txt">Non suivi, beaucoup de plans refusés ou abandonnés</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_5" value="3" onchange="onAns(10,5,3)"><span class="opt-txt">Jamais mesuré</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_10_6">
+  <div class="qnum">7</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il un budget annuel avec suivi mensuel ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_6" value="0" onchange="onAns(10,6,0)"><span class="opt-txt">Oui, budget détaillé par poste, suivi mensuel avec le comptable</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_6" value="1" onchange="onAns(10,6,1)"><span class="opt-txt">Budget approximatif sans suivi rigoureux</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_6" value="2" onchange="onAns(10,6,2)"><span class="opt-txt">Pas vraiment de budget formel</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_6" value="3" onchange="onAns(10,6,3)"><span class="opt-txt">Aucun budget — gestion réactive</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_10_7">
+  <div class="qnum">8</div>
+  <div class="qbody">
+    <div class="qtxt">Les quarts de travail et les salles sont-ils rentabilisés au maximum ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_10_7" value="0" onchange="onAns(10,7,0)"><span class="opt-txt">Oui, horaires optimisés, peu de temps morts non planifiés</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_7" value="1" onchange="onAns(10,7,1)"><span class="opt-txt">Quelques pertes mais globalement bien géré</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_7" value="2" onchange="onAns(10,7,2)"><span class="opt-txt">Temps morts fréquents, opportunités manquées</span></label>
+<label class="radio-opt"><input type="radio" name="q_10_7" value="3" onchange="onAns(10,7,3)"><span class="opt-txt">Rentabilité des salles jamais mesurée ni optimisée</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(9)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="goSec(11)">Suivante &#9654;</button>
+  </div>
+</div>
+<div class="spanel" id="sp_11">
+  <div class="shdr" style="border-left-color:#be123c"><span style="font-size:1.5rem">🦷</span>
+  <div><div class="sname">Protocoles Cliniques et Conformité</div>
+  <div class="scnt">6 questions &middot; Section 12 sur 12</div></div></div>
+  <div class="qcard" id="qc_11_0">
+  <div class="qnum">1</div>
+  <div class="qbody">
+    <div class="qtxt">Les protocoles de stérilisation sont-ils conformes aux normes en vigueur ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_11_0" value="0" onchange="onAns(11,0,0)"><span class="opt-txt">Oui, conformes aux normes 2026, documentés, enregistrements à jour</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_0" value="1" onchange="onAns(11,0,1)"><span class="opt-txt">Conformes aux anciennes normes, mise à jour en cours</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_0" value="2" onchange="onAns(11,0,2)"><span class="opt-txt">Partiellement conformes, lacunes identifiées</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_0" value="3" onchange="onAns(11,0,3)"><span class="opt-txt">Non conformes ou normes inconnues de l'équipe</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_11_1">
+  <div class="qnum">2</div>
+  <div class="qbody">
+    <div class="qtxt">L'équipe est-elle informée des nouvelles normes de stérilisation (octobre 2026) ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_11_1" value="0" onchange="onAns(11,1,0)"><span class="opt-txt">Oui, formation déjà faite, équipement conforme</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_1" value="1" onchange="onAns(11,1,1)"><span class="opt-txt">Informés, démarches en cours</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_1" value="2" onchange="onAns(11,1,2)"><span class="opt-txt">Peu informés, aucune action entreprise</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_1" value="3" onchange="onAns(11,1,3)"><span class="opt-txt">Aucune connaissance de ces nouvelles normes</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_11_2">
+  <div class="qnum">3</div>
+  <div class="qbody">
+    <div class="qtxt">Les consentements éclairés sont-ils obtenus et archivés systématiquement ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_11_2" value="0" onchange="onAns(11,2,0)"><span class="opt-txt">Oui, pour chaque traitement, signés et archivés au dossier</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_2" value="1" onchange="onAns(11,2,1)"><span class="opt-txt">La plupart du temps, quelques exceptions</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_2" value="2" onchange="onAns(11,2,2)"><span class="opt-txt">Rarement, seulement pour les interventions majeures</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_2" value="3" onchange="onAns(11,2,3)"><span class="opt-txt">Jamais ou presque — risque légal important</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_11_3">
+  <div class="qnum">4</div>
+  <div class="qbody">
+    <div class="qtxt">Les formulaires post-opératoires sont-ils remis et expliqués aux patients ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_11_3" value="0" onchange="onAns(11,3,0)"><span class="opt-txt">Oui, systématiquement avec explication verbale et suivi</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_3" value="1" onchange="onAns(11,3,1)"><span class="opt-txt">Remis la plupart du temps sans toujours expliquer</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_3" value="2" onchange="onAns(11,3,2)"><span class="opt-txt">Rarement remis, laissé à la discrétion du professionnel</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_3" value="3" onchange="onAns(11,3,3)"><span class="opt-txt">Non, pratique inexistante dans la clinique</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_11_4">
+  <div class="qnum">5</div>
+  <div class="qbody">
+    <div class="qtxt">Y a-t-il un protocole d'urgence médicale connu de toute l'équipe ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_11_4" value="0" onchange="onAns(11,4,0)"><span class="opt-txt">Oui, affiché, pratiqué annuellement, équipement vérifié</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_4" value="1" onchange="onAns(11,4,1)"><span class="opt-txt">Il existe mais peu pratiqué</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_4" value="2" onchange="onAns(11,4,2)"><span class="opt-txt">Peu connu, personne ne sait vraiment quoi faire</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_4" value="3" onchange="onAns(11,4,3)"><span class="opt-txt">Aucun protocole d'urgence</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+<div class="qcard" id="qc_11_5">
+  <div class="qnum">6</div>
+  <div class="qbody">
+    <div class="qtxt">La gestion des médicaments et des stupéfiants est-elle conforme ?</div>
+    <div class="rgroup"><label class="radio-opt"><input type="radio" name="q_11_5" value="0" onchange="onAns(11,5,0)"><span class="opt-txt">Oui, registre à jour, conformité vérifiée régulièrement</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_5" value="1" onchange="onAns(11,5,1)"><span class="opt-txt">Partiellement conforme, quelques lacunes</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_5" value="2" onchange="onAns(11,5,2)"><span class="opt-txt">Des lacunes importantes non corrigées</span></label>
+<label class="radio-opt"><input type="radio" name="q_11_5" value="3" onchange="onAns(11,5,3)"><span class="opt-txt">Non gérée adéquatement — risque de conformité</span></label>
+</div>
+    <div class="qcmt"><textarea placeholder="💬 Commentaires..." oninput="sv()"></textarea></div>
+  </div>
+</div>
+
+  <div class="nav-acts">
+    <button class="btn bsec" onclick="goSec(10)">&#9664; Pr&eacute;c&eacute;dente</button>
+    <button class="btn bpri" onclick="showRes()">&#128202; Voir les r&eacute;sultats</button>
+  </div>
+</div>
+
+<div id="resultsPanel" style="display:none">
+  <div class="res-hdr">
+    <h2>&#128202; Rapport de diagnostic &mdash; <span id="rCl">Clinique</span></h2>
+    <p>&Eacute;valuation du <span id="rDt"></span> &middot; <span id="rCo"></span></p>
+  </div>
+  <div class="sgrid" id="scoreGrid"></div>
+  <div class="pri-sec">
+    <div class="pri-title">&#127919; Top 5 des priorit&eacute;s d'intervention</div>
+    <div id="priList"></div>
+  </div>
+  <div class="narea"><label>&#128203; Notes de la conseill&egrave;re</label>
+  <textarea id="notesF" placeholder="Observations, contexte particulier..." oninput="sv()"></textarea></div>
+  <div class="narea"><label>&#9989; Plan d'action convenu</label>
+  <textarea id="planF" placeholder="Prochaines &eacute;tapes, &eacute;ch&eacute;ancier..." oninput="sv()"></textarea></div>
+  <div class="res-acts">
+    <button class="btn bdgr" onclick="clearAll()">&#128465; Effacer</button>
+    <button class="btn bsec" onclick="goSec(0)">&#9664; Retour</button>
+    <button class="btn bpri" onclick="window.print()">&#128424; Imprimer</button>
+  </div>
+</div>
+</div></div>
+<script>
+const NAMES=["Structure organisationnelle", "Gestion des ressources humaines", "Secrétariat et Administration", "Gestion des rendez-vous et des horaires", "Gestion des patients et des dossiers", "Répartition des tâches et des rôles", "Équipe et Communication", "Formation et Compétences", "Logiciels et Technologie", "Rentabilité et Productivité", "Protocoles Cliniques et Conformité"],ICONS=["🏗️", "👥", "📋", "📅", "🗂️", "🔄", "💬", "🎓", "💻", "💰", "🦷"],COLORS=["#1a6abf", "#7c3aed", "#0f766e", "#9d174d", "#1e3a5c", "#065f46", "#b45309", "#65a30d", "#1e40af", "#92400e", "#be123c"],COUNTS=[6, 9, 8, 8, 7, 6, 6, 5, 6, 8, 6],RECS=["Clarification des rôles, création d'un organigramme et documentation des procédures", "Implantation d'un programme RH structuré : embauche, intégration, évaluation, discipline et révisions salariales", "Restructuration des procédures administratives, du secrétariat et de la facturation", "Optimisation de la gestion des horaires, réduction des no-shows et augmentation du taux d'occupation", "Suivi des plans de traitement, analyse du roulement des patients et protocoles d'accueil", "Clarification et documentation de la répartition des tâches par poste", "Amélioration de la communication interne, des réunions d'équipe et du climat de travail", "Développement d'un plan de formation continue adapté à chaque poste", "Formation sur les logiciels dentaires et optimisation des outils technologiques", "Mise en place de KPIs, réduction des comptes à recevoir et optimisation de la rentabilité", "Mise en conformité des protocoles cliniques et préparation aux normes de stérilisation 2026"];
+const SMAP={0:100,1:65,2:30,3:0},KEY='gm_diag_v5';
+let ans={},cur=-1;
+function goSec(i){
+  document.getElementById('welcomePanel').style.display='none';
+  document.getElementById('resultsPanel').style.display='none';
+  document.querySelectorAll('.spanel').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const p=document.getElementById('sp_'+i);if(p){p.style.display='block';cur=i;}
+  const b=document.querySelector('.nav-btn[data-sec="'+i+'"]');if(b)b.classList.add('active');
+  document.getElementById('mainArea').scrollTop=0;updProg();
+}
+function onAns(sec,q,val){
+  if(!ans[sec])ans[sec]={};ans[sec][q]=val;
+  const c=document.getElementById('qc_'+sec+'_'+q);if(c)c.classList.add('answered');
+  updProg();updBadge(sec);sv();
+}
+function secScore(sec){
+  const cnt=COUNTS[sec-1];if(cnt===undefined||!ans[sec])return null;
+  let tot=0,n=0;
+  for(let q=0;q<cnt;q++)if(ans[sec][q]!==undefined){tot+=SMAP[ans[sec][q]];n++;}
+  return n===0?null:Math.round(tot/n);
+}
+const scCol=s=>s>=75?'#15803d':s>=50?'#d97706':s>=25?'#ea580c':'#dc2626';
+const scBg=s=>s>=75?'#dcfce7':s>=50?'#fef3c7':s>=25?'#ffedd5':'#fee2e2';
+const scLbl=s=>s>=75?'&#129001; Solide':s>=50?'&#129000; Satisfaisant':s>=25?'&#128992; À améliorer':'&#128308; Critique';
+function updBadge(sec){
+  const score=secScore(sec),btn=document.querySelector('.nav-btn[data-sec="'+sec+'"]');if(!btn)return;
+  const ex=btn.querySelector('.nscore');if(ex)ex.remove();
+  if(score!==null){const sp=document.createElement('span');sp.className='nscore';
+    sp.style.background=scBg(score);sp.style.color=scCol(score);sp.textContent=score+'%';
+    btn.appendChild(sp);btn.classList.add('done');}
+}
+function updProg(){
+  let tot=0,asd=0;
+  COUNTS.forEach((c,i)=>{tot+=c;asd+=ans[i+1]?Object.keys(ans[i+1]).length:0;});
+  const pct=tot?Math.round(asd/tot*100):0;
+  document.getElementById('pFill').style.width=pct+'%';
+  document.getElementById('pPct').textContent=pct+'%';
+  document.getElementById('pAns').textContent=asd;
+  document.getElementById('pTot').textContent=tot;
+}
+function showRes(){
+  document.querySelectorAll('.spanel').forEach(p=>p.style.display='none');
+  document.getElementById('welcomePanel').style.display='none';
+  document.getElementById('resultsPanel').style.display='block';
+  document.getElementById('rCl').textContent=document.getElementById('cName').value||'Clinique';
+  document.getElementById('rDt').textContent=document.getElementById('cDate').value||new Date().toLocaleDateString('fr-CA');
+  document.getElementById('rCo').textContent=document.getElementById('cCons').value||'Mélanie Fortin';
+  const grid=document.getElementById('scoreGrid');grid.innerHTML='';
+  const scored=[];
+  NAMES.forEach((name,i)=>{
+    const s=secScore(i+1)||0;scored.push({name,icon:ICONS[i],score:s,idx:i});
+    const card=document.createElement('div');card.className='scard';
+    card.innerHTML='<div class="scard-top"><span style="font-size:1.2rem">'+ICONS[i]+'</span><span class="scard-name">'+name+'</span></div>'+
+      '<div class="sbar"><div class="sbar-fill" style="width:0%;background:'+scCol(s)+'" data-w="'+s+'"></div></div>'+
+      '<div class="sval"><span class="snum" style="color:'+scCol(s)+'">'+s+'%</span>'+
+      '<span class="sbadge" style="background:'+scBg(s)+';color:'+scCol(s)+'">'+scLbl(s)+'</span></div>';
+    grid.appendChild(card);
+  });
+  setTimeout(()=>document.querySelectorAll('.sbar-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+  const srt=scored.slice().sort((a,b)=>a.score-b.score);
+  const pl=document.getElementById('priList');pl.innerHTML='';
+  const pc=['#dc2626','#ea580c','#d97706','#65a30d','#15803d'];
+  srt.slice(0,5).forEach((item,i)=>{
+    const div=document.createElement('div');div.className='pi';
+    div.innerHTML='<div class="prank" style="background:'+pc[i]+'">'+(i+1)+'</div>'+
+      '<div><div class="pname">'+item.icon+' '+item.name+' — Score : '+item.score+'%</div>'+
+      '<div class="prec">'+(RECS[item.idx]||'Accompagnement recommandé')+'</div></div>';
+    pl.appendChild(div);
+  });
+  document.getElementById('mainArea').scrollTop=0;
+}
+function getCmts(){var r=[];document.querySelectorAll('.qcmt textarea').forEach(ta=>r.push(ta.value));return r;}
+function getOpen(){var r={};document.querySelectorAll('.open-field').forEach((el,i)=>r[i]=el.value);return r;}
+function sv(){
+  try{localStorage.setItem(KEY,JSON.stringify({
+    cn:document.getElementById('cName').value,cd:document.getElementById('cDate').value,
+    cc:document.getElementById('cCons').value,
+    nf:(document.getElementById('notesF')||{}).value||'',
+    pf:(document.getElementById('planF')||{}).value||'',
+    ans,cmts:getCmts(),open:getOpen()
+  }));}catch(e){}
+}
+function loadSaved(){
+  try{
+    const d=JSON.parse(localStorage.getItem(KEY)||'null');if(!d)return;
+    if(d.cn)document.getElementById('cName').value=d.cn;
+    if(d.cd)document.getElementById('cDate').value=d.cd;
+    if(d.cc)document.getElementById('cCons').value=d.cc;
+    if(d.nf&&document.getElementById('notesF'))document.getElementById('notesF').value=d.nf;
+    if(d.pf&&document.getElementById('planF'))document.getElementById('planF').value=d.pf;
+    if(d.ans){
+      ans=d.ans;
+      Object.keys(ans).forEach(sec=>{
+        Object.keys(ans[sec]).forEach(q=>{
+          const r=document.querySelector('input[name="q_'+sec+'_'+q+'"][value="'+ans[sec][q]+'"]');
+          if(r)r.checked=true;
+          const c=document.getElementById('qc_'+sec+'_'+q);if(c)c.classList.add('answered');
+        });
+        updBadge(parseInt(sec));
+      });
+    }
+    if(d.cmts){const tas=document.querySelectorAll('.qcmt textarea');
+      d.cmts.forEach((v,i)=>{if(tas[i]&&v){tas[i].value=v;tas[i].style.minHeight=tas[i].scrollHeight+'px';}});}
+    if(d.open){const els=document.querySelectorAll('.open-field');
+      Object.keys(d.open).forEach(i=>{if(els[i]&&d.open[i])els[i].value=d.open[i];});}
+    updProg();
+  }catch(e){}
+}
+function clearAll(){
+  if(!confirm('Effacer toutes les données du diagnostic ?'))return;
+  ans={};
+  document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+  document.querySelectorAll('.qcard').forEach(c=>c.classList.remove('answered'));
+  document.querySelectorAll('.open-field').forEach(el=>el.value='');
+  document.querySelectorAll('.qcmt textarea').forEach(ta=>{ta.value='';ta.style.minHeight='32px';});
+  document.getElementById('cName').value='';
+  document.getElementById('cDate').value=new Date().toISOString().split('T')[0];
+  document.getElementById('cCons').value='';
+  if(document.getElementById('notesF'))document.getElementById('notesF').value='';
+  if(document.getElementById('planF'))document.getElementById('planF').value='';
+  try{localStorage.removeItem(KEY);}catch(e){}
+  document.getElementById('welcomePanel').style.display='block';
+  document.getElementById('resultsPanel').style.display='none';
+  document.querySelectorAll('.spanel').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.nav-btn').forEach(b=>{b.classList.remove('active','done');const s=b.querySelector('.nscore');if(s)s.remove();});
+  updProg();
+}
+document.querySelectorAll('.qcmt textarea').forEach(ta=>ta.addEventListener('input',function(){
+  this.style.minHeight='32px';if(this.scrollHeight>32)this.style.minHeight=this.scrollHeight+'px';
+}));
+document.getElementById('cDate').value=new Date().toISOString().split('T')[0];
+document.getElementById('cCons').value='Mélanie Fortin';
+updProg();loadSaved();
+</script>
+</body></html>
