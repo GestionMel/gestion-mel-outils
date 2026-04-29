@@ -543,7 +543,19 @@ body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min
         <textarea class="form-textarea" id="c-commentaires" placeholder="Parlez-nous de vous, de vos objectifs, de ce qui vous démarque..."></textarea>
       </div>
 
-      <p style="font-size:.73rem;color:#475569;margin-bottom:4px">* Champs obligatoires. Vos coordonnées sont partagées uniquement avec les cliniques intéressées par votre profil.</p>
+      <div style="background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.12);border-radius:10px;padding:16px 18px;margin-bottom:18px">
+        <label class="check-item" style="align-items:flex-start;gap:12px">
+          <input type="checkbox" id="c-consentement" style="margin-top:3px;accent-color:var(--blue);width:16px;height:16px;flex-shrink:0">
+          <span style="color:#cbd5e1;font-size:.84rem;line-height:1.6">
+            <strong style="color:var(--text)">Autorisation d'affichage</strong><br>
+            J'autorise Gestion Mel à afficher mon courriel et mon numéro de téléphone sur mon profil public afin que les cliniques intéressées puissent communiquer directement avec moi. Je comprends que je peux retirer ce consentement en tout temps en contactant info@gestionmel.com.
+          </span>
+        </label>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(56,189,248,.1);color:#475569;font-size:.72rem">
+          Si non coché, les cliniques intéressées passeront par Gestion Mel pour obtenir vos coordonnées.
+        </div>
+      </div>
+      <p style="font-size:.73rem;color:#475569;margin-bottom:4px">* Champs obligatoires. Conforme à la Loi 25 sur la protection des renseignements personnels.</p>
       <div class="form-actions">
         <button class="btn btn-ghost" onclick="closeModal('modal-candidate')">Annuler</button>
         <button class="btn btn-primary" onclick="submitCandidate()">Soumettre ma candidature</button>
@@ -633,7 +645,19 @@ body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min
         <textarea class="form-textarea" id="j-commentaires" placeholder="Toute autre information pertinente..."></textarea>
       </div>
 
-      <p style="font-size:.73rem;color:#475569;margin-bottom:4px">* Champs obligatoires. Votre courriel est partagé avec les candidats qui souhaitent vous contacter directement.</p>
+      <div style="background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.12);border-radius:10px;padding:16px 18px;margin-bottom:18px">
+        <label class="check-item" style="align-items:flex-start;gap:12px">
+          <input type="checkbox" id="j-consentement" style="margin-top:3px;accent-color:var(--blue);width:16px;height:16px;flex-shrink:0">
+          <span style="color:#cbd5e1;font-size:.84rem;line-height:1.6">
+            <strong style="color:var(--text)">Autorisation d'affichage</strong><br>
+            J'autorise Gestion Mel à afficher le courriel et le numéro de téléphone de notre clinique sur notre offre publique afin que les candidates intéressées puissent communiquer directement avec nous. Je comprends que je peux retirer ce consentement en tout temps en contactant info@gestionmel.com.
+          </span>
+        </label>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(56,189,248,.1);color:#475569;font-size:.72rem">
+          Si non coché, les candidates intéressées passeront par Gestion Mel pour obtenir vos coordonnées.
+        </div>
+      </div>
+      <p style="font-size:.73rem;color:#475569;margin-bottom:4px">* Champs obligatoires. Conforme à la Loi 25 sur la protection des renseignements personnels.</p>
       <div class="form-actions">
         <button class="btn btn-ghost" onclick="closeModal('modal-job')">Annuler</button>
         <button class="btn btn-primary" onclick="submitJob()">Publier mon offre</button>
@@ -771,6 +795,7 @@ async function submitCandidate() {
     academie: document.querySelector('input[name="c-acad"]:checked')?.value || 'Non',
     lienCV: document.getElementById('c-cv').value.trim(),
     commentaires: document.getElementById('c-commentaires').value.trim(),
+    consentement: document.getElementById('c-consentement')?.checked || false,
     status: 'pending',
     type: 'candidate',
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -847,22 +872,36 @@ function showCandidateDetail(id) {
       <div><div class="detail-label">Type d'emploi</div><div class="detail-value">${esc(c.typeEmploi||'')}</div></div>
       <div><div class="detail-label">Expérience</div><div class="detail-value">${esc(c.experience||'Non précisé')}</div></div>
     </div>
-    ${(c.logiciels||[]).length ? `<div style="margin-top:16px"><div class="detail-label">Logiciels</div><div class="tags" style="margin-top:6px">${c.logiciels.map(l=>`<span class="tag blue">${esc(l)}</span>`).join('')}</div></div>` : ''}
-    ${c.commentaires ? `<div style="margin-top:16px"><div class="detail-label">À propos</div><div class="detail-value">${esc(c.commentaires)}</div></div>` : ''}
-    ${c.lienCV ? `<div style="margin-top:16px"><div class="detail-label">Curriculum Vitae</div><a href="${esc(c.lienCV)}" target="_blank" class="detail-link">📄 Consulter le CV</a></div>` : ''}
+    ${(c.logiciels||[]).filter(l=>l!=='Aucun pour le moment').length ? `<div style="margin-top:16px"><div class="detail-label">Logiciels</div><div class="tags" style="margin-top:6px">${c.logiciels.filter(l=>l!=='Aucun pour le moment').map(l=>`<span class="tag blue">${esc(l)}</span>`).join('')}</div></div>` : ''}
     <hr class="detail-divider">
-    <div style="text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:16px">
-      Pour entrer en contact : <a href="mailto:${esc(c.courriel)}" class="detail-link">${esc(c.courriel)}</a>
-      ${c.telephone ? ' · ' + esc(c.telephone) : ''}
-    </div>
-    <div style="text-align:center">
-      <a href="mailto:${esc(c.courriel)}?subject=Votre candidature — Espace carrières Gestion Mel" class="btn btn-primary" style="text-decoration:none;display:inline-flex">
-        ✉ Contacter cette candidate
-      </a>
-    </div>
+    ${c.consentement ? `
+      <div style="text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:16px">
+        Coordonnées de la candidate :
+        <strong style="color:var(--text)"> ${esc(c.courriel)}</strong>
+        ${c.telephone ? ` · <strong style="color:var(--text)">${esc(c.telephone)}</strong>` : ''}
+      </div>
+      ${c.lienCV ? `<div style="text-align:center;margin-bottom:16px"><a href="${esc(c.lienCV)}" target="_blank" class="detail-link">📄 Consulter le CV</a></div>` : ''}
+      <div style="text-align:center">
+        <a href="mailto:${esc(c.courriel)}?subject=Votre candidature — Espace carrières Gestion Mel"
+           class="btn btn-primary" style="text-decoration:none;display:inline-flex">
+          ✉ Contacter cette candidate directement
+        </a>
+      </div>
+    ` : `
+      <div style="background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.12);border-radius:10px;padding:16px 18px;margin-bottom:18px;text-align:center">
+        <div style="color:var(--muted);font-size:.8rem;margin-bottom:10px">
+          🔒 Cette candidate a choisi de ne pas afficher ses coordonnées publiquement. Gestion Mel vous mettra en relation.
+        </div>
+        <a href="mailto:${esc(CONFIG.adminEmail)}?subject=Intérêt pour la candidature de ${esc(c.nom)}&body=Bonjour Mélanie,%0D%0A%0D%0AJe suis intéressée par le profil de ${esc(c.nom)} (${(c.postes||[]).join(', ')}) disponible dans votre Espace carrières dentaires.%0D%0A%0D%0APouvez-vous me transmettre ses coordonnées?%0D%0A%0D%0AMerci!"
+           class="btn btn-primary" style="text-decoration:none;display:inline-flex">
+          ✉ Demander les coordonnées à Gestion Mel
+        </a>
+      </div>
+      <div style="text-align:center;color:#475569;font-size:.75rem">
+        Gestion Mel vous mettra en relation dans les plus brefs délais.
+      </div>
+    `}
   `;
-  openModal('modal-detail');
-}
 
 // ═══════════════════════
 // JOBS
@@ -900,6 +939,7 @@ async function submitJob() {
     logiciels: [...document.querySelectorAll('input[name="j-logiciel"]:checked')].map(i=>i.value),
     dateDebut: document.getElementById('j-date').value,
     commentaires: document.getElementById('j-commentaires').value.trim(),
+    consentement: document.getElementById('j-consentement')?.checked || false,
     status: 'pending',
     type: 'job',
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -958,6 +998,9 @@ function renderJobs() {
   `).join('');
 }
 
+  openModal('modal-detail');
+}
+
 function showJobDetail(id) {
   const j = allJobs.find(x => x.id === id);
   if (!j) return;
@@ -977,14 +1020,32 @@ function showJobDetail(id) {
     ${j.avantages ? `<div style="margin-bottom:16px"><div class="detail-label">Avantages offerts</div><div class="detail-value" style="white-space:pre-wrap">${esc(j.avantages)}</div></div>` : ''}
     ${j.dateDebut ? `<div style="margin-bottom:16px"><div class="detail-label">Entrée en poste souhaitée</div><div class="detail-value">${j.dateDebut}</div></div>` : ''}
     <hr class="detail-divider">
-    <div style="text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:18px">
-      Communiquez directement avec la clinique pour postuler.
-    </div>
-    <div style="text-align:center">
-      <a href="mailto:${esc(j.courriel)}?subject=Votre offre d'emploi — ${esc(j.poste)}" class="btn btn-primary" style="text-decoration:none;display:inline-flex">
-        ✉ Je suis intéressée — Contacter la clinique
-      </a>
-    </div>
+    ${j.consentement ? `
+      <div style="text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:16px">
+        Coordonnées de la clinique :
+        <strong style="color:var(--text)"> ${esc(j.courriel)}</strong>
+        ${j.telephone ? ` · <strong style="color:var(--text)">${esc(j.telephone)}</strong>` : ''}
+      </div>
+      <div style="text-align:center">
+        <a href="mailto:${esc(j.courriel)}?subject=Votre offre d'emploi — ${esc(j.poste)}"
+           class="btn btn-primary" style="text-decoration:none;display:inline-flex">
+          ✉ Je suis intéressée — Contacter la clinique directement
+        </a>
+      </div>
+    ` : `
+      <div style="background:rgba(56,189,248,.05);border:1px solid rgba(56,189,248,.12);border-radius:10px;padding:16px 18px;margin-bottom:18px;text-align:center">
+        <div style="color:var(--muted);font-size:.8rem;margin-bottom:10px">
+          🔒 Cette clinique a choisi de ne pas afficher ses coordonnées publiquement. Gestion Mel vous mettra en relation.
+        </div>
+        <a href="mailto:${esc(CONFIG.adminEmail)}?subject=Intérêt pour l'offre de ${esc(j.clinique)} — ${esc(j.poste)}&body=Bonjour Mélanie,%0D%0A%0D%0AJe suis intéressée par l'offre de ${esc(j.clinique)} pour le poste de ${esc(j.poste)}.%0D%0A%0D%0APouvez-vous me transmettre leurs coordonnées?%0D%0A%0D%0AMerci!"
+           class="btn btn-primary" style="text-decoration:none;display:inline-flex">
+          ✉ Demander les coordonnées à Gestion Mel
+        </a>
+      </div>
+      <div style="text-align:center;color:#475569;font-size:.75rem">
+        Gestion Mel vous mettra en relation dans les plus brefs délais.
+      </div>
+    `}
   `;
   openModal('modal-detail');
 }
@@ -1174,8 +1235,32 @@ document.querySelectorAll('.overlay').forEach(overlay => {
   });
 });
 
+// ═══════════════════════
+// URL ANCHOR ROUTING
+// Permet aux boutons GoDaddy de pointer directement
+// vers la bonne section via l'URL
+// Ex: votresite.github.io/carrieres#deposer
+// ═══════════════════════
+function handleHash() {
+  const hash = window.location.hash;
+  if (hash === '#deposer') {
+    showView('talents');
+    setTimeout(() => openCandidateForm(), 400);
+  } else if (hash === '#offres') {
+    showView('jobs');
+  } else if (hash === '#candidats') {
+    showView('talents');
+  } else if (hash === '#publier') {
+    showView('jobs');
+    setTimeout(() => openJobForm(), 400);
+  }
+}
+
+window.addEventListener('hashchange', handleHash);
+
 // Start
 loadCounts();
+handleHash();
 
 </script>
 </body>
