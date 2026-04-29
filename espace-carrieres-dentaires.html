@@ -320,8 +320,10 @@ body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min
     <div class="logo-sub">Optimiser · Structurer · Performer</div>
   </div>
   <nav class="nav">
-    <button class="nav-btn" id="nav-talents" onclick="showView('talents')">🦷 Talent Dentaire</button>
-    <button class="nav-btn" id="nav-jobs" onclick="showView('jobs')">💎 Trouver la perle rare</button>
+    <button class="nav-btn" id="nav-deposer" onclick="showView('talents');setTimeout(openCandidateForm,300)">🦷 Déposer ma candidature</button>
+    <button class="nav-btn" id="nav-offres" onclick="showView('jobs')">🔍 Ma clinique de rêve</button>
+    <button class="nav-btn" id="nav-talents" onclick="showView('talents')">💎 Trouver ma perle rare</button>
+    <button class="nav-btn" id="nav-publier" onclick="showView('jobs');setTimeout(openJobForm,300)">📋 Offrir un poste de rêve</button>
     <button class="nav-btn admin-gear" onclick="showView('admin-login')" title="Administration">⚙</button>
   </nav>
 </header>
@@ -817,7 +819,16 @@ async function loadCandidates() {
   grid.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement des profils...</div>';
   try {
     const snap = await db.collection('candidatures').where('status','==','approved').get();
-    allCandidates = snap.docs.map(d => ({...d.data(), _id: d.id}));
+    const hundredEightyDaysAgo = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000);
+    allCandidates = snap.docs.map(d => ({...d.data(), _id: d.id})).filter(c => {
+      if (!c.createdAt) return true;
+      const created = c.createdAt.toDate ? c.createdAt.toDate() : new Date(c.createdAt);
+      return created > hundredEightyDaysAgo;
+    }).sort((a, b) => {
+      const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+      const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+      return dateB - dateA;
+    });
     renderCandidates();
   } catch(e) {
     grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Erreur de chargement. Vérifiez la configuration Firebase.</div></div>';
@@ -852,6 +863,7 @@ function renderCandidates() {
       </div>
       ${(c.logiciels||[]).filter(l=>l!=='Aucun pour le moment').length ? `<div class="tags">${(c.logiciels).filter(l=>l!=='Aucun pour le moment').map(l=>`<span class="tag blue">${esc(l)}</span>`).join('')}</div>` : ''}
       <div class="dispo"><span class="dot"></span>${esc(c.disponibilite||'')}</div>
+      ${c.createdAt ? `<div style="font-size:.68rem;color:#475569;margin-top:8px">Publié le ${new Date(c.createdAt.toDate ? c.createdAt.toDate() : c.createdAt).toLocaleDateString('fr-CA')}</div>` : ''}
     </div>
   `).join('');
 }
@@ -960,7 +972,16 @@ async function loadJobs() {
   grid.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement des offres...</div>';
   try {
     const snap = await db.collection('offres').where('status','==','approved').get();
-    allJobs = snap.docs.map(d => ({...d.data(), _id:d.id}));
+    const hundredEightyDaysAgo = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000);
+    allJobs = snap.docs.map(d => ({...d.data(), _id:d.id})).filter(j => {
+      if (!j.createdAt) return true;
+      const created = j.createdAt.toDate ? j.createdAt.toDate() : new Date(j.createdAt);
+      return created > hundredEightyDaysAgo;
+    }).sort((a, b) => {
+      const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+      const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+      return dateB - dateA;
+    });
     renderJobs();
   } catch(e) {
     grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Erreur de chargement. Vérifiez la configuration Firebase.</div></div>';
@@ -994,6 +1015,7 @@ function renderJobs() {
         </div>
         <span class="j-see">Voir l'offre →</span>
       </div>
+      ${j.createdAt ? `<div style="font-size:.68rem;color:#475569;margin-top:8px">Publié le ${new Date(j.createdAt.toDate ? j.createdAt.toDate() : j.createdAt).toLocaleDateString('fr-CA')}</div>` : ''}
     </div>
   `).join('');
 }
@@ -1062,8 +1084,8 @@ function showSuccess(type) {
       <div class="success-title">${isCandidate ? 'Candidature reçue!' : 'Offre reçue!'}</div>
       <p class="success-text">
         ${isCandidate
-          ? 'Votre profil sera affiché dans l\'espace Talent Dentaire après validation par Gestion Mel. Vous serez contactée si une clinique est intéressée par votre profil.'
-          : 'Votre offre sera publiée dans l\'espace Trouver la perle rare après validation par notre équipe. Nous communiquerons avec vous sous peu.'}
+          ? 'Votre profil sera affiché dans l\'espace Talent Dentaire après validation par Gestion Mel. Votre profil sera visible durant <strong>180 jours (6 mois)</strong>. Si vous désirez le retirer avant, envoyez-nous un courriel à info@gestionmel.com.'
+          : 'Votre offre sera publiée dans l\'espace Trouver la perle rare après validation par notre équipe. Votre offre sera visible durant <strong>180 jours (6 mois)</strong>. Si vous désirez la retirer avant, envoyez-nous un courriel à info@gestionmel.com.'}
       </p>
       <button class="btn btn-primary" onclick="closeModal('${isCandidate ? 'modal-candidate' : 'modal-job'}')">Fermer</button>
     </div>
