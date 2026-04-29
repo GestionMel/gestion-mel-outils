@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Carrières Dentaires — Gestion Mel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0f1e;
+  --bg2:#0f172a;
+  --blue:#38bdf8;
+  --blue-light:#7dd3fc;
+  --text:#e8eaf0;
+  --muted:#94a3b8;
+  --border:rgba(56,189,248,0.15);
+  --card:rgba(255,255,255,0.03);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min-height:100vh}
+
+/* ── Header ── */
+.header{
+  background:rgba(10,15,30,0.96);
+  border-bottom:1px solid var(--border);
+  padding:16px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(12px);
+}
+.logo{cursor:pointer}
+.logo-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--blue)}
+.logo-name span{color:var(--text);font-style:italic}
+.logo-sub{font-size:0.6rem;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px}
+.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.nav-btn{
+  background:transparent;border:1px solid rgba(56,189,248,0.25);
+  color:var(--muted);padding:8px 16px;border-radius:6px;
+  cursor:pointer;font-size:0.8rem;letter-spacing:0.3px;
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.nav-btn:hover{border-color:var(--blue);color:var(--blue)}
+.nav-btn.active{background:var(--blue);color:var(--bg);border-color:var(--blue);font-weight:600}
+.admin-gear{opacity:.4;font-size:.9rem;padding:8px 10px}
+
+/* ── Views ── */
+.view{display:none;animation:fadeIn .3s ease}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Hero ── */
+.hero{
+  text-align:center;padding:80px 40px 60px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;
+  top:-80px;left:50%;transform:translateX(-50%);
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(56,189,248,.07) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-eye{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,5vw,3.6rem);
+  font-weight:400;line-height:1.2;
+  color:#f1f5f9;margin-bottom:18px;
+}
+.hero-title em{color:var(--blue);font-style:italic}
+.hero-desc{color:var(--muted);max-width:540px;margin:0 auto;line-height:1.8;font-size:.95rem}
+
+/* ── Two-col ── */
+.two-col{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:22px;max-width:980px;margin:0 auto;
+  padding:0 40px 80px;
+}
+.section-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:34px 28px;text-align:center;
+  transition:all .3s;cursor:pointer;
+}
+.section-card:hover{
+  border-color:rgba(56,189,248,.35);
+  background:rgba(56,189,248,.05);
+  transform:translateY(-4px);
+}
+.card-icon{font-size:2.2rem;margin-bottom:14px}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.65rem;color:#f1f5f9;margin-bottom:10px}
+.card-desc{color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:20px}
+.card-count{
+  display:inline-block;
+  background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);
+  color:var(--blue);padding:3px 12px;border-radius:20px;font-size:.75rem;
+  margin-bottom:18px;
+}
+
+/* ── Buttons ── */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:11px 24px;border-radius:8px;font-size:.85rem;
+  cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-weight:500;letter-spacing:.3px;transition:all .2s;border:none;
+}
+.btn-primary{background:var(--blue);color:var(--bg)}
+.btn-primary:hover{background:var(--blue-light);transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--blue);border:1px solid var(--blue)}
+.btn-outline:hover{background:rgba(56,189,248,.1)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid rgba(148,163,184,.2)}
+.btn-ghost:hover{border-color:var(--muted);color:var(--text)}
+.btn-danger{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);padding:7px 14px;font-size:.78rem}
+.btn-danger:hover{background:rgba(239,68,68,.2)}
+.btn-success{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);padding:7px 14px;font-size:.78rem}
+.btn-success:hover{background:rgba(34,197,94,.2)}
+.btn-sm{padding:7px 16px;font-size:.78rem}
+
+/* ── Section header ── */
+.section-hdr{
+  max-width:980px;margin:0 auto;
+  padding:50px 40px 28px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  flex-wrap:wrap;gap:14px;
+}
+.section-hdr-title{font-family:'Cormorant Garamond',serif;font-size:2.1rem;color:#f1f5f9}
+.section-hdr-title em{color:var(--blue);font-style:italic}
+.section-hdr-sub{color:var(--muted);font-size:.85rem;margin-top:4px}
+
+/* ── Cards grid ── */
+.cards-grid{
+  max-width:980px;margin:0 auto;
+  padding:0 40px 60px;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(275px,1fr));
+  gap:18px;
+}
+.empty-state{
+  grid-column:1/-1;text-align:center;
+  padding:60px 20px;color:#475569;
+}
+.empty-icon{font-size:3rem;margin-bottom:14px}
+
+/* ── Profile card ── */
+.profile-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:22px;
+  transition:all .25s;cursor:pointer;
+}
+.profile-card:hover{border-color:rgba(56,189,248,.35);background:rgba(56,189,248,.04);transform:translateY(-2px)}
+.p-name{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f1f5f9;margin-bottom:4px}
+.p-poste{color:var(--blue);font-size:.8rem;font-weight:500;margin-bottom:10px}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.tag{
+  background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.12);
+  color:var(--muted);padding:2px 9px;border-radius:20px;font-size:.7rem;
+}
+.tag.blue{color:var(--blue)}
+.tag.green{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.12);color:#4ade80}
+.dispo{font-size:.78rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block}
+.acad-badge{
+  background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);
+  color:var(--blue);padding:2px 9px;border-radius:20px;font-size:.68rem;font-weight:500;
+}
+
+/* ── Job card ── */
+.job-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:22px;transition:all .25s;cursor:pointer;
+}
+.job-card:hover{border-color:rgba(56,189,248,.35);background:rgba(56,189,248,.04);transform:translateY(-2px)}
+.j-clinique{font-family:'Cormorant Garamond',serif;font-size:1.2rem;color:#f1f5f9;margin-bottom:3px}
+.j-poste{color:var(--blue);font-size:.82rem;font-weight:500;margin-bottom:10px}
+.j-desc{
+  color:var(--muted);font-size:.8rem;line-height:1.65;margin-bottom:12px;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.j-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.j-see{color:var(--blue);font-size:.78rem}
+
+/* ── Overlay / Modal ── */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(10px);
+  z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.overlay.hidden{display:none}
+.modal{
+  background:var(--bg2);
+  border:1px solid rgba(56,189,248,.2);
+  border-radius:20px;padding:38px;
+  max-width:600px;width:100%;
+  max-height:90vh;overflow-y:auto;
+  position:relative;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.modal-close{
+  position:absolute;top:18px;right:18px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--muted);width:30px;height:30px;
+  border-radius:50%;cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.modal-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#f1f5f9;margin-bottom:6px}
+.modal-sub{color:var(--muted);font-size:.83rem;margin-bottom:26px}
+
+/* ── Forms ── */
+.form-group{margin-bottom:18px}
+.form-label{display:block;color:var(--muted);font-size:.8rem;margin-bottom:7px;letter-spacing:.3px}
+.form-label .req{color:#f87171}
+.form-input,.form-select,.form-textarea{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid rgba(56,189,248,.14);
+  border-radius:8px;padding:10px 13px;
+  color:var(--text);font-size:.88rem;
+  font-family:'DM Sans',sans-serif;
+  transition:border-color .2s;outline:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  border-color:var(--blue);background:rgba(56,189,248,.04);
+}
+.form-textarea{resize:vertical;min-height:85px}
+.form-select{appearance:none;cursor:pointer}
+.form-select option{background:var(--bg2)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.check-group{display:flex;flex-direction:column;gap:9px}
+.check-item{display:flex;align-items:center;gap:9px;cursor:pointer}
+.check-item input{accent-color:var(--blue);width:15px;height:15px;cursor:pointer}
+.check-label{color:#cbd5e1;font-size:.86rem}
+.radio-group{display:flex;flex-direction:column;gap:9px}
+.radio-item{display:flex;align-items:center;gap:9px;cursor:pointer}
+.radio-item input{accent-color:var(--blue);width:15px;height:15px;cursor:pointer}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:26px;padding-top:16px;border-top:1px solid var(--border)}
+.form-section-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+  color:var(--blue);margin:20px 0 12px;
+}
+
+/* ── Detail ── */
+.detail-label{font-size:.72rem;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.detail-value{color:#cbd5e1;font-size:.9rem;line-height:1.7}
+.detail-link{color:var(--blue);text-decoration:none}
+.detail-link:hover{text-decoration:underline}
+.detail-divider{border:none;border-top:1px solid rgba(56,189,248,.08);margin:18px 0}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+/* ── Admin ── */
+.admin-wrap{max-width:980px;margin:0 auto;padding:40px 40px 60px}
+.admin-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.pending-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:18px 22px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.p-info-name{color:#f1f5f9;font-weight:500;margin-bottom:3px}
+.p-info-meta{color:var(--muted);font-size:.8rem}
+.p-actions{display:flex;gap:8px}
+
+/* ── Success ── */
+.success-msg{
+  text-align:center;padding:20px;
+}
+.success-icon{font-size:3rem;margin-bottom:14px}
+.success-title{font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:#f1f5f9;margin-bottom:10px}
+.success-text{color:var(--muted);font-size:.9rem;line-height:1.7;margin-bottom:24px}
+
+/* ── Loading ── */
+.loading{
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 20px;color:var(--blue);font-size:.9rem;gap:10px;
+}
+.spinner{
+  width:20px;height:20px;border:2px solid rgba(56,189,248,.2);
+  border-top-color:var(--blue);border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Footer ── */
+.footer{
+  border-top:1px solid rgba(56,189,248,.07);
+  padding:24px 40px;text-align:center;
+  color:#475569;font-size:.78rem;
+}
+.footer a{color:var(--blue);text-decoration:none}
+
+/* ── Responsive ── */
+@media(max-width:640px){
+  .header{padding:14px 18px}
+  .hero{padding:50px 20px 36px}
+  .two-col{grid-template-columns:1fr;padding:0 20px 50px}
+  .section-hdr{padding:36px 20px 20px}
+  .cards-grid{padding:0 20px 40px;grid-template-columns:1fr}
+  .modal{padding:26px 20px}
+  .form-grid{grid-template-columns:1fr}
+  .admin-wrap{padding:28px 18px 40px}
+  .detail-grid{grid-template-columns:1fr}
+  .nav-btn{padding:6px 11px;font-size:.73rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════ -->
+<header class="header">
+  <div class="logo" onclick="showView('home')">
+    <div class="logo-name">Gestion <span>Mel</span></div>
+    <div class="logo-sub">Optimiser · Structurer · Performer</div>
+  </div>
+  <nav class="nav">
+    <button class="nav-btn" id="nav-talents" onclick="showView('talents')">🦷 Talent Dentaire</button>
+    <button class="nav-btn" id="nav-jobs" onclick="showView('jobs')">💎 Trouver la perle rare</button>
+    <button class="nav-btn admin-gear" onclick="showView('admin-login')" title="Administration">⚙</button>
+  </nav>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     VIEW: HOME
+═══════════════════════════════════════════════ -->
+<div class="view active" id="view-home">
+  <div class="hero">
+    <div class="hero-eye">💎 Espace carrières dentaires</div>
+    <h1 class="hero-title">
+      Vous cherchez un emploi<br>ou <em>la perle rare</em> pour votre équipe?
+    </h1>
+    <p class="hero-desc">
+      Gestion Mel met en relation les talents du domaine dentaire avec les cliniques qui cherchent exactement quelqu'un comme eux.
+    </p>
+  </div>
+
+  <div class="two-col">
+    <div class="section-card" onclick="showView('talents')">
+      <div class="card-icon">🦷</div>
+      <div class="card-title">Talent Dentaire</div>
+      <div class="card-desc">
+        Vous êtes professionnelle du domaine dentaire? Déposez votre profil et faites-vous découvrir par des cliniques à la recherche de talents motivés et compétents.
+      </div>
+      <div class="card-count" id="count-candidates">Chargement...</div>
+      <br>
+      <button class="btn btn-primary">Je veux déposer ma candidature</button>
+    </div>
+
+    <div class="section-card" onclick="showView('jobs')">
+      <div class="card-icon">💎</div>
+      <div class="card-title">Trouver la perle rare</div>
+      <div class="card-desc">
+        Votre clinique cherche le membre idéal pour compléter votre équipe? Publiez votre offre et trouvez votre perle rare parmi des candidats qualifiés.
+      </div>
+      <div class="card-count" id="count-jobs">Chargement...</div>
+      <br>
+      <button class="btn btn-primary">Je publie mon offre</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     VIEW: TALENTS
+═══════════════════════════════════════════════ -->
+<div class="view" id="view-talents">
+  <div class="section-hdr">
+    <div>
+      <h2 class="section-hdr-title">🦷 <em>Talent</em> Dentaire</h2>
+      <div class="section-hdr-sub">Professionnelles disponibles et prêtes à rejoindre votre équipe</div>
+    </div>
+    <button class="btn btn-primary" onclick="openCandidateForm()">+ Déposer ma candidature</button>
+  </div>
+  <div class="cards-grid" id="candidates-grid">
+    <div class="loading"><div class="spinner"></div> Chargement des profils...</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     VIEW: JOBS
+═══════════════════════════════════════════════ -->
+<div class="view" id="view-jobs">
+  <div class="section-hdr">
+    <div>
+      <h2 class="section-hdr-title">💎 Trouver la <em>perle rare</em></h2>
+      <div class="section-hdr-sub">Offres d'emploi dans le domaine dentaire au Québec</div>
+    </div>
+    <button class="btn btn-primary" onclick="openJobForm()">+ Publier une offre</button>
+  </div>
+  <div class="cards-grid" id="jobs-grid">
+    <div class="loading"><div class="spinner"></div> Chargement des offres...</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     VIEW: ADMIN LOGIN
+═══════════════════════════════════════════════ -->
+<div class="view" id="view-admin-login">
+  <div style="max-width:380px;margin:80px auto;padding:0 20px">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:14px">⚙️</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.55rem;color:#f1f5f9;margin-bottom:22px">Administration</h2>
+      <div id="admin-login-error" style="color:#f87171;font-size:.82rem;margin-bottom:12px;display:none"></div>
+      <input class="form-input" type="password" id="admin-pwd-input" placeholder="Mot de passe" style="margin-bottom:14px" onkeydown="if(event.key==='Enter')doAdminLogin()">
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doAdminLogin()">Connexion</button>
+      <br><br>
+      <button class="btn btn-ghost btn-sm" onclick="showView('home')">← Retour</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     VIEW: ADMIN
+═══════════════════════════════════════════════ -->
+<div class="view" id="view-admin">
+  <div class="admin-wrap">
+    <div style="margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <div>
+        <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:#f1f5f9;margin-bottom:4px">Panneau d'administration</h2>
+        <p style="color:var(--muted);font-size:.82rem">Approuvez les soumissions avant leur publication publique.</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="showView('home')">← Retour au site</button>
+    </div>
+    <div class="admin-tabs" id="admin-tabs">
+      <button class="nav-btn active" onclick="showAdminTab('pending-c',this)">En attente — Candidatures (<span id="ct-pc">0</span>)</button>
+      <button class="nav-btn" onclick="showAdminTab('pending-j',this)">En attente — Offres (<span id="ct-pj">0</span>)</button>
+      <button class="nav-btn" onclick="showAdminTab('approved-c',this)">Approuvées — Candidatures (<span id="ct-ac">0</span>)</button>
+      <button class="nav-btn" onclick="showAdminTab('approved-j',this)">Approuvées — Offres (<span id="ct-aj">0</span>)</button>
+    </div>
+    <div id="admin-content">
+      <div class="loading"><div class="spinner"></div> Chargement...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MODALS
+═══════════════════════════════════════════════ -->
+
+<!-- Candidate Form -->
+<div class="overlay hidden" id="modal-candidate">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-candidate')">×</button>
+    <div id="candidate-form-content">
+      <div class="modal-title">🦷 Déposer ma candidature</div>
+      <p class="modal-sub">Votre profil sera visible auprès des cliniques partenaires après validation par Gestion Mel.</p>
+
+      <div class="form-section-title">Vos coordonnées</div>
+      <div class="form-group">
+        <label class="form-label">Nom complet <span class="req">*</span></label>
+        <input class="form-input" id="c-nom" placeholder="Prénom Nom">
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Courriel <span class="req">*</span></label>
+          <input class="form-input" id="c-courriel" type="email" placeholder="vous@exemple.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Téléphone</label>
+          <input class="form-input" id="c-telephone" placeholder="418 000-0000">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ville / Région <span class="req">*</span></label>
+        <input class="form-input" id="c-ville" placeholder="Ex: Québec, Montréal, Saguenay...">
+      </div>
+
+      <div class="form-section-title">Votre profil professionnel</div>
+      <div class="form-group">
+        <label class="form-label">Poste(s) recherché(s) <span class="req">*</span></label>
+        <div class="check-group" id="c-postes">
+          <label class="check-item"><input type="checkbox" value="Secrétaire dentaire"><span class="check-label">Secrétaire dentaire</span></label>
+          <label class="check-item"><input type="checkbox" value="Assistante dentaire"><span class="check-label">Assistante dentaire</span></label>
+          <label class="check-item"><input type="checkbox" value="Hygiéniste dentaire"><span class="check-label">Hygiéniste dentaire</span></label>
+          <label class="check-item"><input type="checkbox" value="Aide à la stérilisation"><span class="check-label">Aide à la stérilisation</span></label>
+          <label class="check-item"><input type="checkbox" value="Coordonnatrice plans de traitement"><span class="check-label">Coordonnatrice plans de traitement</span></label>
+          <label class="check-item"><input type="checkbox" value="Gestionnaire / Directrice de clinique"><span class="check-label">Gestionnaire / Directrice de clinique</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Type d'emploi souhaité <span class="req">*</span></label>
+        <div class="radio-group" id="c-type">
+          <label class="radio-item"><input type="radio" name="c-type" value="Temps plein"><span class="check-label">Temps plein</span></label>
+          <label class="radio-item"><input type="radio" name="c-type" value="Temps partiel"><span class="check-label">Temps partiel</span></label>
+          <label class="radio-item"><input type="radio" name="c-type" value="Remplacement / Disponibilité ponctuelle"><span class="check-label">Remplacement / Disponibilité ponctuelle</span></label>
+          <label class="radio-item"><input type="radio" name="c-type" value="Ouvert à toute opportunité"><span class="check-label">Ouvert à toute opportunité</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Disponibilité <span class="req">*</span></label>
+        <select class="form-select" id="c-dispo">
+          <option value="">Sélectionnez...</option>
+          <option>Immédiate</option>
+          <option>Dans les 2 à 4 semaines</option>
+          <option>Dans plus d'un mois</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Années d'expérience dans le domaine dentaire</label>
+        <select class="form-select" id="c-exp">
+          <option value="">Sélectionnez...</option>
+          <option>Aucune (formation en cours ou complétée)</option>
+          <option>1 à 3 ans</option>
+          <option>3 à 5 ans</option>
+          <option>5 ans et plus</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Logiciels maîtrisés</label>
+        <div class="check-group" id="c-logiciels">
+          <label class="check-item"><input type="checkbox" value="Dentitek"><span class="check-label">Dentitek</span></label>
+          <label class="check-item"><input type="checkbox" value="Progident"><span class="check-label">Progident</span></label>
+          <label class="check-item"><input type="checkbox" value="Autre"><span class="check-label">Autre</span></label>
+          <label class="check-item"><input type="checkbox" value="Aucun pour le moment"><span class="check-label">Aucun pour le moment</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Diplômée de l'Académie Gestion Mel?</label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="c-acad" value="Oui"><span class="check-label">Oui ✨</span></label>
+          <label class="radio-item"><input type="radio" name="c-acad" value="Formation en cours"><span class="check-label">Formation en cours</span></label>
+          <label class="radio-item"><input type="radio" name="c-acad" value="Non"><span class="check-label">Non</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Lien vers votre CV (Google Drive, Dropbox, OneDrive…)</label>
+        <input class="form-input" id="c-cv" placeholder="https://drive.google.com/...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">À propos de vous / Informations supplémentaires</label>
+        <textarea class="form-textarea" id="c-commentaires" placeholder="Parlez-nous de vous, de vos objectifs, de ce qui vous démarque..."></textarea>
+      </div>
+
+      <p style="font-size:.73rem;color:#475569;margin-bottom:4px">* Champs obligatoires. Vos coordonnées sont partagées uniquement avec les cliniques intéressées par votre profil.</p>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-candidate')">Annuler</button>
+        <button class="btn btn-primary" onclick="submitCandidate()">Soumettre ma candidature</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Job Form -->
+<div class="overlay hidden" id="modal-job">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-job')">×</button>
+    <div id="job-form-content">
+      <div class="modal-title">💎 Publier une offre</div>
+      <p class="modal-sub">Votre offre sera visible aux candidats qualifiés après validation par Gestion Mel.</p>
+
+      <div class="form-section-title">Informations sur votre clinique</div>
+      <div class="form-group">
+        <label class="form-label">Nom de la clinique <span class="req">*</span></label>
+        <input class="form-input" id="j-clinique" placeholder="Clinique Dentaire...">
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Ville / Région <span class="req">*</span></label>
+          <input class="form-input" id="j-ville" placeholder="Québec, Montréal...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Courriel de contact <span class="req">*</span></label>
+          <input class="form-input" id="j-courriel" type="email" placeholder="contact@clinique.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Téléphone</label>
+        <input class="form-input" id="j-telephone" placeholder="418 000-0000">
+      </div>
+
+      <div class="form-section-title">Le poste à combler</div>
+      <div class="form-group">
+        <label class="form-label">Poste recherché <span class="req">*</span></label>
+        <select class="form-select" id="j-poste">
+          <option value="">Sélectionnez...</option>
+          <option>Secrétaire dentaire</option>
+          <option>Assistante dentaire</option>
+          <option>Hygiéniste dentaire</option>
+          <option>Aide à la stérilisation</option>
+          <option>Coordonnatrice plans de traitement</option>
+          <option>Gestionnaire / Directrice de clinique</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Type d'emploi <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-item"><input type="radio" name="j-type" value="Temps plein"><span class="check-label">Temps plein</span></label>
+          <label class="radio-item"><input type="radio" name="j-type" value="Temps partiel"><span class="check-label">Temps partiel</span></label>
+          <label class="radio-item"><input type="radio" name="j-type" value="Remplacement"><span class="check-label">Remplacement</span></label>
+          <label class="radio-item"><input type="radio" name="j-type" value="Contrat"><span class="check-label">Contrat</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Description du poste <span class="req">*</span></label>
+        <textarea class="form-textarea" id="j-desc" style="min-height:115px" placeholder="Responsabilités, ambiance de travail, profil recherché..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Avantages offerts</label>
+        <textarea class="form-textarea" id="j-avantages" placeholder="Assurances collectives, horaire flexible, stationnement, bonification..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Logiciels utilisés en clinique</label>
+        <div class="check-group">
+          <label class="check-item"><input type="checkbox" name="j-logiciel" value="Dentitek"><span class="check-label">Dentitek</span></label>
+          <label class="check-item"><input type="checkbox" name="j-logiciel" value="Progident"><span class="check-label">Progident</span></label>
+          <label class="check-item"><input type="checkbox" name="j-logiciel" value="Autre"><span class="check-label">Autre</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Date d'entrée en poste souhaitée</label>
+        <input class="form-input" id="j-date" type="date" style="color-scheme:dark">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Commentaires supplémentaires</label>
+        <textarea class="form-textarea" id="j-commentaires" placeholder="Toute autre information pertinente..."></textarea>
+      </div>
+
+      <p style="font-size:.73rem;color:#475569;margin-bottom:4px">* Champs obligatoires. Votre courriel est partagé avec les candidats qui souhaitent vous contacter directement.</p>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-job')">Annuler</button>
+        <button class="btn btn-primary" onclick="submitJob()">Publier mon offre</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modals (filled dynamically) -->
+<div class="overlay hidden" id="modal-detail">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('modal-detail')">×</button>
+    <div id="modal-detail-content"></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  💎 Espace carrières dentaires &nbsp;·&nbsp;
+  <a href="https://gestionmel.com">gestionmel.com</a> &nbsp;·&nbsp;
+  info@gestionmel.com
+</footer>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════ -->
+<script>
+
+// ════════════════════════════════════════════════
+// ⚙️  CONFIGURATION — À REMPLIR UNE SEULE FOIS
+//     Suivez le guide d'installation fourni avec ce fichier
+// ════════════════════════════════════════════════
+const CONFIG = {
+  firebase: {
+    apiKey:            "VOTRE_API_KEY",
+    authDomain:        "VOTRE_PROJECT.firebaseapp.com",
+    projectId:         "VOTRE_PROJECT_ID",
+    storageBucket:     "VOTRE_PROJECT.appspot.com",
+    messagingSenderId: "VOTRE_SENDER_ID",
+    appId:             "VOTRE_APP_ID"
+  },
+  emailjs: {
+    publicKey:  "VOTRE_EMAILJS_PUBLIC_KEY",
+    serviceId:  "VOTRE_EMAILJS_SERVICE_ID",
+    templateId: "VOTRE_EMAILJS_TEMPLATE_ID"
+  },
+  adminPassword: "GestionMel2026",
+  adminEmail:    "info@gestionmel.com"
+};
+// ════════════════════════════════════════════════
+
+// ── Init Firebase ──
+firebase.initializeApp(CONFIG.firebase);
+const db = firebase.firestore();
+
+// ── Init EmailJS ──
+emailjs.init(CONFIG.emailjs.publicKey);
+
+// ── State ──
+let currentAdminTab = 'pending-c';
+let allCandidates = [];
+let allJobs = [];
+
+// ═══════════════════════
+// VIEW MANAGEMENT
+// ═══════════════════════
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn:not(.admin-gear)').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  const nb = document.getElementById('nav-' + name);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (name === 'talents') loadCandidates();
+  if (name === 'jobs') loadJobs();
+  if (name === 'admin') loadAdmin();
+}
+
+function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.body.style.overflow = ''; }
+
+// ═══════════════════════
+// FIREBASE HELPERS
+// ═══════════════════════
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+function fmtDate(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
+}
+
+// ═══════════════════════
+// CANDIDATES
+// ═══════════════════════
+function openCandidateForm() {
+  // Reset form
+  ['c-nom','c-courriel','c-telephone','c-ville','c-dispo','c-exp','c-cv','c-commentaires'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  document.querySelectorAll('#modal-candidate input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.querySelectorAll('#modal-candidate input[type=radio]').forEach(r => r.checked = false);
+  document.getElementById('candidate-form-content').innerHTML = document.getElementById('candidate-form-content').innerHTML;
+  // Re-render form
+  showCandidateForm();
+  openModal('modal-candidate');
+}
+
+function showCandidateForm() {
+  // Form is already in HTML, just open
+}
+
+async function submitCandidate() {
+  const nom = document.getElementById('c-nom').value.trim();
+  const courriel = document.getElementById('c-courriel').value.trim();
+  const ville = document.getElementById('c-ville').value.trim();
+  const dispo = document.getElementById('c-dispo').value;
+  const typeEmploi = document.querySelector('input[name="c-type"]:checked')?.value || '';
+  const postes = [...document.querySelectorAll('#c-postes input:checked')].map(i => i.value);
+
+  if (!nom || !courriel || !ville || !dispo || !typeEmploi || !postes.length) {
+    alert('Veuillez remplir tous les champs obligatoires (*).');
+    return;
+  }
+
+  const data = {
+    id: genId(),
+    nom, courriel, ville,
+    telephone: document.getElementById('c-telephone').value.trim(),
+    postes,
+    typeEmploi,
+    disponibilite: dispo,
+    experience: document.getElementById('c-exp').value,
+    logiciels: [...document.querySelectorAll('#c-logiciels input:checked')].map(i => i.value),
+    academie: document.querySelector('input[name="c-acad"]:checked')?.value || 'Non',
+    lienCV: document.getElementById('c-cv').value.trim(),
+    commentaires: document.getElementById('c-commentaires').value.trim(),
+    status: 'pending',
+    type: 'candidate',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection('candidatures').doc(data.id).set(data);
+    // Send email notification
+    sendEmailNotification('candidate', data);
+    showSuccess('candidate');
+  } catch(e) {
+    console.error(e);
+    alert('Une erreur est survenue. Veuillez réessayer.');
+  }
+}
+
+async function loadCandidates() {
+  const grid = document.getElementById('candidates-grid');
+  grid.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement des profils...</div>';
+  try {
+    const snap = await db.collection('candidatures').where('status','==','approved').get();
+    allCandidates = snap.docs.map(d => ({...d.data(), _id: d.id}));
+    renderCandidates();
+  } catch(e) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Erreur de chargement. Vérifiez la configuration Firebase.</div></div>';
+  }
+}
+
+function renderCandidates() {
+  const grid = document.getElementById('candidates-grid');
+  const countEl = document.getElementById('count-candidates');
+  const n = allCandidates.length;
+  if (countEl) countEl.textContent = n + ' profil' + (n!==1?'s':'') + ' disponible' + (n!==1?'s':'');
+
+  if (!n) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">🦷</div>
+      <div class="empty-text">Aucun profil disponible pour le moment.<br>Soyez la première à vous inscrire!</div>
+      <br><button class="btn btn-primary" onclick="openCandidateForm()">Déposer ma candidature</button>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = allCandidates.map(c => `
+    <div class="profile-card" onclick="showCandidateDetail('${c.id}')">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px">
+        <div class="p-name">${esc(c.nom)}</div>
+        ${c.academie==='Oui' ? '<span class="acad-badge">🎓 Académie</span>' : ''}
+      </div>
+      <div class="p-poste">${(c.postes||[]).slice(0,2).join(' · ')}${(c.postes||[]).length>2?' …':''}</div>
+      <div class="tags">
+        <span class="tag">📍 ${esc(c.ville)}</span>
+        ${c.experience ? `<span class="tag">${esc(c.experience)}</span>` : ''}
+      </div>
+      ${(c.logiciels||[]).filter(l=>l!=='Aucun pour le moment').length ? `<div class="tags">${(c.logiciels).filter(l=>l!=='Aucun pour le moment').map(l=>`<span class="tag blue">${esc(l)}</span>`).join('')}</div>` : ''}
+      <div class="dispo"><span class="dot"></span>${esc(c.disponibilite||'')}</div>
+    </div>
+  `).join('');
+}
+
+function showCandidateDetail(id) {
+  const c = allCandidates.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('modal-detail-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap">
+      <div class="modal-title" style="margin-bottom:0">${esc(c.nom)}</div>
+      ${c.academie==='Oui'?'<span class="acad-badge">🎓 Académie Gestion Mel</span>':''}
+    </div>
+    <div style="color:var(--blue);font-size:.9rem;margin-bottom:22px">${(c.postes||[]).join(' · ')}</div>
+    <hr class="detail-divider">
+    <div class="detail-grid">
+      <div><div class="detail-label">Ville / Région</div><div class="detail-value">${esc(c.ville)}</div></div>
+      <div><div class="detail-label">Disponibilité</div><div class="detail-value">${esc(c.disponibilite||'')}</div></div>
+      <div><div class="detail-label">Type d'emploi</div><div class="detail-value">${esc(c.typeEmploi||'')}</div></div>
+      <div><div class="detail-label">Expérience</div><div class="detail-value">${esc(c.experience||'Non précisé')}</div></div>
+    </div>
+    ${(c.logiciels||[]).length ? `<div style="margin-top:16px"><div class="detail-label">Logiciels</div><div class="tags" style="margin-top:6px">${c.logiciels.map(l=>`<span class="tag blue">${esc(l)}</span>`).join('')}</div></div>` : ''}
+    ${c.commentaires ? `<div style="margin-top:16px"><div class="detail-label">À propos</div><div class="detail-value">${esc(c.commentaires)}</div></div>` : ''}
+    ${c.lienCV ? `<div style="margin-top:16px"><div class="detail-label">Curriculum Vitae</div><a href="${esc(c.lienCV)}" target="_blank" class="detail-link">📄 Consulter le CV</a></div>` : ''}
+    <hr class="detail-divider">
+    <div style="text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:16px">
+      Pour entrer en contact : <a href="mailto:${esc(c.courriel)}" class="detail-link">${esc(c.courriel)}</a>
+      ${c.telephone ? ' · ' + esc(c.telephone) : ''}
+    </div>
+    <div style="text-align:center">
+      <a href="mailto:${esc(c.courriel)}?subject=Votre candidature — Espace carrières Gestion Mel" class="btn btn-primary" style="text-decoration:none;display:inline-flex">
+        ✉ Contacter cette candidate
+      </a>
+    </div>
+  `;
+  openModal('modal-detail');
+}
+
+// ═══════════════════════
+// JOBS
+// ═══════════════════════
+function openJobForm() {
+  ['j-clinique','j-ville','j-courriel','j-telephone','j-poste','j-desc','j-avantages','j-date','j-commentaires'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  document.querySelectorAll('#modal-job input[type=radio]').forEach(r => r.checked=false);
+  document.querySelectorAll('#modal-job input[type=checkbox]').forEach(cb => cb.checked=false);
+  openModal('modal-job');
+}
+
+async function submitJob() {
+  const clinique = document.getElementById('j-clinique').value.trim();
+  const ville = document.getElementById('j-ville').value.trim();
+  const courriel = document.getElementById('j-courriel').value.trim();
+  const poste = document.getElementById('j-poste').value;
+  const desc = document.getElementById('j-desc').value.trim();
+  const typeEmploi = document.querySelector('input[name="j-type"]:checked')?.value || '';
+
+  if (!clinique || !ville || !courriel || !poste || !desc || !typeEmploi) {
+    alert('Veuillez remplir tous les champs obligatoires (*).');
+    return;
+  }
+
+  const data = {
+    id: genId(),
+    clinique, ville, courriel,
+    telephone: document.getElementById('j-telephone').value.trim(),
+    poste,
+    typeEmploi,
+    description: desc,
+    avantages: document.getElementById('j-avantages').value.trim(),
+    logiciels: [...document.querySelectorAll('input[name="j-logiciel"]:checked')].map(i=>i.value),
+    dateDebut: document.getElementById('j-date').value,
+    commentaires: document.getElementById('j-commentaires').value.trim(),
+    status: 'pending',
+    type: 'job',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection('offres').doc(data.id).set(data);
+    sendEmailNotification('job', data);
+    showSuccess('job');
+  } catch(e) {
+    console.error(e);
+    alert('Une erreur est survenue. Veuillez réessayer.');
+  }
+}
+
+async function loadJobs() {
+  const grid = document.getElementById('jobs-grid');
+  grid.innerHTML = '<div class="loading"><div class="spinner"></div> Chargement des offres...</div>';
+  try {
+    const snap = await db.collection('offres').where('status','==','approved').get();
+    allJobs = snap.docs.map(d => ({...d.data(), _id:d.id}));
+    renderJobs();
+  } catch(e) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div>Erreur de chargement. Vérifiez la configuration Firebase.</div></div>';
+  }
+}
+
+function renderJobs() {
+  const grid = document.getElementById('jobs-grid');
+  const countEl = document.getElementById('count-jobs');
+  const n = allJobs.length;
+  if (countEl) countEl.textContent = n + ' offre' + (n!==1?'s':'') + ' publiée' + (n!==1?'s':'');
+
+  if (!n) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">💎</div>
+      <div class="empty-text">Aucune offre publiée pour le moment.<br>Votre clinique cherche un talent?</div>
+      <br><button class="btn btn-primary" onclick="openJobForm()">Publier une offre</button>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = allJobs.map(j => `
+    <div class="job-card" onclick="showJobDetail('${j.id}')">
+      <div class="j-clinique">${esc(j.clinique)}</div>
+      <div class="j-poste">${esc(j.poste)}</div>
+      <div class="j-desc">${esc(j.description)}</div>
+      <div class="j-footer">
+        <div class="tags" style="margin-bottom:0">
+          <span class="tag">📍 ${esc(j.ville)}</span>
+          <span class="tag blue">${esc(j.typeEmploi)}</span>
+        </div>
+        <span class="j-see">Voir l'offre →</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showJobDetail(id) {
+  const j = allJobs.find(x => x.id === id);
+  if (!j) return;
+  document.getElementById('modal-detail-content').innerHTML = `
+    <div class="modal-title">${esc(j.poste)}</div>
+    <div style="color:var(--blue);font-size:.9rem;margin-bottom:10px">${esc(j.clinique)}</div>
+    <div class="tags" style="margin-bottom:22px">
+      <span class="tag">📍 ${esc(j.ville)}</span>
+      <span class="tag blue">${esc(j.typeEmploi)}</span>
+      ${(j.logiciels||[]).map(l=>`<span class="tag">${esc(l)}</span>`).join('')}
+    </div>
+    <hr class="detail-divider">
+    <div style="margin-bottom:16px">
+      <div class="detail-label">Description du poste</div>
+      <div class="detail-value" style="white-space:pre-wrap">${esc(j.description)}</div>
+    </div>
+    ${j.avantages ? `<div style="margin-bottom:16px"><div class="detail-label">Avantages offerts</div><div class="detail-value" style="white-space:pre-wrap">${esc(j.avantages)}</div></div>` : ''}
+    ${j.dateDebut ? `<div style="margin-bottom:16px"><div class="detail-label">Entrée en poste souhaitée</div><div class="detail-value">${j.dateDebut}</div></div>` : ''}
+    <hr class="detail-divider">
+    <div style="text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:18px">
+      Communiquez directement avec la clinique pour postuler.
+    </div>
+    <div style="text-align:center">
+      <a href="mailto:${esc(j.courriel)}?subject=Votre offre d'emploi — ${esc(j.poste)}" class="btn btn-primary" style="text-decoration:none;display:inline-flex">
+        ✉ Je suis intéressée — Contacter la clinique
+      </a>
+    </div>
+  `;
+  openModal('modal-detail');
+}
+
+// ═══════════════════════
+// SUCCESS MESSAGES
+// ═══════════════════════
+function showSuccess(type) {
+  const isCandidate = type === 'candidate';
+  const contentId = isCandidate ? 'candidate-form-content' : 'job-form-content';
+  document.getElementById(contentId).innerHTML = `
+    <div class="success-msg">
+      <div class="success-icon">💎</div>
+      <div class="success-title">${isCandidate ? 'Candidature reçue!' : 'Offre reçue!'}</div>
+      <p class="success-text">
+        ${isCandidate
+          ? 'Votre profil sera affiché dans l\'espace Talent Dentaire après validation par Gestion Mel. Vous serez contactée si une clinique est intéressée par votre profil.'
+          : 'Votre offre sera publiée dans l\'espace Trouver la perle rare après validation par notre équipe. Nous communiquerons avec vous sous peu.'}
+      </p>
+      <button class="btn btn-primary" onclick="closeModal('${isCandidate ? 'modal-candidate' : 'modal-job'}')">Fermer</button>
+    </div>
+  `;
+}
+
+// ═══════════════════════
+// EMAIL NOTIFICATIONS
+// ═══════════════════════
+function sendEmailNotification(type, data) {
+  const isCandidate = type === 'candidate';
+  const params = {
+    to_email: CONFIG.adminEmail,
+    subject: isCandidate
+      ? `🦷 Nouvelle candidature — ${data.nom} (${(data.postes||[]).join(', ')})`
+      : `💎 Nouvelle offre d'emploi — ${data.clinique} (${data.poste})`,
+    message: isCandidate
+      ? `Nouvelle candidature reçue!\n\nNom: ${data.nom}\nCourriel: ${data.courriel}\nVille: ${data.ville}\nPoste(s): ${(data.postes||[]).join(', ')}\nDisponibilité: ${data.disponibilite}\nType: ${data.typeEmploi}\nExpérience: ${data.experience}\nAcadémie: ${data.academie}\nCV: ${data.lienCV||'Non fourni'}\n\nÀ propos: ${data.commentaires||'—'}\n\n→ Connectez-vous au panneau admin pour approuver.`
+      : `Nouvelle offre d'emploi reçue!\n\nClinique: ${data.clinique}\nVille: ${data.ville}\nCourriel: ${data.courriel}\nPoste: ${data.poste}\nType: ${data.typeEmploi}\n\nDescription: ${data.description}\n\nAvantages: ${data.avantages||'—'}\n\n→ Connectez-vous au panneau admin pour approuver.`
+  };
+
+  emailjs.send(CONFIG.emailjs.serviceId, CONFIG.emailjs.templateId, params)
+    .catch(err => console.warn('EmailJS non configuré:', err));
+}
+
+// ═══════════════════════
+// ADMIN
+// ═══════════════════════
+function doAdminLogin() {
+  const pwd = document.getElementById('admin-pwd-input').value;
+  const errEl = document.getElementById('admin-login-error');
+  if (pwd === CONFIG.adminPassword) {
+    errEl.style.display = 'none';
+    showView('admin');
+  } else {
+    errEl.textContent = 'Mot de passe incorrect.';
+    errEl.style.display = 'block';
+  }
+}
+
+async function loadAdmin() {
+  document.getElementById('admin-content').innerHTML = '<div class="loading"><div class="spinner"></div> Chargement...</div>';
+  try {
+    const [cSnap, jSnap] = await Promise.all([
+      db.collection('candidatures').get(),
+      db.collection('offres').get()
+    ]);
+    allCandidates = cSnap.docs.map(d => ({...d.data(), _id:d.id}));
+    allJobs = jSnap.docs.map(d => ({...d.data(), _id:d.id}));
+    updateAdminCounts();
+    renderAdminTab(currentAdminTab);
+  } catch(e) {
+    document.getElementById('admin-content').innerHTML = '<div class="empty-state">Erreur de chargement Firebase.</div>';
+  }
+}
+
+function updateAdminCounts() {
+  document.getElementById('ct-pc').textContent = allCandidates.filter(c=>c.status==='pending').length;
+  document.getElementById('ct-pj').textContent = allJobs.filter(j=>j.status==='pending').length;
+  document.getElementById('ct-ac').textContent = allCandidates.filter(c=>c.status==='approved').length;
+  document.getElementById('ct-aj').textContent = allJobs.filter(j=>j.status==='approved').length;
+}
+
+function showAdminTab(tab, btn) {
+  currentAdminTab = tab;
+  document.querySelectorAll('.admin-tabs .nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderAdminTab(tab);
+}
+
+function renderAdminTab(tab) {
+  let items = [];
+  let isPending = tab.startsWith('pending');
+  if (tab==='pending-c') items = allCandidates.filter(c=>c.status==='pending');
+  else if (tab==='pending-j') items = allJobs.filter(j=>j.status==='pending');
+  else if (tab==='approved-c') items = allCandidates.filter(c=>c.status==='approved');
+  else if (tab==='approved-j') items = allJobs.filter(j=>j.status==='approved');
+
+  const isCandidate = tab.endsWith('-c');
+
+  if (!items.length) {
+    document.getElementById('admin-content').innerHTML = `<div style="text-align:center;padding:40px 20px;color:#475569"><div style="font-size:2rem;margin-bottom:10px">✓</div>Aucun élément dans cette catégorie.</div>`;
+    return;
+  }
+
+  document.getElementById('admin-content').innerHTML = items.map(item => `
+    <div class="pending-card">
+      <div class="p-info">
+        <div class="p-info-name">
+          ${isCandidate ? esc(item.nom) : esc(item.clinique)}
+          ${isCandidate && item.academie==='Oui' ? '<span class="acad-badge" style="margin-left:8px">🎓 Académie</span>' : ''}
+        </div>
+        <div class="p-info-meta">
+          ${isCandidate
+            ? `${(item.postes||[]).join(', ')} · ${esc(item.ville)} · ${esc(item.courriel)}`
+            : `${esc(item.poste)} · ${esc(item.ville)} · ${esc(item.courriel)}`}
+        </div>
+      </div>
+      <div class="p-actions">
+        ${isPending ? `
+          <button class="btn btn-success" onclick="adminAction('approve','${item.id}','${tab.endsWith('-c')?'candidatures':'offres'}')">✓ Approuver</button>
+          <button class="btn btn-danger" onclick="adminAction('reject','${item.id}','${tab.endsWith('-c')?'candidatures':'offres'}')">✕ Refuser</button>
+        ` : `
+          <button class="btn btn-danger" onclick="adminAction('reject','${item.id}','${tab.endsWith('-c')?'candidatures':'offres'}')">Retirer</button>
+        `}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function adminAction(action, id, collection) {
+  const ref = db.collection(collection).doc(id);
+  try {
+    if (action === 'approve') {
+      await ref.update({ status: 'approved' });
+      if (collection === 'candidatures') {
+        const item = allCandidates.find(c => c.id === id);
+        if (item) item.status = 'approved';
+      } else {
+        const item = allJobs.find(j => j.id === id);
+        if (item) item.status = 'approved';
+      }
+    } else {
+      await ref.delete();
+      if (collection === 'candidatures') allCandidates = allCandidates.filter(c => c.id !== id);
+      else allJobs = allJobs.filter(j => j.id !== id);
+    }
+    updateAdminCounts();
+    renderAdminTab(currentAdminTab);
+  } catch(e) {
+    console.error(e);
+    alert('Erreur lors de l\'action. Réessayez.');
+  }
+}
+
+// ═══════════════════════
+// UTILS
+// ═══════════════════════
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Load counts on home ──
+async function loadCounts() {
+  try {
+    const [cSnap, jSnap] = await Promise.all([
+      db.collection('candidatures').where('status','==','approved').get(),
+      db.collection('offres').where('status','==','approved').get()
+    ]);
+    const nc = cSnap.size;
+    const nj = jSnap.size;
+    const cc = document.getElementById('count-candidates');
+    const cj = document.getElementById('count-jobs');
+    if (cc) cc.textContent = nc + ' profil' + (nc!==1?'s':'') + ' disponible' + (nc!==1?'s':'');
+    if (cj) cj.textContent = nj + ' offre' + (nj!==1?'s':'') + ' publiée' + (nj!==1?'s':'');
+  } catch(e) {
+    const cc = document.getElementById('count-candidates');
+    const cj = document.getElementById('count-jobs');
+    if (cc) cc.textContent = 'Voir les profils';
+    if (cj) cj.textContent = 'Voir les offres';
+  }
+}
+
+// Close overlay on background click
+document.querySelectorAll('.overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) closeModal(overlay.id);
+  });
+});
+
+// Start
+loadCounts();
+
+</script>
+</body>
+</html>
