@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)file:///C:/Users/info/Downloads/registre-incidents-accidents.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registre incidents/accidents — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:980px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .tab-btn{padding:11px 18px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:20px 30px;}
+  .tab-pane.active{display:block;}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select,.ff textarea{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.86rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ff input:focus,.ff select:focus,.ff textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  .ff textarea{resize:vertical;min-height:70px;line-height:1.6;}
+  .info-box{background:#fff8e1;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.83rem;color:#7a4400;line-height:1.7;margin-bottom:14px;}
+  .info-box strong{color:var(--orange);}
+  .severity-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .sev-btn{padding:7px 14px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .12s;color:#5a6a80;}
+  .sev-btn.sel-mineur{background:var(--orange);border-color:var(--orange);color:white;}
+  .sev-btn.sel-grave{background:var(--red);border-color:var(--red);color:white;}
+  .sev-btn.sel-mortel{background:var(--dark);border-color:var(--dark);color:white;}
+  .sev-btn.sel-pres-acc{background:var(--purple);border-color:var(--purple);color:white;}
+  .sig-section{background:var(--light);padding:16px 20px;border-top:2px solid var(--border);}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  .sfield label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:4px;}
+  .sfield input{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;width:100%;background:white;margin-bottom:12px;}
+  .sig-line{border-top:1.5px solid var(--border);padding-top:5px;font-size:.73rem;color:#8a9ab0;}
+
+  /* REGISTRE TABLE */
+  .reg-table{width:100%;border-collapse:collapse;font-size:.78rem;}
+  .reg-table th{background:var(--dark);color:white;padding:7px 9px;text-align:left;font-size:.7rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .reg-table td{border-bottom:1px solid var(--border);padding:6px 8px;vertical-align:middle;}
+  .reg-table tr:nth-child(even) td{background:var(--light);}
+  .badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700;}
+  .b-mineur{background:#fff8e1;color:var(--orange);}
+  .b-grave{background:#fef2f2;color:var(--red);}
+  .b-pres{background:#f3e8ff;color:var(--purple);}
+  .btn-add{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;width:fit-content;}
+  .actions{padding:12px 30px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .btn{padding:7px 16px;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+  .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .btn-primary{background:var(--blue);color:white;}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.nav-tabs,.actions,.btn-add{display:none!important;}.tab-pane{display:block!important;}.container{box-shadow:none;margin:0;border-radius:0;}.reg-table th,.severity-btns .sev-btn,.info-box{-webkit-print-color-adjust:exact;print-color-adjust:exact;}input,select,textarea{border:none!important;background:transparent!important;}}
+  @media(max-width:700px){.grid,.grid3,.sig-grid{grid-template-columns:1fr;}.tab-pane{padding:14px 16px;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">SST — Santé et sécurité</div></div>
+<div class="container">
+  <div class="doc-header"><h1>⚠️ Registre des incidents et accidents</h1><p>Conforme aux exigences de la CNESST — Loi sur la santé et la sécurité du travail (LSST)</p></div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="show(0,this)">📝 Rapport d'incident</button>
+    <button class="tab-btn" onclick="show(1,this)">📋 Registre des événements</button>
+    <button class="tab-btn" onclick="show(2,this)">📚 Guide CNESST</button>
+  </div>
+
+  <!-- RAPPORT -->
+  <div class="tab-pane active" id="tp0">
+    <div class="info-box"><strong>Obligation légale :</strong> Tout accident du travail ou incident doit être documenté. En cas d'accident causant une absence de plus d'un jour ou une lésion professionnelle, la CNESST doit être avisée. Conservez ce document pendant <strong>5 ans minimum</strong>.</div>
+
+    <div class="sec-title">Identification</div>
+    <div class="grid3">
+      <div class="ff"><label>Clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+      <div class="ff"><label>Date de l'événement</label><input type="date" id="dateEv"></div>
+      <div class="ff"><label>Heure</label><input type="time"></div>
+      <div class="ff"><label>Nom de l'employé(e) concerné(e)</label><input type="text" placeholder="Prénom et nom"></div>
+      <div class="ff"><label>Poste occupé</label><input type="text" placeholder="Titre du poste"></div>
+      <div class="ff"><label>Ancienneté</label><input type="text" placeholder="Ex: 2 ans, 6 mois"></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:16px;">Type et gravité de l'événement</div>
+    <div class="grid" style="margin-bottom:12px;">
+      <div class="ff"><label>Type d'événement</label>
+        <select>
+          <option>Accident du travail</option>
+          <option>Incident (presque-accident)</option>
+          <option>Maladie professionnelle</option>
+          <option>Blessure légère (premiers soins)</option>
+          <option>Exposition à un produit dangereux</option>
+          <option>Blessure par objet piquant/tranchant</option>
+          <option>Autre</option>
+        </select>
+      </div>
+      <div class="ff"><label>Gravité</label>
+        <div class="severity-btns">
+          <button class="sev-btn" onclick="setSev(this,&#39;sel-pres-acc&#39;)">🔵 Presque-accident</button>
+          <button class="sev-btn" onclick="setSev(this,&#39;sel-mineur&#39;)">🟡 Blessure mineure</button>
+          <button class="sev-btn" onclick="setSev(this,&#39;sel-grave&#39;)">🔴 Blessure grave</button>
+          <button class="sev-btn" onclick="setSev(this,&#39;sel-mortel&#39;)">⚫ Mortel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-title">Description de l'événement</div>
+    <div class="grid3" style="margin-bottom:12px;">
+      <div class="ff"><label>Lieu précis dans la clinique</label><input type="text" placeholder="Ex: Salle 2, salle de stérilisation..."></div>
+      <div class="ff"><label>Tâche effectuée au moment de l'accident</label><input type="text" placeholder="Ex: Stérilisation, assistance..."></div>
+      <div class="ff"><label>Partie du corps atteinte</label><input type="text" placeholder="Ex: Main droite, dos..."></div>
+    </div>
+    <div class="ff" style="margin-bottom:12px;"><label>Description détaillée de l'événement</label><textarea style="min-height:90px;" placeholder="Décrivez précisément ce qui s&#39;est passé, dans quel contexte, avec quels outils ou produits, et comment la blessure ou l&#39;incident s&#39;est produit..."></textarea></div>
+    <div class="ff" style="margin-bottom:12px;"><label>Causes identifiées</label><textarea placeholder="Facteurs environnementaux, humains, organisationnels, équipements défectueux..."></textarea></div>
+
+    <div class="sec-title">Premiers soins et conséquences</div>
+    <div class="grid" style="margin-bottom:12px;">
+      <div class="ff"><label>Premiers soins prodigués</label><textarea placeholder="Traitement immédiat effectué..."></textarea></div>
+      <div class="ff"><label>Soins médicaux requis?</label>
+        <select style="margin-bottom:8px;"><option>Non — premiers soins suffisants</option><option>Oui — consultation médicale</option><option>Oui — urgence</option><option>Oui — hospitalisation</option></select>
+        <div class="ff"><label>Nom du professionnel de santé consulté</label><input type="text" placeholder="Médecin, clinique..."></div>
+      </div>
+      <div class="ff"><label>Absence du travail prévue</label>
+        <select><option>Aucune absence</option><option>Retour le jour même</option><option>1 jour</option><option>2 à 5 jours</option><option>Plus d'une semaine</option><option>Indéterminée</option></select>
+      </div>
+      <div class="ff"><label>Date de retour prévue</label><input type="date"></div>
+    </div>
+
+    <div class="sec-title">Témoins</div>
+    <div class="grid3" style="margin-bottom:12px;">
+      <div class="ff"><label>Témoin 1 — Nom</label><input type="text" placeholder="Nom du témoin"></div>
+      <div class="ff"><label>Témoin 1 — Poste</label><input type="text" placeholder="Poste"></div>
+      <div class="ff"><label>Témoin 1 — Contact</label><input type="text" placeholder="Téléphone..."></div>
+      <div class="ff"><label>Témoin 2 — Nom</label><input type="text" placeholder="Nom du témoin"></div>
+      <div class="ff"><label>Témoin 2 — Poste</label><input type="text" placeholder="Poste"></div>
+      <div class="ff"><label>Témoin 2 — Contact</label><input type="text" placeholder="Téléphone..."></div>
+    </div>
+
+    <div class="sec-title">Mesures correctives et préventives</div>
+    <div class="ff" style="margin-bottom:12px;"><label>Actions correctives immédiates</label><textarea placeholder="Mesures prises immédiatement pour corriger la situation dangereuse..."></textarea></div>
+    <div class="ff" style="margin-bottom:12px;"><label>Actions préventives à long terme</label><textarea placeholder="Procédures, formations, équipements ou modifications à mettre en place pour éviter la récurrence..."></textarea></div>
+    <div class="grid3" style="margin-bottom:12px;">
+      <div class="ff"><label>Responsable du suivi</label><input type="text" placeholder="Nom et titre"></div>
+      <div class="ff"><label>Date limite des corrections</label><input type="date"></div>
+      <div class="ff"><label>CNESST avisée?</label><select><option>Non — pas requis</option><option>Oui — avis transmis</option><option>En cours</option></select></div>
+    </div>
+
+    <div class="sig-section">
+      <div class="sec-title">Signatures</div>
+      <div class="sig-grid">
+        <div class="sfield"><label>Employé(e) concerné(e)</label><input type="text" placeholder="Nom et prénom"><input type="date"><div class="sig-line">Signature ____________________________</div></div>
+        <div class="sfield"><label>Gestionnaire / Superviseur(e)</label><input type="text" placeholder="Nom et titre"><input type="date"><div class="sig-line">Signature ____________________________</div></div>
+        <div class="sfield"><label>Témoin principal</label><input type="text" placeholder="Nom et prénom"><input type="date"><div class="sig-line">Signature ____________________________</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTRE -->
+  <div class="tab-pane" id="tp1">
+    <div class="info-box"><strong>Conservation obligatoire :</strong> Ce registre doit être conservé pendant au moins 5 ans et être accessible aux travailleurs et aux représentants de la CNESST sur demande.</div>
+    <table class="reg-table">
+      <thead><tr><th>Date</th><th>Employé(e)</th><th>Poste</th><th>Type</th><th>Gravité</th><th>Partie du corps</th><th>Jours d'absence</th><th>CNESST avisée</th><th>Statut suivi</th></tr></thead>
+      <tbody id="regBody"><tr>
+    <td><input type="date" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:115px;"></td>
+    <td><input type="text" placeholder="Nom..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Poste..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:100px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Accident</option><option>Incident</option><option>Blessure légère</option><option>Exposition</option><option>Autre</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Presque-accident</option><option>Mineur</option><option>Grave</option></select></td>
+    <td><input type="text" placeholder="Ex: main..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:90px;"></td>
+    <td><input type="number" min="0" placeholder="0" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:55px;text-align:center;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:14px;height:14px;cursor:pointer;accent-color:var(--blue);"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>En cours</option><option>Complété</option><option>Fermé</option></select></td></tr><tr>
+    <td><input type="date" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:115px;"></td>
+    <td><input type="text" placeholder="Nom..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Poste..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:100px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Accident</option><option>Incident</option><option>Blessure légère</option><option>Exposition</option><option>Autre</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Presque-accident</option><option>Mineur</option><option>Grave</option></select></td>
+    <td><input type="text" placeholder="Ex: main..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:90px;"></td>
+    <td><input type="number" min="0" placeholder="0" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:55px;text-align:center;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:14px;height:14px;cursor:pointer;accent-color:var(--blue);"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>En cours</option><option>Complété</option><option>Fermé</option></select></td></tr><tr>
+    <td><input type="date" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:115px;"></td>
+    <td><input type="text" placeholder="Nom..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Poste..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:100px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Accident</option><option>Incident</option><option>Blessure légère</option><option>Exposition</option><option>Autre</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Presque-accident</option><option>Mineur</option><option>Grave</option></select></td>
+    <td><input type="text" placeholder="Ex: main..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:90px;"></td>
+    <td><input type="number" min="0" placeholder="0" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:55px;text-align:center;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:14px;height:14px;cursor:pointer;accent-color:var(--blue);"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>En cours</option><option>Complété</option><option>Fermé</option></select></td></tr></tbody>
+    </table>
+    <button class="btn-add" onclick="addRegRow()">+ Ajouter un événement au registre</button>
+  </div>
+
+  <!-- GUIDE -->
+  <div class="tab-pane" id="tp2">
+    <div class="info-box" style="background:#e8f4fe;border-color:var(--blue);color:#1a3a5c;"><strong style="color:var(--blue);">Rappel légal :</strong> Au Québec, la LSST (Loi sur la santé et la sécurité du travail) et la LATMP (Loi sur les accidents du travail et les maladies professionnelles) encadrent les obligations de l'employeur.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;">
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+        <div style="font-size:.82rem;font-weight:700;color:var(--red);margin-bottom:8px;">🔴 Obligations immédiates (accident grave)</div>
+        <ul style="font-size:.81rem;line-height:2;padding-left:16px;">
+          <li>Appeler le 911 si blessure grave</li>
+          <li>Préserver la scène de l'accident</li>
+          <li>Aviser la CNESST dans les 24h si décès, handicap ou hospitalisation</li>
+          <li>Ne pas modifier les lieux avant inspection</li>
+          <li>Aviser la mutuelle de prévention si applicable</li>
+        </ul>
+      </div>
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+        <div style="font-size:.82rem;font-weight:700;color:var(--orange);margin-bottom:8px;">🟡 Dans les 24 à 72 heures</div>
+        <ul style="font-size:.81rem;line-height:2;padding-left:16px;">
+          <li>Compléter le formulaire d'avis d'accident (si requis)</li>
+          <li>Remettre à l'employé(e) le formulaire AT-1 (réclamation CNESST)</li>
+          <li>Documenter toute l'information disponible</li>
+          <li>Contacter l'assureur si applicable</li>
+          <li>Prendre des photos si pertinent</li>
+        </ul>
+      </div>
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+        <div style="font-size:.82rem;font-weight:700;color:var(--blue);margin-bottom:8px;">🔵 Obligations de l'employeur</div>
+        <ul style="font-size:.81rem;line-height:2;padding-left:16px;">
+          <li>Maintenir le registre des accidents/incidents</li>
+          <li>Former les travailleurs en santé et sécurité</li>
+          <li>Mettre en place les mesures préventives identifiées</li>
+          <li>Tenir à jour le registre SIMDUT</li>
+          <li>Offrir les premiers soins (kit à jour obligatoire)</li>
+          <li>Conserver les dossiers 5 ans minimum</li>
+        </ul>
+      </div>
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;">
+        <div style="font-size:.82rem;font-weight:700;color:var(--green);margin-bottom:8px;">🟢 Ressources importantes</div>
+        <ul style="font-size:.81rem;line-height:2;padding-left:16px;">
+          <li>CNESST : 1-844-838-0808 | cnesst.gouv.qc.ca</li>
+          <li>Formulaire réclamation AT-1 : cnesst.gouv.qc.ca</li>
+          <li>Programme de prévention : obligatoire 20 travailleurs +</li>
+          <li>Trousse premiers soins : mise à jour annuelle requise</li>
+          <li>Registre SIMDUT : obligation légale pour tous</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions"><button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+<script>
+document.getElementById('dateEv').valueAsDate = new Date();
+function show(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+function setSev(btn,cls){btn.closest('.severity-btns').querySelectorAll('.sev-btn').forEach(b=>b.className='sev-btn');btn.classList.add(cls);}
+function addRegRow(){
+  const tbody=document.getElementById('regBody');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><input type="date" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:115px;"></td>
+    <td><input type="text" placeholder="Nom..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Poste..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:100px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Accident</option><option>Incident</option><option>Blessure légère</option><option>Exposition</option><option>Autre</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>Presque-accident</option><option>Mineur</option><option>Grave</option></select></td>
+    <td><input type="text" placeholder="Ex: main..." style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:90px;"></td>
+    <td><input type="number" min="0" placeholder="0" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:55px;text-align:center;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:14px;height:14px;cursor:pointer;accent-color:var(--blue);"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;"><option>En cours</option><option>Complété</option><option>Fermé</option></select></td>`;
+  tbody.appendChild(tr);
+}
+for(let i=0;i<3;i++)addRegRow();
+</script>
+
+
+</body></html>
