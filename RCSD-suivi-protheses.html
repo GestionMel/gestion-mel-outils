@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulaire de suivi — Prothèses RCSD | Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--green:#1a9e5a;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}
+  .container{max-width:860px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.75;}
+  .section{padding:22px 36px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .field{display:flex;flex-direction:column;gap:4px;}.field.full{grid-column:1/-1;}
+  label{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  input[type=text],input[type=date],select,textarea{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);transition:border-color .2s;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea{resize:vertical;min-height:65px;}
+  .tip-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#0d3a6e;margin:10px 0;line-height:1.6;}
+  .avert-box{background:#fff8e1;border-left:4px solid var(--orange);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#7a4400;margin:10px 0;line-height:1.6;}
+  .initials-row{display:flex;align-items:center;gap:12px;background:#fff8e1;border:1.5px solid #f0c040;border-radius:6px;padding:10px 16px;margin:14px 0;}
+  .initials-row span{font-size:.85rem;font-weight:700;color:#7a5500;white-space:nowrap;}
+  .initials-row input{width:100px;text-align:center;font-weight:700;font-size:1rem;border:none;border-bottom:2px solid #f0c040;background:transparent;}
+  p.desc{font-size:.88rem;line-height:1.7;margin-bottom:10px;}
+
+  /* Question oui/non */
+  .question-block{background:#f8fbff;border:1.5px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:14px;}
+  .question-block .q-titre{font-size:.9rem;font-weight:700;color:var(--dark);margin-bottom:12px;}
+  .radio-row{display:flex;gap:24px;align-items:center;margin-bottom:10px;}
+  .radio-opt{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:.88rem;}
+  .radio-opt input[type=radio]{accent-color:var(--blue);width:16px;height:16px;cursor:pointer;}
+  .detail-zone{margin-top:10px;display:none;}
+  .detail-zone.visible{display:block;}
+  .detail-zone label{font-size:.74rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px;}
+  .detail-zone input{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;background:white;}
+  .detail-zone input:focus{outline:none;border-color:var(--accent);}
+
+  .btn{padding:11px 28px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-primary{background:var(--blue);color:white;}.btn-primary:hover{background:#1558a0;}
+  .btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+  .btn-danger{background:white;color:#c0392b;border:1.5px solid #c0392b;}
+  .actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;}
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
+  .save-msg{font-size:.82rem;color:var(--green);font-weight:600;display:none;align-items:center;gap:5px;}
+  @media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;max-width:100%;}
+    .question-block{background:white;}.detail-zone{display:block!important;}}
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Formulaire RCSD</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Formulaire de suivi — Prothèses dentaires</h1>
+    <p>Régime canadien de soins dentaires (RCSD) — Historique des soins prothétiques</p>
+  </div>
+
+  <!-- SECTION 1 — PATIENT -->
+  <div class="section">
+    <div class="section-title">1. Informations du patient</div>
+    <div class="grid">
+      <div class="field full"><label>Nom complet</label><input type="text" id="nomComplet" placeholder="Nom, Prénom"></div>
+      <div class="field"><label>Date de naissance</label><input type="date" id="dateNaissance"></div>
+      <div class="field"><label>Numéro d'adhérent (RCSD)</label><input type="text" id="noAdherent" placeholder="Numéro d'adhérent"></div>
+      <div class="field"><label>No de dossier</label><input type="text" id="noDossier"></div>
+      <div class="field"><label>Dentiste traitant(e)</label><input type="text" id="dentiste" placeholder="Dr. / Dre."></div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 — HISTORIQUE -->
+  <div class="section">
+    <div class="section-title">2. Historique des soins — 24 derniers mois</div>
+    <div class="tip-box">ℹ️ Veuillez répondre aux questions suivantes concernant vos prothèses actuelles au cours des <strong>24 derniers mois</strong>.</div>
+
+    <!-- Q1 -->
+    <div class="question-block">
+      <div class="q-titre">1. Avez-vous eu un regarnissage ou un rebasage de votre prothèse ?</div>
+      <div class="radio-row">
+        <label class="radio-opt"><input type="radio" name="q1" id="q1non" value="non" onchange="toggleDetail('q1detail', false)"> Non</label>
+        <label class="radio-opt"><input type="radio" name="q1" id="q1oui" value="oui" onchange="toggleDetail('q1detail', true)"> Oui</label>
+      </div>
+      <div class="detail-zone" id="q1detail">
+        <label>Date approximative</label>
+        <input type="text" id="q1date" placeholder="ex. : janvier 2024">
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-block">
+      <div class="q-titre">2. Avez-vous fait effectuer une réparation ou un ajout de dents ?</div>
+      <div class="radio-row">
+        <label class="radio-opt"><input type="radio" name="q2" id="q2non" value="non" onchange="toggleDetail('q2detail', false)"> Non</label>
+        <label class="radio-opt"><input type="radio" name="q2" id="q2oui" value="oui" onchange="toggleDetail('q2detail', true)"> Oui</label>
+      </div>
+      <div class="detail-zone" id="q2detail">
+        <label>Précisez</label>
+        <input type="text" id="q2desc" placeholder="Nature de la réparation...">
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-block">
+      <div class="q-titre">3. Avez-vous reçu une nouvelle prothèse complète ou partielle ?</div>
+      <div class="radio-row">
+        <label class="radio-opt"><input type="radio" name="q3" id="q3non" value="non" onchange="toggleDetail('q3detail', false)"> Non</label>
+        <label class="radio-opt"><input type="radio" name="q3" id="q3oui" value="oui" onchange="toggleDetail('q3detail', true)"> Oui</label>
+      </div>
+      <div class="detail-zone" id="q3detail">
+        <label>Date de livraison</label>
+        <input type="date" id="q3date">
+        <label style="margin-top:8px;">Type de prothèse</label>
+        <input type="text" id="q3type" placeholder="ex. : prothèse complète supérieure">
+      </div>
+    </div>
+
+    <div class="initials-row"><span>✍️ Initiales du (de la) patient(e) :</span><input type="text" id="init1" maxlength="6" placeholder="___"></div>
+  </div>
+
+  <!-- SECTION 3 — ATTESTATION -->
+  <div class="section">
+    <div class="section-title">3. Attestation et signature</div>
+    <div class="avert-box">📋 Je certifie que les renseignements fournis ci-dessus sont exacts au meilleur de ma connaissance. Je comprends que ces informations sont nécessaires pour l'admissibilité aux prestations du RCSD.</div>
+
+    <div class="grid" style="margin-top:16px;margin-bottom:14px;">
+      <div class="field"><label>Signé à (ville)</label><input type="text" id="ville" placeholder="Québec"></div>
+      <div class="field"><label>Le (date)</label><input type="date" id="dateSignature"></div>
+    </div>
+    <div class="grid">
+      <div class="field"><label>Nom du (de la) patient(e)</label><input type="text" id="nomSig"></div>
+      <div class="field"><label>Signature (manuscrite à l'impression)</label><input type="text" id="sigPatient"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <span class="save-msg" id="saveMsg">✅ Données sauvegardées !</span>
+    <button class="btn btn-danger" onclick="clearAll()">🗑 Effacer</button>
+    <button class="btn btn-secondary" onclick="saveData()">💾 Sauvegarder</button>
+    <button class="btn btn-secondary" onclick="loadData()">📂 Charger</button>
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage clinique uniquement</div>
+</div>
+
+<script>
+const KEY = 'gm_rcsd_suivi';
+const TEXT_FIELDS = ['nomComplet','dateNaissance','noAdherent','noDossier','dentiste',
+  'init1','ville','dateSignature','nomSig','sigPatient',
+  'q1date','q2desc','q3date','q3type'];
+const RADIO_GROUPS = ['q1','q2','q3'];
+const DETAILS = { q1:'q1detail', q2:'q2detail', q3:'q3detail' };
+
+function toggleDetail(id, show) {
+  const el = document.getElementById(id);
+  if (el) { if(show) el.classList.add('visible'); else el.classList.remove('visible'); }
+  saveData();
+}
+
+function saveData() {
+  const d = {};
+  TEXT_FIELDS.forEach(id => { const el=document.getElementById(id); if(el) d[id]=el.value; });
+  RADIO_GROUPS.forEach(g => {
+    const sel = document.querySelector(`input[name=${g}]:checked`);
+    d['radio_'+g] = sel ? sel.value : '';
+  });
+  localStorage.setItem(KEY, JSON.stringify(d));
+  const msg = document.getElementById('saveMsg');
+  msg.style.display = 'flex';
+  setTimeout(() => msg.style.display = 'none', 2500);
+}
+
+function loadData() {
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (!d) { alert('Aucune donnée sauvegardée.'); return; }
+    TEXT_FIELDS.forEach(id => { const el=document.getElementById(id); if(el && d[id]) el.value=d[id]; });
+    RADIO_GROUPS.forEach(g => {
+      if (d['radio_'+g]) {
+        const radio = document.querySelector(`input[name=${g}][value="${d['radio_'+g]}"]`);
+        if (radio) { radio.checked = true; toggleDetail(DETAILS[g], d['radio_'+g]==='oui'); }
+      }
+    });
+  } catch(e) { alert('Erreur de chargement.'); }
+}
+
+function clearAll() {
+  if (!confirm('Effacer toutes les données du formulaire ?')) return;
+  TEXT_FIELDS.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  RADIO_GROUPS.forEach(g => {
+    document.querySelectorAll(`input[name=${g}]`).forEach(r => r.checked=false);
+    toggleDetail(DETAILS[g], false);
+  });
+  document.getElementById('dateSignature').value = new Date().toISOString().split('T')[0];
+}
+
+// Sauvegarde auto
+TEXT_FIELDS.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('change', saveData);
+});
+
+// Date du jour
+document.getElementById('dateSignature').value = new Date().toISOString().split('T')[0];
+
+// Chargement auto
+window.addEventListener('load', () => {
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (!d) return;
+    TEXT_FIELDS.forEach(id => { const el=document.getElementById(id); if(el && d[id]) el.value=d[id]; });
+    RADIO_GROUPS.forEach(g => {
+      if (d['radio_'+g]) {
+        const radio = document.querySelector(`input[name=${g}][value="${d['radio_'+g]}"]`);
+        if (radio) { radio.checked = true; toggleDetail(DETAILS[g], d['radio_'+g]==='oui'); }
+      }
+    });
+  } catch(e) {}
+});
+</script>
+</body>
+</html>
