@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/info/Downloads/gabarits-lettres-rh.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabarits de lettres RH — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);font-size:14px;}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.4rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+
+  /* LAYOUT */
+  .layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 56px);}
+
+  /* SIDEBAR */
+  .sidebar{background:var(--dark);padding:20px 0;overflow-y:auto;}
+  .sidebar-title{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:2px;padding:0 18px 10px;}
+  .letter-btn{display:flex;align-items:center;gap:10px;padding:10px 18px;background:none;border:none;color:rgba(255,255,255,.7);font-family:inherit;font-size:.82rem;font-weight:500;cursor:pointer;width:100%;text-align:left;transition:all .15s;border-left:3px solid transparent;}
+  .letter-btn:hover{background:rgba(255,255,255,.08);color:white;}
+  .letter-btn.active{background:rgba(33,150,243,.2);color:white;border-left-color:var(--accent);}
+  .letter-btn .lbtn-icon{font-size:.95rem;flex-shrink:0;}
+  .letter-btn .lbtn-label{line-height:1.35;}
+  .sidebar-sep{border:none;border-top:1px solid rgba(255,255,255,.1);margin:10px 18px;}
+
+  /* MAIN */
+  .main{background:#eef4fb;overflow-y:auto;}
+
+  /* CLINIC HEADER BAR */
+  .clinic-bar{background:white;border-bottom:2px solid var(--border);padding:12px 28px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .logo-wrap{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+  .logo-preview{width:68px;height:50px;border:1.5px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--light);cursor:pointer;transition:border-color .2s;}
+  .logo-preview:hover{border-color:var(--accent);}
+  .logo-preview img{width:100%;height:100%;object-fit:contain;}
+  .logo-placeholder{font-size:.62rem;color:#8a9ab0;text-align:center;line-height:1.3;padding:4px;}
+  #logoInput{display:none;}
+  .btn-logo{padding:5px 9px;border-radius:5px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.71rem;font-weight:600;cursor:pointer;color:#5a6a80;white-space:nowrap;}
+  .btn-logo:hover{border-color:var(--accent);color:var(--blue);}
+  .letter-logo{display:none;margin-bottom:14px;}
+  .letter-logo img{max-height:72px;max-width:200px;object-fit:contain;}
+  .letter-logo.visible{display:block;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:7px 11px;font-size:.84rem;font-family:inherit;color:var(--text);background:var(--light);flex:1;min-width:150px;}
+  .ci:focus{outline:none;border-color:var(--accent);background:white;}
+  .btn-print{padding:8px 18px;border-radius:7px;border:1.5px solid var(--border);background:white;color:#5a6a80;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .btn-print:hover{background:var(--light);border-color:var(--accent);color:var(--blue);}
+
+  /* LETTER VIEW */
+  .letter-view{display:none;padding:28px;}
+  .letter-view.active{display:block;}
+
+  /* LETTER CARD */
+  .letter-card{background:white;border-radius:10px;box-shadow:0 2px 16px rgba(26,106,191,.08);overflow:hidden;max-width:820px;margin:0 auto;}
+  .letter-card-header{padding:14px 20px;display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--border);}
+  .lch-icon{font-size:1.4rem;}
+  .lch-title{font-size:1rem;font-weight:700;color:var(--dark);flex:1;}
+  .lch-badge{padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* FIELDS PANEL */
+  .fields-panel{background:var(--light);border-bottom:1px solid var(--border);padding:14px 20px;}
+  .fields-title{font-size:.73rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+  .fields-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select,.ff textarea{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ff input:focus,.ff select:focus,.ff textarea:focus{outline:none;border-color:var(--accent);}
+  .ff textarea{resize:vertical;min-height:60px;}
+  .ff.full{grid-column:1/-1;}
+
+  /* LETTER BODY */
+  .letter-body{padding:28px 36px;font-size:.9rem;line-height:1.85;color:#1a2535;}
+  .letter-date{text-align:right;margin-bottom:22px;color:#5a6a80;font-size:.88rem;}
+  .letter-dest{margin-bottom:20px;}
+  .letter-dest .dest-line{font-weight:600;}
+  .letter-objet{margin-bottom:22px;padding:10px 14px;background:var(--light);border-left:4px solid var(--accent);border-radius:0 6px 6px 0;font-weight:700;font-size:.9rem;}
+  .letter-para{margin-bottom:14px;text-align:justify;}
+  .letter-sig{margin-top:32px;}
+  .sig-lines{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:20px;}
+  .sig-box{border-top:1.5px solid var(--border);padding-top:8px;}
+  .sig-name{font-weight:700;font-size:.88rem;}
+  .sig-role{font-size:.82rem;color:#5a6a80;}
+
+  /* EDITABLE SPANS */
+  .ef{border-bottom:1.5px dashed var(--accent);color:var(--blue);font-weight:600;cursor:text;padding:0 2px;min-width:20px;display:inline-block;}
+  .ef:focus{outline:none;background:#e3f2fd;border-radius:2px;}
+  .ef-block{display:block;border:1.5px dashed var(--accent);border-radius:4px;padding:4px 8px;color:var(--text);font-weight:400;cursor:text;min-height:24px;margin:4px 0;}
+  .ef-block:focus{outline:none;background:#e3f2fd;}
+
+  /* SALARY TABLE */
+  .salary-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.85rem;}
+  .salary-table th{background:var(--dark);color:white;padding:7px 12px;text-align:left;font-size:.78rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .salary-table td{border:1px solid var(--border);padding:6px 10px;}
+  .salary-table tr:nth-child(even) td{background:var(--light);}
+  .salary-table td input{border:none;background:transparent;width:100%;font-family:inherit;font-size:.84rem;padding:2px;}
+  .salary-table td input:focus{outline:none;background:#fffde7;}
+  .btn-add-row{padding:5px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:5px;color:var(--blue);font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:6px;}
+
+  /* CONFIDENTIAL BADGE */
+  .conf-badge{display:inline-block;border:2px solid var(--red);color:var(--red);font-size:.75rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+
+  /* PRINT */
+  @media print{
+    .page-header,.sidebar,.clinic-bar,.fields-panel,.btn-print{display:none!important;}
+    .layout{display:block;}
+    .main{background:white;}
+    .letter-view{display:block!important;padding:0;}
+    .letter-view:not(.active){display:none!important;}
+    .letter-card{box-shadow:none;border-radius:0;}
+    .letter-card-header{display:none!important;}
+    .letter-body{padding:20px 30px;}
+    .ef{border:none;color:var(--text);font-weight:inherit;}
+    .ef-block{border:none;background:transparent;}
+    .salary-table td input{border:none;background:transparent;}
+  }
+  @media(max-width:768px){
+    .layout{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .fields-grid{grid-template-columns:1fr 1fr;}
+    .letter-body{padding:18px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Gabarits de lettres RH</div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-title">Embauche</div>
+    <button class="letter-btn active" onclick="showLetter(0,this)"><span class="lbtn-icon">📄</span><span class="lbtn-label">Offre d'emploi</span></button>
+    <button class="letter-btn" onclick="showLetter(1,this)"><span class="lbtn-icon">✅</span><span class="lbtn-label">Confirmation d'embauche</span></button>
+    <hr class="sidebar-sep">
+    <div class="sidebar-title">Probation</div>
+    <button class="letter-btn" onclick="showLetter(2,this)"><span class="lbtn-icon">🎉</span><span class="lbtn-label">Fin de probation — Réussie</span></button>
+    <button class="letter-btn" onclick="showLetter(3,this)"><span class="lbtn-icon">⏳</span><span class="lbtn-label">Fin de probation — Prolongation</span></button>
+    <button class="letter-btn" onclick="showLetter(4,this)"><span class="lbtn-icon">❌</span><span class="lbtn-label">Fin de probation — Non réussie</span></button>
+    <hr class="sidebar-sep">
+    <div class="sidebar-title">Rémunération</div>
+    <button class="letter-btn" onclick="showLetter(5,this)"><span class="lbtn-icon">💰</span><span class="lbtn-label">Augmentation + bonus</span></button>
+    <hr class="sidebar-sep">
+    <div class="sidebar-title">Gestion disciplinaire</div>
+    <button class="letter-btn" onclick="showLetter(6,this)"><span class="lbtn-icon">📅</span><span class="lbtn-label">Convocation à une rencontre</span></button>
+    <button class="letter-btn" onclick="showLetter(7,this)"><span class="lbtn-icon">⚠️</span><span class="lbtn-label">Avertissement disciplinaire</span></button>
+    <hr class="sidebar-sep">
+    <div class="sidebar-title">Modification d'emploi</div>
+    <button class="letter-btn" onclick="showLetter(8,this)"><span class="lbtn-icon">🔄</span><span class="lbtn-label">Modification conditions d'emploi</span></button>
+    <button class="letter-btn" onclick="showLetter(9,this)"><span class="lbtn-icon">🔙</span><span class="lbtn-label">Retour au travail</span></button>
+    <hr class="sidebar-sep">
+    <div class="sidebar-title">Départ</div>
+    <button class="letter-btn" onclick="showLetter(10,this)"><span class="lbtn-icon">🚪</span><span class="lbtn-label">Fin de contrat</span></button>
+    <button class="letter-btn" onclick="showLetter(11,this)"><span class="lbtn-icon">🔴</span><span class="lbtn-label">Terminaison d'emploi</span></button>
+    <button class="letter-btn" onclick="showLetter(12,this)"><span class="lbtn-icon">🌟</span><span class="lbtn-label">Lettre de référence</span></button>
+    <button class="letter-btn" onclick="showLetter(13,this)"><span class="lbtn-icon">✉️</span><span class="lbtn-label">Confirmation d'emploi</span></button>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- CLINIC BAR -->
+    <div class="clinic-bar">
+      <div class="logo-wrap">
+        <div class="logo-preview" id="logoPreview" onclick="document.getElementById(&#39;logoInput&#39;).click()" title="Cliquez pour ajouter votre logo">
+          <div class="logo-placeholder" id="logoPlaceholder">📷<br>Logo</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <button class="btn-logo" onclick="document.getElementById(&#39;logoInput&#39;).click()">📁 Charger logo</button>
+          <button class="btn-logo" id="btnDelLogo" style="display:none;color:var(--red);" onclick="removeLogo()">✕ Retirer</button>
+        </div>
+        <input type="file" id="logoInput" accept="image/*" onchange="loadLogo(this)">
+      </div>
+      <input class="ci" type="text" id="nomClinique" placeholder="Nom de la clinique..." oninput="updateAll()">
+      <input class="ci" type="text" id="adresseClinique" placeholder="Adresse de la clinique..." oninput="updateAll()">
+      <input class="ci" type="text" id="nomSignataire" placeholder="Nom du (de la) signataire..." oninput="updateAll()">
+      <input class="ci" type="text" id="titreSignataire" placeholder="Titre (ex: Gestionnaire)..." oninput="updateAll()">
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+
+    <!-- LETTER 0 : OFFRE D'EMPLOI -->
+    <div class="letter-view active" id="lv0">
+      <div class="letter-card">
+        <div class="letter-card-header">
+          <span class="lch-icon">📄</span>
+          <span class="lch-title">Offre d'emploi</span>
+          <span class="lch-badge" style="background:var(--green);">Embauche</span>
+        </div>
+        <div class="fields-panel">
+          <div class="fields-title">Remplissez les informations — elles s'intègreront automatiquement dans la lettre</div>
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" id="f0_nom" placeholder="Prénom Nom" oninput="syncField(&#39;f0_nom&#39;,&#39;s0_nom&#39;)"></div>
+            <div class="ff"><label>Poste offert</label><input type="text" id="f0_poste" placeholder="Secrétaire dentaire" oninput="syncField(&#39;f0_poste&#39;,&#39;s0_poste&#39;)"></div>
+            <div class="ff"><label>Date d'entrée en fonction</label><input type="date" id="f0_debut" oninput="syncField(&#39;f0_debut&#39;,&#39;s0_debut&#39;,true)"></div>
+            <div class="ff"><label>Salaire horaire ($)</label><input type="text" id="f0_salaire" placeholder="00,00 $/h" oninput="syncField(&#39;f0_salaire&#39;,&#39;s0_salaire&#39;)"></div>
+            <div class="ff"><label>Statut (temps plein / partiel)</label><input type="text" id="f0_statut" placeholder="temps plein" oninput="syncField(&#39;f0_statut&#39;,&#39;s0_statut&#39;)"></div>
+            <div class="ff"><label>Durée de probation</label><input type="text" id="f0_probation" placeholder="3 mois" oninput="syncField(&#39;f0_probation&#39;,&#39;s0_probation&#39;)"></div>
+            <div class="ff"><label>Horaire prévu</label><input type="text" id="f0_horaire" placeholder="Lundi au vendredi, 8h-17h" oninput="syncField(&#39;f0_horaire&#39;,&#39;s0_horaire&#39;)"></div>
+            <div class="ff"><label>Date limite d'acceptation</label><input type="date" id="f0_limite" oninput="syncField(&#39;f0_limite&#39;,&#39;s0_limite&#39;,true)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo0"><img id="logoImg0" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date0">Québec, le 17 mai 2026</div>
+          <div class="letter-dest">
+            <div class="dest-line"><span class="ef" id="s0_nom" contenteditable="true">Prénom Nom</span></div>
+          </div>
+          <div class="letter-objet">Objet : Offre d'emploi — <span class="ef" id="s0_poste" contenteditable="true">Poste</span></div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" id="s0_nom2" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Nous avons le plaisir de vous offrir un poste de <span class="ef" id="s0_poste2" contenteditable="true">Poste</span> au sein de notre équipe à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span>. Votre profil, vos compétences et votre enthousiasme ont retenu notre attention, et nous croyons sincèrement que vous serez un atout précieux pour notre équipe.</div>
+          <div class="letter-para"><strong>Conditions d'emploi proposées :</strong></div>
+          <div class="letter-para" style="padding-left:16px;">
+            • <strong>Poste :</strong> <span class="ef" id="s0_poste3" contenteditable="true">Poste</span><br>
+            • <strong>Statut :</strong> <span class="ef" id="s0_statut" contenteditable="true">Temps plein</span><br>
+            • <strong>Date d'entrée en fonction :</strong> <span class="ef" id="s0_debut" contenteditable="true">Date</span><br>
+            • <strong>Rémunération :</strong> <span class="ef" id="s0_salaire" contenteditable="true">00,00 $</span> de l'heure<br>
+            • <strong>Horaire :</strong> <span class="ef" id="s0_horaire" contenteditable="true">À définir</span><br>
+            • <strong>Période de probation :</strong> <span class="ef" id="s0_probation" contenteditable="true">3 mois</span>
+          </div>
+          <div class="letter-para">Cette offre est conditionnelle à la vérification de vos références professionnelles et à la signature de votre contrat de travail. Un contrat détaillé vous sera remis lors de votre entrée en fonction.</div>
+          <div class="letter-para">Pour confirmer votre acceptation, veuillez nous contacter ou signer et retourner une copie de cette lettre avant le <span class="ef" id="s0_limite" contenteditable="true">Date limite</span>. Passé ce délai, l'offre deviendra nulle et non avenue.</div>
+          <div class="letter-para">Nous sommes très enthousiastes à l'idée de vous accueillir dans notre équipe et espérons que vous accepterez cette offre avec enthousiasme!</div>
+          <div class="letter-sig">
+            <p>Veuillez agréer, Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>, nos cordiales salutations.</p>
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><div class="sig-role signataire-title">Titre</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Candidat(e) — Acceptation</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 1 : CONFIRMATION D'EMBAUCHE -->
+    <div class="letter-view" id="lv1">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">✅</span><span class="lch-title">Confirmation d'embauche</span><span class="lch-badge" style="background:var(--green);">Embauche</span></div>
+        <div class="fields-panel">
+          <div class="fields-title">Informations de la lettre</div>
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" id="f1_nom" placeholder="Prénom Nom" oninput="syncField(&#39;f1_nom&#39;,&#39;s1_nom&#39;)"></div>
+            <div class="ff"><label>Poste</label><input type="text" id="f1_poste" placeholder="Secrétaire dentaire" oninput="syncField(&#39;f1_poste&#39;,&#39;s1_poste&#39;)"></div>
+            <div class="ff"><label>Date d'entrée en fonction</label><input type="date" id="f1_debut" oninput="syncField(&#39;f1_debut&#39;,&#39;s1_debut&#39;,true)"></div>
+            <div class="ff"><label>Salaire horaire ($)</label><input type="text" id="f1_salaire" placeholder="00,00 $/h" oninput="syncField(&#39;f1_salaire&#39;,&#39;s1_salaire&#39;)"></div>
+            <div class="ff"><label>Statut (temps plein / partiel)</label><input type="text" id="f1_statut" placeholder="temps plein" oninput="syncField(&#39;f1_statut&#39;,&#39;s1_statut&#39;)"></div>
+            <div class="ff"><label>Durée de probation</label><input type="text" id="f1_probation" placeholder="3 mois" oninput="syncField(&#39;f1_probation&#39;,&#39;s1_probation&#39;)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo1"><img id="logoImg1" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date1">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s1_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Confirmation d'embauche</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Nous avons le plaisir de confirmer votre embauche à titre de <strong><span class="ef" id="s1_poste" contenteditable="true">Poste</span></strong> à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span>.</div>
+          <div class="letter-para">Votre entrée en fonction est prévue le <span class="ef" id="s1_debut" contenteditable="true">Date</span>. Vous occuperez ce poste à <span class="ef" id="s1_statut" contenteditable="true">temps plein</span>, avec une rémunération de <span class="ef" id="s1_salaire" contenteditable="true">00,00 $</span> de l'heure.</div>
+          <div class="letter-para">Une période de probation de <span class="ef" id="s1_probation" contenteditable="true">3 mois</span> s'appliquera à votre entrée en poste, au terme de laquelle une évaluation formelle sera réalisée afin de confirmer la continuité de votre emploi.</div>
+          <div class="letter-para">Nous vous demandons de vous présenter le jour de votre entrée en fonction muni(e) de vos documents d'identité ainsi que de vos informations bancaires pour la mise en place du dépôt direct.</div>
+          <div class="letter-para">Nous sommes ravis de vous accueillir dans notre équipe et vous souhaitons la plus cordiale des bienvenues!</div>
+          <div class="letter-sig">
+            <p>Veuillez agréer, Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>, nos salutations distinguées.</p>
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><div class="sig-role signataire-title">Titre</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e) — Accusé de réception</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 2 : FIN DE PROBATION RÉUSSIE -->
+    <div class="letter-view" id="lv2">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">🎉</span><span class="lch-title">Fin de probation — Réussie</span><span class="lch-badge" style="background:var(--green);">Probation</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" id="f2_nom" placeholder="Prénom Nom" oninput="syncField(&#39;f2_nom&#39;,&#39;s2_nom&#39;)"></div>
+            <div class="ff"><label>Poste</label><input type="text" id="f2_poste" placeholder="Secrétaire dentaire" oninput="syncField(&#39;f2_poste&#39;,&#39;s2_poste&#39;)"></div>
+            <div class="ff"><label>Date de fin de probation</label><input type="date" id="f2_fin" oninput="syncField(&#39;f2_fin&#39;,&#39;s2_fin&#39;,true)"></div>
+            <div class="ff"><label>Nouveau salaire (si applicable)</label><input type="text" id="f2_salaire" placeholder="00,00 $/h" oninput="syncField(&#39;f2_salaire&#39;,&#39;s2_salaire&#39;)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo2"><img id="logoImg2" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date2">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s2_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Confirmation — Réussite de votre période de probation</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Nous avons le grand plaisir de vous informer que votre période de probation à titre de <span class="ef" id="s2_poste" contenteditable="true">Poste</span> à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span> est maintenant complétée avec succès, en date du <span class="ef" id="s2_fin" contenteditable="true">Date</span>.</div>
+          <div class="letter-para">Au cours des derniers mois, vous avez su démontrer votre compétence, votre professionnalisme et votre capacité à vous intégrer harmonieusement au sein de notre équipe. Votre attitude positive, votre sens du service à la clientèle et votre engagement envers notre clinique ont été remarqués et sont très appréciés.</div>
+          <div class="letter-para">C'est donc avec enthousiasme que nous confirmons votre statut d'emploi permanent au sein de notre équipe. <span class="ef" id="s2_salaire" contenteditable="true"></span></div>
+          <div class="letter-para">Nous nous réjouissons de poursuivre cette belle collaboration avec vous et vous encourageons à continuer sur cette belle lancée. N'hésitez pas à nous faire part de vos idées et suggestions — votre contribution est précieuse!</div>
+          <div class="letter-sig">
+            <p>Veuillez recevoir, Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>, nos plus sincères félicitations.</p>
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><div class="sig-role signataire-title">Titre</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e) — Accusé de réception</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 3 : PROLONGATION DE PROBATION -->
+    <div class="letter-view" id="lv3">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">⏳</span><span class="lch-title">Fin de probation — Prolongation</span><span class="lch-badge" style="background:var(--orange);">Probation</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s3_nom&#39;)"></div>
+            <div class="ff"><label>Poste</label><input type="text" oninput="syncAll(this,&#39;s3_poste&#39;)"></div>
+            <div class="ff"><label>Date de fin de probation initiale</label><input type="date" oninput="syncDate(this,&#39;s3_fin1&#39;)"></div>
+            <div class="ff"><label>Nouvelle date de fin de probation</label><input type="date" oninput="syncDate(this,&#39;s3_fin2&#39;)"></div>
+            <div class="ff full"><label>Axes d'amélioration</label><textarea oninput="syncAll(this,&#39;s3_axes&#39;)" placeholder="Ex : améliorer la maîtrise du logiciel, ponctualité..."></textarea></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo3"><img id="logoImg3" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date3">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s3_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Prolongation de votre période de probation</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Suite à notre rencontre d'évaluation de fin de probation, nous souhaitons vous informer que votre période de probation à titre de <span class="ef" id="s3_poste" contenteditable="true">Poste</span> à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span> sera prolongée jusqu'au <span class="ef" id="s3_fin2" contenteditable="true">Nouvelle date</span>.</div>
+          <div class="letter-para">Bien que nous reconnaissions les efforts déployés depuis votre entrée en poste le <span class="ef" id="s3_fin1" contenteditable="true">Date initiale</span>, nous avons identifié certains axes d'amélioration qui nécessitent un suivi supplémentaire :</div>
+          <div class="letter-para"><span class="ef-block" id="s3_axes" contenteditable="true">Axes d'amélioration à préciser...</span></div>
+          <div class="letter-para">Au cours de cette période de prolongation, vous serez accompagné(e) et soutenu(e) afin que vous puissiez atteindre les objectifs fixés. Des rencontres de suivi régulières seront planifiées pour vous permettre de progresser.</div>
+          <div class="letter-para">Nous souhaitons sincèrement que cette période vous permette de consolider vos acquis et de confirmer votre place au sein de notre équipe.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e)</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 4 : FIN DE PROBATION NON RÉUSSIE -->
+    <div class="letter-view" id="lv4">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">❌</span><span class="lch-title">Fin de probation — Non réussie</span><span class="lch-badge" style="background:var(--red);">Probation</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s4_nom&#39;)"></div>
+            <div class="ff"><label>Poste</label><input type="text" oninput="syncAll(this,&#39;s4_poste&#39;)"></div>
+            <div class="ff"><label>Date de fin d'emploi</label><input type="date" oninput="syncDate(this,&#39;s4_fin&#39;)"></div>
+            <div class="ff"><label>Dernier jour de travail</label><input type="date" oninput="syncDate(this,&#39;s4_dernier&#39;)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo4"><img id="logoImg4" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date4">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s4_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div style="margin-bottom:8px;"><span class="conf-badge">Personnel et confidentiel</span></div>
+          <div class="letter-objet">Objet : Fin d'emploi suite à la période de probation</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Suite à notre rencontre d'évaluation de fin de probation tenue récemment, nous devons malheureusement vous informer que nous mettons fin à votre emploi à titre de <span class="ef" id="s4_poste" contenteditable="true">Poste</span> à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span>, en date du <span class="ef" id="s4_fin" contenteditable="true">Date</span>.</div>
+          <div class="letter-para">Malgré les efforts déployés, nous avons constaté que le poste ne correspond pas aux attentes requises pour les raisons qui vous ont été exposées lors de notre rencontre. Cette décision a été prise après mûre réflexion et avec le souci d'être juste envers vous et envers notre équipe.</div>
+          <div class="letter-para">Votre dernier jour de travail sera le <span class="ef" id="s4_dernier" contenteditable="true">Date</span>. Toutes les sommes qui vous sont dues, incluant les vacances accumulées, vous seront versées sur votre dernier chèque de paie. Un relevé d'emploi vous sera produit dans les délais prévus.</div>
+          <div class="letter-para">Nous vous rappelons votre obligation de confidentialité concernant les informations relatives à la clinique et à ses patients, qui demeure en vigueur après la cessation de votre emploi.</div>
+          <div class="letter-para">Nous vous souhaitons sincèrement succès dans vos projets futurs.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e) — Accusé de réception</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 5 : AUGMENTATION + BONUS -->
+    <div class="letter-view" id="lv5">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">💰</span><span class="lch-title">Augmentation salariale et bonification</span><span class="lch-badge" style="background:var(--blue);">Rémunération</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s5_nom&#39;)"></div>
+            <div class="ff"><label>Poste</label><input type="text" oninput="syncAll(this,&#39;s5_poste&#39;)"></div>
+            <div class="ff"><label>Nouveau salaire horaire</label><input type="text" placeholder="00,00 $/h" oninput="syncAll(this,&#39;s5_salaire&#39;)"></div>
+            <div class="ff"><label>Montant du bonus ($)</label><input type="text" placeholder="0,00 $" oninput="syncAll(this,&#39;s5_bonus&#39;)"></div>
+            <div class="ff"><label>Période visée</label><input type="text" placeholder="2024-2025" oninput="syncAll(this,&#39;s5_periode&#39;)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo5"><img id="logoImg5" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date5">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s5_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Confirmation — Augmentation salariale et bonification <span class="ef" id="s5_periode" contenteditable="true">Période</span></div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Nous avons le plaisir de vous informer que votre salaire sera majoré. Votre nouvelle rémunération sera de <strong><span class="ef" id="s5_salaire" contenteditable="true">00,00 $</span> de l'heure</strong>, en vigueur à compter d'aujourd'hui.</div>
+          <div class="letter-para">De plus, nous avons décidé de vous accorder un bonus de <strong><span class="ef" id="s5_bonus" contenteditable="true">0,00 $</span></strong> en reconnaissance de vos performances au cours de la dernière année. Par ce geste, nous souhaitons honorer l'investissement dont vous avez fait preuve dans l'atteinte des objectifs de la clinique. Nos sincères félicitations pour cette réussite!</div>
+          <div class="letter-para">Le paiement de ce bonus s'effectue sur une base volontaire et sans préjudice pour l'avenir. Soyez assuré(e) que nous ferons toujours notre possible pour reconnaître l'évolution et les bonnes performances de notre personnel.</div>
+          <div style="margin-top:16px;margin-bottom:6px;font-weight:700;font-size:.86rem;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;">Historique salarial</div>
+          <table class="salary-table" id="salaryHist">
+            <thead><tr><th>Date</th><th>Salaire horaire</th></tr></thead>
+            <tbody>
+              <tr><td><input type="text" placeholder="JJ/MM/AAAA"></td><td><input type="text" placeholder="00,00 $/h"></td></tr>
+              <tr><td><input type="text" placeholder="JJ/MM/AAAA"></td><td><input type="text" placeholder="00,00 $/h"></td></tr>
+              <tr><td><input type="text" placeholder="JJ/MM/AAAA"></td><td><input type="text" placeholder="00,00 $/h"></td></tr>
+            </tbody>
+          </table>
+          <button class="btn-add-row no-print" onclick="addSalaryRow()">+ Ajouter une ligne</button>
+          <div style="margin-top:14px;font-weight:700;font-size:.86rem;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;">Historique des bonus</div>
+          <table class="salary-table" id="bonusHist" style="margin-top:6px;">
+            <thead><tr><th>Année</th><th>Montant du bonus</th></tr></thead>
+            <tbody>
+              <tr><td><input type="text" placeholder="AAAA"></td><td><input type="text" placeholder="0,00 $"></td></tr>
+              <tr><td><input type="text" placeholder="AAAA"></td><td><input type="text" placeholder="0,00 $"></td></tr>
+            </tbody>
+          </table>
+          <button class="btn-add-row no-print" onclick="addBonusRow()">+ Ajouter une ligne</button>
+          <div class="letter-sig" style="margin-top:20px;">
+            <p>Nous vous remercions pour votre travail et votre engagement envers notre clinique.</p>
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e) — Accusé de réception</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 6 : CONVOCATION -->
+    <div class="letter-view" id="lv6">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">📅</span><span class="lch-title">Convocation à une rencontre</span><span class="lch-badge" style="background:var(--orange);">Disciplinaire</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s6_nom&#39;)"></div>
+            <div class="ff"><label>Date de la rencontre</label><input type="date" oninput="syncDate(this,&#39;s6_date&#39;)"></div>
+            <div class="ff"><label>Heure</label><input type="time" oninput="syncAll(this,&#39;s6_heure&#39;)"></div>
+            <div class="ff"><label>Lieu</label><input type="text" placeholder="Ex : Bureau de la gestionnaire" oninput="syncAll(this,&#39;s6_lieu&#39;)"></div>
+            <div class="ff full"><label>Sujet de la rencontre</label><textarea oninput="syncAll(this,&#39;s6_sujet&#39;)" placeholder="Ex : Votre rendement, absences répétées..."></textarea></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo6"><img id="logoImg6" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date6">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s6_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Convocation à une rencontre</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Par la présente, nous vous convoquons à une rencontre le <strong><span class="ef" id="s6_date" contenteditable="true">Date</span></strong> à <strong><span class="ef" id="s6_heure" contenteditable="true">Heure</span></strong>, au <span class="ef" id="s6_lieu" contenteditable="true">Lieu</span>.</div>
+          <div class="letter-para">Cette rencontre a pour objet de discuter de la situation suivante : <span class="ef-block" id="s6_sujet" contenteditable="true">Sujet de la rencontre...</span></div>
+          <div class="letter-para">Vous avez le droit de vous faire accompagner d'une personne de confiance lors de cette rencontre. Nous vous demandons de confirmer votre présence auprès de votre gestionnaire.</div>
+          <div class="letter-para">Nous comptons sur votre présence et votre collaboration afin de trouver des solutions constructives.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e) — Accusé de réception</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 7 : AVERTISSEMENT DISCIPLINAIRE -->
+    <div class="letter-view" id="lv7">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">⚠️</span><span class="lch-title">Avertissement disciplinaire — Lettre officielle</span><span class="lch-badge" style="background:var(--red);">Disciplinaire</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s7_nom&#39;)"></div>
+            <div class="ff"><label>Poste</label><input type="text" oninput="syncAll(this,&#39;s7_poste&#39;)"></div>
+            <div class="ff"><label>Niveau d'avertissement</label>
+              <select oninput="syncAll(this,&#39;s7_niveau&#39;)">
+                <option>verbal</option><option>écrit (1er)</option><option>écrit (2e)</option><option>final</option>
+              </select>
+            </div>
+            <div class="ff full"><label>Motif et description des faits</label><textarea oninput="syncAll(this,&#39;s7_motif&#39;)" placeholder="Décrivez les faits de façon précise..."></textarea></div>
+            <div class="ff full"><label>Comportements attendus</label><textarea oninput="syncAll(this,&#39;s7_attentes&#39;)" placeholder="Ce qui est attendu de l&#39;employé(e)..."></textarea></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo7"><img id="logoImg7" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date7">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s7_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div style="margin-bottom:8px;"><span class="conf-badge">Document confidentiel — Versé au dossier</span></div>
+          <div class="letter-objet">Objet : Avertissement <span class="ef" id="s7_niveau" contenteditable="true">niveau</span></div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">La présente lettre constitue un avertissement <span class="ef" contenteditable="true">niveau</span> vous signifiant un manquement à vos obligations professionnelles à titre de <span class="ef" id="s7_poste" contenteditable="true">Poste</span> à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span>.</div>
+          <div class="letter-para"><strong>Faits reprochés :</strong><span class="ef-block" id="s7_motif" contenteditable="true">Description des faits...</span></div>
+          <div class="letter-para"><strong>Comportements attendus :</strong><span class="ef-block" id="s7_attentes" contenteditable="true">Attentes...</span></div>
+          <div class="letter-para" style="background:#fff8e1;border-left:4px solid var(--orange);padding:10px 14px;border-radius:0 6px 6px 0;">⚠️ <strong>Avertissement :</strong> Tout manquement similaire ou toute récidive pourra entraîner une mesure disciplinaire plus sévère, pouvant aller jusqu'au congédiement pour cause juste et suffisante.</div>
+          <div class="letter-para" style="margin-top:14px;">La présente lettre sera versée à votre dossier d'employé(e). Vous avez la possibilité d'y inscrire vos commentaires ci-dessous.</div>
+          <div class="letter-para"><strong>Commentaires de l'employé(e) :</strong><span class="ef-block" contenteditable="true" style="min-height:50px;"></span></div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e)</div><br>Signature : ____________________________<br><br>Date : ____________________________<br><br><small style="color:#8a9ab0;">* La signature atteste la réception, non l'acceptation.</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 8 : MODIFICATION CONDITIONS D'EMPLOI -->
+    <div class="letter-view" id="lv8">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">🔄</span><span class="lch-title">Modification des conditions d'emploi</span><span class="lch-badge" style="background:var(--purple);">Modification</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s8_nom&#39;)"></div>
+            <div class="ff"><label>Date d'entrée en vigueur</label><input type="date" oninput="syncDate(this,&#39;s8_date&#39;)"></div>
+            <div class="ff full"><label>Modifications apportées</label><textarea oninput="syncAll(this,&#39;s8_modifs&#39;)" placeholder="Ex : horaire réduit à 4 jours, nouveau poste, nouveau salaire..."></textarea></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo8"><img id="logoImg8" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date8">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s8_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Modification de vos conditions d'emploi</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Nous souhaitons vous informer que des modifications seront apportées à vos conditions d'emploi à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span>, en vigueur à compter du <span class="ef" id="s8_date" contenteditable="true">Date</span>.</div>
+          <div class="letter-para"><strong>Modifications apportées :</strong><span class="ef-block" id="s8_modifs" contenteditable="true">Détails des modifications...</span></div>
+          <div class="letter-para">Toutes les autres conditions de votre emploi demeurent inchangées. Si vous avez des questions concernant ces modifications, nous vous invitons à en discuter avec votre gestionnaire.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e) — Accusé de réception</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 9 : RETOUR AU TRAVAIL -->
+    <div class="letter-view" id="lv9">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">🔙</span><span class="lch-title">Confirmation de retour au travail</span><span class="lch-badge" style="background:var(--green);">Modification</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s9_nom&#39;)"></div>
+            <div class="ff"><label>Date de retour</label><input type="date" oninput="syncDate(this,&#39;s9_retour&#39;)"></div>
+            <div class="ff"><label>Poste au retour</label><input type="text" oninput="syncAll(this,&#39;s9_poste&#39;)"></div>
+            <div class="ff full"><label>Conditions particulières (si applicable)</label><textarea oninput="syncAll(this,&#39;s9_conditions&#39;)" placeholder="Ex : tâches allégées, horaire adapté..."></textarea></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo9"><img id="logoImg9" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date9">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s9_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Confirmation de votre retour au travail</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Nous avons le plaisir de confirmer votre retour au travail à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span> à compter du <strong><span class="ef" id="s9_retour" contenteditable="true">Date</span></strong>, à titre de <span class="ef" id="s9_poste" contenteditable="true">Poste</span>.</div>
+          <div class="letter-para">Nous sommes heureux(se) de vous retrouver parmi nous et espérons que votre retour se passera dans les meilleures conditions.</div>
+          <div class="letter-para" id="s9_cond_para"><strong>Conditions particulières :</strong><span class="ef-block" id="s9_conditions" contenteditable="true">Aucune condition particulière.</span></div>
+          <div class="letter-para">N'hésitez pas à communiquer avec votre gestionnaire si vous avez des questions ou des besoins particuliers lors de votre retour.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e)</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 10 : FIN DE CONTRAT -->
+    <div class="letter-view" id="lv10">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">🚪</span><span class="lch-title">Fin de contrat</span><span class="lch-badge" style="background:var(--orange);">Départ</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s10_nom&#39;)"></div>
+            <div class="ff"><label>Poste</label><input type="text" oninput="syncAll(this,&#39;s10_poste&#39;)"></div>
+            <div class="ff"><label>Date de fin de contrat</label><input type="date" oninput="syncDate(this,&#39;s10_fin&#39;)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo10"><img id="logoImg10" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date10">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s10_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div class="letter-objet">Objet : Fin de contrat</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Par la présente, nous vous informons que votre contrat à titre de <span class="ef" id="s10_poste" contenteditable="true">Poste</span> à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span> prendra fin le <strong><span class="ef" id="s10_fin" contenteditable="true">Date</span></strong>.</div>
+          <div class="letter-para">Les sommes qui vous sont dues, incluant votre rémunération et vos indemnités de vacances accumulées, vous seront versées sur votre prochaine paie. Un relevé d'emploi vous sera produit dans les délais prévus.</div>
+          <div class="letter-para">Nous vous rappelons que votre obligation de confidentialité concernant les informations de la clinique et de ses patients demeure en vigueur après la fin de votre contrat.</div>
+          <div class="letter-para">Nous vous remercions pour votre contribution et vous souhaitons beaucoup de succès dans vos projets futurs.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div class="sig-box"><div class="sig-name">Employé(e) — Accusé de réception</div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 11 : TERMINAISON D'EMPLOI -->
+    <div class="letter-view" id="lv11">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">🔴</span><span class="lch-title">Terminaison d'emploi</span><span class="lch-badge" style="background:var(--red);">Départ</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s11_nom&#39;)"></div>
+            <div class="ff"><label>Date de la rencontre</label><input type="date" oninput="syncDate(this,&#39;s11_rencontre&#39;)"></div>
+            <div class="ff"><label>Date d'entrée en vigueur</label><input type="date" oninput="syncDate(this,&#39;s11_fin&#39;)"></div>
+            <div class="ff"><label>Motif(s)</label><input type="text" oninput="syncAll(this,&#39;s11_motifs&#39;)" placeholder="Ex : rendement insuffisant, restructuration..."></div>
+            <div class="ff"><label>Indemnité de départ ($)</label><input type="text" oninput="syncAll(this,&#39;s11_indem&#39;)" placeholder="0,00 $"></div>
+            <div class="ff"><label>Semaines/mois d'indemnité</label><input type="text" oninput="syncAll(this,&#39;s11_semaines&#39;)" placeholder="Ex : 2 semaines de salaire"></div>
+            <div class="ff"><label>Date limite d'acceptation</label><input type="date" oninput="syncDate(this,&#39;s11_limite&#39;)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo11"><img id="logoImg11" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date11">Québec, le 17 mai 2026</div>
+          <div class="letter-dest"><div class="dest-line"><span class="ef" id="s11_nom" contenteditable="true">Prénom Nom</span></div></div>
+          <div style="margin-bottom:8px;"><span class="conf-badge">En main propre — Personnel et confidentiel</span></div>
+          <div class="letter-objet">Objet : Terminaison de votre emploi</div>
+          <div class="letter-para">Madame, Monsieur <span class="ef" contenteditable="true">Nom</span>,</div>
+          <div class="letter-para">Tel que nous vous l'avons indiqué lors de notre rencontre du <span class="ef" id="s11_rencontre" contenteditable="true">Date de la rencontre</span>, et pour les raisons qui vous ont alors été exposées relativement à <span class="ef" id="s11_motifs" contenteditable="true">motifs</span>, nous mettons fin à votre emploi à la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span>, le tout effectif en date du <span class="ef" id="s11_fin" contenteditable="true">Date</span>.</div>
+          <div class="letter-para">La clinique vous versera une indemnité de départ au montant de <strong><span class="ef" id="s11_indem" contenteditable="true">0,00 $</span></strong>, représentant <span class="ef" id="s11_semaines" contenteditable="true">nombre de semaines/mois</span> ainsi que les indemnités de vacances et autres montants qui vous sont dus.</div>
+          <div class="letter-para">Votre indemnité de départ inclut toute indemnité légale ou statutaire requise notamment par la Loi sur les normes du travail et vous reconnaissez que cette indemnité est suffisante et raisonnable conformément à toute législation applicable.</div>
+          <div class="letter-para">Le versement de votre indemnité de départ est conditionnel à son acceptation et à la signature d'une copie de la présente lettre. Votre acceptation doit nous parvenir avant le <span class="ef" id="s11_limite" contenteditable="true">Date limite</span>, après quoi la présente offre deviendra nulle et non avenue.</div>
+          <div class="letter-para">Nous vous rappelons votre obligation légale et contractuelle de préserver la confidentialité des pratiques et activités de la clinique et des renseignements sur ses patients, ses employés et fournisseurs, laquelle demeure en vigueur même après la cessation de votre emploi.</div>
+          <div class="letter-para">Nous vous souhaitons succès dans vos projets futurs.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><br>Signature : ____________________________</div>
+              <div>
+                <p style="font-size:.82rem;margin-bottom:10px;">J'ai lu et compris la présente lettre et j'en accepte les modalités.</p>
+                <div class="sig-box"><div class="sig-name"><span class="ef" contenteditable="true">Nom de l'employé(e)</span></div><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 12 : LETTRE DE RÉFÉRENCE -->
+    <div class="letter-view" id="lv12">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">🌟</span><span class="lch-title">Lettre de référence</span><span class="lch-badge" style="background:var(--purple);">Départ</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom</label><input type="text" oninput="syncAll(this,&#39;s12_nom&#39;)"></div>
+            <div class="ff"><label>Poste occupé</label><input type="text" oninput="syncAll(this,&#39;s12_poste&#39;)"></div>
+            <div class="ff"><label>Date d'embauche</label><input type="date" oninput="syncDate(this,&#39;s12_debut&#39;)"></div>
+            <div class="ff"><label>Date de départ</label><input type="date" oninput="syncDate(this,&#39;s12_fin&#39;)"></div>
+            <div class="ff full"><label>Qualités et forces remarquées</label><textarea oninput="syncAll(this,&#39;s12_qualites&#39;)" placeholder="Ex : excellent service à la clientèle, rigueur, esprit d&#39;équipe..."></textarea></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo12"><img id="logoImg12" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date12">Québec, le 17 mai 2026</div>
+          <div class="letter-objet">Objet : Lettre de référence — <span class="ef" id="s12_nom" contenteditable="true">Prénom Nom</span></div>
+          <div class="letter-para">À qui de droit,</div>
+          <div class="letter-para">Par la présente, nous attestons que <strong><span class="ef" contenteditable="true">Prénom Nom</span></strong> a été à l'emploi de la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span> à titre de <span class="ef" id="s12_poste" contenteditable="true">Poste</span>, du <span class="ef" id="s12_debut" contenteditable="true">Date de début</span> au <span class="ef" id="s12_fin" contenteditable="true">Date de fin</span>.</div>
+          <div class="letter-para">Au cours de cette période, <span class="ef" contenteditable="true">Prénom</span> a su se démarquer par les qualités suivantes : <span class="ef-block" id="s12_qualites" contenteditable="true">Qualités et forces...</span></div>
+          <div class="letter-para">Nous recommandons <span class="ef" contenteditable="true">Prénom Nom</span> sans réserve et croyons sincèrement qu'il/elle saura apporter une contribution significative à tout employeur qui aura la chance de l'accueillir dans son équipe.</div>
+          <div class="letter-para">N'hésitez pas à communiquer avec nous pour toute information complémentaire.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><div class="sig-role signataire-title">Titre</div><br>Tél. : <span class="ef" contenteditable="true">000-000-0000</span><br>Courriel : <span class="ef" contenteditable="true">info@clinique.com</span><br><br>Signature : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LETTER 13 : CONFIRMATION D'EMPLOI (pour tiers) -->
+    <div class="letter-view" id="lv13">
+      <div class="letter-card">
+        <div class="letter-card-header"><span class="lch-icon">✉️</span><span class="lch-title">Confirmation d'emploi</span><span class="lch-badge" style="background:var(--blue);">Attestation</span></div>
+        <div class="fields-panel">
+          <div class="fields-grid">
+            <div class="ff"><label>Prénom et nom de l'employé(e)</label><input type="text" oninput="syncAll(this,&#39;s13_nom&#39;)"></div>
+            <div class="ff"><label>Poste occupé</label><input type="text" oninput="syncAll(this,&#39;s13_poste&#39;)"></div>
+            <div class="ff"><label>Statut (permanent / contrat)</label><input type="text" placeholder="permanent" oninput="syncAll(this,&#39;s13_statut&#39;)"></div>
+            <div class="ff"><label>Depuis le (date d'embauche)</label><input type="date" oninput="syncDate(this,&#39;s13_depuis&#39;)"></div>
+            <div class="ff"><label>Temps plein / partiel</label><input type="text" placeholder="temps plein" oninput="syncAll(this,&#39;s13_temps&#39;)"></div>
+            <div class="ff"><label>Salaire annuel (optionnel)</label><input type="text" placeholder="ex: 45 000 $" oninput="syncAll(this,&#39;s13_salaire&#39;)"></div>
+          </div>
+        </div>
+        <div class="letter-body">
+          <div class="letter-logo" id="letterLogo13"><img id="logoImg13" src="file:///C:/Users/info/Downloads/gabarits-lettres-rh.html" alt="Logo clinique"></div>
+          <div class="letter-date" id="date13">Québec, le 17 mai 2026</div>
+          <div class="letter-objet">Objet : Confirmation d'emploi</div>
+          <div class="letter-para">À qui de droit,</div>
+          <div class="letter-para">Par la présente, nous confirmons que <strong><span class="ef" id="s13_nom" contenteditable="true">Prénom Nom</span></strong> est à l'emploi de la <span class="ef clinic-name" contenteditable="true">Clinique dentaire</span> depuis le <span class="ef" id="s13_depuis" contenteditable="true">Date</span>. Il/Elle occupe les fonctions de <span class="ef" id="s13_poste" contenteditable="true">Poste</span> à <span class="ef" id="s13_temps" contenteditable="true">temps plein</span> et son poste est <span class="ef" id="s13_statut" contenteditable="true">permanent</span>.</div>
+          <div class="letter-para" id="s13_salaire_para">Son salaire annuel est de <span class="ef" id="s13_salaire" contenteditable="true">—</span>.</div>
+          <div class="letter-para">N'hésitez pas à communiquer avec nous si d'autres informations vous sont nécessaires.</div>
+          <div class="letter-sig">
+            <div class="sig-lines">
+              <div class="sig-box"><div class="sig-name clinic-name">Clinique dentaire</div><div class="sig-role signataire-name">Signataire</div><div class="sig-role signataire-title">Titre</div><br>Tél. : <span class="ef" contenteditable="true">000-000-0000</span><br><br>Signature : ____________________________<br><br>Date : ____________________________</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end main -->
+</div><!-- end layout -->
+
+<script>
+// ===== LOGO =====
+let logoDataUrl = '';
+function loadLogo(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    logoDataUrl = e.target.result;
+    document.getElementById('logoPlaceholder').style.display = 'none';
+    const prev = document.getElementById('logoPreview');
+    let img = prev.querySelector('img');
+    if (!img) { img = document.createElement('img'); prev.appendChild(img); }
+    img.src = logoDataUrl;
+    img.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+    document.getElementById('btnDelLogo').style.display = 'block';
+    // Show logo in all letters
+    document.querySelectorAll('.letter-logo').forEach(el => {
+      el.classList.add('visible');
+      el.querySelector('img').src = logoDataUrl;
+    });
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function removeLogo() {
+  logoDataUrl = '';
+  document.getElementById('logoPlaceholder').style.display = '';
+  const prev = document.getElementById('logoPreview');
+  const img = prev.querySelector('img');
+  if (img) img.remove();
+  document.getElementById('btnDelLogo').style.display = 'none';
+  document.querySelectorAll('.letter-logo').forEach(el => el.classList.remove('visible'));
+}
+
+// ===== DATE INIT =====
+const today = new Date();
+const dateStr = today.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
+const dateCity = 'Québec, le ';
+for (let i=0;i<=13;i++) {
+  const el = document.getElementById('date'+i);
+  if (el) el.textContent = dateCity + dateStr;
+}
+
+// ===== SHOW LETTER =====
+function showLetter(n, btn) {
+  document.querySelectorAll('.letter-view').forEach((v,i) => v.classList.toggle('active', i===n));
+  document.querySelectorAll('.letter-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ===== SYNC FIELDS =====
+function syncField(inputId, spanId, isDate) {
+  const inp = document.getElementById(inputId);
+  const span = document.getElementById(spanId);
+  if (!inp || !span) return;
+  let val = inp.value;
+  if (isDate && val) {
+    const d = new Date(val + 'T12:00:00');
+    val = d.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
+  }
+  span.textContent = val || span.getAttribute('placeholder') || '';
+}
+
+function syncAll(input, spanId) {
+  const span = document.getElementById(spanId);
+  if (span) span.textContent = input.value;
+}
+
+function syncDate(input, spanId) {
+  const span = document.getElementById(spanId);
+  if (!span || !input.value) return;
+  const d = new Date(input.value + 'T12:00:00');
+  span.textContent = d.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
+}
+
+// ===== UPDATE CLINIC INFO IN ALL LETTERS =====
+function updateAll() {
+  const nom = document.getElementById('nomClinique').value || 'Clinique dentaire';
+  const sign = document.getElementById('nomSignataire').value || 'Signataire';
+  const titre = document.getElementById('titreSignataire').value || 'Titre';
+  document.querySelectorAll('.clinic-name').forEach(el => el.textContent = nom);
+  document.querySelectorAll('.signataire-name').forEach(el => el.textContent = sign);
+  document.querySelectorAll('.signataire-title').forEach(el => el.textContent = titre);
+}
+
+// ===== SALARY ROWS =====
+function addSalaryRow() {
+  const t = document.getElementById('salaryHist').querySelector('tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td><input type="text" placeholder="JJ/MM/AAAA"></td><td><input type="text" placeholder="00,00 $/h"></td>';
+  t.appendChild(tr);
+}
+
+function addBonusRow() {
+  const t = document.getElementById('bonusHist').querySelector('tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td><input type="text" placeholder="AAAA"></td><td><input type="text" placeholder="0,00 $"></td>';
+  t.appendChild(tr);
+}
+</script>
+
+
+</body></html>

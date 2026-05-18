@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/info/Downloads/accueil-nouveau-dentiste.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accueil nouveau dentiste — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:900px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:22px 36px;}
+  .doc-header h1{font-size:1.35rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.83rem;opacity:.7;}
+  .info-bar{padding:14px 36px;background:var(--light);border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .ib-field{display:flex;flex-direction:column;gap:3px;}
+  .ib-field label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ib-field input{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ib-field input:focus{outline:none;border-color:var(--accent);}
+  .progress-bar-wrap{padding:10px 36px;background:white;border-bottom:1px solid var(--border);}
+  .prog-top{display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:4px;}
+  .prog-lbl{font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  .prog-pct{font-weight:700;color:var(--blue);}
+  .prog-track{background:#e0e0e0;border-radius:8px;height:7px;overflow:hidden;}
+  .prog-fill{height:7px;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:8px;transition:width .4s;}
+  .section{margin:18px 36px;}
+  .sec-hd{display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:8px 8px 0 0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sec-icon{font-size:1.1rem;}
+  .sec-title{font-size:.88rem;font-weight:700;color:white;flex:1;}
+  .sec-prog{font-size:.75rem;color:rgba(255,255,255,.75);}
+  .item-list{border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
+  .item-row{padding:10px 14px;border-bottom:1px solid var(--border);}
+  .item-row:last-child{border-bottom:none;}
+  .item-row.done{background:#f0fdf4;}
+  .item-top{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:start;}
+  .item-cb{width:20px;height:20px;cursor:pointer;accent-color:var(--green);margin-top:2px;flex-shrink:0;}
+  .item-content{flex:1;}
+  .item-label{font-size:.86rem;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:3px;}
+  .item-row.done .item-label{text-decoration:line-through;color:#8a9ab0;}
+  .item-desc{font-size:.78rem;color:#5a6a80;line-height:1.5;}
+  .item-link{font-size:.73rem;color:var(--blue);word-break:break-all;}
+  .item-detail{margin-top:8px;padding-left:30px;}
+  .detail-row{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:center;margin-bottom:5px;font-size:.8rem;}
+  .detail-label{font-size:.74rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
+  .detail-input{border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.8rem;font-family:inherit;background:var(--light);flex:1;}
+  .detail-input:focus{outline:none;border-color:var(--accent);}
+  .status-sel{border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.75rem;font-family:inherit;cursor:pointer;}
+  .status-sel:focus{outline:none;border-color:var(--accent);}
+  .status-todo{background:#fff8e1;color:var(--orange);border-color:var(--orange);}
+  .status-done{background:#f0fdf4;color:var(--green);border-color:var(--green);}
+  .status-na{background:#f0f0f0;color:#8a9ab0;border-color:#ddd;}
+  .badge-urgent{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.2);padding:2px 8px;border-radius:8px;font-size:.68rem;font-weight:700;}
+  .badge-imp{background:#fff8e1;color:var(--orange);border:1px solid rgba(230,126,34,.2);padding:2px 8px;border-radius:8px;font-size:.68rem;font-weight:700;}
+  .notes-section{margin:0 36px 18px;}
+  .notes-section label{font-size:.74rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;}
+  .notes-section textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:10px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:70px;background:var(--light);}
+  .notes-section textarea:focus{outline:none;border-color:var(--accent);}
+  .actions{padding:14px 36px;background:var(--light);display:flex;justify-content:flex-end;border-top:1px solid var(--border);gap:8px;}
+  .btn{padding:8px 18px;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+  .btn-secondary{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.actions,.progress-bar-wrap{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .section{margin:8px 14px!important;}
+    .sec-hd{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,select{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:600px){
+    .info-bar{grid-template-columns:1fr 1fr;}
+    .section{margin:12px 14px;}
+  }
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Accueil dentiste</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Accueil et intégration — Nouveau(elle) dentiste</h1><p>Checklist administrative complète des inscriptions et configurations requises</p></div>
+  <div class="info-bar">
+    <div class="ib-field"><label>Clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+    <div class="ib-field"><label>Nom du (de la) dentiste</label><input type="text" placeholder="Dr / Dre Prénom Nom"></div>
+    <div class="ib-field"><label>No de permis (ODQ)</label><input type="text" placeholder="00000"></div>
+    <div class="ib-field"><label>Date d'entrée en fonction</label><input type="date"></div>
+    <div class="ib-field"><label>Type d'embauche</label>
+      <select style="border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;background:white;">
+        <option>Nouveau praticien</option>
+        <option>Dentiste changeant de cabinet</option>
+        <option>Dentiste associé(e)</option>
+        <option>Dentiste remplaçant(e)</option>
+      </select>
+    </div>
+    <div class="ib-field"><label>Gestionnaire responsable</label><input type="text" placeholder="Nom et prénom"></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="prog-top"><span class="prog-lbl" id="progLabel">Progression — 0 étape complétée</span><span class="prog-pct" id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- SECTION 1 : ACDQ -->
+  <div class="section">
+    <div class="sec-hd" style="background:#1a6abf;"><span class="sec-icon">🦷</span><span class="sec-title">ACDQ — Association des chirurgiens-dentistes du Québec</span><span class="sec-prog" id="sp0">0/2</span></div>
+    <div class="item-list">
+      <div class="item-row" id="row_0_0">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(0,0,this)">
+          <div class="item-content">
+            <div class="item-label">Inscription au réseau ACDQ <span class="badge-urgent">Priorité 1</span></div>
+            <div class="item-desc">Contrat d'abonnement au réseau ACDQ — accès aux formulaires, assurances et services de l'association.</div>
+            <div class="item-link">🔗 acdq.qc.ca → Section «Réseau ACDQ» → Contrat d'abonnement</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option>
+            <option value="status-done">Complété</option>
+            <option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">No membre ACDQ</span><input class="detail-input" type="text" placeholder="À compléter après inscription"></div>
+          <div class="detail-row"><span class="detail-label">Date d'inscription</span><input class="detail-input" type="date"></div>
+          <div class="detail-row"><span class="detail-label">Notes</span><input class="detail-input" type="text" placeholder="Notes..."></div>
+        </div>
+      </div>
+      <div class="item-row" id="row_0_1">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(0,1,this)">
+          <div class="item-content">
+            <div class="item-label">Inscription Net+ACDQ (logiciel de gestion ACDQ)</div>
+            <div class="item-desc">Plateforme en ligne de l'ACDQ pour la gestion des réclamations et des formulaires d'assurance.</div>
+            <div class="item-link">🔗 Contacter Net+ACDQ : info@net-plus.ca</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">No d'accès</span><input class="detail-input" type="text" placeholder="Identifiant Net+ACDQ"></div>
+          <div class="detail-row"><span class="detail-label">Date d'activation</span><input class="detail-input" type="date"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 : RAMQ -->
+  <div class="section">
+    <div class="sec-hd" style="background:#c0392b;"><span class="sec-icon">🏥</span><span class="sec-title">RAMQ — Régie de l'assurance maladie du Québec</span><span class="sec-prog" id="sp1">0/3</span></div>
+    <div class="item-list">
+      <div class="item-row" id="row_1_0">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(1,0,this)">
+          <div class="item-content">
+            <div class="item-label">Demande d'accréditation et renseignements pour facturation informatisée <span class="badge-urgent">Priorité 1</span></div>
+            <div class="item-desc">Formulaire 2404 — Nécessaire pour facturer à la RAMQ. Sans ce formulaire, le dentiste ne peut pas être remboursé pour les soins couverts.</div>
+            <div class="item-link">🔗 ramq.gouv.qc.ca → Professionnels → Formulaires → 2404</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div style="background:#fff8e1;border-left:3px solid var(--orange);padding:8px 12px;border-radius:0 6px 6px 0;font-size:.78rem;margin-bottom:8px;">
+            <strong>Formulaires RAMQ à compléter :</strong><br>
+            <div style="margin-top:5px;display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+              <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox"> Formulaire 2404 (accréditation facturation)</label>
+              <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox"> Formulaire 3003</label>
+              <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox"> Formulaire 3004</label>
+              <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox"> Formulaire 3005 (mandat signature)</label>
+              <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox"> Formulaire 3006 partie 2</label>
+            </div>
+          </div>
+          <div class="detail-row"><span class="detail-label">No de pratique RAMQ</span><input class="detail-input" type="text" placeholder="À recevoir de la RAMQ"></div>
+          <div class="detail-row"><span class="detail-label">Date d'envoi</span><input class="detail-input" type="date"></div>
+          <div class="detail-row"><span class="detail-label">Date de confirmation</span><input class="detail-input" type="date"></div>
+        </div>
+      </div>
+      <div class="item-row" id="row_1_1">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(1,1,this)">
+          <div class="item-content">
+            <div class="item-label">Mandat des professionnels de la santé — signature des relevés d'honoraires</div>
+            <div class="item-desc">Formulaire 3005 — Autorise un tiers (ex: secrétaire, gestionnaire) à signer les relevés d'honoraires ou demandes de paiement au nom du dentiste.</div>
+            <div class="item-link">🔗 ramq.gouv.qc.ca → Professionnels → Formulaires → 3005</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">Mandataire désigné</span><input class="detail-input" type="text" placeholder="Nom de la personne autorisée"></div>
+          <div class="detail-row"><span class="detail-label">Date d'envoi</span><input class="detail-input" type="date"></div>
+        </div>
+      </div>
+      <div class="item-row" id="row_1_2">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(1,2,this)">
+          <div class="item-content">
+            <div class="item-label">Configuration dans le logiciel dentaire (Dentitek/Progident) pour la facturation RAMQ</div>
+            <div class="item-desc">Ajouter le profil du nouveau dentiste dans le logiciel avec son numéro de pratique RAMQ et ses informations pour la facturation automatisée.</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">Logiciel utilisé</span>
+            <select class="detail-input" style="padding:4px 7px;">
+              <option>Dentitek</option><option>Progident</option><option>Autre</option>
+            </select>
+          </div>
+          <div class="detail-row"><span class="detail-label">Complété par</span><input class="detail-input" type="text" placeholder="Nom de la personne"></div>
+          <div class="detail-row"><span class="detail-label">Date</span><input class="detail-input" type="date"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 : EXPRESS SCRIPTS / SSNA -->
+  <div class="section">
+    <div class="sec-hd" style="background:#8e44ad;"><span class="sec-icon">💊</span><span class="sec-title">Santé Canada — Express Scripts / Programme SSNA</span><span class="sec-prog" id="sp2">0/1</span></div>
+    <div class="item-list">
+      <div class="item-row" id="row_2_0">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(2,0,this)">
+          <div class="item-content">
+            <div class="item-label">Inscription au Programme des services de santé non assurés (SSNA) <span class="badge-imp">Important</span></div>
+            <div class="item-desc">Permet de facturer les soins dentaires pour les membres admissibles des Premières Nations et Inuits. Deux formulaires selon la situation :</div>
+            <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:.78rem;background:var(--light);border:1px solid var(--border);border-radius:5px;padding:7px 10px;">
+                <strong>Pour un nouveau praticien :</strong><br>
+                <span class="item-link">🔗 fr.provider.express-scripts.ca → Formulaire d'inscription du fournisseur de soins dentaires</span>
+              </div>
+              <div style="font-size:.78rem;background:var(--light);border:1px solid var(--border);border-radius:5px;padding:7px 10px;">
+                <strong>Pour un dentiste changeant de cabinet :</strong><br>
+                <span class="item-link">🔗 fr.provider.express-scripts.ca → Formulaire de modification des renseignements</span>
+              </div>
+            </div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">No fournisseur SSNA</span><input class="detail-input" type="text" placeholder="À recevoir d&#39;Express Scripts"></div>
+          <div class="detail-row"><span class="detail-label">Date d'envoi</span><input class="detail-input" type="date"></div>
+          <div class="detail-row"><span class="detail-label">Date de confirmation</span><input class="detail-input" type="date"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 : DENTAIDE / DÉPÔT DIRECT -->
+  <div class="section">
+    <div class="sec-hd" style="background:#1a9e5a;"><span class="sec-icon">🏦</span><span class="sec-title">Dentaide — Dépôt direct des honoraires</span><span class="sec-prog" id="sp3">0/1</span></div>
+    <div class="item-list">
+      <div class="item-row" id="row_3_0">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(3,0,this)">
+          <div class="item-content">
+            <div class="item-label">Formulaire dépôt direct — compte regroupé Dentaide <span class="badge-urgent">Priorité 1</span></div>
+            <div class="item-desc">Permet de recevoir les remboursements des assurances collectives directement dans le compte bancaire désigné de la clinique. Contacter Dentaide pour obtenir et soumettre le formulaire approprié.</div>
+            <div class="item-link">🔗 Contacter Dentaide : information@dentaide.ca</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">No de fournisseur</span><input class="detail-input" type="text" placeholder="No attribué par Dentaide"></div>
+          <div class="detail-row"><span class="detail-label">Compte bancaire désigné</span><input class="detail-input" type="text" placeholder="Derniers chiffres du compte"></div>
+          <div class="detail-row"><span class="detail-label">Date d'activation</span><input class="detail-input" type="date"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 : ÉTAMPE -->
+  <div class="section">
+    <div class="sec-hd" style="background:#e67e22;"><span class="sec-icon">🔏</span><span class="sec-title">Étampe — Formulaires d'assurance</span><span class="sec-prog" id="sp4">0/1</span></div>
+    <div class="item-list">
+      <div class="item-row" id="row_4_0">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(4,0,this)">
+          <div class="item-content">
+            <div class="item-label">Faire produire l'étampe personnalisée du dentiste <span class="badge-imp">Important</span></div>
+            <div class="item-desc">L'étampe doit inclure : Nom complet du dentiste, titre (Dr / Dre), no de permis ODQ, no de pratique RAMQ, adresse de la clinique et numéro de téléphone. Elle est apposée sur tous les formulaires d'assurance et documents officiels.</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">Fournisseur étampe</span><input class="detail-input" type="text" placeholder="Ex: Bureau en gros, Plastipak..."></div>
+          <div class="detail-row"><span class="detail-label">Date de commande</span><input class="detail-input" type="date"></div>
+          <div class="detail-row"><span class="detail-label">Date de réception</span><input class="detail-input" type="date"></div>
+          <div style="margin-top:6px;background:var(--light);border:1px solid var(--border);border-radius:5px;padding:8px 12px;font-size:.78rem;">
+            <strong>Informations à inclure sur l'étampe :</strong>
+            <div style="margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+              <div><label style="font-size:.71rem;font-weight:700;color:#5a6a80;display:block;margin-bottom:2px;">Nom complet</label><input type="text" placeholder="Dr/Dre Prénom Nom" style="border:1.5px solid var(--border);border-radius:4px;padding:4px 7px;font-size:.78rem;width:100%;background:white;font-family:inherit;"></div>
+              <div><label style="font-size:.71rem;font-weight:700;color:#5a6a80;display:block;margin-bottom:2px;">No permis ODQ</label><input type="text" placeholder="00000" style="border:1.5px solid var(--border);border-radius:4px;padding:4px 7px;font-size:.78rem;width:100%;background:white;font-family:inherit;"></div>
+              <div><label style="font-size:.71rem;font-weight:700;color:#5a6a80;display:block;margin-bottom:2px;">No RAMQ</label><input type="text" placeholder="No de pratique RAMQ" style="border:1.5px solid var(--border);border-radius:4px;padding:4px 7px;font-size:.78rem;width:100%;background:white;font-family:inherit;"></div>
+              <div><label style="font-size:.71rem;font-weight:700;color:#5a6a80;display:block;margin-bottom:2px;">Téléphone clinique</label><input type="text" placeholder="418-000-0000" style="border:1.5px solid var(--border);border-radius:4px;padding:4px 7px;font-size:.78rem;width:100%;background:white;font-family:inherit;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 : PAIEMENT HONORAIRES -->
+  <div class="section">
+    <div class="sec-hd" style="background:#2c3e50;"><span class="sec-icon">💼</span><span class="sec-title">Paiement des honoraires et autres configurations</span><span class="sec-prog" id="sp5">0/4</span></div>
+    <div class="item-list">
+      <div class="item-row" id="row_5_0">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(5,0,this)">
+          <div class="item-content">
+            <div class="item-label">Configurer le mode de paiement des honoraires du dentiste <span class="badge-urgent">Priorité 1</span></div>
+            <div class="item-desc">Définir le pourcentage d'honoraires, la fréquence de paiement et le mode de remboursement (dépôt direct, chèque, etc.) selon l'entente convenue.</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+        <div class="item-detail">
+          <div class="detail-row"><span class="detail-label">% d'honoraires</span><input class="detail-input" type="text" placeholder="ex: 35% des honoraires bruts"></div>
+          <div class="detail-row"><span class="detail-label">Fréquence de paie</span><input class="detail-input" type="text" placeholder="ex: aux 2 semaines"></div>
+          <div class="detail-row"><span class="detail-label">Mode de paiement</span><input class="detail-input" type="text" placeholder="ex: dépôt direct"></div>
+        </div>
+      </div>
+      <div class="item-row" id="row_5_1">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(5,1,this)">
+          <div class="item-content">
+            <div class="item-label">Ajouter le dentiste dans le logiciel de paie</div>
+            <div class="item-desc">Configurer le profil de paie dans le logiciel utilisé (Nethris, Ceridian, ADP, etc.) avec les informations bancaires et les paramètres de rémunération.</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+      </div>
+      <div class="item-row" id="row_5_2">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(5,2,this)">
+          <div class="item-content">
+            <div class="item-label">Remettre les accès informatiques de la clinique</div>
+            <div class="item-desc">Créer les comptes et remettre les accès au logiciel dentaire, courriel professionnel, dossiers partagés et autres outils utilisés à la clinique.</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+      </div>
+      <div class="item-row" id="row_5_3">
+        <div class="item-top">
+          <input type="checkbox" class="item-cb" onchange="tick(5,3,this)">
+          <div class="item-content">
+            <div class="item-label">Présenter le dentiste à l'équipe et faire la visite de la clinique</div>
+            <div class="item-desc">Accueillir le nouveau dentiste, présenter chaque membre de l'équipe, faire visiter les locaux, présenter les protocoles et procédures internes de la clinique.</div>
+          </div>
+          <select class="status-sel status-todo" onchange="this.className=&#39;status-sel &#39;+this.value">
+            <option value="status-todo">À faire</option><option value="status-done">Complété</option><option value="status-na">N/A</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes-section"><label>Notes et observations</label><textarea placeholder="Informations complémentaires, délais particuliers, contacts clés pour chaque organisme..."></textarea></div>
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+<script>
+const totals = [2,3,1,1,1,4];
+const done = [0,0,0,0,0,0];
+function tick(si, ii, cb) {
+  document.getElementById(`row_${si}_${ii}`).classList.toggle('done', cb.checked);
+  done[si] = document.querySelectorAll(`[id^="row_${si}_"] .item-cb:checked`).length;
+  document.getElementById(`sp${si}`).textContent = `${done[si]}/${totals[si]}`;
+  updateProgress();
+}
+function updateProgress() {
+  const total = totals.reduce((a,b)=>a+b,0);
+  const d = done.reduce((a,b)=>a+b,0);
+  const pct = Math.round(d/total*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progLabel').textContent = `Progression — ${d}/${total} étape(s) complétée(s)`;
+}
+</script>
+
+
+</body></html>

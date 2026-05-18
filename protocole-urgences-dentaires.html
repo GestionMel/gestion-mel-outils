@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<!-- saved from url=(0065)file:///C:/Users/info/Downloads/protocole-urgences-dentaires.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocole urgences dentaires — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1000px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,#7b0000 0%,#c0392b 100%);color:white;padding:18px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .tab-btn{padding:11px 20px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:20px 28px;}
+  .tab-pane.active{display:block;}
+  .sec-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;}
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:10px 14px;font-size:.82rem;color:#2a3a4a;line-height:1.7;margin-bottom:14px;}
+  .warn-box{background:#fef2f2;border-left:4px solid var(--red);border-radius:0 7px 7px 0;padding:10px 14px;font-size:.82rem;color:#7a0000;line-height:1.7;margin-bottom:14px;}
+  /* TRIAGE TOOL */
+  .triage-wrap{background:#fff8f8;border:2px solid var(--red);border-radius:12px;padding:18px 20px;margin-bottom:16px;}
+  .triage-title{font-size:.9rem;font-weight:700;color:var(--red);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+  .q-block{background:white;border:1.5px solid var(--border);border-radius:9px;padding:13px 15px;margin-bottom:10px;}
+  .q-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;background:var(--red);color:white;font-size:.77rem;font-weight:700;flex-shrink:0;margin-right:8px;}
+  .q-text{font-size:.9rem;font-weight:600;color:var(--dark);}
+  .q-note{font-size:.75rem;color:#8a9ab0;font-style:italic;margin-top:3px;}
+  .q-answers{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .ans-btn{padding:6px 14px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
+  .ans-btn:hover{border-color:var(--accent);color:var(--blue);}
+  .ans-btn.sel-oui{background:var(--red);border-color:var(--red);color:white;}
+  .ans-btn.sel-non{background:var(--green);border-color:var(--green);color:white;}
+  .ans-btn.sel-peu{background:var(--orange);border-color:var(--orange);color:white;}
+  /* RESULT PANEL */
+  .result-panel{border-radius:10px;padding:16px 18px;margin-top:14px;border:2px solid;display:none;}
+  .rp-icon{font-size:1.8rem;margin-bottom:6px;}
+  .rp-title{font-size:1rem;font-weight:700;margin-bottom:8px;}
+  .rp-actions{font-size:.85rem;line-height:1.9;margin-top:8px;}
+  .rp-green{background:#f0fdf4;border-color:rgba(26,158,90,.3);color:#0a3d1f;}
+  .rp-orange{background:#fff8f0;border-color:rgba(230,126,34,.3);color:#5a2a00;}
+  .rp-red{background:#fef2f2;border-color:rgba(192,57,43,.3);color:#7a0000;}
+  .rp-purple{background:#f8f0ff;border-color:rgba(142,68,173,.3);color:#3d005a;}
+  /* URGENCY TYPES */
+  .urgency-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .urg-card{border-radius:9px;padding:14px 16px;border:1.5px solid;}
+  .ug-title{font-size:.87rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .ug-desc{font-size:.8rem;line-height:1.7;}
+  .ug-delai{font-size:.77rem;font-weight:700;margin-top:6px;padding:3px 9px;border-radius:8px;display:inline-block;}
+  /* SCRIPTS */
+  .script-card{background:#f8fbff;border:1.5px solid var(--border);border-left:4px solid var(--red);border-radius:8px;padding:13px 15px;margin-bottom:12px;}
+  .sc-title{font-size:.76rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+  .sc-q{font-size:.85rem;line-height:1.9;font-style:italic;}
+  .sc-q .q{font-weight:700;color:var(--dark);font-style:normal;}
+  .sc-q .r{color:#5a6a80;}
+  /* CHECKLIST */
+  .chk-item{display:flex;align-items:flex-start;gap:8px;padding:7px 9px;border-radius:6px;margin-bottom:4px;background:white;border:1.5px solid var(--border);}
+  .chk-cb{width:17px;height:17px;cursor:pointer;accent-color:var(--green);flex-shrink:0;margin-top:2px;}
+  .chk-lbl{font-size:.84rem;line-height:1.4;flex:1;}
+  /* LOG */
+  .log-table{width:100%;border-collapse:collapse;font-size:.79rem;}
+  .log-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.71rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .log-table td{border-bottom:1px solid var(--border);padding:7px 9px;vertical-align:middle;}
+  .log-table tr:nth-child(even) td{border:none;background:var(--light);}
+  .log-table input,.log-table select{border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;}
+  .btn-add-sm{display:flex;align-items:center;gap:5px;padding:5px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;width:fit-content;}
+  .btn-del{width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .actions{padding:12px 28px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.nav-tabs,.actions,.ans-btn,.btn-add-sm,.btn-del,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.tab-pane{display:block!important;}.ug-delai,.rp-green,.rp-orange,.rp-red,.rp-purple{-webkit-print-color-adjust:exact;print-color-adjust:exact;}input,select{border:none!important;background:transparent!important;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Urgences</div></div>
+<div class="container">
+  <div class="doc-header"><h1>🚨 Protocole — Rendez-vous d'urgence</h1><p>Triage téléphonique · Questions à poser · Niveaux d'urgence · Registre</p></div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="go(0,this)">🔍 Outil de triage</button>
+    <button class="tab-btn" onclick="go(1,this)">📋 Types d'urgences</button>
+    <button class="tab-btn" onclick="go(2,this)">💬 Script téléphonique</button>
+    <button class="tab-btn" onclick="go(3,this)">📊 Registre du jour</button>
+  </div>
+
+  <!-- TRIAGE INTERACTIF -->
+  <div class="tab-pane active" id="tp0">
+    <div class="warn-box">⚠️ <strong>Important :</strong> En cas de détresse respiratoire, saignement incontrôlable ou trauma facial grave, toujours diriger immédiatement vers le 911 ou l'urgence hospitalière.</div>
+    <div class="triage-wrap">
+      <div class="triage-title">🔍 Outil de triage rapide — Posez ces questions au patient</div>
+
+      <div class="q-block">
+        <span class="q-num">1</span><span class="q-text">Le patient a-t-il de la douleur en ce moment?</span>
+        <div class="q-answers">
+          <button class="ans-btn" id="a1_oui" onclick="ans(1,&#39;oui&#39;)">✅ Oui, de la douleur</button>
+          <button class="ans-btn" id="a1_peu" onclick="ans(1,&#39;peu&#39;)">⚠️ Légère gêne</button>
+          <button class="ans-btn" id="a1_non" onclick="ans(1,&#39;non&#39;)">❌ Aucune douleur</button>
+        </div>
+      </div>
+
+      <div class="q-block">
+        <span class="q-num">2</span><span class="q-text">Depuis combien de temps? La douleur empire-t-elle?</span>
+        <div class="q-answers">
+          <button class="ans-btn" id="a2_oui" onclick="ans(2,&#39;oui&#39;)">🔴 Depuis +24h ou empire vite</button>
+          <button class="ans-btn" id="a2_peu" onclick="ans(2,&#39;peu&#39;)">🟡 Depuis 2-3 jours, stable</button>
+          <button class="ans-btn" id="a2_non" onclick="ans(2,&#39;non&#39;)">🟢 Depuis quelques jours, légère</button>
+        </div>
+      </div>
+
+      <div class="q-block">
+        <span class="q-num">3</span><span class="q-text">Y a-t-il gonflement, enflure ou fièvre?</span>
+        <div class="q-answers">
+          <button class="ans-btn" id="a3_oui" onclick="ans(3,&#39;oui&#39;)">🔴 Oui, gonflement visible + fièvre</button>
+          <button class="ans-btn" id="a3_peu" onclick="ans(3,&#39;peu&#39;)">🟡 Légère enflure, pas de fièvre</button>
+          <button class="ans-btn" id="a3_non" onclick="ans(3,&#39;non&#39;)">🟢 Aucun gonflement</button>
+        </div>
+      </div>
+
+      <div class="q-block">
+        <span class="q-num">4</span><span class="q-text">Y a-t-il eu un trauma (chute, coup, accident)?</span>
+        <div class="q-answers">
+          <button class="ans-btn" id="a4_oui" onclick="ans(4,&#39;oui&#39;)">🔴 Oui, trauma récent</button>
+          <button class="ans-btn" id="a4_non" onclick="ans(4,&#39;non&#39;)">🟢 Non, aucun trauma</button>
+        </div>
+      </div>
+
+      <div class="q-block">
+        <span class="q-num">5</span><span class="q-text">Y a-t-il saignement? Peut-il s'alimenter?</span>
+        <div class="q-answers">
+          <button class="ans-btn" id="a5_oui" onclick="ans(5,&#39;oui&#39;)">🔴 Saignement abondant</button>
+          <button class="ans-btn" id="a5_peu" onclick="ans(5,&#39;peu&#39;)">🟡 Saignement léger / difficulté à manger</button>
+          <button class="ans-btn" id="a5_non" onclick="ans(5,&#39;non&#39;)">🟢 Aucun saignement</button>
+        </div>
+      </div>
+
+      <div class="q-block">
+        <span class="q-num">6</span><span class="q-text">La douleur passe-t-elle avec des analgésiques? Prend-il des médicaments actuellement?</span>
+        <div class="q-answers">
+          <button class="ans-btn" id="a6_oui" onclick="ans(6,&#39;oui&#39;)">🟢 Oui, soulagé par médicaments</button>
+          <button class="ans-btn" id="a6_non" onclick="ans(6,&#39;non&#39;)">🔴 Non, aucun soulagement</button>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="result-panel rp-red" id="res_extreme">
+        <div class="rp-icon">🚨</div>
+        <div class="rp-title">URGENCE EXTRÊME — Référer au 911 ou à l'urgence hospitalière</div>
+        <div class="rp-actions"><strong>Action immédiate :</strong><br>• Gonflement atteignant la gorge ou l'œil<br>• Difficulté à respirer ou avaler<br>• Saignement incontrôlable<br>• Trauma facial grave<br>→ Diriger vers l'urgence de l'hôpital le plus proche</div>
+      </div>
+      <div class="result-panel rp-red" id="res_urgent">
+        <div class="rp-icon">🔴</div>
+        <div class="rp-title">URGENT — Rendez-vous aujourd'hui ou dans les 24 heures</div>
+        <div class="rp-actions"><strong>Action requise :</strong> Offrir une plage d'urgence aujourd'hui ou au plus tôt demain matin. Aviser le dentiste de la situation.<br><br><strong>Symptômes concernés :</strong> Abcès avec gonflement, douleur sévère incontrôlable, dent fracturée avec douleur vive, dent avulsée (sortie de la gencive).</div>
+      </div>
+      <div class="result-panel rp-orange" id="res_bientot">
+        <div class="rp-icon">🟡</div>
+        <div class="rp-title">SOUS-URGENT — Rendez-vous dans les 24-48 heures</div>
+        <div class="rp-actions"><strong>Action requise :</strong> Offrir un rendez-vous dans les 2 prochains jours. Placer sur la liste d'attente prioritaire si pas de plage disponible.<br><br><strong>Conseils intérimaires :</strong> Ibuprofène (si toléré), rinçage à l'eau salée tiède, éviter les aliments chauds/froids.</div>
+      </div>
+      <div class="result-panel rp-green" id="res_normal">
+        <div class="rp-icon">🟢</div>
+        <div class="rp-title">NON-URGENT — Rendez-vous dans la semaine</div>
+        <div class="rp-actions"><strong>Action requise :</strong> Offrir un rendez-vous dans les 5-7 prochains jours. Si aucune plage disponible, placer sur la liste d'attente.<br><br><strong>Conseils en attendant :</strong> Analgésiques au besoin, hygiène bucco-dentaire soigneuse, appeler si la situation se détériore.</div>
+      </div>
+      <div class="result-panel rp-purple" id="res_conseil">
+        <div class="rp-icon">💬</div>
+        <div class="rp-title">CONSEIL PAR TÉLÉPHONE — Pas besoin de RV immédiat</div>
+        <div class="rp-actions"><strong>Exemples :</strong> Légère sensibilité, question sur un traitement récent stable, perte d'un scellant sans douleur.<br><br><strong>Action :</strong> Rassurer le patient, donner des conseils de base et proposer un RV de routine lors de la prochaine disponibilité.</div>
+      </div>
+    </div>
+    <button class="btn primary" onclick="resetTriage()">↺ Nouveau triage</button>
+  </div>
+
+  <!-- TYPES D'URGENCES -->
+  <div class="tab-pane" id="tp1">
+    <div class="urgency-grid">
+      <div class="urg-card" style="background:#fef2f2;border-color:rgba(192,57,43,.25);">
+        <div class="ug-title" style="color:var(--red);">🔴 Abcès dentaire</div>
+        <div class="ug-desc">Infection bactérienne avec gonflement, douleur pulsatile, fièvre possible. Peut devenir dangereux si non traité.<br><br><strong>Signes :</strong> Gonflement facial, douleur sévère, mauvais goût, ganglions enflés.</div>
+        <span class="ug-delai" style="background:var(--red);color:white;">Aujourd'hui ou 24h</span>
+      </div>
+      <div class="urg-card" style="background:#fef2f2;border-color:rgba(192,57,43,.25);">
+        <div class="ug-title" style="color:var(--red);">🔴 Dent avulsée (sortie)</div>
+        <div class="ug-desc">Dent complètement sortie de son alvéole suite à un trauma. <strong>Urgence absolue — chaque minute compte!</strong><br><br>Instruction : conserver dans du lait, salive ou sérum physiologique — NE PAS nettoyer.</div>
+        <span class="ug-delai" style="background:var(--red);color:white;">Immédiatement — moins d'1h</span>
+      </div>
+      <div class="urg-card" style="background:#fff8f0;border-color:rgba(230,126,34,.25);">
+        <div class="ug-title" style="color:var(--orange);">🟡 Fracture dentaire douloureuse</div>
+        <div class="ug-desc">Dent brisée avec douleur vive à la pression ou aux changements de température. Pulpe possiblement exposée.<br><br><strong>Signes :</strong> Douleur élective, sensibilité extrême au froid/chaud.</div>
+        <span class="ug-delai" style="background:var(--orange);color:white;">24-48 heures</span>
+      </div>
+      <div class="urg-card" style="background:#fff8f0;border-color:rgba(230,126,34,.25);">
+        <div class="ug-title" style="color:var(--orange);">🟡 Douleur aiguë post-opératoire</div>
+        <div class="ug-desc">Douleur sévère après extraction ou traitement de canal (alvéolite sèche, etc.) non soulagée par les analgésiques prescrits.</div>
+        <span class="ug-delai" style="background:var(--orange);color:white;">24-48 heures</span>
+      </div>
+      <div class="urg-card" style="background:#f0fdf4;border-color:rgba(26,158,90,.25);">
+        <div class="ug-title" style="color:var(--green);">🟢 Perte d'obturation (plombage)</div>
+        <div class="ug-desc">Restauration perdue sans douleur aiguë. Peut causer une sensibilité aux aliments et à la température.<br><br>Conseils : éviter de mastiquer de ce côté, couvrir avec un dentifrice au clou de girofle si disponible.</div>
+        <span class="ug-delai" style="background:var(--green);color:white;">Dans la semaine</span>
+      </div>
+      <div class="urg-card" style="background:#f0fdf4;border-color:rgba(26,158,90,.25);">
+        <div class="ug-title" style="color:var(--green);">🟢 Sensibilité dentaire sans gonflement</div>
+        <div class="ug-desc">Sensibilité légère à modérée sans gonflement ni fièvre. Peut indiquer une carie débutante ou une récession gingivale.<br><br>Peut attendre un rendez-vous régulier si stable.</div>
+        <span class="ug-delai" style="background:var(--green);color:white;">Dans les 5-7 jours</span>
+      </div>
+      <div class="urg-card" style="background:#f3e8ff;border-color:rgba(142,68,173,.25);">
+        <div class="ug-title" style="color:var(--purple);">🔵 Prothèse cassée ou mal ajustée</div>
+        <div class="ug-desc">Dentier brisé, couronne décimentée ou prothèse partielle déformée. Inconfort mais généralement pas urgent sauf si blessure des tissus.<br><br>Si la prothèse blesse la gencive : priorité accrue.</div>
+        <span class="ug-delai" style="background:var(--purple);color:white;">2-5 jours</span>
+      </div>
+      <div class="urg-card" style="background:#f3e8ff;border-color:rgba(142,68,173,.25);">
+        <div class="ug-title" style="color:var(--purple);">🔵 Saignement gingival inexpliqué</div>
+        <div class="ug-desc">Saignement des gencives persistant sans trauma récent. Peut indiquer une maladie parodontale active nécessitant évaluation.<br><br>Si saignement abondant et incontrôlable → urgence.</div>
+        <span class="ug-delai" style="background:var(--purple);color:white;">2-5 jours ou sooner si abondant</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT -->
+  <div class="tab-pane" id="tp2">
+    <div class="info-box">Ces questions sont à poser dans cet ordre pour évaluer rapidement le niveau d'urgence. Restez calme et professionnel — votre ton est aussi important que les mots.</div>
+    <div class="script-card">
+      <div class="sc-title">📞 Script complet — Appel d'urgence dentaire</div>
+      <div class="sc-q">
+        <span class="q">«Bonjour, Clinique [Nom], c'est [Votre prénom]. Comment puis-je vous aider?»</span><br><br>
+        <span class="r">→ Le patient mentionne une douleur ou urgence :</span><br>
+        <span class="q">«Je suis là pour vous aider. Pour bien vous orienter, j'ai quelques questions rapides à vous poser.»</span><br><br>
+        <span class="q">1. «Pouvez-vous me décrire votre douleur? Où est-elle exactement?»</span><br>
+        <span class="r">→ [Écouter, noter la zone et le type de douleur]</span><br><br>
+        <span class="q">2. «Depuis combien de temps ressentez-vous cette douleur? Est-ce que ça empire?»</span><br>
+        <span class="r">→ [Évaluer l'évolution — stable vs aggravation rapide]</span><br><br>
+        <span class="q">3. «Avez-vous du gonflement au visage, à la joue ou au cou? Avez-vous de la fièvre?»</span><br>
+        <span class="r">→ [Gonflement + fièvre = urgence critique potentielle]</span><br><br>
+        <span class="q">4. «Avez-vous eu un accident, une chute ou un coup récemment?»</span><br>
+        <span class="r">→ [Trauma = priorité élevée]</span><br><br>
+        <span class="q">5. «Y a-t-il du saignement? Pouvez-vous manger et boire normalement?»</span><br>
+        <span class="r">→ [Difficulté à avaler = urgence, référer si nécessaire]</span><br><br>
+        <span class="q">6. «Avez-vous pris des analgésiques (Advil, Tylenol)? Est-ce que ça soulage?»</span><br>
+        <span class="r">→ [Aucun soulagement = priorité accrue]</span><br><br>
+        <span class="q">«Merci pour ces informations. Basé sur ce que vous me décrivez, je vais [niveau d'action]. Êtes-vous disponible [option d'horaire]?»</span>
+      </div>
+    </div>
+
+    <div class="sec-title">Étapes post-triage</div>
+    <div id="postTriageChk">
+      <div class="chk-item"><input type="checkbox" class="chk-cb"><span class="chk-lbl">Déterminer le niveau d'urgence (urgent / sous-urgent / non-urgent)</span></div>
+      <div class="chk-item"><input type="checkbox" class="chk-cb"><span class="chk-lbl">Vérifier l'horaire pour une plage d'urgence disponible</span></div>
+      <div class="chk-item"><input type="checkbox" class="chk-cb"><span class="chk-lbl">Aviser le dentiste de la situation et du niveau d'urgence</span></div>
+      <div class="chk-item"><input type="checkbox" class="chk-cb"><span class="chk-lbl">Donner le rendez-vous ou placer sur la liste d'attente prioritaire</span></div>
+      <div class="chk-item"><input type="checkbox" class="chk-cb"><span class="chk-lbl">Donner des conseils intérimaires au patient (analgésiques, alimentation)</span></div>
+      <div class="chk-item"><input type="checkbox" class="chk-cb"><span class="chk-lbl">Documenter l'appel dans le dossier patient</span></div>
+      <div class="chk-item"><input type="checkbox" class="chk-cb"><span class="chk-lbl">Rappeler le patient si aucune plage disponible pour s'assurer que la situation ne s'est pas aggravée</span></div>
+    </div>
+  </div>
+
+  <!-- REGISTRE -->
+  <div class="tab-pane" id="tp3">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+      <input type="date" id="logDate" class="ci">
+      <input type="text" id="logClinic" class="ci" placeholder="Clinique...">
+    </div>
+    <table class="log-table">
+      <thead><tr><th>Heure appel</th><th>Patient</th><th>Téléphone</th><th>Symptôme principal</th><th>Niveau</th><th>Action prise</th><th>RV donné</th><th class="no-print"></th></tr></thead>
+      <tbody id="logBody"><tr>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:120px;"></td>
+    <td><input type="text" placeholder="Téléphone..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Douleur, abcès, fracture..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:140px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.74rem;font-family:inherit;"><option>🔴 Urgent</option><option>🟡 Sous-urgent</option><option>🟢 Non-urgent</option><option>💬 Conseil</option><option>🚨 Extrême→911</option></select></td>
+    <td><input type="text" placeholder="RV donné / liste d&#39;attente..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:130px;"></td>
+    <td><input type="datetime-local" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.73rem;font-family:inherit;background:white;"></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr><tr>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:120px;"></td>
+    <td><input type="text" placeholder="Téléphone..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Douleur, abcès, fracture..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:140px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.74rem;font-family:inherit;"><option>🔴 Urgent</option><option>🟡 Sous-urgent</option><option>🟢 Non-urgent</option><option>💬 Conseil</option><option>🚨 Extrême→911</option></select></td>
+    <td><input type="text" placeholder="RV donné / liste d&#39;attente..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:130px;"></td>
+    <td><input type="datetime-local" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.73rem;font-family:inherit;background:white;"></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr><tr>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:120px;"></td>
+    <td><input type="text" placeholder="Téléphone..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Douleur, abcès, fracture..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:140px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.74rem;font-family:inherit;"><option>🔴 Urgent</option><option>🟡 Sous-urgent</option><option>🟢 Non-urgent</option><option>💬 Conseil</option><option>🚨 Extrême→911</option></select></td>
+    <td><input type="text" placeholder="RV donné / liste d&#39;attente..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:130px;"></td>
+    <td><input type="datetime-local" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.73rem;font-family:inherit;background:white;"></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr></tbody>
+    </table>
+    <button class="btn-add-sm" onclick="addLogRow()">+ Ajouter un appel</button>
+  </div>
+
+  <div class="actions"><button class="btn primary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+<script>
+const answers={};
+function go(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+function ans(q,v){
+  answers[q]=v;
+  document.querySelectorAll(`[id^="a${q}_"]`).forEach(b=>b.className='ans-btn');
+  const btn=document.getElementById(`a${q}_${v}`);
+  if(btn)btn.classList.add(`sel-${v==='oui'?'oui':v==='non'?'non':'peu'}`);
+  evaluate();
+}
+function evaluate(){
+  document.querySelectorAll('.result-panel').forEach(p=>p.style.display='none');
+  const a=answers;
+  // EXTREME: gonflement sévère + fièvre + douleur intense
+  if(a[3]==='oui'&&a[5]==='oui'&&a[1]==='oui'){document.getElementById('res_extreme').style.display='block';return;}
+  // URGENT: douleur sévère, empire vite, gonflement, trauma, saignement
+  if((a[1]==='oui'&&a[2]==='oui')||(a[3]==='oui')||(a[4]==='oui')||(a[5]==='oui'&&a[6]==='non')){document.getElementById('res_urgent').style.display='block';return;}
+  // BIENTOT: douleur modérée stable
+  if((a[1]==='oui'&&a[2]==='peu')||(a[5]==='peu')||(a[1]==='peu'&&a[6]==='non')){document.getElementById('res_bientot').style.display='block';return;}
+  // CONSEIL: aucune douleur, gêne légère, soulagé
+  if(a[1]==='non'||(a[1]==='peu'&&a[6]==='oui')){document.getElementById('res_conseil').style.display='block';return;}
+  // NORMAL: douleur légère soulage
+  if(Object.keys(a).length>=4){document.getElementById('res_normal').style.display='block';}
+}
+function resetTriage(){Object.keys(answers).forEach(k=>delete answers[k]);document.querySelectorAll('.ans-btn').forEach(b=>b.className='ans-btn');document.querySelectorAll('.result-panel').forEach(p=>p.style.display='none');}
+
+document.getElementById('logDate').valueAsDate=new Date();
+function addLogRow(){
+  const tbody=document.getElementById('logBody');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:120px;"></td>
+    <td><input type="text" placeholder="Téléphone..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;width:110px;"></td>
+    <td><input type="text" placeholder="Douleur, abcès, fracture..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:140px;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.74rem;font-family:inherit;"><option>🔴 Urgent</option><option>🟡 Sous-urgent</option><option>🟢 Non-urgent</option><option>💬 Conseil</option><option>🚨 Extrême→911</option></select></td>
+    <td><input type="text" placeholder="RV donné / liste d'attente..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:white;min-width:130px;"></td>
+    <td><input type="datetime-local" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.73rem;font-family:inherit;background:white;"></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest('tr').remove()">×</button></td>`;
+  tbody.appendChild(tr);
+}
+for(let i=0;i<3;i++)addLogRow();
+</script>
+
+
+</body></html>

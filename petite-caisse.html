@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)file:///C:/Users/info/Downloads/petite-caisse.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petite caisse — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:22px 36px;}
+  .doc-header h1{font-size:1.35rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.83rem;opacity:.7;}
+  .info-bar{padding:14px 36px;background:var(--light);border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .ib-field{display:flex;flex-direction:column;gap:3px;}
+  .ib-field label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ib-field input{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ib-field input:focus{outline:none;border-color:var(--accent);}
+  .body{padding:20px 36px;}
+  .sec-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;padding-bottom:6px;border-bottom:2px solid var(--border);}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+  /* COIN TABLE */
+  .coin-table{width:100%;border-collapse:collapse;margin-bottom:4px;}
+  .coin-table th{background:var(--dark);color:white;padding:8px 12px;text-align:left;font-size:.74rem;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .coin-table th.th-c{text-align:center;}
+  .coin-table th.th-r{text-align:right;}
+  .coin-table td{border-bottom:1px solid var(--border);padding:6px 10px;vertical-align:middle;}
+  .coin-table tr:nth-child(even) td{background:#fafbfc;}
+  .coin-table tr:hover td{background:var(--light);}
+  .coin-table td.coin-label{font-weight:700;font-size:.88rem;}
+  .coin-table td.coin-label .coin-emoji{margin-right:5px;}
+  .coin-qty{width:80px;border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.86rem;font-family:inherit;text-align:right;background:white;color:var(--text);}
+  .coin-qty:focus{outline:none;border-color:var(--accent);}
+  .coin-subtotal{font-weight:700;text-align:right;font-size:.88rem;color:var(--blue);min-width:80px;}
+  .total-row td{background:var(--dark);color:white;font-weight:700;font-size:.92rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .total-row td.num{text-align:right;font-size:1rem;color:#7dd3fc;}
+  /* ROWS SECTION */
+  .rows-section{margin-bottom:20px;}
+  .row-list{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;}
+  .entry-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;}
+  .entry-input{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:var(--light);flex:1;}
+  .entry-input:focus{outline:none;border-color:var(--accent);background:white;}
+  .entry-amount{width:110px;border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.86rem;font-family:inherit;text-align:right;color:var(--text);background:var(--light);}
+  .entry-amount:focus{outline:none;border-color:var(--accent);background:white;}
+  .btn-del{width:26px;height:26px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;font-family:inherit;flex-shrink:0;}
+  .btn-del:hover{background:#fef2f2;border-color:var(--red);}
+  .btn-add{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  .btn-add:hover{background:#e8f0fb;}
+  .subtotal-bar{display:flex;justify-content:flex-end;gap:8px;align-items:center;padding:7px 12px;background:var(--light);border-radius:6px;font-size:.84rem;margin-top:4px;}
+  .subtotal-lbl{color:#5a6a80;}
+  .subtotal-val{font-weight:700;color:var(--blue);min-width:90px;text-align:right;}
+  /* SUMMARY */
+  .summary-box{background:var(--light);border:2px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px;}
+  .sum-row{display:flex;align-items:center;padding:10px 18px;border-bottom:1px solid var(--border);}
+  .sum-row:last-child{border-bottom:none;}
+  .sum-label{flex:1;font-size:.88rem;color:#5a6a80;}
+  .sum-value{font-weight:700;font-size:.92rem;color:var(--text);min-width:120px;text-align:right;}
+  .sum-row.highlight{background:#f0f6ff;}
+  .sum-row.highlight .sum-label{font-weight:700;color:var(--dark);}
+  .sum-row.highlight .sum-value{color:var(--blue);font-size:1rem;}
+  .balance-box{padding:16px 20px;border-radius:0 0 8px 8px;text-align:center;}
+  .balance-ok{background:#f0fdf4;border-top:2px solid var(--green);}
+  .balance-bad{background:#fef2f2;border-top:2px solid var(--red);}
+  .balance-num{font-size:1.8rem;font-weight:700;margin-bottom:4px;}
+  .balance-lbl{font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+  /* SECRETARIAT */
+  .sec-caisse{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#fff8e1;border:1.5px solid var(--orange);border-radius:8px;margin-bottom:20px;}
+  .sc-label{font-size:.88rem;font-weight:700;color:#7a4400;}
+  .sc-input{width:110px;border:1.5px solid var(--orange);border-radius:6px;padding:6px 10px;font-size:.92rem;font-family:inherit;text-align:right;font-weight:700;background:white;color:var(--text);}
+  .sc-input:focus{outline:none;border-color:var(--orange);}
+  /* SOLDE ATTENDU */
+  .solde-box{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#e3f2fd;border:1.5px solid var(--blue);border-radius:8px;margin-bottom:20px;}
+  .sb-label{font-size:.88rem;font-weight:700;color:var(--blue);}
+  .sb-input{width:130px;border:1.5px solid var(--blue);border-radius:6px;padding:6px 10px;font-size:.92rem;font-family:inherit;text-align:right;font-weight:700;background:white;color:var(--text);}
+  .sb-input:focus{outline:none;}
+  .sig-section{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:14px 18px;margin-bottom:20px;}
+  .sig-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .sfield label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:4px;}
+  .sfield input{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;width:100%;background:white;margin-bottom:12px;}
+  .sfield input:focus{outline:none;border-color:var(--accent);}
+  .sig-line{border-top:1.5px solid var(--border);padding-top:5px;font-size:.73rem;color:#8a9ab0;}
+  .actions{padding:14px 36px;background:var(--light);display:flex;justify-content:space-between;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+  .btn{padding:8px 18px;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-secondary{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .btn-reset{background:white;color:var(--red);border:1.5px solid var(--red);font-size:.78rem;}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+  @media print{
+    body{background:white;}
+    .page-header,.actions,.btn-add,.btn-del{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .body{padding:10px 20px;}
+    .coin-table th,.total-row td,.balance-ok,.balance-bad{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:600px){.info-bar{grid-template-columns:1fr 1fr;}.sig-grid{grid-template-columns:1fr;}.body{padding:14px 16px;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Administration — Petite caisse</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Conciliation de la petite caisse</h1><p>Balance et vérification des espèces, factures et remplacements</p></div>
+  <div class="info-bar">
+    <div class="ib-field"><label>Clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+    <div class="ib-field"><label>Date de conciliation</label><input type="date" id="dateConcil"></div>
+    <div class="ib-field"><label>Compilé par</label><input type="text" placeholder="Nom et prénom"></div>
+  </div>
+  <div class="body">
+
+    <!-- ESPÈCES -->
+    <div style="margin-bottom:20px;">
+      <div class="sec-title">1. Compte des espèces</div>
+      <table class="coin-table">
+        <thead><tr>
+          <th>Dénomination</th>
+          <th class="th-c">Quantité</th>
+          <th class="th-c">Valeur unitaire</th>
+          <th class="th-r">Sous-total</th>
+        </tr></thead>
+        <tbody id="coinBody"><tr>
+      <td class="coin-label"><span class="coin-emoji">🪙</span>5¢</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_0" value="0" oninput="calcCoin(0)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">0.05 $</td>
+      <td class="coin-subtotal" id="sub_0">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">🪙</span>10¢</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_1" value="0" oninput="calcCoin(1)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">0.10 $</td>
+      <td class="coin-subtotal" id="sub_1">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">🪙</span>25¢</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_2" value="0" oninput="calcCoin(2)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">0.25 $</td>
+      <td class="coin-subtotal" id="sub_2">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">🟡</span>1 $</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_3" value="0" oninput="calcCoin(3)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">1.00 $</td>
+      <td class="coin-subtotal" id="sub_3">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">🟡</span>2 $</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_4" value="0" oninput="calcCoin(4)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">2.00 $</td>
+      <td class="coin-subtotal" id="sub_4">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">💵</span>5 $</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_5" value="0" oninput="calcCoin(5)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">5.00 $</td>
+      <td class="coin-subtotal" id="sub_5">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">💵</span>10 $</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_6" value="0" oninput="calcCoin(6)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">10.00 $</td>
+      <td class="coin-subtotal" id="sub_6">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">💵</span>20 $</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_7" value="0" oninput="calcCoin(7)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">20.00 $</td>
+      <td class="coin-subtotal" id="sub_7">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">💵</span>50 $</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_8" value="0" oninput="calcCoin(8)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">50.00 $</td>
+      <td class="coin-subtotal" id="sub_8">0,00 $</td></tr><tr>
+      <td class="coin-label"><span class="coin-emoji">💵</span>100 $</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_9" value="0" oninput="calcCoin(9)"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">100.00 $</td>
+      <td class="coin-subtotal" id="sub_9">0,00 $</td></tr></tbody>
+        <tfoot>
+          <tr class="total-row">
+            <td colspan="3">💰 Total des espèces</td>
+            <td class="num" id="totalEspeces">0,00 $</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- FACTURES -->
+    <div class="rows-section">
+      <div class="sec-title">2. Factures à rembourser</div>
+      <div class="row-list" id="facturesList">
+        <div class="entry-row"><input class="entry-input" type="text" placeholder="Description de la facture..." oninput="calcAll()"><input class="entry-amount" type="number" step="0.01" min="0" placeholder="0,00" oninput="calcAll()"><button class="btn-del" onclick="this.closest(&#39;.entry-row&#39;).remove();calcAll()">×</button></div>
+        <div class="entry-row"><input class="entry-input" type="text" placeholder="Description de la facture..." oninput="calcAll()"><input class="entry-amount" type="number" step="0.01" min="0" placeholder="0,00" oninput="calcAll()"><button class="btn-del" onclick="this.closest(&#39;.entry-row&#39;).remove();calcAll()">×</button></div>
+      </div>
+      <button class="btn-add" onclick="addRow(&#39;facturesList&#39;)">+ Ajouter une facture</button>
+      <div class="subtotal-bar"><span class="subtotal-lbl">Sous-total factures :</span><span class="subtotal-val" id="totalFactures">0,00 $</span></div>
+    </div>
+
+    <!-- REMPLACEMENTS -->
+    <div class="rows-section">
+      <div class="sec-title">3. Remplacements / paiements d'employés</div>
+      <div class="row-list" id="remplacementsList">
+        <div class="entry-row"><input class="entry-input" type="text" placeholder="Nom de l&#39;employé(e) et description..." oninput="calcAll()"><input class="entry-amount" type="number" step="0.01" min="0" placeholder="0,00" oninput="calcAll()"><button class="btn-del" onclick="this.closest(&#39;.entry-row&#39;).remove();calcAll()">×</button></div>
+      </div>
+      <button class="btn-add" onclick="addRow(&#39;remplacementsList&#39;)">+ Ajouter un remplacement</button>
+      <div class="subtotal-bar"><span class="subtotal-lbl">Sous-total remplacements :</span><span class="subtotal-val" id="totalRemplacements">0,00 $</span></div>
+    </div>
+
+    <!-- AUTRES MONTANTS -->
+    <div class="rows-section">
+      <div class="sec-title">4. Autres montants (prêts, dus, remboursements)</div>
+      <div class="row-list" id="autresList">
+        <div class="entry-row"><input class="entry-input" type="text" placeholder="Description (prêt, montant dû, remboursement reçu)..." oninput="calcAll()"><input class="entry-amount" type="number" step="0.01" min="0" placeholder="0,00" oninput="calcAll()"><button class="btn-del" onclick="this.closest(&#39;.entry-row&#39;).remove();calcAll()">×</button></div>
+      </div>
+      <button class="btn-add" onclick="addRow(&#39;autresList&#39;)">+ Ajouter un montant</button>
+      <div class="subtotal-bar"><span class="subtotal-lbl">Sous-total autres :</span><span class="subtotal-val" id="totalAutres">0,00 $</span></div>
+    </div>
+
+    <!-- CAISSE SECRÉTARIAT -->
+    <div class="sec-caisse">
+      <div>
+        <div class="sc-label">💼 Caisse au secrétariat (montant fixe)</div>
+        <div style="font-size:.76rem;color:#7a4400;margin-top:2px;">Montant permanent conservé au secrétariat (ex: monnaie pour transactions)</div>
+      </div>
+      <input class="sc-input" type="number" step="0.01" id="caisseSecretariat" value="100" oninput="calcAll()"> $
+    </div>
+
+    <!-- SOLDE ATTENDU -->
+    <div class="solde-box">
+      <div>
+        <div class="sb-label">🏦 Solde attendu total (montant de la petite caisse)</div>
+        <div style="font-size:.76rem;color:var(--blue);margin-top:2px;">Montant que devrait totaliser l'ensemble de la petite caisse selon les registres</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <input class="sb-input" type="number" step="0.01" id="soldeAttendu" value="300" oninput="calcAll()"> $
+      </div>
+    </div>
+
+    <!-- RÉSUMÉ -->
+    <div class="sec-title">Résumé de la conciliation</div>
+    <div class="summary-box">
+      <div class="sum-row"><span class="sum-label">💰 Total des espèces comptées</span><span class="sum-value" id="s-especes">0,00 $</span></div>
+      <div class="sum-row"><span class="sum-label">🧾 Factures à rembourser</span><span class="sum-value" id="s-factures">0,00 $</span></div>
+      <div class="sum-row"><span class="sum-label">👤 Remplacements / paiements</span><span class="sum-value" id="s-remplacements">0,00 $</span></div>
+      <div class="sum-row"><span class="sum-label">📋 Autres montants</span><span class="sum-value" id="s-autres">0,00 $</span></div>
+      <div class="sum-row"><span class="sum-label">💼 Caisse secrétariat</span><span class="sum-value" id="s-secretariat">100,00 $</span></div>
+      <div class="sum-row highlight"><span class="sum-label">📊 TOTAL COMPILÉ</span><span class="sum-value" id="s-total">100,00 $</span></div>
+      <div class="sum-row"><span class="sum-label">🏦 Solde attendu</span><span class="sum-value" id="s-solde">300,00 $</span></div>
+      <div id="balanceBox" class="balance-box balance-bad">
+        <div class="balance-num" id="balanceNum" style="color: var(--red);">200,00 $</div>
+        <div class="balance-lbl" id="balanceLbl" style="color: var(--red);">⚠️ MANQUE — Caisse en manque</div>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div style="margin-bottom:18px;">
+      <div class="sec-title">Notes et observations</div>
+      <textarea style="width:100%;border:1.5px solid var(--border);border-radius:7px;padding:10px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:65px;background:var(--light);" placeholder="Observations, explication d&#39;un écart, contexte particulier..."></textarea>
+    </div>
+
+    <!-- SIGNATURES -->
+    <div class="sig-section">
+      <div class="sig-title">Signatures et validation</div>
+      <div class="sig-grid">
+        <div class="sfield"><label>Compilé par</label><input type="text" placeholder="Nom et prénom"><input type="date"><div class="sig-line">Signature ____________________________</div></div>
+        <div class="sfield"><label>Vérifié et approuvé par</label><input type="text" placeholder="Nom, titre"><input type="date"><div class="sig-line">Signature ____________________________</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn btn-reset" onclick="resetAll()">↺ Réinitialiser</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+<script>
+const COINS = [
+  { denom:0.05, label:'5¢', emoji:'🪙', color:'#cd7f32' },
+  { denom:0.10, label:'10¢', emoji:'🪙', color:'#aaa' },
+  { denom:0.25, label:'25¢', emoji:'🪙', color:'#aaa' },
+  { denom:1.00, label:'1 $', emoji:'🟡', color:'#d4a900' },
+  { denom:2.00, label:'2 $', emoji:'🟡', color:'#c0a060' },
+  { denom:5.00, label:'5 $', emoji:'💵', color:'#4a7' },
+  { denom:10.00, label:'10 $', emoji:'💵', color:'#57a' },
+  { denom:20.00, label:'20 $', emoji:'💵', color:'#47a' },
+  { denom:50.00, label:'50 $', emoji:'💵', color:'#a74' },
+  { denom:100.00, label:'100 $', emoji:'💵', color:'#7a4' },
+];
+function buildCoins() {
+  const tbody = document.getElementById('coinBody');
+  COINS.forEach((c,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="coin-label"><span class="coin-emoji">${c.emoji}</span>${c.label}</td>
+      <td style="text-align:center;"><input class="coin-qty" type="number" min="0" id="qty_${i}" value="0" oninput="calcCoin(${i})"></td>
+      <td style="text-align:center;font-size:.84rem;color:#5a6a80;">${c.denom.toFixed(2)} $</td>
+      <td class="coin-subtotal" id="sub_${i}">0,00 $</td>`;
+    tbody.appendChild(tr);
+  });
+}
+function calcCoin(i) {
+  const qty = parseFloat(document.getElementById('qty_'+i).value) || 0;
+  const sub = qty * COINS[i].denom;
+  document.getElementById('sub_'+i).textContent = fmt(sub);
+  calcAll();
+}
+function calcAll() {
+  let especes = 0;
+  COINS.forEach((_,i) => {
+    const qty = parseFloat(document.getElementById('qty_'+i).value) || 0;
+    especes += qty * COINS[i].denom;
+  });
+  const factures = sumList('facturesList');
+  const remplacements = sumList('remplacementsList');
+  const autres = sumList('autresList');
+  const secretariat = parseFloat(document.getElementById('caisseSecretariat').value) || 0;
+  const solde = parseFloat(document.getElementById('soldeAttendu').value) || 0;
+  const total = especes + factures + remplacements + autres + secretariat;
+  const diff = total - solde;
+  document.getElementById('totalEspeces').textContent = fmt(especes);
+  document.getElementById('totalFactures').textContent = fmt(factures);
+  document.getElementById('totalRemplacements').textContent = fmt(remplacements);
+  document.getElementById('totalAutres').textContent = fmt(autres);
+  document.getElementById('s-especes').textContent = fmt(especes);
+  document.getElementById('s-factures').textContent = fmt(factures);
+  document.getElementById('s-remplacements').textContent = fmt(remplacements);
+  document.getElementById('s-autres').textContent = fmt(autres);
+  document.getElementById('s-secretariat').textContent = fmt(secretariat);
+  document.getElementById('s-total').textContent = fmt(total);
+  document.getElementById('s-solde').textContent = fmt(solde);
+  const box = document.getElementById('balanceBox');
+  const num = document.getElementById('balanceNum');
+  const lbl = document.getElementById('balanceLbl');
+  num.textContent = fmt(Math.abs(diff));
+  if (Math.abs(diff) < 0.01) {
+    box.className = 'balance-box balance-ok';
+    num.style.color = 'var(--green)';
+    lbl.textContent = '✅ Caisse balancée — Parfait!';
+    lbl.style.color = 'var(--green)';
+  } else {
+    box.className = 'balance-box balance-bad';
+    num.style.color = 'var(--red)';
+    lbl.textContent = diff > 0 ? '⚠️ SURPLUS — Caisse en surplus' : '⚠️ MANQUE — Caisse en manque';
+    lbl.style.color = 'var(--red)';
+  }
+}
+function sumList(listId) {
+  let total = 0;
+  document.querySelectorAll(`#${listId} .entry-amount`).forEach(inp => {
+    total += parseFloat(inp.value) || 0;
+  });
+  const subId = listId === 'facturesList' ? 'totalFactures' : listId === 'remplacementsList' ? 'totalRemplacements' : 'totalAutres';
+  document.getElementById(subId).textContent = fmt(total);
+  return total;
+}
+function fmt(n) { return n.toLocaleString('fr-CA', { minimumFractionDigits:2, maximumFractionDigits:2 }) + ' $'; }
+function addRow(listId) {
+  const list = document.getElementById(listId);
+  const row = document.createElement('div');
+  row.className = 'entry-row';
+  row.innerHTML = `<input class="entry-input" type="text" placeholder="Description..." oninput="calcAll()"><input class="entry-amount" type="number" step="0.01" min="0" placeholder="0,00" oninput="calcAll()"><button class="btn-del" onclick="this.closest('.entry-row').remove();calcAll()">×</button>`;
+  list.appendChild(row);
+}
+function resetAll() {
+  if (!confirm('Réinitialiser toute la conciliation?')) return;
+  COINS.forEach((_,i) => { document.getElementById('qty_'+i).value = 0; document.getElementById('sub_'+i).textContent = '0,00 $'; });
+  ['facturesList','remplacementsList','autresList'].forEach(id => {
+    document.querySelectorAll(`#${id} input`).forEach(inp => inp.value = '');
+  });
+  calcAll();
+}
+document.getElementById('dateConcil').valueAsDate = new Date();
+buildCoins();
+calcAll();
+</script>
+
+
+</body></html>

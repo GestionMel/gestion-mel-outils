@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)file:///C:/Users/info/Downloads/checklist-ouverture-fermeture.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist ouverture/fermeture — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1150px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .top-bar{padding:10px 24px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:9px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.on{background:var(--orange);border-color:var(--orange);color:white;}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .mode-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);}
+  .mode-tab{padding:11px 26px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:-2px;}
+  .mode-tab:hover{color:var(--blue);background:#e8f0fb;}
+  .mode-tab.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .mode-pane{display:none;padding:16px 22px 20px;}
+  .mode-pane.active{display:block;}
+  .prog-strip{padding:8px 24px;background:white;border-bottom:1px solid var(--border);}
+  .prog-top{display:flex;justify-content:space-between;font-size:.72rem;margin-bottom:3px;}
+  .prog-track{background:#e0e0e0;border-radius:6px;height:6px;overflow:hidden;}
+  .prog-fill{height:6px;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:6px;transition:width .3s;}
+  .edit-banner{background:#fff8e1;border-bottom:2px solid var(--orange);padding:8px 24px;font-size:.8rem;color:#7a4400;display:none;align-items:center;gap:8px;flex-wrap:wrap;}
+  .edit-banner.show{display:flex;}
+
+  /* GRID */
+  .cl-grid{display:grid;gap:14px;}
+  .role-col{background:white;border-radius:10px;border:1.5px solid var(--border);overflow:hidden;}
+  .role-head{padding:10px 13px;color:white;display:flex;align-items:center;gap:7px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .rh-name{background:transparent;border:none;color:white;font-family:inherit;font-size:.86rem;font-weight:700;flex:1;min-width:0;}
+  .rh-name:focus{outline:1px dashed rgba(255,255,255,.5);border-radius:3px;}
+  .rh-prog{font-size:.71rem;opacity:.8;white-space:nowrap;}
+  .rh-btn{width:22px;height:22px;border-radius:4px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.15);color:white;cursor:pointer;font-size:.73rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .role-body{padding:7px;}
+
+  /* TASKS */
+  .ti{display:flex;align-items:flex-start;gap:7px;padding:6px 7px;border-radius:6px;margin-bottom:3px;border:1.5px solid transparent;transition:background .1s;}
+  .ti:hover{background:var(--light);}
+  .ti.done{background:#f0fdf4;}
+  .ti.done .tl{text-decoration:line-through;color:#aaa;}
+  .ti-cb{width:17px;height:17px;cursor:pointer;accent-color:var(--green);flex-shrink:0;margin-top:2px;}
+  .tl{flex:1;font-size:.81rem;line-height:1.4;color:var(--text);word-break:break-word;}
+  .tl-edit{flex:1;border:none;background:transparent;font-family:inherit;font-size:.81rem;line-height:1.4;color:var(--text);resize:none;padding:0;min-height:20px;width:100%;}
+  .tl-edit:focus{outline:1px solid var(--accent);border-radius:3px;padding:1px 3px;background:#fffde7;}
+  .tb-imp{background:#fff8e1;color:var(--orange);border:1px solid rgba(230,126,34,.25);border-radius:5px;padding:1px 5px;font-size:.63rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+  .tb-crit{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);border-radius:5px;padding:1px 5px;font-size:.63rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+  .ti-tools{display:flex;gap:3px;flex-shrink:0;opacity:0;}
+  .ti:hover .ti-tools{opacity:1;}
+  .tt{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);background:white;cursor:pointer;font-size:.68rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .tt:hover{background:var(--light);}
+  .tt.del:hover{background:#fef2f2;color:var(--red);}
+  .tt.mv select{border:none;background:transparent;font-size:.7rem;font-family:inherit;cursor:pointer;width:100%;height:100%;}
+  .btn-addtask{display:flex;align-items:center;justify-content:center;gap:5px;padding:5px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.74rem;font-weight:600;cursor:pointer;font-family:inherit;width:100%;margin-top:5px;}
+  .btn-addtask:hover{background:#e8f0fb;}
+  .btn-addrole{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;background:var(--light);border:1.5px dashed var(--border);border-radius:10px;color:#5a6a80;font-size:.8rem;font-weight:600;cursor:pointer;font-family:inherit;min-height:80px;}
+  .btn-addrole:hover{border-color:var(--accent);color:var(--blue);}
+
+  .actions{padding:12px 24px;background:var(--light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+
+  @media print{
+    body{background:white;}.page-header,.top-bar,.actions,.mode-tabs,.btn-addtask,.btn-addrole,.ti-tools,.rh-btn,.edit-banner,.btn{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}.mode-pane{display:block!important;padding:8px;}
+    .role-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.cl-grid{grid-template-columns:repeat(3,1fr)!important;}
+    .rh-name{color:white!important;} .tl-edit{font-size:.79rem;}
+  }
+  @media(max-width:800px){.cl-grid{grid-template-columns:1fr!important;}.top-bar,.mode-pane{padding:10px 12px;}}
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Opérations</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>🔑 Checklist d'ouverture et de fermeture</h1>
+    <p>Tâches quotidiennes par rôle · Entièrement personnalisable</p>
+  </div>
+
+  <div class="top-bar">
+    <div style="display:flex;gap:9px;flex-wrap:wrap;align-items:center;">
+      <input class="ci" type="text" id="nomClinique" placeholder="Clinique...">
+      <input class="ci" type="date" id="dateJour">
+      <input class="ci" type="text" id="respJour" placeholder="Responsable du jour...">
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn" id="editBtn" onclick="toggleEdit()">✏️ Modifier la liste</button>
+      <button class="btn" onclick="resetChecks()">↺ Réinitialiser</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="edit-banner" id="editBanner">
+    <span>✏️ <strong>Mode édition actif</strong> — Modifiez les tâches, rôles, ajoutez ou déplacez des éléments. Cliquez sur le texte d'une tâche pour le modifier.</span>
+    <button class="btn on" onclick="toggleEdit()">✅ Terminer l'édition</button>
+  </div>
+
+  <div class="prog-strip">
+    <div class="prog-top">
+      <span style="font-weight:700;color:#5a6a80;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;" id="progLabel">0 / 27 tâche(s) complétée(s)</span>
+      <span style="font-weight:700;color:var(--blue);font-size:.72rem;" id="progPct">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode(0,this)">🌅 Ouverture</button>
+    <button class="mode-tab" onclick="setMode(1,this)">🌆 Fermeture</button>
+  </div>
+  <div class="mode-pane active" id="mp0"><div class="cl-grid" id="g0" style="grid-template-columns: repeat(3, 1fr);"><div class="role-col">
+      <div class="role-head" style="background:#1a6abf;">
+        <input class="rh-name" value="🗂️ Secrétaire" readonly="" onchange="r_name(&#39;r1&#39;,this.value)" placeholder="Nom du rôle...">
+        <span class="rh-prog">0/10</span>
+        
+      </div>
+      <div class="role-body" id="rb_r1_0">
+        <div class="ti" id="ti_t1">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t1&#39;,this.checked)">
+    <span class="tl">Ouvrir les portes et désactiver l'alarme</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t1&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t2">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t2&#39;,this.checked)">
+    <span class="tl">Allumer lumières et équipements bureautiques</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t2&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t3">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t3&#39;,this.checked)">
+    <span class="tl">Ouvrir le logiciel et vérifier l'horaire</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t3&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t4">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t4&#39;,this.checked)">
+    <span class="tl">Récupérer les messages vocaux</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t4&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t5">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t5&#39;,this.checked)">
+    <span class="tl">Répondre aux courriels prioritaires</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t5&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t6">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t6&#39;,this.checked)">
+    <span class="tl">Préparer les dossiers du jour</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t6&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t7">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t7&#39;,this.checked)">
+    <span class="tl">Confirmer les RV du jour et lendemain</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t7&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t8">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t8&#39;,this.checked)">
+    <span class="tl">Ouvrir la caisse — vérifier le fonds</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t8&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t9">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t9&#39;,this.checked)">
+    <span class="tl">Préparer les formulaires d'assurance</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t9&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t10">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t10&#39;,this.checked)">
+    <span class="tl">Vérifier la liste de priorité (urgences)</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t10&#39;)">×</button></div>
+  </div>
+        
+      </div></div><div class="role-col">
+      <div class="role-head" style="background:#1a9e5a;">
+        <input class="rh-name" value="🔧 Assistante / Hygiéniste" readonly="" onchange="r_name(&#39;r2&#39;,this.value)" placeholder="Nom du rôle...">
+        <span class="rh-prog">0/10</span>
+        
+      </div>
+      <div class="role-body" id="rb_r2_0">
+        <div class="ti" id="ti_t11">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t11&#39;,this.checked)">
+    <span class="tl">Allumer les équipements cliniques et fauteuils</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t11&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t12">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t12&#39;,this.checked)">
+    <span class="tl">Vérifier la stérilisation de la veille</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t12&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t13">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t13&#39;,this.checked)">
+    <span class="tl">Préparer les salles selon l'horaire du jour</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t13&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t14">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t14&#39;,this.checked)">
+    <span class="tl">Vérifier niveaux de produits et fournitures</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t14&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t15">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t15&#39;,this.checked)">
+    <span class="tl">Préparer les solutions désinfectantes (PCI)</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t15&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t16">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t16&#39;,this.checked)">
+    <span class="tl">Tester les équipements (aspiration, turbines)</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t16&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t17">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t17&#39;,this.checked)">
+    <span class="tl">Vérifier l'autoclave — démarrer un cycle si requis</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t17&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t18">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t18&#39;,this.checked)">
+    <span class="tl">Préparer les instruments spéciaux du jour</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t18&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t19">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t19&#39;,this.checked)">
+    <span class="tl">Remplir les bonbonnes d'eau distillée</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t19&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t20">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t20&#39;,this.checked)">
+    <span class="tl">Préparer les documents cliniques patients</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t20&#39;)">×</button></div>
+  </div>
+        
+      </div></div><div class="role-col">
+      <div class="role-head" style="background:#8e44ad;">
+        <input class="rh-name" value="👤 Gestionnaire" readonly="" onchange="r_name(&#39;r3&#39;,this.value)" placeholder="Nom du rôle...">
+        <span class="rh-prog">0/7</span>
+        
+      </div>
+      <div class="role-body" id="rb_r3_0">
+        <div class="ti" id="ti_t21">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t21&#39;,this.checked)">
+    <span class="tl">Arriver avant l'équipe — accès sécurisé</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t21&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t22">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t22&#39;,this.checked)">
+    <span class="tl">Vérifier le journal de bord et notes de la veille</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t22&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t23">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t23&#39;,this.checked)">
+    <span class="tl">Vérifier absences et ajuster les responsabilités</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t23&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t24">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t24&#39;,this.checked)">
+    <span class="tl">Confirmer la disponibilité du personnel</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t24&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t25">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t25&#39;,this.checked)">
+    <span class="tl">Brief rapide avec l'équipe (5 minutes)</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t25&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t26">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t26&#39;,this.checked)">
+    <span class="tl">Vérifier les commandes reçues et distribuer</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t26&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t27">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t27&#39;,this.checked)">
+    <span class="tl">Vérifier les demandes urgentes de fournisseurs</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t27&#39;)">×</button></div>
+  </div>
+        
+      </div></div></div></div>
+  <div class="mode-pane" id="mp1"><div class="cl-grid" id="g1" style="grid-template-columns: repeat(3, 1fr);"><div class="role-col">
+      <div class="role-head" style="background:#1a6abf;">
+        <input class="rh-name" value="🗂️ Secrétaire" readonly="" onchange="r_name(&#39;r1&#39;,this.value)" placeholder="Nom du rôle...">
+        <span class="rh-prog">0/10</span>
+        
+      </div>
+      <div class="role-body" id="rb_r1_1">
+        <div class="ti" id="ti_t28">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t28&#39;,this.checked)">
+    <span class="tl">Balancer la fin de journée</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t28&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t29">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t29&#39;,this.checked)">
+    <span class="tl">Rembourser la petite caisse et fermer la caisse</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t29&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t30">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t30&#39;,this.checked)">
+    <span class="tl">Confirmer les RV du lendemain (48h)</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t30&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t31">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t31&#39;,this.checked)">
+    <span class="tl">Mettre à jour les dossiers en attente</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t31&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t32">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t32&#39;,this.checked)">
+    <span class="tl">Retourner tous les appels sans réponse</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t32&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t33">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t33&#39;,this.checked)">
+    <span class="tl">Enregistrer le message de boîte vocale (soir)</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t33&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t34">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t34&#39;,this.checked)">
+    <span class="tl">Préparer les dossiers du lendemain</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t34&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t35">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t35&#39;,this.checked)">
+    <span class="tl">Fermer le logiciel dentaire correctement</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t35&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t36">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t36&#39;,this.checked)">
+    <span class="tl">Éteindre ordinateurs et équipements de bureau</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t36&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t37">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t37&#39;,this.checked)">
+    <span class="tl">Vérifier que la salle d'attente est propre</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t37&#39;)">×</button></div>
+  </div>
+        
+      </div></div><div class="role-col">
+      <div class="role-head" style="background:#1a9e5a;">
+        <input class="rh-name" value="🔧 Assistante / Hygiéniste" readonly="" onchange="r_name(&#39;r2&#39;,this.value)" placeholder="Nom du rôle...">
+        <span class="rh-prog">0/10</span>
+        
+      </div>
+      <div class="role-body" id="rb_r2_1">
+        <div class="ti" id="ti_t38">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t38&#39;,this.checked)">
+    <span class="tl">Décontaminer et nettoyer toutes les salles</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t38&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t39">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t39&#39;,this.checked)">
+    <span class="tl">Compléter stérilisation et ranger les instruments</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t39&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t40">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t40&#39;,this.checked)">
+    <span class="tl">Remplir le registre de stérilisation</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t40&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t41">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t41&#39;,this.checked)">
+    <span class="tl">Vider et nettoyer les pots d'aspiration</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t41&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t42">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t42&#39;,this.checked)">
+    <span class="tl">Nettoyer et désinfecter l'autoclave</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t42&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t43">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t43&#39;,this.checked)">
+    <span class="tl">Ranger le matériel et réapprovisionner les salles</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t43&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t44">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t44&#39;,this.checked)">
+    <span class="tl">Éliminer les déchets biomédicaux (protocole)</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t44&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t45">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t45&#39;,this.checked)">
+    <span class="tl">Éteindre les équipements cliniques</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t45&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t46">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t46&#39;,this.checked)">
+    <span class="tl">Couvrir les fauteuils si applicable</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t46&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t47">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t47&#39;,this.checked)">
+    <span class="tl">Vérifier que les produits chimiques sont fermés</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t47&#39;)">×</button></div>
+  </div>
+        
+      </div></div><div class="role-col">
+      <div class="role-head" style="background:#8e44ad;">
+        <input class="rh-name" value="👤 Gestionnaire" readonly="" onchange="r_name(&#39;r3&#39;,this.value)" placeholder="Nom du rôle...">
+        <span class="rh-prog">0/7</span>
+        
+      </div>
+      <div class="role-body" id="rb_r3_1">
+        <div class="ti" id="ti_t48">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t48&#39;,this.checked)">
+    <span class="tl">Vérifier que toutes les tâches de fermeture sont faites</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t48&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t49">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t49&#39;,this.checked)">
+    <span class="tl">Valider la balance de caisse</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t49&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t50">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t50&#39;,this.checked)">
+    <span class="tl">Compléter le journal de bord du jour</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t50&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t51">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t51&#39;,this.checked)">
+    <span class="tl">Vérifier les alarmes et caméras</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t51&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t52">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t52&#39;,this.checked)">
+    <span class="tl">Faire le tour de la clinique (lumières, eau, équipements)</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t52&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t53">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t53&#39;,this.checked)">
+    <span class="tl">Activer l'alarme et fermer les portes</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t53&#39;)">×</button></div>
+  </div><div class="ti" id="ti_t54">
+    <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t54&#39;,this.checked)">
+    <span class="tl">Noter les tâches en suspens pour le lendemain</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t54&#39;)">×</button></div>
+  </div>
+        
+      </div></div></div></div>
+
+  <div class="actions">
+    <button class="btn" style="color:var(--red);border-color:rgba(192,57,43,.25);" onclick="resetChecks()">↺ Réinitialiser les cases</button>
+    <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+
+<script>
+const COLORS=['#1a6abf','#1a9e5a','#8e44ad','#e67e22','#c0392b','#d4a017','#2c3e50','#00897b'];
+let editing=false, mode=0, tid=1;
+
+let roles=[
+  {id:'r1',name:'🗂️ Secrétaire',color:'#1a6abf'},
+  {id:'r2',name:'🔧 Assistante / Hygiéniste',color:'#1a9e5a'},
+  {id:'r3',name:'👤 Gestionnaire',color:'#8e44ad'},
+];
+
+function T(rId,m,label,badge=''){return{id:'t'+tid++,rId,m,label,badge,done:false};}
+let tasks=[];
+
+function init(){
+  tasks=[]; tid=1;
+  const O=0,F=1;
+  // Ouverture Sec
+  [['Ouvrir les portes et désactiver l\'alarme','crit'],['Allumer lumières et équipements bureautiques',''],['Ouvrir le logiciel et vérifier l\'horaire','imp'],['Récupérer les messages vocaux',''],['Répondre aux courriels prioritaires',''],['Préparer les dossiers du jour','imp'],['Confirmer les RV du jour et lendemain','imp'],['Ouvrir la caisse — vérifier le fonds','crit'],['Préparer les formulaires d\'assurance',''],['Vérifier la liste de priorité (urgences)','']].forEach(([l,b])=>tasks.push(T('r1',O,l,b)));
+  // Ouverture Ass/Hyg
+  [['Allumer les équipements cliniques et fauteuils',''],['Vérifier la stérilisation de la veille','crit'],['Préparer les salles selon l\'horaire du jour','imp'],['Vérifier niveaux de produits et fournitures',''],['Préparer les solutions désinfectantes (PCI)',''],['Tester les équipements (aspiration, turbines)',''],['Vérifier l\'autoclave — démarrer un cycle si requis','imp'],['Préparer les instruments spéciaux du jour',''],['Remplir les bonbonnes d\'eau distillée',''],['Préparer les documents cliniques patients','']].forEach(([l,b])=>tasks.push(T('r2',O,l,b)));
+  // Ouverture Gest
+  [['Arriver avant l\'équipe — accès sécurisé','crit'],['Vérifier le journal de bord et notes de la veille',''],['Vérifier absences et ajuster les responsabilités','imp'],['Confirmer la disponibilité du personnel',''],['Brief rapide avec l\'équipe (5 minutes)','imp'],['Vérifier les commandes reçues et distribuer',''],['Vérifier les demandes urgentes de fournisseurs','']].forEach(([l,b])=>tasks.push(T('r3',O,l,b)));
+  // Fermeture Sec
+  [['Balancer la fin de journée','crit'],['Rembourser la petite caisse et fermer la caisse','crit'],['Confirmer les RV du lendemain (48h)','imp'],['Mettre à jour les dossiers en attente',''],['Retourner tous les appels sans réponse',''],['Enregistrer le message de boîte vocale (soir)',''],['Préparer les dossiers du lendemain',''],['Fermer le logiciel dentaire correctement',''],['Éteindre ordinateurs et équipements de bureau',''],['Vérifier que la salle d\'attente est propre','']].forEach(([l,b])=>tasks.push(T('r1',F,l,b)));
+  // Fermeture Ass/Hyg
+  [['Décontaminer et nettoyer toutes les salles','crit'],['Compléter stérilisation et ranger les instruments','crit'],['Remplir le registre de stérilisation','imp'],['Vider et nettoyer les pots d\'aspiration',''],['Nettoyer et désinfecter l\'autoclave',''],['Ranger le matériel et réapprovisionner les salles','imp'],['Éliminer les déchets biomédicaux (protocole)',''],['Éteindre les équipements cliniques',''],['Couvrir les fauteuils si applicable',''],['Vérifier que les produits chimiques sont fermés','']].forEach(([l,b])=>tasks.push(T('r2',F,l,b)));
+  // Fermeture Gest
+  [['Vérifier que toutes les tâches de fermeture sont faites','crit'],['Valider la balance de caisse','crit'],['Compléter le journal de bord du jour','imp'],['Vérifier les alarmes et caméras',''],['Faire le tour de la clinique (lumières, eau, équipements)','imp'],['Activer l\'alarme et fermer les portes','crit'],['Noter les tâches en suspens pour le lendemain','']].forEach(([l,b])=>tasks.push(T('r3',F,l,b)));
+}
+
+function draw(){
+  const gId='g'+mode;
+  const g=document.getElementById(gId);
+  const cols=Math.min(roles.length,4);
+  g.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  g.innerHTML='';
+
+  roles.forEach(r=>{
+    const rt=tasks.filter(t=>t.rId===r.id&&t.m===mode);
+    const done=rt.filter(t=>t.done).length;
+    const col=document.createElement('div');
+    col.className='role-col';
+    const editBtns=editing?`
+      <input type="color" value="${r.color}" title="Couleur" style="width:22px;height:20px;border:1.5px solid rgba(255,255,255,.3);border-radius:3px;cursor:pointer;padding:0;background:transparent;" onchange="r_color('${r.id}',this.value)">
+      <button class="rh-btn" onclick="r_del('${r.id}')" title="Supprimer ce rôle">×</button>`:'';
+    col.innerHTML=`
+      <div class="role-head" style="background:${r.color};">
+        <input class="rh-name" value="${r.name}" ${editing?'':'readonly'} onchange="r_name('${r.id}',this.value)" placeholder="Nom du rôle...">
+        <span class="rh-prog">${done}/${rt.length}</span>
+        ${editBtns}
+      </div>
+      <div class="role-body" id="rb_${r.id}_${mode}">
+        ${rt.map(t=>drawTask(t)).join('')}
+        ${editing?`<button class="btn-addtask" onclick="t_add('${r.id}')">+ Ajouter une tâche</button>`:''}
+      </div>`;
+    g.appendChild(col);
+  });
+
+  if(editing){
+    const addDiv=document.createElement('div');
+    addDiv.innerHTML=`<button class="btn-addrole" onclick="r_add()">+ Ajouter un rôle</button>`;
+    g.appendChild(addDiv);
+  }
+  updateProg();
+}
+
+function drawTask(t){
+  const badge=t.badge==='crit'?'<span class="tb-crit">Critique</span>':t.badge==='imp'?'<span class="tb-imp">Important</span>':'';
+  const labelEl=editing
+    ?`<textarea class="tl-edit" rows="1" oninput="auto_h(this);t_label('${t.id}',this.value)">${t.label}</textarea>`
+    :`<span class="tl">${t.label}</span>`;
+  const tools=editing?`<div class="ti-tools">
+    <div class="tt mv" title="Déplacer vers..."><select onchange="t_move('${t.id}',this.value);this.value=''"><option value="">↕</option>${roles.filter(r=>r.id!==t.rId).map(r=>`<option value="${r.id}">${r.name}</option>`).join('')}</select></div>
+    <button class="tt" onclick="t_badge('${t.id}')" title="Badge : ${t.badge||'aucun'}">${t.badge==='crit'?'🔴':t.badge==='imp'?'🟡':'⚪'}</button>
+    <button class="tt del" onclick="t_del('${t.id}')">×</button>
+  </div>`:`<div class="ti-tools"><button class="tt del" onclick="t_del('${t.id}')">×</button></div>`;
+
+  return `<div class="ti${t.done?' done':''}" id="ti_${t.id}">
+    <input type="checkbox" class="ti-cb" ${t.done?'checked':''} onchange="t_check('${t.id}',this.checked)">
+    ${labelEl}${badge}${tools}
+  </div>`;
+}
+
+// TASK ACTIONS
+function t_check(id,v){const t=find_t(id);if(t){t.done=v;}const el=document.getElementById('ti_'+id);if(el)el.classList.toggle('done',v);updateProg();updateRoleProg();}
+function t_label(id,v){const t=find_t(id);if(t)t.label=v;}
+function t_badge(id){const t=find_t(id);if(!t)return;t.badge=t.badge===''?'imp':t.badge==='imp'?'crit':'';draw();}
+function t_add(rId){tasks.push(T(rId,mode,'Nouvelle tâche...'));draw();}
+function t_del(id){tasks=tasks.filter(t=>t.id!==id);draw();}
+function t_move(id,newRId){const t=find_t(id);if(t&&newRId){t.rId=newRId;draw();}}
+
+// ROLE ACTIONS
+function r_name(id,v){const r=find_r(id);if(r)r.name=v;updateRoleProg();}
+function r_color(id,v){const r=find_r(id);if(r){r.color=v;draw();}}
+function r_add(){const id='r'+Date.now();roles.push({id,name:'Nouveau rôle',color:COLORS[roles.length%COLORS.length]});draw();}
+function r_del(id){if(!confirm('Supprimer ce rôle? Les tâches associées seront également supprimées.'))return;roles=roles.filter(r=>r.id!==id);tasks=tasks.filter(t=>t.rId!==id);draw();}
+
+// PROGRESS
+function updateProg(){
+  const mt=tasks.filter(t=>t.m===mode);
+  const done=mt.filter(t=>t.done).length,total=mt.length,pct=total?Math.round(done/total*100):0;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progLabel').textContent=`${done} / ${total} tâche(s) complétée(s)`;
+}
+function updateRoleProg(){
+  roles.forEach(r=>{
+    const rt=tasks.filter(t=>t.rId===r.id&&t.m===mode);
+    const el=document.querySelector(`#rb_${r.id}_${mode}`)?.previousElementSibling?.querySelector('.rh-prog');
+    if(el)el.textContent=`${rt.filter(t=>t.done).length}/${rt.length}`;
+  });
+}
+
+// NAV
+function setMode(n,btn){
+  mode=n;
+  document.querySelectorAll('.mode-pane').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.mode-tab').forEach((b,i)=>b.classList.toggle('active',i===n));
+  drawBoth();
+}
+function toggleEdit(){
+  editing=!editing;
+  document.getElementById('editBtn').textContent=editing?'✅ Terminer':'✏️ Modifier la liste';
+  document.getElementById('editBtn').classList.toggle('on',editing);
+  document.getElementById('editBanner').classList.toggle('show',editing);
+  drawBoth();
+}
+function resetChecks(){
+  if(!confirm('Réinitialiser toutes les cases?'))return;
+  tasks.forEach(t=>t.done=false);draw();
+}
+function drawBoth(){const prev=mode;mode=0;draw();mode=1;draw();mode=prev;draw();updateProg();}
+function auto_h(el){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+const find_t=id=>tasks.find(t=>t.id===id);
+const find_r=id=>roles.find(r=>r.id===id);
+
+// INIT
+document.getElementById('dateJour').valueAsDate=new Date();
+init();drawBoth();
+</script>
+
+
+</body></html>

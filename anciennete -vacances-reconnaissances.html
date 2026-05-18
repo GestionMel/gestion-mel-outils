@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/info/Downloads/anciennete-vacances.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ancienneté — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+    --gold:#d4a017;--silver:#8a9ab0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1100px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+
+  /* TABS */
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);}
+  .nav-tab{padding:11px 22px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:-2px;white-space:nowrap;}
+  .nav-tab:hover{color:var(--blue);background:#e8f0fb;}
+  .nav-tab.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:22px 32px;}
+  .tab-pane.active{display:block;}
+
+  /* CLINIC BAR */
+  .clinic-bar{padding:12px 32px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:7px 11px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .btn-top{padding:7px 16px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
+  .btn-top:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-top.primary{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* UPCOMING ANNIVERSARIES BANNER */
+  .anniv-banner{margin:0 0 18px 0;}
+  .anniv-title{font-size:.78rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+  .anniv-title::before{content:'🎂';}
+  .anniv-cards{display:flex;flex-wrap:wrap;gap:10px;}
+  .anniv-card{background:linear-gradient(135deg,#fff8e1,#fff3cd);border:1.5px solid var(--gold);border-radius:9px;padding:10px 16px;display:flex;align-items:center;gap:12px;min-width:230px;}
+  .ac-icon{font-size:1.6rem;flex-shrink:0;}
+  .ac-name{font-weight:700;font-size:.88rem;color:var(--dark);}
+  .ac-info{font-size:.76rem;color:#7a4400;margin-top:2px;}
+  .ac-days{background:var(--orange);color:white;border-radius:6px;padding:3px 9px;font-size:.72rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ac-days.today{background:var(--red);}
+  .ac-days.milestone{background:var(--purple);}
+
+  /* ADD FORM */
+  .add-form{background:#f8fbff;border:1.5px solid var(--border);border-radius:9px;padding:14px 18px;margin-bottom:18px;}
+  .form-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .form-title::before{content:'➕';}
+  .form-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:9px;align-items:end;}
+  .fg{display:flex;flex-direction:column;gap:3px;}
+  .fg label{font-size:.69rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
+  .fg input,.fg select{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
+  .fg input:focus,.fg select:focus{outline:none;border-color:var(--accent);}
+  .btn-add{padding:9px 18px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.84rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+  .btn-add:hover{background:#155a9e;}
+
+  /* MAIN TABLE */
+  .table-wrap{overflow-x:auto;}
+  .emp-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .emp-table th{background:var(--dark);color:white;padding:9px 11px;text-align:left;font-size:.71rem;font-weight:600;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .emp-table th.th-c{text-align:center;}
+  .emp-table td{border-bottom:1px solid var(--border);padding:8px 11px;vertical-align:middle;}
+  .emp-table tr:nth-child(even) td{background:#fafbfc;}
+  .emp-table tr:hover td{background:var(--light);}
+  .emp-table tr.anniv-today td{background:#fff8e1;}
+
+  /* RANK */
+  .rank-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-size:.75rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* SENIORITY BAR */
+  .sen-bar-wrap{width:100px;background:#e0e0e0;border-radius:4px;height:8px;overflow:hidden;display:inline-block;vertical-align:middle;}
+  .sen-bar{height:8px;border-radius:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* MILESTONE */
+  .milestone{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:10px;font-size:.71rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ms-5{background:#fff8e1;color:var(--gold);border:1px solid rgba(212,160,23,.3);}
+  .ms-10{background:#f3e8ff;color:var(--purple);border:1px solid rgba(142,68,173,.3);}
+  .ms-15{background:#e8f4fe;color:var(--blue);border:1px solid rgba(26,106,191,.3);}
+  .ms-20{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.3);}
+  .ms-new{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.3);}
+
+  /* VACATION BADGE */
+  .vac-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:20px;font-size:.75rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* NEXT ANNIV */
+  .next-anniv{font-size:.76rem;}
+  .next-soon{color:var(--orange);font-weight:700;}
+  .next-today{color:var(--red);font-weight:700;}
+  .next-ok{color:#5a6a80;}
+
+  /* DELETE */
+  .btn-del{width:24px;height:24px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;justify-content:center;}
+  .btn-del:hover{background:#fef2f2;border-color:var(--red);}
+
+  /* POLICY CONFIG */
+  .policy-card{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:16px 20px;margin-bottom:16px;}
+  .pc-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .pc-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+  .policy-table{width:100%;border-collapse:collapse;font-size:.83rem;}
+  .policy-table th{background:#f4f8ff;padding:7px 12px;text-align:left;font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border);}
+  .policy-table td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:middle;}
+  .policy-table input[type=number],.policy-table input[type=text]{border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;}
+  .policy-table input:focus{outline:none;border-color:var(--accent);}
+  .color-dot{width:14px;height:14px;border-radius:50%;display:inline-block;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .info-box{background:#e8f4fe;border-left:4px solid var(--accent);border-radius:0 6px 6px 0;padding:10px 14px;font-size:.82rem;color:#1a3a5c;margin-bottom:14px;line-height:1.7;}
+
+  /* STATS */
+  .stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:18px;}
+  .stat-card{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 16px;text-align:center;}
+  .sc-num{font-size:1.8rem;font-weight:700;color:var(--blue);line-height:1;}
+  .sc-label{font-size:.76rem;color:#5a6a80;margin-top:4px;}
+  .sc-sub{font-size:.72rem;color:#8a9ab0;margin-top:2px;}
+
+  /* EMPTY */
+  .empty-state{text-align:center;padding:36px;color:#8a9ab0;}
+  .empty-state .es-icon{font-size:2.5rem;margin-bottom:8px;}
+
+  .section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;padding-bottom:6px;border-bottom:2px solid var(--border);}
+  .section-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+
+  @media print{
+    body{background:white;font-size:10px;}
+    .page-header,.nav-tabs,.clinic-bar,.add-form,.btn-del,.btn-top,.btn-add{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .tab-pane{display:block!important;padding:8px;}
+    .emp-table th,.rank-badge,.vac-badge,.milestone,.sen-bar,.ac-days{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:800px){
+    .form-grid{grid-template-columns:1fr 1fr;}
+    .tab-pane{padding:14px 16px;}
+    .clinic-bar{padding:10px 14px;}
+    .stats-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Ancienneté et vacances</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>📅 Ancienneté</h1>
+    <p>Dates d'embauche, ancienneté calculée automatiquement, vacances et reconnaissance</p>
+  </div>
+
+  <div class="clinic-bar">
+    <input class="ci" type="text" id="nomClinique" placeholder="Nom de la clinique..." style="min-width:220px;">
+    <span style="font-size:.76rem;color:#8a9ab0;">Aujourd'hui : <strong id="todayDate">17 mai 2026</strong></span>
+    <div style="margin-left:auto;display:flex;gap:7px;">
+      <button class="btn-top" onclick="showTab(1,null)">⚙️ Politique de vacances</button>
+      <button class="btn-top primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab(0,this)">👥 Liste des employé(e)s</button>
+    <button class="nav-tab" onclick="showTab(1,this)">⚙️ Politique de vacances</button>
+    <button class="nav-tab" onclick="showTab(2,this)">📊 Statistiques</button>
+    <button class="nav-tab" onclick="showTab(3,this)">🏆 Tableau de reconnaissance</button>
+  </div>
+
+  <!-- ===== TAB 0 : LISTE ===== -->
+  <div class="tab-pane active" id="tab0">
+
+    <div id="annivBanner" style="display: block;" class="anniv-banner">
+      <div class="anniv-title">Anniversaires d'embauche — Prochains 30 jours</div>
+      <div class="anniv-cards" id="annivCards"><div class="anniv-card">
+      <div class="ac-icon">🎂</div>
+      <div style="flex:1;">
+        <div class="ac-name">Fortin, Anne</div>
+        <div class="ac-info">11 ans d'ancienneté<br>Secrétaire aux rappels</div>
+      </div>
+      <div class="ac-days">Dans 22 jours</div>
+    </div></div>
+    </div>
+
+    <!-- ADD FORM -->
+    <div class="add-form">
+      <div class="form-title">Ajouter un(e) employé(e)</div>
+      <div class="form-grid">
+        <div class="fg"><label>Nom et prénom</label><input type="text" id="f_nom" placeholder="Tremblay, Marie"></div>
+        <div class="fg"><label>Poste</label>
+          <select id="f_poste">
+            <option>Secrétaire dentaire</option>
+            <option>Secrétaire aux rappels</option>
+            <option>Hygiéniste dentaire</option>
+            <option>Assistante dentaire</option>
+            <option>Coordonnatrice</option>
+            <option>Gestionnaire</option>
+            <option>Aide à la stérilisation</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="fg"><label>Date d'embauche</label><input type="date" id="f_dateEmb"></div>
+        <div class="fg"><label>Statut</label>
+          <select id="f_statut">
+            <option>Temps plein</option>
+            <option>Temps partiel</option>
+            <option>Sur appel</option>
+          </select>
+        </div>
+        <button class="btn-add" onclick="addEmployee()">+ Ajouter</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap">
+      <table class="emp-table">
+        <thead><tr>
+          <th class="th-c" style="width:40px;">#</th>
+          <th style="min-width:160px;">Employé(e)</th>
+          <th style="min-width:130px;">Poste</th>
+          <th class="th-c">Date d'embauche</th>
+          <th class="th-c" style="min-width:130px;">Ancienneté</th>
+          <th class="th-c" style="min-width:110px;">Progression</th>
+          <th class="th-c">Vacances</th>
+          <th class="th-c" style="min-width:80px;">% Vacances</th>
+          <th class="th-c" style="min-width:110px;">Prochain anniversaire</th>
+          <th class="th-c">Statut</th>
+          <th class="th-c no-print" style="width:40px;"></th>
+        </tr></thead>
+        <tbody id="empTbody"><tr>
+      <td style="text-align:center;"><div class="rank-badge" style="background:var(--silver)">1</div></td>
+      <td>
+        <div style="font-weight:700;font-size:.86rem;">Côté, Josée</div>
+        <div style="margin-top:3px;"><span class="milestone ms-10">⭐ 10 ans+</span></div>
+      </td>
+      <td style="font-size:.79rem;color:#5a6a80;">Gestionnaire</td>
+      <td style="text-align:center;font-size:.79rem;">30 nov. 2012</td>
+      <td style="text-align:center;font-weight:600;font-size:.84rem;">13 ans 5 mois</td>
+      <td style="text-align:center;">
+        <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+          <div class="sen-bar-wrap"><div class="sen-bar" style="width:54%;background:var(--gold);"></div></div>
+        </div>
+      </td>
+      <td style="text-align:center;"><span class="vac-badge" style="background:#d4a01720;color:#d4a017;border:1px solid #d4a01740;">5 sem.</span></td>
+      <td style="text-align:center;font-weight:700;font-size:.86rem;color:#d4a017;">10%</td>
+      <td style="text-align:center;"><span class="next-anniv next-ok">30 nov.<br><span style="font-size:.7rem;color:#aaa;">Dans 197 j.</span></span></td>
+      <td style="text-align:center;font-size:.76rem;">
+        <span style="background:#e8f4fe;color:var(--blue);border:1px solid #b3d4f5;padding:2px 8px;border-radius:8px;font-weight:600;">Temps plein</span>
+      </td>
+      <td class="no-print" style="text-align:center;"><button class="btn-del" onclick="removeEmp(5)">×</button></td></tr><tr>
+      <td style="text-align:center;"><div class="rank-badge" style="background:#b0bec5">2</div></td>
+      <td>
+        <div style="font-weight:700;font-size:.86rem;">Fortin, Anne</div>
+        <div style="margin-top:3px;"><span class="milestone ms-10">⭐ 10 ans+</span></div>
+      </td>
+      <td style="font-size:.79rem;color:#5a6a80;">Secrétaire aux rappels</td>
+      <td style="text-align:center;font-size:.79rem;">8 juin 2015</td>
+      <td style="text-align:center;font-weight:600;font-size:.84rem;">10 ans 11 mois</td>
+      <td style="text-align:center;">
+        <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+          <div class="sen-bar-wrap"><div class="sen-bar" style="width:44%;background:var(--gold);"></div></div>
+        </div>
+      </td>
+      <td style="text-align:center;"><span class="vac-badge" style="background:#d4a01720;color:#d4a017;border:1px solid #d4a01740;">5 sem.</span></td>
+      <td style="text-align:center;font-weight:700;font-size:.86rem;color:#d4a017;">10%</td>
+      <td style="text-align:center;"><span class="next-anniv next-soon">📅 Dans 22 jours</span></td>
+      <td style="text-align:center;font-size:.76rem;">
+        <span style="background:#e8f4fe;color:var(--blue);border:1px solid #b3d4f5;padding:2px 8px;border-radius:8px;font-weight:600;">Temps plein</span>
+      </td>
+      <td class="no-print" style="text-align:center;"><button class="btn-del" onclick="removeEmp(4)">×</button></td></tr><tr>
+      <td style="text-align:center;"><div class="rank-badge" style="background:#b0bec5">3</div></td>
+      <td>
+        <div style="font-weight:700;font-size:.86rem;">Tremblay, Marie</div>
+        <div style="margin-top:3px;"><span class="milestone ms-5">🥇 5 ans+</span></div>
+      </td>
+      <td style="font-size:.79rem;color:#5a6a80;">Secrétaire dentaire</td>
+      <td style="text-align:center;font-size:.79rem;">15 mars 2019</td>
+      <td style="text-align:center;font-weight:600;font-size:.84rem;">7 ans 2 mois</td>
+      <td style="text-align:center;">
+        <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+          <div class="sen-bar-wrap"><div class="sen-bar" style="width:29%;background:var(--purple);"></div></div>
+        </div>
+      </td>
+      <td style="text-align:center;"><span class="vac-badge" style="background:#8e44ad20;color:#8e44ad;border:1px solid #8e44ad40;">4 sem.</span></td>
+      <td style="text-align:center;font-weight:700;font-size:.86rem;color:#8e44ad;">8%</td>
+      <td style="text-align:center;"><span class="next-anniv next-ok">15 mars<br><span style="font-size:.7rem;color:#aaa;">Dans 302 j.</span></span></td>
+      <td style="text-align:center;font-size:.76rem;">
+        <span style="background:#e8f4fe;color:var(--blue);border:1px solid #b3d4f5;padding:2px 8px;border-radius:8px;font-weight:600;">Temps plein</span>
+      </td>
+      <td class="no-print" style="text-align:center;"><button class="btn-del" onclick="removeEmp(1)">×</button></td></tr><tr>
+      <td style="text-align:center;"><div class="rank-badge" style="background:#b0bec5">4</div></td>
+      <td>
+        <div style="font-weight:700;font-size:.86rem;">Gagnon, Sophie</div>
+        
+      </td>
+      <td style="font-size:.79rem;color:#5a6a80;">Hygiéniste dentaire</td>
+      <td style="text-align:center;font-size:.79rem;">1 sept. 2021</td>
+      <td style="text-align:center;font-weight:600;font-size:.84rem;">4 ans 8 mois</td>
+      <td style="text-align:center;">
+        <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+          <div class="sen-bar-wrap"><div class="sen-bar" style="width:19%;background:var(--accent);"></div></div>
+        </div>
+      </td>
+      <td style="text-align:center;"><span class="vac-badge" style="background:#2196f320;color:#2196f3;border:1px solid #2196f340;">3 sem.</span></td>
+      <td style="text-align:center;font-weight:700;font-size:.86rem;color:#2196f3;">6%</td>
+      <td style="text-align:center;"><span class="next-anniv next-ok">1 sept.<br><span style="font-size:.7rem;color:#aaa;">Dans 107 j.</span></span></td>
+      <td style="text-align:center;font-size:.76rem;">
+        <span style="background:#e8f4fe;color:var(--blue);border:1px solid #b3d4f5;padding:2px 8px;border-radius:8px;font-weight:600;">Temps plein</span>
+      </td>
+      <td class="no-print" style="text-align:center;"><button class="btn-del" onclick="removeEmp(2)">×</button></td></tr><tr>
+      <td style="text-align:center;"><div class="rank-badge" style="background:#b0bec5">5</div></td>
+      <td>
+        <div style="font-weight:700;font-size:.86rem;">Bouchard, Luc</div>
+        
+      </td>
+      <td style="font-size:.79rem;color:#5a6a80;">Assistante dentaire</td>
+      <td style="text-align:center;font-size:.79rem;">22 janv. 2024</td>
+      <td style="text-align:center;font-weight:600;font-size:.84rem;">2 ans 3 mois</td>
+      <td style="text-align:center;">
+        <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+          <div class="sen-bar-wrap"><div class="sen-bar" style="width:9%;background:var(--green);"></div></div>
+        </div>
+      </td>
+      <td style="text-align:center;"><span class="vac-badge" style="background:#1a9e5a20;color:#1a9e5a;border:1px solid #1a9e5a40;">2 sem.</span></td>
+      <td style="text-align:center;font-weight:700;font-size:.86rem;color:#1a9e5a;">4%</td>
+      <td style="text-align:center;"><span class="next-anniv next-ok">22 janv.<br><span style="font-size:.7rem;color:#aaa;">Dans 250 j.</span></span></td>
+      <td style="text-align:center;font-size:.76rem;">
+        <span style="background:#fff8e1;color:var(--orange);border:1px solid rgba(230,126,34,.3);padding:2px 8px;border-radius:8px;font-weight:600;">Temps partiel</span>
+      </td>
+      <td class="no-print" style="text-align:center;"><button class="btn-del" onclick="removeEmp(3)">×</button></td></tr></tbody>
+      </table>
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="es-icon">👥</div>
+        <div>Aucun(e) employé(e) ajouté(e). Utilisez le formulaire ci-dessus pour commencer.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB 1 : POLITIQUE ===== -->
+  <div class="tab-pane" id="tab1">
+    <div class="info-box">
+      <strong>Loi sur les normes du travail (Québec) — Base légale :</strong><br>
+      • Moins de 1 an : 4% de la rémunération totale (vacances proportionnelles)<br>
+      • 1 an à moins de 3 ans : 2 semaines (4% de la rémunération)<br>
+      • 3 ans et plus : 3 semaines (6% de la rémunération)<br>
+      Vous pouvez configurer des paliers supplémentaires selon votre politique interne.
+    </div>
+    <div class="policy-card">
+      <div class="pc-title">Paliers de vacances — Politique de la clinique</div>
+      <table class="policy-table" id="policyTable">
+        <thead><tr>
+          <th style="width:40px;"></th>
+          <th>À partir de (années)</th>
+          <th>Jusqu'à (années)</th>
+          <th>Semaines de vacances</th>
+          <th>% (indemnité)</th>
+          <th>Étiquette affichée</th>
+          <th>Couleur</th>
+        </tr></thead>
+        <tbody id="policyBody"></tbody>
+      </table>
+      <button class="btn-add" style="margin-top:10px;background:white;color:var(--blue);border:1.5px dashed var(--accent);font-size:.78rem;" onclick="addPolicyRow()">+ Ajouter un palier</button>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button class="btn-top primary" onclick="renderAll();showTab(0,null)">✅ Appliquer et retourner à la liste</button>
+    </div>
+  </div>
+
+  <!-- ===== TAB 2 : STATS ===== -->
+  <div class="tab-pane" id="tab2">
+    <div class="stats-grid" id="statsGrid">
+    <div class="stat-card"><div class="sc-num">5</div><div class="sc-label">Employé(e)s</div></div>
+    <div class="stat-card"><div class="sc-num">7.7</div><div class="sc-label">Ancienneté moyenne</div><div class="sc-sub">en années</div></div>
+    <div class="stat-card"><div class="sc-num">13 ans</div><div class="sc-label">Plus ancienne</div><div class="sc-sub">Côté, Josée</div></div>
+    <div class="stat-card"><div class="sc-num">2 ans</div><div class="sc-label">Plus récent(e)</div><div class="sc-sub">Bouchard, Luc</div></div></div>
+    <div class="section-title">Répartition par palier de vacances</div>
+    <div id="vacDistrib">
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--light);border-radius:7px;margin-bottom:7px;border-left:4px solid #d4a017;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+      <div style="flex:1;font-size:.84rem;font-weight:600;">10 ans et + — 5 semaines</div>
+      <div style="font-size:.8rem;color:#5a6a80;">Côté, Josée · Fortin, Anne</div>
+      <div style="background:#d4a017;color:white;border-radius:6px;padding:3px 10px;font-size:.76rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">2 emp.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--light);border-radius:7px;margin-bottom:7px;border-left:4px solid #8e44ad;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+      <div style="flex:1;font-size:.84rem;font-weight:600;">5 à 10 ans — 4 semaines</div>
+      <div style="font-size:.8rem;color:#5a6a80;">Tremblay, Marie</div>
+      <div style="background:#8e44ad;color:white;border-radius:6px;padding:3px 10px;font-size:.76rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">1 emp.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--light);border-radius:7px;margin-bottom:7px;border-left:4px solid #2196f3;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+      <div style="flex:1;font-size:.84rem;font-weight:600;">3 à 5 ans — 3 semaines</div>
+      <div style="font-size:.8rem;color:#5a6a80;">Gagnon, Sophie</div>
+      <div style="background:#2196f3;color:white;border-radius:6px;padding:3px 10px;font-size:.76rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">1 emp.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--light);border-radius:7px;margin-bottom:7px;border-left:4px solid #1a9e5a;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+      <div style="flex:1;font-size:.84rem;font-weight:600;">1 à 3 ans — 2 semaines</div>
+      <div style="font-size:.8rem;color:#5a6a80;">Bouchard, Luc</div>
+      <div style="background:#1a9e5a;color:white;border-radius:6px;padding:3px 10px;font-size:.76rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">1 emp.</div>
+    </div></div>
+    <div class="section-title" style="margin-top:18px;">Prochains anniversaires (12 mois)</div>
+    <div id="nextAnnivList"><div style="display:flex;flex-direction:column;gap:6px;">
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--light);border-radius:7px;border:1px solid var(--border);">
+      <div style="font-size:1.1rem;">🎂</div>
+      <div style="flex:1;font-size:.84rem;font-weight:600;">Fortin, Anne</div>
+      <div style="font-size:.78rem;color:#5a6a80;">Secrétaire aux rappels</div>
+      <div style="font-size:.78rem;color:var(--blue);font-weight:600;">11 ans</div>
+      <div style="font-size:.76rem;background:var(--orange);color:white;border-radius:5px;padding:2px 9px;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 22 j.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--light);border-radius:7px;border:1px solid var(--border);">
+      <div style="font-size:1.1rem;">📅</div>
+      <div style="flex:1;font-size:.84rem;font-weight:600;">Gagnon, Sophie</div>
+      <div style="font-size:.78rem;color:#5a6a80;">Hygiéniste dentaire</div>
+      <div style="font-size:.78rem;color:var(--blue);font-weight:600;">5 ans</div>
+      <div style="font-size:.76rem;background:#8a9ab0;color:white;border-radius:5px;padding:2px 9px;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 107 j.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--light);border-radius:7px;border:1px solid var(--border);">
+      <div style="font-size:1.1rem;">📅</div>
+      <div style="flex:1;font-size:.84rem;font-weight:600;">Côté, Josée</div>
+      <div style="font-size:.78rem;color:#5a6a80;">Gestionnaire</div>
+      <div style="font-size:.78rem;color:var(--blue);font-weight:600;">14 ans</div>
+      <div style="font-size:.76rem;background:#8a9ab0;color:white;border-radius:5px;padding:2px 9px;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 197 j.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--light);border-radius:7px;border:1px solid var(--border);">
+      <div style="font-size:1.1rem;">📅</div>
+      <div style="flex:1;font-size:.84rem;font-weight:600;">Bouchard, Luc</div>
+      <div style="font-size:.78rem;color:#5a6a80;">Assistante dentaire</div>
+      <div style="font-size:.78rem;color:var(--blue);font-weight:600;">3 ans</div>
+      <div style="font-size:.76rem;background:#8a9ab0;color:white;border-radius:5px;padding:2px 9px;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 250 j.</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--light);border-radius:7px;border:1px solid var(--border);">
+      <div style="font-size:1.1rem;">📅</div>
+      <div style="flex:1;font-size:.84rem;font-weight:600;">Tremblay, Marie</div>
+      <div style="font-size:.78rem;color:#5a6a80;">Secrétaire dentaire</div>
+      <div style="font-size:.78rem;color:var(--blue);font-weight:600;">8 ans</div>
+      <div style="font-size:.76rem;background:#8a9ab0;color:white;border-radius:5px;padding:2px 9px;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 302 j.</div>
+    </div></div></div>
+  </div>
+
+  <!-- ===== TAB 3 : RECONNAISSANCE ===== -->
+  <div class="tab-pane" id="tab3">
+    <div class="info-box">
+      Ce tableau présente les jalons d'ancienneté et les reconnaissances prévues. Configurez les montants et gestes, puis consultez quels employé(e)s approchent d'un prochain jalon.
+    </div>
+    <div class="policy-card" style="margin-bottom:18px;">
+      <div class="pc-title">Configuration des jalons et reconnaissances</div>
+      <table class="policy-table">
+        <thead><tr>
+          <th>🏅 Jalon</th><th>Type</th><th>Montant</th><th>Description / Geste prévu</th>
+          <th style="width:36px;" class="no-print"></th>
+        </tr></thead>
+        <tbody id="milestonesBody"></tbody>
+      </table>
+      <button class="btn-add" style="margin-top:10px;background:white;color:var(--blue);border:1.5px dashed var(--accent);font-size:.78rem;" onclick="addMilestone()">+ Ajouter un jalon</button>
+    </div>
+    <div class="section-title">État de la reconnaissance par employé(e)</div>
+    <div class="table-wrap">
+      <table class="emp-table">
+        <thead><tr>
+          <th>Employé(e)</th><th>Poste</th><th class="th-c">Ancienneté</th>
+          <th class="th-c">Jalon actuel</th><th class="th-c">Reconnaissance</th>
+          <th class="th-c">Prochain jalon</th><th class="th-c">Dans</th>
+          <th class="th-c">Remise ✓</th>
+        </tr></thead>
+        <tbody id="recogBody"></tbody>
+      </table>
+    </div>
+    <div class="section-title" style="margin-top:20px;">⚡ Jalons à venir — 12 prochains mois</div>
+    <div id="upcomingMilestones"></div>
+  </div>
+
+</div><!-- end container -->
+<script>
+// ===== DATA =====
+let employees = [];
+let idCnt = 1;
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+
+let vacPolicy = [
+  { from:0,   to:1,    weeks:0,   pct:4,   label:'< 1 an — Proportionnel', color:'#8a9ab0' },
+  { from:1,   to:3,    weeks:2,   pct:4,   label:'1 à 3 ans — 2 semaines', color:'#1a9e5a' },
+  { from:3,   to:5,    weeks:3,   pct:6,   label:'3 à 5 ans — 3 semaines', color:'#2196f3' },
+  { from:5,   to:10,   weeks:4,   pct:8,   label:'5 à 10 ans — 4 semaines', color:'#8e44ad' },
+  { from:10,  to:9999, weeks:5,   pct:10,  label:'10 ans et + — 5 semaines', color:'#d4a017' },
+];
+
+// Sample employees
+const SAMPLES = [
+  { nom:'Tremblay, Marie', poste:'Secrétaire dentaire', dateEmb:'2019-03-15', statut:'Temps plein' },
+  { nom:'Gagnon, Sophie', poste:'Hygiéniste dentaire', dateEmb:'2021-09-01', statut:'Temps plein' },
+  { nom:'Bouchard, Luc', poste:'Assistante dentaire', dateEmb:'2024-01-22', statut:'Temps partiel' },
+  { nom:'Fortin, Anne', poste:'Secrétaire aux rappels', dateEmb:'2015-06-08', statut:'Temps plein' },
+  { nom:'Côté, Josée', poste:'Gestionnaire', dateEmb:'2012-11-30', statut:'Temps plein' },
+];
+SAMPLES.forEach(s => { s.id = idCnt++; employees.push(s); });
+
+// ===== HELPERS =====
+function getAge(dateEmb) {
+  const d = new Date(dateEmb + 'T00:00:00');
+  let years = TODAY.getFullYear() - d.getFullYear();
+  let months = TODAY.getMonth() - d.getMonth();
+  let days = TODAY.getDate() - d.getDate();
+  if (days < 0) { months--; }
+  if (months < 0) { months += 12; years--; }
+  return { years, months, total: years + months/12 };
+}
+
+function getVacPolicy(years) {
+  for (let i = vacPolicy.length - 1; i >= 0; i--) {
+    if (years >= vacPolicy[i].from) return vacPolicy[i];
+  }
+  return vacPolicy[0];
+}
+
+function getNextAnniversary(dateEmb) {
+  const d = new Date(dateEmb + 'T00:00:00');
+  let next = new Date(TODAY.getFullYear(), d.getMonth(), d.getDate());
+  if (next < TODAY) next = new Date(TODAY.getFullYear() + 1, d.getMonth(), d.getDate());
+  const diff = Math.round((next - TODAY) / (1000*60*60*24));
+  return { date: next, daysUntil: diff };
+}
+
+function getMilestone(years) {
+  if (years < 1) return { label:'🌱 Nouveau', cls:'ms-new' };
+  if (years >= 20) return { label:'🏆 20 ans+', cls:'ms-20' };
+  if (years >= 15) return { label:'💎 15 ans+', cls:'ms-15' };
+  if (years >= 10) return { label:'⭐ 10 ans+', cls:'ms-10' };
+  if (years >= 5)  return { label:'🥇 5 ans+', cls:'ms-5' };
+  return null;
+}
+
+function fmtDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('fr-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function rankColor(rank, total) {
+  const pct = rank / total;
+  if (pct <= 0.1) return 'var(--gold)';
+  if (pct <= 0.3) return 'var(--silver)';
+  return '#b0bec5';
+}
+
+function senBarColor(years) {
+  if (years < 1) return '#8a9ab0';
+  if (years < 3) return 'var(--green)';
+  if (years < 5) return 'var(--accent)';
+  if (years < 10) return 'var(--purple)';
+  return 'var(--gold)';
+}
+
+// ===== RENDER =====
+function renderAll() {
+  const sorted = [...employees].sort((a,b) => {
+    const aa = getAge(a.dateEmb).total;
+    const bb = getAge(b.dateEmb).total;
+    return bb - aa;
+  });
+
+  const tbody = document.getElementById('empTbody');
+  const empty = document.getElementById('emptyState');
+  const upcomingAnnivs = [];
+
+  tbody.innerHTML = '';
+  if (sorted.length === 0) { empty.style.display = 'block'; }
+  else { empty.style.display = 'none'; }
+
+  sorted.forEach((emp, idx) => {
+    const rank = idx + 1;
+    const age = getAge(emp.dateEmb);
+    const policy = getVacPolicy(age.total);
+    const nextAnniv = getNextAnniversary(emp.dateEmb);
+    const milestone = getMilestone(age.years);
+    const isToday = nextAnniv.daysUntil === 0;
+    const isSoon = nextAnniv.daysUntil <= 30;
+
+    if (isSoon || isToday) {
+      upcomingAnnivs.push({ emp, nextAnniv, age, isToday, yearsCompleting: age.years + 1 });
+    }
+
+    const senYears = Math.min(age.total, 25);
+    const senPct = (senYears / 25 * 100).toFixed(0);
+    const senLabel = age.years === 0
+      ? `${age.months} mois`
+      : `${age.years} an${age.years>1?'s':''} ${age.months > 0 ? age.months + ' mois' : ''}`;
+
+    const nextStr = isToday
+      ? `<span class="next-anniv next-today">🎉 Aujourd'hui!</span>`
+      : isSoon
+      ? `<span class="next-anniv next-soon">📅 Dans ${nextAnniv.daysUntil} jour${nextAnniv.daysUntil>1?'s':''}</span>`
+      : `<span class="next-anniv next-ok">${nextAnniv.date.toLocaleDateString('fr-CA',{month:'short',day:'numeric'})}<br><span style="font-size:.7rem;color:#aaa;">Dans ${nextAnniv.daysUntil} j.</span></span>`;
+
+    const vacLabel = age.years < 1
+      ? `<span class="vac-badge" style="background:#f0f0f0;color:#5a6a80;border:1px solid #ddd;">Proportionnel</span>`
+      : `<span class="vac-badge" style="background:${policy.color}20;color:${policy.color};border:1px solid ${policy.color}40;">${policy.weeks} sem.</span>`;
+
+    const tr = document.createElement('tr');
+    if (isToday) tr.className = 'anniv-today';
+    tr.innerHTML = `
+      <td style="text-align:center;"><div class="rank-badge" style="background:${rankColor(rank,sorted.length)}">${rank}</div></td>
+      <td>
+        <div style="font-weight:700;font-size:.86rem;">${emp.nom}</div>
+        ${milestone ? `<div style="margin-top:3px;"><span class="milestone ${milestone.cls}">${milestone.label}</span></div>` : ''}
+      </td>
+      <td style="font-size:.79rem;color:#5a6a80;">${emp.poste}</td>
+      <td style="text-align:center;font-size:.79rem;">${fmtDate(emp.dateEmb)}</td>
+      <td style="text-align:center;font-weight:600;font-size:.84rem;">${senLabel}</td>
+      <td style="text-align:center;">
+        <div style="display:flex;align-items:center;gap:6px;justify-content:center;">
+          <div class="sen-bar-wrap"><div class="sen-bar" style="width:${senPct}%;background:${senBarColor(age.total)};"></div></div>
+        </div>
+      </td>
+      <td style="text-align:center;">${vacLabel}</td>
+      <td style="text-align:center;font-weight:700;font-size:.86rem;color:${policy.color};">${policy.pct}%</td>
+      <td style="text-align:center;">${nextStr}</td>
+      <td style="text-align:center;font-size:.76rem;">
+        <span style="background:${emp.statut==='Temps plein'?'#e8f4fe':'#fff8e1'};color:${emp.statut==='Temps plein'?'var(--blue)':'var(--orange)'};border:1px solid ${emp.statut==='Temps plein'?'#b3d4f5':'rgba(230,126,34,.3)'};padding:2px 8px;border-radius:8px;font-weight:600;">${emp.statut}</span>
+      </td>
+      <td class="no-print" style="text-align:center;"><button class="btn-del" onclick="removeEmp(${emp.id})">×</button></td>`;
+    tbody.appendChild(tr);
+  });
+
+  renderAnnivBanner(upcomingAnnivs);
+  renderStats(sorted);
+}
+
+function renderAnnivBanner(list) {
+  const banner = document.getElementById('annivBanner');
+  const cards = document.getElementById('annivCards');
+  if (list.length === 0) { banner.style.display = 'none'; return; }
+  banner.style.display = 'block';
+  cards.innerHTML = list.map(({ emp, nextAnniv, age, isToday, yearsCompleting }) => {
+    const isMilestone = [5,10,15,20,25].includes(yearsCompleting);
+    const daysLabel = isToday ? 'Aujourd\'hui! 🎉' : `Dans ${nextAnniv.daysUntil} jour${nextAnniv.daysUntil>1?'s':''}`;
+    const daysClass = isToday ? 'ac-days today' : isMilestone ? 'ac-days milestone' : 'ac-days';
+    const icon = isToday ? '🎊' : isMilestone ? '🏆' : '🎂';
+    return `<div class="anniv-card">
+      <div class="ac-icon">${icon}</div>
+      <div style="flex:1;">
+        <div class="ac-name">${emp.nom}</div>
+        <div class="ac-info">${yearsCompleting} an${yearsCompleting>1?'s':''} d'ancienneté${isMilestone?' — Année jalon! 🌟':''}<br>${emp.poste}</div>
+      </div>
+      <div class="${daysClass}">${daysLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderStats(sorted) {
+  const grid = document.getElementById('statsGrid');
+  if (sorted.length === 0) { grid.innerHTML = ''; return; }
+  const totalYears = sorted.reduce((s,e) => s + getAge(e.dateEmb).total, 0);
+  const avgYears = totalYears / sorted.length;
+  const maxEmp = sorted[0];
+  const maxAge = getAge(maxEmp.dateEmb);
+  const minEmp = sorted[sorted.length-1];
+  const minAge = getAge(minEmp.dateEmb);
+  grid.innerHTML = `
+    <div class="stat-card"><div class="sc-num">${sorted.length}</div><div class="sc-label">Employé(e)s</div></div>
+    <div class="stat-card"><div class="sc-num">${avgYears.toFixed(1)}</div><div class="sc-label">Ancienneté moyenne</div><div class="sc-sub">en années</div></div>
+    <div class="stat-card"><div class="sc-num">${maxAge.years} ans</div><div class="sc-label">Plus ancienne</div><div class="sc-sub">${maxEmp.nom}</div></div>
+    <div class="stat-card"><div class="sc-num">${minAge.years < 1 ? minAge.months + ' mois' : minAge.years + ' ans'}</div><div class="sc-label">Plus récent(e)</div><div class="sc-sub">${minEmp.nom}</div></div>`;
+
+  // Vacation distribution
+  const distrib = document.getElementById('vacDistrib');
+  const buckets = {};
+  sorted.forEach(e => {
+    const p = getVacPolicy(getAge(e.dateEmb).total);
+    if (!buckets[p.label]) buckets[p.label] = { policy:p, count:0, names:[] };
+    buckets[p.label].count++;
+    buckets[p.label].names.push(e.nom);
+  });
+  distrib.innerHTML = Object.values(buckets).map(b => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--light);border-radius:7px;margin-bottom:7px;border-left:4px solid ${b.policy.color};-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+      <div style="flex:1;font-size:.84rem;font-weight:600;">${b.policy.label}</div>
+      <div style="font-size:.8rem;color:#5a6a80;">${b.names.join(' · ')}</div>
+      <div style="background:${b.policy.color};color:white;border-radius:6px;padding:3px 10px;font-size:.76rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">${b.count} emp.</div>
+    </div>`).join('');
+
+  // Next 12 months anniversaries
+  const nextList = document.getElementById('nextAnnivList');
+  const annivs = sorted.map(e => {
+    const n = getNextAnniversary(e.dateEmb);
+    const age = getAge(e.dateEmb);
+    return { emp:e, next:n, yearsCompleting: age.years + 1 };
+  }).sort((a,b) => a.next.daysUntil - b.next.daysUntil).slice(0, 12);
+  nextList.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px;">${annivs.map(a => `
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px;background:var(--light);border-radius:7px;border:1px solid var(--border);">
+      <div style="font-size:1.1rem;">${a.next.daysUntil === 0 ? '🎊' : a.next.daysUntil <= 30 ? '🎂' : '📅'}</div>
+      <div style="flex:1;font-size:.84rem;font-weight:600;">${a.emp.nom}</div>
+      <div style="font-size:.78rem;color:#5a6a80;">${a.emp.poste}</div>
+      <div style="font-size:.78rem;color:var(--blue);font-weight:600;">${a.yearsCompleting} an${a.yearsCompleting>1?'s':''}</div>
+      <div style="font-size:.76rem;background:${a.next.daysUntil<=30?'var(--orange)':a.next.daysUntil<=90?'var(--blue)':'#8a9ab0'};color:white;border-radius:5px;padding:2px 9px;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;">${a.next.daysUntil === 0 ? 'Aujourd\'hui!' : 'Dans ' + a.next.daysUntil + ' j.'}</div>
+    </div>`).join('')}</div>`;
+}
+
+// ===== ACTIONS =====
+function addEmployee() {
+  const nom = document.getElementById('f_nom').value.trim();
+  const date = document.getElementById('f_dateEmb').value;
+  if (!nom || !date) { alert('Veuillez remplir le nom et la date d\'embauche.'); return; }
+  employees.push({ id:idCnt++, nom, poste:document.getElementById('f_poste').value, dateEmb:date, statut:document.getElementById('f_statut').value });
+  document.getElementById('f_nom').value = '';
+  document.getElementById('f_dateEmb').value = '';
+  renderAll();
+}
+
+function removeEmp(id) {
+  employees = employees.filter(e => e.id !== id);
+  renderAll();
+}
+
+// ===== POLICY TABLE =====
+function renderPolicy() {
+  const tbody = document.getElementById('policyBody');
+  tbody.innerHTML = '';
+  vacPolicy.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><button class="btn-del" onclick="removePolicy(${i})">×</button></td>
+      <td><input type="number" min="0" step="0.5" value="${p.from}" onchange="vacPolicy[${i}].from=+this.value;renderAll()"></td>
+      <td><input type="number" min="0" step="0.5" value="${p.to === 9999 ? '' : p.to}" placeholder="Illimité" onchange="vacPolicy[${i}].to=this.value?+this.value:9999;renderAll()"></td>
+      <td><input type="number" min="0" step="0.5" value="${p.weeks}" onchange="vacPolicy[${i}].weeks=+this.value;renderAll()"></td>
+      <td><input type="number" min="0" step="0.5" value="${p.pct}" onchange="vacPolicy[${i}].pct=+this.value;renderAll()"></td>
+      <td><input type="text" value="${p.label}" onchange="vacPolicy[${i}].label=this.value;renderAll()"></td>
+      <td style="text-align:center;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="color-dot" style="background:${p.color};"></div>
+          <input type="color" value="${p.color}" onchange="vacPolicy[${i}].color=this.value;renderAll()" style="width:32px;height:24px;border:none;padding:0;cursor:pointer;border-radius:4px;">
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function addPolicyRow() {
+  vacPolicy.push({ from:0, to:9999, weeks:2, pct:4, label:'Nouveau palier', color:'#2196f3' });
+  renderPolicy();
+}
+
+function removePolicy(i) {
+  vacPolicy.splice(i, 1);
+  renderPolicy();
+  renderAll();
+}
+
+// ===== MILESTONES CONFIG =====
+let milestones = [
+  { years:1,  label:'1 an',   type:'Cadeau', amount:'25 $',  description:'Carte signée par l\'équipe + petit cadeau' },
+  { years:3,  label:'3 ans',  type:'Cadeau', amount:'50 $',  description:'Carte + certificat cadeau' },
+  { years:5,  label:'5 ans',  type:'Célébration', amount:'100 $', description:'Certificat + repas d\'équipe ou cadeau personnalisé' },
+  { years:10, label:'10 ans', type:'Célébration', amount:'200 $', description:'Plaque de reconnaissance + activité spéciale d\'équipe' },
+  { years:15, label:'15 ans', type:'Célébration', amount:'300 $', description:'Trophée + certificat + journée de congé payée' },
+  { years:20, label:'20 ans', type:'Célébration', amount:'500 $', description:'Reconnaissance spéciale + cadeau de prestige' },
+  { years:25, label:'25 ans', type:'Célébration', amount:'750 $', description:'Cérémonie de reconnaissance + cadeau exceptionnel' },
+];
+
+function renderMilestonesTable() {
+  const tbody = document.getElementById('milestonesBody');
+  tbody.innerHTML = '';
+  milestones.forEach((m, i) => {
+    const colors = ['#d4a017','#1a9e5a','#d4a017','#8e44ad','#2196f3','#c0392b','#e67e22'];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span style="background:${colors[i%colors.length]}20;color:${colors[i%colors.length]};border:1px solid ${colors[i%colors.length]}40;padding:3px 10px;border-radius:8px;font-weight:700;font-size:.8rem;">🏅 ${m.label}</span></td>
+      <td><input class="policy-table input" type="text" value="${m.type}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;" onchange="milestones[${i}].type=this.value"></td>
+      <td><input type="text" value="${m.amount}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;text-align:right;" onchange="milestones[${i}].amount=this.value"></td>
+      <td><input type="text" value="${m.description}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;" onchange="milestones[${i}].description=this.value"></td>
+      <td class="no-print"><button class="btn-del" onclick="milestones.splice(${i},1);renderMilestonesTable();renderRecogTable()">×</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function addMilestone() {
+  milestones.push({ years:1, label:'__ an(s)', type:'Cadeau', amount:'0 $', description:'' });
+  milestones.sort((a,b)=>a.years-b.years);
+  renderMilestonesTable();
+  renderRecogTable();
+}
+
+function getCurrentMilestone(years) {
+  let cur = null;
+  milestones.forEach(m => { if (years >= m.years) cur = m; });
+  return cur;
+}
+
+function getNextMilestone(years) {
+  return milestones.find(m => m.years > years) || null;
+}
+
+function renderRecogTable() {
+  const tbody = document.getElementById('recogBody');
+  if (!tbody) return;
+  const sorted = [...employees].sort((a,b) => getAge(b.dateEmb).total - getAge(a.dateEmb).total);
+  tbody.innerHTML = '';
+  sorted.forEach(emp => {
+    const age = getAge(emp.dateEmb);
+    const cur = getCurrentMilestone(age.years);
+    const next = getNextMilestone(age.total);
+    const yearsUntilNext = next ? (next.years - age.total) : null;
+    const monthsUntil = yearsUntilNext ? Math.ceil(yearsUntilNext * 12) : null;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="font-weight:700;">${emp.nom}</td>
+      <td style="font-size:.78rem;color:#5a6a80;">${emp.poste}</td>
+      <td style="text-align:center;font-weight:600;">${age.years} an${age.years!==1?'s':''} ${age.months > 0 ? age.months+'m':''}</td>
+      <td style="text-align:center;">${cur ? `<span style="background:#fff8e1;color:var(--gold);border:1px solid rgba(212,160,23,.3);padding:2px 9px;border-radius:8px;font-size:.75rem;font-weight:700;">🏅 ${cur.label}</span>` : '<span style="color:#8a9ab0;font-size:.76rem;">Aucun encore</span>'}</td>
+      <td style="text-align:center;font-size:.78rem;">${cur ? `<strong>${cur.amount}</strong> — ${cur.description}` : '—'}</td>
+      <td style="text-align:center;">${next ? `<span style="background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.2);padding:2px 9px;border-radius:8px;font-size:.75rem;font-weight:700;">🎯 ${next.label}</span>` : '<span style="color:#d4a017;font-size:.78rem;font-weight:700;">🏆 Max atteint!</span>'}</td>
+      <td style="text-align:center;font-size:.78rem;${monthsUntil && monthsUntil<=6?'color:var(--orange);font-weight:700;':''}">${monthsUntil ? (monthsUntil <= 12 ? `⚡ ${monthsUntil} mois` : `${Math.ceil(yearsUntilNext)} an${Math.ceil(yearsUntilNext)>1?'s':''}`) : '—'}</td>
+      <td style="text-align:center;"><input type="checkbox" style="width:16px;height:16px;cursor:pointer;accent-color:var(--green);" title="Reconnaissance remise"></td>`;
+    tbody.appendChild(tr);
+  });
+
+  // Upcoming milestones
+  const upcoming = document.getElementById('upcomingMilestones');
+  if (!upcoming) return;
+  const alerts = [];
+  sorted.forEach(emp => {
+    const age = getAge(emp.dateEmb);
+    const next = getNextMilestone(age.total);
+    if (!next) return;
+    const monthsUntil = Math.ceil((next.years - age.total) * 12);
+    if (monthsUntil <= 12) alerts.push({ emp, next, monthsUntil, age });
+  });
+  alerts.sort((a,b) => a.monthsUntil - b.monthsUntil);
+  if (alerts.length === 0) {
+    upcoming.innerHTML = '<div style="text-align:center;padding:20px;color:#8a9ab0;font-size:.84rem;">✅ Aucun jalon dans les 12 prochains mois.</div>';
+  } else {
+    upcoming.innerHTML = alerts.map(a => `
+      <div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:${a.monthsUntil<=3?'#fff8e1':'var(--light)'};border:1.5px solid ${a.monthsUntil<=3?'var(--orange)':'var(--border)'};border-radius:8px;margin-bottom:8px;">
+        <div style="font-size:1.4rem;">${a.monthsUntil<=3?'⚡':'🎯'}</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;font-size:.87rem;">${a.emp.nom}</div>
+          <div style="font-size:.76rem;color:#5a6a80;">${a.emp.poste} · ${a.age.years} an${a.age.years!==1?'s':''} actuellement</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-weight:700;color:var(--blue);font-size:.86rem;">Jalon : ${a.next.label}</div>
+          <div style="font-size:.75rem;color:#5a6a80;">${a.next.type} · ${a.next.amount}</div>
+        </div>
+        <div style="background:${a.monthsUntil<=3?'var(--orange)':'var(--blue)'};color:white;border-radius:7px;padding:5px 12px;font-size:.76rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans ${a.monthsUntil} mois</div>
+      </div>`).join('');
+  }
+}
+
+function showTab(n, btn) {
+  document.querySelectorAll('.tab-pane').forEach((p,i) => p.classList.toggle('active',i===n));
+  document.querySelectorAll('.nav-tab').forEach((b,i) => b.classList.toggle('active',i===n));
+  if (n === 1) renderPolicy();
+  if (n === 2) renderStats([...employees].sort((a,b) => getAge(b.dateEmb).total - getAge(a.dateEmb).total));
+  if (n === 3) { renderMilestonesTable(); renderRecogTable(); }
+}
+
+// Init
+document.getElementById('todayDate').textContent = TODAY.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
+renderAll();
+</script>
+
+
+</body></html>

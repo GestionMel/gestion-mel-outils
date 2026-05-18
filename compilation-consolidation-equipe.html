@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<!-- saved from url=(0182)file:///C:/Users/info/Desktop/Gestion%20Mel/Outils%20en%20.%20HTML%20pour%20outils%20dans%20Acad%C3%A9mie%20Gestion%20Mel%20-%20Copie/Compilation%20consolidation%20d'%C3%A9quipe.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compilation consolidation d'équipe — Gestion Mel</title>
+<style>
+  :root {
+    --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3;
+    --light: #f4f8ff; --border: #d0dff0; --text: #1a2535;
+    --green: #1a9e5a; --orange: #e67e22; --red: #c0392b; --purple: #8e44ad;
+    --green-bg: #f0fdf4; --orange-bg: #fff8f0; --red-bg: #fef2f2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .page-header .subtitle { font-size: .82rem; color: rgba(255,255,255,.6); }
+  .container { max-width: 980px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 24px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: .85rem; opacity: .75; }
+  .nav-tabs { display: flex; background: #f0f5fb; border-bottom: 2px solid var(--border); overflow-x: auto; }
+  .tab-btn { padding: 12px 20px; background: none; border: none; border-bottom: 3px solid transparent; color: #5a6a80; font-family: inherit; font-size: .83rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .2s; margin-bottom: -2px; display: flex; align-items: center; gap: 6px; }
+  .tab-btn:hover { color: var(--blue); background: #e8f0fb; }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--accent); background: white; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .section { padding: 20px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: .8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: .74rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: .5px; }
+  input[type=text], input[type=date], select, textarea {
+    border: 1.5px solid var(--border); border-radius: 6px; padding: 8px 11px;
+    font-size: .88rem; font-family: inherit; color: var(--text); background: var(--light);
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea { resize: vertical; min-height: 75px; line-height: 1.6; }
+
+  /* EMPLOYEE LIST */
+  .emp-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .emp-row {
+    display: grid; grid-template-columns: 1fr 1fr auto;
+    gap: 10px; align-items: center;
+    background: var(--light); border: 1.5px solid var(--border);
+    border-radius: 7px; padding: 10px 12px;
+  }
+  .emp-row.has-data { border-color: var(--green); background: var(--green-bg); }
+  .emp-num { font-size: .75rem; font-weight: 700; color: var(--blue); }
+  .btn-del { width: 30px; height: 30px; border-radius: 6px; border: 1.5px solid #e0e0e0; background: white; color: var(--red); cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .btn-del:hover { background: var(--red-bg); border-color: var(--red); }
+  .btn-add { display: flex; align-items: center; gap: 8px; padding: 9px 18px; background: var(--light); border: 1.5px dashed var(--accent); border-radius: 7px; color: var(--blue); font-size: .85rem; font-weight: 600; cursor: pointer; font-family: inherit; width: fit-content; }
+  .btn-add:hover { background: #e8f0fb; }
+  .emp-status { font-size: .72rem; color: var(--green); font-weight: 700; }
+
+  /* SCORE ENTRY */
+  .emp-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .emp-sel-btn {
+    padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border);
+    background: white; color: #5a6a80; font-family: inherit; font-size: .82rem;
+    font-weight: 600; cursor: pointer; transition: all .15s;
+  }
+  .emp-sel-btn:hover { border-color: var(--accent); color: var(--blue); }
+  .emp-sel-btn.active { background: var(--blue); border-color: var(--blue); color: white; }
+  .emp-sel-btn.done { border-color: var(--green); color: var(--green); }
+  .emp-sel-btn.done.active { background: var(--green); border-color: var(--green); color: white; }
+
+  .score-section-title { font-size: .78rem; font-weight: 700; color: white; background: var(--dark); padding: 7px 12px; border-radius: 6px 6px 0 0; margin-top: 20px; display: flex; align-items: center; justify-content: space-between; }
+  .score-section-title .lbl { font-size: .68rem; color: rgba(255,255,255,.6); }
+  .score-row {
+    display: grid; grid-template-columns: 1fr 200px;
+    gap: 10px; align-items: center; padding: 8px 12px;
+    border: 1px solid var(--border); border-top: none;
+    font-size: .83rem; background: white;
+  }
+  .score-row:last-child { border-radius: 0 0 6px 6px; }
+  .score-row:nth-child(even) { background: var(--light); }
+  .score-row.neg { border-left: 3px solid var(--orange); }
+  .score-btns { display: flex; gap: 3px; justify-content: space-between; }
+  .sbtn {
+    width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border);
+    background: white; font-size: .72rem; font-weight: 700; cursor: pointer;
+    font-family: inherit; color: #8a9ab0; transition: all .12s; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sbtn:hover { border-color: var(--accent); color: var(--accent); }
+  .sbtn.sl { background: var(--red); border-color: var(--red); color: white; }
+  .sbtn.sm { background: var(--orange); border-color: var(--orange); color: white; }
+  .sbtn.sh { background: var(--green); border-color: var(--green); color: white; }
+
+  /* DASHBOARD */
+  .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .sum-card { background: var(--light); border: 1.5px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .sum-card .val { font-size: 2rem; font-weight: 700; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+  .sum-card .lbl { font-size: .75rem; color: #5a6a80; }
+
+  .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .cat-card { background: white; border: 1.5px solid var(--border); border-radius: 8px; padding: 16px; }
+  .cat-card h4 { font-size: .78rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .cat-score { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .cat-score-val { font-size: 1.6rem; font-weight: 700; min-width: 48px; }
+  .cat-score-val.high { color: var(--green); }
+  .cat-score-val.mid { color: var(--orange); }
+  .cat-score-val.low { color: var(--red); }
+  .bar-wrap { flex: 1; background: #e0e0e0; border-radius: 4px; height: 10px; overflow: hidden; }
+  .bar-fill { height: 10px; border-radius: 4px; transition: width .5s; }
+  .bar-high { background: var(--green); }
+  .bar-mid { background: var(--orange); }
+  .bar-low { background: var(--red); }
+
+  .top-list { list-style: none; }
+  .top-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: .82rem; }
+  .top-item:last-child { border-bottom: none; }
+  .top-badge { flex-shrink: 0; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: .75rem; font-weight: 700; color: white; }
+  .badge-force { background: var(--green); }
+  .badge-defi { background: var(--red); }
+  .top-score { margin-left: auto; font-weight: 700; flex-shrink: 0; padding-left: 8px; }
+
+  .emp-compare { overflow-x: auto; margin-top: 8px; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: .8rem; min-width: 400px; }
+  .compare-table th { background: var(--dark); color: white; padding: 8px 10px; text-align: left; font-size: .75rem; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .compare-table td { border: 1px solid var(--border); padding: 7px 10px; }
+  .compare-table tr:nth-child(even) td { background: var(--light); }
+  .score-chip { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: .75rem; font-weight: 700; color: white; }
+  .chip-high { background: var(--green); }
+  .chip-mid { background: var(--orange); }
+  .chip-low { background: var(--red); }
+
+  /* THEMES */
+  .theme-block { background: var(--light); border: 1.5px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+  .theme-block h4 { font-size: .8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .theme-block h4::before { content: ''; display: block; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
+
+  /* ACTION PLAN */
+  .action-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  .action-table th { background: var(--dark); color: white; padding: 8px 12px; text-align: left; font-size: .76rem; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .action-table td { border: 1px solid var(--border); padding: 6px 8px; vertical-align: top; }
+  .action-table tr:nth-child(even) td { background: var(--light); }
+  .action-table input, .action-table select { border: none; background: transparent; width: 100%; font-family: inherit; font-size: .82rem; padding: 3px; }
+  .action-table input:focus, .action-table select:focus { outline: none; background: #fffde7; }
+  .btn-add-row { margin-top: 10px; padding: 7px 16px; background: white; border: 1.5px dashed var(--accent); border-radius: 6px; color: var(--blue); font-size: .82rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-add-row:hover { background: #e8f0fb; }
+
+  /* ALERT BOX */
+  .alert-box { background: #fff8e1; border-left: 4px solid var(--orange); border-radius: 4px; padding: 10px 14px; font-size: .83rem; color: #7a4400; margin-bottom: 14px; line-height: 1.6; }
+  .info-box { background: var(--light); border-left: 4px solid var(--accent); border-radius: 4px; padding: 10px 14px; font-size: .84rem; color: #2a3a4a; margin-bottom: 14px; line-height: 1.7; }
+
+  /* ACTIONS BAR */
+  .actions { padding: 18px 36px; background: var(--light); display: flex; gap: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .btn { padding: 9px 20px; border-radius: 7px; font-size: .88rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; font-family: inherit; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #155a9e; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-secondary:hover { background: #e8f0fb; }
+  .btn-success { background: var(--green); color: white; }
+  .btn-success:hover { background: #157a47; }
+  .btn-print { background: white; color: #5a6a80; border: 1.5px solid var(--border); }
+
+  .footer-note { text-align: center; font-size: .75rem; color: #8a9ab0; padding: 12px; }
+
+  .no-data-msg { text-align: center; padding: 40px 20px; color: #8a9ab0; font-size: .9rem; }
+  .no-data-msg span { font-size: 2rem; display: block; margin-bottom: 10px; }
+
+  .progress-emp { background: #e0e0e0; border-radius: 10px; height: 8px; margin-top: 6px; overflow: hidden; }
+  .progress-emp-fill { height: 8px; background: var(--blue); border-radius: 10px; transition: width .3s; }
+
+  @media print {
+    body { background: white; font-size: 11px; }
+    .page-header, .nav-tabs, .actions { display: none !important; }
+    .container { box-shadow: none; margin: 0; border-radius: 0; }
+    .tab-content { display: block !important; }
+    .doc-header, .compare-table th, .action-table th, .score-section-title { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  @media (max-width: 600px) {
+    .section { padding: 14px 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .cat-grid { grid-template-columns: 1fr; }
+    .score-row { grid-template-columns: 1fr; }
+    .actions { padding: 14px 16px; }
+    .emp-row { grid-template-columns: 1fr auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div class="subtitle">Outil gestionnaire — Compilation consolidation d'équipe</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Compilation — Consolidation d'équipe</h1>
+    <p>Outil d'analyse et de synthèse des questionnaires — Réservé au gestionnaire</p>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab(0)">⚙️ Configuration</button>
+    <button class="tab-btn" onclick="showTab(1)">📥 Saisie des scores</button>
+    <button class="tab-btn" onclick="showTab(2)">📊 Tableau de bord</button>
+    <button class="tab-btn" onclick="showTab(3)">💬 Thèmes qualitatifs</button>
+    <button class="tab-btn" onclick="showTab(4)">✅ Plan d'action</button>
+  </div>
+
+  <!-- ===== ONGLET 1 : CONFIGURATION ===== -->
+  <div class="tab-content active" id="tab-0">
+    <div class="section">
+      <div class="section-title">Informations générales</div>
+      <div class="grid">
+        <div class="field"><label>Nom de la clinique</label><input type="text" id="clinique" placeholder="Clinique Dentaire..."></div>
+        <div class="field"><label>Date de la consolidation</label><input type="date" id="dateConso"></div>
+        <div class="field"><label>Gestionnaire / Animateur(trice)</label><input type="text" id="animateur" placeholder="Nom et prénom"></div>
+        <div class="field"><label>Département / Groupe (optionnel)</label><input type="text" id="dept" placeholder="Ex : Secrétariat, Clinique, Équipe complète..."></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Liste des participants (4 à 25)</div>
+      <div class="info-box">Ajoutez le nom et le poste de chaque employé ayant complété le questionnaire. Vous pourrez ensuite saisir leurs scores individuellement.</div>
+      <div class="emp-list" id="empList"></div>
+      <button class="btn-add" onclick="addEmp()" id="btnAdd">+ Ajouter un(e) participant(e)</button>
+      <div style="margin-top:12px;">
+        <div style="font-size:.78rem;color:#5a6a80;display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span id="empCount">0 participant(s)</span>
+          <span id="empScored">0 score(s) saisi(s)</span>
+        </div>
+        <div class="progress-emp"><div class="progress-emp-fill" id="empProgress" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <span></span>
+      <button class="btn btn-primary" onclick="showTab(1)">Continuer — Saisie des scores →</button>
+    </div>
+  </div>
+
+  <!-- ===== ONGLET 2 : SAISIE ===== -->
+  <div class="tab-content" id="tab-1">
+    <div class="section">
+      <div class="section-title">Saisie des scores par participant</div>
+      <div class="info-box">Sélectionnez un(e) participant(e) et saisissez ses scores tels qu'indiqués sur son questionnaire. Répétez pour chaque participant.</div>
+      <div class="emp-selector" id="empSelector"></div>
+      <div id="scoreEntry"></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(0)">← Retour</button>
+      <button class="btn btn-primary" onclick="showTab(2);buildDashboard()">Voir le tableau de bord →</button>
+    </div>
+  </div>
+
+  <!-- ===== ONGLET 3 : DASHBOARD ===== -->
+  <div class="tab-content" id="tab-2">
+    <div class="section">
+      <div class="section-title">Vue d'ensemble</div>
+      <div id="dashSummary"><div class="no-data-msg"><span>📊</span>Complétez la saisie des scores pour voir l'analyse.</div></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Résultats par catégorie</div>
+      <div id="dashCats"><div class="no-data-msg"><span>📈</span>Aucune donnée disponible.</div></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Forces et défis prioritaires</div>
+      <div id="dashTopBottom"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Comparaison par participant</div>
+      <div id="dashCompare"></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(1)">← Retour</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+        <button class="btn btn-primary" onclick="showTab(3)">Thèmes qualitatifs →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ONGLET 4 : THÈMES ===== -->
+  <div class="tab-content" id="tab-3">
+    <div class="section">
+      <div class="section-title">Synthèse des réponses qualitatives</div>
+      <div class="info-box">Après lecture des questionnaires individuels, notez ici les thèmes récurrents identifiés dans chaque question ouverte.</div>
+
+      <div class="theme-block">
+        <h4>Q1-Q2 — Valeurs personnelles récurrentes</h4>
+        <textarea placeholder="Quelles valeurs reviennent le plus souvent? Ex : respect, travail d&#39;équipe, communication..."></textarea>
+      </div>
+      <div class="theme-block">
+        <h4>Q3 — Définitions des valeurs de la clinique</h4>
+        <textarea placeholder="Comment l&#39;équipe définit-elle les valeurs de la clinique? Y a-t-il des divergences?"></textarea>
+      </div>
+      <div class="theme-block">
+        <h4>Q4 — Valeur prioritaire collective</h4>
+        <textarea placeholder="Quelle valeur est la plus citée comme prioritaire? Qu&#39;est-ce que ça révèle?"></textarea>
+      </div>
+      <div class="theme-block">
+        <h4>Q5 — Valeurs non respectées — situations récurrentes</h4>
+        <textarea placeholder="Quelles valeurs sont les plus souvent citées comme non respectées? Quels types de situations?"></textarea>
+      </div>
+      <div class="theme-block">
+        <h4>Q6 — Besoins communs de l'équipe</h4>
+        <textarea placeholder="Quels besoins reviennent le plus souvent? Ex : communication, reconnaissance, soutien..."></textarea>
+      </div>
+      <div class="theme-block">
+        <h4>Q7 — Situations d'inconfort fréquentes</h4>
+        <textarea placeholder="Quelles situations d&#39;inconfort sont les plus mentionnées?"></textarea>
+      </div>
+      <div class="theme-block">
+        <h4>Q8 — Attentes envers les collègues</h4>
+        <textarea placeholder="Quelles attentes reviennent le plus souvent?"></textarea>
+      </div>
+      <div class="theme-block" style="border-color:var(--green);border-width:1.5px;">
+        <h4 style="color:var(--green);">Apprentissages clés de cette consolidation</h4>
+        <textarea placeholder="Qu&#39;est-ce que cette consolidation a révélé? Points positifs surprenants, consensus inattendu, tension principale..."></textarea>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(2)">← Retour</button>
+      <button class="btn btn-primary" onclick="showTab(4)">Plan d'action →</button>
+    </div>
+  </div>
+
+  <!-- ===== ONGLET 5 : PLAN D'ACTION ===== -->
+  <div class="tab-content" id="tab-4">
+    <div class="section">
+      <div class="section-title">Plan d'action — Suites de la consolidation</div>
+      <div class="info-box">Basé sur l'analyse des scores et des thèmes qualitatifs, définissez les actions prioritaires à mettre en place avec l'équipe.</div>
+      <table class="action-table" id="actionTable">
+        <thead>
+          <tr>
+            <th style="width:30%">Action prioritaire</th>
+            <th style="width:20%">Objectif visé</th>
+            <th style="width:18%">Responsable</th>
+            <th style="width:14%">Date limite</th>
+            <th style="width:13%">Statut</th>
+            <th style="width:5%"></th>
+          </tr>
+        </thead>
+        <tbody id="actionBody"><tr>
+    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
+    <td><input type="text" placeholder="Objectif visé..."></td>
+    <td><input type="text" placeholder="Responsable..."></td>
+    <td><input type="date"></td>
+    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
+    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
+    <td><input type="text" placeholder="Objectif visé..."></td>
+    <td><input type="text" placeholder="Responsable..."></td>
+    <td><input type="date"></td>
+    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
+    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
+    <td><input type="text" placeholder="Objectif visé..."></td>
+    <td><input type="text" placeholder="Responsable..."></td>
+    <td><input type="date"></td>
+    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
+    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
+    <td><input type="text" placeholder="Objectif visé..."></td>
+    <td><input type="text" placeholder="Responsable..."></td>
+    <td><input type="date"></td>
+    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
+    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
+    <td><input type="text" placeholder="Objectif visé..."></td>
+    <td><input type="text" placeholder="Responsable..."></td>
+    <td><input type="date"></td>
+    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
+    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
+    <td><input type="text" placeholder="Objectif visé..."></td>
+    <td><input type="text" placeholder="Responsable..."></td>
+    <td><input type="date"></td>
+    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
+    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr></tbody>
+      </table>
+      <button class="btn-add-row" onclick="addAction()">+ Ajouter une action</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Prochaines étapes</div>
+      <div class="grid">
+        <div class="field"><label>Date de la prochaine rencontre de suivi</label><input type="date"></div>
+        <div class="field"><label>Format du suivi prévu</label><input type="text" placeholder="Ex : Réunion d&#39;équipe, rencontres individuelles..."></div>
+        <div class="field full"><label>Notes additionnelles</label><textarea placeholder="Observations importantes, contexte particulier, points à surveiller..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(3)">← Retour</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer le rapport complet</button>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Outil confidentiel — usage gestionnaire uniquement</div>
+</div>
+
+<script>
+// ===== DATA =====
+const CATS = {
+  pos: { label: 'Comportements positifs', neg: false },
+  neg: { label: 'Comportements négatifs', neg: true },
+  sat: { label: 'Satisfaction — Clinique', neg: false },
+  eq:  { label: 'Satisfaction — Équipe', neg: false }
+};
+
+const QS = {
+  pos: ["Respecter la confidentialité et éviter les questions indiscrètes.","Reconnaître et valoriser la contribution de chacun.","Avoir une attitude constructive envers le travail des collègues.","Collaborer avec leurs collègues dans le cadre du travail.","Avoir un langage courtois et des propos nuancés.","Regarder l'autre lorsqu'il lui parle.","Saluer leurs collègues en arrivant et en partant.","Aider les autres dans leur travail lorsque l'occasion se présente.","Arriver à temps aux rencontres ou aviser de leur retard.","Demander avec politesse et remercier.","Éviter de lancer ou d'alimenter des rumeurs.","Demander l'avis des autres sur des sujets qui les concernent.","Partager leurs connaissances et leur expertise avec les autres.","Nettoyer et ranger les lieux communs après usage.","Se montrer conciliantes et ne pas s'offenser pour un rien."],
+  neg: ["Faire des blagues qui créent de l'inconfort.","Blâmer les autres pour leurs propres erreurs.","Ignorer un collègue lors d'activités communes.","Crier après un collègue ou exprimer des frustrations de façon inappropriée.","Critiquer les compétences d'un collègue ou passer des remarques désobligeantes.","Adopter une attitude individualiste plutôt que collaborative.","Parler fort ou faire du bruit dans les aires communes.","Interrompre une conversation en cours.","Participer aux commérages contre une autre personne.","S'approprier tout le crédit d'un travail d'équipe.","Omettre de donner toute l'information nécessaire à un collègue.","Être inattentif pendant une rencontre.","Refuser d'écouter une personne qui veut clarifier une situation.","Parler à d'autres pendant qu'une formation se déroule."],
+  sat: ["La clinique a une vision claire et la partage avec les employés.","Les politiques de la clinique sont claires et connues de tous.","La direction est professionnelle et mérite ma confiance.","La qualité du service est une priorité dans cette clinique.","La direction respecte ses engagements envers les employés.","La clinique est ouverte et à l'écoute des besoins et suggestions.","La clinique valorise les initiatives individuelles.","La direction offre des évaluations de performance justes.","La clinique offre un bon environnement de travail.","La clinique offre les outils et le soutien pour accomplir les tâches.","La clinique gère efficacement la charge de travail.","La direction encourage le travail d'équipe.","Les différents postes communiquent clairement entre eux."],
+  eq:  ["J'accorde de l'importance à mon travail.","Mon travail m'apporte suffisamment de défis.","Je me sens souvent stressé(e) par mon travail.","Mes collègues considèrent mon opinion.","Mon supérieur me demande souvent mon avis.","Les attentes de mon supérieur sont réalistes.","Les tâches assignées me permettent de grandir.","Je me sens à l'aise de donner mon opinion.","J'obtiens souvent du soutien de mes collègues.","Les responsabilités sont partagées équitablement.","Les membres de mon équipe communiquent bien entre eux.","Les conflits sont gérés de façon professionnelle.","Mon salaire correspond à mes responsabilités."]
+};
+
+let employees = [];
+let scores = {}; // { empId: { pos:[], neg:[], sat:[], eq:[] } }
+let currentEmp = null;
+
+// ===== EMPLOYEES =====
+function addEmp() {
+  if (employees.length >= 25) { alert('Maximum 25 participants atteint.'); return; }
+  const id = Date.now();
+  employees.push({ id, name: '', role: '' });
+  renderEmpList();
+  renderEmpSelector();
+}
+
+function removeEmp(id) {
+  employees = employees.filter(e => e.id !== id);
+  delete scores[id];
+  if (currentEmp === id) currentEmp = null;
+  renderEmpList();
+  renderEmpSelector();
+}
+
+function renderEmpList() {
+  const el = document.getElementById('empList');
+  el.innerHTML = '';
+  employees.forEach((emp, i) => {
+    const hasScores = scores[emp.id] && Object.keys(scores[emp.id]).length > 0;
+    const row = document.createElement('div');
+    row.className = 'emp-row' + (hasScores ? ' has-data' : '');
+    row.innerHTML = `
+      <div>
+        <div class="emp-num">Participant ${i+1} ${hasScores ? '<span class="emp-status">✓ Scores saisis</span>' : ''}</div>
+        <input type="text" placeholder="Nom et prénom" value="${emp.name}"
+          oninput="employees[${i}].name=this.value;renderEmpSelector()" style="margin-top:4px;width:100%;">
+      </div>
+      <div>
+        <div class="emp-num" style="visibility:hidden">_</div>
+        <input type="text" placeholder="Poste occupé" value="${emp.role}"
+          oninput="employees[${i}].role=this.value;renderEmpSelector()" style="margin-top:4px;width:100%;">
+      </div>
+      <button class="btn-del" onclick="removeEmp(${emp.id})">×</button>`;
+    el.appendChild(row);
+  });
+  document.getElementById('btnAdd').style.display = employees.length >= 25 ? 'none' : 'flex';
+  updateEmpCount();
+}
+
+function updateEmpCount() {
+  const total = employees.length;
+  const scored = employees.filter(e => hasAllScores(e.id)).length;
+  document.getElementById('empCount').textContent = `${total} participant(s)`;
+  document.getElementById('empScored').textContent = `${scored} questionnaire(s) complet(s)`;
+  document.getElementById('empProgress').style.width = total > 0 ? (scored/total*100)+'%' : '0%';
+}
+
+function hasAllScores(id) {
+  const s = scores[id];
+  if (!s) return false;
+  return s.pos && s.neg && s.sat && s.eq &&
+    s.pos.length === QS.pos.length && s.neg.length === QS.neg.length &&
+    s.sat.length === QS.sat.length && s.eq.length === QS.eq.length;
+}
+
+// ===== SCORE ENTRY =====
+function renderEmpSelector() {
+  const el = document.getElementById('empSelector');
+  el.innerHTML = '';
+  if (employees.length === 0) {
+    el.innerHTML = '<p style="font-size:.85rem;color:#8a9ab0;">Aucun participant configuré. Retournez à la configuration.</p>';
+    document.getElementById('scoreEntry').innerHTML = '';
+    return;
+  }
+  employees.forEach(emp => {
+    const done = hasAllScores(emp.id);
+    const btn = document.createElement('button');
+    btn.className = 'emp-sel-btn' + (done ? ' done' : '') + (currentEmp === emp.id ? ' active' : '');
+    btn.textContent = (emp.name || 'Sans nom') + (done ? ' ✓' : '');
+    btn.onclick = () => { currentEmp = emp.id; renderEmpSelector(); renderScoreEntry(); };
+    el.appendChild(btn);
+  });
+  if (!currentEmp && employees.length > 0) {
+    currentEmp = employees[0].id;
+    renderEmpSelector();
+    renderScoreEntry();
+  }
+}
+
+function renderScoreEntry() {
+  const el = document.getElementById('scoreEntry');
+  if (!currentEmp) { el.innerHTML = ''; return; }
+  const emp = employees.find(e => e.id === currentEmp);
+  if (!emp) { el.innerHTML = ''; return; }
+  if (!scores[currentEmp]) scores[currentEmp] = {};
+
+  let html = `<div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+    <strong>${emp.name || 'Participant sans nom'}</strong> — ${emp.role || 'Poste non défini'}
+    <div style="font-size:.78rem;color:#5a6a80;margin-top:3px;">Saisissez les scores tels qu'indiqués sur le questionnaire de cette personne.</div>
+  </div>`;
+
+  Object.keys(QS).forEach(cat => {
+    const isNeg = CATS[cat].neg;
+    html += `<div class="score-section-title">${CATS[cat].label}<span class="lbl">${isNeg ? '1 = rarement | 7 = souvent' : '1 = désaccord | 7 = accord'}</span></div>`;
+    QS[cat].forEach((q, qi) => {
+      const savedVal = scores[currentEmp][cat] && scores[currentEmp][cat][qi];
+      html += `<div class="score-row ${isNeg ? 'neg' : ''}">
+        <span>${q}</span>
+        <div class="score-btns">
+          ${[1,2,3,4,5,6,7].map(n => {
+            let cls = '';
+            if (savedVal === n) cls = n<=2?'sl':n<=4?'sm':'sh';
+            return `<button class="sbtn ${cls}" data-cat="${cat}" data-qi="${qi}" data-v="${n}" onclick="saveScore(this)">${n}</button>`;
+          }).join('')}
+        </div>
+      </div>`;
+    });
+  });
+
+  el.innerHTML = html;
+  updateEmpCount();
+}
+
+function saveScore(btn) {
+  const {cat, qi, v} = btn.dataset;
+  if (!scores[currentEmp]) scores[currentEmp] = {};
+  if (!scores[currentEmp][cat]) scores[currentEmp][cat] = [];
+  scores[currentEmp][cat][parseInt(qi)] = parseInt(v);
+  // Update buttons in this row
+  btn.closest('.score-btns').querySelectorAll('.sbtn').forEach(b => b.classList.remove('sl','sm','sh'));
+  const val = parseInt(v);
+  btn.classList.add(val<=2?'sl':val<=4?'sm':'sh');
+  updateEmpCount();
+}
+
+// ===== DASHBOARD =====
+function avg(arr) {
+  const valid = arr.filter(v => v !== undefined && v !== null);
+  if (!valid.length) return null;
+  return valid.reduce((a,b) => a+b, 0) / valid.length;
+}
+
+function scoreClass(v, isNeg) {
+  if (v === null) return '';
+  if (isNeg) { return v >= 5 ? 'low' : v >= 3 ? 'mid' : 'high'; }
+  return v >= 5.5 ? 'high' : v >= 3.5 ? 'mid' : 'low';
+}
+
+function barClass(v, isNeg) {
+  const cls = scoreClass(v, isNeg);
+  return cls === 'high' ? 'bar-high' : cls === 'mid' ? 'bar-mid' : 'bar-low';
+}
+
+function chipClass(v, isNeg) {
+  const cls = scoreClass(v, isNeg);
+  return cls === 'high' ? 'chip-high' : cls === 'mid' ? 'chip-mid' : 'chip-low';
+}
+
+function buildDashboard() {
+  const scored = employees.filter(e => scores[e.id] && Object.keys(scores[e.id]).length > 0);
+  if (scored.length === 0) {
+    document.getElementById('dashSummary').innerHTML = '<div class="no-data-msg"><span>📊</span>Aucun score saisi. Retournez à la saisie des scores.</div>';
+    document.getElementById('dashCats').innerHTML = '';
+    document.getElementById('dashTopBottom').innerHTML = '';
+    document.getElementById('dashCompare').innerHTML = '';
+    return;
+  }
+
+  // Summary cards
+  document.getElementById('dashSummary').innerHTML = `
+    <div class="summary-cards">
+      <div class="sum-card"><div class="val">${employees.length}</div><div class="lbl">Participants configurés</div></div>
+      <div class="sum-card"><div class="val">${scored.length}</div><div class="lbl">Questionnaires saisis</div></div>
+      <div class="sum-card"><div class="val">${Object.keys(QS).reduce((a,c)=>a+QS[c].length,0)}</div><div class="lbl">Questions au total</div></div>
+      <div class="sum-card"><div class="val">${Math.round(scored.length/employees.length*100)}%</div><div class="lbl">Taux de complétion</div></div>
+    </div>`;
+
+  // Category averages
+  let catHtml = '<div class="cat-grid">';
+  Object.keys(QS).forEach(cat => {
+    const isNeg = CATS[cat].neg;
+    const allScores = [];
+    scored.forEach(e => {
+      if (scores[e.id][cat]) allScores.push(...scores[e.id][cat].filter(v=>v));
+    });
+    const moyenne = avg(allScores);
+    const cls = scoreClass(moyenne, isNeg);
+    const barW = moyenne ? (moyenne/7*100).toFixed(0) : 0;
+    const bCls = barClass(moyenne, isNeg);
+    catHtml += `<div class="cat-card">
+      <h4>${CATS[cat].label}</h4>
+      <div class="cat-score">
+        <span class="cat-score-val ${cls}">${moyenne ? moyenne.toFixed(1) : '—'}/7</span>
+        <div class="bar-wrap"><div class="bar-fill ${bCls}" style="width:${barW}%"></div></div>
+      </div>
+      <div style="font-size:.75rem;color:#5a6a80;">${isNeg ? (cls==='low'?'✅ Peu de comportements négatifs':cls==='mid'?'⚠️ Quelques comportements à adresser':'🔴 Comportements négatifs fréquents') : (cls==='high'?'✅ Très satisfaisant':cls==='mid'?'⚠️ Satisfaction modérée':'🔴 À améliorer en priorité')}</div>
+    </div>`;
+  });
+  catHtml += '</div>';
+  document.getElementById('dashCats').innerHTML = catHtml;
+
+  // Top forces & défis
+  const allItems = [];
+  Object.keys(QS).forEach(cat => {
+    const isNeg = CATS[cat].neg;
+    QS[cat].forEach((q, qi) => {
+      const vals = scored.map(e => scores[e.id][cat] && scores[e.id][cat][qi]).filter(v=>v);
+      const a = avg(vals);
+      if (a !== null) {
+        // Pour les négatifs, on inverse pour le scoring (haut score négatif = problème)
+        const problemScore = isNeg ? a : (8 - a);
+        allItems.push({ cat, qi, q, avg: a, isNeg, problemScore });
+      }
+    });
+  });
+
+  const forces = [...allItems].sort((a,b) => {
+    const scoreA = a.isNeg ? (8-a.avg) : a.avg;
+    const scoreB = b.isNeg ? (8-b.avg) : b.avg;
+    return scoreB - scoreA;
+  }).slice(0, 5);
+
+  const defis = [...allItems].sort((a,b) => b.problemScore - a.problemScore).slice(0, 5);
+
+  let topHtml = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
+
+  topHtml += '<div><div style="font-size:.8rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border);">✅ Top 5 — Forces de l\'équipe</div><ul class="top-list">';
+  forces.forEach((item, i) => {
+    const displayScore = item.isNeg ? (8-item.avg).toFixed(1) : item.avg.toFixed(1);
+    topHtml += `<li class="top-item"><span class="top-badge badge-force">${i+1}</span><span>${item.q}</span><span class="top-score" style="color:var(--green)">${item.avg.toFixed(1)}/7</span></li>`;
+  });
+  topHtml += '</ul></div>';
+
+  topHtml += '<div><div style="font-size:.8rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border);">🔴 Top 5 — Défis prioritaires</div><ul class="top-list">';
+  defis.forEach((item, i) => {
+    topHtml += `<li class="top-item"><span class="top-badge badge-defi">${i+1}</span><span>${item.q} <span style="font-size:.72rem;color:#8a9ab0;">(${CATS[item.cat].label})</span></span><span class="top-score" style="color:var(--red)">${item.avg.toFixed(1)}/7</span></li>`;
+  });
+  topHtml += '</ul></div></div>';
+  document.getElementById('dashTopBottom').innerHTML = topHtml;
+
+  // Employee comparison
+  if (scored.length < 2) {
+    document.getElementById('dashCompare').innerHTML = '<p style="font-size:.83rem;color:#8a9ab0;padding:10px 0;">La comparaison est disponible avec 2 participants ou plus.</p>';
+    return;
+  }
+  let compHtml = '<div class="emp-compare"><table class="compare-table"><thead><tr><th>Participant</th><th>Poste</th>';
+  Object.keys(QS).forEach(cat => { compHtml += `<th>${CATS[cat].label}</th>`; });
+  compHtml += '</tr></thead><tbody>';
+  scored.forEach(emp => {
+    compHtml += `<tr><td><strong>${emp.name || 'Sans nom'}</strong></td><td>${emp.role || '—'}</td>`;
+    Object.keys(QS).forEach(cat => {
+      const isNeg = CATS[cat].neg;
+      const vals = scores[emp.id][cat] ? scores[emp.id][cat].filter(v=>v) : [];
+      const a = avg(vals);
+      if (a === null) { compHtml += '<td>—</td>'; return; }
+      const cc = chipClass(a, isNeg);
+      compHtml += `<td><span class="score-chip ${cc}">${a.toFixed(1)}/7</span></td>`;
+    });
+    compHtml += '</tr>';
+  });
+  compHtml += '</tbody></table></div>';
+  document.getElementById('dashCompare').innerHTML = compHtml;
+}
+
+// ===== ACTION PLAN =====
+function addAction() {
+  const tbody = document.getElementById('actionBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" placeholder="Décrivez l'action..."></td>
+    <td><input type="text" placeholder="Objectif visé..."></td>
+    <td><input type="text" placeholder="Responsable..."></td>
+    <td><input type="date"></td>
+    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
+    <td><button class="btn-del" onclick="this.closest('tr').remove()" style="margin:auto;">×</button></td>`;
+  tbody.appendChild(tr);
+}
+
+// Add 3 default action rows
+for(let i=0;i<3;i++) addAction();
+
+// ===== TABS =====
+function showTab(n) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (n===1) renderEmpSelector();
+}
+</script>
+
+
+</body></html>

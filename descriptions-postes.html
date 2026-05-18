@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/info/Downloads/descriptions-postes.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descriptions de postes — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:980px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.85rem;opacity:.75;}
+
+  .clinic-bar{background:var(--light);border-bottom:1px solid var(--border);padding:12px 36px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+  .cf{display:flex;align-items:center;gap:8px;flex:1;min-width:200px;}
+  .cf label{font-size:.73rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+  .cf input{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.86rem;font-family:inherit;color:var(--text);background:white;}
+  .cf input:focus{outline:none;border-color:var(--accent);}
+
+  .poste-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .poste-tabs::-webkit-scrollbar{display:none;}
+  .poste-tab{padding:11px 16px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .poste-tab:hover{color:var(--blue);background:#e8f0fb;}
+  .poste-tab.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .poste-content{display:none;}
+  .poste-content.active{display:block;}
+
+  .desc-wrap{padding:24px 36px;}
+
+  .poste-title-block{background:var(--light);border:2px solid var(--accent);border-radius:10px;padding:18px 22px;margin-bottom:18px;display:flex;align-items:flex-start;gap:14px;}
+  .poste-icon{font-size:2rem;flex-shrink:0;}
+  .pt-info{flex:1;}
+  .pt-title{font-size:1.15rem;font-weight:700;color:var(--dark);margin-bottom:3px;}
+  .pt-sup{font-size:.83rem;color:#5a6a80;font-style:italic;}
+  .pt-date{font-size:.72rem;color:#8a9ab0;margin-top:6px;display:flex;align-items:center;gap:6px;}
+  .pt-date input{border:1.5px solid var(--border);border-radius:5px;padding:3px 7px;font-size:.72rem;font-family:inherit;color:var(--text);background:white;}
+
+  .desc-summary{background:#f0f6ff;border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:12px 16px;margin-bottom:18px;font-size:.87rem;line-height:1.75;color:#1a3a5c;}
+
+  /* SECTION */
+  .desc-section{margin-bottom:18px;border:1.5px solid var(--border);border-radius:9px;overflow:hidden;}
+  .sec-header{display:flex;align-items:center;padding:10px 16px;background:#f4f8ff;border-bottom:1.5px solid var(--border);}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;flex:1;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;flex-shrink:0;}
+  .btn-edit{padding:4px 12px;border-radius:5px;border:1.5px solid var(--border);background:white;color:#5a6a80;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px;}
+  .btn-edit:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-edit.active{background:var(--orange);border-color:var(--orange);color:white;}
+
+  .subsec{padding:12px 16px 4px;}
+  .subsec-title{font-size:.76rem;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+  .subsec-title::before{content:'▸';color:var(--accent);}
+
+  /* ITEMS */
+  .item-list{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+  .item-row{display:flex;align-items:flex-start;gap:8px;}
+  .item-text{flex:1;padding:6px 10px;background:var(--light);border-radius:6px;border:1px solid var(--border);font-size:.83rem;line-height:1.5;color:#2a3a4a;display:flex;align-items:flex-start;gap:7px;}
+  .item-text::before{content:'•';color:var(--blue);font-weight:700;flex-shrink:0;margin-top:1px;}
+  .item-text[contenteditable=true]{background:white;border-color:var(--accent);outline:none;cursor:text;}
+  .item-text[contenteditable=true]:focus{box-shadow:0 0 0 2px rgba(33,150,243,.15);}
+  .btn-del-item{width:22px;height:22px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.8rem;flex-shrink:0;margin-top:4px;font-family:inherit;display:none;align-items:center;justify-content:center;}
+  .edit-mode .btn-del-item{display:flex;}
+
+  /* COMP GRID */
+  .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 16px;}
+  .comp-item-row{display:flex;align-items:flex-start;gap:8px;}
+  .comp-text{flex:1;padding:7px 10px;background:var(--light);border-radius:6px;border:1px solid var(--border);font-size:.82rem;color:#2a3a4a;display:flex;align-items:flex-start;gap:6px;}
+  .comp-text::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
+  .comp-text[contenteditable=true]{background:white;border-color:var(--green);outline:none;cursor:text;}
+  .comp-text[contenteditable=true]:focus{box-shadow:0 0 0 2px rgba(26,158,90,.12);}
+
+  /* ADD BUTTON */
+  .btn-add-item{display:none;align-items:center;gap:6px;padding:6px 12px;background:transparent;border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;margin:0 16px 12px;}
+  .btn-add-item:hover{background:#e8f0fb;}
+  .edit-mode .btn-add-item{display:flex;}
+
+  /* SIGNATURE */
+  .sig-section{background:#f8f9fa;border-top:2px solid var(--border);padding:16px 22px;margin-top:6px;}
+  .sig-title{font-size:.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .sfield label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;}
+  .sfield input{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;width:100%;margin-bottom:12px;}
+  .sfield input:focus{outline:none;border-color:var(--accent);}
+  .sig-line{border-top:1.5px solid var(--border);padding-top:5px;font-size:.72rem;color:#8a9ab0;}
+
+  .actions{padding:14px 36px;background:var(--light);display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);}
+  .btn{padding:8px 18px;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:10px;}
+
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.poste-tabs,.actions,.clinic-bar,.btn-edit,.btn-del-item,.btn-add-item{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .poste-content{display:block!important;}
+    .doc-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .poste-content+.poste-content{page-break-before:always;}
+    .desc-section{page-break-inside:avoid;}
+    input{border:none!important;background:transparent!important;}
+    [contenteditable]{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:700px){
+    .desc-wrap{padding:14px 16px;}
+    .comp-grid{grid-template-columns:1fr;}
+    .sig-grid{grid-template-columns:1fr;}
+    .actions{padding:10px 16px;}
+    .clinic-bar{padding:10px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Ressources humaines</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Descriptions de postes</h1>
+    <p>Tâches, responsabilités et profil de compétences — Clinique dentaire</p>
+  </div>
+
+  <div class="clinic-bar">
+    <div class="cf"><label>Clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+    <div class="cf"><label>Superviseur(e)</label><input type="text" placeholder="Nom et titre"></div>
+  </div>
+
+  <div class="poste-tabs" id="tabs"><button class="poste-tab active">🗂️ Secrétaire dentaire</button><button class="poste-tab">📞 Secrétaire dentaire</button><button class="poste-tab">🔀 Secrétaire dentaire</button><button class="poste-tab">🦷 Hygiéniste dentaire</button><button class="poste-tab">🔧 Assistant(e) dentaire</button><button class="poste-tab">📋 Coordonnatrice </button><button class="poste-tab">👤 Gestionnaire </button></div>
+  <div id="postes"><div class="poste-content active" id="pc0"><div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">🗂️</div>
+      <div class="pt-info">
+        <div class="pt-title">Secrétaire dentaire</div>
+        <div class="pt-sup">Sous la supervision de la gestionnaire / dentiste propriétaire</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">La secrétaire dentaire assure un support administratif en lien avec l'accueil des patients et le bon fonctionnement de la clinique. Grâce à son accueil hors pair, son sourire, son professionnalisme et sa capacité à répondre aux besoins des clients, la titulaire du poste offre aux patients une expérience client hors du commun.</div><div class="desc-section" id="sec_0_0">
+      <div class="sec-header">
+        <div class="sec-title">Services aux patients</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_0_0&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_0_0"><div class="item-row" id="item_0_0_0">
+    <div class="item-text" contenteditable="false">Accueillir les patients à leur arrivée à la clinique</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_1">
+    <div class="item-text" contenteditable="false">Répondre aux besoins des patients et identifier leurs attentes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_2">
+    <div class="item-text" contenteditable="false">Répondre au téléphone avec professionnalisme et courtoisie</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_3">
+    <div class="item-text" contenteditable="false">Apporter un soutien aux patients concernant leurs réclamations d'assurance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_4">
+    <div class="item-text" contenteditable="false">Mettre à jour les coordonnées des patients au dossier</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_5">
+    <div class="item-text" contenteditable="false">Planifier les traitements et les rendez-vous des patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_6">
+    <div class="item-text" contenteditable="false">Informer les patients des changements à l'horaire, des tarifs et du temps réservé</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_7">
+    <div class="item-text" contenteditable="false">Procéder à l'ouverture des dossiers des nouveaux patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_8">
+    <div class="item-text" contenteditable="false">Effectuer les rappels d'hygiène et de plans de traitement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_9">
+    <div class="item-text" contenteditable="false">Prendre les messages (boîte vocale, courriels) et en assurer le suivi dans un court délai</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_10">
+    <div class="item-text" contenteditable="false">Confirmer les rendez-vous 48 heures à l'avance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_0_11">
+    <div class="item-text" contenteditable="false">Optimiser l'horaire des patients afin d'éliminer les pertes de temps</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_0_11&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_0_0&#39;,&#39;sec_0_0&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_0_1">
+      <div class="sec-header">
+        <div class="sec-title">Facturation</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_0_1&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_0_1"><div class="item-row" id="item_0_1_0">
+    <div class="item-text" contenteditable="false">Effectuer la facturation exacte des traitements et les vérifications auprès des assurances et de la RAMQ</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_1_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_1_1">
+    <div class="item-text" contenteditable="false">Communiquer avec les compagnies d'assurances concernant les traitements des patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_1_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_1_2">
+    <div class="item-text" contenteditable="false">Produire les estimés et les transmettre aux patients et aux assureurs</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_1_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_1_3">
+    <div class="item-text" contenteditable="false">Effectuer le suivi des comptes à recevoir (assurances et patients) après 30 jours</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_1_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_1_4">
+    <div class="item-text" contenteditable="false">Effectuer la saisie des paiements des assurances au dossier des patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_1_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_1_5">
+    <div class="item-text" contenteditable="false">Balancer la fin de journée avec les dépôts effectués</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_1_5&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_0_1&#39;,&#39;sec_0_1&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_0_2">
+      <div class="sec-header">
+        <div class="sec-title">Autres</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_0_2&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_0_2"><div class="item-row" id="item_0_2_0">
+    <div class="item-text" contenteditable="false">Effectuer l'entretien de la salle d'attente</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_2_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_2_1">
+    <div class="item-text" contenteditable="false">Apporter son soutien aux collègues</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_2_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_2_2">
+    <div class="item-text" contenteditable="false">Effectuer le classement des documents</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_2_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_0_2_3">
+    <div class="item-text" contenteditable="false">Toutes autres tâches connexes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_0_2_3&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_0_2&#39;,&#39;sec_0_2&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="comp_0">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit(&#39;comp_0&#39;,this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_0"><div class="comp-item-row" id="comp_0_0">
+    <div class="comp-text" contenteditable="false">Accueillir le patient avec le sourire et lui souhaiter la bienvenue</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_1">
+    <div class="comp-text" contenteditable="false">Répondre calmement, avec tact et professionnalisme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_2">
+    <div class="comp-text" contenteditable="false">Démontrer un grand respect envers les patients et collègues</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_3">
+    <div class="comp-text" contenteditable="false">Avoir une tenue vestimentaire adéquate et soignée</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_4">
+    <div class="comp-text" contenteditable="false">Avoir de l'entregent et une facilité à communiquer</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_5">
+    <div class="comp-text" contenteditable="false">Avoir de la facilité avec les outils informatiques</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_6">
+    <div class="comp-text" contenteditable="false">Aimer le travail d'équipe et la collaboration</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_7">
+    <div class="comp-text" contenteditable="false">Être en mesure de travailler sous pression</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_8">
+    <div class="comp-text" contenteditable="false">Être organisé(e) et autonome</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_9">
+    <div class="comp-text" contenteditable="false">Démontrer de la discrétion et du discernement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_10">
+    <div class="comp-text" contenteditable="false">Avoir une attitude positive en tout temps</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_11">
+    <div class="comp-text" contenteditable="false">Démontrer une écoute active et des capacités de communication</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_11&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_12">
+    <div class="comp-text" contenteditable="false">Souci du respect de l'horaire et de la ponctualité</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_12&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_0_13">
+    <div class="comp-text" contenteditable="false">Faire preuve d'initiative et d'anticipation</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_0_13&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+    <button class="btn-add-item" onclick="addComp(&#39;cgrid_0&#39;,&#39;comp_0&#39;)" style="display:none;">+ Ajouter une compétence</button>
+  </div><div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div></div></div><div class="poste-content" id="pc1"><div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">📞</div>
+      <div class="pt-info">
+        <div class="pt-title">Secrétaire dentaire aux rappels</div>
+        <div class="pt-sup">Sous la supervision de la gestionnaire</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">La secrétaire dentaire aux rappels assure un support administratif en lien avec les rappels d'hygiène dentaire, l'accueil des patients et le bon fonctionnement de la clinique. Elle offre aux patients une expérience client hors du commun grâce à son accueil chaleureux et son professionnalisme.</div><div class="desc-section" id="sec_1_0">
+      <div class="sec-header">
+        <div class="sec-title">Gestion des rappels</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_1_0&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_1_0"><div class="item-row" id="item_1_0_0">
+    <div class="item-text" contenteditable="false">Assurer un suivi rigoureux de la liste des rappels d'hygiène</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_0_1">
+    <div class="item-text" contenteditable="false">Planifier les rendez-vous d'hygiène des patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_0_2">
+    <div class="item-text" contenteditable="false">Mettre à jour les coordonnées des patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_0_3">
+    <div class="item-text" contenteditable="false">Le 1er du mois, envoyer les courriels de rappel en lot pour dans 2 mois</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_0_4">
+    <div class="item-text" contenteditable="false">Produire mensuellement la liste des patients perdus (rapport DR10)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_0_5">
+    <div class="item-text" contenteditable="false">Vérifier mensuellement les nouveaux patients sans délai de rappel</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_0_6">
+    <div class="item-text" contenteditable="false">Vérifier mensuellement les patients ayant un plan de traitement actif sans délai de rappel</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_0_7">
+    <div class="item-text" contenteditable="false">Noter les informations importantes au dossier du patient lors de l'appel</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_0_7&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_1_0&#39;,&#39;sec_1_0&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_1_1">
+      <div class="sec-header">
+        <div class="sec-title">Services aux patients</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_1_1&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_1_1"><div class="item-row" id="item_1_1_0">
+    <div class="item-text" contenteditable="false">Accueillir les patients et répondre à leurs besoins</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_1_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_1_1">
+    <div class="item-text" contenteditable="false">Apporter un soutien aux patients concernant leurs réclamations d'assurance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_1_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_1_2">
+    <div class="item-text" contenteditable="false">Planifier les traitements et les rendez-vous des patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_1_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_1_3">
+    <div class="item-text" contenteditable="false">Répondre au téléphone avec professionnalisme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_1_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_1_4">
+    <div class="item-text" contenteditable="false">Confirmer les rendez-vous 48 heures à l'avance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_1_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_1_5">
+    <div class="item-text" contenteditable="false">Optimiser l'horaire des patients afin d'éliminer les pertes de temps</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_1_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_1_6">
+    <div class="item-text" contenteditable="false">Prendre les messages et en assurer le suivi rapidement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_1_6&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_1_1&#39;,&#39;sec_1_1&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_1_2">
+      <div class="sec-header">
+        <div class="sec-title">Facturation et autres</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_1_2&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_1_2"><div class="item-row" id="item_1_2_0">
+    <div class="item-text" contenteditable="false">Effectuer la facturation des traitements et les vérifications auprès des assurances et de la RAMQ</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_2_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_2_1">
+    <div class="item-text" contenteditable="false">Balancer la fin de journée avec les dépôts effectués</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_2_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_2_2">
+    <div class="item-text" contenteditable="false">Effectuer l'entretien de la salle d'attente</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_2_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_2_3">
+    <div class="item-text" contenteditable="false">Apporter son soutien aux collègues</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_2_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_1_2_4">
+    <div class="item-text" contenteditable="false">Toutes autres tâches connexes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_1_2_4&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_1_2&#39;,&#39;sec_1_2&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="comp_1">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit(&#39;comp_1&#39;,this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_1"><div class="comp-item-row" id="comp_1_0">
+    <div class="comp-text" contenteditable="false">Accueillir le patient avec le sourire et lui souhaiter la bienvenue</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_1">
+    <div class="comp-text" contenteditable="false">Répondre calmement, avec tact et professionnalisme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_2">
+    <div class="comp-text" contenteditable="false">Démontrer un grand respect et une écoute active</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_3">
+    <div class="comp-text" contenteditable="false">Avoir de l'entregent et une aisance au téléphone</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_4">
+    <div class="comp-text" contenteditable="false">Facilité avec les outils informatiques</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_5">
+    <div class="comp-text" contenteditable="false">Rigueur dans le suivi et la documentation</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_6">
+    <div class="comp-text" contenteditable="false">Autonomie et sens de l'organisation</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_7">
+    <div class="comp-text" contenteditable="false">Faire preuve d'initiative et d'anticipation</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_8">
+    <div class="comp-text" contenteditable="false">Travailler sous pression avec calme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_1_9">
+    <div class="comp-text" contenteditable="false">Attitude positive et esprit d'équipe</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_1_9&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+    <button class="btn-add-item" onclick="addComp(&#39;cgrid_1&#39;,&#39;comp_1&#39;)" style="display:none;">+ Ajouter une compétence</button>
+  </div><div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div></div></div><div class="poste-content" id="pc2"><div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">🔀</div>
+      <div class="pt-info">
+        <div class="pt-title">Secrétaire dentaire et assistante volante</div>
+        <div class="pt-sup">Sous la supervision de la gestionnaire</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">La secrétaire dentaire et assistante volante assure à la fois un support administratif en lien avec l'accueil des patients et une assistance clinique aux dentistes et hygiénistes. Ce poste polyvalent requiert une grande capacité d'adaptation et d'organisation.</div><div class="desc-section" id="sec_2_0">
+      <div class="sec-header">
+        <div class="sec-title">Services aux patients</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_2_0&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_2_0"><div class="item-row" id="item_2_0_0">
+    <div class="item-text" contenteditable="false">Accueillir les patients et répondre à leurs besoins</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_0_1">
+    <div class="item-text" contenteditable="false">Apporter un soutien aux patients concernant leurs réclamations d'assurance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_0_2">
+    <div class="item-text" contenteditable="false">Planifier les traitements et les rendez-vous des patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_0_3">
+    <div class="item-text" contenteditable="false">Répondre au téléphone et effectuer les rappels</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_0_4">
+    <div class="item-text" contenteditable="false">Confirmer les rendez-vous 48 heures à l'avance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_0_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_0_5">
+    <div class="item-text" contenteditable="false">Optimiser l'horaire des patients afin d'éliminer les pertes de temps</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_0_5&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_2_0&#39;,&#39;sec_2_0&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_2_1">
+      <div class="sec-header">
+        <div class="sec-title">Facturation</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_2_1&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_2_1"><div class="item-row" id="item_2_1_0">
+    <div class="item-text" contenteditable="false">Effectuer la facturation des traitements et les vérifications auprès des assurances et de la RAMQ</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_1_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_1_1">
+    <div class="item-text" contenteditable="false">Produire les estimés et les transmettre aux patients et aux assureurs</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_1_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_1_2">
+    <div class="item-text" contenteditable="false">Effectuer le suivi des comptes à recevoir après 30 jours</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_1_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_1_3">
+    <div class="item-text" contenteditable="false">Balancer la fin de journée avec les dépôts effectués</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_1_3&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_2_1&#39;,&#39;sec_2_1&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_2_2">
+      <div class="sec-header">
+        <div class="sec-title">Assistance clinique</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_2_2&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_2_2"><div class="item-row" id="item_2_2_0">
+    <div class="item-text" contenteditable="false">Préparer les instruments et le matériel nécessaire avant chaque rendez-vous</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_1">
+    <div class="item-text" contenteditable="false">Compléter les dossiers patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_2">
+    <div class="item-text" contenteditable="false">Assister les dentistes lors des traitements</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_3">
+    <div class="item-text" contenteditable="false">Prendre les empreintes dentaires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_4">
+    <div class="item-text" contenteditable="false">Expliquer aux secrétaires le plan de traitements ou les frais encourus</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_5">
+    <div class="item-text" contenteditable="false">Reconduire les patients à la fin des traitements</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_6">
+    <div class="item-text" contenteditable="false">Nettoyer la salle après chaque patient et respecter les normes d'hygiène</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_7">
+    <div class="item-text" contenteditable="false">Participer à la stérilisation des instruments</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_8">
+    <div class="item-text" contenteditable="false">Remplir les tiroirs et armoires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_2_2_9">
+    <div class="item-text" contenteditable="false">Couler les modèles de plâtres et effectuer l'entretien de l'autoclave</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_2_2_9&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_2_2&#39;,&#39;sec_2_2&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="comp_2">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit(&#39;comp_2&#39;,this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_2"><div class="comp-item-row" id="comp_2_0">
+    <div class="comp-text" contenteditable="false">Grande polyvalence et capacité d'adaptation rapide</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_2_1">
+    <div class="comp-text" contenteditable="false">Accueil chaleureux et professionnalisme en tout temps</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_2_2">
+    <div class="comp-text" contenteditable="false">Aisance à gérer plusieurs tâches simultanément</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_2_3">
+    <div class="comp-text" contenteditable="false">Facilité avec les outils informatiques</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_2_4">
+    <div class="comp-text" contenteditable="false">Esprit d'équipe et collaboration</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_2_5">
+    <div class="comp-text" contenteditable="false">Travailler sous pression avec calme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_2_6">
+    <div class="comp-text" contenteditable="false">Discrétion et respect de la confidentialité</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_2_7">
+    <div class="comp-text" contenteditable="false">Attitude positive et initiative</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_2_7&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+    <button class="btn-add-item" onclick="addComp(&#39;cgrid_2&#39;,&#39;comp_2&#39;)" style="display:none;">+ Ajouter une compétence</button>
+  </div><div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div></div></div><div class="poste-content" id="pc3"><div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">🦷</div>
+      <div class="pt-info">
+        <div class="pt-title">Hygiéniste dentaire</div>
+        <div class="pt-sup">Sous la supervision du (de la) dentiste</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">Sous la supervision du dentiste, l'hygiéniste dentaire effectue les soins d'hygiène requis auprès des patients et les conseille dans le suivi d'une bonne santé dentaire. Grâce à son professionnalisme et sa capacité à répondre aux besoins des patients, elle offre une expérience client hors du commun.</div><div class="desc-section" id="sec_3_0">
+      <div class="sec-header">
+        <div class="sec-title">Tâches et responsabilités</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_3_0&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_3_0"><div class="item-row" id="item_3_0_0">
+    <div class="item-text" contenteditable="false">Accueillir les patients et prendre connaissance de leurs problématiques et inquiétudes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_1">
+    <div class="item-text" contenteditable="false">Répondre aux besoins des patients et faire des recommandations en lien avec leur santé dentaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_2">
+    <div class="item-text" contenteditable="false">Prendre les radiographies dentaires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_3">
+    <div class="item-text" contenteditable="false">Expliquer les mesures d'hygiène bucco-dentaire personnalisées</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_4">
+    <div class="item-text" contenteditable="false">Effectuer les pré-examens dentaires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_5">
+    <div class="item-text" contenteditable="false">Réaliser les scellants dentaires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_6">
+    <div class="item-text" contenteditable="false">Effectuer les nettoyages et détartrages selon la classe parodontale</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_7">
+    <div class="item-text" contenteditable="false">Assister les dentistes lors des traitements</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_8">
+    <div class="item-text" contenteditable="false">Prendre les empreintes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_9">
+    <div class="item-text" contenteditable="false">Effectuer les surfaçages assistés par le dentiste et la désinfection au laser</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_10">
+    <div class="item-text" contenteditable="false">Élaborer et expliquer les plans de traitements aux patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_11">
+    <div class="item-text" contenteditable="false">Expliquer aux secrétaires le plan de traitements ou les frais encourus</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_11&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_12">
+    <div class="item-text" contenteditable="false">Reconduire les patients à la fin des traitements</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_12&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_13">
+    <div class="item-text" contenteditable="false">Compléter les dossiers patients de façon rigoureuse</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_13&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_14">
+    <div class="item-text" contenteditable="false">Nettoyer la salle après chaque patient et respecter les normes PCI</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_14&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_15">
+    <div class="item-text" contenteditable="false">Participer à la stérilisation des instruments</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_15&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_16">
+    <div class="item-text" contenteditable="false">Aiguiser les instruments manuels</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_16&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_17">
+    <div class="item-text" contenteditable="false">Remplir les tiroirs et armoires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_17&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_18">
+    <div class="item-text" contenteditable="false">Apporter son support et son aide à ses collègues de travail</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_18&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_3_0_19">
+    <div class="item-text" contenteditable="false">Toutes autres tâches connexes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_3_0_19&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_3_0&#39;,&#39;sec_3_0&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="comp_3">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit(&#39;comp_3&#39;,this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_3"><div class="comp-item-row" id="comp_3_0">
+    <div class="comp-text" contenteditable="false">Membre en règle de l'Ordre des hygiénistes dentaires du Québec (OHDQ)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_1">
+    <div class="comp-text" contenteditable="false">Accueillir le patient avec le sourire et lui souhaiter la bienvenue</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_2">
+    <div class="comp-text" contenteditable="false">Répondre calmement, avec tact et professionnalisme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_3">
+    <div class="comp-text" contenteditable="false">Démontrer un grand respect et une écoute active</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_4">
+    <div class="comp-text" contenteditable="false">Identifier et répondre aux besoins du patient</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_5">
+    <div class="comp-text" contenteditable="false">Prendre le temps de rassurer les patients anxieux</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_6">
+    <div class="comp-text" contenteditable="false">Avoir de l'entregent et des capacités de communication</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_7">
+    <div class="comp-text" contenteditable="false">Facilité avec les outils informatiques et logiciels dentaires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_8">
+    <div class="comp-text" contenteditable="false">Aimer le travail d'équipe et la collaboration</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_9">
+    <div class="comp-text" contenteditable="false">Être en mesure de travailler sous pression</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_10">
+    <div class="comp-text" contenteditable="false">Être organisé(e) et autonome</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_11">
+    <div class="comp-text" contenteditable="false">Formation en PCI à jour</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_11&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_3_12">
+    <div class="comp-text" contenteditable="false">Faire preuve d'initiative et d'amélioration continue</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_3_12&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+    <button class="btn-add-item" onclick="addComp(&#39;cgrid_3&#39;,&#39;comp_3&#39;)" style="display:none;">+ Ajouter une compétence</button>
+  </div><div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div></div></div><div class="poste-content" id="pc4"><div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">🔧</div>
+      <div class="pt-info">
+        <div class="pt-title">Assistant(e) dentaire</div>
+        <div class="pt-sup">Sous la supervision du (de la) dentiste</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">Sous la supervision du dentiste, l'assistant(e) dentaire assiste le dentiste lors des traitements pour maximiser son efficacité. Il/Elle dispose les instruments et le matériel de façon optimale, effectue certains travaux de laboratoire et de stérilisation, et offre aux patients une expérience client hors du commun.</div><div class="desc-section" id="sec_4_0">
+      <div class="sec-header">
+        <div class="sec-title">Tâches et responsabilités</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_4_0&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_4_0"><div class="item-row" id="item_4_0_0">
+    <div class="item-text" contenteditable="false">Faire le suivi des horaires et ajuster, en cas de besoin, les temps de rendez-vous en collaboration avec la secrétaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_1">
+    <div class="item-text" contenteditable="false">Préparer les instruments et le matériel nécessaire avant chaque rendez-vous</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_2">
+    <div class="item-text" contenteditable="false">Accueillir les patients et prendre connaissance de leurs problématiques et inquiétudes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_3">
+    <div class="item-text" contenteditable="false">Compléter les dossiers patients</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_4">
+    <div class="item-text" contenteditable="false">Répondre aux besoins des patients et faire des recommandations en lien avec leur santé dentaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_5">
+    <div class="item-text" contenteditable="false">Assister les dentistes lors des traitements</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_6">
+    <div class="item-text" contenteditable="false">Prendre les empreintes dentaires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_7">
+    <div class="item-text" contenteditable="false">Changer le panier et faire boire les succions</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_8">
+    <div class="item-text" contenteditable="false">Expliquer aux secrétaires le plan de traitements ou les frais encourus</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_9">
+    <div class="item-text" contenteditable="false">Reconduire les patients à la fin des traitements</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_10">
+    <div class="item-text" contenteditable="false">Nettoyer la salle après chaque patient et respecter les normes d'hygiène</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_11">
+    <div class="item-text" contenteditable="false">Participer à la stérilisation des instruments</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_11&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_12">
+    <div class="item-text" contenteditable="false">Remplir les tiroirs et armoires</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_12&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_13">
+    <div class="item-text" contenteditable="false">Couler les modèles de plâtres</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_13&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_14">
+    <div class="item-text" contenteditable="false">Effectuer l'entretien de l'autoclave</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_14&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_15">
+    <div class="item-text" contenteditable="false">Apporter son support et son aide à ses collègues de travail</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_15&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_4_0_16">
+    <div class="item-text" contenteditable="false">Toutes autres tâches connexes</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_4_0_16&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_4_0&#39;,&#39;sec_4_0&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="comp_4">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit(&#39;comp_4&#39;,this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_4"><div class="comp-item-row" id="comp_4_0">
+    <div class="comp-text" contenteditable="false">Accueillir le patient avec le sourire et lui souhaiter la bienvenue</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_1">
+    <div class="comp-text" contenteditable="false">Répondre calmement, avec tact et professionnalisme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_2">
+    <div class="comp-text" contenteditable="false">Démontrer un grand respect et de l'empathie</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_3">
+    <div class="comp-text" contenteditable="false">Identifier et répondre aux besoins du patient</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_4">
+    <div class="comp-text" contenteditable="false">Prendre le temps de rassurer le patient</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_5">
+    <div class="comp-text" contenteditable="false">Avoir de l'entregent et des capacités de communication</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_6">
+    <div class="comp-text" contenteditable="false">Facilité avec les outils informatiques</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_7">
+    <div class="comp-text" contenteditable="false">Aimer le travail d'équipe</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_8">
+    <div class="comp-text" contenteditable="false">Être en mesure de travailler sous pression</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_9">
+    <div class="comp-text" contenteditable="false">Être organisé(e) et autonome</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_10">
+    <div class="comp-text" contenteditable="false">Démontrer de la discrétion et du discernement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_11">
+    <div class="comp-text" contenteditable="false">Avoir une attitude positive en tout temps</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_11&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_12">
+    <div class="comp-text" contenteditable="false">Démontrer une écoute active</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_12&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_4_13">
+    <div class="comp-text" contenteditable="false">Souci du respect de l'horaire et initiative</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_4_13&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+    <button class="btn-add-item" onclick="addComp(&#39;cgrid_4&#39;,&#39;comp_4&#39;)" style="display:none;">+ Ajouter une compétence</button>
+  </div><div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div></div></div><div class="poste-content" id="pc5"><div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">📋</div>
+      <div class="pt-info">
+        <div class="pt-title">Coordonnatrice</div>
+        <div class="pt-sup">Sous la supervision du (de la) dentiste propriétaire</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">La coordonnatrice assure un support administratif et technique en lien avec le bon fonctionnement des activités de la clinique. Elle est responsable de la gestion des activités cliniques, des ressources humaines et du matériel. Elle communique l'information efficacement et contribue au rayonnement des valeurs de la clinique.</div><div class="desc-section" id="sec_5_0">
+      <div class="sec-header">
+        <div class="sec-title">Ressources humaines</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_5_0&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_5_0"><div class="item-row" id="item_5_0_0">
+    <div class="item-text" contenteditable="false">Effectuer le recrutement (affichage, intégration, période de probation)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_1">
+    <div class="item-text" contenteditable="false">Effectuer le processus d'évaluation du rendement (évaluations, rencontres, suivis)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_2">
+    <div class="item-text" contenteditable="false">Superviser les employés et prendre en charge le volet disciplinaire, le cas échéant</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_3">
+    <div class="item-text" contenteditable="false">Gérer les situations conflictuelles avec professionnalisme</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_4">
+    <div class="item-text" contenteditable="false">Mettre à jour les documents RH (contrats, guide d'intégration, évaluations)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_5">
+    <div class="item-text" contenteditable="false">Gérer le régime d'assurances collectives et les dossiers d'invalidité</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_6">
+    <div class="item-text" contenteditable="false">Effectuer un suivi quant à l'assiduité des employés (CNESST, absences, congés)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_7">
+    <div class="item-text" contenteditable="false">Élaborer les horaires de travail</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_8">
+    <div class="item-text" contenteditable="false">Planifier les activités de formation et de développement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_9">
+    <div class="item-text" contenteditable="false">Planifier les réunions d'équipe</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_10">
+    <div class="item-text" contenteditable="false">Préparer le plan annuel de bien-être et assurer sa réalisation</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_0_11">
+    <div class="item-text" contenteditable="false">Initier, élaborer et appliquer toute amélioration pertinente aux procédures de travail</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_0_11&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_5_0&#39;,&#39;sec_5_0&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_5_1">
+      <div class="sec-header">
+        <div class="sec-title">Informatique</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_5_1&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_5_1"><div class="item-row" id="item_5_1_0">
+    <div class="item-text" contenteditable="false">Assurer la maintenance des équipements informatiques</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_1_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_1_1">
+    <div class="item-text" contenteditable="false">Régler les problèmes informatiques courants</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_1_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_1_2">
+    <div class="item-text" contenteditable="false">Faire les achats nécessaires au bon fonctionnement informatique</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_1_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_1_3">
+    <div class="item-text" contenteditable="false">Installer les équipements informatiques</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_1_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_1_4">
+    <div class="item-text" contenteditable="false">Entretenir les présences numériques de la clinique</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_1_4&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_5_1&#39;,&#39;sec_5_1&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_5_2">
+      <div class="sec-header">
+        <div class="sec-title">Activités cliniques</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_5_2&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_5_2"><div class="item-row" id="item_5_2_0">
+    <div class="item-text" contenteditable="false">Collaborer avec le service à la clientèle du logiciel dentaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_2_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_2_1">
+    <div class="item-text" contenteditable="false">Mettre à jour la liste de prix annuellement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_2_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_2_2">
+    <div class="item-text" contenteditable="false">Envoyer mensuellement la liste des rappels à partir du logiciel dentaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_2_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_2_3">
+    <div class="item-text" contenteditable="false">Assurer que les rappels sont à jour et que la facturation est exacte</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_2_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_5_2_4">
+    <div class="item-text" contenteditable="false">Toutes autres tâches à la demande du (de la) dentiste propriétaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_5_2_4&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_5_2&#39;,&#39;sec_5_2&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="comp_5">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit(&#39;comp_5&#39;,this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_5"><div class="comp-item-row" id="comp_5_0">
+    <div class="comp-text" contenteditable="false">Structure, rigueur et méthode dans le travail</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_1">
+    <div class="comp-text" contenteditable="false">Grande autonomie et sens des responsabilités</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_2">
+    <div class="comp-text" contenteditable="false">Capacité de s'adapter au changement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_3">
+    <div class="comp-text" contenteditable="false">Orienté(e) vers les résultats et la performance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_4">
+    <div class="comp-text" contenteditable="false">Orienté(e) vers le service à la clientèle</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_5">
+    <div class="comp-text" contenteditable="false">Capacités rédactionnelles solides</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_6">
+    <div class="comp-text" contenteditable="false">Professionnalisme exemplaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_7">
+    <div class="comp-text" contenteditable="false">Diplomatie et sens de la communication</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_8">
+    <div class="comp-text" contenteditable="false">Discrétion et respect strict de la confidentialité</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_5_9">
+    <div class="comp-text" contenteditable="false">Leadership positif et mobilisateur</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_5_9&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+    <button class="btn-add-item" onclick="addComp(&#39;cgrid_5&#39;,&#39;comp_5&#39;)" style="display:none;">+ Ajouter une compétence</button>
+  </div><div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div></div></div><div class="poste-content" id="pc6"><div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">👤</div>
+      <div class="pt-info">
+        <div class="pt-title">Gestionnaire</div>
+        <div class="pt-sup">Sous la supervision du (de la) dentiste propriétaire</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">Le (la) gestionnaire assure un support administratif et technique complet en lien avec le bon fonctionnement de la clinique. Il/Elle est responsable de la comptabilité, de la paie, des ressources humaines et du matériel. Il/Elle assure le suivi et le respect des politiques en place et contribue au rayonnement des valeurs de la clinique.</div><div class="desc-section" id="sec_6_0">
+      <div class="sec-header">
+        <div class="sec-title">Comptabilité</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_6_0&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_6_0"><div class="item-row" id="item_6_0_0">
+    <div class="item-text" contenteditable="false">Effectuer le cycle comptable complet</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_0_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_0_1">
+    <div class="item-text" contenteditable="false">Effectuer le processus de fin de période et produire les états financiers mensuels</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_0_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_0_2">
+    <div class="item-text" contenteditable="false">Collaborer avec la firme comptable dans la préparation de la fin d'année financière</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_0_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_0_3">
+    <div class="item-text" contenteditable="false">Gérer la petite caisse</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_0_3&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_6_0&#39;,&#39;sec_6_0&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_6_1">
+      <div class="sec-header">
+        <div class="sec-title">Paie</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_6_1&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_6_1"><div class="item-row" id="item_6_1_0">
+    <div class="item-text" contenteditable="false">Vérifier et autoriser les feuilles de temps</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_1_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_1_1">
+    <div class="item-text" contenteditable="false">Produire la paie aux deux semaines</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_1_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_1_2">
+    <div class="item-text" contenteditable="false">Produire les relevés d'emploi</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_1_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_1_3">
+    <div class="item-text" contenteditable="false">Répondre aux questions des employés relativement à la paie</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_1_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_1_4">
+    <div class="item-text" contenteditable="false">Produire les T4 et compléter le sommaire 1</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_1_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_1_5">
+    <div class="item-text" contenteditable="false">Assurer le respect de l'équité salariale</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_1_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_1_6">
+    <div class="item-text" contenteditable="false">Calculer les vacances annuelles</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_1_6&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_6_1&#39;,&#39;sec_6_1&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_6_2">
+      <div class="sec-header">
+        <div class="sec-title">Ressources humaines</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_6_2&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_6_2"><div class="item-row" id="item_6_2_0">
+    <div class="item-text" contenteditable="false">Effectuer le recrutement (affichage, intégration, probation)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_1">
+    <div class="item-text" contenteditable="false">Effectuer le processus d'évaluation du rendement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_2">
+    <div class="item-text" contenteditable="false">Superviser les employés et prendre en charge le volet disciplinaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_3">
+    <div class="item-text" contenteditable="false">Gérer les situations conflictuelles</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_4">
+    <div class="item-text" contenteditable="false">Mettre à jour les documents RH</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_5">
+    <div class="item-text" contenteditable="false">Gérer le régime d'assurances collectives et les dossiers d'invalidité</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_6">
+    <div class="item-text" contenteditable="false">Effectuer un suivi de l'assiduité des employés (CNESST, absences, congés)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_7">
+    <div class="item-text" contenteditable="false">Élaborer les horaires de travail</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_8">
+    <div class="item-text" contenteditable="false">Planifier les activités de formation et de développement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_9">
+    <div class="item-text" contenteditable="false">Planifier les réunions d'équipe</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_9&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_10">
+    <div class="item-text" contenteditable="false">Préparer le plan annuel de bien-être et assurer sa réalisation</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_10&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_2_11">
+    <div class="item-text" contenteditable="false">Initier, élaborer et appliquer toute amélioration pertinente aux procédures</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_2_11&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_6_2&#39;,&#39;sec_6_2&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="sec_6_3">
+      <div class="sec-header">
+        <div class="sec-title">Informatique et activités cliniques</div>
+        <button class="btn-edit" onclick="toggleEdit(&#39;sec_6_3&#39;,this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_6_3"><div class="item-row" id="item_6_3_0">
+    <div class="item-text" contenteditable="false">Assurer la maintenance des équipements informatiques</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_3_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_3_1">
+    <div class="item-text" contenteditable="false">Collaborer avec le service à la clientèle du logiciel dentaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_3_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_3_2">
+    <div class="item-text" contenteditable="false">Mettre à jour la liste de prix annuellement</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_3_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_3_3">
+    <div class="item-text" contenteditable="false">Envoyer mensuellement la liste des rappels et assurer que la facturation est exacte</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_3_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="item-row" id="item_6_3_4">
+    <div class="item-text" contenteditable="false">Toutes autres tâches à la demande du (de la) dentiste propriétaire</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;item_6_3_4&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+        <button class="btn-add-item" onclick="addItem(&#39;list_6_3&#39;,&#39;sec_6_3&#39;)">+ Ajouter une ligne</button>
+      </div>
+    </div><div class="desc-section" id="comp_6">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit(&#39;comp_6&#39;,this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_6"><div class="comp-item-row" id="comp_6_0">
+    <div class="comp-text" contenteditable="false">Formation en gestion, administration ou RH (atout)</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_0&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_1">
+    <div class="comp-text" contenteditable="false">Structure, rigueur et méthode dans le travail</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_1&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_2">
+    <div class="comp-text" contenteditable="false">Autonomie et sens des responsabilités</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_2&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_3">
+    <div class="comp-text" contenteditable="false">Leadership positif et mobilisateur</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_3&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_4">
+    <div class="comp-text" contenteditable="false">Orienté(e) vers les résultats et la performance</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_4&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_5">
+    <div class="comp-text" contenteditable="false">Excellentes capacités de communication</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_5&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_6">
+    <div class="comp-text" contenteditable="false">Diplomatie et gestion des conflits</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_6&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_7">
+    <div class="comp-text" contenteditable="false">Discrétion et respect strict de la confidentialité</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_7&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_8">
+    <div class="comp-text" contenteditable="false">Maîtrise des outils informatiques et logiciels comptables</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_8&#39;).remove()" title="Supprimer">×</button>
+  </div><div class="comp-item-row" id="comp_6_9">
+    <div class="comp-text" contenteditable="false">Connaissance des normes du travail québécoises</div>
+    <button class="btn-del-item" onclick="document.getElementById(&#39;comp_6_9&#39;).remove()" title="Supprimer">×</button>
+  </div></div>
+    <button class="btn-add-item" onclick="addComp(&#39;cgrid_6&#39;,&#39;comp_6&#39;)" style="display:none;">+ Ajouter une compétence</button>
+  </div><div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div></div></div></div>
+
+  <div class="actions">
+    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const POSTES = [
+  {
+    icon:'🗂️', title:'Secrétaire dentaire',
+    sup:'Sous la supervision de la gestionnaire / dentiste propriétaire',
+    summary:'La secrétaire dentaire assure un support administratif en lien avec l\'accueil des patients et le bon fonctionnement de la clinique. Grâce à son accueil hors pair, son sourire, son professionnalisme et sa capacité à répondre aux besoins des clients, la titulaire du poste offre aux patients une expérience client hors du commun.',
+    sections:[
+      { title:'Services aux patients', items:[
+        'Accueillir les patients à leur arrivée à la clinique',
+        'Répondre aux besoins des patients et identifier leurs attentes',
+        'Répondre au téléphone avec professionnalisme et courtoisie',
+        'Apporter un soutien aux patients concernant leurs réclamations d\'assurance',
+        'Mettre à jour les coordonnées des patients au dossier',
+        'Planifier les traitements et les rendez-vous des patients',
+        'Informer les patients des changements à l\'horaire, des tarifs et du temps réservé',
+        'Procéder à l\'ouverture des dossiers des nouveaux patients',
+        'Effectuer les rappels d\'hygiène et de plans de traitement',
+        'Prendre les messages (boîte vocale, courriels) et en assurer le suivi dans un court délai',
+        'Confirmer les rendez-vous 48 heures à l\'avance',
+        'Optimiser l\'horaire des patients afin d\'éliminer les pertes de temps',
+      ]},
+      { title:'Facturation', items:[
+        'Effectuer la facturation exacte des traitements et les vérifications auprès des assurances et de la RAMQ',
+        'Communiquer avec les compagnies d\'assurances concernant les traitements des patients',
+        'Produire les estimés et les transmettre aux patients et aux assureurs',
+        'Effectuer le suivi des comptes à recevoir (assurances et patients) après 30 jours',
+        'Effectuer la saisie des paiements des assurances au dossier des patients',
+        'Balancer la fin de journée avec les dépôts effectués',
+      ]},
+      { title:'Autres', items:[
+        'Effectuer l\'entretien de la salle d\'attente',
+        'Apporter son soutien aux collègues',
+        'Effectuer le classement des documents',
+        'Toutes autres tâches connexes',
+      ]},
+    ],
+    competences:[
+      'Accueillir le patient avec le sourire et lui souhaiter la bienvenue',
+      'Répondre calmement, avec tact et professionnalisme',
+      'Démontrer un grand respect envers les patients et collègues',
+      'Avoir une tenue vestimentaire adéquate et soignée',
+      'Avoir de l\'entregent et une facilité à communiquer',
+      'Avoir de la facilité avec les outils informatiques',
+      'Aimer le travail d\'équipe et la collaboration',
+      'Être en mesure de travailler sous pression',
+      'Être organisé(e) et autonome',
+      'Démontrer de la discrétion et du discernement',
+      'Avoir une attitude positive en tout temps',
+      'Démontrer une écoute active et des capacités de communication',
+      'Souci du respect de l\'horaire et de la ponctualité',
+      'Faire preuve d\'initiative et d\'anticipation',
+    ]
+  },
+  {
+    icon:'📞', title:'Secrétaire dentaire aux rappels',
+    sup:'Sous la supervision de la gestionnaire',
+    summary:'La secrétaire dentaire aux rappels assure un support administratif en lien avec les rappels d\'hygiène dentaire, l\'accueil des patients et le bon fonctionnement de la clinique. Elle offre aux patients une expérience client hors du commun grâce à son accueil chaleureux et son professionnalisme.',
+    sections:[
+      { title:'Gestion des rappels', items:[
+        'Assurer un suivi rigoureux de la liste des rappels d\'hygiène',
+        'Planifier les rendez-vous d\'hygiène des patients',
+        'Mettre à jour les coordonnées des patients',
+        'Le 1er du mois, envoyer les courriels de rappel en lot pour dans 2 mois',
+        'Produire mensuellement la liste des patients perdus (rapport DR10)',
+        'Vérifier mensuellement les nouveaux patients sans délai de rappel',
+        'Vérifier mensuellement les patients ayant un plan de traitement actif sans délai de rappel',
+        'Noter les informations importantes au dossier du patient lors de l\'appel',
+      ]},
+      { title:'Services aux patients', items:[
+        'Accueillir les patients et répondre à leurs besoins',
+        'Apporter un soutien aux patients concernant leurs réclamations d\'assurance',
+        'Planifier les traitements et les rendez-vous des patients',
+        'Répondre au téléphone avec professionnalisme',
+        'Confirmer les rendez-vous 48 heures à l\'avance',
+        'Optimiser l\'horaire des patients afin d\'éliminer les pertes de temps',
+        'Prendre les messages et en assurer le suivi rapidement',
+      ]},
+      { title:'Facturation et autres', items:[
+        'Effectuer la facturation des traitements et les vérifications auprès des assurances et de la RAMQ',
+        'Balancer la fin de journée avec les dépôts effectués',
+        'Effectuer l\'entretien de la salle d\'attente',
+        'Apporter son soutien aux collègues',
+        'Toutes autres tâches connexes',
+      ]},
+    ],
+    competences:[
+      'Accueillir le patient avec le sourire et lui souhaiter la bienvenue',
+      'Répondre calmement, avec tact et professionnalisme',
+      'Démontrer un grand respect et une écoute active',
+      'Avoir de l\'entregent et une aisance au téléphone',
+      'Facilité avec les outils informatiques',
+      'Rigueur dans le suivi et la documentation',
+      'Autonomie et sens de l\'organisation',
+      'Faire preuve d\'initiative et d\'anticipation',
+      'Travailler sous pression avec calme',
+      'Attitude positive et esprit d\'équipe',
+    ]
+  },
+  {
+    icon:'🔀', title:'Secrétaire dentaire et assistante volante',
+    sup:'Sous la supervision de la gestionnaire',
+    summary:'La secrétaire dentaire et assistante volante assure à la fois un support administratif en lien avec l\'accueil des patients et une assistance clinique aux dentistes et hygiénistes. Ce poste polyvalent requiert une grande capacité d\'adaptation et d\'organisation.',
+    sections:[
+      { title:'Services aux patients', items:[
+        'Accueillir les patients et répondre à leurs besoins',
+        'Apporter un soutien aux patients concernant leurs réclamations d\'assurance',
+        'Planifier les traitements et les rendez-vous des patients',
+        'Répondre au téléphone et effectuer les rappels',
+        'Confirmer les rendez-vous 48 heures à l\'avance',
+        'Optimiser l\'horaire des patients afin d\'éliminer les pertes de temps',
+      ]},
+      { title:'Facturation', items:[
+        'Effectuer la facturation des traitements et les vérifications auprès des assurances et de la RAMQ',
+        'Produire les estimés et les transmettre aux patients et aux assureurs',
+        'Effectuer le suivi des comptes à recevoir après 30 jours',
+        'Balancer la fin de journée avec les dépôts effectués',
+      ]},
+      { title:'Assistance clinique', items:[
+        'Préparer les instruments et le matériel nécessaire avant chaque rendez-vous',
+        'Compléter les dossiers patients',
+        'Assister les dentistes lors des traitements',
+        'Prendre les empreintes dentaires',
+        'Expliquer aux secrétaires le plan de traitements ou les frais encourus',
+        'Reconduire les patients à la fin des traitements',
+        'Nettoyer la salle après chaque patient et respecter les normes d\'hygiène',
+        'Participer à la stérilisation des instruments',
+        'Remplir les tiroirs et armoires',
+        'Couler les modèles de plâtres et effectuer l\'entretien de l\'autoclave',
+      ]},
+    ],
+    competences:[
+      'Grande polyvalence et capacité d\'adaptation rapide',
+      'Accueil chaleureux et professionnalisme en tout temps',
+      'Aisance à gérer plusieurs tâches simultanément',
+      'Facilité avec les outils informatiques',
+      'Esprit d\'équipe et collaboration',
+      'Travailler sous pression avec calme',
+      'Discrétion et respect de la confidentialité',
+      'Attitude positive et initiative',
+    ]
+  },
+  {
+    icon:'🦷', title:'Hygiéniste dentaire',
+    sup:'Sous la supervision du (de la) dentiste',
+    summary:'Sous la supervision du dentiste, l\'hygiéniste dentaire effectue les soins d\'hygiène requis auprès des patients et les conseille dans le suivi d\'une bonne santé dentaire. Grâce à son professionnalisme et sa capacité à répondre aux besoins des patients, elle offre une expérience client hors du commun.',
+    sections:[
+      { title:'Tâches et responsabilités', items:[
+        'Accueillir les patients et prendre connaissance de leurs problématiques et inquiétudes',
+        'Répondre aux besoins des patients et faire des recommandations en lien avec leur santé dentaire',
+        'Prendre les radiographies dentaires',
+        'Expliquer les mesures d\'hygiène bucco-dentaire personnalisées',
+        'Effectuer les pré-examens dentaires',
+        'Réaliser les scellants dentaires',
+        'Effectuer les nettoyages et détartrages selon la classe parodontale',
+        'Assister les dentistes lors des traitements',
+        'Prendre les empreintes',
+        'Effectuer les surfaçages assistés par le dentiste et la désinfection au laser',
+        'Élaborer et expliquer les plans de traitements aux patients',
+        'Expliquer aux secrétaires le plan de traitements ou les frais encourus',
+        'Reconduire les patients à la fin des traitements',
+        'Compléter les dossiers patients de façon rigoureuse',
+        'Nettoyer la salle après chaque patient et respecter les normes PCI',
+        'Participer à la stérilisation des instruments',
+        'Aiguiser les instruments manuels',
+        'Remplir les tiroirs et armoires',
+        'Apporter son support et son aide à ses collègues de travail',
+        'Toutes autres tâches connexes',
+      ]},
+    ],
+    competences:[
+      'Membre en règle de l\'Ordre des hygiénistes dentaires du Québec (OHDQ)',
+      'Accueillir le patient avec le sourire et lui souhaiter la bienvenue',
+      'Répondre calmement, avec tact et professionnalisme',
+      'Démontrer un grand respect et une écoute active',
+      'Identifier et répondre aux besoins du patient',
+      'Prendre le temps de rassurer les patients anxieux',
+      'Avoir de l\'entregent et des capacités de communication',
+      'Facilité avec les outils informatiques et logiciels dentaires',
+      'Aimer le travail d\'équipe et la collaboration',
+      'Être en mesure de travailler sous pression',
+      'Être organisé(e) et autonome',
+      'Formation en PCI à jour',
+      'Faire preuve d\'initiative et d\'amélioration continue',
+    ]
+  },
+  {
+    icon:'🔧', title:'Assistant(e) dentaire',
+    sup:'Sous la supervision du (de la) dentiste',
+    summary:'Sous la supervision du dentiste, l\'assistant(e) dentaire assiste le dentiste lors des traitements pour maximiser son efficacité. Il/Elle dispose les instruments et le matériel de façon optimale, effectue certains travaux de laboratoire et de stérilisation, et offre aux patients une expérience client hors du commun.',
+    sections:[
+      { title:'Tâches et responsabilités', items:[
+        'Faire le suivi des horaires et ajuster, en cas de besoin, les temps de rendez-vous en collaboration avec la secrétaire',
+        'Préparer les instruments et le matériel nécessaire avant chaque rendez-vous',
+        'Accueillir les patients et prendre connaissance de leurs problématiques et inquiétudes',
+        'Compléter les dossiers patients',
+        'Répondre aux besoins des patients et faire des recommandations en lien avec leur santé dentaire',
+        'Assister les dentistes lors des traitements',
+        'Prendre les empreintes dentaires',
+        'Changer le panier et faire boire les succions',
+        'Expliquer aux secrétaires le plan de traitements ou les frais encourus',
+        'Reconduire les patients à la fin des traitements',
+        'Nettoyer la salle après chaque patient et respecter les normes d\'hygiène',
+        'Participer à la stérilisation des instruments',
+        'Remplir les tiroirs et armoires',
+        'Couler les modèles de plâtres',
+        'Effectuer l\'entretien de l\'autoclave',
+        'Apporter son support et son aide à ses collègues de travail',
+        'Toutes autres tâches connexes',
+      ]},
+    ],
+    competences:[
+      'Accueillir le patient avec le sourire et lui souhaiter la bienvenue',
+      'Répondre calmement, avec tact et professionnalisme',
+      'Démontrer un grand respect et de l\'empathie',
+      'Identifier et répondre aux besoins du patient',
+      'Prendre le temps de rassurer le patient',
+      'Avoir de l\'entregent et des capacités de communication',
+      'Facilité avec les outils informatiques',
+      'Aimer le travail d\'équipe',
+      'Être en mesure de travailler sous pression',
+      'Être organisé(e) et autonome',
+      'Démontrer de la discrétion et du discernement',
+      'Avoir une attitude positive en tout temps',
+      'Démontrer une écoute active',
+      'Souci du respect de l\'horaire et initiative',
+    ]
+  },
+  {
+    icon:'📋', title:'Coordonnatrice',
+    sup:'Sous la supervision du (de la) dentiste propriétaire',
+    summary:'La coordonnatrice assure un support administratif et technique en lien avec le bon fonctionnement des activités de la clinique. Elle est responsable de la gestion des activités cliniques, des ressources humaines et du matériel. Elle communique l\'information efficacement et contribue au rayonnement des valeurs de la clinique.',
+    sections:[
+      { title:'Ressources humaines', items:[
+        'Effectuer le recrutement (affichage, intégration, période de probation)',
+        'Effectuer le processus d\'évaluation du rendement (évaluations, rencontres, suivis)',
+        'Superviser les employés et prendre en charge le volet disciplinaire, le cas échéant',
+        'Gérer les situations conflictuelles avec professionnalisme',
+        'Mettre à jour les documents RH (contrats, guide d\'intégration, évaluations)',
+        'Gérer le régime d\'assurances collectives et les dossiers d\'invalidité',
+        'Effectuer un suivi quant à l\'assiduité des employés (CNESST, absences, congés)',
+        'Élaborer les horaires de travail',
+        'Planifier les activités de formation et de développement',
+        'Planifier les réunions d\'équipe',
+        'Préparer le plan annuel de bien-être et assurer sa réalisation',
+        'Initier, élaborer et appliquer toute amélioration pertinente aux procédures de travail',
+      ]},
+      { title:'Informatique', items:[
+        'Assurer la maintenance des équipements informatiques',
+        'Régler les problèmes informatiques courants',
+        'Faire les achats nécessaires au bon fonctionnement informatique',
+        'Installer les équipements informatiques',
+        'Entretenir les présences numériques de la clinique',
+      ]},
+      { title:'Activités cliniques', items:[
+        'Collaborer avec le service à la clientèle du logiciel dentaire',
+        'Mettre à jour la liste de prix annuellement',
+        'Envoyer mensuellement la liste des rappels à partir du logiciel dentaire',
+        'Assurer que les rappels sont à jour et que la facturation est exacte',
+        'Toutes autres tâches à la demande du (de la) dentiste propriétaire',
+      ]},
+    ],
+    competences:[
+      'Structure, rigueur et méthode dans le travail',
+      'Grande autonomie et sens des responsabilités',
+      'Capacité de s\'adapter au changement',
+      'Orienté(e) vers les résultats et la performance',
+      'Orienté(e) vers le service à la clientèle',
+      'Capacités rédactionnelles solides',
+      'Professionnalisme exemplaire',
+      'Diplomatie et sens de la communication',
+      'Discrétion et respect strict de la confidentialité',
+      'Leadership positif et mobilisateur',
+    ]
+  },
+  {
+    icon:'👤', title:'Gestionnaire',
+    sup:'Sous la supervision du (de la) dentiste propriétaire',
+    summary:'Le (la) gestionnaire assure un support administratif et technique complet en lien avec le bon fonctionnement de la clinique. Il/Elle est responsable de la comptabilité, de la paie, des ressources humaines et du matériel. Il/Elle assure le suivi et le respect des politiques en place et contribue au rayonnement des valeurs de la clinique.',
+    sections:[
+      { title:'Comptabilité', items:[
+        'Effectuer le cycle comptable complet',
+        'Effectuer le processus de fin de période et produire les états financiers mensuels',
+        'Collaborer avec la firme comptable dans la préparation de la fin d\'année financière',
+        'Gérer la petite caisse',
+      ]},
+      { title:'Paie', items:[
+        'Vérifier et autoriser les feuilles de temps',
+        'Produire la paie aux deux semaines',
+        'Produire les relevés d\'emploi',
+        'Répondre aux questions des employés relativement à la paie',
+        'Produire les T4 et compléter le sommaire 1',
+        'Assurer le respect de l\'équité salariale',
+        'Calculer les vacances annuelles',
+      ]},
+      { title:'Ressources humaines', items:[
+        'Effectuer le recrutement (affichage, intégration, probation)',
+        'Effectuer le processus d\'évaluation du rendement',
+        'Superviser les employés et prendre en charge le volet disciplinaire',
+        'Gérer les situations conflictuelles',
+        'Mettre à jour les documents RH',
+        'Gérer le régime d\'assurances collectives et les dossiers d\'invalidité',
+        'Effectuer un suivi de l\'assiduité des employés (CNESST, absences, congés)',
+        'Élaborer les horaires de travail',
+        'Planifier les activités de formation et de développement',
+        'Planifier les réunions d\'équipe',
+        'Préparer le plan annuel de bien-être et assurer sa réalisation',
+        'Initier, élaborer et appliquer toute amélioration pertinente aux procédures',
+      ]},
+      { title:'Informatique et activités cliniques', items:[
+        'Assurer la maintenance des équipements informatiques',
+        'Collaborer avec le service à la clientèle du logiciel dentaire',
+        'Mettre à jour la liste de prix annuellement',
+        'Envoyer mensuellement la liste des rappels et assurer que la facturation est exacte',
+        'Toutes autres tâches à la demande du (de la) dentiste propriétaire',
+      ]},
+    ],
+    competences:[
+      'Formation en gestion, administration ou RH (atout)',
+      'Structure, rigueur et méthode dans le travail',
+      'Autonomie et sens des responsabilités',
+      'Leadership positif et mobilisateur',
+      'Orienté(e) vers les résultats et la performance',
+      'Excellentes capacités de communication',
+      'Diplomatie et gestion des conflits',
+      'Discrétion et respect strict de la confidentialité',
+      'Maîtrise des outils informatiques et logiciels comptables',
+      'Connaissance des normes du travail québécoises',
+    ]
+  },
+];
+
+// ===================== RENDER =====================
+function buildPoste(p, pi) {
+  const wrap = document.createElement('div');
+  wrap.className = 'poste-content' + (pi===0?' active':'');
+  wrap.id = 'pc'+pi;
+
+  let html = `<div class="desc-wrap">
+    <div class="poste-title-block">
+      <div class="poste-icon">${p.icon}</div>
+      <div class="pt-info">
+        <div class="pt-title">${p.title}</div>
+        <div class="pt-sup">${p.sup}</div>
+        <div class="pt-date">Date de mise à jour : <input type="date"></div>
+      </div>
+    </div>
+    <div class="desc-summary">${p.summary}</div>`;
+
+  // SECTIONS
+  p.sections.forEach((sec, si) => {
+    const secId = `sec_${pi}_${si}`;
+    html += `<div class="desc-section" id="${secId}">
+      <div class="sec-header">
+        <div class="sec-title">${sec.title}</div>
+        <button class="btn-edit" onclick="toggleEdit('${secId}',this)">✏️ Modifier</button>
+      </div>
+      <div class="subsec">
+        <div class="item-list" id="list_${pi}_${si}">`;
+    sec.items.forEach((item, ii) => {
+      html += itemHtml(`item_${pi}_${si}_${ii}`, item);
+    });
+    html += `</div>
+        <button class="btn-add-item" onclick="addItem('list_${pi}_${si}','${secId}')">+ Ajouter une ligne</button>
+      </div>
+    </div>`;
+  });
+
+  // COMPETENCES
+  const compId = `comp_${pi}`;
+  html += `<div class="desc-section" id="${compId}">
+    <div class="sec-header">
+      <div class="sec-title">Profil et compétences</div>
+      <button class="btn-edit" onclick="toggleEdit('${compId}',this)">✏️ Modifier</button>
+    </div>
+    <div class="comp-grid" id="cgrid_${pi}">`;
+  p.competences.forEach((c, ci) => {
+    html += compHtml(`comp_${pi}_${ci}`, c);
+  });
+  html += `</div>
+    <button class="btn-add-item" onclick="addComp('cgrid_${pi}','${compId}')" style="display:none;">+ Ajouter une compétence</button>
+  </div>`;
+
+  // SIGNATURE
+  html += `<div class="sig-section">
+    <div class="sig-title">Attestation de réception</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Employé(e)</label><input type="text" placeholder="Nom et prénom"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Gestionnaire</label><input type="text" placeholder="Nom et titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
+    </div>
+  </div>`;
+
+  html += '</div>';
+  wrap.innerHTML = html;
+  return wrap;
+}
+
+function itemHtml(id, text) {
+  return `<div class="item-row" id="${id}">
+    <div class="item-text" contenteditable="false">${text}</div>
+    <button class="btn-del-item" onclick="document.getElementById('${id}').remove()" title="Supprimer">×</button>
+  </div>`;
+}
+
+function compHtml(id, text) {
+  return `<div class="comp-item-row" id="${id}">
+    <div class="comp-text" contenteditable="false">${text}</div>
+    <button class="btn-del-item" onclick="document.getElementById('${id}').remove()" title="Supprimer">×</button>
+  </div>`;
+}
+
+function toggleEdit(secId, btn) {
+  const sec = document.getElementById(secId);
+  const isActive = sec.classList.toggle('edit-mode');
+  btn.classList.toggle('active', isActive);
+  btn.textContent = isActive ? '✅ Terminer' : '✏️ Modifier';
+  // Toggle contenteditable on items
+  sec.querySelectorAll('.item-text, .comp-text').forEach(el => {
+    el.contentEditable = isActive ? 'true' : 'false';
+  });
+}
+
+function addItem(listId, secId) {
+  const list = document.getElementById(listId);
+  const id = 'item_new_' + Date.now();
+  const div = document.createElement('div');
+  div.innerHTML = itemHtml(id, 'Nouvelle tâche — cliquez pour modifier');
+  const row = div.firstChild;
+  // Make editable immediately
+  const txt = row.querySelector('.item-text');
+  txt.contentEditable = 'true';
+  list.appendChild(row);
+  // Focus
+  txt.focus();
+  const range = document.createRange();
+  range.selectNodeContents(txt);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+}
+
+function addComp(gridId, secId) {
+  const grid = document.getElementById(gridId);
+  const id = 'comp_new_' + Date.now();
+  const div = document.createElement('div');
+  div.innerHTML = compHtml(id, 'Nouvelle compétence — cliquez pour modifier');
+  const row = div.firstChild;
+  const txt = row.querySelector('.comp-text');
+  txt.contentEditable = 'true';
+  grid.appendChild(row);
+  txt.focus();
+  const range = document.createRange();
+  range.selectNodeContents(txt);
+  window.getSelection().removeAllRanges();
+  window.getSelection().addRange(range);
+}
+
+// BUILD TABS & POSTES
+const tabsEl = document.getElementById('tabs');
+const postesEl = document.getElementById('postes');
+
+POSTES.forEach((p, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'poste-tab' + (i===0?' active':'');
+  btn.innerHTML = `${p.icon} ${p.title.split(' ')[0]} ${p.title.split(' ')[1]||''}`;
+  btn.onclick = () => showPoste(i);
+  tabsEl.appendChild(btn);
+  postesEl.appendChild(buildPoste(p, i));
+});
+
+function showPoste(n) {
+  document.querySelectorAll('.poste-content').forEach((c,i) => c.classList.toggle('active',i===n));
+  document.querySelectorAll('.poste-tab').forEach((b,i) => b.classList.toggle('active',i===n));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+
+</body></html>

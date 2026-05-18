@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/info/Downloads/consolidation-equipe.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consolidation d'équipe — Gestion Mel</title>
+<style>
+  :root {
+    --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3;
+    --light: #f4f8ff; --border: #d0dff0; --text: #1a2535;
+    --green: #1a9e5a; --orange: #e67e22; --red: #c0392b; --purple: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 920px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: .85rem; opacity: .75; }
+  .identity-bar { background: var(--light); border-bottom: 1px solid var(--border); padding: 16px 36px; display: flex; flex-wrap: wrap; gap: 14px; }
+  .id-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 180px; }
+  .id-field label { font-size: .72rem; font-weight: 700; color: #5a6a80; text-transform: uppercase; letter-spacing: .5px; }
+  .progress-wrap { background: #d0dff0; height: 5px; }
+  .progress-bar { height: 5px; background: var(--accent); transition: width .3s; width: 0%; }
+  .nav-tabs { display: flex; background: #f0f5fb; border-bottom: 2px solid var(--border); overflow-x: auto; }
+  .tab-btn { padding: 12px 20px; background: none; border: none; border-bottom: 3px solid transparent; color: #5a6a80; font-family: inherit; font-size: .83rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .2s; margin-bottom: -2px; }
+  .tab-btn:hover { color: var(--blue); background: #e8f0fb; }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--accent); background: white; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .section { padding: 20px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: .8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label, .field > label { font-size: .75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: .5px; }
+  input[type=text], input[type=date] { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: .9rem; font-family: inherit; color: var(--text); background: var(--light); }
+  input[type=text]:focus, input[type=date]:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: .88rem; font-family: inherit; color: var(--text); background: var(--light); resize: vertical; min-height: 78px; line-height: 1.6; width: 100%; }
+  textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  .info-box { background: var(--light); border-left: 4px solid var(--accent); border-radius: 4px; padding: 12px 16px; font-size: .86rem; color: #2a3a4a; margin-bottom: 14px; line-height: 1.75; }
+  .info-box strong { color: var(--blue); }
+  .raisons-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 9px; margin-top: 12px; }
+  .raison-item { background: var(--light); border: 1px solid var(--border); border-radius: 7px; padding: 9px 13px; font-size: .82rem; color: #2a3a4a; display: flex; gap: 8px; line-height: 1.5; }
+  .raison-item::before { content: '→'; color: var(--blue); font-weight: 700; flex-shrink: 0; }
+  .q-block { background: white; border: 1.5px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+  .q-header { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 11px; }
+  .q-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 6px; background: var(--dark); color: white; font-size: .78rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .q-text { font-size: .9rem; font-weight: 600; color: var(--text); line-height: 1.45; }
+  .q-hint { font-size: .78rem; color: #8a9ab0; margin-top: 3px; font-style: italic; }
+  .val-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  .val-table th { background: var(--dark); color: white; padding: 7px 11px; text-align: left; font-size: .75rem; }
+  .val-table td { border: 1px solid var(--border); padding: 4px 7px; vertical-align: top; }
+  .val-table tr:nth-child(even) td { background: var(--light); }
+  .val-table input { border: none; background: transparent; width: 100%; font-family: inherit; font-size: .82rem; padding: 4px; color: var(--text); }
+  .val-table input:focus { outline: none; background: #fffde7; }
+  .val-table textarea { border: none; background: transparent; width: 100%; font-family: inherit; font-size: .82rem; min-height: 54px; padding: 4px; resize: vertical; }
+  .val-table textarea:focus { outline: none; background: #fffde7; }
+  .val-ent-row { display: grid; grid-template-columns: 150px 1fr; gap: 10px; align-items: start; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .val-ent-row:last-child { border-bottom: none; }
+  .val-tag { background: #e8f0fb; border: 1.5px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: .81rem; font-weight: 700; color: var(--blue); text-align: center; margin-top: 2px; }
+  .sit-row { background: var(--light); border: 1px solid var(--border); border-radius: 7px; padding: 11px 13px; margin-bottom: 9px; }
+  .sit-val { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+  .sit-val label { white-space: nowrap; font-size: .73rem; font-weight: 700; color: #5a6a80; text-transform: uppercase; letter-spacing: .5px; }
+  .sit-val input { flex: 1; padding: 7px 10px; font-size: .85rem; }
+  .likert-cat { font-size: .8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin: 22px 0 9px; padding-bottom: 6px; border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 8px; }
+  .likert-cat::before { content: ''; display: block; width: 3px; height: 13px; background: var(--accent); border-radius: 2px; }
+  .lk-head { display: grid; grid-template-columns: 1fr 200px; gap: 10px; align-items: center; background: var(--dark); color: white; padding: 8px 12px; border-radius: 6px 6px 0 0; font-size: .74rem; font-weight: 600; letter-spacing: .4px; }
+  .lk-scale { display: flex; justify-content: space-between; font-size: .69rem; color: rgba(255,255,255,.65); }
+  .lk-scale span { width: 25px; text-align: center; }
+  .lk-row { display: grid; grid-template-columns: 1fr 200px; gap: 10px; align-items: center; padding: 9px 12px; border: 1px solid var(--border); border-top: none; font-size: .83rem; color: var(--text); background: white; }
+  .lk-row:last-child { border-radius: 0 0 6px 6px; }
+  .lk-row:nth-child(even) { background: var(--light); }
+  .lk-row.neg { border-left: 3px solid var(--orange); }
+  .lk-row.pos { border-left: 3px solid var(--green); }
+  .lk-btns { display: flex; gap: 4px; justify-content: space-between; }
+  .lbtn { width: 25px; height: 25px; border-radius: 50%; border: 2px solid var(--border); background: white; font-size: .73rem; font-weight: 700; cursor: pointer; font-family: inherit; color: #8a9ab0; display: flex; align-items: center; justify-content: center; transition: all .15s; padding: 0; }
+  .lbtn:hover { border-color: var(--accent); color: var(--accent); }
+  .lbtn.sl { background: var(--red); border-color: var(--red); color: white; }
+  .lbtn.sm { background: var(--orange); border-color: var(--orange); color: white; }
+  .lbtn.sh { background: var(--green); border-color: var(--green); color: white; }
+  .smart-note { background: #e8f4fe; border-left: 4px solid var(--accent); border-radius: 4px; padding: 12px 16px; font-size: .84rem; color: #1a3a5c; margin-bottom: 16px; line-height: 1.7; }
+  .smart-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+  .smart-pill { background: white; border: 1.5px solid var(--border); border-radius: 20px; padding: 4px 12px; font-size: .77rem; color: #2a3a4a; }
+  .smart-pill strong { color: var(--blue); }
+  .eng-card { background: var(--light); border: 1.5px solid var(--border); border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+  .eng-num { font-size: .74rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+  .eng-field { margin-bottom: 10px; }
+  .eng-field > label { display: block; margin-bottom: 5px; }
+  .actions { padding: 20px 36px; background: var(--light); display: flex; gap: 12px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .btn { padding: 10px 22px; border-radius: 7px; font-size: .88rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; font-family: inherit; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #155a9e; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-secondary:hover { background: #e8f0fb; }
+  .btn-print { background: white; color: #5a6a80; border: 1.5px solid var(--border); }
+  .footer-note { text-align: center; font-size: .75rem; color: #8a9ab0; padding: 12px; }
+  .phase-badge { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 20px; font-size: .7rem; font-weight: 700; color: white; margin-left: 6px; }
+  .pb-pre { background: var(--green); }
+  .pb-sondage { background: var(--orange); }
+  .pb-post { background: var(--purple); }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .page-header, .nav-tabs, .actions, .progress-wrap, .identity-bar { display: none !important; }
+    .container { box-shadow: none; margin: 0; border-radius: 0; }
+    .tab-content { display: block !important; }
+    .doc-header, .lk-head, .q-num { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .lbtn.sl, .lbtn.sm, .lbtn.sh { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section { page-break-inside: avoid; }
+  }
+  @media (max-width:600px) {
+    .section { padding: 14px 16px; }
+    .grid { grid-template-columns: 1fr; }
+    .lk-row { grid-template-columns: 1fr; }
+    .lk-btns { justify-content: flex-start; }
+    .val-ent-row { grid-template-columns: 1fr; }
+    .actions { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Ressources humaines</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Consolidation d'équipe</h1>
+    <p>Questionnaire complet — Valeurs · Climat de travail · Engagements</p>
+  </div>
+
+  <div class="identity-bar">
+    <div class="id-field"><label>Nom et prénom</label><input type="text" placeholder="Prénom et nom"></div>
+    <div class="id-field"><label>Poste occupé</label><input type="text" placeholder="Titre du poste"></div>
+    <div class="id-field"><label>Date</label><input type="date"></div>
+  </div>
+
+  <div class="progress-wrap"><div class="progress-bar" id="prog"></div></div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="show(0)">📋 Introduction</button>
+    <button class="tab-btn" onclick="show(1)">💬 Valeurs et attentes<span class="phase-badge pb-pre">Avant</span></button>
+    <button class="tab-btn" onclick="show(2)">📊 Climat de travail<span class="phase-badge pb-sondage">Sondage</span></button>
+    <button class="tab-btn" onclick="show(3)">✍️ Engagements<span class="phase-badge pb-post">Après</span></button>
+  </div>
+
+  <!-- INTRO -->
+  <div class="tab-content active" id="tab-0">
+    <div class="section">
+      <div class="section-title">À propos de la consolidation d'équipe</div>
+      <div class="info-box">La consolidation d'équipe est une démarche structurée qui aide l'équipe à devenir davantage <strong>autonome, unie et performante</strong>. Elle permet d'accélérer la maturité collective en abordant ouvertement les valeurs, les besoins et les attentes de chacun.</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Quand entreprendre une consolidation?</div>
+      <div class="raisons-grid">
+        <div class="raison-item">Un nouveau gestionnaire s'intègre à l'équipe</div>
+        <div class="raison-item">Des conflits doivent être résolus</div>
+        <div class="raison-item">L'équipe doit relever de nouveaux défis</div>
+        <div class="raison-item">Les tâches et rôles doivent être clarifiés</div>
+        <div class="raison-item">Des valeurs et objectifs communs doivent être établis</div>
+        <div class="raison-item">Le climat de travail doit être amélioré</div>
+        <div class="raison-item">Une nouvelle équipe démarre ses activités</div>
+        <div class="raison-item">Le rendement de l'équipe n'est plus optimal</div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Comment utiliser cet outil?</div>
+      <div class="info-box">
+        <strong>Section 1 — Valeurs et attentes</strong> : À compléter <em>avant</em> la rencontre. Chaque employé(e) remplit individuellement.<br><br>
+        <strong>Section 2 — Climat de travail</strong> : Sondage confidentiel. Les résultats permettent d'identifier les axes d'amélioration.<br><br>
+        <strong>Section 3 — Engagements</strong> : À compléter <em>après</em> la rencontre. Chaque personne s'engage envers l'équipe.
+      </div>
+      <p style="font-size:.79rem;color:#8a9ab0;font-style:italic;margin-top:8px;">Vos réponses ne feront l'objet d'aucune représaille ni discrimination. L'objectif est d'améliorer la collaboration et le respect mutuel.</p>
+    </div>
+    <div class="actions"><span></span><button class="btn btn-primary" onclick="show(1)">Commencer — Section 1 →</button></div>
+  </div>
+
+  <!-- VALEURS -->
+  <div class="tab-content" id="tab-1">
+    <div class="section">
+      <div class="section-title">Section 1 — Valeurs et attentes</div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q1</div><div><div class="q-text">Quelles sont les valeurs au travail qui vous définissent?</div><div class="q-hint">Inscrivez au minimum 3 valeurs</div></div></div>
+        <textarea placeholder="Ex : travail d&#39;équipe, respect, initiative, honnêteté, entraide, plaisir..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q2</div><div><div class="q-text">Donnez une définition de chacune de vos valeurs et un exemple concret où elle est interpellée positivement.</div></div></div>
+        <table class="val-table">
+          <thead><tr><th style="width:22%">Valeur</th><th style="width:38%">Définition personnelle</th><th>Exemple concret</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" placeholder="Valeur 1"></td><td><textarea placeholder="Ma définition..."></textarea></td><td><textarea placeholder="Exemple..."></textarea></td></tr>
+            <tr><td><input type="text" placeholder="Valeur 2"></td><td><textarea placeholder="Ma définition..."></textarea></td><td><textarea placeholder="Exemple..."></textarea></td></tr>
+            <tr><td><input type="text" placeholder="Valeur 3"></td><td><textarea placeholder="Ma définition..."></textarea></td><td><textarea placeholder="Exemple..."></textarea></td></tr>
+            <tr><td><input type="text" placeholder="Valeur 4 (optionnel)"></td><td><textarea placeholder="Ma définition..."></textarea></td><td><textarea placeholder="Exemple..."></textarea></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q3</div><div><div class="q-text">Quelle est votre définition des valeurs de la clinique?</div></div></div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-top:4px;">
+          <div class="val-ent-row"><div class="val-tag">Initiative</div><textarea placeholder="Votre définition..."></textarea></div>
+          <div class="val-ent-row"><div class="val-tag">Respect</div><textarea placeholder="Votre définition..."></textarea></div>
+          <div class="val-ent-row"><div class="val-tag">Professionnalisme</div><textarea placeholder="Votre définition..."></textarea></div>
+          <div class="val-ent-row"><div class="val-tag">Travail d'équipe</div><textarea placeholder="Votre définition..."></textarea></div>
+          <div class="val-ent-row"><div class="val-tag">Service client</div><textarea placeholder="Votre définition..."></textarea></div>
+          <div class="val-ent-row"><div class="val-tag">Appartenance</div><textarea placeholder="Votre définition..."></textarea></div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q4</div><div><div class="q-text">Quelle est la valeur de la clinique à laquelle vous vous identifiez le plus, et pourquoi?</div></div></div>
+        <textarea placeholder="Nommez la valeur et expliquez pourquoi elle vous rejoint particulièrement..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q5</div><div><div class="q-text">Donnez des exemples où les valeurs de la clinique ne sont pas respectées selon vous.</div><div class="q-hint">Sans nommer de personnes — décrivez uniquement la situation</div></div></div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <div class="sit-row"><div class="sit-val"><label>Valeur touchée :</label><input type="text" placeholder="Ex : Travail d&#39;équipe"></div><textarea placeholder="Décrivez la situation..."></textarea></div>
+          <div class="sit-row"><div class="sit-val"><label>Valeur touchée :</label><input type="text" placeholder="Ex : Respect"></div><textarea placeholder="Décrivez la situation..."></textarea></div>
+          <div class="sit-row"><div class="sit-val"><label>Valeur touchée :</label><input type="text" placeholder="Ex : Communication"></div><textarea placeholder="Décrivez la situation..."></textarea></div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q6</div><div><div class="q-text">Quels sont vos besoins au travail?</div><div class="q-hint">Ex : soutien, information, clarté des tâches, reconnaissance...</div></div></div>
+        <textarea placeholder="Listez vos besoins principaux..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q7</div><div><div class="q-text">Quelles sont les situations dans lesquelles vous n'êtes pas à l'aise?</div></div></div>
+        <textarea placeholder="Décrivez les situations professionnelles qui vous causent de l&#39;inconfort..."></textarea>
+      </div>
+      <div class="q-block">
+        <div class="q-header"><div class="q-num">Q8</div><div><div class="q-text">Quelles sont vos attentes envers vos collègues?</div></div></div>
+        <textarea placeholder="Qu&#39;attendez-vous de vos collègues? Communication, entraide, professionnalisme..."></textarea>
+      </div>
+    </div>
+    <div class="actions"><button class="btn btn-secondary" onclick="show(0)">← Retour</button><button class="btn btn-primary" onclick="show(2)">Continuer — Section 2 →</button></div>
+  </div>
+
+  <!-- CLIMAT -->
+  <div class="tab-content" id="tab-2">
+    <div class="section">
+      <div class="section-title">Section 2 — Sondage climat de travail</div>
+      <div class="info-box">Pour chaque énoncé, indiquez votre niveau d'accord sur une échelle de <strong>1 (totalement en désaccord)</strong> à <strong>7 (totalement en accord)</strong>. Répondez honnêtement — vos réponses sont confidentielles.</div>
+
+      <div class="likert-cat">Comportements positifs observés</div>
+      <div class="lk-head"><span>Dans mon milieu de travail, je vois des personnes…</span><div class="lk-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
+      <div id="lk-pos"><div class="lk-row pos"><span>Respecter la confidentialité des informations et éviter les questions indiscrètes.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Reconnaître et valoriser la contribution du travail de chacun.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Avoir une attitude constructive envers le travail des collègues.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Collaborer avec leurs collègues dans le cadre du travail.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Avoir un langage courtois et des propos nuancés.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Regarder l'autre lorsqu'il lui parle.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Saluer leurs collègues en arrivant et en partant.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Aider les autres dans leur travail lorsque l'occasion se présente.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Arriver à temps aux rencontres ou aviser de leur retard.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Demander avec politesse et remercier.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Éviter de lancer ou d'alimenter des rumeurs.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Demander l'avis des autres sur des sujets qui les concernent.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Partager leurs connaissances et leur expertise avec les autres.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Nettoyer et ranger l'équipement et les lieux communs après usage.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row pos"><span>Se montrer conciliantes et ne pas s'offenser pour un rien.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div></div>
+
+      <div class="likert-cat" style="margin-top:24px;">Comportements négatifs observés</div>
+      <div class="lk-head"><span>Dans mon milieu de travail, je vois des personnes…</span><div class="lk-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
+      <div id="lk-neg"><div class="lk-row neg"><span>Faire des blagues qui créent de l'inconfort.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Blâmer les autres pour leurs propres erreurs.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Ignorer un collègue lors d'activités communes.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Crier après un collègue ou exprimer leurs frustrations de façon inappropriée.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Critiquer les compétences d'un collègue ou passer des remarques désobligeantes.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Adopter une attitude individualiste plutôt que collaborative.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Parler fort ou faire du bruit dans les aires communes.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Interrompre une conversation en cours.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Participer aux commérages contre une autre personne.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>S'approprier tout le crédit d'un travail d'équipe.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Omettre de donner toute l'information nécessaire à un collègue.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Être inattentif pendant une rencontre (répondre à un appel, lire ses messages).</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Refuser d'écouter une personne qui désire clarifier une situation.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row neg"><span>Parler à d'autres pendant qu'une formation se déroule.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div></div>
+
+      <div class="likert-cat" style="margin-top:24px;">Satisfaction — La clinique et la direction</div>
+      <div class="lk-head"><span>Niveau d'accord avec chaque énoncé</span><div class="lk-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
+      <div id="lk-sat"><div class="lk-row "><span>La clinique a une vision claire et la partage avec les employés.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Les politiques de la clinique sont claires et connues de tous.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La direction est professionnelle et mérite ma confiance.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La qualité du service est une priorité dans cette clinique.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La direction respecte ses engagements envers les employés.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La clinique est ouverte et à l'écoute des besoins et suggestions.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La clinique valorise les initiatives individuelles.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La direction offre des évaluations de performance justes.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La clinique offre un bon environnement de travail.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La clinique offre les outils et le soutien pour accomplir les tâches.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La clinique gère efficacement la charge de travail.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>La direction encourage le travail d'équipe.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Les différents postes communiquent clairement entre eux.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div></div>
+
+      <div class="likert-cat" style="margin-top:24px;">Satisfaction — Mon travail et mon équipe</div>
+      <div class="lk-head"><span>Niveau d'accord avec chaque énoncé</span><div class="lk-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span></div></div>
+      <div id="lk-eq"><div class="lk-row "><span>J'accorde de l'importance à mon travail.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Mon travail m'apporte suffisamment de défis.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Je me sens souvent stressé(e) par mon travail.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Mes collègues considèrent mon opinion.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Mon supérieur me demande souvent mon avis.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Les attentes de mon supérieur sont réalistes.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Les tâches assignées me permettent de grandir.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Je me sens à l'aise de donner mon opinion.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>J'obtiens souvent du soutien de mes collègues.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Les responsabilités sont partagées équitablement.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Les membres de mon équipe communiquent bien entre eux.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Les conflits sont gérés de façon professionnelle.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div><div class="lk-row "><span>Mon salaire correspond à mes responsabilités.</span><div class="lk-btns"><button class="lbtn" data-v="1" onclick="pick(this)">1</button><button class="lbtn" data-v="2" onclick="pick(this)">2</button><button class="lbtn" data-v="3" onclick="pick(this)">3</button><button class="lbtn" data-v="4" onclick="pick(this)">4</button><button class="lbtn" data-v="5" onclick="pick(this)">5</button><button class="lbtn" data-v="6" onclick="pick(this)">6</button><button class="lbtn" data-v="7" onclick="pick(this)">7</button></div></div></div>
+    </div>
+    <div class="actions"><button class="btn btn-secondary" onclick="show(1)">← Retour</button><button class="btn btn-primary" onclick="show(3)">Continuer — Section 3 →</button></div>
+  </div>
+
+  <!-- ENGAGEMENTS -->
+  <div class="tab-content" id="tab-3">
+    <div class="section">
+      <div class="section-title">Section 3 — Engagements personnels</div>
+      <div class="smart-note">
+        Suite à la rencontre de consolidation, définissez <strong>2 ou 3 engagements personnels</strong> liés à votre attitude, comportement ou savoir-être. Ces engagements sont faits envers votre équipe et doivent être <strong>SMART</strong> :
+        <div class="smart-pills">
+          <div class="smart-pill"><strong>S</strong>pécifique</div>
+          <div class="smart-pill"><strong>M</strong>esurable</div>
+          <div class="smart-pill"><strong>A</strong>cceptable</div>
+          <div class="smart-pill"><strong>R</strong>éaliste</div>
+          <div class="smart-pill"><strong>T</strong>emporel</div>
+        </div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-num">Engagement #1</div>
+        <div class="eng-field"><label>Mon engagement</label><textarea placeholder="Décrivez votre engagement de façon claire et spécifique..."></textarea></div>
+        <div class="eng-field"><label>Comment je vais y parvenir</label><textarea placeholder="Quels moyens et actions concrètes allez-vous mettre en place?"></textarea></div>
+        <div class="eng-field"><label>Date limite</label><input type="date"></div>
+      </div>
+      <div class="eng-card">
+        <div class="eng-num">Engagement #2</div>
+        <div class="eng-field"><label>Mon engagement</label><textarea placeholder="Décrivez votre engagement de façon claire et spécifique..."></textarea></div>
+        <div class="eng-field"><label>Comment je vais y parvenir</label><textarea placeholder="Quels moyens et actions concrètes allez-vous mettre en place?"></textarea></div>
+        <div class="eng-field"><label>Date limite</label><input type="date"></div>
+      </div>
+      <div class="eng-card" style="border-left-color:var(--purple);">
+        <div class="eng-num" style="color:var(--purple);">Engagement #3 (optionnel)</div>
+        <div class="eng-field"><label>Mon engagement</label><textarea placeholder="Troisième engagement (optionnel)..."></textarea></div>
+        <div class="eng-field"><label>Comment je vais y parvenir</label><textarea placeholder="Quels moyens et actions concrètes allez-vous mettre en place?"></textarea></div>
+        <div class="eng-field"><label>Date limite</label><input type="date"></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Signatures</div>
+      <div class="grid">
+        <div class="field"><label>Nom de l'employé(e)</label><input type="text" placeholder="Nom et prénom"></div>
+        <div class="field"><label>Date</label><input type="date"></div>
+        <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="(manuscrite à l&#39;impression)"></div>
+        <div class="field"><label>Signature du (de la) gestionnaire</label><input type="text" placeholder="(manuscrite à l&#39;impression)"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(2)">← Retour</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+const POS=["Respecter la confidentialité des informations et éviter les questions indiscrètes.","Reconnaître et valoriser la contribution du travail de chacun.","Avoir une attitude constructive envers le travail des collègues.","Collaborer avec leurs collègues dans le cadre du travail.","Avoir un langage courtois et des propos nuancés.","Regarder l'autre lorsqu'il lui parle.","Saluer leurs collègues en arrivant et en partant.","Aider les autres dans leur travail lorsque l'occasion se présente.","Arriver à temps aux rencontres ou aviser de leur retard.","Demander avec politesse et remercier.","Éviter de lancer ou d'alimenter des rumeurs.","Demander l'avis des autres sur des sujets qui les concernent.","Partager leurs connaissances et leur expertise avec les autres.","Nettoyer et ranger l'équipement et les lieux communs après usage.","Se montrer conciliantes et ne pas s'offenser pour un rien."];
+const NEG=["Faire des blagues qui créent de l'inconfort.","Blâmer les autres pour leurs propres erreurs.","Ignorer un collègue lors d'activités communes.","Crier après un collègue ou exprimer leurs frustrations de façon inappropriée.","Critiquer les compétences d'un collègue ou passer des remarques désobligeantes.","Adopter une attitude individualiste plutôt que collaborative.","Parler fort ou faire du bruit dans les aires communes.","Interrompre une conversation en cours.","Participer aux commérages contre une autre personne.","S'approprier tout le crédit d'un travail d'équipe.","Omettre de donner toute l'information nécessaire à un collègue.","Être inattentif pendant une rencontre (répondre à un appel, lire ses messages).","Refuser d'écouter une personne qui désire clarifier une situation.","Parler à d'autres pendant qu'une formation se déroule."];
+const SAT=["La clinique a une vision claire et la partage avec les employés.","Les politiques de la clinique sont claires et connues de tous.","La direction est professionnelle et mérite ma confiance.","La qualité du service est une priorité dans cette clinique.","La direction respecte ses engagements envers les employés.","La clinique est ouverte et à l'écoute des besoins et suggestions.","La clinique valorise les initiatives individuelles.","La direction offre des évaluations de performance justes.","La clinique offre un bon environnement de travail.","La clinique offre les outils et le soutien pour accomplir les tâches.","La clinique gère efficacement la charge de travail.","La direction encourage le travail d'équipe.","Les différents postes communiquent clairement entre eux."];
+const EQ=["J'accorde de l'importance à mon travail.","Mon travail m'apporte suffisamment de défis.","Je me sens souvent stressé(e) par mon travail.","Mes collègues considèrent mon opinion.","Mon supérieur me demande souvent mon avis.","Les attentes de mon supérieur sont réalistes.","Les tâches assignées me permettent de grandir.","Je me sens à l'aise de donner mon opinion.","J'obtiens souvent du soutien de mes collègues.","Les responsabilités sont partagées équitablement.","Les membres de mon équipe communiquent bien entre eux.","Les conflits sont gérés de façon professionnelle.","Mon salaire correspond à mes responsabilités."];
+
+function buildLikert(items,id,cls){
+  const el=document.getElementById(id);
+  items.forEach(text=>{
+    const d=document.createElement('div');
+    d.className='lk-row '+(cls||'');
+    d.innerHTML=`<span>${text}</span><div class="lk-btns">${[1,2,3,4,5,6,7].map(n=>`<button class="lbtn" data-v="${n}" onclick="pick(this)">${n}</button>`).join('')}</div>`;
+    el.appendChild(d);
+  });
+}
+function pick(b){
+  b.closest('.lk-btns').querySelectorAll('.lbtn').forEach(x=>x.classList.remove('sl','sm','sh'));
+  const v=parseInt(b.dataset.v);
+  b.classList.add(v<=2?'sl':v<=4?'sm':'sh');
+}
+buildLikert(POS,'lk-pos','pos');
+buildLikert(NEG,'lk-neg','neg');
+buildLikert(SAT,'lk-sat','');
+buildLikert(EQ,'lk-eq','');
+
+function show(n){
+  document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
+  document.getElementById('prog').style.width=(n/3*100)+'%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+
+</body></html>

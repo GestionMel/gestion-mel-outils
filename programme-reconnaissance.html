@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/info/Downloads/programme-reconnaissance.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programme de reconnaissance — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:860px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:26px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.85rem;opacity:.75;}
+  .section{padding:20px 36px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  label{font-size:.74rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  input[type=text],input[type=date],textarea{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--light);}
+  input:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea{resize:vertical;min-height:70px;line-height:1.65;width:100%;}
+
+  /* ANCIENNETÉ TABLE */
+  .anc-table{width:100%;border-collapse:collapse;font-size:.86rem;margin-bottom:12px;}
+  .anc-table th{background:var(--dark);color:white;padding:10px 14px;text-align:left;font-size:.76rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .anc-table td{border:1px solid var(--border);padding:8px 12px;vertical-align:middle;}
+  .anc-table tr:nth-child(even) td{background:var(--light);}
+  .anc-table input{border:none;background:transparent;width:100%;font-family:inherit;font-size:.86rem;padding:3px;}
+  .anc-table input:focus{outline:none;background:#fffde7;}
+  .year-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--dark);color:white;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;min-width:60px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .btn-del{width:26px;height:26px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:#c0392b;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;}
+  .btn-del:hover{background:#fef2f2;border-color:#c0392b;}
+  .btn-add-row{margin-top:8px;padding:7px 14px;background:white;border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.81rem;font-weight:600;cursor:pointer;font-family:inherit;}
+  .btn-add-row:hover{background:#e8f0fb;}
+
+  /* ACTIVITÉS */
+  .activite-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+  .activite-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;background:var(--light);border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;}
+
+  /* NOTE FISCALE */
+  .note-fiscale{background:#fff8e1;border-left:4px solid var(--orange);border-radius:4px;padding:10px 14px;font-size:.82rem;color:#7a4400;margin-bottom:14px;line-height:1.7;}
+
+  /* STARS VISUAL */
+  .stars-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .star-card{background:var(--light);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;min-width:100px;flex:1;}
+  .star-card .star{font-size:1.5rem;margin-bottom:4px;}
+  .star-card .years{font-size:1.1rem;font-weight:700;color:var(--blue);}
+  .star-card .amount{font-size:.8rem;color:#5a6a80;margin-top:3px;}
+
+  .actions{padding:20px 36px;background:var(--light);display:flex;gap:10px;justify-content:flex-end;}
+  .btn{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+  .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
+
+  @media print{
+    body{background:white;}
+    .page-header,.actions,.btn-del,.btn-add-row{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .doc-header,.anc-table th,.year-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:600px){
+    .section{padding:14px 16px;}
+    .grid{grid-template-columns:1fr;}
+    .activite-row{grid-template-columns:1fr auto;}
+    .stars-row{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Ressources humaines</div></div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Programme de reconnaissance</h1>
+    <p>Basé sur l'ancienneté — Clinique dentaire</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid">
+      <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+      <div class="field"><label>Date de création / mise à jour</label><input type="date"></div>
+      <div class="field"><label>Approuvé par</label><input type="text" placeholder="Nom du gestionnaire / propriétaire"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Objectifs du programme</div>
+    <textarea style="min-height:80px;">La direction a à cœur le bien-être de ses employés et désire conserver son personnel en le remerciant pour ses années de service continus. Ce programme a pour but de remercier son personnel dévoué pour sa loyauté et son bon service, et de contribuer à un sentiment d'appartenance fort au sein de l'équipe.</textarea>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Programme de reconnaissance — Ancienneté</div>
+    <div class="note-fiscale">⚠️ <strong>Note fiscale importante :</strong> Les cadeaux sont considérés comme un avantage imposable au fédéral, peu importe le montant. Au provincial, ils ne sont pas imposables si le montant total ne dépasse pas 500 $ dans l'année. Consultez votre comptable pour plus de détails.</div>
+
+    <table class="anc-table">
+      <thead><tr><th style="width:15%">Ancienneté</th><th style="width:45%">Type de cadeau / reconnaissance</th><th style="width:20%">Valeur maximale</th><th style="width:15%">Notes</th><th style="width:5%"></th></tr></thead>
+      <tbody id="ancTable">
+        <tr><td><span class="year-badge">5 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
+        <tr><td><span class="year-badge">10 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
+        <tr><td><span class="year-badge">15 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
+        <tr><td><span class="year-badge">20 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
+        <tr><td><span class="year-badge">25 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
+      </tbody>
+    </table>
+    <button class="btn-add-row" onclick="addAncRow()">+ Ajouter une tranche d'ancienneté</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Activités sociales et de reconnaissance</div>
+    <textarea style="min-height:75px;margin-bottom:14px;">Des activités à caractère social et de reconnaissance sont organisées, au minimum, une fois par année. Ces activités permettent de souligner le début des vacances, la période des Fêtes, les départs à la retraite, les bons résultats et tous les efforts soutenus apportés par les membres de l'équipe.</textarea>
+
+    <div class="activite-list" id="activiteList"><div class="activite-row">
+    <input type="text" placeholder="Nom de l&#39;activité (ex : Dîner de Noël, 5 à 7...)">
+    <input type="text" placeholder="Période prévue (ex : Décembre)">
+    <button class="btn-del" onclick="this.closest(&#39;.activite-row&#39;).remove()">×</button></div><div class="activite-row">
+    <input type="text" placeholder="Nom de l&#39;activité (ex : Dîner de Noël, 5 à 7...)">
+    <input type="text" placeholder="Période prévue (ex : Décembre)">
+    <button class="btn-del" onclick="this.closest(&#39;.activite-row&#39;).remove()">×</button></div><div class="activite-row">
+    <input type="text" placeholder="Nom de l&#39;activité (ex : Dîner de Noël, 5 à 7...)">
+    <input type="text" placeholder="Période prévue (ex : Décembre)">
+    <button class="btn-del" onclick="this.closest(&#39;.activite-row&#39;).remove()">×</button></div></div>
+    <button class="btn-add-row" onclick="addActivite()">+ Ajouter une activité prévue</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Autres formes de reconnaissance</div>
+    <textarea style="min-height:90px;">La reconnaissance ne se limite pas aux cadeaux d'ancienneté. La clinique valorise également :
+• Les félicitations verbales et écrites pour le travail bien fait
+• La soulignement des semaines dédiées à chaque corps de métier (secrétaires, hygiénistes, assistantes)
+• Les petites attentions lors des fêtes et occasions spéciales
+• La semaine de la gentillesse — activité de reconnaissance entre collègues
+• Les réunions d'équipe positives soulignant les bons coups collectifs</textarea>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Approbation</div>
+    <div class="grid">
+      <div>
+        <div class="field" style="margin-bottom:24px;"><label>Signature du (de la) gestionnaire</label><input type="text" placeholder="Nom et prénom"></div>
+        <div style="border-top:1.5px solid var(--border);padding-top:8px;font-size:.77rem;color:#5a6a80;">Signature ____________________________ Date ___________</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions"><button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+function addAncRow() {
+  const tbody = document.getElementById('ancTable');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input type="text" placeholder="Ex : 30 ans" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 8px;font-family:inherit;font-size:.85rem;background:var(--light);"></td><td><input type="text" placeholder="Type de cadeau"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest('tr').remove()">×</button></td>`;
+  tbody.appendChild(tr);
+}
+
+function addActivite() {
+  const list = document.getElementById('activiteList');
+  const row = document.createElement('div');
+  row.className = 'activite-row';
+  row.innerHTML = `
+    <input type="text" placeholder="Nom de l'activité (ex : Dîner de Noël, 5 à 7...)">
+    <input type="text" placeholder="Période prévue (ex : Décembre)">
+    <button class="btn-del" onclick="this.closest('.activite-row').remove()">×</button>`;
+  list.appendChild(row);
+}
+
+// Init 3 activités
+['Dîner ou 5 à 7 de fin d\'année', 'Activité estivale / début des vacances', 'Semaine de la gentillesse (novembre)'].forEach((act, i) => {
+  addActivite();
+  const rows = document.querySelectorAll('.activite-row');
+  const last = rows[rows.length-1];
+  last.querySelector('input:first-child').value = act;
+  last.querySelectorAll('input')[1].value = ['Décembre', 'Juin', 'Novembre'][i];
+});
+</script>
+
+
+</body></html>

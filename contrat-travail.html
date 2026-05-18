@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)file:///C:/Users/info/Downloads/contrat-travail.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contrat de travail — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+
+  /* TOP BAR */
+  .top-bar{background:var(--dark);color:white;padding:14px 36px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  .brand{font-size:1.3rem;font-weight:700;}
+  .brand span{color:var(--accent);}
+  .top-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .btn-top{padding:7px 16px;border-radius:6px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.1);color:white;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .15s;}
+  .btn-top:hover{background:rgba(255,255,255,.2);}
+  .btn-top.primary{background:var(--accent);border-color:var(--accent);}
+
+  /* FIELDS BAR */
+  .fields-bar{background:white;border-bottom:2px solid var(--border);padding:14px 36px;}
+  .fields-bar-title{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+  .fields-bar-title::before{content:'✏️';}
+  .fields-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select,.ff textarea{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ff input:focus,.ff select:focus,.ff textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  .ff.full{grid-column:1/-1;}
+  .logo-upload-wrap{display:flex;align-items:center;gap:8px;}
+  .logo-box{width:72px;height:52px;border:1.5px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--light);cursor:pointer;}
+  .logo-box:hover{border-color:var(--accent);}
+  .logo-box img{width:100%;height:100%;object-fit:contain;}
+  #logoFile{display:none;}
+  .btn-sm{padding:4px 9px;border-radius:5px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn-sm:hover{border-color:var(--accent);color:var(--blue);}
+
+  /* CONTRACT PAPER */
+  .paper-wrap{max-width:820px;margin:28px auto;padding:0 20px 40px;}
+  .paper{background:white;border-radius:8px;box-shadow:0 4px 24px rgba(26,106,191,.10);padding:48px 52px;font-size:.92rem;line-height:1.85;color:#1a2535;}
+
+  /* CONTRACT HEADER */
+  .contract-logo{margin-bottom:20px;}
+  .contract-logo img{max-height:80px;max-width:220px;object-fit:contain;}
+  .contract-title{text-align:center;margin-bottom:8px;}
+  .contract-title h1{font-size:1.3rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+  .contract-title .subtitle{font-size:.88rem;color:#5a6a80;font-style:italic;}
+  .divider{border:none;border-top:2px solid var(--dark);margin:16px 0;}
+  .divider-light{border:none;border-top:1px solid var(--border);margin:14px 0;}
+
+  /* PARTIES */
+  .parties-block{margin-bottom:18px;}
+  .party-label{font-size:.78rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+  .party-name{font-weight:700;font-size:.92rem;}
+  .party-addr{font-size:.88rem;color:#5a6a80;}
+  .party-role{display:inline-block;background:var(--dark);color:white;padding:2px 10px;border-radius:4px;font-size:.76rem;font-weight:700;margin:5px 0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .et-separator{text-align:center;font-weight:700;font-size:1rem;color:#5a6a80;margin:10px 0;}
+
+  /* ARTICLES */
+  .article{margin-bottom:20px;}
+  .article-title{font-size:.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:4px;border-bottom:1.5px solid var(--border);color:var(--dark);}
+  .article-num{color:var(--accent);}
+  .clause{display:grid;grid-template-columns:45px 1fr;gap:8px;margin-bottom:10px;font-size:.88rem;line-height:1.8;}
+  .clause-num{font-weight:700;color:#5a6a80;padding-top:1px;}
+
+  /* EDITABLE FIELDS IN CONTRACT */
+  .ef{border-bottom:1.5px dashed var(--accent);color:var(--blue);font-weight:600;cursor:text;padding:0 2px;min-width:20px;display:inline-block;}
+  .ef:focus{outline:none;background:#e3f2fd;border-radius:2px;}
+  .ef-long{min-width:120px;}
+  .ef-xl{min-width:200px;}
+
+  /* PRÉAMBULE */
+  .preambule{background:var(--light);border-left:3px solid var(--accent);padding:12px 16px;margin-bottom:18px;font-size:.88rem;line-height:1.8;}
+  .attendu{margin-bottom:8px;}
+  .attendu strong{color:var(--blue);}
+  .consequent{margin-top:10px;font-weight:700;text-transform:uppercase;font-size:.82rem;letter-spacing:.5px;}
+
+  /* CHECKBOX OPTIONS */
+  .opt-group{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0;}
+  .opt-item{display:flex;align-items:center;gap:5px;font-size:.84rem;}
+  .opt-item input{width:15px;height:15px;cursor:pointer;accent-color:var(--blue);}
+
+  /* BENEFITS TABLE */
+  .benefits-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:8px 0;}
+  .benefits-table th{background:var(--dark);color:white;padding:6px 10px;text-align:left;font-size:.76rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .benefits-table td{border:1px solid var(--border);padding:6px 10px;vertical-align:middle;}
+  .benefits-table tr:nth-child(even) td{background:var(--light);}
+  .benefits-table td input[type=text]{border:none;background:transparent;width:100%;font-family:inherit;font-size:.83rem;}
+  .benefits-table td input[type=checkbox]{accent-color:var(--green);}
+
+  /* INITIALS FOOTER */
+  .initials-footer{text-align:right;border-top:1px solid var(--border);padding-top:8px;margin-top:20px;font-size:.8rem;color:#5a6a80;}
+  .page-break{border:none;border-top:2px dashed var(--border);margin:30px 0;}
+
+  /* SIGNATURES */
+  .sig-block{margin-top:24px;}
+  .sig-title{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;text-align:center;margin-bottom:16px;color:var(--dark);}
+  .sig-line-wrap{margin-bottom:6px;font-size:.84rem;}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:16px;}
+  .sig-col{text-align:center;}
+  .sig-line{border-top:1.5px solid var(--dark);margin-top:30px;padding-top:6px;font-size:.8rem;}
+  .sig-col .sig-name{font-weight:700;font-size:.86rem;}
+  .sig-col .sig-role{font-size:.78rem;color:#5a6a80;}
+
+  /* PRINT */
+  @media print{
+    body{background:white;}
+    .top-bar,.fields-bar{display:none!important;}
+    .paper-wrap{margin:0;padding:0;max-width:100%;}
+    .paper{box-shadow:none;border-radius:0;padding:30px 40px;font-size:.85rem;}
+    .ef{border:none;color:var(--text);font-weight:inherit;}
+    .page-break{page-break-before:always;border:none;margin:0;}
+    .article{page-break-inside:avoid;}
+    .contract-logo,.party-role,.preambule,.article-title{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+  @media(max-width:700px){
+    .paper{padding:24px 20px;}
+    .paper-wrap{padding:0 8px 30px;}
+    .fields-grid{grid-template-columns:1fr 1fr;}
+    .sig-grid{grid-template-columns:1fr;}
+    .top-bar{padding:12px 16px;}
+    .fields-bar{padding:12px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="brand">Gestion<span>Mel</span> — Contrat de travail</div>
+  <div class="top-actions">
+    <button class="btn-top primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder PDF</button>
+  </div>
+</div>
+
+<!-- FIELDS BAR -->
+<div class="fields-bar">
+  <div class="fields-bar-title">Remplissez les informations — elles s'intègreront automatiquement dans le contrat</div>
+  <div class="fields-grid">
+    <!-- LOGO -->
+    <div class="ff" style="grid-column:span 1;">
+      <label>Logo de la clinique</label>
+      <div class="logo-upload-wrap">
+        <div class="logo-box" id="logoBox" onclick="document.getElementById(&#39;logoFile&#39;).click()" title="Cliquez pour ajouter le logo">
+          <span id="logoPlaceholder" style="font-size:.65rem;color:#8a9ab0;text-align:center;padding:4px;">📷 Logo</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <button class="btn-sm" onclick="document.getElementById(&#39;logoFile&#39;).click()">📁 Charger</button>
+          <button class="btn-sm" id="btnDelLogo" style="display:none;" onclick="removeLogo()">✕ Retirer</button>
+        </div>
+        <input type="file" id="logoFile" accept="image/*" onchange="loadLogo(this)">
+      </div>
+    </div>
+    <!-- EMPLOYEUR -->
+    <div class="ff"><label>Nom de la clinique (employeur)</label><input type="text" id="f_clinique" placeholder="Clinique Dentaire..." oninput="sync(&#39;f_clinique&#39;,&#39;.s-clinique&#39;)"></div>
+    <div class="ff"><label>Adresse de la clinique</label><input type="text" id="f_adresse" placeholder="826, avenue..." oninput="sync(&#39;f_adresse&#39;,&#39;.s-adresse&#39;)"></div>
+    <div class="ff"><label>Représentant(e) de l'employeur</label><input type="text" id="f_representant" placeholder="Dre / Dr..." oninput="sync(&#39;f_representant&#39;,&#39;.s-representant&#39;)"></div>
+    <div class="ff"><label>Titre du représentant</label><input type="text" id="f_titreRep" placeholder="Dentiste propriétaire" oninput="sync(&#39;f_titreRep&#39;,&#39;.s-titrerep&#39;)"></div>
+    <!-- EMPLOYÉ -->
+    <div class="ff"><label>Nom complet de l'employé(e)</label><input type="text" id="f_employe" placeholder="Prénom Nom" oninput="sync(&#39;f_employe&#39;,&#39;.s-employe&#39;)"></div>
+    <div class="ff"><label>Adresse de l'employé(e)</label><input type="text" id="f_adresseEmp" placeholder="123, rue..." oninput="sync(&#39;f_adresseEmp&#39;,&#39;.s-adresseemp&#39;)"></div>
+    <div class="ff"><label>Date d'embauche</label><input type="date" id="f_dateEmb" oninput="syncDate(&#39;f_dateEmb&#39;,&#39;.s-dateemb&#39;)"></div>
+    <!-- POSTE -->
+    <div class="ff"><label>Titre du poste</label><input type="text" id="f_poste" placeholder="Secrétaire dentaire" oninput="sync(&#39;f_poste&#39;,&#39;.s-poste&#39;)"></div>
+    <div class="ff"><label>Type de contrat</label>
+      <select id="f_typeContrat" onchange="sync(&#39;f_typeContrat&#39;,&#39;.s-typecontrat&#39;)">
+        <option>durée indéterminée</option>
+        <option>durée déterminée</option>
+        <option>remplacement</option>
+      </select>
+    </div>
+    <!-- RÉMUNÉRATION -->
+    <div class="ff"><label>Salaire ($/h ou annuel)</label><input type="text" id="f_salaire" placeholder="ex: 22,00 $/h ou 45 000 $/an" oninput="sync(&#39;f_salaire&#39;,&#39;.s-salaire&#39;)"></div>
+    <div class="ff"><label>Fréquence de paie</label>
+      <select id="f_paie" onchange="sync(&#39;f_paie&#39;,&#39;.s-paie&#39;)">
+        <option>aux deux semaines</option>
+        <option>aux deux jeudis par dépôt direct</option>
+        <option>hebdomadaire</option>
+        <option>mensuelle</option>
+      </select>
+    </div>
+    <div class="ff"><label>Heures/semaine normales</label><input type="text" id="f_heures" placeholder="35" oninput="sync(&#39;f_heures&#39;,&#39;.s-heures&#39;)"></div>
+    <div class="ff"><label>Semaines de vacances</label><input type="text" id="f_vacances" placeholder="3" oninput="sync(&#39;f_vacances&#39;,&#39;.s-vacances&#39;)"></div>
+    <div class="ff"><label>Durée de la probation</label><input type="text" id="f_probation" placeholder="3 mois" oninput="sync(&#39;f_probation&#39;,&#39;.s-probation&#39;)"></div>
+    <div class="ff"><label>Ville de signature</label><input type="text" id="f_ville" placeholder="Québec" oninput="sync(&#39;f_ville&#39;,&#39;.s-ville&#39;)"></div>
+    <div class="ff"><label>Date de signature</label><input type="date" id="f_dateSig" oninput="syncDate(&#39;f_dateSig&#39;,&#39;.s-datesig&#39;)"></div>
+  </div>
+</div>
+
+<!-- CONTRACT PAPER -->
+<div class="paper-wrap">
+<div class="paper">
+
+  <!-- LOGO -->
+  <div class="contract-logo" id="contractLogo" style="display:none;"><img id="contractLogoImg" src="file:///C:/Users/info/Downloads/contrat-travail.html" alt="Logo"></div>
+
+  <!-- TITLE -->
+  <div class="contract-title">
+    <h1>Contrat de travail</h1>
+    <div class="subtitle">Intervenu entre les parties ci-après désignées</div>
+  </div>
+  <hr class="divider">
+
+  <!-- PARTIES -->
+  <div class="parties-block">
+    <div class="party-label">L'employeur</div>
+    <div class="party-name s-clinique">Clinique dentaire</div>
+    <div class="party-addr s-adresse">Adresse de la clinique</div>
+    <br>
+    <div style="font-size:.86rem;">ci-après appelé &nbsp;<span class="party-role">L'EMPLOYEUR</span></div>
+    <div style="font-size:.86rem;margin-top:4px;">et représenté par &nbsp;<strong><span class="s-representant ef" contenteditable="true">Représentant(e)</span>, <span class="s-titrerep ef" contenteditable="true">Titre</span></strong></div>
+  </div>
+
+  <div class="et-separator">— ET —</div>
+
+  <div class="parties-block">
+    <div class="party-label">L'employé(e)</div>
+    <div class="party-name s-employe">Prénom Nom</div>
+    <div class="party-addr s-adresseemp">Adresse</div>
+    <br>
+    <div style="font-size:.86rem;"><strong>Date d'embauche : <span class="s-dateemb ef" contenteditable="true">Date</span></strong></div>
+    <br>
+    <div style="font-size:.86rem;">ci-après appelé(e) &nbsp;<span class="party-role">L'EMPLOYÉ(E)</span></div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PRÉAMBULE -->
+  <div class="preambule">
+    <div class="attendu">ATTENDU que <strong>L'EMPLOYEUR</strong> a convenu de retenir les services de <strong>L'EMPLOYÉ(E)</strong> sous réserve des conditions prévues ci-après;</div>
+    <div class="attendu">ATTENDU que <strong>L'EMPLOYÉ(E)</strong> déclare connaître les politiques et conditions d'emploi de <strong>L'EMPLOYEUR</strong> et est satisfait(e) des conditions d'emploi prévues aux présentes.</div>
+    <div class="consequent">EN CONSÉQUENCE, LES PARTIES CONVIENNENT DE CE QUI SUIT :</div>
+  </div>
+
+  <!-- ARTICLE 1 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">1.</span> Embauche</div>
+    <div style="font-size:.9rem;line-height:1.85;text-align:justify;">
+      <strong>L'EMPLOYEUR</strong> retient les services professionnels de <strong>L'EMPLOYÉ(E)</strong> à titre de <strong><span class="s-poste ef" contenteditable="true">Poste</span></strong> pour un contrat de <span class="s-typecontrat ef" contenteditable="true">durée indéterminée</span>, à compter du <span class="s-dateemb ef" contenteditable="true">Date d'embauche</span>, indépendamment de la date de signature des présentes.
+    </div>
+  </div>
+
+  <!-- ARTICLE 2 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">2.</span> Responsabilités</div>
+    <div class="clause">
+      <div class="clause-num">2.1</div>
+      <div>Sous l'autorité de <span class="s-representant ef" contenteditable="true">Représentant(e)</span>, <strong>L'EMPLOYÉ(E)</strong> a les responsabilités décrites dans la description de poste annexée à la présente et faisant partie intégrante du présent contrat.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">2.2</div>
+      <div>L'énumération des tâches mentionnées en pièce jointe n'est pas restrictive. Dans l'exécution de ses fonctions, <strong>L'EMPLOYÉ(E)</strong> effectue toutes tâches connexes à son emploi ou conformes à ses fonctions.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">2.3</div>
+      <div>Pour le bon fonctionnement de l'entreprise, <strong>L'EMPLOYEUR</strong> pourra être appelé à modifier les tâches de <strong>L'EMPLOYÉ(E)</strong>. <strong>L'EMPLOYEUR</strong> s'engage à informer <strong>L'EMPLOYÉ(E)</strong> de ces modifications à ses fonctions.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">2.4</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> a le devoir d'agir de bonne foi, avec respect et loyauté envers ses supérieurs et collègues. <strong>L'EMPLOYÉ(E)</strong> respectera les politiques et directives de l'entreprise.</div>
+    </div>
+  </div>
+
+  <!-- PAGE BREAK -->
+  <div class="initials-footer">Initiales : ____________________</div>
+  <div class="page-break"></div>
+
+  <!-- ARTICLE 3 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">3.</span> Disponibilité et exclusivité</div>
+    <div class="clause">
+      <div class="clause-num">3.1</div>
+      <div>La semaine normale de travail est <strong>en moyenne de <span class="s-heures ef" contenteditable="true">35</span> heures</strong>. Cependant, <strong>L'EMPLOYÉ(E)</strong> est conscient(e) que le temps nécessaire peut excéder les heures normales de travail pendant les périodes plus achalandées. <strong>L'EMPLOYÉ(E)</strong> est responsable de son horaire et de travailler le nombre d'heures nécessaires pour réaliser l'ensemble des tâches qui lui sont confiées.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">3.2</div>
+      <div><strong>L'EMPLOYEUR</strong> est dans le droit de demander à <strong>L'EMPLOYÉ(E)</strong> d'effectuer des heures en dehors de l'horaire habituel de la clinique dans le but d'assister à des formations, réunions ou toutes autres demandes jugées pertinentes.</div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 4 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">4.</span> Rémunération et avantages sociaux</div>
+    <div style="font-size:.88rem;margin-bottom:10px;font-style:italic;">En contrepartie de l'exécution par <strong>L'EMPLOYÉ(E)</strong> de ses fonctions :</div>
+    <div class="clause">
+      <div class="clause-num">4.1</div>
+      <div><strong>L'EMPLOYEUR</strong> s'engage à verser à <strong>L'EMPLOYÉ(E)</strong> un salaire de <strong><span class="s-salaire ef ef-long" contenteditable="true">00,00 $/h</span></strong> duquel seront prises les déductions usuelles et obligatoires d'emploi, y compris les contributions aux divers régimes gouvernementaux. <strong>L'EMPLOYÉ(E)</strong> consent à ce que <strong>L'EMPLOYEUR</strong> procède à des déductions directes sur son salaire dans les cas où des sommes lui auraient été versées en trop.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">4.2</div>
+      <div>La paie est versée <span class="s-paie ef" contenteditable="true">aux deux semaines</span> par dépôt direct.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">4.3</div>
+      <div>
+        <strong>Avantages sociaux offerts :</strong>
+        <div style="margin-top:8px;">
+        <table class="benefits-table">
+          <thead><tr><th>Avantage</th><th>Offert</th><th>Contribution employeur</th><th>Détails</th></tr></thead>
+          <tbody>
+            <tr><td>Assurances collectives</td><td style="text-align:center;"><input type="checkbox"></td><td><input type="text" placeholder="ex: 25% de la prime"></td><td><input type="text" placeholder="Précisions..."></td></tr>
+            <tr><td>REER collectif</td><td style="text-align:center;"><input type="checkbox"></td><td><input type="text" placeholder="ex: 50% jusqu&#39;à 2%"></td><td><input type="text" placeholder="Précisions..."></td></tr>
+            <tr><td>Bonus annuel</td><td style="text-align:center;"><input type="checkbox"></td><td><input type="text" placeholder="ex: selon performance"></td><td><input type="text" placeholder="Critères..."></td></tr>
+            <tr><td>Uniforme / sarrau</td><td style="text-align:center;"><input type="checkbox"></td><td><input type="text" placeholder="ex: fourni"></td><td><input type="text" placeholder=""></td></tr>
+            <tr><td><input type="text" placeholder="Autre avantage..."></td><td style="text-align:center;"><input type="checkbox"></td><td><input type="text" placeholder=""></td><td><input type="text" placeholder=""></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 5 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">5.</span> Vacances</div>
+    <div class="clause">
+      <div class="clause-num">5.1</div>
+      <div><strong>L'EMPLOYEUR</strong> accorde à <strong>L'EMPLOYÉ(E)</strong> <strong><span class="s-vacances ef" contenteditable="true">__</span> semaines</strong> de vacances par année, conformément à la <em>Loi sur les normes du travail</em> du Québec, à compter de la date d'entrée en vigueur du contrat.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">5.2</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> qui désire prendre des vacances doit obtenir l'autorisation préalable de <strong>L'EMPLOYEUR</strong> en respectant le délai de préavis d'usage.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">5.3</div>
+      <div>Le choix des vacances se fait en fonction des activités de la clinique et peut être refusé si cela compromet le bon fonctionnement de l'entreprise. <strong>L'EMPLOYEUR</strong> se réserve le droit d'apporter des modifications au calendrier des vacances.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">5.4</div>
+      <div>Les vacances doivent être prises dans l'année de référence et ne peuvent être reportées d'année en année; elles sont non monnayables et doivent être prises en congé.</div>
+    </div>
+  </div>
+
+  <div class="initials-footer">Initiales : ____________________</div>
+  <div class="page-break"></div>
+
+  <!-- ARTICLE 6 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">6.</span> Utilisation et conservation des biens</div>
+    <div class="clause">
+      <div class="clause-num">6.1</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> qui désire utiliser les biens de la clinique à des fins personnelles doit obtenir préalablement l'autorisation de son supérieur immédiat.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">6.2</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> consent à ce que <strong>L'EMPLOYEUR</strong> se réserve le droit de fouiller les sacs, sacoches, mallettes, casier, véhicules automobiles et autres biens personnels, en compagnie de <strong>L'EMPLOYÉ(E)</strong>, lorsque des circonstances sérieuses le justifient. Un refus de la part de <strong>L'EMPLOYÉ(E)</strong> constitue un bris de ses conditions de travail et peut entraîner un congédiement.</div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 7 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">7.</span> Engagement de l'employé(e)</div>
+    <div class="clause">
+      <div class="clause-num">7.1</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> s'engage à fournir les efforts nécessaires à l'atteinte des objectifs fixés par son supérieur immédiat et à la réalisation de sa description d'emploi ci-jointe, en conformité avec les valeurs, les orientations et les politiques de <strong>L'EMPLOYEUR</strong>.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">7.2</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> qui veut mettre fin à ce contrat doit aviser, par écrit, <strong>L'EMPLOYEUR</strong> dans un délai raisonnable qui permettra le transfert de son travail, conformément aux dispositions de la <em>Loi sur les normes du travail</em>.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">7.3</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> s'engage à maintenir la confidentialité de toutes les informations relatives à la clinique, à ses patients et à ses employés, et ce, même après la fin de son emploi.</div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 8 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">8.</span> Engagement de l'employeur</div>
+    <div class="clause">
+      <div class="clause-num">8.1</div>
+      <div><strong>L'EMPLOYEUR</strong> s'engage à supporter <strong>L'EMPLOYÉ(E)</strong> dans le cadre de ses fonctions et s'engage à tout mettre en œuvre afin de faciliter l'exécution de ses attributions, le tout dans l'intérêt de l'entreprise.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">8.2</div>
+      <div><strong>L'EMPLOYEUR</strong> s'engage à aviser, par écrit, <strong>L'EMPLOYÉ(E)</strong> de la fin de son contrat, dans un délai respectant les dispositions de la <em>Loi sur les normes du travail</em> du Québec.</div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 9 -->
+  <div class="article">
+    <div class="article-title"><span class="article-num">9.</span> Durée, modification, renouvellement du contrat et rencontre annuelle</div>
+    <div class="clause">
+      <div class="clause-num">9.1</div>
+      <div><strong>L'EMPLOYÉ(E)</strong> est assujetti(e) à une période d'essai de <span class="s-probation ef" contenteditable="true">trois (3) mois</span> à partir de la date d'embauche. Durant cette période, <strong>L'EMPLOYEUR</strong> peut mettre fin au contrat d'emploi pour tout motif qu'il juge raisonnable. À la suite de la terminaison de son emploi durant cette période, <strong>L'EMPLOYÉ(E)</strong> n'a droit à aucun préavis.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">9.2</div>
+      <div><strong>L'EMPLOYEUR</strong> se réserve le droit de mettre fin au présent contrat pour cause justifiée, à savoir et non limitativement, la malveillance, la fraude ou le vol.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">9.3</div>
+      <div>Toute modification au présent contrat ne pourra être rendue possible sans le consentement exclusif et écrit des deux parties.</div>
+    </div>
+    <div class="clause">
+      <div class="clause-num">9.4</div>
+      <div>Une rencontre annuelle d'évaluation du rendement sera tenue entre <strong>L'EMPLOYEUR</strong> et <strong>L'EMPLOYÉ(E)</strong> afin de faire le bilan de l'année écoulée, de fixer les objectifs de l'année à venir et de discuter des conditions d'emploi.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SIGNATURES -->
+  <div class="sig-block">
+    <div class="sig-title">LES PARTIES RECONNAISSENT AVOIR LU ET ACCEPTÉ LES CLAUSES DU PRÉSENT CONTRAT,</div>
+    <div class="sig-line-wrap"><strong>EN FOI DE QUOI LES PARTIES ONT SIGNÉ À <span class="s-ville ef" contenteditable="true">Ville</span> LE <span class="s-datesig ef ef-long" contenteditable="true">17 mai 2026</span></strong></div>
+
+    <div class="sig-grid">
+      <div class="sig-col">
+        <div style="font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">L'Employeur</div>
+        <div class="sig-line">
+          <div class="sig-name s-representant">Représentant(e)</div>
+          <div class="sig-role s-titlerep">Titre</div>
+        </div>
+      </div>
+      <div class="sig-col">
+        <div style="font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">L'Employé(e)</div>
+        <div class="sig-line">
+          <div class="sig-name s-employe">Prénom Nom</div>
+          <div class="sig-role s-poste">Poste</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;font-size:.8rem;color:#5a6a80;text-align:center;font-style:italic;">
+      Ce contrat a été préparé en deux (2) exemplaires originaux, dont un remis à chaque partie.
+    </div>
+  </div>
+
+  <div class="initials-footer">Initiales : ____________________</div>
+</div>
+</div>
+
+<script>
+// ===== LOGO =====
+function loadLogo(input) {
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const src = e.target.result;
+    // Preview
+    const box = document.getElementById('logoBox');
+    document.getElementById('logoPlaceholder').style.display = 'none';
+    let img = box.querySelector('img');
+    if (!img) { img = document.createElement('img'); box.appendChild(img); }
+    img.src = src; img.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+    document.getElementById('btnDelLogo').style.display = 'block';
+    // In contract
+    document.getElementById('contractLogo').style.display = 'block';
+    document.getElementById('contractLogoImg').src = src;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function removeLogo() {
+  document.getElementById('logoPlaceholder').style.display = '';
+  const box = document.getElementById('logoBox');
+  const img = box.querySelector('img'); if (img) img.remove();
+  document.getElementById('btnDelLogo').style.display = 'none';
+  document.getElementById('contractLogo').style.display = 'none';
+}
+
+// ===== SYNC =====
+function sync(inputId, selector) {
+  const val = document.getElementById(inputId).value;
+  document.querySelectorAll(selector).forEach(el => el.textContent = val || el.getAttribute('data-placeholder') || '');
+}
+
+function syncDate(inputId, selector) {
+  const val = document.getElementById(inputId).value;
+  if (!val) return;
+  const d = new Date(val + 'T12:00:00');
+  const formatted = d.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
+  document.querySelectorAll(selector).forEach(el => el.textContent = formatted);
+}
+
+// Auto-set today as signature date
+document.getElementById('f_dateSig').valueAsDate = new Date();
+syncDate('f_dateSig', '.s-datesig');
+</script>
+
+
+</body></html>

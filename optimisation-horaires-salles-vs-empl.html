@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///C:/Users/info/Downloads/optimisation-horaires.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimisation des horaires — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1150px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .tab-btn{padding:10px 18px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.81rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:18px 24px;}
+  .tab-pane.active{display:block;}
+  .top-bar{padding:10px 24px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .sec-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.69rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ff input:focus,.ff select:focus{outline:none;border-color:var(--accent);background:white;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  /* STAFF */
+  .staff-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:12px 14px;margin-bottom:8px;display:grid;grid-template-columns:20px 1fr 1fr 1fr 1fr auto;gap:8px;align-items:center;}
+  .staff-color{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+  .si{border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:var(--light);}
+  .si:focus{outline:none;border-color:var(--accent);}
+  .btn-del-s{width:24px;height:24px;border-radius:5px;border:1px solid rgba(192,57,43,.3);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .btn-add{display:flex;align-items:center;gap:5px;padding:6px 13px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  /* SCHEDULE GRID */
+  .schedule-wrap{overflow-x:auto;margin-bottom:14px;}
+  .sched-table{border-collapse:collapse;min-width:100%;font-size:.75rem;}
+  .sched-table th{background:var(--dark);color:white;padding:7px 8px;text-align:center;font-size:.69rem;font-weight:600;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sched-table th.time-col{text-align:left;min-width:70px;}
+  .sched-table th.day-col{min-width:130px;}
+  .sched-table td{border:1px solid var(--border);padding:2px;height:32px;vertical-align:middle;position:relative;}
+  .sched-table td.time-cell{padding:4px 8px;background:var(--light);font-size:.72rem;font-weight:700;color:#5a6a80;white-space:nowrap;border-right:2px solid var(--border);}
+  .sched-table td.lunch{background:#f9f9f9;}
+  .slot-select{width:100%;height:100%;border:none;background:transparent;font-family:inherit;font-size:.71rem;cursor:pointer;padding:2px 4px;border-radius:3px;outline:none;}
+  .slot-block{width:100%;height:100%;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.69rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  /* STATS */
+  .stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .stat-chip{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:9px 14px;text-align:center;}
+  .sc-val{font-size:1.2rem;font-weight:700;color:var(--blue);}
+  .sc-lbl{font-size:.71rem;color:#5a6a80;margin-top:2px;}
+  /* STAFF SUMMARY */
+  .staff-summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px;}
+  .ss-card{background:white;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;border-left-width:4px;}
+  .ss-name{font-size:.84rem;font-weight:700;color:var(--dark);margin-bottom:6px;}
+  .ss-bar-wrap{background:#e0e0e0;border-radius:3px;height:6px;overflow:hidden;margin-top:4px;}
+  .ss-bar{height:6px;border-radius:3px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  /* NOTES */
+  .note-area{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px;font-size:.84rem;font-family:inherit;resize:vertical;min-height:80px;background:var(--light);}
+  .note-area:focus{outline:none;border-color:var(--accent);background:white;}
+  .actions{padding:12px 24px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.nav-tabs,.top-bar,.actions,.btn-add,.btn-del-s,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.tab-pane{display:block!important;}.sched-table th,.slot-block{-webkit-print-color-adjust:exact;print-color-adjust:exact;}input,select{border:none!important;background:transparent!important;}}
+  @media(max-width:750px){.grid2,.grid3{grid-template-columns:1fr;}.tab-pane{padding:12px 14px;}.staff-card{grid-template-columns:14px 1fr 1fr auto;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Administration — Gestion des horaires</div></div>
+<div class="container">
+  <div class="doc-header">
+    <div><h1>📅 Optimisation des horaires</h1><p>Planification hebdomadaire · Répartition de la charge · Vue par fauteuil et par rôle</p></div>
+    <button class="btn" style="color:white;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1);" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+
+  <div class="top-bar">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <input class="ci" type="text" id="clinicNm" placeholder="Clinique Dentaire...">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="btn" onclick="changeWeek(-1)">‹ Sem. préc.</button>
+        <span id="weekLabel" style="font-size:.84rem;font-weight:700;color:var(--dark);white-space:nowrap;">11 mai – 15 mai 2026</span>
+        <button class="btn" onclick="changeWeek(1)">Sem. suiv. ›</button>
+      </div>
+      <button class="btn primary" onclick="buildSchedule()">🔄 Actualiser</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab(0,this)">👥 Personnel</button>
+    <button class="tab-btn" onclick="showTab(1,this);buildSchedule()">📅 Horaire de la semaine</button>
+    <button class="tab-btn" onclick="showTab(2,this);buildStats()">📊 Analyse de charge</button>
+    <button class="tab-btn" onclick="showTab(3,this)">📝 Notes et disponibilités</button>
+  </div>
+
+  <!-- CONFIG PERSONNEL -->
+  <div class="tab-pane active" id="tp0">
+    <div class="sec-title">Membres de l'équipe</div>
+    <div style="display:grid;grid-template-columns:20px 1fr 1fr 1fr 1fr auto;gap:8px;padding:5px 8px;font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">
+      <span></span><span>Nom</span><span>Rôle</span><span>Statut</span><span>H. hebdo cible</span><span></span>
+    </div>
+    <div id="staffList">
+    <div class="staff-card">
+      <div class="staff-color" style="background:#1a6abf;"></div>
+      <input class="si" type="text" value="Sophie Tremblay" placeholder="Prénom Nom..." oninput="staff[0].name=this.value">
+      <select class="si" onchange="staff[0].role=this.value"><option selected="">Secrétaire</option><option>Hygiéniste</option><option>Assistante dentaire</option><option>Gestionnaire</option><option>Dentiste</option><option>Coordonnatrice</option><option>Aide stérilisation</option></select>
+      <select class="si" onchange="staff[0].statut=this.value"><option selected="">Temps plein</option><option>Temps partiel</option><option>Sur appel</option></select>
+      <input class="si" type="number" value="35" min="1" max="60" oninput="staff[0].hTarget=+this.value" style="text-align:right;" placeholder="H/sem">
+      <button class="btn-del-s" onclick="staff.splice(0,1);renderStaffList()">×</button>
+    </div>
+    <div class="staff-card">
+      <div class="staff-color" style="background:#1a9e5a;"></div>
+      <input class="si" type="text" value="Marie Gagnon" placeholder="Prénom Nom..." oninput="staff[1].name=this.value">
+      <select class="si" onchange="staff[1].role=this.value"><option>Secrétaire</option><option selected="">Hygiéniste</option><option>Assistante dentaire</option><option>Gestionnaire</option><option>Dentiste</option><option>Coordonnatrice</option><option>Aide stérilisation</option></select>
+      <select class="si" onchange="staff[1].statut=this.value"><option selected="">Temps plein</option><option>Temps partiel</option><option>Sur appel</option></select>
+      <input class="si" type="number" value="35" min="1" max="60" oninput="staff[1].hTarget=+this.value" style="text-align:right;" placeholder="H/sem">
+      <button class="btn-del-s" onclick="staff.splice(1,1);renderStaffList()">×</button>
+    </div>
+    <div class="staff-card">
+      <div class="staff-color" style="background:#8e44ad;"></div>
+      <input class="si" type="text" value="Julie Côté" placeholder="Prénom Nom..." oninput="staff[2].name=this.value">
+      <select class="si" onchange="staff[2].role=this.value"><option>Secrétaire</option><option selected="">Hygiéniste</option><option>Assistante dentaire</option><option>Gestionnaire</option><option>Dentiste</option><option>Coordonnatrice</option><option>Aide stérilisation</option></select>
+      <select class="si" onchange="staff[2].statut=this.value"><option>Temps plein</option><option selected="">Temps partiel</option><option>Sur appel</option></select>
+      <input class="si" type="number" value="20" min="1" max="60" oninput="staff[2].hTarget=+this.value" style="text-align:right;" placeholder="H/sem">
+      <button class="btn-del-s" onclick="staff.splice(2,1);renderStaffList()">×</button>
+    </div>
+    <div class="staff-card">
+      <div class="staff-color" style="background:#e67e22;"></div>
+      <input class="si" type="text" value="Anne Bouchard" placeholder="Prénom Nom..." oninput="staff[3].name=this.value">
+      <select class="si" onchange="staff[3].role=this.value"><option>Secrétaire</option><option>Hygiéniste</option><option selected="">Assistante dentaire</option><option>Gestionnaire</option><option>Dentiste</option><option>Coordonnatrice</option><option>Aide stérilisation</option></select>
+      <select class="si" onchange="staff[3].statut=this.value"><option selected="">Temps plein</option><option>Temps partiel</option><option>Sur appel</option></select>
+      <input class="si" type="number" value="35" min="1" max="60" oninput="staff[3].hTarget=+this.value" style="text-align:right;" placeholder="H/sem">
+      <button class="btn-del-s" onclick="staff.splice(3,1);renderStaffList()">×</button>
+    </div>
+    <div class="staff-card">
+      <div class="staff-color" style="background:#c0392b;"></div>
+      <input class="si" type="text" value="Vous (Gestionnaire)" placeholder="Prénom Nom..." oninput="staff[4].name=this.value">
+      <select class="si" onchange="staff[4].role=this.value"><option>Secrétaire</option><option>Hygiéniste</option><option>Assistante dentaire</option><option selected="">Gestionnaire</option><option>Dentiste</option><option>Coordonnatrice</option><option>Aide stérilisation</option></select>
+      <select class="si" onchange="staff[4].statut=this.value"><option selected="">Temps plein</option><option>Temps partiel</option><option>Sur appel</option></select>
+      <input class="si" type="number" value="40" min="1" max="60" oninput="staff[4].hTarget=+this.value" style="text-align:right;" placeholder="H/sem">
+      <button class="btn-del-s" onclick="staff.splice(4,1);renderStaffList()">×</button>
+    </div></div>
+    <button class="btn-add" onclick="addStaff()" style="margin-bottom:16px;">+ Ajouter un(e) membre</button>
+
+    <div class="sec-title">Configuration de la clinique</div>
+    <div class="grid3">
+      <div class="ff"><label>Heure d'ouverture</label><input type="time" id="cfg_open" value="08:00"></div>
+      <div class="ff"><label>Heure de fermeture</label><input type="time" id="cfg_close" value="17:00"></div>
+      <div class="ff"><label>Durée des blocs (minutes)</label>
+        <select id="cfg_bloc">
+          <option value="30">30 minutes</option>
+          <option value="60" selected="">1 heure</option>
+        </select>
+      </div>
+      <div class="ff"><label>Pause dîner (heure de début)</label><input type="time" id="cfg_lunch" value="12:00"></div>
+      <div class="ff"><label>Durée de la pause (min)</label><select id="cfg_lunch_dur"><option value="30">30 min</option><option value="60" selected="">60 min</option></select></div>
+      <div class="ff"><label>Nombre de fauteuils</label><input type="number" id="cfg_chairs" value="3" min="1" max="10" oninput="buildSchedule()"></div>
+    </div>
+    <div class="actions"><button class="btn primary" onclick="showTab(1,null);buildSchedule()">Voir l'horaire →</button></div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div class="tab-pane" id="tp1">
+    <div class="staff-summary" id="staffSummary"><div class="ss-card" style="border-left-color:#1a6abf;"><div class="ss-name">Sophie Tremblay<br><span style="font-size:.72rem;color:#8a9ab0;font-weight:400;">Secrétaire · Temps plein</span></div>
+      <div style="font-size:.8rem;color:var(--red);font-weight:700;">0.0h / 35h cibles</div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:0%;background:#1a6abf;"></div></div>
+    </div><div class="ss-card" style="border-left-color:#1a9e5a;"><div class="ss-name">Marie Gagnon<br><span style="font-size:.72rem;color:#8a9ab0;font-weight:400;">Hygiéniste · Temps plein</span></div>
+      <div style="font-size:.8rem;color:var(--red);font-weight:700;">0.0h / 35h cibles</div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:0%;background:#1a9e5a;"></div></div>
+    </div><div class="ss-card" style="border-left-color:#8e44ad;"><div class="ss-name">Julie Côté<br><span style="font-size:.72rem;color:#8a9ab0;font-weight:400;">Hygiéniste · Temps partiel</span></div>
+      <div style="font-size:.8rem;color:var(--red);font-weight:700;">0.0h / 20h cibles</div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:0%;background:#8e44ad;"></div></div>
+    </div><div class="ss-card" style="border-left-color:#e67e22;"><div class="ss-name">Anne Bouchard<br><span style="font-size:.72rem;color:#8a9ab0;font-weight:400;">Assistante dentaire · Temps plein</span></div>
+      <div style="font-size:.8rem;color:var(--red);font-weight:700;">0.0h / 35h cibles</div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:0%;background:#e67e22;"></div></div>
+    </div><div class="ss-card" style="border-left-color:#c0392b;"><div class="ss-name">Vous (Gestionnaire)<br><span style="font-size:.72rem;color:#8a9ab0;font-weight:400;">Gestionnaire · Temps plein</span></div>
+      <div style="font-size:.8rem;color:var(--red);font-weight:700;">0.0h / 40h cibles</div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:0%;background:#c0392b;"></div></div>
+    </div></div>
+    <div class="schedule-wrap"><table class="sched-table" id="schedTable"><thead><tr><th class="time-col">Heure</th><th class="day-col">Lundi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 1</span></th><th class="day-col">Lundi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 2</span></th><th class="day-col">Lundi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 3</span></th><th class="day-col">Mardi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 1</span></th><th class="day-col">Mardi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 2</span></th><th class="day-col">Mardi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 3</span></th><th class="day-col">Mercredi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 1</span></th><th class="day-col">Mercredi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 2</span></th><th class="day-col">Mercredi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 3</span></th><th class="day-col">Jeudi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 1</span></th><th class="day-col">Jeudi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 2</span></th><th class="day-col">Jeudi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 3</span></th><th class="day-col">Vendredi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 1</span></th><th class="day-col">Vendredi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 2</span></th><th class="day-col">Vendredi<br><span style="font-size:.63rem;opacity:.7;">Fauteuil 3</span></th></tr></thead><tbody><tr><td class="time-cell">08:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_08:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_08:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_08:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_08:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_08:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_08:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_08:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_08:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_08:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_08:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_08:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_08:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_08:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_08:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_08:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr><tr><td class="time-cell">09:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_09:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_09:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_09:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_09:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_09:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_09:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_09:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_09:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_09:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_09:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_09:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_09:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_09:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_09:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_09:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr><tr><td class="time-cell">10:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_10:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_10:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_10:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_10:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_10:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_10:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_10:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_10:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_10:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_10:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_10:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_10:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_10:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_10:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_10:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr><tr><td class="time-cell">11:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_11:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_11:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_11:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_11:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_11:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_11:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_11:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_11:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_11:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_11:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_11:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_11:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_11:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_11:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_11:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr><tr><td class="time-cell">12:00<br><span style="color:var(--orange);font-size:.65rem;">🍽 Dîner</span></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td><td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td></tr><tr><td class="time-cell">13:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_13:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_13:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_13:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_13:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_13:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_13:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_13:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_13:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_13:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_13:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_13:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_13:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_13:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_13:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_13:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr><tr><td class="time-cell">14:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_14:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_14:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_14:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_14:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_14:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_14:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_14:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_14:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_14:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_14:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_14:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_14:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_14:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_14:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_14:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr><tr><td class="time-cell">15:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_15:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_15:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_15:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_15:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_15:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_15:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_15:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_15:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_15:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_15:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_15:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_15:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_15:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_15:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_15:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr><tr><td class="time-cell">16:00</td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_16:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_16:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Lundi_16:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_16:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_16:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mardi_16:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_16:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_16:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Mercredi_16:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_16:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_16:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Jeudi_16:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_16:00_1&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_16:00_2&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td><td><select class="slot-select" onchange="assignSlot(&#39;Vendredi_16:00_3&#39;,this.value);this.value=&#39;&#39;">
+              <option value="">— Libre —</option>
+              <option value="s1">Sophie Tremblay</option><option value="s2">Marie Gagnon</option><option value="s3">Julie Côté</option><option value="s4">Anne Bouchard</option><option value="s5">Vous (Gestionnaire)</option>
+            </select></td></tr></tbody></table></div>
+    <div class="sec-title" style="margin-top:4px;">Légende</div>
+    <div id="legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"><div style="display:flex;align-items:center;gap:5px;font-size:.76rem;"><div style="width:12px;height:12px;border-radius:3px;background:#1a6abf;"></div>Sophie Tremblay</div><div style="display:flex;align-items:center;gap:5px;font-size:.76rem;"><div style="width:12px;height:12px;border-radius:3px;background:#1a9e5a;"></div>Marie Gagnon</div><div style="display:flex;align-items:center;gap:5px;font-size:.76rem;"><div style="width:12px;height:12px;border-radius:3px;background:#8e44ad;"></div>Julie Côté</div><div style="display:flex;align-items:center;gap:5px;font-size:.76rem;"><div style="width:12px;height:12px;border-radius:3px;background:#e67e22;"></div>Anne Bouchard</div><div style="display:flex;align-items:center;gap:5px;font-size:.76rem;"><div style="width:12px;height:12px;border-radius:3px;background:#c0392b;"></div>Vous (Gestionnaire)</div></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="tab-pane" id="tp2">
+    <div class="stats-row" id="statsRow"></div>
+    <div class="sec-title">Charge par membre de l'équipe</div>
+    <div id="chargeGrid" class="staff-summary"></div>
+    <div class="sec-title" style="margin-top:12px;">Analyse de la répartition</div>
+    <div id="analyseBox"></div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="tab-pane" id="tp3">
+    <div class="sec-title">Notes de planification</div>
+    <textarea class="note-area" placeholder="Notes générales sur la semaine, contexte particulier, contraintes..."></textarea>
+    <div class="sec-title" style="margin-top:14px;">Disponibilités et contraintes individuelles</div>
+    <div id="availGrid"></div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+
+<script>
+const DAYS=['Lundi','Mardi','Mercredi','Jeudi','Vendredi'];
+const ROLES=['Secrétaire','Hygiéniste','Assistante dentaire','Gestionnaire','Dentiste','Coordonnatrice','Aide stérilisation'];
+const COLORS=['#1a6abf','#1a9e5a','#8e44ad','#e67e22','#c0392b','#d4a017','#2c3e50','#00897b'];
+const STATUTS=['Temps plein','Temps partiel','Sur appel'];
+
+let staff=[
+  {id:'s1',name:'Sophie Tremblay',role:'Secrétaire',statut:'Temps plein',hTarget:35,color:'#1a6abf'},
+  {id:'s2',name:'Marie Gagnon',role:'Hygiéniste',statut:'Temps plein',hTarget:35,color:'#1a9e5a'},
+  {id:'s3',name:'Julie Côté',role:'Hygiéniste',statut:'Temps partiel',hTarget:20,color:'#8e44ad'},
+  {id:'s4',name:'Anne Bouchard',role:'Assistante dentaire',statut:'Temps plein',hTarget:35,color:'#e67e22'},
+  {id:'s5',name:'Vous (Gestionnaire)',role:'Gestionnaire',statut:'Temps plein',hTarget:40,color:'#c0392b'},
+];
+let sid=6;
+// schedule[day][timeSlot][chair] = staffId or ''
+let schedule={};
+let weekOffset=0;
+
+const today=new Date();today.setHours(0,0,0,0);
+function getMonday(d,offset=0){const dt=new Date(d);const day=dt.getDay(),diff=dt.getDate()-day+(day===0?-6:1);dt.setDate(diff+offset*7);return dt;}
+
+function updateWeekLabel(){
+  const mon=getMonday(today,weekOffset);
+  const fri=new Date(mon);fri.setDate(fri.getDate()+4);
+  document.getElementById('weekLabel').textContent=mon.toLocaleDateString('fr-CA',{day:'numeric',month:'short'})+' – '+fri.toLocaleDateString('fr-CA',{day:'numeric',month:'short',year:'numeric'});
+}
+function changeWeek(d){weekOffset+=d;updateWeekLabel();buildSchedule();}
+updateWeekLabel();
+
+function addStaff(){
+  const id='s'+sid++;
+  staff.push({id,name:'',role:'Secrétaire',statut:'Temps plein',hTarget:35,color:COLORS[staff.length%COLORS.length]});
+  renderStaffList();
+}
+
+function renderStaffList(){
+  const el=document.getElementById('staffList');
+  el.innerHTML=staff.map((s,i)=>`
+    <div class="staff-card">
+      <div class="staff-color" style="background:${s.color};"></div>
+      <input class="si" type="text" value="${s.name}" placeholder="Prénom Nom..." oninput="staff[${i}].name=this.value">
+      <select class="si" onchange="staff[${i}].role=this.value">${ROLES.map(r=>`<option ${r===s.role?'selected':''}>${r}</option>`).join('')}</select>
+      <select class="si" onchange="staff[${i}].statut=this.value">${STATUTS.map(st=>`<option ${st===s.statut?'selected':''}>${st}</option>`).join('')}</select>
+      <input class="si" type="number" value="${s.hTarget}" min="1" max="60" oninput="staff[${i}].hTarget=+this.value" style="text-align:right;" placeholder="H/sem">
+      <button class="btn-del-s" onclick="staff.splice(${i},1);renderStaffList()">×</button>
+    </div>`).join('');
+}
+
+function getTimeSlots(){
+  const open=document.getElementById('cfg_open').value||'08:00';
+  const close=document.getElementById('cfg_close').value||'17:00';
+  const bloc=parseInt(document.getElementById('cfg_bloc').value)||60;
+  const lunch=document.getElementById('cfg_lunch').value||'12:00';
+  const lunchDur=parseInt(document.getElementById('cfg_lunch_dur').value)||60;
+  const slots=[];
+  let h=parseInt(open.split(':')[0]),m=parseInt(open.split(':')[1]);
+  const endH=parseInt(close.split(':')[0]),endM=parseInt(close.split(':')[1]);
+  const lH=parseInt(lunch.split(':')[0]),lM=parseInt(lunch.split(':')[1]);
+  while(h*60+m<endH*60+endM){
+    const label=(h<10?'0'+h:h)+':'+(m<10?'0'+m:m);
+    const isLunch=h===lH&&m===lM;
+    slots.push({label,isLunch,h,m});
+    m+=bloc;if(m>=60){h+=Math.floor(m/60);m=m%60;}
+  }
+  return slots;
+}
+
+function buildSchedule(){
+  const slots=getTimeSlots();
+  const chairs=parseInt(document.getElementById('cfg_chairs').value)||3;
+  const table=document.getElementById('schedTable');
+  // Header
+  let html=`<thead><tr><th class="time-col">Heure</th>`;
+  DAYS.forEach(d=>{ for(let c=1;c<=chairs;c++) html+=`<th class="day-col">${d}<br><span style="font-size:.63rem;opacity:.7;">Fauteuil ${c}</span></th>`; });
+  html+='</tr></thead><tbody>';
+  slots.forEach(slot=>{
+    html+=`<tr>`;
+    html+=`<td class="time-cell">${slot.label}${slot.isLunch?'<br><span style="color:var(--orange);font-size:.65rem;">🍽 Dîner</span>':''}</td>`;
+    DAYS.forEach(day=>{
+      for(let c=1;c<=chairs;c++){
+        const key=`${day}_${slot.label}_${c}`;
+        const curr=schedule[key]||'';
+        const s=staff.find(x=>x.id===curr);
+        if(slot.isLunch){
+          html+=`<td class="lunch"><div style="background:#f5f5f5;height:100%;display:flex;align-items:center;justify-content:center;font-size:.68rem;color:#aaa;border-radius:3px;">—</div></td>`;
+        } else {
+          html+=`<td>`;
+          if(curr&&s){
+            html+=`<div class="slot-block" style="background:${s.color};" onclick="clearSlot('${key}')" title="Cliquer pour libérer">${s.name.split(' ')[0]}</div>`;
+          } else {
+            html+=`<select class="slot-select" onchange="assignSlot('${key}',this.value);this.value=''">
+              <option value="">— Libre —</option>
+              ${staff.map(x=>`<option value="${x.id}">${x.name||x.role}</option>`).join('')}
+            </select>`;
+          }
+          html+=`</td>`;
+        }
+      }
+    });
+    html+=`</tr>`;
+  });
+  html+='</tbody>';
+  table.innerHTML=html;
+
+  // Legend
+  document.getElementById('legend').innerHTML=staff.map(s=>`<div style="display:flex;align-items:center;gap:5px;font-size:.76rem;"><div style="width:12px;height:12px;border-radius:3px;background:${s.color};"></div>${s.name||s.role}</div>`).join('');
+
+  // Summary
+  const mon=getMonday(today,weekOffset);
+  document.getElementById('staffSummary').innerHTML=staff.map(s=>{
+    const assigned=Object.entries(schedule).filter(([k,v])=>v===s.id).length;
+    const blocH=parseInt(document.getElementById('cfg_bloc').value)/60;
+    const totalH=(assigned*blocH).toFixed(1);
+    const pct=s.hTarget>0?Math.min(100,parseFloat(totalH)/s.hTarget*100):0;
+    const col=pct>=90?'var(--green)':pct>=60?'var(--orange)':'var(--red)';
+    return `<div class="ss-card" style="border-left-color:${s.color};"><div class="ss-name">${s.name||s.role}<br><span style="font-size:.72rem;color:#8a9ab0;font-weight:400;">${s.role} · ${s.statut}</span></div>
+      <div style="font-size:.8rem;color:${col};font-weight:700;">${totalH}h / ${s.hTarget}h cibles</div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:${pct}%;background:${s.color};"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function assignSlot(key,staffId){if(staffId)schedule[key]=staffId;buildSchedule();}
+function clearSlot(key){delete schedule[key];buildSchedule();}
+
+function buildStats(){
+  const slots=getTimeSlots().filter(s=>!s.isLunch);
+  const chairs=parseInt(document.getElementById('cfg_chairs').value)||3;
+  const totalSlots=DAYS.length*slots.length*chairs;
+  const assigned=Object.keys(schedule).filter(k=>schedule[k]).length;
+  const pct=totalSlots>0?Math.round(assigned/totalSlots*100):0;
+  document.getElementById('statsRow').innerHTML=`
+    <div class="stat-chip"><div class="sc-val">${totalSlots}</div><div class="sc-lbl">Blocs disponibles</div></div>
+    <div class="stat-chip"><div class="sc-val" style="color:var(--blue);">${assigned}</div><div class="sc-lbl">Blocs attribués</div></div>
+    <div class="stat-chip"><div class="sc-val" style="color:${pct>=80?'var(--green)':pct>=50?'var(--orange)':'var(--red)'};">${pct}%</div><div class="sc-lbl">Taux de remplissage</div></div>
+    <div class="stat-chip"><div class="sc-val" style="color:var(--orange);">${totalSlots-assigned}</div><div class="sc-lbl">Blocs libres</div></div>`;
+
+  const blocH=parseInt(document.getElementById('cfg_bloc').value)/60;
+  document.getElementById('chargeGrid').innerHTML=staff.map(s=>{
+    const n=Object.values(schedule).filter(v=>v===s.id).length;
+    const h=(n*blocH).toFixed(1);
+    const pct=s.hTarget>0?Math.min(100,parseFloat(h)/s.hTarget*100):0;
+    const col=pct>=90?'var(--green)':pct>=70?'var(--orange)':'var(--red)';
+    return `<div class="ss-card" style="border-left-color:${s.color};"><div class="ss-name">${s.name||s.role}</div>
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px;">
+        <span style="color:#5a6a80;">${s.role}</span>
+        <span style="font-weight:700;color:${col};">${h}h / ${s.hTarget}h</span>
+      </div>
+      <div class="ss-bar-wrap"><div class="ss-bar" style="width:${pct}%;background:${s.color};"></div></div>
+      <div style="font-size:.7rem;color:${col};margin-top:3px;">${Math.round(pct)}% des heures cibles</div>
+    </div>`;
+  }).join('');
+
+  const alerts=[];
+  staff.forEach(s=>{
+    const n=Object.values(schedule).filter(v=>v===s.id).length;
+    const h=n*blocH;
+    if(h>s.hTarget)alerts.push(`⚠️ <strong>${s.name||s.role}</strong> dépasse son objectif de ${(h-s.hTarget).toFixed(1)}h cette semaine.`);
+    else if(h<s.hTarget*0.5)alerts.push(`🔵 <strong>${s.name||s.role}</strong> a moins de 50% de ses heures cibles planifiées.`);
+  });
+  document.getElementById('analyseBox').innerHTML=alerts.length
+    ?alerts.map(a=>`<div style="padding:9px 14px;border-radius:7px;font-size:.82rem;margin-bottom:6px;background:var(--light);border:1.5px solid var(--border);">${a}</div>`).join('')
+    :'<div style="padding:10px 14px;border-radius:7px;font-size:.82rem;background:#f0fdf4;border:1.5px solid rgba(26,158,90,.2);color:var(--green);">✅ La répartition des heures est équilibrée pour tous les membres de l\'équipe.</div>';
+
+  // Dispo notes
+  document.getElementById('availGrid').innerHTML=staff.map(s=>`
+    <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:8px;">
+      <div style="font-size:.83rem;font-weight:700;color:var(--dark);margin-bottom:6px;">${s.name||s.role} <span style="font-size:.72rem;color:#8a9ab0;font-weight:400;">${s.statut}</span></div>
+      <textarea class="note-area" style="min-height:50px;font-size:.8rem;" placeholder="Contraintes, congés, disponibilités particulières cette semaine..."></textarea>
+    </div>`).join('');
+}
+
+function showTab(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+renderStaffList();buildSchedule();
+</script>
+
+
+</body></html>

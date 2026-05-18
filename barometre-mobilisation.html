@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)file:///C:/Users/info/Downloads/barometre-mobilisation.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baromètre de mobilisation — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:900px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+  .main-tabs{display:flex;background:var(--dark);border-bottom:3px solid var(--accent);}
+  .main-tab{padding:12px 24px;background:none;border:none;border-bottom:4px solid transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:.84rem;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:-3px;}
+  .main-tab:hover{color:white;background:rgba(255,255,255,.08);}
+  .main-tab.active{color:white;border-bottom-color:var(--accent);background:rgba(33,150,243,.15);}
+  .main-pane{display:none;}
+  .main-pane.active{display:block;}
+  .section{padding:20px 30px;border-bottom:1px solid var(--border);}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+  .info-bar{padding:11px 30px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
+  .anon-badge{background:#f0fdf4;color:var(--green);border:1.5px solid rgba(26,158,90,.3);border-radius:20px;padding:4px 12px;font-size:.76rem;font-weight:700;}
+
+  /* DIMENSIONS */
+  .dim-card{background:white;border:1.5px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+  .dim-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+  .dim-icon{font-size:1.3rem;}
+  .dim-title{font-size:.92rem;font-weight:700;color:var(--dark);}
+  .dim-sub{font-size:.76rem;color:#8a9ab0;margin-top:2px;}
+  .q-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--light);}
+  .q-row:last-child{border-bottom:none;}
+  .q-text{flex:1;font-size:.84rem;color:var(--text);}
+  .scale-btns{display:flex;gap:4px;}
+  .s-btn{width:30px;height:30px;border-radius:6px;border:1.5px solid var(--border);background:white;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;color:#8a9ab0;transition:all .12s;}
+  .s-btn:hover{border-color:var(--accent);}
+  .s-btn.s1{background:#c0392b;border-color:#c0392b;color:white;}
+  .s-btn.s2{background:#e67e22;border-color:#e67e22;color:white;}
+  .s-btn.s3{background:#f39c12;border-color:#f39c12;color:white;}
+  .s-btn.s4{background:#27ae60;border-color:#27ae60;color:white;}
+  .s-btn.s5{background:#1a9e5a;border-color:#1a9e5a;color:white;}
+
+  /* SUBMIT */
+  .submit-wrap{padding:16px 30px;background:var(--light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .btn-submit{padding:10px 24px;border-radius:8px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;}
+  .btn-reset{padding:8px 16px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.82rem;cursor:pointer;color:#5a6a80;}
+
+  /* SUCCESS */
+  .success-box{text-align:center;padding:36px;display:none;}
+  .success-box .si{font-size:2.5rem;margin-bottom:10px;}
+
+  /* DASHBOARD */
+  .period-bar{padding:10px 30px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .btn-sm{padding:6px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn-sm:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-sm.primary{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* GAUGE CARDS */
+  .gauge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px;}
+  .gauge-card{background:white;border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;}
+  .gc-icon{font-size:1.5rem;margin-bottom:4px;}
+  .gc-score{font-size:1.6rem;font-weight:700;margin-bottom:3px;}
+  .gc-label{font-size:.74rem;color:#5a6a80;margin-bottom:8px;line-height:1.3;}
+  .gc-bar{background:#e0e0e0;border-radius:4px;height:8px;overflow:hidden;}
+  .gc-fill{height:8px;border-radius:4px;transition:width .5s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* GLOBAL GAUGE */
+  .global-gauge{background:var(--light);border:1.5px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:14px;text-align:center;}
+  .gg-score{font-size:2.5rem;font-weight:700;margin-bottom:6px;}
+  .gg-label{font-size:.9rem;font-weight:700;margin-bottom:10px;}
+  .gg-bar-wrap{background:#e0e0e0;border-radius:8px;height:16px;overflow:hidden;margin:8px auto;max-width:400px;}
+  .gg-bar{height:16px;border-radius:8px;transition:width .6s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* ACTIONS */
+  .reco-card{background:white;border:1.5px solid var(--border);border-left:4px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:8px;}
+  .rc-title{font-size:.84rem;font-weight:700;margin-bottom:5px;}
+  .rc-desc{font-size:.81rem;color:#5a6a80;line-height:1.6;}
+
+  /* EMP CONFIG */
+  .emp-setup{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+  .emp-row-s{display:flex;gap:8px;align-items:center;}
+  .emp-row-s input{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;background:var(--light);}
+  .btn-add{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  .btn-del{width:22px;height:22px;border-radius:5px;border:1px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+
+  /* SAISIE */
+  .saisie-wrap{display:flex;flex-direction:column;gap:14px;}
+  .saisie-emp-card{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:12px 14px;}
+  .se-name{font-size:.84rem;font-weight:700;margin-bottom:8px;color:var(--dark);}
+  .se-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:.8rem;}
+  .se-lbl{flex:1;color:#5a6a80;}
+  .se-scale{display:flex;gap:3px;}
+  .ss-btn{width:26px;height:26px;border-radius:5px;border:1.5px solid var(--border);background:white;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;color:#8a9ab0;transition:all .1s;}
+  .ss-btn:hover{border-color:var(--accent);}
+  .ss-btn.a1{background:#c0392b;border-color:#c0392b;color:white;}
+  .ss-btn.a2{background:#e67e22;border-color:#e67e22;color:white;}
+  .ss-btn.a3{background:#f39c12;border-color:#f39c12;color:white;}
+  .ss-btn.a4{background:#27ae60;border-color:#27ae60;color:white;}
+  .ss-btn.a5{background:#1a9e5a;border-color:#1a9e5a;color:white;}
+
+  /* HIST */
+  .hist-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .hist-table th{background:var(--dark);color:white;padding:7px 10px;text-align:left;font-size:.72rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .hist-table td{border-bottom:1px solid var(--border);padding:7px 10px;}
+  .hist-table tr:nth-child(even) td{background:var(--light);}
+
+  .actions{padding:12px 30px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.main-tabs,.info-bar,.period-bar,.submit-wrap,.actions,.btn-add,.btn-del{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.main-pane{display:block!important;}.gc-fill,.gg-bar,.s-btn,.ss-btn{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">RH — Mobilisation d'équipe</div></div>
+<div class="container">
+  <div class="doc-header"><h1>🌡️ Baromètre de mobilisation</h1><p>Mesure trimestrielle de l'engagement, du sentiment d'appartenance et de la motivation de l'équipe</p></div>
+
+  <div class="main-tabs">
+    <button class="main-tab active" onclick="showMain(0,this)">🌡️ Sondage employé<span style="background:rgba(255,255,255,.15);border-radius:4px;padding:1px 6px;font-size:.68rem;margin-left:7px;">Anonyme</span></button>
+    <button class="main-tab" onclick="showMain(1,this)">📊 Tableau de bord<span style="background:rgba(255,255,255,.15);border-radius:4px;padding:1px 6px;font-size:.68rem;margin-left:7px;">Gestionnaire</span></button>
+  </div>
+
+  <!-- SONDAGE -->
+  <div class="main-pane active" id="mp0">
+    <div class="info-bar">
+      <input class="ci" type="text" placeholder="Clinique..." style="min-width:180px;">
+      <input class="ci" type="month" id="moisSondage">
+      <div class="anon-badge">🔒 Réponses anonymes — 5 min</div>
+    </div>
+
+    <div id="formView">
+      <div class="section">
+        <div style="background:var(--light);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.83rem;margin-bottom:16px;color:#2a3a4a;line-height:1.7;">
+          Sur une échelle de <strong>1 (fortement en désaccord) à 5 (fortement en accord)</strong>, indiquez votre niveau d'accord avec chacun des énoncés suivants. Répondez honnêtement — vos réponses sont <strong>100% anonymes</strong>.
+        </div>
+        <div class="scale-legend" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;font-size:.73rem;">
+          <span style="padding:3px 9px;border-radius:6px;background:#fef2f2;color:#c0392b;font-weight:700;">1 — Fortement en désaccord</span>
+          <span style="padding:3px 9px;border-radius:6px;background:#fff5eb;color:#e67e22;font-weight:700;">2 — En désaccord</span>
+          <span style="padding:3px 9px;border-radius:6px;background:#fef9e7;color:#f39c12;font-weight:700;">3 — Neutre</span>
+          <span style="padding:3px 9px;border-radius:6px;background:#f1f8f4;color:#27ae60;font-weight:700;">4 — D'accord</span>
+          <span style="padding:3px 9px;border-radius:6px;background:#f0fdf4;color:#1a9e5a;font-weight:700;">5 — Fortement d'accord</span>
+        </div>
+
+        <!-- DIMENSION 1 -->
+        <div class="dim-card">
+          <div class="dim-header"><span class="dim-icon">💪</span><div><div class="dim-title">Engagement et motivation</div><div class="dim-sub">Votre niveau d'implication dans votre travail au quotidien</div></div></div>
+          <div id="qs_eng"><div class="q-row">
+      <span class="q-text">Je suis enthousiaste à l'idée de venir travailler.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="eng_0" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="eng_0" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="eng_0" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="eng_0" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="eng_0" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Je donne le meilleur de moi-même dans mon travail.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="eng_1" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="eng_1" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="eng_1" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="eng_1" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="eng_1" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Mon travail me donne de l'énergie et de la satisfaction.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="eng_2" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="eng_2" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="eng_2" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="eng_2" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="eng_2" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Je suis fier(ère) du travail que j'effectue dans cette clinique.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="eng_3" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="eng_3" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="eng_3" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="eng_3" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="eng_3" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div></div>
+        </div>
+        <!-- DIMENSION 2 -->
+        <div class="dim-card">
+          <div class="dim-header"><span class="dim-icon">🤝</span><div><div class="dim-title">Sentiment d'appartenance</div><div class="dim-sub">Votre connexion à l'équipe et à la clinique</div></div></div>
+          <div id="qs_app"><div class="q-row">
+      <span class="q-text">Je me sens valorisé(e) et respecté(e) par mes collègues.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="app_0" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="app_0" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="app_0" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="app_0" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="app_0" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Je me sens membre à part entière de l'équipe.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="app_1" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="app_1" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="app_1" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="app_1" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="app_1" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Je me sens à l'aise d'exprimer mes opinions et idées.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="app_2" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="app_2" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="app_2" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="app_2" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="app_2" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Je serais déçu(e) de quitter cette clinique.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="app_3" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="app_3" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="app_3" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="app_3" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="app_3" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div></div>
+        </div>
+        <!-- DIMENSION 3 -->
+        <div class="dim-card">
+          <div class="dim-header"><span class="dim-icon">🌱</span><div><div class="dim-title">Développement et reconnaissance</div><div class="dim-sub">Vos opportunités de croissance et votre sentiment d'être valorisé(e)</div></div></div>
+          <div id="qs_dev"><div class="q-row">
+      <span class="q-text">J'ai accès à des opportunités de développement et de formation.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="dev_0" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="dev_0" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="dev_0" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="dev_0" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="dev_0" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Mon travail me permet d'apprendre et de progresser.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="dev_1" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="dev_1" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="dev_1" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="dev_1" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="dev_1" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Mes efforts et mes contributions sont reconnus.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="dev_2" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="dev_2" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="dev_2" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="dev_2" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="dev_2" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Je reçois de la rétroaction utile sur mon rendement.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="dev_3" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="dev_3" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="dev_3" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="dev_3" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="dev_3" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div></div>
+        </div>
+        <!-- DIMENSION 4 -->
+        <div class="dim-card">
+          <div class="dim-header"><span class="dim-icon">🎯</span><div><div class="dim-title">Alignement et leadership</div><div class="dim-sub">Votre confiance envers la direction et votre compréhension des objectifs</div></div></div>
+          <div id="qs_lead"><div class="q-row">
+      <span class="q-text">La direction communique clairement les orientations et objectifs.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="lead_0" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="lead_0" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="lead_0" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="lead_0" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="lead_0" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">La direction est disponible et à l'écoute de l'équipe.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="lead_1" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="lead_1" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="lead_1" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="lead_1" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="lead_1" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Les décisions prises par la direction me semblent justes.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="lead_2" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="lead_2" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="lead_2" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="lead_2" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="lead_2" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div><div class="q-row">
+      <span class="q-text">Je fais confiance au leadership de cette clinique.</span>
+      <div class="scale-btns">
+        <button class="s-btn" data-key="lead_3" data-v="1" onclick="pickQ(this)">1</button><button class="s-btn" data-key="lead_3" data-v="2" onclick="pickQ(this)">2</button><button class="s-btn" data-key="lead_3" data-v="3" onclick="pickQ(this)">3</button><button class="s-btn" data-key="lead_3" data-v="4" onclick="pickQ(this)">4</button><button class="s-btn" data-key="lead_3" data-v="5" onclick="pickQ(this)">5</button>
+      </div>
+    </div></div>
+        </div>
+
+        <!-- OPEN QUESTION -->
+        <div class="dim-card">
+          <div class="dim-header"><span class="dim-icon">💬</span><div><div class="dim-title">Question ouverte (facultatif)</div><div class="dim-sub">Anonyme — Partagez librement</div></div></div>
+          <div style="font-size:.84rem;color:#5a6a80;margin-bottom:6px;">Qu'est-ce qui pourrait améliorer votre niveau de mobilisation et votre bien-être au travail?</div>
+          <textarea id="openQ" style="width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px 11px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:70px;background:var(--light);line-height:1.6;" placeholder="Vos suggestions, observations ou besoins..."></textarea>
+        </div>
+      </div>
+
+      <div class="submit-wrap">
+        <button class="btn-reset" onclick="resetForm()">↺ Recommencer</button>
+        <button class="btn-submit" onclick="submitSondage()">✅ Soumettre mes réponses</button>
+      </div>
+    </div>
+
+    <div class="success-box" id="successView">
+      <div class="si">🎉</div>
+      <div style="font-size:1.1rem;font-weight:700;color:var(--green);margin-bottom:8px;">Merci pour votre participation!</div>
+      <div style="font-size:.86rem;color:#5a6a80;line-height:1.7;">Vos réponses ont été enregistrées de façon confidentielle.<br>Votre contribution aide à améliorer le milieu de travail pour toute l'équipe. 💙</div>
+      <button class="btn-submit" style="margin-top:18px;" onclick="newResp()">Retour</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="main-pane" id="mp1">
+    <div class="period-bar">
+      <input class="ci" type="month" id="periodeD">
+      <input class="ci" type="text" placeholder="Nom de l&#39;équipe..." style="min-width:160px;">
+      <button class="btn-sm primary" onclick="buildDash()">📊 Calculer</button>
+      <button class="btn-sm" onclick="savePeriod()">💾 Sauvegarder</button>
+      <button class="btn-sm" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+
+    <!-- CONFIG EMPLOYEES -->
+    <div class="section">
+      <div class="sec-title">Configuration de l'équipe</div>
+      <div class="emp-setup" id="empSetup">
+    <div class="emp-row-s">
+      <span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:18px;">1</span>
+      <input type="text" placeholder="Employé(e) 1 — optionnel" value="" oninput="mgrEmployees[0].name=this.value">
+      <button class="btn-del" onclick="mgrEmployees.splice(0,1);delete mgrResponses[1];renderEmpSetup();renderSaisie()">×</button>
+    </div>
+    <div class="emp-row-s">
+      <span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:18px;">2</span>
+      <input type="text" placeholder="Employé(e) 2 — optionnel" value="" oninput="mgrEmployees[1].name=this.value">
+      <button class="btn-del" onclick="mgrEmployees.splice(1,1);delete mgrResponses[2];renderEmpSetup();renderSaisie()">×</button>
+    </div>
+    <div class="emp-row-s">
+      <span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:18px;">3</span>
+      <input type="text" placeholder="Employé(e) 3 — optionnel" value="" oninput="mgrEmployees[2].name=this.value">
+      <button class="btn-del" onclick="mgrEmployees.splice(2,1);delete mgrResponses[3];renderEmpSetup();renderSaisie()">×</button>
+    </div>
+    <div class="emp-row-s">
+      <span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:18px;">4</span>
+      <input type="text" placeholder="Employé(e) 4 — optionnel" value="" oninput="mgrEmployees[3].name=this.value">
+      <button class="btn-del" onclick="mgrEmployees.splice(3,1);delete mgrResponses[4];renderEmpSetup();renderSaisie()">×</button>
+    </div>
+    <div class="emp-row-s">
+      <span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:18px;">5</span>
+      <input type="text" placeholder="Employé(e) 5 — optionnel" value="" oninput="mgrEmployees[4].name=this.value">
+      <button class="btn-del" onclick="mgrEmployees.splice(4,1);delete mgrResponses[5];renderEmpSetup();renderSaisie()">×</button>
+    </div></div>
+      <button class="btn-add" onclick="addEmp()">+ Ajouter un(e) employé(e)</button>
+    </div>
+
+    <!-- SAISIE -->
+    <div class="section">
+      <div class="sec-title">Saisie des réponses</div>
+      <div style="background:var(--light);border-left:3px solid var(--accent);padding:8px 12px;font-size:.81rem;color:#2a3a4a;margin-bottom:12px;border-radius:0 6px 6px 0;">Saisissez les réponses de chaque employé(e) sur une échelle de 1 à 5 selon leur sondage complété.</div>
+      <div class="saisie-wrap" id="saisieWrap"><div class="saisie-emp-card"><div class="se-name">Employé(e) 1</div><div class="se-row">
+        <span class="se-lbl">💪 Je suis enthousiaste à l'idée de venir travailler.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je donne le meilleur de moi-même dans mon travail.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Mon travail me donne de l'énergie et de la satisfaction.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je suis fier(ère) du travail que j'effectue dans cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;eng_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens valorisé(e) et respecté(e) par mes collègues.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;app_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens membre à part entière de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;app_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens à l'aise d'exprimer mes opinions et idées.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;app_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je serais déçu(e) de quitter cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;app_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;app_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 J'ai accès à des opportunités de développement et de formation.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mon travail me permet d'apprendre et de progresser.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mes efforts et mes contributions sont reconnus.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Je reçois de la rétroaction utile sur mon rendement.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;dev_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction communique clairement les orientations et objectifs.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction est disponible et à l'écoute de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Les décisions prises par la direction me semblent justes.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Je fais confiance au leadership de cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(1,&#39;lead_3&#39;,5,this)">5</button></div>
+      </div></div><div class="saisie-emp-card"><div class="se-name">Employé(e) 2</div><div class="se-row">
+        <span class="se-lbl">💪 Je suis enthousiaste à l'idée de venir travailler.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je donne le meilleur de moi-même dans mon travail.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Mon travail me donne de l'énergie et de la satisfaction.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je suis fier(ère) du travail que j'effectue dans cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;eng_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens valorisé(e) et respecté(e) par mes collègues.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;app_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens membre à part entière de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;app_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens à l'aise d'exprimer mes opinions et idées.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;app_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je serais déçu(e) de quitter cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;app_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;app_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 J'ai accès à des opportunités de développement et de formation.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mon travail me permet d'apprendre et de progresser.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mes efforts et mes contributions sont reconnus.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Je reçois de la rétroaction utile sur mon rendement.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;dev_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction communique clairement les orientations et objectifs.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction est disponible et à l'écoute de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Les décisions prises par la direction me semblent justes.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Je fais confiance au leadership de cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(2,&#39;lead_3&#39;,5,this)">5</button></div>
+      </div></div><div class="saisie-emp-card"><div class="se-name">Employé(e) 3</div><div class="se-row">
+        <span class="se-lbl">💪 Je suis enthousiaste à l'idée de venir travailler.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je donne le meilleur de moi-même dans mon travail.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Mon travail me donne de l'énergie et de la satisfaction.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je suis fier(ère) du travail que j'effectue dans cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;eng_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens valorisé(e) et respecté(e) par mes collègues.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;app_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens membre à part entière de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;app_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens à l'aise d'exprimer mes opinions et idées.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;app_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je serais déçu(e) de quitter cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;app_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;app_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 J'ai accès à des opportunités de développement et de formation.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mon travail me permet d'apprendre et de progresser.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mes efforts et mes contributions sont reconnus.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Je reçois de la rétroaction utile sur mon rendement.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;dev_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction communique clairement les orientations et objectifs.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction est disponible et à l'écoute de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Les décisions prises par la direction me semblent justes.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Je fais confiance au leadership de cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(3,&#39;lead_3&#39;,5,this)">5</button></div>
+      </div></div><div class="saisie-emp-card"><div class="se-name">Employé(e) 4</div><div class="se-row">
+        <span class="se-lbl">💪 Je suis enthousiaste à l'idée de venir travailler.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je donne le meilleur de moi-même dans mon travail.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Mon travail me donne de l'énergie et de la satisfaction.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je suis fier(ère) du travail que j'effectue dans cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;eng_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens valorisé(e) et respecté(e) par mes collègues.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;app_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens membre à part entière de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;app_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens à l'aise d'exprimer mes opinions et idées.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;app_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je serais déçu(e) de quitter cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;app_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;app_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 J'ai accès à des opportunités de développement et de formation.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mon travail me permet d'apprendre et de progresser.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mes efforts et mes contributions sont reconnus.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Je reçois de la rétroaction utile sur mon rendement.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;dev_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction communique clairement les orientations et objectifs.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction est disponible et à l'écoute de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Les décisions prises par la direction me semblent justes.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Je fais confiance au leadership de cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(4,&#39;lead_3&#39;,5,this)">5</button></div>
+      </div></div><div class="saisie-emp-card"><div class="se-name">Employé(e) 5</div><div class="se-row">
+        <span class="se-lbl">💪 Je suis enthousiaste à l'idée de venir travailler.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je donne le meilleur de moi-même dans mon travail.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Mon travail me donne de l'énergie et de la satisfaction.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">💪 Je suis fier(ère) du travail que j'effectue dans cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;eng_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens valorisé(e) et respecté(e) par mes collègues.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;app_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens membre à part entière de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;app_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je me sens à l'aise d'exprimer mes opinions et idées.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;app_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🤝 Je serais déçu(e) de quitter cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;app_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;app_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 J'ai accès à des opportunités de développement et de formation.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mon travail me permet d'apprendre et de progresser.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Mes efforts et mes contributions sont reconnus.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🌱 Je reçois de la rétroaction utile sur mon rendement.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;dev_3&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction communique clairement les orientations et objectifs.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_0&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_0&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_0&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_0&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_0&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 La direction est disponible et à l'écoute de l'équipe.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_1&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_1&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_1&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_1&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_1&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Les décisions prises par la direction me semblent justes.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_2&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_2&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_2&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_2&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_2&#39;,5,this)">5</button></div>
+      </div><div class="se-row">
+        <span class="se-lbl">🎯 Je fais confiance au leadership de cette clinique.</span>
+        <div class="se-scale"><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_3&#39;,1,this)">1</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_3&#39;,2,this)">2</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_3&#39;,3,this)">3</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_3&#39;,4,this)">4</button><button class="ss-btn" onclick="setMgrResp(5,&#39;lead_3&#39;,5,this)">5</button></div>
+      </div></div></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="section" id="dashSection" style="display:none;">
+      <div class="sec-title">Résultats — Baromètre de mobilisation</div>
+      <div class="global-gauge" id="globalGauge"></div>
+      <div class="gauge-grid" id="dimGauges"></div>
+      <div class="sec-title" style="margin-top:4px;">💡 Recommandations</div>
+      <div id="recoList"></div>
+    </div>
+
+    <!-- HISTORIQUE -->
+    <div class="section">
+      <div class="sec-title">Historique</div>
+      <div id="histWrap"><div style="font-size:.83rem;color:#8a9ab0;text-align:center;padding:16px;">Aucune période sauvegardée.</div></div>
+    </div>
+
+    <div class="actions"><button class="btn-sm" onclick="clearDash()">🗑️ Réinitialiser</button></div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com</div>
+</div>
+
+<script>
+const DIMS = [
+  { id:'eng', icon:'💪', label:'Engagement', qs:[
+    'Je suis enthousiaste à l\'idée de venir travailler.',
+    'Je donne le meilleur de moi-même dans mon travail.',
+    'Mon travail me donne de l\'énergie et de la satisfaction.',
+    'Je suis fier(ère) du travail que j\'effectue dans cette clinique.',
+  ]},
+  { id:'app', icon:'🤝', label:'Appartenance', qs:[
+    'Je me sens valorisé(e) et respecté(e) par mes collègues.',
+    'Je me sens membre à part entière de l\'équipe.',
+    'Je me sens à l\'aise d\'exprimer mes opinions et idées.',
+    'Je serais déçu(e) de quitter cette clinique.',
+  ]},
+  { id:'dev', icon:'🌱', label:'Développement', qs:[
+    'J\'ai accès à des opportunités de développement et de formation.',
+    'Mon travail me permet d\'apprendre et de progresser.',
+    'Mes efforts et mes contributions sont reconnus.',
+    'Je reçois de la rétroaction utile sur mon rendement.',
+  ]},
+  { id:'lead', icon:'🎯', label:'Leadership', qs:[
+    'La direction communique clairement les orientations et objectifs.',
+    'La direction est disponible et à l\'écoute de l\'équipe.',
+    'Les décisions prises par la direction me semblent justes.',
+    'Je fais confiance au leadership de cette clinique.',
+  ]},
+];
+
+const responses = {};
+let mgrEmployees = [];
+let mgrResponses = {};
+let mgrEmpId = 1;
+let history = [];
+const TODAY = new Date();
+
+document.getElementById('moisSondage').value = TODAY.toISOString().slice(0,7);
+document.getElementById('periodeD').value = TODAY.toISOString().slice(0,7);
+
+// BUILD QUESTIONNAIRE
+DIMS.forEach(dim => {
+  const el = document.getElementById('qs_' + dim.id);
+  el.innerHTML = dim.qs.map((q, qi) => {
+    const key = `${dim.id}_${qi}`;
+    return `<div class="q-row">
+      <span class="q-text">${q}</span>
+      <div class="scale-btns">
+        ${[1,2,3,4,5].map(n => `<button class="s-btn" data-key="${key}" data-v="${n}" onclick="pickQ(this)">${n}</button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+});
+
+function pickQ(btn) {
+  const key = btn.dataset.key;
+  const v = parseInt(btn.dataset.v);
+  document.querySelectorAll(`[data-key="${key}"]`).forEach(b => b.className = 's-btn');
+  btn.classList.add(`s${v}`);
+  responses[key] = v;
+}
+
+function resetForm() {
+  Object.keys(responses).forEach(k => delete responses[k]);
+  document.querySelectorAll('.s-btn').forEach(b => b.className = 's-btn');
+  document.getElementById('openQ').value = '';
+}
+
+function submitSondage() {
+  const filled = Object.keys(responses).length;
+  const total = DIMS.reduce((a,d) => a + d.qs.length, 0);
+  if (filled < total * 0.7) { alert('Veuillez répondre à la majorité des questions avant de soumettre.'); return; }
+  if (!window._sub) window._sub = [];
+  window._sub.push({ ...responses, open: document.getElementById('openQ').value, ts: new Date().toISOString() });
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('successView').style.display = 'block';
+}
+
+function newResp() {
+  resetForm();
+  document.getElementById('formView').style.display = 'block';
+  document.getElementById('successView').style.display = 'none';
+}
+
+function showMain(n, btn) {
+  document.querySelectorAll('.main-pane').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.main-tab').forEach((b,i) => b.classList.toggle('active', i===n));
+}
+
+// GESTIONNAIRE
+function addEmp() {
+  const id = mgrEmpId++;
+  mgrEmployees.push({ id, name:'' });
+  mgrResponses[id] = {};
+  renderEmpSetup();
+  renderSaisie();
+}
+
+function renderEmpSetup() {
+  const el = document.getElementById('empSetup');
+  el.innerHTML = mgrEmployees.map((emp, i) => `
+    <div class="emp-row-s">
+      <span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:18px;">${i+1}</span>
+      <input type="text" placeholder="Employé(e) ${i+1} — optionnel" value="${emp.name}" oninput="mgrEmployees[${i}].name=this.value">
+      <button class="btn-del" onclick="mgrEmployees.splice(${i},1);delete mgrResponses[${emp.id}];renderEmpSetup();renderSaisie()">×</button>
+    </div>`).join('');
+}
+
+function renderSaisie() {
+  const wrap = document.getElementById('saisieWrap');
+  if (mgrEmployees.length === 0) { wrap.innerHTML = '<div style="font-size:.83rem;color:#8a9ab0;">Ajoutez des employé(e)s ci-dessus.</div>'; return; }
+  wrap.innerHTML = mgrEmployees.map((emp, ei) => {
+    const rows = DIMS.flatMap(dim => dim.qs.map((q, qi) => {
+      const key = `${dim.id}_${qi}`;
+      const val = mgrResponses[emp.id][key];
+      return `<div class="se-row">
+        <span class="se-lbl">${dim.icon} ${q}</span>
+        <div class="se-scale">${[1,2,3,4,5].map(n => `<button class="ss-btn${val===n?` a${n}`:''}" onclick="setMgrResp(${emp.id},'${key}',${n},this)">${n}</button>`).join('')}</div>
+      </div>`;
+    }));
+    return `<div class="saisie-emp-card"><div class="se-name">Employé(e) ${ei+1}${emp.name?' — '+emp.name:''}</div>${rows.join('')}</div>`;
+  }).join('');
+}
+
+function setMgrResp(empId, key, val, btn) {
+  if (!mgrResponses[empId]) mgrResponses[empId] = {};
+  mgrResponses[empId][key] = val;
+  const scale = btn.closest('.se-scale');
+  scale.querySelectorAll('.ss-btn').forEach(b => b.className = 'ss-btn');
+  btn.classList.add(`a${val}`);
+}
+
+function buildDash() {
+  const scored = mgrEmployees.filter(e => Object.keys(mgrResponses[e.id] || {}).length > 0);
+  if (scored.length === 0) { alert('Aucune réponse saisie.'); return; }
+  document.getElementById('dashSection').style.display = 'block';
+
+  const avg = (dim) => {
+    const vals = [];
+    scored.forEach(e => {
+      dim.qs.forEach((_, qi) => {
+        const v = mgrResponses[e.id][`${dim.id}_${qi}`];
+        if (v) vals.push(v);
+      });
+    });
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  };
+
+  const dimScores = DIMS.map(dim => ({ ...dim, score: avg(dim) }));
+  const allVals = dimScores.map(d => d.score).filter(v=>v!==null);
+  const globalScore = allVals.length ? allVals.reduce((a,b)=>a+b,0)/allVals.length : null;
+
+  const color = v => v >= 4 ? '#1a9e5a' : v >= 3 ? '#f39c12' : v >= 2 ? '#e67e22' : '#c0392b';
+  const label = v => v >= 4.2 ? '🌟 Équipe très mobilisée' : v >= 3.5 ? '✅ Mobilisation satisfaisante' : v >= 2.5 ? '⚠️ Mobilisation à améliorer' : '🔴 Mobilisation critique — Action urgente';
+
+  // Global
+  const gg = document.getElementById('globalGauge');
+  gg.innerHTML = `<div class="gg-score" style="color:${color(globalScore)}">${globalScore?globalScore.toFixed(1):'-'}/5</div>
+    <div class="gg-label" style="color:${color(globalScore)}">${label(globalScore)}</div>
+    <div class="gg-bar-wrap"><div class="gg-bar" style="width:${globalScore?globalScore/5*100:0}%;background:${color(globalScore)};"></div></div>
+    <div style="font-size:.77rem;color:#8a9ab0;margin-top:6px;">${scored.length} répondant(e)(s) sur ${mgrEmployees.length}</div>`;
+
+  // Dims
+  document.getElementById('dimGauges').innerHTML = dimScores.map(d => `
+    <div class="gauge-card">
+      <div class="gc-icon">${d.icon}</div>
+      <div class="gc-score" style="color:${color(d.score)}">${d.score?d.score.toFixed(1):'-'}/5</div>
+      <div class="gc-label">${d.label}</div>
+      <div class="gc-bar"><div class="gc-fill" style="width:${d.score?d.score/5*100:0}%;background:${color(d.score)};"></div></div>
+    </div>`).join('');
+
+  // Recommandations
+  const recos = [];
+  dimScores.forEach(d => {
+    if (!d.score) return;
+    if (d.id === 'eng' && d.score < 3.5) recos.push({ color:'var(--red)', title:'💪 Engagement à renforcer', desc:'Organiser une rencontre individuelle pour comprendre les freins. Varier les tâches, fixer des objectifs stimulants et reconnaître les réussites publiquement.' });
+    if (d.id === 'app' && d.score < 3.5) recos.push({ color:'var(--orange)', title:'🤝 Sentiment d\'appartenance à développer', desc:'Prévoir des activités de cohésion d\'équipe. S\'assurer que chacun se sent écouté et inclus dans les décisions qui le concernent.' });
+    if (d.id === 'dev' && d.score < 3.5) recos.push({ color:'var(--purple)', title:'🌱 Développement et reconnaissance — à améliorer', desc:'Mettre en place des plans de développement individuels. Célébrer les succès, même petits. Offrir des formations adaptées aux besoins exprimés.' });
+    if (d.id === 'lead' && d.score < 3.5) recos.push({ color:'var(--blue)', title:'🎯 Confiance envers le leadership — à travailler', desc:'Améliorer la communication des objectifs et décisions. Être plus présent(e) et disponible. Solliciter l\'avis de l\'équipe avant les changements importants.' });
+    if (d.score >= 4) recos.push({ color:'var(--green)', title:`${d.icon} Force : ${d.label}`, desc:`Score de ${d.score.toFixed(1)}/5 — Maintenir les pratiques actuelles et partager ce qui fonctionne bien avec d\'autres équipes.` });
+  });
+  if (recos.length === 0) recos.push({ color:'var(--green)', title:'✅ Bilan positif', desc:'Toutes les dimensions sont dans la zone satisfaisante. Continuez à maintenir ces pratiques et répétez le sondage dans 3 mois.' });
+
+  document.getElementById('recoList').innerHTML = recos.map(r => `
+    <div class="reco-card" style="border-left-color:${r.color};">
+      <div class="rc-title" style="color:${r.color};">${r.title}</div>
+      <div class="rc-desc">${r.desc}</div>
+    </div>`).join('');
+}
+
+function savePeriod() {
+  const period = { date: document.getElementById('periodeD').value, n: mgrEmployees.length, ts: new Date().toLocaleDateString('fr-CA') };
+  history.push(period);
+  renderHist();
+  alert('Période sauvegardée!');
+}
+
+function renderHist() {
+  const el = document.getElementById('histWrap');
+  if (history.length === 0) { el.innerHTML = '<div style="font-size:.83rem;color:#8a9ab0;text-align:center;padding:16px;">Aucune période sauvegardée.</div>'; return; }
+  el.innerHTML = `<table class="hist-table"><thead><tr><th>Période</th><th>Participants</th><th>Enregistré le</th></tr></thead><tbody>${history.map(p=>`<tr><td>${p.date}</td><td>${p.n}</td><td>${p.ts}</td></tr>`).join('')}</tbody></table>`;
+}
+
+function clearDash() {
+  if (!confirm('Réinitialiser?')) return;
+  mgrEmployees.forEach(e => mgrResponses[e.id] = {});
+  renderSaisie();
+  document.getElementById('dashSection').style.display = 'none';
+}
+
+// Init 5 employees
+for(let i=0;i<5;i++) addEmp();
+</script>
+
+
+</body></html>

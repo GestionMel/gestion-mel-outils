@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///C:/Users/info/Downloads/protocole-confirmations-rv.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocole confirmations RV — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1000px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .tab-btn{padding:11px 20px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:20px 28px;}
+  .tab-pane.active{display:block;}
+  .sec-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;}
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:10px 14px;font-size:.82rem;color:#2a3a4a;line-height:1.7;margin-bottom:14px;}
+  /* STEPS */
+  .step-list{display:flex;flex-direction:column;gap:0;}
+  .step{display:flex;gap:14px;position:relative;padding-bottom:16px;}
+  .step:last-child{padding-bottom:0;}
+  .step-line{position:absolute;left:19px;top:38px;bottom:0;width:2px;background:var(--border);}
+  .step:last-child .step-line{display:none;}
+  .sn{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;color:white;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sb{flex:1;background:white;border:1.5px solid var(--border);border-radius:8px;padding:12px 15px;}
+  .sb-title{font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:5px;}
+  .sb-desc{font-size:.83rem;color:#4a5a6a;line-height:1.65;}
+  .sb-time{font-size:.72rem;color:#8a9ab0;margin-top:5px;font-style:italic;}
+  /* CANAL CARDS */
+  .canal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:14px;}
+  .canal-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;border-top:3px solid var(--border);}
+  .cc-icon{font-size:1.4rem;margin-bottom:6px;}
+  .cc-title{font-size:.87rem;font-weight:700;color:var(--dark);margin-bottom:6px;}
+  .cc-pros{font-size:.79rem;color:var(--green);line-height:1.7;margin-bottom:4px;}
+  .cc-cons{font-size:.79rem;color:var(--red);line-height:1.7;}
+  /* SCRIPT */
+  .script-card{background:#f8fbff;border:1.5px solid var(--border);border-left:4px solid var(--blue);border-radius:8px;padding:14px 16px;margin-bottom:14px;}
+  .sc-title{font-size:.77rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+  .sc-text{font-size:.86rem;line-height:1.9;color:var(--text);font-style:italic;}
+  .sc-text .ph{color:var(--blue);font-weight:700;font-style:normal;}
+  .sc-note{margin-top:8px;font-size:.77rem;color:#5a6a80;background:var(--light);padding:6px 9px;border-radius:5px;}
+  /* SUIVI TABLE */
+  .suivi-table{width:100%;border-collapse:collapse;font-size:.79rem;}
+  .suivi-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.71rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .suivi-table td{border-bottom:1px solid var(--border);padding:7px 9px;vertical-align:middle;}
+  .suivi-table tr:nth-child(even) td{background:var(--light);}
+  .suivi-table input,.suivi-table select{border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;}
+  .status-badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:.71rem;font-weight:700;}
+  .s-conf{background:#f0fdf4;color:var(--green);}
+  .s-att{background:#fff8e1;color:var(--orange);}
+  .s-noans{background:#fef2f2;color:var(--red);}
+  .s-ann{background:#f3e8ff;color:var(--purple);}
+  .stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  .stat-c{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;text-align:center;}
+  .stat-c .sn2{font-size:1.3rem;font-weight:700;}
+  .stat-c .sl{font-size:.71rem;color:#5a6a80;margin-top:2px;}
+  .btn-add{display:flex;align-items:center;gap:5px;padding:5px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;width:fit-content;}
+  .btn-del{width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .actions{padding:12px 28px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.nav-tabs,.actions,.btn-add,.btn-del,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.tab-pane{display:block!important;}.sn{-webkit-print-color-adjust:exact;print-color-adjust:exact;}input,select{border:none!important;background:transparent!important;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Administration</div></div>
+<div class="container">
+  <div class="doc-header"><h1>📞 Protocole — Confirmations de rendez-vous</h1><p>Procédures, délais, scripts et suivi des confirmations</p></div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="go(0,this)">📋 Protocole</button>
+    <button class="tab-btn" onclick="go(1,this)">📡 Canaux de communication</button>
+    <button class="tab-btn" onclick="go(2,this)">💬 Scripts</button>
+    <button class="tab-btn" onclick="go(3,this)">✅ Suivi du jour</button>
+  </div>
+
+  <!-- PROTOCOLE -->
+  <div class="tab-pane active" id="tp0">
+    <div class="info-box">Le protocole de confirmation des rendez-vous est l'une des pratiques les plus efficaces pour réduire les no-shows (objectif : ≤ 5%). Une confirmation bien faite augmente le taux de présence et permet de remplir les plages libérées rapidement.</div>
+    <div class="sec-title">Étapes du protocole de confirmation</div>
+    <div class="step-list">
+      <div class="step"><div class="sn" style="background:var(--purple);">1</div><div class="step-line"></div><div class="sb"><div class="sb-title">Extraction de la liste des RV du lendemain</div><div class="sb-desc">Chaque jour en fin d'après-midi (15h30–16h), extraire la liste complète des rendez-vous du lendemain depuis le logiciel dentaire. Trier par heure et noter les coordonnées de chaque patient (téléphone, mode de contact préféré).</div><div class="sb-time">⏱️ La veille, entre 15h30 et 16h00</div></div></div>
+      <div class="step"><div class="sn" style="background:var(--blue);">2</div><div class="step-line"></div><div class="sb"><div class="sb-title">Confirmation par le canal préféré du patient</div><div class="sb-desc">Contacter chaque patient selon son mode préféré : appel téléphonique, texto ou courriel. Prioriser les RV de longue durée (extraction, traitement de canal, couronne). Les RV de moins de 30 min peuvent être confirmés par texto ou courriel.</div><div class="sb-time">⏱️ La veille du RV, entre 15h30 et 17h00</div></div></div>
+      <div class="step"><div class="sn" style="background:var(--green);">3</div><div class="step-line"></div><div class="sb"><div class="sb-title">Consigner le statut de confirmation</div><div class="sb-desc">Pour chaque tentative de contact, inscrire dans le logiciel : ✅ Confirmé · 📞 Message laissé · ❌ Sans réponse · ⚠️ Annulation. Si le patient annule, mettre à jour l'horaire et contacter immédiatement la liste d'attente.</div><div class="sb-time">⏱️ Immédiatement après chaque contact</div></div></div>
+      <div class="step"><div class="sn" style="background:var(--orange);">4</div><div class="step-line"></div><div class="sb"><div class="sb-title">Relance pour les non-confirmés</div><div class="sb-desc">Le matin du rendez-vous (8h–9h), relancer par téléphone les patients qui n'ont pas confirmé la veille. Si toujours sans réponse à 30 min avant le RV, aviser le dentiste ou l'hygiéniste et proposer une alternative de la liste d'attente.</div><div class="sb-time">⏱️ Le matin du RV, entre 8h00 et 9h00</div></div></div>
+      <div class="step"><div class="sn" style="background:var(--red);">5</div><div class="step-line"></div><div class="sb"><div class="sb-title">Gestion des annulations de dernière minute</div><div class="sb-desc">Si un patient annule le jour même : 1) Contacter immédiatement les 3 premiers patients de la liste de priorité d'attente correspondant au type de RV. 2) Documenter l'annulation au dossier. 3) Replanifier le patient dès que possible.</div><div class="sb-time">⏱️ Immédiatement à la réception de l'annulation</div></div></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:18px;">Règles de base</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 15px;">
+        <div style="font-size:.8rem;font-weight:700;color:var(--blue);margin-bottom:8px;">📏 Délais recommandés</div>
+        <ul style="font-size:.8rem;line-height:2.2;padding-left:16px;">
+          <li><strong>RV de 60 min et plus :</strong> Confirmation 48h avant</li>
+          <li><strong>RV de 30 à 60 min :</strong> Confirmation 24h avant</li>
+          <li><strong>RV de moins de 30 min :</strong> Confirmation la veille</li>
+          <li><strong>Patients à risque de no-show :</strong> Double confirmation</li>
+        </ul>
+      </div>
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 15px;">
+        <div style="font-size:.8rem;font-weight:700;color:var(--blue);margin-bottom:8px;">⚠️ À ne jamais faire</div>
+        <ul style="font-size:.8rem;line-height:2.2;padding-left:16px;">
+          <li>Confirmer un RV important uniquement par texto</li>
+          <li>Omettre de confirmer les nouveaux patients</li>
+          <li>Laisser un créneau vide sans tenter de le remplir</li>
+          <li>Ne pas documenter les tentatives de contact</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANAUX -->
+  <div class="tab-pane" id="tp1">
+    <div class="sec-title">Canaux de communication — Avantages et limites</div>
+    <div class="canal-grid">
+      <div class="canal-card" style="border-top-color:var(--blue);">
+        <div class="cc-icon">📞</div>
+        <div class="cc-title">Téléphone</div>
+        <div class="cc-pros">✅ Contact direct et immédiat<br>✅ Permet de répondre aux questions<br>✅ Plus difficile d'ignorer<br>✅ Taux de confirmation le plus élevé</div>
+        <div class="cc-cons">❌ Chronophage<br>❌ Peut tomber sur messagerie<br>❌ Certains patients évitent les appels</div>
+      </div>
+      <div class="canal-card" style="border-top-color:var(--green);">
+        <div class="cc-icon">💬</div>
+        <div class="cc-title">Message texte (SMS)</div>
+        <div class="cc-pros">✅ Rapide et efficace<br>✅ Taux de lecture très élevé (+90%)<br>✅ Pas besoin d'être disponible<br>✅ Facile de répondre</div>
+        <div class="cc-cons">❌ Pas idéal pour les situations complexes<br>❌ Certains patients âgés ne textent pas<br>❌ Pas de numéro professionnel parfois</div>
+      </div>
+      <div class="canal-card" style="border-top-color:var(--orange);">
+        <div class="cc-icon">📧</div>
+        <div class="cc-title">Courriel</div>
+        <div class="cc-pros">✅ Permet d'inclure toute l'information<br>✅ Preuve écrite de la confirmation<br>✅ Peut inclure rappels + instructions</div>
+        <div class="cc-cons">❌ Taux de lecture plus faible<br>❌ Peut aller dans les spams<br>❌ Moins réactif</div>
+      </div>
+      <div class="canal-card" style="border-top-color:var(--purple);">
+        <div class="cc-icon">🤖</div>
+        <div class="cc-title">Rappel automatisé (logiciel)</div>
+        <div class="cc-pros">✅ Aucun effort humain requis<br>✅ Envoi à heure précise<br>✅ Configurable par type de RV</div>
+        <div class="cc-cons">❌ Peut paraître impersonnel<br>❌ Ne remplace pas le contact humain pour les RV importants<br>❌ Dépend du logiciel dentaire</div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top:4px;"><strong>💡 Recommandation Gestion Mel :</strong> Combiner le rappel automatisé (48h avant) avec un appel téléphonique personnalisé (24h avant) pour les RV de 60 min et plus. Réserver le texto pour les confirmations rapides et les patients qui le préfèrent.</div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <div class="tab-pane" id="tp2">
+    <div class="script-card">
+      <div class="sc-title">📞 Script — Confirmation téléphonique (RV général)</div>
+      <div class="sc-text">« Bonjour, puis-je parler à <span class="ph">[Prénom du patient]</span>? … Bonjour <span class="ph">[Prénom]</span>, c'est <span class="ph">[Votre prénom]</span> de la Clinique <span class="ph">[Nom]</span>. Je vous appelle pour confirmer votre rendez-vous de <span class="ph">[type de soin]</span> prévu le <span class="ph">[jour et date]</span> à <span class="ph">[heure]</span> avec <span class="ph">[Dr/Hygéniste nom]</span>. Est-ce que vous confirmez votre présence? »</div>
+      <div class="sc-note">Si confirmation : « Parfait! Je vous rappelle d'arriver 5 minutes à l'avance. Si vous avez besoin d'annuler, merci de nous aviser au moins 24 heures à l'avance. À bientôt! »</div>
+    </div>
+    <div class="script-card">
+      <div class="sc-title">📞 Script — Message vocal (si pas de réponse)</div>
+      <div class="sc-text">« Bonjour <span class="ph">[Prénom]</span>, c'est <span class="ph">[Prénom]</span> de la Clinique <span class="ph">[Nom]</span>. Je vous laisse ce message pour confirmer votre rendez-vous de <span class="ph">[type de soin]</span> demain, le <span class="ph">[date]</span> à <span class="ph">[heure]</span>. Veuillez nous rappeler au <span class="ph">[numéro]</span> pour confirmer votre présence ou aviser d'un empêchement. Merci et bonne soirée! »</div>
+    </div>
+    <div class="script-card" style="border-left-color:var(--green);">
+      <div class="sc-title" style="color:var(--green);">💬 Modèle texto — Confirmation 48h avant</div>
+      <div class="sc-text">« Bonjour <span class="ph">[Prénom]</span> 😊 — Rappel RV : <span class="ph">[Type de soin]</span> le <span class="ph">[jour DD/MM]</span> à <span class="ph">[HH:MM]</span> avec <span class="ph">[Dr/Hygieniste]</span>. Répondez OUI pour confirmer ou appelez-nous au <span class="ph">[numéro]</span>. Clinique <span class="ph">[Nom]</span> »</div>
+    </div>
+    <div class="script-card" style="border-left-color:var(--orange);">
+      <div class="sc-title" style="color:var(--orange);">📧 Gabarit courriel — Confirmation avec rappel</div>
+      <div class="sc-text">Objet : Confirmation de votre rendez-vous — Clinique <span class="ph">[Nom]</span><br><br>Bonjour <span class="ph">[Prénom]</span>,<br><br>Nous vous confirmons votre rendez-vous :<br>📅 Date : <span class="ph">[Jour, DD mois AAAA]</span><br>⏰ Heure : <span class="ph">[HH:MM]</span><br>🦷 Soin : <span class="ph">[Type de traitement]</span><br>👨‍⚕️ Avec : <span class="ph">[Nom du praticien]</span><br><br>Pour annuler ou modifier, veuillez nous contacter au <span class="ph">[numéro]</span> ou répondre à ce courriel au moins 24h à l'avance.<br><br>Nous nous réjouissons de vous recevoir!<br>L'équipe de la Clinique <span class="ph">[Nom]</span></div>
+    </div>
+    <div class="script-card" style="border-left-color:var(--red);">
+      <div class="sc-title" style="color:var(--red);">📞 Script — Relance le matin du RV (sans confirmation)</div>
+      <div class="sc-text">« Bonjour <span class="ph">[Prénom]</span>, c'est <span class="ph">[Prénom]</span> de la Clinique <span class="ph">[Nom]</span>. Je voulais simplement m'assurer que vous étiez au courant de votre rendez-vous de <span class="ph">[type de soin]</span> aujourd'hui à <span class="ph">[heure]</span>. Pouvez-vous confirmer votre présence? Si vous avez un empêchement, merci de nous le faire savoir le plus tôt possible. »</div>
+    </div>
+  </div>
+
+  <!-- SUIVI -->
+  <div class="tab-pane" id="tp3">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+      <input class="ci" type="date" id="suiviDate">
+      <span style="font-size:.78rem;color:#8a9ab0;" id="suiviInfo"></span>
+    </div>
+    <div class="stats-row" id="statsConf">
+    <div class="stat-c"><div class="sn2">5</div><div class="sl">Total RV</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--green);">0</div><div class="sl">Confirmés</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--orange);">0</div><div class="sl">En attente</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--red);">0</div><div class="sl">Sans réponse</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--purple);">5</div><div class="sl">Annulés</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--blue);">0%</div><div class="sl">Taux de confirmation</div></div></div>
+    <table class="suivi-table">
+      <thead><tr><th>Patient</th><th>Heure</th><th>Type de soin</th><th>Durée</th><th>Canal utilisé</th><th>Tentatives</th><th>Statut</th><th class="no-print"></th></tr></thead>
+      <tbody id="suiviBody"><tr>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;"></td>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;width:100%;"><option>Nettoyage</option><option>Examen</option><option>Obturation</option><option>Extraction</option><option>Traitement de canal</option><option>Couronne</option><option>Consultation</option><option>Urgence</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>30 min</option><option>45 min</option><option>60 min</option><option>90 min</option><option>120 min</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>📞 Téléphone</option><option>💬 Texto</option><option>📧 Courriel</option><option>🤖 Automatisé</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>1</option><option>2</option><option>3+</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;" onchange="updateStats()">
+      <option value="att">⏳ En attente</option><option value="conf">✅ Confirmé</option><option value="noans">📞 Sans réponse</option><option value="ann">❌ Annulé</option>
+    </select></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove();updateStats()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;"></td>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;width:100%;"><option>Nettoyage</option><option>Examen</option><option>Obturation</option><option>Extraction</option><option>Traitement de canal</option><option>Couronne</option><option>Consultation</option><option>Urgence</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>30 min</option><option>45 min</option><option>60 min</option><option>90 min</option><option>120 min</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>📞 Téléphone</option><option>💬 Texto</option><option>📧 Courriel</option><option>🤖 Automatisé</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>1</option><option>2</option><option>3+</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;" onchange="updateStats()">
+      <option value="att">⏳ En attente</option><option value="conf">✅ Confirmé</option><option value="noans">📞 Sans réponse</option><option value="ann">❌ Annulé</option>
+    </select></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove();updateStats()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;"></td>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;width:100%;"><option>Nettoyage</option><option>Examen</option><option>Obturation</option><option>Extraction</option><option>Traitement de canal</option><option>Couronne</option><option>Consultation</option><option>Urgence</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>30 min</option><option>45 min</option><option>60 min</option><option>90 min</option><option>120 min</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>📞 Téléphone</option><option>💬 Texto</option><option>📧 Courriel</option><option>🤖 Automatisé</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>1</option><option>2</option><option>3+</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;" onchange="updateStats()">
+      <option value="att">⏳ En attente</option><option value="conf">✅ Confirmé</option><option value="noans">📞 Sans réponse</option><option value="ann">❌ Annulé</option>
+    </select></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove();updateStats()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;"></td>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;width:100%;"><option>Nettoyage</option><option>Examen</option><option>Obturation</option><option>Extraction</option><option>Traitement de canal</option><option>Couronne</option><option>Consultation</option><option>Urgence</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>30 min</option><option>45 min</option><option>60 min</option><option>90 min</option><option>120 min</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>📞 Téléphone</option><option>💬 Texto</option><option>📧 Courriel</option><option>🤖 Automatisé</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>1</option><option>2</option><option>3+</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;" onchange="updateStats()">
+      <option value="att">⏳ En attente</option><option value="conf">✅ Confirmé</option><option value="noans">📞 Sans réponse</option><option value="ann">❌ Annulé</option>
+    </select></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove();updateStats()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;"></td>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;width:100%;"><option>Nettoyage</option><option>Examen</option><option>Obturation</option><option>Extraction</option><option>Traitement de canal</option><option>Couronne</option><option>Consultation</option><option>Urgence</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>30 min</option><option>45 min</option><option>60 min</option><option>90 min</option><option>120 min</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>📞 Téléphone</option><option>💬 Texto</option><option>📧 Courriel</option><option>🤖 Automatisé</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>1</option><option>2</option><option>3+</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;" onchange="updateStats()">
+      <option value="att">⏳ En attente</option><option value="conf">✅ Confirmé</option><option value="noans">📞 Sans réponse</option><option value="ann">❌ Annulé</option>
+    </select></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest(&#39;tr&#39;).remove();updateStats()">×</button></td></tr></tbody>
+    </table>
+    <button class="btn-add" onclick="addSuiviRow()">+ Ajouter un rendez-vous</button>
+  </div>
+
+  <div class="actions"><button class="btn primary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+<script>
+function go(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+document.getElementById('suiviDate').valueAsDate=new Date();
+
+function addSuiviRow(){
+  const tbody=document.getElementById('suiviBody');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><input type="text" placeholder="Nom du patient..." style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;width:100%;background:white;"></td>
+    <td><input type="time" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.77rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;width:100%;"><option>Nettoyage</option><option>Examen</option><option>Obturation</option><option>Extraction</option><option>Traitement de canal</option><option>Couronne</option><option>Consultation</option><option>Urgence</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>30 min</option><option>45 min</option><option>60 min</option><option>90 min</option><option>120 min</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>📞 Téléphone</option><option>💬 Texto</option><option>📧 Courriel</option><option>🤖 Automatisé</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;"><option>1</option><option>2</option><option>3+</option></select></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:4px 6px;font-size:.75rem;font-family:inherit;" onchange="updateStats()">
+      <option value="att">⏳ En attente</option><option value="conf">✅ Confirmé</option><option value="noans">📞 Sans réponse</option><option value="ann">❌ Annulé</option>
+    </select></td>
+    <td><button style="width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;" onclick="this.closest('tr').remove();updateStats()">×</button></td>`;
+  tbody.appendChild(tr);
+  updateStats();
+}
+function updateStats(){
+  const rows=document.querySelectorAll('#suiviBody tr');
+  let conf=0,att=0,noans=0,ann=0;
+  rows.forEach(r=>{const s=r.querySelector('select:last-of-type');if(!s)return;const v=s.value;if(v==='conf')conf++;else if(v==='att')att++;else if(v==='noans')noans++;else ann++;});
+  const total=rows.length;
+  document.getElementById('statsConf').innerHTML=`
+    <div class="stat-c"><div class="sn2">${total}</div><div class="sl">Total RV</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--green);">${conf}</div><div class="sl">Confirmés</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--orange);">${att}</div><div class="sl">En attente</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--red);">${noans}</div><div class="sl">Sans réponse</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--purple);">${ann}</div><div class="sl">Annulés</div></div>
+    <div class="stat-c"><div class="sn2" style="color:var(--blue);">${total>0?Math.round(conf/total*100):0}%</div><div class="sl">Taux de confirmation</div></div>`;
+}
+for(let i=0;i<5;i++)addSuiviRow();
+</script>
+
+
+</body></html>

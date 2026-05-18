@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)file:///C:/Users/info/Downloads/registre-simdut.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registre SIMDUT — Clinique dentaire | Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);font-size:13px;}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.4rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:1240px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.81rem;opacity:.7;}
+
+  /* TOP BAR */
+  .top-bar{padding:11px 32px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .btn-top{padding:6px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
+  .btn-top:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-top.primary{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* TABS */
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);}
+  .nav-tab{padding:11px 22px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:-2px;white-space:nowrap;}
+  .nav-tab:hover{color:var(--blue);background:#e8f0fb;}
+  .nav-tab.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:24px 32px;}
+  .tab-pane.active{display:block;}
+
+  /* ===== GUIDE SIMDUT ===== */
+  .guide-intro{background:#fff8e1;border-left:4px solid var(--orange);border-radius:4px;padding:12px 16px;font-size:.84rem;color:#7a4400;margin-bottom:20px;line-height:1.7;}
+  .guide-intro strong{color:var(--orange);}
+  .symbols-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:24px;}
+  .symbol-card{border:1.5px solid var(--border);border-radius:9px;overflow:hidden;transition:box-shadow .2s;}
+  .symbol-card:hover{box-shadow:0 2px 12px rgba(26,106,191,.1);}
+  .sym-header{padding:14px;display:flex;align-items:center;gap:12px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sym-icon{width:56px;height:56px;flex-shrink:0;}
+  .sym-code{font-size:.7rem;font-weight:700;color:#8a9ab0;letter-spacing:.5px;}
+  .sym-name{font-size:.85rem;font-weight:700;color:var(--dark);line-height:1.3;}
+  .sym-body{padding:10px 14px 13px;background:#fafbfc;border-top:1px solid var(--border);}
+  .sym-desc{font-size:.78rem;color:#4a5a6a;line-height:1.6;margin-bottom:6px;}
+  .sym-exemples{font-size:.73rem;color:#8a9ab0;font-style:italic;}
+  .sym-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}
+  .sym-tag{background:var(--light);border:1px solid var(--border);border-radius:3px;padding:2px 6px;font-size:.68rem;color:#5a6a80;}
+
+  /* ===== REGISTRE ===== */
+  .reg-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;}
+  .reg-filter{border:1.5px solid var(--border);border-radius:6px;padding:5px 10px;font-size:.78rem;font-family:inherit;color:var(--text);background:white;cursor:pointer;}
+  .reg-filter:focus{outline:none;border-color:var(--accent);}
+  .stats-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .schip{padding:4px 11px;border-radius:20px;font-size:.74rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  .cat-block{margin-bottom:16px;border:1.5px solid var(--border);border-radius:9px;overflow:hidden;}
+  .cat-hd{display:flex;align-items:center;gap:8px;padding:9px 14px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cat-hd-title{font-size:.82rem;font-weight:700;color:white;flex:1;}
+  .cat-cnt{font-size:.72rem;color:rgba(255,255,255,.75);}
+  .cat-btn{padding:3px 9px;border-radius:5px;border:1.5px solid rgba(255,255,255,.4);background:rgba(255,255,255,.15);color:white;font-family:inherit;font-size:.71rem;font-weight:600;cursor:pointer;transition:all .12s;}
+  .cat-btn:hover{background:rgba(255,255,255,.3);}
+
+  .reg-table{width:100%;border-collapse:collapse;font-size:.75rem;}
+  .reg-table th{background:#f4f8ff;padding:7px 8px;text-align:left;font-size:.69rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border);white-space:nowrap;}
+  .reg-table td{border-bottom:1px solid var(--border);padding:6px 8px;vertical-align:middle;}
+  .reg-table tr:last-child td{border-bottom:none;}
+  .reg-table tr:nth-child(even) td{background:#fafbfc;}
+  .reg-table tr:hover td{background:#f0f5fb;}
+
+  .cell-e{border:1px solid transparent;border-radius:3px;padding:3px 5px;width:100%;font-family:inherit;font-size:.75rem;color:var(--text);background:transparent;cursor:text;}
+  .cell-e:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* SIMDUT PILLS */
+  .simdut-pills{display:flex;flex-wrap:wrap;gap:3px;}
+  .sp{width:22px;height:22px;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;cursor:help;-webkit-print-color-adjust:exact;print-color-adjust:exact;border:1.5px solid transparent;}
+  .sp.active{opacity:1;}
+  .sp.inactive{opacity:.18;filter:grayscale(1);}
+  .sp-toggle{cursor:pointer;}
+  .sp-toggle:hover{transform:scale(1.15);}
+
+  /* FDS STATUS */
+  .fds-ok{color:var(--green);font-weight:700;}
+  .fds-no{color:var(--red);font-weight:700;}
+  .fds-sel{border:1px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.74rem;font-family:inherit;background:var(--light);cursor:pointer;}
+  .fds-sel:focus{outline:none;border-color:var(--accent);}
+
+  .btn-del-row{width:20px;height:20px;border-radius:4px;border:1px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .btn-del-row:hover{background:#fef2f2;border-color:var(--red);}
+  .btn-add-row{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:0 0 7px 7px;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;width:100%;justify-content:center;}
+  .btn-add-row:hover{background:#e8f0fb;}
+
+  /* LEGAL NOTICE */
+  .legal-box{background:#e8f4fe;border:1.5px solid #b3d4f5;border-radius:8px;padding:14px 18px;margin-bottom:18px;font-size:.82rem;color:#1a3a5c;line-height:1.7;}
+  .legal-box strong{color:var(--blue);}
+
+  /* FORMATION */
+  .form-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .form-table th{background:var(--dark);color:white;padding:7px 10px;text-align:left;font-size:.72rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .form-table td{border:1px solid var(--border);padding:6px 9px;vertical-align:middle;}
+  .form-table tr:nth-child(even) td{background:var(--light);}
+  .form-table input{border:none;background:transparent;width:100%;font-family:inherit;font-size:.79rem;padding:2px;}
+  .form-table input:focus{outline:none;background:#fffde7;}
+  .btn-add-f{margin-top:8px;padding:6px 12px;background:white;border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;}
+  .btn-add-f:hover{background:#e8f0fb;}
+
+  /* SECTION TITLE */
+  .sec-title{font-size:.79rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;padding-bottom:6px;border-bottom:2px solid var(--border);}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+
+  @media print{
+    body{background:white;font-size:9px;}
+    .page-header,.top-bar,.nav-tabs,.btn-add-row,.btn-del-row,.cat-btn,.reg-filter,.btn-top{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .tab-pane{display:block!important;padding:8px;}
+    .cat-hd,.sym-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .sp{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .cell-e,.fds-sel{border:none;background:transparent;}
+    .cat-block{page-break-inside:avoid;}
+    .symbol-card{page-break-inside:avoid;}
+  }
+  @media(max-width:768px){
+    .tab-pane{padding:14px 12px;}
+    .top-bar{padding:10px 12px;}
+    .symbols-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Santé et sécurité au travail</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Registre SIMDUT — Produits dangereux</h1>
+    <p>Système d'information sur les matières dangereuses utilisées au travail (SIMDUT 2015) — Conforme CNESST</p>
+  </div>
+
+  <div class="top-bar">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <input class="ci" type="text" placeholder="Nom de la clinique..." style="min-width:220px;">
+      <input class="ci" type="text" placeholder="Responsable SST...">
+      <input class="ci" type="date" id="dateMaj">
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;" class="no-print">
+      <button class="btn-top" onclick="showTab(0,this)">📋 Retour au registre</button>
+      <button class="btn-top primary" onclick="window.print()">🖨️ Imprimer le registre</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab(0,this)">📋 Registre des produits</button>
+    <button class="nav-tab" onclick="showTab(1,this)">🔷 Guide SIMDUT 2015</button>
+    <button class="nav-tab" onclick="showTab(2,this)">📚 Formation et suivi</button>
+  </div>
+
+  <!-- ========== REGISTRE ========== -->
+  <div class="tab-pane active" id="tab-0"><div class="stats-chips" id="statsChips">
+      <span class="schip" style="background:#e3f2fd;color:var(--blue);">24 produits au registre</span>
+      <span class="schip" style="background:#fef2f2;color:var(--red);">1 FDS manquante(s)</span></div>
+
+    <div class="legal-box">
+      <strong>Obligation légale — CNESST :</strong> En vertu de la <em>Loi sur la santé et la sécurité du travail</em> et du règlement SIMDUT 2015, tout employeur doit tenir un registre des produits dangereux présents dans son établissement, s'assurer que les Fiches de données de sécurité (FDS) sont accessibles aux travailleurs, et former son personnel sur les risques et les mesures de prévention.
+    </div>
+
+    <div class="reg-bar">
+      <select class="reg-filter" id="catFilter" onchange="filterReg()"><option value="">Toutes les catégories</option><option value="anest">Anesthésiques et médicaments</option><option value="desinf">Désinfectants et stérilisants</option><option value="rest">Matériaux de restauration</option><option value="blanch">Produits de blanchiment</option><option value="gaz">Gaz médicaux</option><option value="radio">Radiographie</option><option value="hygiene">Hygiène et prophylaxie</option></select>
+      <select class="reg-filter" id="fdsFilter" onchange="filterReg()">
+        <option value="">Tous les statuts FDS</option>
+        <option value="Oui">FDS disponible</option>
+        <option value="Non">FDS manquante</option>
+      </select>
+      <button class="btn-top" onclick="addProduct()">+ Ajouter un produit</button>
+    </div>
+
+    <div id="regContainer"><div class="cat-block">
+      <div class="cat-hd" style="background:#1a6abf;">
+        <div class="cat-hd-title">Anesthésiques et médicaments</div>
+        <div class="cat-cnt">3 produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct(&#39;anest&#39;)">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_anest"><tr id="row_p1">
+    <td><input class="cell-e" value="ANE-001" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Lidocaïne 2% (carpules)" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Septodont" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Dentsply Canada" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p1"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;anest&#39;,&#39;p1&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Armoire médicaments" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;anest&#39;,&#39;p1&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;anest&#39;,&#39;p1&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p2">
+    <td><input class="cell-e" value="ANE-002" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Mépivacaïne 3%" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Septodont" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p2"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;anest&#39;,&#39;p2&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Armoire médicaments" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;anest&#39;,&#39;p2&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;anest&#39;,&#39;p2&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p3">
+    <td><input class="cell-e" value="ANE-003" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Épinéphrine (épinéphrine préchargée)" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Pfizer" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Pharmacie" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p3"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;anest&#39;,&#39;p3&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Trousse urgence" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-06" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Trousse urgence" onchange="updateProd(&#39;anest&#39;,&#39;p3&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;anest&#39;,&#39;p3&#39;)" title="Supprimer">×</button></td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct(&#39;anest&#39;)">+ Ajouter un produit dans cette catégorie</button></div><div class="cat-block">
+      <div class="cat-hd" style="background:#c0392b;">
+        <div class="cat-hd-title">Désinfectants et stérilisants</div>
+        <div class="cat-cnt">6 produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct(&#39;desinf&#39;)">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_desinf"><tr id="row_p4">
+    <td><input class="cell-e" value="DES-001" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Alcool isopropylique 70%" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Labchem" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Metro Medical" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p4"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp active sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;desinf&#39;,&#39;p4&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Gants nitrile, lunettes, ventilation" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Cabinet verrouillé, loin sources chaleur" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-03" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Inflammable — tenir loin des sources d&#39;ignition" onchange="updateProd(&#39;desinf&#39;,&#39;p4&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;desinf&#39;,&#39;p4&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p5">
+    <td><input class="cell-e" value="DES-002" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Cavicide (désinfectant surfaces)" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Metrex" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Sinclair Dental" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p5"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;desinf&#39;,&#39;p5&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile, lunettes" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Placard de stockage" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;desinf&#39;,&#39;p5&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;desinf&#39;,&#39;p5&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p6">
+    <td><input class="cell-e" value="DES-003" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Sporox II (glutaraldéhyde 2%)" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Sultan Healthcare" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p6"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp active sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;desinf&#39;,&#39;p6&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#c0392b;background:#c0392b18;border:1px solid #c0392b;padding:2px 7px;border-radius:10px;">Élevé</span></td>
+    <td><input class="cell-e" value="Gants épais, lunettes, masque respiratoire, sarrau" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Zone ventilée, accès restreint" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-09" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Sensibilisant respiratoire — TRÈS IRRITANT — utiliser sous hotte si possible" onchange="updateProd(&#39;desinf&#39;,&#39;p6&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;desinf&#39;,&#39;p6&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p7">
+    <td><input class="cell-e" value="DES-004" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Hypochlorite de sodium (eau de Javel)" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Guilbault" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Épicerie/Pharmacie" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p7"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp active sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp active sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;desinf&#39;,&#39;p7&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Gants caoutchouc, lunettes, ventilation" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Endroit frais, sombre, ventilé" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-02" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Ne jamais mélanger avec d&#39;autres produits chimiques" onchange="updateProd(&#39;desinf&#39;,&#39;p7&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;desinf&#39;,&#39;p7&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p8">
+    <td><input class="cell-e" value="DES-005" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Solution désinfectante instruments (Cidex)" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Advanced Sterilization" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p8"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;desinf&#39;,&#39;p8&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#c0392b;background:#c0392b18;border:1px solid #c0392b;padding:2px 7px;border-radius:10px;">Élevé</span></td>
+    <td><input class="cell-e" value="Gants épais, lunettes, masque" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Zone ventilée avec couvercle" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-11" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;desinf&#39;,&#39;p8&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;desinf&#39;,&#39;p8&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p9">
+    <td><input class="cell-e" value="DES-006" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Détergent enzymatique ultrasonique" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Hu-Friedy" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Sinclair Dental" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p9"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;desinf&#39;,&#39;p9&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Armoire produits" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;fds&#39;,this.value)">
+        <option>Oui</option>
+        <option selected="">Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="FDS à obtenir" onchange="updateProd(&#39;desinf&#39;,&#39;p9&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;desinf&#39;,&#39;p9&#39;)" title="Supprimer">×</button></td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct(&#39;desinf&#39;)">+ Ajouter un produit dans cette catégorie</button></div><div class="cat-block">
+      <div class="cat-hd" style="background:#8e44ad;">
+        <div class="cat-hd-title">Matériaux de restauration</div>
+        <div class="cat-cnt">6 produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct(&#39;rest&#39;)">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_rest"><tr id="row_p10">
+    <td><input class="cell-e" value="REST-001" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Acide phosphorique 37% (mordançage)" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="3M" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Dentsply Canada" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p10"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp inactive sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;rest&#39;,&#39;p10&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Gants nitrile, lunettes" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Armoire serrée" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Rincer abondamment en cas de contact oculaire" onchange="updateProd(&#39;rest&#39;,&#39;p10&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;rest&#39;,&#39;p10&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p11">
+    <td><input class="cell-e" value="REST-002" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Adhésif dentaire — primer/bond" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Kerr / Dentsply" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p11"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp active sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;rest&#39;,&#39;p11&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Gants nitrile, masque" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Réfrigérateur, loin sources chaleur" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-08" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Contient HEMA — inflammable" onchange="updateProd(&#39;rest&#39;,&#39;p11&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;rest&#39;,&#39;p11&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p12">
+    <td><input class="cell-e" value="REST-003" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Composite universel (tous teintes)" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Dentsply Sirona" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p12"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;rest&#39;,&#39;p12&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile, masque" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Réfrigérateur" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;rest&#39;,&#39;p12&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;rest&#39;,&#39;p12&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p13">
+    <td><input class="cell-e" value="REST-004" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Amalgame capsulé (amalgame dentaire)" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Dentsply Sirona" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p13"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp active sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp inactive sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp active sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;rest&#39;,&#39;p13&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#c0392b;background:#c0392b18;border:1px solid #c0392b;padding:2px 7px;border-radius:10px;">Élevé</span></td>
+    <td><input class="cell-e" value="Gants, masque, protection oculaire, aucune flamme nue" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Conteneur scellé, zone froide" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-06" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Contient du mercure — récupération obligatoire — programme d&#39;élimination requis" onchange="updateProd(&#39;rest&#39;,&#39;p13&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;rest&#39;,&#39;p13&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p14">
+    <td><input class="cell-e" value="REST-005" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Eugénol (zinc-eugénol, pâtes)" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Sultan Healthcare" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Sinclair Dental" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p14"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;rest&#39;,&#39;p14&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Endroit frais" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-10" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;rest&#39;,&#39;p14&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;rest&#39;,&#39;p14&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p15">
+    <td><input class="cell-e" value="REST-006" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Ciment verre ionomère poudre" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="GC" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Sinclair Dental" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p15"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;rest&#39;,&#39;p15&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile, éviter inhalation de poudre" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Endroit sec" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-02" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;rest&#39;,&#39;p15&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;rest&#39;,&#39;p15&#39;)" title="Supprimer">×</button></td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct(&#39;rest&#39;)">+ Ajouter un produit dans cette catégorie</button></div><div class="cat-block">
+      <div class="cat-hd" style="background:#e67e22;">
+        <div class="cat-hd-title">Produits de blanchiment</div>
+        <div class="cat-cnt">2 produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct(&#39;blanch&#39;)">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_blanch"><tr id="row_p16">
+    <td><input class="cell-e" value="BLA-001" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Peroxyde de carbamide 10-22%" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Ultradent" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Dentsply Canada" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p16"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;blanch&#39;,&#39;p16&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Gants nitrile, lunettes" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Réfrigérateur (4°C), protégé lumière" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Éviter contact avec muqueuses" onchange="updateProd(&#39;blanch&#39;,&#39;p16&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;blanch&#39;,&#39;p16&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p17">
+    <td><input class="cell-e" value="BLA-002" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Peroxyde d&#39;hydrogène 25-38% (cabinet)" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Ultradent / Philips" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p17"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp active sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp active sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp inactive sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;blanch&#39;,&#39;p17&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#c0392b;background:#c0392b18;border:1px solid #c0392b;padding:2px 7px;border-radius:10px;">Élevé</span></td>
+    <td><input class="cell-e" value="Gants nitrile épais, lunettes, masque, sarrau imperméable" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Réfrigérateur, protégé chaleur et lumière" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-09" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Concentration élevée — peut causer brûlures chimiques" onchange="updateProd(&#39;blanch&#39;,&#39;p17&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;blanch&#39;,&#39;p17&#39;)" title="Supprimer">×</button></td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct(&#39;blanch&#39;)">+ Ajouter un produit dans cette catégorie</button></div><div class="cat-block">
+      <div class="cat-hd" style="background:#27ae60;">
+        <div class="cat-hd-title">Gaz médicaux</div>
+        <div class="cat-cnt">2 produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct(&#39;gaz&#39;)">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_gaz"><tr id="row_p18">
+    <td><input class="cell-e" value="GAZ-001" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Oxyde nitreux N₂O (bonbonne)" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Air Liquide" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Air Liquide Canada" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p18"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp active sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;gaz&#39;,&#39;p18&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Ventilation adéquate, masque évacuateur, surveillance en cours d&#39;utilisation" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Local ventilé, ancré, loin sources chaleur" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-12" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Risque de narcose par exposition prolongée — système évacuateur obligatoire" onchange="updateProd(&#39;gaz&#39;,&#39;p18&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;gaz&#39;,&#39;p18&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p19">
+    <td><input class="cell-e" value="GAZ-002" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Oxygène médical O₂ (bonbonne)" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Air Liquide" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Air Liquide Canada" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p19"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp active sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp active sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp inactive sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;gaz&#39;,&#39;p19&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Éviter huiles et graisses au contact" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Local ventilé, ancré, loin sources chaleur et inflammables" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-12" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Comburant — favorise la combustion — trousse d&#39;urgence obligatoire" onchange="updateProd(&#39;gaz&#39;,&#39;p19&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;gaz&#39;,&#39;p19&#39;)" title="Supprimer">×</button></td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct(&#39;gaz&#39;)">+ Ajouter un produit dans cette catégorie</button></div><div class="cat-block">
+      <div class="cat-hd" style="background:#2c3e50;">
+        <div class="cat-hd-title">Radiographie</div>
+        <div class="cat-cnt">2 produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct(&#39;radio&#39;)">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_radio"><tr id="row_p20">
+    <td><input class="cell-e" value="RAD-001" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Révélateur radiographique" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Carestream / Kodak" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p20"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp active sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;radio&#39;,&#39;p20&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Gants nitrile, lunettes, éviter contact peau/yeux" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Endroit frais, hors lumière" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-07" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Élimination selon réglementation locale" onchange="updateProd(&#39;radio&#39;,&#39;p20&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;radio&#39;,&#39;p20&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p21">
+    <td><input class="cell-e" value="RAD-002" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Fixateur radiographique" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Carestream / Kodak" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Henry Schein" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p21"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp active sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;radio&#39;,&#39;p21&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#e67e22;background:#e67e2218;border:1px solid #e67e22;padding:2px 7px;border-radius:10px;">Modéré</span></td>
+    <td><input class="cell-e" value="Gants nitrile, lunettes, ventilation" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Endroit frais, hors lumière" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-07" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Contient sulfite de sodium — élimination réglementée" onchange="updateProd(&#39;radio&#39;,&#39;p21&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;radio&#39;,&#39;p21&#39;)" title="Supprimer">×</button></td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct(&#39;radio&#39;)">+ Ajouter un produit dans cette catégorie</button></div><div class="cat-block">
+      <div class="cat-hd" style="background:#1a9e5a;">
+        <div class="cat-hd-title">Hygiène et prophylaxie</div>
+        <div class="cat-cnt">3 produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct(&#39;hygiene&#39;)">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_hygiene"><tr id="row_p22">
+    <td><input class="cell-e" value="HYG-001" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Fluorure vernis (NaF 5%)" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="VOCO / Colgate" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Sinclair Dental" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p22"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp active sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;hygiene&#39;,&#39;p22&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Armoire médicaments" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Toxique en grande quantité — usage professionnel uniquement" onchange="updateProd(&#39;hygiene&#39;,&#39;p22&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;hygiene&#39;,&#39;p22&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p23">
+    <td><input class="cell-e" value="HYG-002" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Acide fluorhydrique (gravure céramique)" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Ultradent" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Dentsply Canada" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p23"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp active sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp active sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp active sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;hygiene&#39;,&#39;p23&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#7b0000;background:#7b000018;border:1px solid #7b0000;padding:2px 7px;border-radius:10px;">TRÈS ÉLEVÉ</span></td>
+    <td><input class="cell-e" value="Gants épais, lunettes étanches, masque, sarrau imperméable" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Coffret de sécurité, ventilé, accès restreint" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2023-05" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="EXTRÊMEMENT DANGEREUX — brûlures profondes — antidote gluconate calcium requis sur place" onchange="updateProd(&#39;hygiene&#39;,&#39;p23&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;hygiene&#39;,&#39;p23&#39;)" title="Supprimer">×</button></td></tr><tr id="row_p24">
+    <td><input class="cell-e" value="HYG-003" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;num&#39;,this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="Pâte à polir (prophylaxie)" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;name&#39;,this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="Nupro / Dentsply" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;fab&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Dentsply Canada" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;lieu&#39;,this.value)"></td>
+    <td><div class="simdut-pills" id="pills_p24"><span class="sp inactive sp-toggle" title="Matières explosibles" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS01&#39;,this)">💥</span><span class="sp inactive sp-toggle" title="Matières inflammables" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS02&#39;,this)">🔥</span><span class="sp inactive sp-toggle" title="Matières comburantes" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS03&#39;,this)">🔵</span><span class="sp inactive sp-toggle" title="Gaz sous pression" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS04&#39;,this)">🫙</span><span class="sp inactive sp-toggle" title="Corrosifs" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS05&#39;,this)">⚗️</span><span class="sp inactive sp-toggle" title="Toxicité aiguë (grave)" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS06&#39;,this)">☠️</span><span class="sp active sp-toggle" title="Irritants / Danger moins grave" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS07&#39;,this)">⚠️</span><span class="sp inactive sp-toggle" title="Danger grave pour la santé" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS08&#39;,this)">🧬</span><span class="sp inactive sp-toggle" title="Danger pour l&#39;environnement" onclick="toggleSym(&#39;hygiene&#39;,&#39;p24&#39;,&#39;GHS09&#39;,this)">🐟</span></div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:#1a9e5a;background:#1a9e5a18;border:1px solid #1a9e5a;padding:2px 7px;border-radius:10px;">Faible</span></td>
+    <td><input class="cell-e" value="Gants nitrile" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;epi&#39;,this.value)"></td>
+    <td><input class="cell-e" value="Armoire produits" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;stockage&#39;,this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;fds&#39;,this.value)">
+        <option selected="">Oui</option>
+        <option>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="2024-01" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;dateFds&#39;,this.value)"></td>
+    <td><input class="cell-e" value="" onchange="updateProd(&#39;hygiene&#39;,&#39;p24&#39;,&#39;notes&#39;,this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd(&#39;hygiene&#39;,&#39;p24&#39;)" title="Supprimer">×</button></td></tr></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct(&#39;hygiene&#39;)">+ Ajouter un produit dans cette catégorie</button></div></div>
+  </div>
+
+  <!-- ========== GUIDE SIMDUT ========== -->
+  <div class="tab-pane" id="tab-1">
+    <div class="guide-intro">
+      <strong>SIMDUT 2015</strong> est le Système d'information sur les matières dangereuses utilisées au travail, harmonisé avec le <em>Système général harmonisé (SGH)</em>. Il utilise 9 pictogrammes pour identifier les dangers des produits chimiques. Ces pictogrammes doivent figurer sur les étiquettes et les Fiches de données de sécurité (FDS) de tous les produits dangereux.
+    </div>
+    <div class="symbols-grid" id="symbolsGrid"><div class="symbol-card">
+      <div class="sym-header" style="background:#e74c3c10;border-bottom:2px solid #e74c3c30;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #e74c3c;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">💥</div>
+        <div>
+          <div class="sym-code">GHS01</div>
+          <div class="sym-name" style="color:#e74c3c;">Matières explosibles</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Matières pouvant exploser sous l'effet de la chaleur, d'un choc ou d'une friction.</div>
+        <div class="sym-exemples">Exemples : Explosifs, peroxydes organiques instables</div>
+        <div class="sym-tags"><span class="sym-tag">Explosibles</span><span class="sym-tag">Autoréactives</span><span class="sym-tag">Peroxydes organiques</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#e67e2210;border-bottom:2px solid #e67e2230;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #e67e22;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🔥</div>
+        <div>
+          <div class="sym-code">GHS02</div>
+          <div class="sym-name" style="color:#e67e22;">Matières inflammables</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Gaz, liquides ou solides pouvant s'enflammer facilement à des températures ambiantes ou faibles.</div>
+        <div class="sym-exemples">Exemples : Alcool isopropylique, adhésifs dentaires, acétone</div>
+        <div class="sym-tags"><span class="sym-tag">Gaz inflammables</span><span class="sym-tag">Liquides inflammables</span><span class="sym-tag">Solides inflammables</span><span class="sym-tag">Aérosols inflammables</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#f39c1210;border-bottom:2px solid #f39c1230;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #f39c12;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🔵</div>
+        <div>
+          <div class="sym-code">GHS03</div>
+          <div class="sym-name" style="color:#f39c12;">Matières comburantes</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Matières pouvant provoquer ou favoriser la combustion d'autres matières.</div>
+        <div class="sym-exemples">Exemples : Oxygène médical, peroxyde d'hydrogène concentré</div>
+        <div class="sym-tags"><span class="sym-tag">Gaz comburants</span><span class="sym-tag">Liquides comburants</span><span class="sym-tag">Solides comburants</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#27ae6010;border-bottom:2px solid #27ae6030;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #27ae60;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🫙</div>
+        <div>
+          <div class="sym-code">GHS04</div>
+          <div class="sym-name" style="color:#27ae60;">Gaz sous pression</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Gaz contenus dans un récipient sous pression ≥ 280 kPa, ou sous forme réfrigérée.</div>
+        <div class="sym-exemples">Exemples : Oxyde nitreux (N₂O), oxygène médical, CO₂</div>
+        <div class="sym-tags"><span class="sym-tag">Gaz comprimés</span><span class="sym-tag">Gaz liquéfiés</span><span class="sym-tag">Gaz réfrigérés</span><span class="sym-tag">Gaz dissous</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#8e44ad10;border-bottom:2px solid #8e44ad30;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #8e44ad;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">⚗️</div>
+        <div>
+          <div class="sym-code">GHS05</div>
+          <div class="sym-name" style="color:#8e44ad;">Corrosifs</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Matières pouvant corroder les métaux ou causer des brûlures chimiques graves à la peau et aux yeux.</div>
+        <div class="sym-exemples">Exemples : Acide phosphorique (mordançage), eau de Javel, glutaraldéhyde, révélateur/fixateur radio</div>
+        <div class="sym-tags"><span class="sym-tag">Corrosion cutanée</span><span class="sym-tag">Lésions oculaires graves</span><span class="sym-tag">Corrosion des métaux</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#c0392b10;border-bottom:2px solid #c0392b30;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #c0392b;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">☠️</div>
+        <div>
+          <div class="sym-code">GHS06</div>
+          <div class="sym-name" style="color:#c0392b;">Toxicité aiguë (grave)</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Matières pouvant causer la mort ou des effets toxiques graves à faibles doses (catégories 1-3).</div>
+        <div class="sym-exemples">Exemples : Glutaraldéhyde concentré, formaldéhyde, mercure (amalgame)</div>
+        <div class="sym-tags"><span class="sym-tag">Toxicité aiguë cat. 1-3</span><span class="sym-tag">Voie orale</span><span class="sym-tag">Voie cutanée</span><span class="sym-tag">Par inhalation</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#e67e2210;border-bottom:2px solid #e67e2230;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #e67e22;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">⚠️</div>
+        <div>
+          <div class="sym-code">GHS07</div>
+          <div class="sym-name" style="color:#e67e22;">Irritants / Danger moins grave</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Matières irritantes pour la peau, les yeux ou les voies respiratoires, ou présentant une toxicité aiguë modérée (cat. 4).</div>
+        <div class="sym-exemples">Exemples : Lidocaïne, matériaux composites, désinfectants dilués, alcool 70%, pâte à polir</div>
+        <div class="sym-tags"><span class="sym-tag">Toxicité aiguë cat. 4</span><span class="sym-tag">Irritation cutanée</span><span class="sym-tag">Irritation oculaire</span><span class="sym-tag">Sensibilisation cutanée</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#2c3e5010;border-bottom:2px solid #2c3e5030;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #2c3e50;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🧬</div>
+        <div>
+          <div class="sym-code">GHS08</div>
+          <div class="sym-name" style="color:#2c3e50;">Danger grave pour la santé</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Matières pouvant causer des effets graves et irréversibles sur la santé (cancérogènes, mutagènes, sensibilisants respiratoires, etc.).</div>
+        <div class="sym-exemples">Exemples : Glutaraldéhyde (sensibilisant), amalgame/mercure, formaldéhyde (cancérogène), peroxyde d'hydrogène concentré</div>
+        <div class="sym-tags"><span class="sym-tag">Cancérogénicité</span><span class="sym-tag">Mutagénicité</span><span class="sym-tag">Toxicité reproductive</span><span class="sym-tag">Sensibilisation respiratoire</span><span class="sym-tag">STOT</span></div>
+      </div></div><div class="symbol-card">
+      <div class="sym-header" style="background:#16a08510;border-bottom:2px solid #16a08530;">
+        <div style="width:54px;height:54px;background:white;border:2px solid #16a085;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🐟</div>
+        <div>
+          <div class="sym-code">GHS09</div>
+          <div class="sym-name" style="color:#16a085;">Danger pour l'environnement</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">Matières présentant un danger pour le milieu aquatique, qu'il soit aigu ou chronique.</div>
+        <div class="sym-exemples">Exemples : Mercure (amalgame), révélateur/fixateur radiographique, certains désinfectants</div>
+        <div class="sym-tags"><span class="sym-tag">Danger aquatique aigu</span><span class="sym-tag">Danger aquatique chronique</span></div>
+      </div></div></div>
+
+    <div style="margin-top:8px;">
+      <div class="sec-title">Classes de danger — Résumé</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:.8rem;">
+        <div style="background:var(--light);border:1px solid var(--border);border-radius:7px;padding:12px 14px;">
+          <strong style="color:var(--red);">Dangers physiques</strong>
+          <ul style="margin:6px 0 0 16px;line-height:2;">
+            <li>Matières explosibles</li>
+            <li>Gaz inflammables / Liquides inflammables / Solides inflammables</li>
+            <li>Matières autoréactives</li>
+            <li>Matières pyrophoriques</li>
+            <li>Matières comburantes</li>
+            <li>Gaz sous pression</li>
+            <li>Peroxydes organiques</li>
+          </ul>
+        </div>
+        <div style="background:var(--light);border:1px solid var(--border);border-radius:7px;padding:12px 14px;">
+          <strong style="color:var(--blue);">Dangers pour la santé et l'environnement</strong>
+          <ul style="margin:6px 0 0 16px;line-height:2;">
+            <li>Toxicité aiguë (catégories 1-4)</li>
+            <li>Corrosion / Irritation cutanée</li>
+            <li>Lésions oculaires / Irritation oculaire</li>
+            <li>Sensibilisation respiratoire ou cutanée</li>
+            <li>Mutagénicité / Cancérogénicité</li>
+            <li>Toxicité reproductive</li>
+            <li>Danger pour le milieu aquatique</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== FORMATION ========== -->
+  <div class="tab-pane" id="tab-2">
+    <div class="legal-box"><strong>Obligation CNESST :</strong> Tout employeur doit informer et former ses travailleurs sur les produits dangereux qu'ils utilisent. La formation doit être documentée et inclure : les risques liés aux produits, les mesures de prévention, les EPI requis, la lecture des étiquettes et des FDS.</div>
+
+    <div style="margin-bottom:20px;">
+      <div class="sec-title">Formation SIMDUT — Registre des employés</div>
+      <table class="form-table" id="formTable">
+        <thead><tr>
+          <th>Nom de l'employé(e)</th>
+          <th>Poste</th>
+          <th>Date de formation initiale</th>
+          <th>Date de mise à jour</th>
+          <th>Formateur(trice)</th>
+          <th>Produits couverts</th>
+          <th>Signature</th>
+          <th class="no-print"></th>
+        </tr></thead>
+        <tbody id="formBody"><tr>
+    <td><input type="text" placeholder="Nom et prénom"></td>
+    <td><input type="text" placeholder="Poste"></td>
+    <td><input type="date"></td>
+    <td><input type="date"></td>
+    <td><input type="text" placeholder="Formateur(trice)"></td>
+    <td><input type="text" placeholder="Tous les produits / Liste spécifique..."></td>
+    <td><input type="text" placeholder="Signature"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom et prénom"></td>
+    <td><input type="text" placeholder="Poste"></td>
+    <td><input type="date"></td>
+    <td><input type="date"></td>
+    <td><input type="text" placeholder="Formateur(trice)"></td>
+    <td><input type="text" placeholder="Tous les produits / Liste spécifique..."></td>
+    <td><input type="text" placeholder="Signature"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom et prénom"></td>
+    <td><input type="text" placeholder="Poste"></td>
+    <td><input type="date"></td>
+    <td><input type="date"></td>
+    <td><input type="text" placeholder="Formateur(trice)"></td>
+    <td><input type="text" placeholder="Tous les produits / Liste spécifique..."></td>
+    <td><input type="text" placeholder="Signature"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom et prénom"></td>
+    <td><input type="text" placeholder="Poste"></td>
+    <td><input type="date"></td>
+    <td><input type="date"></td>
+    <td><input type="text" placeholder="Formateur(trice)"></td>
+    <td><input type="text" placeholder="Tous les produits / Liste spécifique..."></td>
+    <td><input type="text" placeholder="Signature"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr><tr>
+    <td><input type="text" placeholder="Nom et prénom"></td>
+    <td><input type="text" placeholder="Poste"></td>
+    <td><input type="date"></td>
+    <td><input type="date"></td>
+    <td><input type="text" placeholder="Formateur(trice)"></td>
+    <td><input type="text" placeholder="Tous les produits / Liste spécifique..."></td>
+    <td><input type="text" placeholder="Signature"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr></tbody>
+      </table>
+      <button class="btn-add-f no-print" onclick="addFormRow()">+ Ajouter un(e) employé(e)</button>
+    </div>
+
+    <div>
+      <div class="sec-title">Révision du registre SIMDUT</div>
+      <table class="form-table">
+        <thead><tr><th>Date de révision</th><th>Révisé par</th><th>Modifications apportées</th><th>Prochaine révision prévue</th></tr></thead>
+        <tbody id="revBody">
+          <tr><td><input type="date"></td><td><input type="text" placeholder="Nom et titre"></td><td><input type="text" placeholder="Nouveaux produits, retraits, mises à jour FDS..."></td><td><input type="date"></td></tr>
+          <tr><td><input type="date"></td><td><input type="text" placeholder="Nom et titre"></td><td><input type="text" placeholder="..."></td><td><input type="date"></td></tr>
+          <tr><td><input type="date"></td><td><input type="text" placeholder="Nom et titre"></td><td><input type="text" placeholder="..."></td><td><input type="date"></td></tr>
+        </tbody>
+      </table>
+      <button class="btn-add-f no-print" onclick="addRevRow()">+ Ajouter une révision</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== SIMDUT SYMBOLS DATA =====
+const SYMBOLS = [
+  { code:'GHS01', name:'Matières explosibles', color:'#e74c3c', emoji:'💥',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#e74c3c" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="26">💥</text></svg>`,
+    desc:'Matières pouvant exploser sous l\'effet de la chaleur, d\'un choc ou d\'une friction.',
+    exemples:'Explosifs, peroxydes organiques instables',
+    tags:['Explosibles','Autoréactives','Peroxydes organiques']},
+  { code:'GHS02', name:'Matières inflammables', color:'#e67e22', emoji:'🔥',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#e67e22" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="26">🔥</text></svg>`,
+    desc:'Gaz, liquides ou solides pouvant s\'enflammer facilement à des températures ambiantes ou faibles.',
+    exemples:'Alcool isopropylique, adhésifs dentaires, acétone',
+    tags:['Gaz inflammables','Liquides inflammables','Solides inflammables','Aérosols inflammables']},
+  { code:'GHS03', name:'Matières comburantes', color:'#f39c12', emoji:'🔵',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#f39c12" stroke-width="3"/><text x="28" y="38" text-anchor="middle" font-size="18">🔥</text><circle cx="28" cy="46" r="5" fill="none" stroke="#f39c12" stroke-width="2"/></svg>`,
+    desc:'Matières pouvant provoquer ou favoriser la combustion d\'autres matières.',
+    exemples:'Oxygène médical, peroxyde d\'hydrogène concentré',
+    tags:['Gaz comburants','Liquides comburants','Solides comburants']},
+  { code:'GHS04', name:'Gaz sous pression', color:'#27ae60', emoji:'🫙',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#27ae60" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="26">🫙</text></svg>`,
+    desc:'Gaz contenus dans un récipient sous pression ≥ 280 kPa, ou sous forme réfrigérée.',
+    exemples:'Oxyde nitreux (N₂O), oxygène médical, CO₂',
+    tags:['Gaz comprimés','Gaz liquéfiés','Gaz réfrigérés','Gaz dissous']},
+  { code:'GHS05', name:'Corrosifs', color:'#8e44ad', emoji:'⚗️',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#8e44ad" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="26">⚗️</text></svg>`,
+    desc:'Matières pouvant corroder les métaux ou causer des brûlures chimiques graves à la peau et aux yeux.',
+    exemples:'Acide phosphorique (mordançage), eau de Javel, glutaraldéhyde, révélateur/fixateur radio',
+    tags:['Corrosion cutanée','Lésions oculaires graves','Corrosion des métaux']},
+  { code:'GHS06', name:'Toxicité aiguë (grave)', color:'#c0392b', emoji:'☠️',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#c0392b" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="26">☠️</text></svg>`,
+    desc:'Matières pouvant causer la mort ou des effets toxiques graves à faibles doses (catégories 1-3).',
+    exemples:'Glutaraldéhyde concentré, formaldéhyde, mercure (amalgame)',
+    tags:['Toxicité aiguë cat. 1-3','Voie orale','Voie cutanée','Par inhalation']},
+  { code:'GHS07', name:'Irritants / Danger moins grave', color:'#e67e22', emoji:'⚠️',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#e67e22" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="28" fill="#e67e22" font-weight="bold">!</text></svg>`,
+    desc:'Matières irritantes pour la peau, les yeux ou les voies respiratoires, ou présentant une toxicité aiguë modérée (cat. 4).',
+    exemples:'Lidocaïne, matériaux composites, désinfectants dilués, alcool 70%, pâte à polir',
+    tags:['Toxicité aiguë cat. 4','Irritation cutanée','Irritation oculaire','Sensibilisation cutanée']},
+  { code:'GHS08', name:'Danger grave pour la santé', color:'#2c3e50', emoji:'🧬',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#2c3e50" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="26">🧬</text></svg>`,
+    desc:'Matières pouvant causer des effets graves et irréversibles sur la santé (cancérogènes, mutagènes, sensibilisants respiratoires, etc.).',
+    exemples:'Glutaraldéhyde (sensibilisant), amalgame/mercure, formaldéhyde (cancérogène), peroxyde d\'hydrogène concentré',
+    tags:['Cancérogénicité','Mutagénicité','Toxicité reproductive','Sensibilisation respiratoire','STOT']},
+  { code:'GHS09', name:'Danger pour l\'environnement', color:'#16a085', emoji:'🐟',
+    svg:`<svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><polygon points="28,2 54,54 2,54" fill="white" stroke="#16a085" stroke-width="3"/><text x="28" y="46" text-anchor="middle" font-size="26">🐟</text></svg>`,
+    desc:'Matières présentant un danger pour le milieu aquatique, qu\'il soit aigu ou chronique.',
+    exemples:'Mercure (amalgame), révélateur/fixateur radiographique, certains désinfectants',
+    tags:['Danger aquatique aigu','Danger aquatique chronique']},
+];
+
+// ===== PRODUCTS DATA =====
+const CATS = [
+  { id:'anest', name:'Anesthésiques et médicaments', color:'#1a6abf', products:[
+    { id:'p1', num:'ANE-001', name:'Lidocaïne 2% (carpules)', fab:'Septodont', lieu:'Dentsply Canada', lieu2:'dentsplycanada.com', fds:'Oui', dateFds:'2024-01', symbols:['GHS07'], epi:'Gants nitrile', stockage:'Armoire médicaments', urgence:'Faible', notes:'' },
+    { id:'p2', num:'ANE-002', name:'Mépivacaïne 3%', fab:'Septodont', lieu:'Henry Schein', lieu2:'henryschein.ca', fds:'Oui', dateFds:'2024-01', symbols:['GHS07'], epi:'Gants nitrile', stockage:'Armoire médicaments', urgence:'Faible', notes:'' },
+    { id:'p3', num:'ANE-003', name:'Épinéphrine (épinéphrine préchargée)', fab:'Pfizer', lieu:'Pharmacie', lieu2:'', fds:'Oui', dateFds:'2023-06', symbols:['GHS07'], epi:'Gants nitrile', stockage:'Trousse urgence', urgence:'Faible', notes:'Trousse urgence' },
+  ]},
+  { id:'desinf', name:'Désinfectants et stérilisants', color:'#c0392b', products:[
+    { id:'p4', num:'DES-001', name:'Alcool isopropylique 70%', fab:'Labchem', lieu:'Metro Medical', lieu2:'', fds:'Oui', dateFds:'2024-03', symbols:['GHS02','GHS07'], epi:'Gants nitrile, lunettes, ventilation', stockage:'Cabinet verrouillé, loin sources chaleur', urgence:'Modéré', notes:'Inflammable — tenir loin des sources d\'ignition' },
+    { id:'p5', num:'DES-002', name:'Cavicide (désinfectant surfaces)', fab:'Metrex', lieu:'Sinclair Dental', lieu2:'sinclaircanada.com', fds:'Oui', dateFds:'2024-01', symbols:['GHS07'], epi:'Gants nitrile, lunettes', stockage:'Placard de stockage', urgence:'Faible', notes:'' },
+    { id:'p6', num:'DES-003', name:'Sporox II (glutaraldéhyde 2%)', fab:'Sultan Healthcare', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2023-09', symbols:['GHS05','GHS06','GHS07','GHS08'], epi:'Gants épais, lunettes, masque respiratoire, sarrau', stockage:'Zone ventilée, accès restreint', urgence:'Élevé', notes:'Sensibilisant respiratoire — TRÈS IRRITANT — utiliser sous hotte si possible' },
+    { id:'p7', num:'DES-004', name:'Hypochlorite de sodium (eau de Javel)', fab:'Guilbault', lieu:'Épicerie/Pharmacie', lieu2:'', fds:'Oui', dateFds:'2024-02', symbols:['GHS03','GHS05','GHS07','GHS09'], epi:'Gants caoutchouc, lunettes, ventilation', stockage:'Endroit frais, sombre, ventilé', urgence:'Modéré', notes:'Ne jamais mélanger avec d\'autres produits chimiques' },
+    { id:'p8', num:'DES-005', name:'Solution désinfectante instruments (Cidex)', fab:'Advanced Sterilization', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2023-11', symbols:['GHS05','GHS07','GHS08'], epi:'Gants épais, lunettes, masque', stockage:'Zone ventilée avec couvercle', urgence:'Élevé', notes:'' },
+    { id:'p9', num:'DES-006', name:'Détergent enzymatique ultrasonique', fab:'Hu-Friedy', lieu:'Sinclair Dental', lieu2:'', fds:'Non', dateFds:'', symbols:['GHS07'], epi:'Gants nitrile', stockage:'Armoire produits', urgence:'Faible', notes:'FDS à obtenir' },
+  ]},
+  { id:'rest', name:'Matériaux de restauration', color:'#8e44ad', products:[
+    { id:'p10', num:'REST-001', name:'Acide phosphorique 37% (mordançage)', fab:'3M', lieu:'Dentsply Canada', lieu2:'', fds:'Oui', dateFds:'2024-01', symbols:['GHS05'], epi:'Gants nitrile, lunettes', stockage:'Armoire serrée', urgence:'Modéré', notes:'Rincer abondamment en cas de contact oculaire' },
+    { id:'p11', num:'REST-002', name:'Adhésif dentaire — primer/bond', fab:'Kerr / Dentsply', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2023-08', symbols:['GHS02','GHS07'], epi:'Gants nitrile, masque', stockage:'Réfrigérateur, loin sources chaleur', urgence:'Modéré', notes:'Contient HEMA — inflammable' },
+    { id:'p12', num:'REST-003', name:'Composite universel (tous teintes)', fab:'Dentsply Sirona', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2024-01', symbols:['GHS07','GHS08'], epi:'Gants nitrile, masque', stockage:'Réfrigérateur', urgence:'Faible', notes:'' },
+    { id:'p13', num:'REST-004', name:'Amalgame capsulé (amalgame dentaire)', fab:'Dentsply Sirona', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2023-06', symbols:['GHS06','GHS08','GHS09'], epi:'Gants, masque, protection oculaire, aucune flamme nue', stockage:'Conteneur scellé, zone froide', urgence:'Élevé', notes:'Contient du mercure — récupération obligatoire — programme d\'élimination requis' },
+    { id:'p14', num:'REST-005', name:'Eugénol (zinc-eugénol, pâtes)', fab:'Sultan Healthcare', lieu:'Sinclair Dental', lieu2:'', fds:'Oui', dateFds:'2023-10', symbols:['GHS07','GHS08'], epi:'Gants nitrile', stockage:'Endroit frais', urgence:'Faible', notes:'' },
+    { id:'p15', num:'REST-006', name:'Ciment verre ionomère poudre', fab:'GC', lieu:'Sinclair Dental', lieu2:'', fds:'Oui', dateFds:'2024-02', symbols:['GHS07'], epi:'Gants nitrile, éviter inhalation de poudre', stockage:'Endroit sec', urgence:'Faible', notes:'' },
+  ]},
+  { id:'blanch', name:'Produits de blanchiment', color:'#e67e22', products:[
+    { id:'p16', num:'BLA-001', name:'Peroxyde de carbamide 10-22%', fab:'Ultradent', lieu:'Dentsply Canada', lieu2:'', fds:'Oui', dateFds:'2024-01', symbols:['GHS05','GHS07'], epi:'Gants nitrile, lunettes', stockage:'Réfrigérateur (4°C), protégé lumière', urgence:'Modéré', notes:'Éviter contact avec muqueuses' },
+    { id:'p17', num:'BLA-002', name:'Peroxyde d\'hydrogène 25-38% (cabinet)', fab:'Ultradent / Philips', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2023-09', symbols:['GHS03','GHS05','GHS06','GHS08'], epi:'Gants nitrile épais, lunettes, masque, sarrau imperméable', stockage:'Réfrigérateur, protégé chaleur et lumière', urgence:'Élevé', notes:'Concentration élevée — peut causer brûlures chimiques' },
+  ]},
+  { id:'gaz', name:'Gaz médicaux', color:'#27ae60', products:[
+    { id:'p18', num:'GAZ-001', name:'Oxyde nitreux N₂O (bonbonne)', fab:'Air Liquide', lieu:'Air Liquide Canada', lieu2:'airliquide.ca', fds:'Oui', dateFds:'2023-12', symbols:['GHS04','GHS07','GHS08'], epi:'Ventilation adéquate, masque évacuateur, surveillance en cours d\'utilisation', stockage:'Local ventilé, ancré, loin sources chaleur', urgence:'Modéré', notes:'Risque de narcose par exposition prolongée — système évacuateur obligatoire' },
+    { id:'p19', num:'GAZ-002', name:'Oxygène médical O₂ (bonbonne)', fab:'Air Liquide', lieu:'Air Liquide Canada', lieu2:'airliquide.ca', fds:'Oui', dateFds:'2023-12', symbols:['GHS03','GHS04'], epi:'Éviter huiles et graisses au contact', stockage:'Local ventilé, ancré, loin sources chaleur et inflammables', urgence:'Modéré', notes:'Comburant — favorise la combustion — trousse d\'urgence obligatoire' },
+  ]},
+  { id:'radio', name:'Radiographie', color:'#2c3e50', products:[
+    { id:'p20', num:'RAD-001', name:'Révélateur radiographique', fab:'Carestream / Kodak', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2023-07', symbols:['GHS05','GHS07','GHS09'], epi:'Gants nitrile, lunettes, éviter contact peau/yeux', stockage:'Endroit frais, hors lumière', urgence:'Modéré', notes:'Élimination selon réglementation locale' },
+    { id:'p21', num:'RAD-002', name:'Fixateur radiographique', fab:'Carestream / Kodak', lieu:'Henry Schein', lieu2:'', fds:'Oui', dateFds:'2023-07', symbols:['GHS05','GHS07','GHS09'], epi:'Gants nitrile, lunettes, ventilation', stockage:'Endroit frais, hors lumière', urgence:'Modéré', notes:'Contient sulfite de sodium — élimination réglementée' },
+  ]},
+  { id:'hygiene', name:'Hygiène et prophylaxie', color:'#1a9e5a', products:[
+    { id:'p22', num:'HYG-001', name:'Fluorure vernis (NaF 5%)', fab:'VOCO / Colgate', lieu:'Sinclair Dental', lieu2:'', fds:'Oui', dateFds:'2024-01', symbols:['GHS06','GHS07'], epi:'Gants nitrile', stockage:'Armoire médicaments', urgence:'Faible', notes:'Toxique en grande quantité — usage professionnel uniquement' },
+    { id:'p23', num:'HYG-002', name:'Acide fluorhydrique (gravure céramique)', fab:'Ultradent', lieu:'Dentsply Canada', lieu2:'', fds:'Oui', dateFds:'2023-05', symbols:['GHS05','GHS06','GHS07','GHS08'], epi:'Gants épais, lunettes étanches, masque, sarrau imperméable', stockage:'Coffret de sécurité, ventilé, accès restreint', urgence:'TRÈS ÉLEVÉ', notes:'EXTRÊMEMENT DANGEREUX — brûlures profondes — antidote gluconate calcium requis sur place' },
+    { id:'p24', num:'HYG-003', name:'Pâte à polir (prophylaxie)', fab:'Nupro / Dentsply', lieu:'Dentsply Canada', lieu2:'', fds:'Oui', dateFds:'2024-01', symbols:['GHS07'], epi:'Gants nitrile', stockage:'Armoire produits', urgence:'Faible', notes:'' },
+  ]},
+];
+
+let products = JSON.parse(JSON.stringify(CATS)); // deep copy
+let idCnt = 200;
+
+// ===== RENDER SIMDUT GUIDE =====
+function renderGuide() {
+  const grid = document.getElementById('symbolsGrid');
+  SYMBOLS.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'symbol-card';
+    card.innerHTML = `
+      <div class="sym-header" style="background:${s.color}10;border-bottom:2px solid ${s.color}30;">
+        <div style="width:54px;height:54px;background:white;border:2px solid ${s.color};border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${s.emoji}</div>
+        <div>
+          <div class="sym-code">${s.code}</div>
+          <div class="sym-name" style="color:${s.color};">${s.name}</div>
+        </div>
+      </div>
+      <div class="sym-body">
+        <div class="sym-desc">${s.desc}</div>
+        <div class="sym-exemples">Exemples : ${s.exemples}</div>
+        <div class="sym-tags">${s.tags.map(t=>`<span class="sym-tag">${t}</span>`).join('')}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ===== RENDER REGISTER =====
+function renderReg(filterCat='', filterFds='') {
+  const cont = document.getElementById('regContainer');
+  const catSel = document.getElementById('catFilter');
+
+  // Update filter options
+  catSel.innerHTML = '<option value="">Toutes les catégories</option>';
+  products.forEach(cat => {
+    catSel.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
+  });
+  if (filterCat) catSel.value = filterCat;
+
+  cont.innerHTML = '';
+  let totalProd = 0, fdsMiss = 0;
+
+  products.forEach(cat => {
+    if (filterCat && cat.id !== filterCat) return;
+    const filteredItems = cat.products.filter(p => {
+      if (filterFds === 'Oui' && p.fds !== 'Oui') return false;
+      if (filterFds === 'Non' && p.fds !== 'Non') return false;
+      return true;
+    });
+    if (filteredItems.length === 0) return;
+
+    totalProd += filteredItems.length;
+    fdsMiss += filteredItems.filter(p => p.fds !== 'Oui').length;
+
+    const block = document.createElement('div');
+    block.className = 'cat-block';
+    block.innerHTML = `
+      <div class="cat-hd" style="background:${cat.color};">
+        <div class="cat-hd-title">${cat.name}</div>
+        <div class="cat-cnt">${filteredItems.length} produit(s)</div>
+        <button class="cat-btn no-print" onclick="event.stopPropagation();addProduct('${cat.id}')">+ Ajouter</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="reg-table">
+          <thead><tr>
+            <th style="width:80px;">N° produit</th>
+            <th style="min-width:160px;">Nom du produit</th>
+            <th style="min-width:110px;">Fabricant</th>
+            <th style="min-width:120px;">Fournisseur / Où acheter</th>
+            <th style="min-width:140px;">Pictogrammes SIMDUT</th>
+            <th style="min-width:85px;">Niveau urgence</th>
+            <th style="min-width:120px;">EPI requis</th>
+            <th style="min-width:100px;">Lieu stockage</th>
+            <th style="min-width:60px;" class="th-center">FDS disp.</th>
+            <th style="min-width:100px;">Date FDS</th>
+            <th style="min-width:120px;">Notes</th>
+            <th style="width:28px;" class="no-print"></th>
+          </tr></thead>
+          <tbody id="tbody_${cat.id}"></tbody>
+        </table>
+      </div>
+      <button class="btn-add-row no-print" onclick="addProduct('${cat.id}')">+ Ajouter un produit dans cette catégorie</button>`;
+
+    const tbody = block.querySelector('tbody');
+    filteredItems.forEach(p => tbody.appendChild(buildProductRow(cat.id, p)));
+    cont.appendChild(block);
+  });
+
+  // Stats
+  const chips = document.getElementById('statsChips');
+  if (chips) {
+    chips.innerHTML = `
+      <span class="schip" style="background:#e3f2fd;color:var(--blue);">${totalProd} produits au registre</span>
+      <span class="schip" style="background:${fdsMiss>0?'#fef2f2':'#f0fdf4'};color:${fdsMiss>0?'var(--red)':'var(--green)'};">${fdsMiss > 0 ? fdsMiss+' FDS manquante(s)' : 'Toutes les FDS disponibles ✓'}</span>`;
+  }
+}
+
+function symPill(code) {
+  const s = SYMBOLS.find(x => x.code === code);
+  if (!s) return '';
+  return `<span title="${s.name}" style="font-size:1rem;cursor:help;">${s.emoji}</span>`;
+}
+
+function buildProductRow(catId, p) {
+  const tr = document.createElement('tr');
+  tr.id = 'row_' + p.id;
+
+  const urgColor = { 'Faible':'#1a9e5a','Modéré':'#e67e22','Élevé':'#c0392b','TRÈS ÉLEVÉ':'#7b0000','':'' };
+  const symPills = SYMBOLS.map(s => {
+    const active = p.symbols.includes(s.code);
+    return `<span class="sp ${active?'active':'inactive'} sp-toggle" title="${s.name}" onclick="toggleSym('${catId}','${p.id}','${s.code}',this)">${s.emoji}</span>`;
+  }).join('');
+
+  tr.innerHTML = `
+    <td><input class="cell-e" value="${p.num}" onchange="updateProd('${catId}','${p.id}','num',this.value)" style="max-width:80px;"></td>
+    <td><input class="cell-e" value="${p.name}" onchange="updateProd('${catId}','${p.id}','name',this.value)" style="font-weight:600;"></td>
+    <td><input class="cell-e" value="${p.fab}" onchange="updateProd('${catId}','${p.id}','fab',this.value)"></td>
+    <td><input class="cell-e" value="${p.lieu}" onchange="updateProd('${catId}','${p.id}','lieu',this.value)"></td>
+    <td><div class="simdut-pills" id="pills_${p.id}">${symPills}</div></td>
+    <td><span style="font-size:.72rem;font-weight:700;color:${urgColor[p.urgence]||'#5a6a80'};background:${urgColor[p.urgence]||'#f0f0f0'}18;border:1px solid ${urgColor[p.urgence]||'#ddd'};padding:2px 7px;border-radius:10px;">${p.urgence||'—'}</span></td>
+    <td><input class="cell-e" value="${p.epi}" onchange="updateProd('${catId}','${p.id}','epi',this.value)"></td>
+    <td><input class="cell-e" value="${p.stockage}" onchange="updateProd('${catId}','${p.id}','stockage',this.value)"></td>
+    <td style="text-align:center;">
+      <select class="fds-sel" onchange="updateProd('${catId}','${p.id}','fds',this.value)">
+        <option ${p.fds==='Oui'?'selected':''}>Oui</option>
+        <option ${p.fds==='Non'?'selected':''}>Non</option>
+      </select>
+    </td>
+    <td><input class="cell-e date-cell" type="date" value="${p.dateFds}" onchange="updateProd('${catId}','${p.id}','dateFds',this.value)"></td>
+    <td><input class="cell-e" value="${p.notes}" onchange="updateProd('${catId}','${p.id}','notes',this.value)"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="deleteProd('${catId}','${p.id}')" title="Supprimer">×</button></td>`;
+
+  return tr;
+}
+
+// ===== ACTIONS =====
+function updateProd(catId, prodId, field, val) {
+  const cat = products.find(c => c.id === catId);
+  if (!cat) return;
+  const prod = cat.products.find(p => p.id === prodId);
+  if (!prod) return;
+  prod[field] = val;
+}
+
+function toggleSym(catId, prodId, symCode, el) {
+  const cat = products.find(c => c.id === catId);
+  const prod = cat && cat.products.find(p => p.id === prodId);
+  if (!prod) return;
+  if (prod.symbols.includes(symCode)) {
+    prod.symbols = prod.symbols.filter(s => s !== symCode);
+    el.classList.remove('active');
+    el.classList.add('inactive');
+  } else {
+    prod.symbols.push(symCode);
+    el.classList.add('active');
+    el.classList.remove('inactive');
+  }
+}
+
+function addProduct(catId) {
+  let cat = catId ? products.find(c => c.id === catId) : products[0];
+  if (!cat) return;
+  const id = 'p_' + (++idCnt);
+  cat.products.push({ id, num:'', name:'Nouveau produit', fab:'', lieu:'', fds:'Non', dateFds:'', symbols:[], epi:'', stockage:'', urgence:'Faible', notes:'' });
+  filterReg();
+  setTimeout(() => {
+    const row = document.getElementById('row_'+id);
+    if (row) {
+      row.scrollIntoView({behavior:'smooth',block:'center'});
+      row.querySelectorAll('input')[1].focus();
+    }
+  }, 80);
+}
+
+function deleteProd(catId, prodId) {
+  const cat = products.find(c => c.id === catId);
+  if (!cat) return;
+  cat.products = cat.products.filter(p => p.id !== prodId);
+  filterReg();
+}
+
+function filterReg() {
+  const catF = document.getElementById('catFilter').value;
+  const fdsF = document.getElementById('fdsFilter').value;
+  renderReg(catF, fdsF);
+}
+
+// ===== FORMATION =====
+function addFormRow() {
+  const tbody = document.getElementById('formBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" placeholder="Nom et prénom"></td>
+    <td><input type="text" placeholder="Poste"></td>
+    <td><input type="date"></td>
+    <td><input type="date"></td>
+    <td><input type="text" placeholder="Formateur(trice)"></td>
+    <td><input type="text" placeholder="Tous les produits / Liste spécifique..."></td>
+    <td><input type="text" placeholder="Signature"></td>
+    <td class="no-print"><button class="btn-del-row" onclick="this.closest('tr').remove()">×</button></td>`;
+  tbody.appendChild(tr);
+}
+
+function addRevRow() {
+  const tbody = document.getElementById('revBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input type="date"></td><td><input type="text" placeholder="Nom et titre"></td><td><input type="text" placeholder="Modifications..."></td><td><input type="date"></td>`;
+  tbody.appendChild(tr);
+}
+
+function showTab(n, btn) {
+  document.querySelectorAll('.tab-pane').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.nav-tab').forEach((b,i) => b.classList.toggle('active', i===n));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Add stats chips container
+document.getElementById('tab-0').insertAdjacentHTML('afterbegin', '<div class="stats-chips" id="statsChips"></div>');
+
+// INIT
+document.getElementById('dateMaj').valueAsDate = new Date();
+renderGuide();
+renderReg();
+
+// Init formation rows
+for(let i=0;i<5;i++) addFormRow();
+</script>
+
+
+</body></html>

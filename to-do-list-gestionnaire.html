@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)file:///C:/Users/info/Downloads/todo-list-gestionnaire.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-do list gestionnaire — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1100px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .top-bar{padding:10px 24px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);}
+  .tab-btn{padding:10px 20px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.81rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:18px 24px;}
+  .tab-pane.active{display:block;}
+  /* ADD FORM */
+  .add-form{background:#f8fbff;border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:16px;}
+  .af-title{font-size:.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+  .af-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:8px;align-items:end;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select{border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
+  .ff input:focus,.ff select:focus{outline:none;border-color:var(--accent);}
+  .btn-add{padding:8px 16px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+  /* STATS BAR */
+  .stats-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .sc{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;text-align:center;}
+  .sc-n{font-size:1.2rem;font-weight:700;} .sc-l{font-size:.7rem;color:#5a6a80;margin-top:2px;}
+  /* TASK LIST */
+  .task-card{background:white;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;transition:all .15s;}
+  .task-card:hover{box-shadow:0 2px 8px rgba(26,106,191,.1);}
+  .task-card.done{opacity:.5;}
+  .task-card.done .task-title{text-decoration:line-through;color:#8a9ab0;}
+  .tc-cb{width:18px;height:18px;flex-shrink:0;margin-top:2px;cursor:pointer;accent-color:var(--green);}
+  .tc-body{flex:1;}
+  .task-title{font-size:.87rem;font-weight:600;color:var(--text);margin-bottom:3px;}
+  .task-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700;}
+  .pri-1{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.2);}
+  .pri-2{background:#fff8e1;color:var(--orange);border:1px solid rgba(230,126,34,.2);}
+  .pri-3{background:#e3f2fd;color:var(--blue);border:1px solid rgba(26,106,191,.2);}
+  .pri-4{background:#f4f4f4;color:#8a9ab0;border:1px solid #e0e0e0;}
+  .cat-badge{font-size:.69rem;padding:2px 7px;border-radius:6px;font-weight:600;}
+  .due-badge{font-size:.69rem;color:#5a6a80;}
+  .due-urgent{color:var(--red);font-weight:700;}
+  .tc-del{width:22px;height:22px;border-radius:5px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;display:flex;align-items:center;justify-content:center;font-family:inherit;flex-shrink:0;}
+  /* MATRIX */
+  .matrix{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;min-height:500px;}
+  .quadrant{border-radius:10px;padding:14px;border:2px solid;}
+  .q-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .q-hint{font-size:.72rem;opacity:.75;margin-bottom:10px;}
+  .mini-task{background:white;border-radius:6px;padding:8px 10px;margin-bottom:6px;display:flex;align-items:center;gap:7px;font-size:.8rem;border:1px solid rgba(0,0,0,.07);}
+  .mini-cb{width:15px;height:15px;cursor:pointer;flex-shrink:0;}
+  .mini-title{flex:1;}
+  .mini-del{width:18px;height:18px;border-radius:4px;border:none;background:rgba(0,0,0,.08);color:rgba(0,0,0,.4);cursor:pointer;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .q-add{display:flex;gap:6px;margin-top:8px;}
+  .q-add input{flex:1;border:1.5px solid rgba(0,0,0,.12);border-radius:5px;padding:5px 8px;font-size:.78rem;font-family:inherit;background:rgba(255,255,255,.7);}
+  .q-add input:focus{outline:none;border-color:var(--accent);background:white;}
+  .q-add button{padding:5px 10px;border-radius:5px;border:none;font-family:inherit;font-size:.75rem;font-weight:600;cursor:pointer;}
+  .empty-q{font-size:.77rem;text-align:center;padding:14px;opacity:.5;}
+  .prog-bar{background:rgba(0,0,0,.1);border-radius:3px;height:4px;overflow:hidden;margin-top:8px;}
+  .prog-f{height:4px;border-radius:3px;background:rgba(255,255,255,.7);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .actions{padding:12px 24px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.top-bar,.nav-tabs,.add-form,.actions,.tc-del,.mini-del,.q-add,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.tab-pane{display:block!important;}.quadrant{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  @media(max-width:700px){.af-grid{grid-template-columns:1fr 1fr;}.matrix{grid-template-columns:1fr;}.stats-bar{gap:7px;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Gestion — Liste de tâches</div></div>
+<div class="container">
+  <div class="doc-header">
+    <div><h1>✅ To-do list — Gestionnaire</h1><p>Priorisation des tâches · Matrice Eisenhower · Vue liste et vue matrice</p></div>
+    <button class="btn" style="color:white;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1);" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="top-bar">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <input class="ci" type="text" id="gNom" placeholder="Gestionnaire...">
+      <input class="ci" type="date" id="gDate">
+      <input class="ci" type="text" id="gClinique" placeholder="Clinique...">
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn" onclick="clearDone()">🗑️ Retirer les complétées</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab(0,this)">📋 Vue liste</button>
+    <button class="tab-btn" onclick="showTab(1,this)">⊞ Matrice Eisenhower</button>
+  </div>
+
+  <!-- LISTE -->
+  <div class="tab-pane active" id="tp0">
+    <div class="add-form">
+      <div class="af-title">➕ Ajouter une tâche</div>
+      <div class="af-grid">
+        <div class="ff"><label>Description de la tâche</label><input type="text" id="in_task" placeholder="Décrivez la tâche..." onkeydown="if(event.key===&#39;Enter&#39;)addTask()"></div>
+        <div class="ff"><label>Priorité</label>
+          <select id="in_pri">
+            <option value="1">🔴 Urgent et important</option>
+            <option value="2">🟡 Important, non urgent</option>
+            <option value="3">🔵 Urgent, peu important</option>
+            <option value="4">⚪ Ni urgent ni important</option>
+          </select>
+        </div>
+        <div class="ff"><label>Catégorie</label>
+          <select id="in_cat">
+            <option value="rh">👥 RH</option>
+            <option value="admin">📋 Admin</option>
+            <option value="finance">💰 Finance</option>
+            <option value="clinique">🦷 Clinique</option>
+            <option value="formation">📚 Formation</option>
+            <option value="autre">📌 Autre</option>
+          </select>
+        </div>
+        <div class="ff"><label>Échéance</label><input type="date" id="in_due"></div>
+        <button class="btn-add" onclick="addTask()">+ Ajouter</button>
+      </div>
+    </div>
+    <div class="stats-bar" id="statsBar">
+    <div class="sc"><div class="sc-n">6</div><div class="sc-l">Total</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--red);">2</div><div class="sc-l">🔴 À faire</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--orange);">3</div><div class="sc-l">🟡 Planifier</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--green);">0</div><div class="sc-l">✅ Complétées</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--red);">0</div><div class="sc-l">⚠️ En retard</div></div></div>
+    <div id="taskListFilter" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+      <span style="font-size:.74rem;font-weight:700;color:#5a6a80;align-self:center;">Filtre :</span>
+      <button class="btn active" id="fb_all" onclick="setFilter(&#39;all&#39;,this)">Toutes</button>
+      <button class="btn" id="fb_1" onclick="setFilter(&#39;1&#39;,this)">🔴 Urgent+Imp.</button>
+      <button class="btn" id="fb_2" onclick="setFilter(&#39;2&#39;,this)">🟡 Important</button>
+      <button class="btn" id="fb_3" onclick="setFilter(&#39;3&#39;,this)">🔵 Urgent</button>
+      <button class="btn" id="fb_done" onclick="setFilter(&#39;done&#39;,this)">✅ Complétées</button>
+    </div>
+    <div id="taskList"><div class="task-card">
+      <input type="checkbox" class="tc-cb" onchange="toggleTask(1,this.checked)">
+      <div class="tc-body">
+        <div class="task-title">Appeler la CNESST — dossier en attente</div>
+        <div class="task-meta">
+          <span class="badge pri-1">🔴 Urgent+Imp.</span>
+          <span class="cat-badge" style="background:#8e44ad20;color:#8e44ad;">👥 RH</span>
+          <span class="due-badge"> 📅 17 mai</span>
+        </div>
+      </div>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=&gt;x.id!==1);draw()">×</button>
+    </div><div class="task-card">
+      <input type="checkbox" class="tc-cb" onchange="toggleTask(3,this.checked)">
+      <div class="tc-body">
+        <div class="task-title">Vérifier la balance de caisse de la semaine</div>
+        <div class="task-meta">
+          <span class="badge pri-1">🔴 Urgent+Imp.</span>
+          <span class="cat-badge" style="background:#1a9e5a20;color:#1a9e5a;">💰 Finance</span>
+          <span class="due-badge"> 📅 17 mai</span>
+        </div>
+      </div>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=&gt;x.id!==3);draw()">×</button>
+    </div><div class="task-card">
+      <input type="checkbox" class="tc-cb" onchange="toggleTask(2,this.checked)">
+      <div class="tc-body">
+        <div class="task-title">Préparer les évaluations de rendement — mois prochain</div>
+        <div class="task-meta">
+          <span class="badge pri-2">🟡 Important</span>
+          <span class="cat-badge" style="background:#8e44ad20;color:#8e44ad;">👥 RH</span>
+          
+        </div>
+      </div>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=&gt;x.id!==2);draw()">×</button>
+    </div><div class="task-card">
+      <input type="checkbox" class="tc-cb" onchange="toggleTask(5,this.checked)">
+      <div class="tc-body">
+        <div class="task-title">Réviser le protocole de stérilisation</div>
+        <div class="task-meta">
+          <span class="badge pri-2">🟡 Important</span>
+          <span class="cat-badge" style="background:#e67e2220;color:#e67e22;">🦷 Clinique</span>
+          
+        </div>
+      </div>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=&gt;x.id!==5);draw()">×</button>
+    </div><div class="task-card">
+      <input type="checkbox" class="tc-cb" onchange="toggleTask(6,this.checked)">
+      <div class="tc-body">
+        <div class="task-title">Planifier la réunion d'équipe mensuelle</div>
+        <div class="task-meta">
+          <span class="badge pri-2">🟡 Important</span>
+          <span class="cat-badge" style="background:#1a6abf20;color:#1a6abf;">📋 Admin</span>
+          
+        </div>
+      </div>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=&gt;x.id!==6);draw()">×</button>
+    </div><div class="task-card">
+      <input type="checkbox" class="tc-cb" onchange="toggleTask(4,this.checked)">
+      <div class="tc-body">
+        <div class="task-title">Commander fournitures cliniques</div>
+        <div class="task-meta">
+          <span class="badge pri-3">🔵 Urgent</span>
+          <span class="cat-badge" style="background:#e67e2220;color:#e67e22;">🦷 Clinique</span>
+          
+        </div>
+      </div>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=&gt;x.id!==4);draw()">×</button>
+    </div></div>
+  </div>
+
+  <!-- MATRICE -->
+  <div class="tab-pane" id="tp1">
+    <div style="background:var(--light);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:9px 14px;font-size:.81rem;color:#2a3a4a;margin-bottom:14px;line-height:1.7;">
+      <strong>Matrice Eisenhower</strong> — Classez vos tâches selon leur urgence et leur importance pour mieux prioriser votre temps de gestionnaire.
+    </div>
+    <div class="matrix">
+      <!-- Q1 : URGENT + IMPORTANT -->
+      <div class="quadrant" style="background:#fef2f2;border-color:rgba(192,57,43,.3);">
+        <div class="q-title" style="color:var(--red);">🔴 Urgent ET Important<br><span style="font-size:.7rem;font-weight:400;">À faire MAINTENANT</span></div>
+        <div id="mq1"><div class="mini-task"><input type="checkbox" class="mini-cb" onchange="toggleMatrix(1,1,this.checked)"><span class="mini-title" style="">Répondre à la CNESST</span><button class="mini-del" onclick="delMatrix(1,1)">×</button></div></div>
+        <div class="q-add"><input type="text" id="mq1-in" placeholder="Nouvelle tâche urgente..." onkeydown="if(event.key===&#39;Enter&#39;)addMatrix(1)"><button onclick="addMatrix(1)" style="background:var(--red);color:white;">+</button></div>
+        <div class="prog-bar"><div class="prog-f" id="prog-mq1" style="width:0%"></div></div>
+      </div>
+      <!-- Q2 : IMPORTANT, PAS URGENT -->
+      <div class="quadrant" style="background:#fff8e1;border-color:rgba(230,126,34,.3);">
+        <div class="q-title" style="color:var(--orange);">🟡 Important, non urgent<br><span style="font-size:.7rem;font-weight:400;">Planifier dans l'agenda</span></div>
+        <div id="mq2"><div class="mini-task"><input type="checkbox" class="mini-cb" onchange="toggleMatrix(2,2,this.checked)"><span class="mini-title" style="">Préparer les évaluations</span><button class="mini-del" onclick="delMatrix(2,2)">×</button></div><div class="mini-task"><input type="checkbox" class="mini-cb" onchange="toggleMatrix(2,3,this.checked)"><span class="mini-title" style="">Réviser le protocole</span><button class="mini-del" onclick="delMatrix(2,3)">×</button></div></div>
+        <div class="q-add"><input type="text" id="mq2-in" placeholder="Tâche importante à planifier..." onkeydown="if(event.key===&#39;Enter&#39;)addMatrix(2)"><button onclick="addMatrix(2)" style="background:var(--orange);color:white;">+</button></div>
+        <div class="prog-bar"><div class="prog-f" id="prog-mq2" style="width:0%"></div></div>
+      </div>
+      <!-- Q3 : URGENT, PAS IMPORTANT -->
+      <div class="quadrant" style="background:#e3f2fd;border-color:rgba(26,106,191,.3);">
+        <div class="q-title" style="color:var(--blue);">🔵 Urgent, peu important<br><span style="font-size:.7rem;font-weight:400;">Déléguer si possible</span></div>
+        <div id="mq3"><div class="mini-task"><input type="checkbox" class="mini-cb" onchange="toggleMatrix(3,4,this.checked)"><span class="mini-title" style="">Commander fournitures</span><button class="mini-del" onclick="delMatrix(3,4)">×</button></div></div>
+        <div class="q-add"><input type="text" id="mq3-in" placeholder="Tâche à déléguer..." onkeydown="if(event.key===&#39;Enter&#39;)addMatrix(3)"><button onclick="addMatrix(3)" style="background:var(--blue);color:white;">+</button></div>
+        <div class="prog-bar"><div class="prog-f" id="prog-mq3" style="width:0%"></div></div>
+      </div>
+      <!-- Q4 : NI URGENT NI IMPORTANT -->
+      <div class="quadrant" style="background:#f4f4f4;border-color:#ddd;">
+        <div class="q-title" style="color:#8a9ab0;">⚪ Ni urgent ni important<br><span style="font-size:.7rem;font-weight:400;">Éliminer ou reporter</span></div>
+        <div id="mq4"><div class="empty-q">Aucune tâche</div></div>
+        <div class="q-add"><input type="text" id="mq4-in" placeholder="Tâche à éliminer ou reporter..." onkeydown="if(event.key===&#39;Enter&#39;)addMatrix(4)"><button onclick="addMatrix(4)" style="background:#8a9ab0;color:white;">+</button></div>
+        <div class="prog-bar"><div class="prog-f" id="prog-mq4" style="width:0%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions"><button class="btn primary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+<script>
+let tasks=[], tid=1, filterMode='all';
+const CAT={rh:{l:'👥 RH',c:'#8e44ad'},admin:{l:'📋 Admin',c:'#1a6abf'},finance:{l:'💰 Finance',c:'#1a9e5a'},clinique:{l:'🦷 Clinique',c:'#e67e22'},formation:{l:'📚 Formation',c:'#d4a017'},autre:{l:'📌 Autre',c:'#5a6a80'}};
+const PRI={1:{l:'🔴 Urgent+Imp.',c:'var(--red)',cls:'pri-1'},2:{l:'🟡 Important',c:'var(--orange)',cls:'pri-2'},3:{l:'🔵 Urgent',c:'var(--blue)',cls:'pri-3'},4:{l:'⚪ Reporter',c:'#8a9ab0',cls:'pri-4'}};
+const TODAY=new Date().toISOString().split('T')[0];
+document.getElementById('gDate').valueAsDate=new Date();
+
+function addTask(){
+  const label=document.getElementById('in_task').value.trim();
+  if(!label)return;
+  tasks.push({id:tid++,label,pri:parseInt(document.getElementById('in_pri').value),cat:document.getElementById('in_cat').value,due:document.getElementById('in_due').value,done:false});
+  document.getElementById('in_task').value='';
+  draw();
+}
+
+function draw(){
+  const pending=tasks.filter(t=>!t.done);
+  const done=tasks.filter(t=>t.done);
+  const today=new Date().toISOString().split('T')[0];
+
+  document.getElementById('statsBar').innerHTML=`
+    <div class="sc"><div class="sc-n">${tasks.length}</div><div class="sc-l">Total</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--red);">${tasks.filter(t=>t.pri===1&&!t.done).length}</div><div class="sc-l">🔴 À faire</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--orange);">${tasks.filter(t=>t.pri===2&&!t.done).length}</div><div class="sc-l">🟡 Planifier</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--green);">${done.length}</div><div class="sc-l">✅ Complétées</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--red);">${tasks.filter(t=>t.due&&t.due<today&&!t.done).length}</div><div class="sc-l">⚠️ En retard</div></div>`;
+
+  let filtered=tasks;
+  if(filterMode==='1')filtered=tasks.filter(t=>t.pri===1&&!t.done);
+  else if(filterMode==='2')filtered=tasks.filter(t=>t.pri===2&&!t.done);
+  else if(filterMode==='3')filtered=tasks.filter(t=>t.pri===3&&!t.done);
+  else if(filterMode==='done')filtered=tasks.filter(t=>t.done);
+  else filtered=[...tasks.filter(t=>!t.done).sort((a,b)=>a.pri-b.pri), ...tasks.filter(t=>t.done)];
+
+  document.getElementById('taskList').innerHTML=filtered.length?filtered.map(t=>{
+    const p=PRI[t.pri], c=CAT[t.cat]||CAT.autre;
+    const isOverdue=t.due&&t.due<TODAY&&!t.done;
+    return `<div class="task-card${t.done?' done':''}">
+      <input type="checkbox" class="tc-cb" ${t.done?'checked':''} onchange="toggleTask(${t.id},this.checked)">
+      <div class="tc-body">
+        <div class="task-title">${t.label}</div>
+        <div class="task-meta">
+          <span class="badge ${p.cls}">${p.l}</span>
+          <span class="cat-badge" style="background:${c.c}20;color:${c.c};">${c.l}</span>
+          ${t.due?`<span class="due-badge${isOverdue?' due-urgent':''}">${isOverdue?'⚠️ Retard :':' 📅'} ${new Date(t.due+'T00:00:00').toLocaleDateString('fr-CA',{day:'numeric',month:'short'})}</span>`:''}
+        </div>
+      </div>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=>x.id!==${t.id});draw()">×</button>
+    </div>`;
+  }).join(''):'<div style="text-align:center;padding:24px;color:#8a9ab0;">Aucune tâche dans cette catégorie.</div>';
+  drawMatrix();
+}
+
+function toggleTask(id,v){const t=tasks.find(x=>x.id===id);if(t)t.done=v;draw();}
+
+function setFilter(f,btn){filterMode=f;document.querySelectorAll('#taskListFilter .btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');draw();}
+function clearDone(){tasks=tasks.filter(t=>!t.done);draw();}
+
+// MATRIX
+let mTasks={1:[],2:[],3:[],4:[]};
+let mtid=1;
+function addMatrix(q){
+  const inp=document.getElementById(`mq${q}-in`);
+  const v=inp.value.trim();if(!v)return;
+  mTasks[q].push({id:mtid++,label:v,done:false});
+  inp.value='';drawMatrix();
+}
+function toggleMatrix(q,id,v){const t=mTasks[q].find(x=>x.id===id);if(t)t.done=v;drawMatrix();}
+function delMatrix(q,id){mTasks[q]=mTasks[q].filter(x=>x.id!==id);drawMatrix();}
+function drawMatrix(){
+  [1,2,3,4].forEach(q=>{
+    const el=document.getElementById(`mq${q}`);
+    el.innerHTML=mTasks[q].length?mTasks[q].map(t=>`<div class="mini-task"><input type="checkbox" class="mini-cb" ${t.done?'checked':''} onchange="toggleMatrix(${q},${t.id},this.checked)"><span class="mini-title" style="${t.done?'text-decoration:line-through;opacity:.5;':''}">${t.label}</span><button class="mini-del" onclick="delMatrix(${q},${t.id})">×</button></div>`).join(''):'<div class="empty-q">Aucune tâche</div>';
+    const done=mTasks[q].filter(t=>t.done).length, total=mTasks[q].length;
+    const prog=document.getElementById(`prog-mq${q}`);
+    if(prog)prog.style.width=(total?Math.round(done/total*100):0)+'%';
+  });
+}
+function showTab(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+
+// Init sample tasks
+const samples=[
+  {label:'Appeler la CNESST — dossier en attente',pri:1,cat:'rh',due:TODAY},
+  {label:'Préparer les évaluations de rendement — mois prochain',pri:2,cat:'rh',due:''},
+  {label:'Vérifier la balance de caisse de la semaine',pri:1,cat:'finance',due:TODAY},
+  {label:'Commander fournitures cliniques',pri:3,cat:'clinique',due:''},
+  {label:'Réviser le protocole de stérilisation',pri:2,cat:'clinique',due:''},
+  {label:'Planifier la réunion d\'équipe mensuelle',pri:2,cat:'admin',due:''},
+];
+samples.forEach(s=>{tasks.push({id:tid++,...s,done:false});});
+mTasks[1]=[{id:mtid++,label:'Répondre à la CNESST',done:false}];
+mTasks[2]=[{id:mtid++,label:'Préparer les évaluations',done:false},{id:mtid++,label:'Réviser le protocole',done:false}];
+mTasks[3]=[{id:mtid++,label:'Commander fournitures',done:false}];
+draw();
+</script>
+
+
+</body></html>

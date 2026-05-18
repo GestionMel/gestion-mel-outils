@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///C:/Users/info/Downloads/simulateur-balance-journee.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulateur — Balance fin de journée | Académie Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:980px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+
+  /* MODE SELECTOR */
+  .mode-bar{padding:12px 28px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .mode-btn{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .mode-btn:hover{border-color:var(--accent);color:var(--blue);}
+  .mode-btn.active{background:var(--blue);border-color:var(--blue);color:white;}
+  .diff-badge{padding:3px 10px;border-radius:12px;font-size:.72rem;font-weight:700;}
+  .d-facile{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.2);}
+  .d-moyen{background:#fff8e1;color:var(--orange);border:1px solid rgba(230,126,34,.2);}
+  .d-difficile{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.2);}
+
+  /* LAYOUT */
+  .sim-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:500px;}
+  .sim-left{padding:20px 24px;border-right:2px solid var(--border);}
+  .sim-right{padding:20px 24px;background:var(--light);}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+
+  /* SCENARIO */
+  .scenario-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:14px;}
+  .sc-title{font-size:.82rem;font-weight:700;color:var(--dark);margin-bottom:8px;}
+  .transactions{display:flex;flex-direction:column;gap:5px;}
+  .tx-row{display:flex;align-items:center;gap:10px;padding:6px 9px;background:var(--light);border-radius:6px;font-size:.81rem;}
+  .tx-type{font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:5px;flex-shrink:0;}
+  .tx-comptant{background:#f0fdf4;color:var(--green);}
+  .tx-debit{background:#e3f2fd;color:var(--blue);}
+  .tx-credit{background:#f3e8ff;color:var(--purple);}
+  .tx-cheque{background:#fff8e1;color:var(--orange);}
+  .tx-assurance{background:#e8f4fe;color:#0277bd;}
+  .tx-remb{background:#fef2f2;color:var(--red);}
+  .tx-amount{margin-left:auto;font-weight:700;}
+  .tx-desc{flex:1;color:#5a6a80;}
+
+  /* INPUT FORM */
+  .input-section{background:white;border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:12px;}
+  .input-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.7rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input{border:1.5px solid var(--border);border-radius:5px;padding:7px 10px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--light);text-align:right;}
+  .ff input:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* RESULT */
+  .result-box{border-radius:9px;padding:16px 18px;text-align:center;margin-bottom:12px;}
+  .result-ok{background:#f0fdf4;border:2px solid var(--green);}
+  .result-bad{background:#fef2f2;border:2px solid var(--red);}
+  .result-pending{background:var(--light);border:2px solid var(--border);}
+  .result-icon{font-size:2rem;margin-bottom:6px;}
+  .result-title{font-size:1rem;font-weight:700;margin-bottom:4px;}
+  .result-diff{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .result-msg{font-size:.82rem;line-height:1.6;}
+  .hint-box{background:#fff8e1;border-left:3px solid var(--orange);border-radius:0 6px 6px 0;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-top:10px;display:none;}
+  .btn-verify{width:100%;padding:11px;border-radius:8px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-bottom:8px;}
+  .btn-verify:hover{background:#155a9e;}
+  .btn-next{width:100%;padding:9px;border-radius:8px;background:white;color:var(--blue);border:1.5px solid var(--blue);font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;}
+  .btn-hint{width:100%;padding:8px;border-radius:7px;background:white;color:var(--orange);border:1.5px solid var(--orange);font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;margin-bottom:8px;}
+
+  /* SCORE */
+  .score-bar{padding:10px 28px;background:white;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;}
+  .score-chip{display:flex;align-items:center;gap:6px;font-size:.78rem;}
+  .score-num{font-weight:700;font-size:.92rem;}
+
+  /* THEORY */
+  .theory-section{padding:20px 28px;}
+  .theory-card{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:14px 18px;margin-bottom:12px;}
+  .tc-title{font-size:.84rem;font-weight:700;color:var(--dark);margin-bottom:8px;}
+  .tc-content{font-size:.83rem;color:#4a5a6a;line-height:1.75;}
+  .formula-box{background:var(--dark);color:white;border-radius:7px;padding:12px 16px;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.8;margin:8px 0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .formula-box .highlight{color:#7dd3fc;}
+
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:8px;}
+  @media(max-width:700px){.sim-layout{grid-template-columns:1fr;}.sim-left{border-right:none;border-bottom:2px solid var(--border);}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Académie — Formation secrétaire</div></div>
+<div class="container">
+  <div class="doc-header"><h1>💰 Simulateur — Balance de fin de journée</h1><p>Pratiquez la conciliation des paiements avec des scénarios réels de clinique dentaire</p></div>
+
+  <div class="score-bar">
+    <div class="score-chip"><span style="font-size:.9rem;">✅</span><span class="score-num" id="sc-ok">0</span><span style="color:#5a6a80;">correct(s)</span></div>
+    <div class="score-chip"><span style="font-size:.9rem;">❌</span><span class="score-num" id="sc-err">0</span><span style="color:#5a6a80;">erreur(s)</span></div>
+    <div class="score-chip"><span style="font-size:.9rem;">📊</span><span class="score-num" id="sc-pct">—</span><span style="color:#5a6a80;">taux de réussite</span></div>
+    <div style="margin-left:auto;font-size:.76rem;color:#8a9ab0;" id="sc-scenario">Scénario 1/2</div>
+  </div>
+
+  <div class="mode-bar">
+    <span style="font-size:.76rem;font-weight:700;color:#5a6a80;">Difficulté :</span>
+    <button class="mode-btn active" onclick="setDiff(&#39;facile&#39;,this)">🟢 Facile</button>
+    <button class="mode-btn" onclick="setDiff(&#39;moyen&#39;,this)">🟡 Moyen</button>
+    <button class="mode-btn" onclick="setDiff(&#39;difficile&#39;,this)">🔴 Difficile</button>
+    <button class="mode-btn" onclick="showTheory()" style="margin-left:auto;">📚 Théorie</button>
+  </div>
+
+  <!-- SIMULATION -->
+  <div id="simView">
+    <div class="sim-layout">
+      <div class="sim-left">
+        <div class="sec-title" id="scNum">Scénario 1 — Difficulté : <span class="diff-badge d-facile">Facile</span></div>
+        <div id="scDesc" style="font-size:.84rem;color:#5a6a80;margin-bottom:10px;background:var(--light);padding:8px 12px;border-radius:6px;border-left:3px solid var(--accent);">Journée tranquille du lundi. Seulement des paiements directs des patients.</div>
+        <div class="scenario-card">
+          <div class="sc-title">📋 Transactions de la journée</div>
+          <div class="transactions" id="txList"><div class="tx-row"><span class="tx-type tx-comptant">💵 Comptant</span><span class="tx-desc">Mme Tremblay — nettoyage</span><span class="tx-amount">120 $</span></div><div class="tx-row"><span class="tx-type tx-debit">💳 Débit</span><span class="tx-desc">M. Gagnon — obturation</span><span class="tx-amount">250 $</span></div><div class="tx-row"><span class="tx-type tx-credit">💳 Crédit</span><span class="tx-desc">Mme Bouchard — consultation</span><span class="tx-amount">85 $</span></div></div>
+        </div>
+        <div class="scenario-card" id="liquidCard" style="display:none;">
+          <div class="sc-title">💵 Argent comptant (pièces et billets)</div>
+          <div id="liquidDetail" style="font-size:.82rem;line-height:1.9;"></div>
+        </div>
+      </div>
+      <div class="sim-right">
+        <div class="sec-title">Votre conciliation</div>
+        <div class="input-section">
+          <div class="input-grid" id="inputGrid"><div class="ff">
+      <label>💵 Total comptant ($)</label>
+      <input type="number" step="0.01" min="0" id="in_comptant" placeholder="0.00" oninput="calcDepot()">
+    </div><div class="ff">
+      <label>💳 Total débit ($)</label>
+      <input type="number" step="0.01" min="0" id="in_debit" placeholder="0.00" oninput="calcDepot()">
+    </div><div class="ff">
+      <label>💳 Total crédit ($)</label>
+      <input type="number" step="0.01" min="0" id="in_credit" placeholder="0.00" oninput="calcDepot()">
+    </div><div class="ff">
+      <label>📄 Total chèques ($)</label>
+      <input type="number" step="0.01" min="0" id="in_cheque" placeholder="0.00" oninput="calcDepot()">
+    </div><div class="ff">
+      <label>🏦 Assurances reçues ($)</label>
+      <input type="number" step="0.01" min="0" id="in_assurance" placeholder="0.00" oninput="calcDepot()">
+    </div><div class="ff">
+      <label>↩️ Remboursements ($)</label>
+      <input type="number" step="0.01" min="0" id="in_remboursement" placeholder="0.00" oninput="calcDepot()">
+    </div><div class="ff style=" grid-column:1="" -1""="">
+      <label>🏛️ TOTAL DÉPÔT ($)</label>
+      <input type="number" step="0.01" min="0" id="in_depot" placeholder="0.00" oninput="">
+    </div></div>
+        </div>
+        <button class="btn-hint" onclick="showHint()">💡 Indice</button>
+        <button class="btn-verify" onclick="verify()">✅ Vérifier ma balance</button>
+        <div class="result-box result-pending" id="resultBox"><div class="result-icon">📊</div><div class="result-title">En attente</div><div class="result-msg">Entrez vos montants et cliquez sur «Vérifier».</div></div>
+        <div class="hint-box" id="hintBox" style="display: none;"></div>
+        <button class="btn-next" id="nextBtn" onclick="nextScenario()" style="display:none;">Scénario suivant →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEORY -->
+  <div id="theoryView" style="display:none;">
+    <div class="theory-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;">📚 Théorie — Balance de fin de journée</div>
+        <button style="padding:6px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;cursor:pointer;color:#5a6a80;" onclick="showTheory(false)">← Retour aux exercices</button>
+      </div>
+      <div class="theory-card">
+        <div class="tc-title">🎯 Qu'est-ce que la balance de fin de journée?</div>
+        <div class="tc-content">La balance de fin de journée (ou conciliation) est la procédure quotidienne qui consiste à <strong>vérifier que tous les paiements reçus correspondent aux transactions enregistrées</strong> dans le logiciel dentaire. C'est une responsabilité clé de la secrétaire dentaire.</div>
+      </div>
+      <div class="theory-card">
+        <div class="tc-title">💡 Principe de base</div>
+        <div class="formula-box">
+  <span class="highlight">TOTAL FACTURÉ</span>
+  - Ajustements (escomptes, écritures d'annulation)
+  - Montants d'assurance à recevoir
+  = <span class="highlight">MONTANT DÛ PAR LES PATIENTS AUJOURD'HUI</span>
+
+  DOIT ÉGALER :
+  <span class="highlight">Comptant</span> + <span class="highlight">Débit</span> + <span class="highlight">Crédit</span> + <span class="highlight">Chèques</span>
+  + <span class="highlight">Paiements d'assurance reçus</span>
+  - <span class="highlight">Remboursements émis</span>
+  = <span class="highlight">DÉPÔT DU JOUR</span></div>
+      </div>
+      <div class="theory-card">
+        <div class="tc-title">📋 Étapes de la balance</div>
+        <div class="tc-content">
+          <ol style="padding-left:18px;line-height:2.2;">
+            <li>Imprimer le rapport de transactions du logiciel dentaire</li>
+            <li>Compter physiquement l'argent comptant dans le tiroir-caisse</li>
+            <li>Additionner les paiements par débit, crédit et chèques</li>
+            <li>Ajouter les paiements d'assurance reçus par dépôt direct</li>
+            <li>Soustraire les remboursements émis</li>
+            <li>Comparer avec le rapport du logiciel</li>
+            <li>Identifier et corriger les écarts</li>
+            <li>Préparer le dépôt bancaire</li>
+          </ol>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="tc-title">⚠️ Erreurs courantes</div>
+        <div class="tc-content">
+          <ul style="padding-left:18px;line-height:2.2;">
+            <li><strong>Oublier un paiement</strong> — toujours vérifier chaque rendez-vous de la journée</li>
+            <li><strong>Mal entrer un paiement</strong> — débit entré comme comptant, ou vice-versa</li>
+            <li><strong>Oublier les remboursements</strong> — tout remboursement réduit le total du dépôt</li>
+            <li><strong>Paiements d'assurance non comptabilisés</strong> — les dépôts directs doivent être saisis</li>
+            <li><strong>Erreur de saisie</strong> — toujours revérifier les gros montants</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — Académie de formation | gestionmel.com</div>
+</div>
+
+<script>
+let difficulty = 'facile';
+let currentIdx = 0;
+let scores = { ok: 0, err: 0 };
+let scenarios = [];
+let answered = false;
+
+const SCENARIOS = {
+  facile: [
+    { desc:'Journée tranquille du lundi. Seulement des paiements directs des patients.',
+      txs:[
+        {type:'comptant',desc:'Mme Tremblay — nettoyage',amount:120},
+        {type:'debit',desc:'M. Gagnon — obturation',amount:250},
+        {type:'credit',desc:'Mme Bouchard — consultation',amount:85},
+      ],
+      answer:{comptant:120,debit:250,credit:85,cheque:0,assurance:0,remboursement:0},
+      depot:455,
+      hint:'Additionnez simplement chaque mode de paiement séparément.'
+    },
+    { desc:'Mercredi matin. Quelques paiements variés, facile à tracer.',
+      txs:[
+        {type:'debit',desc:'M. Côté — couronne',amount:850},
+        {type:'comptant',desc:'Mme Fortin — examen',amount:95},
+        {type:'cheque',desc:'M. Simard — bridge',amount:1200},
+      ],
+      answer:{comptant:95,debit:850,credit:0,cheque:1200,assurance:0,remboursement:0},
+      depot:2145,
+      hint:'N\'oubliez pas que le chèque est un mode de paiement séparé.'
+    },
+  ],
+  moyen: [
+    { desc:'Journée chargée du jeudi. Mix de paiements patients et assurance reçue.',
+      txs:[
+        {type:'debit',desc:'Mme Lavoie — nettoyage + radio',amount:175},
+        {type:'credit',desc:'M. Roy — implant acompte',amount:500},
+        {type:'assurance',desc:'Sun Life — paiement dossier Leblanc reçu',amount:320},
+        {type:'comptant',desc:'Mme Mercier — scellants enfant',amount:60},
+        {type:'cheque',desc:'M. Bergeron — prothèse partielle',amount:980},
+      ],
+      answer:{comptant:60,debit:175,credit:500,cheque:980,assurance:320,remboursement:0},
+      depot:2035,
+      hint:'Le paiement d\'assurance reçu s\'ajoute au total du dépôt comme un paiement normal.'
+    },
+    { desc:'Vendredi avec remboursement. Attention à la direction des flux!',
+      txs:[
+        {type:'debit',desc:'Mme Ouellet — couronne',amount:750},
+        {type:'assurance',desc:'Beneva — remboursement assurance reçu',amount:290},
+        {type:'remb',desc:'M. Leclerc — trop-perçu remboursé',amount:80},
+        {type:'credit',desc:'Mme Dion — blanchiment',amount:399},
+        {type:'comptant',desc:'M. Plante — urgence',amount:150},
+      ],
+      answer:{comptant:150,debit:750,credit:399,cheque:0,assurance:290,remboursement:80},
+      depot:1509,
+      hint:'Le remboursement RÉDUIT votre dépôt. Soustrayez-le du total.'
+    },
+  ],
+  difficile: [
+    { desc:'Journée complexe de fin de mois avec plusieurs modes de paiement et remboursements.',
+      txs:[
+        {type:'comptant',desc:'M. Gauthier — nettoyage',amount:145},
+        {type:'debit',desc:'Mme Pelletier — endodontie acompte',amount:600},
+        {type:'credit',desc:'M. Harvey — couronne zircone',amount:1100},
+        {type:'assurance',desc:'Industrielle Alliance — Dumont reçu',amount:445},
+        {type:'assurance',desc:'Manulife — Champagne reçu',amount:280},
+        {type:'cheque',desc:'Mme Caron — prothèse complète',amount:2200},
+        {type:'remb',desc:'M. Bolduc — annulation trop-perçu',amount:95},
+        {type:'remb',desc:'Mme St-Pierre — remb. surestimé',amount:35},
+      ],
+      answer:{comptant:145,debit:600,credit:1100,cheque:2200,assurance:725,remboursement:130},
+      depot:4640,
+      hint:'Additionnez les 2 paiements d\'assurance (445+280=725) et les 2 remboursements (95+35=130).'
+    },
+  ],
+};
+
+function setDiff(diff, btn) {
+  difficulty = diff;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentIdx = 0;
+  scores = {ok:0,err:0};
+  answered = false;
+  updateScores();
+  loadScenario();
+}
+
+function loadScenario() {
+  const list = SCENARIOS[difficulty];
+  if (!list || list.length === 0) return;
+  const sc = list[currentIdx % list.length];
+  answered = false;
+  document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('hintBox').style.display = 'none';
+  document.getElementById('scNum').textContent = `Scénario ${currentIdx+1} — Difficulté : `;
+  document.getElementById('scNum').innerHTML += `<span class="diff-badge d-${difficulty}">${difficulty.charAt(0).toUpperCase()+difficulty.slice(1)}</span>`;
+  document.getElementById('scDesc').textContent = sc.desc;
+  document.getElementById('sc-scenario').textContent = `Scénario ${currentIdx+1}/${list.length}`;
+
+  // Transactions
+  const colors = {comptant:'tx-comptant',debit:'tx-debit',credit:'tx-credit',cheque:'tx-cheque',assurance:'tx-assurance',remb:'tx-remb'};
+  const labels = {comptant:'💵 Comptant',debit:'💳 Débit',credit:'💳 Crédit',cheque:'📄 Chèque',assurance:'🏦 Assurance',remb:'↩️ Remboursement'};
+  document.getElementById('txList').innerHTML = sc.txs.map(tx =>
+    `<div class="tx-row"><span class="tx-type ${colors[tx.type]}">${labels[tx.type]}</span><span class="tx-desc">${tx.desc}</span><span class="tx-amount">${tx.amount.toLocaleString('fr-CA')} $</span></div>`
+  ).join('');
+
+  // Input grid
+  const fields = [
+    {id:'in_comptant',label:'💵 Total comptant ($)'},
+    {id:'in_debit',label:'💳 Total débit ($)'},
+    {id:'in_credit',label:'💳 Total crédit ($)'},
+    {id:'in_cheque',label:'📄 Total chèques ($)'},
+    {id:'in_assurance',label:'🏦 Assurances reçues ($)'},
+    {id:'in_remboursement',label:'↩️ Remboursements ($)'},
+    {id:'in_depot',label:'🏛️ TOTAL DÉPÔT ($)', full:true},
+  ];
+  document.getElementById('inputGrid').innerHTML = fields.map(f =>
+    `<div class="ff${f.full?' style="grid-column:1/-1"':''}">
+      <label>${f.label}</label>
+      <input type="number" step="0.01" min="0" id="${f.id}" placeholder="0.00" oninput="${f.id==='in_depot'?'':'calcDepot()'}">
+    </div>`
+  ).join('');
+
+  document.getElementById('resultBox').className = 'result-box result-pending';
+  document.getElementById('resultBox').innerHTML = '<div class="result-icon">📊</div><div class="result-title">En attente</div><div class="result-msg">Entrez vos montants et cliquez sur «Vérifier».</div>';
+  document.getElementById('liquidCard').style.display = 'none';
+}
+
+function calcDepot() {
+  const c = parseFloat(document.getElementById('in_comptant')?.value)||0;
+  const d = parseFloat(document.getElementById('in_debit')?.value)||0;
+  const cr = parseFloat(document.getElementById('in_credit')?.value)||0;
+  const ch = parseFloat(document.getElementById('in_cheque')?.value)||0;
+  const a = parseFloat(document.getElementById('in_assurance')?.value)||0;
+  const r = parseFloat(document.getElementById('in_remboursement')?.value)||0;
+  const depot = c+d+cr+ch+a-r;
+  const el = document.getElementById('in_depot');
+  if(el) el.value = depot.toFixed(2);
+}
+
+function verify() {
+  if(answered) return;
+  const sc = SCENARIOS[difficulty][currentIdx % SCENARIOS[difficulty].length];
+  const userDepot = parseFloat(document.getElementById('in_depot')?.value)||0;
+  const diff = Math.abs(userDepot - sc.depot);
+  const ok = diff < 0.01;
+  answered = true;
+  if(ok) { scores.ok++; } else { scores.err++; }
+  updateScores();
+
+  const box = document.getElementById('resultBox');
+  if(ok) {
+    box.className = 'result-box result-ok';
+    box.innerHTML = `<div class="result-icon">🎉</div><div class="result-title" style="color:var(--green);">Parfait! Balance correcte!</div><div class="result-diff" style="color:var(--green);">${sc.depot.toLocaleString('fr-CA')} $</div><div class="result-msg">Excellent travail! Votre dépôt de ${sc.depot.toLocaleString('fr-CA')} $ est exact.</div>`;
+  } else {
+    box.className = 'result-box result-bad';
+    box.innerHTML = `<div class="result-icon">⚠️</div><div class="result-title" style="color:var(--red);">Écart détecté</div><div class="result-diff" style="color:var(--red);">Votre balance : ${userDepot.toLocaleString('fr-CA')} $</div><div class="result-msg">Réponse correcte : <strong>${sc.depot.toLocaleString('fr-CA')} $</strong><br>Écart de : <strong>${(userDepot-sc.depot).toLocaleString('fr-CA')} $</strong><br><br>Détail : Comptant ${sc.answer.comptant}$ · Débit ${sc.answer.debit}$ · Crédit ${sc.answer.credit}$ · Chèque ${sc.answer.cheque}$ · Assurance ${sc.answer.assurance}$ · Remb. -${sc.answer.remboursement}$</div>`;
+  }
+  document.getElementById('nextBtn').style.display = 'block';
+}
+
+function showHint() {
+  const sc = SCENARIOS[difficulty][currentIdx % SCENARIOS[difficulty].length];
+  const hintEl = document.getElementById('hintBox');
+  hintEl.textContent = '💡 ' + sc.hint;
+  hintEl.style.display = 'block';
+}
+
+function nextScenario() {
+  currentIdx++;
+  answered = false;
+  document.getElementById('hintBox').style.display = 'none';
+  loadScenario();
+}
+
+function updateScores() {
+  const total = scores.ok + scores.err;
+  document.getElementById('sc-ok').textContent = scores.ok;
+  document.getElementById('sc-err').textContent = scores.err;
+  document.getElementById('sc-pct').textContent = total > 0 ? Math.round(scores.ok/total*100)+'%' : '—';
+}
+
+function showTheory(show=true) {
+  document.getElementById('simView').style.display = show ? 'none' : 'block';
+  document.getElementById('theoryView').style.display = show ? 'block' : 'none';
+}
+
+loadScenario();
+</script>
+
+
+</body></html>

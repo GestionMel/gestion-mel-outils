@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/info/Downloads/sondage-poulx-equipe.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sondage poulx — Climat d'équipe | Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
+
+  /* MAIN TABS */
+  .main-tabs{display:flex;background:var(--dark);border-bottom:3px solid var(--accent);}
+  .main-tab{padding:13px 26px;background:none;border:none;border-bottom:4px solid transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:-3px;display:flex;align-items:center;gap:8px;}
+  .main-tab:hover{color:white;background:rgba(255,255,255,.08);}
+  .main-tab.active{color:white;border-bottom-color:var(--accent);background:rgba(33,150,243,.15);}
+  .main-tab .badge{background:rgba(255,255,255,.15);border-radius:4px;padding:2px 7px;font-size:.68rem;}
+  .main-tab.active .badge{background:var(--accent);}
+  .main-pane{display:none;}
+  .main-pane.active{display:block;}
+
+  .container{max-width:860px;margin:24px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+  .section{padding:20px 32px;border-bottom:1px solid var(--border);}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+
+  /* IDENTITY BAR */
+  .info-bar{padding:12px 32px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 11px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .anon-badge{background:#f0fdf4;color:var(--green);border:1.5px solid rgba(26,158,90,.3);border-radius:20px;padding:4px 12px;font-size:.76rem;font-weight:700;display:flex;align-items:center;gap:5px;}
+
+  /* INTRO CARD */
+  .intro-card{background:var(--light);border-radius:9px;padding:16px 20px;margin-bottom:18px;font-size:.86rem;line-height:1.75;color:#2a3a4a;border-left:4px solid var(--accent);}
+  .intro-card strong{color:var(--blue);}
+
+  /* QUESTION CARDS */
+  .q-card{background:white;border:1.5px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:12px;transition:border-color .2s;}
+  .q-card:hover{border-color:var(--accent);}
+  .q-card.answered{border-color:var(--green);background:#fafffe;}
+  .q-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+  .q-num{width:28px;height:28px;border-radius:8px;background:var(--dark);color:white;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .q-text{font-size:.92rem;font-weight:600;line-height:1.45;flex:1;}
+  .q-sub{font-size:.76rem;color:#8a9ab0;font-style:italic;margin-top:3px;}
+
+  /* EMOJI SCALE */
+  .emoji-scale{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .em-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 14px;border-radius:10px;border:2px solid var(--border);background:white;cursor:pointer;font-family:inherit;transition:all .15s;min-width:70px;}
+  .em-btn:hover{border-color:var(--accent);background:#f0f7ff;}
+  .em-btn.selected{border-color:transparent;transform:scale(1.05);}
+  .em-btn .emoji{font-size:1.8rem;}
+  .em-btn .em-lbl{font-size:.68rem;font-weight:600;color:#5a6a80;text-align:center;line-height:1.2;}
+  .em-1.selected{background:#fef2f2;border-color:var(--red)!important;}
+  .em-2.selected{background:#fff5eb;border-color:#ff7043!important;}
+  .em-3.selected{background:#fff8e1;border-color:var(--orange)!important;}
+  .em-4.selected{background:#f1f8f4;border-color:#43a047!important;}
+  .em-5.selected{background:#f0fdf4;border-color:var(--green)!important;}
+
+  /* YES/NO/MAYBE */
+  .ynm-group{display:flex;gap:10px;justify-content:center;}
+  .ynm-btn{padding:9px 22px;border-radius:8px;border:2px solid var(--border);background:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
+  .ynm-btn:hover{border-color:var(--accent);}
+  .ynm-btn.sel-oui{background:var(--green);border-color:var(--green);color:white;}
+  .ynm-btn.sel-non{background:var(--green);border-color:var(--green);color:white;}
+  .ynm-btn.sel-unpeu{background:var(--orange);border-color:var(--orange);color:white;}
+  .ynm-btn.sel-oui-conf{background:var(--red);border-color:var(--red);color:white;}
+
+  /* TEXT AREA */
+  .q-textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:10px 12px;font-size:.86rem;font-family:inherit;resize:vertical;min-height:80px;line-height:1.6;background:var(--light);}
+  .q-textarea:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* PROGRESS */
+  .prog-wrap{padding:10px 32px;background:white;border-bottom:1px solid var(--border);}
+  .prog-top{display:flex;justify-content:space-between;font-size:.74rem;margin-bottom:4px;}
+  .prog-track{background:#e0e0e0;border-radius:6px;height:6px;overflow:hidden;}
+  .prog-fill{height:6px;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:6px;transition:width .3s;}
+
+  /* SUBMIT */
+  .submit-wrap{padding:18px 32px;background:var(--light);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .btn-submit{padding:11px 28px;border-radius:8px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s;}
+  .btn-submit:hover{background:#155a9e;}
+  .btn-reset{padding:8px 16px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+
+  /* SUCCESS */
+  .success-box{text-align:center;padding:40px 32px;}
+  .success-icon{font-size:3rem;margin-bottom:12px;}
+  .success-title{font-size:1.3rem;font-weight:700;color:var(--green);margin-bottom:8px;}
+  .success-msg{font-size:.88rem;color:#5a6a80;line-height:1.7;}
+
+  /* ===== GESTIONNAIRE ===== */
+  .period-bar{padding:12px 32px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .period-bar select,.period-bar input{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
+  .period-bar select:focus,.period-bar input:focus{outline:none;border-color:var(--accent);}
+  .btn-sm{padding:6px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn-sm:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-sm.primary{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* ALERT BANNER */
+  .alert-banner{margin:14px 32px;border-radius:8px;padding:12px 16px;font-size:.84rem;display:flex;align-items:center;gap:10px;}
+  .alert-red{background:#fef2f2;border:1.5px solid rgba(192,57,43,.3);color:var(--red);}
+  .alert-orange{background:#fff8f0;border:1.5px solid rgba(230,126,34,.3);color:var(--orange);}
+  .alert-green{background:#f0fdf4;border:1.5px solid rgba(26,158,90,.3);color:var(--green);}
+  .alert-icon{font-size:1.2rem;flex-shrink:0;}
+
+  /* PULSE DASHBOARD */
+  .pulse-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px;}
+  .pulse-card{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;text-align:center;}
+  .pulse-emoji{font-size:2rem;margin-bottom:4px;}
+  .pulse-score{font-size:1.5rem;font-weight:700;margin-bottom:3px;}
+  .pulse-lbl{font-size:.76rem;color:#5a6a80;margin-bottom:8px;line-height:1.3;}
+  .pulse-bar-wrap{background:#e0e0e0;border-radius:4px;height:7px;overflow:hidden;}
+  .pulse-bar{height:7px;border-radius:4px;transition:width .5s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* SAISIE GESTIONNAIRE */
+  .saisie-grid{display:flex;flex-direction:column;gap:14px;}
+  .saisie-card{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:14px 18px;}
+  .saisie-q{font-size:.86rem;font-weight:600;color:var(--dark);margin-bottom:10px;}
+  .saisie-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .saisie-emp{font-size:.8rem;color:#5a6a80;min-width:120px;}
+  .saisie-sel{display:flex;gap:5px;}
+  .s-em{font-size:1.1rem;cursor:pointer;opacity:.3;transition:all .12s;border:none;background:none;padding:2px;}
+  .s-em:hover{opacity:.8;transform:scale(1.1);}
+  .s-em.active{opacity:1;transform:scale(1.15);}
+  .s-yn{padding:4px 10px;border-radius:5px;border:1.5px solid var(--border);background:white;font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;color:#5a6a80;transition:all .12s;}
+  .s-yn:hover{border-color:var(--accent);}
+  .s-yn.sel-v{background:var(--green);border-color:var(--green);color:white;}
+  .s-yn.sel-o{background:var(--orange);border-color:var(--orange);color:white;}
+  .s-yn.sel-r{background:var(--red);border-color:var(--red);color:white;}
+  .s-comment{width:100%;border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.78rem;font-family:inherit;background:white;resize:none;min-height:36px;}
+  .s-comment:focus{outline:none;border-color:var(--accent);}
+
+  /* OPEN RESPONSES */
+  .open-resp{background:white;border:1.5px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:8px;}
+  .or-emp{font-size:.74rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+  .or-text{font-size:.84rem;color:var(--text);line-height:1.6;font-style:italic;}
+
+  /* HISTORY */
+  .history-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .history-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.72rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .history-table td{border-bottom:1px solid var(--border);padding:8px 10px;vertical-align:middle;}
+  .history-table tr:nth-child(even) td{background:var(--light);}
+  .trend-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:8px;font-size:.73rem;font-weight:700;}
+
+  /* EMP MANAGER */
+  .emp-setup{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+  .emp-setup-row{display:flex;gap:8px;align-items:center;}
+  .emp-setup-row input{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;background:white;}
+  .btn-del{width:24px;height:24px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.78rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .btn-add{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+
+  .actions{padding:14px 32px;background:var(--light);display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);}
+  .btn{padding:8px 18px;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-primary{background:var(--blue);color:white;}
+  .btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+
+  @media print{
+    body{background:white;}
+    .page-header,.main-tabs,.info-bar,.period-bar,.prog-wrap,.submit-wrap,.actions,.btn-add,.btn-del,.btn-sm{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .main-pane{display:block!important;}
+    .pulse-bar,.alert-banner,.trend-chip,.history-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+  @media(max-width:600px){
+    .emoji-scale{gap:4px;} .em-btn{min-width:55px;padding:7px 8px;}
+    .section,.submit-wrap,.actions{padding:12px 16px;}
+    .pulse-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Climat d'équipe</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>💓 Sondage poulx — Climat d'équipe</h1>
+    <p>Prise de pouls rapide et confidentielle · Détection précoce des tensions · Prévention des conflits</p>
+  </div>
+
+  <div class="main-tabs">
+    <button class="main-tab active" onclick="showMain(0,this)">
+      💓 Sondage employé
+      <span class="badge">Anonyme</span>
+    </button>
+    <button class="main-tab" onclick="showMain(1,this)">
+      📊 Tableau de bord
+      <span class="badge">Gestionnaire</span>
+    </button>
+  </div>
+
+  <!-- ============================= -->
+  <!-- PANE 0 : SONDAGE EMPLOYÉ      -->
+  <!-- ============================= -->
+  <div class="main-pane active" id="mp0">
+
+    <div class="info-bar">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span style="font-size:.82rem;color:#5a6a80;">Clinique :</span>
+        <input class="ci" type="text" id="nomClinique" placeholder="Nom de la clinique..." style="min-width:180px;">
+        <span style="font-size:.82rem;color:#5a6a80;">Période :</span>
+        <input class="ci" type="date" id="dateSondage">
+      </div>
+      <div class="anon-badge">🔒 Réponses anonymes et confidentielles</div>
+    </div>
+
+    <div id="formView">
+      <div class="prog-wrap">
+        <div class="prog-top"><span style="font-weight:700;color:#5a6a80;font-size:.73rem;text-transform:uppercase;letter-spacing:.5px;">Progression</span><span style="font-weight:700;color:var(--blue);font-size:.73rem;" id="progTxt">0 / 7 questions</span></div>
+        <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+      </div>
+
+      <div class="section">
+        <div class="intro-card">Ce sondage est <strong>100% anonyme</strong>. Il permet à votre gestionnaire de prendre le pouls de l'équipe et d'intervenir rapidement si nécessaire. Répondez honnêtement — vos réponses sont précieuses! ⏱️ Environ 3 minutes.</div>
+
+        <!-- Q1 -->
+        <div class="q-card" id="qc1">
+          <div class="q-header"><div class="q-num">1</div><div><div class="q-text">Comment vous sentez-vous au travail en ce moment?</div></div></div>
+          <div class="emoji-scale">
+            <button class="em-btn em-1" onclick="pickEmoji(1,1,this)"><span class="emoji">😞</span><span class="em-lbl">Très mal</span></button>
+            <button class="em-btn em-2" onclick="pickEmoji(1,2,this)"><span class="emoji">😕</span><span class="em-lbl">Pas bien</span></button>
+            <button class="em-btn em-3" onclick="pickEmoji(1,3,this)"><span class="emoji">😐</span><span class="em-lbl">Correct</span></button>
+            <button class="em-btn em-4" onclick="pickEmoji(1,4,this)"><span class="emoji">🙂</span><span class="em-lbl">Bien</span></button>
+            <button class="em-btn em-5" onclick="pickEmoji(1,5,this)"><span class="emoji">😊</span><span class="em-lbl">Très bien</span></button>
+          </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="q-card" id="qc2">
+          <div class="q-header"><div class="q-num">2</div><div><div class="q-text">Le climat de travail dans l'équipe est-il agréable en ce moment?</div></div></div>
+          <div class="emoji-scale">
+            <button class="em-btn em-1" onclick="pickEmoji(2,1,this)"><span class="emoji">🌩️</span><span class="em-lbl">Très tendu</span></button>
+            <button class="em-btn em-2" onclick="pickEmoji(2,2,this)"><span class="emoji">☁️</span><span class="em-lbl">Quelques nuages</span></button>
+            <button class="em-btn em-3" onclick="pickEmoji(2,3,this)"><span class="emoji">🌤️</span><span class="em-lbl">Variable</span></button>
+            <button class="em-btn em-4" onclick="pickEmoji(2,4,this)"><span class="emoji">🌥️</span><span class="em-lbl">Plutôt bien</span></button>
+            <button class="em-btn em-5" onclick="pickEmoji(2,5,this)"><span class="emoji">☀️</span><span class="em-lbl">Excellent</span></button>
+          </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="q-card" id="qc3">
+          <div class="q-header"><div class="q-num">3</div><div><div class="q-text">La communication entre collègues est-elle fluide?</div></div></div>
+          <div class="emoji-scale">
+            <button class="em-btn em-1" onclick="pickEmoji(3,1,this)"><span class="emoji">🔇</span><span class="em-lbl">Très difficile</span></button>
+            <button class="em-btn em-2" onclick="pickEmoji(3,2,this)"><span class="emoji">📉</span><span class="em-lbl">Difficile</span></button>
+            <button class="em-btn em-3" onclick="pickEmoji(3,3,this)"><span class="emoji">💬</span><span class="em-lbl">Correcte</span></button>
+            <button class="em-btn em-4" onclick="pickEmoji(3,4,this)"><span class="emoji">🗣️</span><span class="em-lbl">Bonne</span></button>
+            <button class="em-btn em-5" onclick="pickEmoji(3,5,this)"><span class="emoji">✨</span><span class="em-lbl">Excellente</span></button>
+          </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="q-card" id="qc4">
+          <div class="q-header"><div class="q-num">4</div><div><div class="q-text">Vous sentez-vous soutenu(e) et respecté(e) par vos collègues?</div></div></div>
+          <div class="emoji-scale">
+            <button class="em-btn em-1" onclick="pickEmoji(4,1,this)"><span class="emoji">🙁</span><span class="em-lbl">Pas du tout</span></button>
+            <button class="em-btn em-2" onclick="pickEmoji(4,2,this)"><span class="emoji">😞</span><span class="em-lbl">Peu</span></button>
+            <button class="em-btn em-3" onclick="pickEmoji(4,3,this)"><span class="emoji">🤷</span><span class="em-lbl">Parfois</span></button>
+            <button class="em-btn em-4" onclick="pickEmoji(4,4,this)"><span class="emoji">🤝</span><span class="em-lbl">Souvent</span></button>
+            <button class="em-btn em-5" onclick="pickEmoji(4,5,this)"><span class="emoji">💪</span><span class="em-lbl">Toujours</span></button>
+          </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="q-card" id="qc5">
+          <div class="q-header"><div class="q-num">5</div><div><div class="q-text">Y a-t-il des tensions, conflits ou malaises que vous observez dans l'équipe?</div><div class="q-sub">Votre réponse est confidentielle</div></div></div>
+          <div class="ynm-group">
+            <button class="ynm-btn" onclick="pickYNM(5,&#39;non&#39;,this,&#39;sel-non&#39;)">✅ Non, tout va bien</button>
+            <button class="ynm-btn" onclick="pickYNM(5,&#39;unpeu&#39;,this,&#39;sel-unpeu&#39;)">🤔 Un peu</button>
+            <button class="ynm-btn" onclick="pickYNM(5,&#39;oui&#39;,this,&#39;sel-oui-conf&#39;)">⚠️ Oui, il y a des tensions</button>
+          </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="q-card" id="qc6">
+          <div class="q-header"><div class="q-num">6</div><div><div class="q-text">Avez-vous l'impression que les tâches et responsabilités sont bien réparties dans l'équipe?</div></div></div>
+          <div class="ynm-group">
+            <button class="ynm-btn" onclick="pickYNM(6,&#39;oui&#39;,this,&#39;sel-oui&#39;)">✅ Oui, c'est équitable</button>
+            <button class="ynm-btn" onclick="pickYNM(6,&#39;unpeu&#39;,this,&#39;sel-unpeu&#39;)">⚖️ Pas toujours</button>
+            <button class="ynm-btn" onclick="pickYNM(6,&#39;non&#39;,this,&#39;sel-oui-conf&#39;)">⚠️ Non, c'est inégal</button>
+          </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="q-card" id="qc7">
+          <div class="q-header"><div class="q-num">7</div><div><div class="q-text">Y a-t-il quelque chose que vous souhaitez porter à l'attention de votre gestionnaire?</div><div class="q-sub">Facultatif — Anonyme — Laissez un commentaire ou une suggestion</div></div></div>
+          <textarea class="q-textarea" id="openComment" placeholder="Partagez vos observations, suggestions ou préoccupations en toute confiance..." onkeyup="updateProg()"></textarea>
+        </div>
+      </div>
+
+      <div class="submit-wrap">
+        <button class="btn-reset" onclick="resetForm()">↺ Recommencer</button>
+        <button class="btn-submit" onclick="submitForm()">✅ Soumettre mes réponses</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <div id="successView" style="display:none;">
+      <div class="success-box">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Merci pour votre participation!</div>
+        <div class="success-msg">Vos réponses ont été enregistrées de façon confidentielle.<br>Votre gestionnaire analysera les résultats et vous fera part des suites si nécessaire.<br><br>Votre voix compte — merci de contribuer à un meilleur climat d'équipe! 💙</div>
+        <button class="btn-submit" style="margin-top:20px;" onclick="newResponse()">Retour au sondage</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= -->
+  <!-- PANE 1 : TABLEAU DE BORD      -->
+  <!-- ============================= -->
+  <div class="main-pane" id="mp1">
+
+    <div class="period-bar">
+      <span style="font-size:.8rem;font-weight:700;color:#5a6a80;">Période :</span>
+      <input type="date" id="periodeDate">
+      <select id="periodeFreq">
+        <option>Hebdomadaire</option>
+        <option>Aux 2 semaines</option>
+        <option>Mensuel</option>
+        <option>Trimestriel</option>
+      </select>
+      <span style="font-size:.8rem;font-weight:700;color:#5a6a80;">Équipe :</span>
+      <input type="text" placeholder="Nom de l&#39;équipe..." style="min-width:160px;">
+      <button class="btn-sm primary" onclick="buildDashboard()">📊 Générer le tableau de bord</button>
+      <button class="btn-sm" onclick="savePeriod()">💾 Sauvegarder cette période</button>
+      <button class="btn-sm" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+
+    <!-- ALERTS -->
+    <div id="alertsWrap"></div>
+
+    <!-- SETUP EMPLOYEES -->
+    <div class="section">
+      <div class="sec-title">Configuration de l'équipe</div>
+      <div class="emp-setup" id="empSetup"><div class="emp-setup-row"><span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:20px;">1</span>
+      <input type="text" placeholder="Employé(e) 1 — optionnel (non affiché dans les résultats)" value="" oninput="mgrEmployees[0].name=this.value">
+      <button class="btn-del" onclick="removeEmpMgr(1)">×</button></div><div class="emp-setup-row"><span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:20px;">2</span>
+      <input type="text" placeholder="Employé(e) 2 — optionnel (non affiché dans les résultats)" value="" oninput="mgrEmployees[1].name=this.value">
+      <button class="btn-del" onclick="removeEmpMgr(2)">×</button></div><div class="emp-setup-row"><span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:20px;">3</span>
+      <input type="text" placeholder="Employé(e) 3 — optionnel (non affiché dans les résultats)" value="" oninput="mgrEmployees[2].name=this.value">
+      <button class="btn-del" onclick="removeEmpMgr(3)">×</button></div><div class="emp-setup-row"><span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:20px;">4</span>
+      <input type="text" placeholder="Employé(e) 4 — optionnel (non affiché dans les résultats)" value="" oninput="mgrEmployees[3].name=this.value">
+      <button class="btn-del" onclick="removeEmpMgr(4)">×</button></div><div class="emp-setup-row"><span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:20px;">5</span>
+      <input type="text" placeholder="Employé(e) 5 — optionnel (non affiché dans les résultats)" value="" oninput="mgrEmployees[4].name=this.value">
+      <button class="btn-del" onclick="removeEmpMgr(5)">×</button></div></div>
+      <button class="btn-add" onclick="addEmpMgr()">+ Ajouter un(e) employé(e)</button>
+    </div>
+
+    <!-- SAISIE DES RÉPONSES -->
+    <div class="section">
+      <div class="sec-title">Saisie des réponses (par employé, de façon anonyme)</div>
+      <div style="font-size:.82rem;color:#5a6a80;margin-bottom:14px;background:var(--light);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 6px 6px 0;">
+        Chaque employé complète le sondage individuellement (papier ou écran). Saisissez ici les résultats pour chacun. Les noms ne sont pas associés aux réponses dans les résultats.
+      </div>
+      <div class="saisie-grid" id="saisieGrid"><div class="saisie-card"><div class="saisie-q">1. Bien-être personnel</div><div class="saisie-row"><span class="saisie-emp">Employé 1</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(1,1,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(1,1,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(1,1,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(1,1,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(1,1,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 2</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(2,1,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(2,1,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(2,1,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(2,1,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(2,1,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 3</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(3,1,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(3,1,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(3,1,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(3,1,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(3,1,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 4</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(4,1,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(4,1,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(4,1,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(4,1,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(4,1,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 5</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(5,1,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(5,1,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(5,1,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(5,1,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(5,1,5,this,&#39;emoji&#39;)">😊</button></div></div></div><div class="saisie-card"><div class="saisie-q">2. Climat général</div><div class="saisie-row"><span class="saisie-emp">Employé 1</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(1,2,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(1,2,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(1,2,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(1,2,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(1,2,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 2</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(2,2,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(2,2,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(2,2,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(2,2,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(2,2,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 3</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(3,2,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(3,2,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(3,2,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(3,2,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(3,2,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 4</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(4,2,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(4,2,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(4,2,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(4,2,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(4,2,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 5</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(5,2,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(5,2,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(5,2,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(5,2,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(5,2,5,this,&#39;emoji&#39;)">😊</button></div></div></div><div class="saisie-card"><div class="saisie-q">3. Communication</div><div class="saisie-row"><span class="saisie-emp">Employé 1</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(1,3,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(1,3,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(1,3,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(1,3,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(1,3,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 2</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(2,3,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(2,3,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(2,3,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(2,3,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(2,3,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 3</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(3,3,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(3,3,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(3,3,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(3,3,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(3,3,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 4</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(4,3,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(4,3,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(4,3,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(4,3,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(4,3,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 5</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(5,3,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(5,3,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(5,3,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(5,3,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(5,3,5,this,&#39;emoji&#39;)">😊</button></div></div></div><div class="saisie-card"><div class="saisie-q">4. Soutien et respect</div><div class="saisie-row"><span class="saisie-emp">Employé 1</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(1,4,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(1,4,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(1,4,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(1,4,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(1,4,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 2</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(2,4,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(2,4,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(2,4,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(2,4,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(2,4,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 3</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(3,4,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(3,4,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(3,4,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(3,4,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(3,4,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 4</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(4,4,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(4,4,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(4,4,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(4,4,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(4,4,5,this,&#39;emoji&#39;)">😊</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 5</span><div class="saisie-sel"><button class="s-em " onclick="setSaisie(5,4,1,this,&#39;emoji&#39;)">😞</button><button class="s-em " onclick="setSaisie(5,4,2,this,&#39;emoji&#39;)">😕</button><button class="s-em " onclick="setSaisie(5,4,3,this,&#39;emoji&#39;)">😐</button><button class="s-em " onclick="setSaisie(5,4,4,this,&#39;emoji&#39;)">🙂</button><button class="s-em " onclick="setSaisie(5,4,5,this,&#39;emoji&#39;)">😊</button></div></div></div><div class="saisie-card"><div class="saisie-q">5. Tensions / Conflits</div><div class="saisie-row"><span class="saisie-emp">Employé 1</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(1,5,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(1,5,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(1,5,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 2</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(2,5,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(2,5,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(2,5,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 3</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(3,5,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(3,5,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(3,5,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 4</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(4,5,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(4,5,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(4,5,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 5</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(5,5,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(5,5,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(5,5,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div></div><div class="saisie-card"><div class="saisie-q">6. Répartition des tâches</div><div class="saisie-row"><span class="saisie-emp">Employé 1</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(1,6,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(1,6,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(1,6,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 2</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(2,6,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(2,6,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(2,6,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 3</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(3,6,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(3,6,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(3,6,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 4</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(4,6,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(4,6,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(4,6,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div><div class="saisie-row"><span class="saisie-emp">Employé 5</span><div class="saisie-sel" style="gap:6px;"><button class="s-yn " onclick="setSaisie(5,6,&#39;non&#39;,this,&#39;ynm&#39;)">✅ OK</button><button class="s-yn " onclick="setSaisie(5,6,&#39;unpeu&#39;,this,&#39;ynm&#39;)">🤔 Un peu</button><button class="s-yn " onclick="setSaisie(5,6,&#39;oui&#39;,this,&#39;ynm&#39;)">⚠️ Oui</button></div></div>
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-size:.74rem;font-weight:700;color:#5a6a80;margin-bottom:6px;">💬 Commentaires recueillis (Q7)</div>
+        <div style="margin-bottom:5px;"><span style="font-size:.72rem;color:#8a9ab0;">Emp. 1 :</span><textarea class="s-comment" placeholder="Commentaire..." onchange="setSaisieComment(1,this.value)"></textarea></div><div style="margin-bottom:5px;"><span style="font-size:.72rem;color:#8a9ab0;">Emp. 2 :</span><textarea class="s-comment" placeholder="Commentaire..." onchange="setSaisieComment(2,this.value)"></textarea></div><div style="margin-bottom:5px;"><span style="font-size:.72rem;color:#8a9ab0;">Emp. 3 :</span><textarea class="s-comment" placeholder="Commentaire..." onchange="setSaisieComment(3,this.value)"></textarea></div><div style="margin-bottom:5px;"><span style="font-size:.72rem;color:#8a9ab0;">Emp. 4 :</span><textarea class="s-comment" placeholder="Commentaire..." onchange="setSaisieComment(4,this.value)"></textarea></div><div style="margin-bottom:5px;"><span style="font-size:.72rem;color:#8a9ab0;">Emp. 5 :</span><textarea class="s-comment" placeholder="Commentaire..." onchange="setSaisieComment(5,this.value)"></textarea></div>
+      </div></div></div>
+      <button class="btn-sm primary" style="margin-top:10px;" onclick="buildDashboard()">📊 Calculer les résultats</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="section" id="dashSection" style="display:none;">
+      <div class="sec-title">Résultats — Poulx de l'équipe</div>
+      <div class="pulse-grid" id="pulseGrid"></div>
+
+      <!-- THERMOMÈTRE GLOBAL -->
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:16px 18px;margin-bottom:14px;">
+        <div style="font-size:.76rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">🌡️ Thermomètre global de l'équipe</div>
+        <div id="thermoBar" style="height:20px;border-radius:8px;overflow:hidden;display:flex;"></div>
+        <div id="thermoLbl" style="margin-top:8px;font-size:.82rem;font-weight:700;text-align:center;"></div>
+      </div>
+
+      <!-- COMMENTAIRES OUVERTS -->
+      <div id="openRespSection" style="display:none;">
+        <div style="font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">💬 Commentaires et suggestions (anonymisés)</div>
+        <div id="openRespList"></div>
+      </div>
+    </div>
+
+    <!-- HISTORIQUE -->
+    <div class="section">
+      <div class="sec-title">Historique des sondages</div>
+      <div id="histContainer">
+        <div style="font-size:.84rem;color:#8a9ab0;text-align:center;padding:20px;">Aucune période sauvegardée. Complétez et sauvegardez vos sondages pour voir les tendances.</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="clearAll()">🗑️ Réinitialiser la saisie</button>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+// ===== STATE =====
+const answers = {};
+let history = [];
+let mgrEmployees = [];
+let mgrResponses = {};
+let empIdCnt = 1;
+
+// ===== QUESTIONNAIRE =====
+document.getElementById('dateSondage').valueAsDate = new Date();
+document.getElementById('periodeDate').valueAsDate = new Date();
+
+function pickEmoji(q, v, btn) {
+  document.querySelectorAll(`#qc${q} .em-btn`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  answers[q] = v;
+  document.getElementById('qc'+q).classList.add('answered');
+  updateProg();
+}
+
+function pickYNM(q, v, btn, cls) {
+  document.querySelectorAll(`#qc${q} .ynm-btn`).forEach(b => {
+    b.classList.remove('sel-oui','sel-non','sel-unpeu','sel-oui-conf');
+  });
+  btn.classList.add(cls);
+  answers[q] = v;
+  document.getElementById('qc'+q).classList.add('answered');
+  updateProg();
+}
+
+function updateProg() {
+  const filled = Object.keys(answers).filter(k => parseInt(k) >= 1 && parseInt(k) <= 6).length;
+  const comment = document.getElementById('openComment').value.trim();
+  const total = 7;
+  const done = filled + (comment ? 1 : 0);
+  document.getElementById('progFill').style.width = (done/total*100) + '%';
+  document.getElementById('progTxt').textContent = done + ' / ' + total + ' questions';
+}
+
+function submitForm() {
+  const filled = Object.keys(answers).filter(k => parseInt(k) >= 1 && parseInt(k) <= 6).length;
+  if (filled < 5) { alert('Veuillez répondre à au moins 5 questions avant de soumettre.'); return; }
+  // Store in session
+  const resp = { ...answers, comment: document.getElementById('openComment').value.trim(), ts: new Date().toISOString() };
+  if (!window._submissions) window._submissions = [];
+  window._submissions.push(resp);
+  document.getElementById('formView').style.display = 'none';
+  document.getElementById('successView').style.display = 'block';
+}
+
+function newResponse() {
+  resetForm();
+  document.getElementById('formView').style.display = 'block';
+  document.getElementById('successView').style.display = 'none';
+}
+
+function resetForm() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.em-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.ynm-btn').forEach(b => b.classList.remove('sel-oui','sel-non','sel-unpeu','sel-oui-conf'));
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('answered'));
+  document.getElementById('openComment').value = '';
+  updateProg();
+}
+
+function showMain(n, btn) {
+  document.querySelectorAll('.main-pane').forEach((p,i) => p.classList.toggle('active', i===n));
+  document.querySelectorAll('.main-tab').forEach((b,i) => b.classList.toggle('active', i===n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ===== GESTIONNAIRE =====
+const Q_LABELS = [
+  { id:1, label:'Bien-être personnel', type:'emoji' },
+  { id:2, label:'Climat général', type:'emoji' },
+  { id:3, label:'Communication', type:'emoji' },
+  { id:4, label:'Soutien et respect', type:'emoji' },
+  { id:5, label:'Tensions / Conflits', type:'ynm' },
+  { id:6, label:'Répartition des tâches', type:'ynm' },
+];
+const EMOJIS = ['','😞','😕','😐','🙂','😊'];
+const YNM_MAP = { non:5, unpeu:3, oui:1, 'oui-conf':1 };
+
+function addEmpMgr() {
+  const id = empIdCnt++;
+  mgrEmployees.push({ id, name:'' });
+  mgrResponses[id] = {};
+  renderEmpSetup();
+  renderSaisie();
+}
+
+function renderEmpSetup() {
+  const el = document.getElementById('empSetup');
+  el.innerHTML = '';
+  mgrEmployees.forEach((emp, i) => {
+    const row = document.createElement('div');
+    row.className = 'emp-setup-row';
+    row.innerHTML = `<span style="font-size:.74rem;font-weight:700;color:#5a6a80;min-width:20px;">${i+1}</span>
+      <input type="text" placeholder="Employé(e) ${i+1} — optionnel (non affiché dans les résultats)" value="${emp.name}"
+        oninput="mgrEmployees[${i}].name=this.value">
+      <button class="btn-del" onclick="removeEmpMgr(${emp.id})">×</button>`;
+    el.appendChild(row);
+  });
+}
+
+function removeEmpMgr(id) {
+  mgrEmployees = mgrEmployees.filter(e => e.id !== id);
+  delete mgrResponses[id];
+  renderEmpSetup();
+  renderSaisie();
+}
+
+function renderSaisie() {
+  const grid = document.getElementById('saisieGrid');
+  grid.innerHTML = '';
+  if (mgrEmployees.length === 0) {
+    grid.innerHTML = '<div style="font-size:.83rem;color:#8a9ab0;">Ajoutez des employé(e)s ci-dessus pour saisir leurs réponses.</div>';
+    return;
+  }
+
+  Q_LABELS.forEach(q => {
+    const card = document.createElement('div');
+    card.className = 'saisie-card';
+    let rowsHtml = mgrEmployees.map((emp, i) => {
+      const val = mgrResponses[emp.id] && mgrResponses[emp.id][q.id];
+      if (q.type === 'emoji') {
+        const btns = [1,2,3,4,5].map(n => `<button class="s-em ${val===n?'active':''}" onclick="setSaisie(${emp.id},${q.id},${n},this,'emoji')">${EMOJIS[n]}</button>`).join('');
+        return `<div class="saisie-row"><span class="saisie-emp">Employé ${i+1}</span><div class="saisie-sel">${btns}</div></div>`;
+      } else {
+        const opts = [
+          {v:'non', l:'✅ OK', cls:'sel-v'},
+          {v:'unpeu', l:'🤔 Un peu', cls:'sel-o'},
+          {v:'oui', l:'⚠️ Oui', cls:'sel-r'}
+        ];
+        const btns = opts.map(o => `<button class="s-yn ${val===o.v?o.cls:''}" onclick="setSaisie(${emp.id},${q.id},'${o.v}',this,'ynm')">${o.l}</button>`).join('');
+        return `<div class="saisie-row"><span class="saisie-emp">Employé ${i+1}</span><div class="saisie-sel" style="gap:6px;">${btns}</div></div>`;
+      }
+    }).join('');
+
+    // Open comments
+    const commentsHtml = q.id === 6 ? `
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+        <div style="font-size:.74rem;font-weight:700;color:#5a6a80;margin-bottom:6px;">💬 Commentaires recueillis (Q7)</div>
+        ${mgrEmployees.map((emp,i) => `<div style="margin-bottom:5px;"><span style="font-size:.72rem;color:#8a9ab0;">Emp. ${i+1} :</span><textarea class="s-comment" placeholder="Commentaire..." onchange="setSaisieComment(${emp.id},this.value)"></textarea></div>`).join('')}
+      </div>` : '';
+
+    card.innerHTML = `<div class="saisie-q">${q.id}. ${q.label}</div>${rowsHtml}${commentsHtml}`;
+    grid.appendChild(card);
+  });
+}
+
+function setSaisie(empId, qId, val, btn, type) {
+  if (!mgrResponses[empId]) mgrResponses[empId] = {};
+  mgrResponses[empId][qId] = val;
+  const row = btn.closest('.saisie-sel');
+  if (type === 'emoji') {
+    row.querySelectorAll('.s-em').forEach(b => b.classList.remove('active'));
+  } else {
+    row.querySelectorAll('.s-yn').forEach(b => b.classList.remove('sel-v','sel-o','sel-r'));
+  }
+  const cls = type === 'emoji' ? 'active' : (val==='non'?'sel-v':val==='unpeu'?'sel-o':'sel-r');
+  btn.classList.add(cls);
+}
+
+function setSaisieComment(empId, val) {
+  if (!mgrResponses[empId]) mgrResponses[empId] = {};
+  mgrResponses[empId]['comment'] = val;
+}
+
+function getNumericScore(empId, qId) {
+  const val = mgrResponses[empId] && mgrResponses[empId][qId];
+  if (val === undefined || val === null) return null;
+  if (typeof val === 'number') return val;
+  return YNM_MAP[val] || null;
+}
+
+function buildDashboard() {
+  const respondents = mgrEmployees.filter(e => {
+    return Q_LABELS.some(q => mgrResponses[e.id] && mgrResponses[e.id][q.id] !== undefined);
+  });
+
+  if (respondents.length === 0) {
+    document.getElementById('dashSection').style.display = 'none';
+    document.getElementById('alertsWrap').innerHTML = '<div class="alert-banner alert-orange"><span class="alert-icon">⚠️</span>Aucune réponse saisie. Ajoutez des employé(e)s et saisissez leurs réponses.</div>';
+    return;
+  }
+
+  document.getElementById('dashSection').style.display = 'block';
+
+  // SCORES per question
+  const qScores = {};
+  Q_LABELS.forEach(q => {
+    const vals = respondents.map(e => getNumericScore(e.id, q.id)).filter(v => v !== null);
+    qScores[q.id] = vals.length > 0 ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  });
+
+  // PULSE CARDS
+  const pulseGrid = document.getElementById('pulseGrid');
+  const emojiMap = {5:'😊',4:'🙂',3:'😐',2:'😕',1:'😞'};
+  const colors = (v) => v >= 4 ? '#1a9e5a' : v >= 2.5 ? '#e67e22' : '#c0392b';
+
+  pulseGrid.innerHTML = Q_LABELS.map(q => {
+    const s = qScores[q.id];
+    const emo = s ? emojiMap[Math.round(s)] : '—';
+    const col = s ? colors(s) : '#8a9ab0';
+    const pct = s ? Math.round(s/5*100) : 0;
+    return `<div class="pulse-card">
+      <div class="pulse-emoji">${emo}</div>
+      <div class="pulse-score" style="color:${col};">${s ? s.toFixed(1)+'/5' : '—'}</div>
+      <div class="pulse-lbl">${q.label}</div>
+      <div class="pulse-bar-wrap"><div class="pulse-bar" style="width:${pct}%;background:${col};"></div></div>
+    </div>`;
+  }).join('') + `<div class="pulse-card">
+    <div class="pulse-emoji">👥</div>
+    <div class="pulse-score" style="color:var(--blue);">${respondents.length}</div>
+    <div class="pulse-lbl">Participant(e)s</div>
+    <div class="pulse-bar-wrap"><div class="pulse-bar" style="width:${Math.round(respondents.length/mgrEmployees.length*100)}%;background:var(--blue);"></div></div>
+  </div>`;
+
+  // GLOBAL SCORE
+  const allScores = Q_LABELS.flatMap(q => respondents.map(e => getNumericScore(e.id, q.id)).filter(v => v !== null));
+  const globalAvg = allScores.length > 0 ? allScores.reduce((a,b)=>a+b,0)/allScores.length : null;
+
+  const thermo = document.getElementById('thermoBar');
+  const thermoLbl = document.getElementById('thermoLbl');
+  if (globalAvg) {
+    const pctGood = Math.round(globalAvg/5*100);
+    const pctBad = 100 - pctGood;
+    const color = globalAvg >= 4 ? '#1a9e5a' : globalAvg >= 2.5 ? '#e67e22' : '#c0392b';
+    const label = globalAvg >= 4.2 ? '😊 Excellent — Équipe en pleine forme!' : globalAvg >= 3.5 ? '🙂 Bien — Quelques points à surveiller' : globalAvg >= 2.5 ? '😐 Attention — Climat à améliorer' : '⚠️ Alerte — Intervention recommandée';
+    thermo.innerHTML = `<div style="width:${pctGood}%;background:${color};"></div><div style="width:${pctBad}%;background:#e0e0e0;"></div>`;
+    thermoLbl.innerHTML = `<span style="color:${color};font-size:.95rem;">${label}</span> &nbsp;<span style="color:#8a9ab0;font-size:.8rem;">(Score global : ${globalAvg.toFixed(1)}/5)</span>`;
+  }
+
+  // ALERTS
+  const alerts = [];
+  Q_LABELS.forEach(q => {
+    const s = qScores[q.id];
+    if (s !== null && s < 2.5) alerts.push({ label: q.label, score: s, level:'red' });
+    else if (s !== null && s < 3.5) alerts.push({ label: q.label, score: s, level:'orange' });
+  });
+  // Check conflicts
+  const conflictScores = respondents.map(e => getNumericScore(e.id, 5)).filter(v => v !== null);
+  const avgConflict = conflictScores.length > 0 ? conflictScores.reduce((a,b)=>a+b,0)/conflictScores.length : null;
+  const alertsHtml = alerts.length === 0
+    ? '<div class="alert-banner alert-green"><span class="alert-icon">✅</span><strong>Aucune alerte</strong> — Le climat d\'équipe est satisfaisant cette période.</div>'
+    : alerts.map(a => `<div class="alert-banner alert-${a.level}"><span class="alert-icon">${a.level==='red'?'🔴':'🟡'}</span><strong>${a.level==='red'?'Alerte':'Attention'} : ${a.label}</strong> — Score de ${a.score.toFixed(1)}/5${a.level==='red'?' — Intervention recommandée':' — À surveiller'}</div>`).join('');
+  document.getElementById('alertsWrap').innerHTML = alertsHtml;
+
+  // OPEN RESPONSES
+  const comments = respondents.map(e => mgrResponses[e.id] && mgrResponses[e.id]['comment']).filter(c => c && c.trim());
+  const openSec = document.getElementById('openRespSection');
+  if (comments.length > 0) {
+    openSec.style.display = 'block';
+    document.getElementById('openRespList').innerHTML = comments.map((c, i) => `<div class="open-resp"><div class="or-emp">Commentaire anonyme ${i+1}</div><div class="or-text">"${c}"</div></div>`).join('');
+  } else { openSec.style.display = 'none'; }
+}
+
+function savePeriod() {
+  const period = {
+    date: document.getElementById('periodeDate').value,
+    freq: document.getElementById('periodeFreq').value,
+    respondents: mgrEmployees.length,
+    responses: JSON.parse(JSON.stringify(mgrResponses)),
+    savedAt: new Date().toLocaleDateString('fr-CA')
+  };
+  history.push(period);
+  renderHistory();
+  alert('Période sauvegardée dans l\'historique!');
+}
+
+function renderHistory() {
+  const el = document.getElementById('histContainer');
+  if (history.length === 0) { el.innerHTML = '<div style="font-size:.84rem;color:#8a9ab0;text-align:center;padding:20px;">Aucune période sauvegardée.</div>'; return; }
+  el.innerHTML = `<table class="history-table"><thead><tr><th>Date</th><th>Fréquence</th><th>Participants</th><th>Score global</th><th>Statut</th></tr></thead><tbody>
+    ${history.map(p => {
+      const allV = Object.values(p.responses).flatMap(r => Q_LABELS.map(q => {
+        const v = r[q.id];
+        if (!v) return null;
+        if (typeof v === 'number') return v;
+        return YNM_MAP[v] || null;
+      }).filter(v=>v!==null));
+      const avg = allV.length > 0 ? (allV.reduce((a,b)=>a+b,0)/allV.length).toFixed(1) : '—';
+      const color = parseFloat(avg) >= 4 ? 'var(--green)' : parseFloat(avg) >= 2.5 ? 'var(--orange)' : 'var(--red)';
+      const lbl = parseFloat(avg) >= 4 ? '✅ Bien' : parseFloat(avg) >= 2.5 ? '⚠️ Attention' : '🔴 Alerte';
+      return `<tr><td>${p.date||p.savedAt}</td><td>${p.freq}</td><td>${p.respondents}</td><td style="font-weight:700;color:${color};">${avg}/5</td><td><span class="trend-chip" style="background:${color}20;color:${color};border:1px solid ${color}40;">${lbl}</span></td></tr>`;
+    }).join('')}
+  </tbody></table>`;
+}
+
+function clearAll() {
+  if (!confirm('Réinitialiser toutes les saisies?')) return;
+  mgrResponses = {};
+  mgrEmployees.forEach(e => mgrResponses[e.id] = {});
+  renderSaisie();
+  document.getElementById('dashSection').style.display = 'none';
+  document.getElementById('alertsWrap').innerHTML = '';
+}
+
+// Init 5 employees
+for(let i=0;i<5;i++) addEmpMgr();
+</script>
+
+
+</body></html>

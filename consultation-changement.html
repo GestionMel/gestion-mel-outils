@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)file:///C:/Users/info/Downloads/consultation-changement.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultation sur un changement — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:940px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.85rem;opacity:.75;}
+
+  /* PHASE INDICATOR */
+  .phase-bar{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .phase-step{padding:12px 20px;font-size:.8rem;font-weight:600;color:#5a6a80;display:flex;align-items:center;gap:7px;white-space:nowrap;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;}
+  .phase-step:hover{color:var(--blue);background:#e8f0fb;}
+  .phase-step.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .phase-num{width:20px;height:20px;border-radius:50%;background:#ccc;color:white;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .phase-step.active .phase-num{background:var(--accent);}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+
+  .section{padding:20px 36px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  label{font-size:.74rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  input[type=text],input[type=date],select{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--light);}
+  input:focus,select:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.86rem;font-family:inherit;color:var(--text);background:var(--light);resize:vertical;line-height:1.65;}
+  textarea:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* TITRE CHANGEMENT */
+  .titre-box{background:var(--light);border:2px solid var(--accent);border-radius:8px;padding:16px 20px;margin-bottom:4px;}
+  .titre-box input{width:100%;border:none;background:transparent;font-size:1.1rem;font-weight:700;color:var(--dark);font-family:inherit;padding:0;}
+  .titre-box input:focus{outline:none;}
+  .titre-box input::placeholder{color:#b0bec5;font-weight:400;}
+
+  /* CONTEXTE BLOCKS */
+  .ctx-grid{display:flex;flex-direction:column;gap:10px;}
+  .ctx-row{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:start;}
+  .ctx-tag{padding:10px 12px;border-radius:7px;font-size:.78rem;font-weight:700;color:white;text-align:center;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* EMPLOYEE LIST */
+  .emp-list{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+  .emp-row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;}
+  .emp-num{width:26px;height:26px;border-radius:6px;background:#2c3e50;color:white;font-size:.76rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .btn-del{width:26px;height:26px;border-radius:6px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .btn-del:hover{background:#fef2f2;border-color:var(--red);}
+  .btn-add{display:flex;align-items:center;gap:7px;padding:7px 14px;background:var(--light);border:1.5px dashed var(--accent);border-radius:7px;color:var(--blue);font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  .btn-add:hover{background:#e8f0fb;}
+
+  /* REACTION TABLE */
+  .table-wrap{overflow-x:auto;margin-bottom:12px;}
+  .react-table{width:100%;border-collapse:collapse;font-size:.84rem;}
+  .react-table th{padding:9px 10px;font-size:.74rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .react-table th.th-emp{background:var(--dark);text-align:left;min-width:150px;}
+  .react-table th.th-fav{background:var(--green);text-align:center;width:80px;}
+  .react-table th.th-neut{background:#7f8c8d;text-align:center;width:80px;}
+  .react-table th.th-def{background:var(--red);text-align:center;width:80px;}
+  .react-table th.th-quest{background:var(--blue);min-width:180px;}
+  .react-table th.th-sugg{background:var(--purple);min-width:180px;}
+  .react-table td{border:1px solid var(--border);padding:6px 8px;vertical-align:top;}
+  .react-table tr:nth-child(even) td{background:var(--light);}
+  .react-table td:first-child{font-weight:600;vertical-align:middle;}
+  .react-table td.choice-cell{text-align:center;vertical-align:middle;}
+  .react-table td textarea{border:none;background:transparent;width:100%;font-family:inherit;font-size:.81rem;padding:2px;min-height:40px;resize:vertical;line-height:1.5;}
+  .react-table td textarea:focus{outline:none;background:#fffde7;}
+
+  /* CHOICE BUTTONS */
+  .cbtn{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:white;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .12s;display:inline-flex;align-items:center;justify-content:center;}
+  .cbtn:hover{border-color:var(--accent);}
+  .cbtn.c-fav{background:var(--green);border-color:var(--green);color:white;}
+  .cbtn.c-neut{background:#7f8c8d;border-color:#7f8c8d;color:white;}
+  .cbtn.c-def{background:var(--red);border-color:var(--red);color:white;}
+
+  /* RESULTS */
+  .results-box{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 18px;}
+  .results-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .results-title::before{content:'📊';}
+  .res-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .res-lbl{font-size:.82rem;font-weight:700;min-width:120px;display:flex;align-items:center;gap:6px;}
+  .res-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .res-bar-wrap{flex:1;background:#e0e0e0;border-radius:4px;height:10px;overflow:hidden;}
+  .res-bar{height:10px;border-radius:4px;transition:width .5s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .bar-fav{background:var(--green);}
+  .bar-neut{background:#7f8c8d;}
+  .bar-def{background:var(--red);}
+  .res-count{font-size:.84rem;font-weight:700;min-width:60px;text-align:right;}
+
+  /* THERMOMETRE */
+  .thermo-wrap{margin-top:14px;background:white;border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;}
+  .thermo-title{font-size:.76rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+  .thermo-bar{height:24px;border-radius:8px;display:flex;overflow:hidden;border:1px solid var(--border);}
+  .thermo-seg{display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:white;transition:width .5s;min-width:0;overflow:hidden;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .thermo-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:.72rem;color:#5a6a80;}
+  .climate-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:700;margin-top:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* DECISION */
+  .decision-block{background:#fff8e1;border-left:4px solid var(--orange);border-radius:6px;padding:14px 16px;margin-bottom:14px;}
+  .dec-options{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  .dec-btn{padding:8px 16px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
+  .dec-btn:hover{border-color:var(--accent);}
+  .dec-btn.sel-approuve{background:var(--green);border-color:var(--green);color:white;}
+  .dec-btn.sel-modifie{background:var(--orange);border-color:var(--orange);color:white;}
+  .dec-btn.sel-reporte{background:#7f8c8d;border-color:#7f8c8d;color:white;}
+  .dec-btn.sel-abandonne{background:var(--red);border-color:var(--red);color:white;}
+
+  /* SUIVI POST */
+  .suivi-block{background:var(--green-bg,#f0fdf4);border:1.5px solid rgba(26,158,90,.2);border-radius:8px;padding:16px 18px;}
+  .suivi-title{font-size:.8rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .suivi-title::before{content:'✅';}
+  .satisfaction-btns{display:flex;gap:8px;flex-wrap:wrap;}
+  .sat-btn{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
+  .sat-btn:hover{border-color:var(--accent);}
+  .sat-btn.sel-tres-bien{background:var(--green);border-color:var(--green);color:white;}
+  .sat-btn.sel-bien{background:#2196f3;border-color:#2196f3;color:white;}
+  .sat-btn.sel-moyen{background:var(--orange);border-color:var(--orange);color:white;}
+  .sat-btn.sel-difficile{background:var(--red);border-color:var(--red);color:white;}
+
+  /* INFO BOX */
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#2a3a4a;margin-bottom:14px;line-height:1.7;}
+
+  /* ACTIONS */
+  .actions{padding:18px 36px;background:var(--light);display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;}
+  .btn{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-primary{background:var(--blue);color:white;}
+  .btn-primary:hover{background:#155a9e;}
+  .btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+  .btn-secondary:hover{background:#e8f0fb;}
+  .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
+
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.phase-bar,.actions,.btn-add,.btn-del,.btn{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .tab-content{display:block!important;}
+    .doc-header,.react-table th,.ctx-tag,.emp-num,.phase-num,.climate-badge,.thermo-seg,.dec-btn,.sat-btn{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,textarea,select{border:none!important;background:transparent!important;}
+    .section{page-break-inside:avoid;}
+  }
+  @media(max-width:600px){
+    .section{padding:14px 16px;}
+    .grid,.grid3{grid-template-columns:1fr;}
+    .ctx-row{grid-template-columns:1fr;}
+    .actions{padding:14px 16px;}
+    .phase-bar{overflow-x:auto;}
+    .page-header{padding:14px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Gestion du changement</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Consultation sur un changement</h1>
+    <p>Présentation, consultation de l'équipe et suivi de l'implantation</p>
+  </div>
+
+  <div class="phase-bar">
+    <div class="phase-step active" onclick="showTab(0,this)"><div class="phase-num">1</div> Présentation du changement</div>
+    <div class="phase-step" onclick="showTab(1,this)"><div class="phase-num">2</div> Consultation de l'équipe</div>
+    <div class="phase-step" onclick="showTab(2,this)"><div class="phase-num">3</div> Résultats et décision</div>
+    <div class="phase-step" onclick="showTab(3,this)"><div class="phase-num">4</div> Suivi post-implantation</div>
+  </div>
+
+  <!-- ===== ÉTAPE 1 : PRÉSENTATION ===== -->
+  <div class="tab-content active" id="tab-0">
+
+    <div class="section">
+      <div class="section-title">Identification</div>
+      <div class="grid3">
+        <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+        <div class="field"><label>Date de la consultation</label><input type="date" id="dateConsult"></div>
+        <div class="field"><label>Date limite de réponse</label><input type="date"></div>
+        <div class="field"><label>Présenté par</label><input type="text" placeholder="Nom du gestionnaire"></div>
+        <div class="field"><label>Personnes concernées</label><input type="text" placeholder="Ex : Toute l&#39;équipe, Hygiénistes..."></div>
+        <div class="field"><label>Priorité</label>
+          <select>
+            <option>🟡 Normale</option>
+            <option>🔴 Urgente</option>
+            <option>🟢 Planifiée</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Description du changement</div>
+      <div class="titre-box" style="margin-bottom:16px;">
+        <input type="text" placeholder="✏️  Titre du changement proposé...">
+      </div>
+      <div class="ctx-grid">
+        <div class="ctx-row">
+          <div class="ctx-tag" style="background:#1a6abf;">📋 Qu'est-ce qui change?</div>
+          <textarea style="min-height:70px;" placeholder="Décrivez précisément ce qui va changer — procédure, horaire, outil, politique, rôle, équipement..."></textarea>
+        </div>
+        <div class="ctx-row">
+          <div class="ctx-tag" style="background:#1a9e5a;">💡 Pourquoi ce changement?</div>
+          <textarea style="min-height:70px;" placeholder="Expliquez les raisons, les problèmes que ça résout, les bénéfices attendus pour l&#39;équipe et la clinique..."></textarea>
+        </div>
+        <div class="ctx-row">
+          <div class="ctx-tag" style="background:#e67e22;">📅 Quand?</div>
+          <textarea style="min-height:55px;" placeholder="Date d&#39;entrée en vigueur, délai de transition, phases de mise en œuvre..."></textarea>
+        </div>
+        <div class="ctx-row">
+          <div class="ctx-tag" style="background:#8e44ad;">⚙️ Comment?</div>
+          <textarea style="min-height:55px;" placeholder="Modalités d&#39;implantation, formations prévues, ressources disponibles, étapes concrètes..."></textarea>
+        </div>
+        <div class="ctx-row">
+          <div class="ctx-tag" style="background:#2c3e50;">👥 Qui est concerné?</div>
+          <textarea style="min-height:55px;" placeholder="Postes, personnes ou départements directement touchés par ce changement..."></textarea>
+        </div>
+        <div class="ctx-row">
+          <div class="ctx-tag" style="background:#c0392b;">🔒 Ce qui ne change PAS</div>
+          <textarea style="min-height:55px;" placeholder="Précisez ce qui reste inchangé — rassurer l&#39;équipe sur les éléments stables..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Bénéfices attendus pour l'équipe</div>
+      <div class="info-box">💡 Il est important de présenter les bénéfices concrets pour l'équipe — pas seulement pour la clinique. Cela favorise l'adhésion.</div>
+      <textarea style="min-height:80px;" placeholder="Ex : Moins de confusion, gain de temps, meilleure communication, conditions de travail améliorées, réduction du stress..."></textarea>
+    </div>
+
+    <div class="actions">
+      <span></span>
+      <button class="btn btn-primary" onclick="showTab(1,null)">Étape 2 — Consultation →</button>
+    </div>
+  </div>
+
+  <!-- ===== ÉTAPE 2 : CONSULTATION ===== -->
+  <div class="tab-content" id="tab-1">
+
+    <div class="section">
+      <div class="section-title">Liste des employés consultés</div>
+      <div class="info-box">Ajoutez les employés qui participent à cette consultation.</div>
+      <div class="emp-list" id="empList"><div class="emp-row">
+    <div class="emp-num">1</div>
+    <input type="text" placeholder="Prénom et nom de l&#39;employé(e)">
+    <button class="btn-del" onclick="this.closest(&#39;.emp-row&#39;).remove();updateNums()">×</button></div><div class="emp-row">
+    <div class="emp-num">2</div>
+    <input type="text" placeholder="Prénom et nom de l&#39;employé(e)">
+    <button class="btn-del" onclick="this.closest(&#39;.emp-row&#39;).remove();updateNums()">×</button></div><div class="emp-row">
+    <div class="emp-num">3</div>
+    <input type="text" placeholder="Prénom et nom de l&#39;employé(e)">
+    <button class="btn-del" onclick="this.closest(&#39;.emp-row&#39;).remove();updateNums()">×</button></div><div class="emp-row">
+    <div class="emp-num">4</div>
+    <input type="text" placeholder="Prénom et nom de l&#39;employé(e)">
+    <button class="btn-del" onclick="this.closest(&#39;.emp-row&#39;).remove();updateNums()">×</button></div></div>
+      <button class="btn-add" onclick="addEmp()">+ Ajouter un(e) employé(e)</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Grille de consultation</div>
+      <div id="tableContainer">
+        <div class="info-box">Ajoutez les participants et générez la grille pour recueillir leurs réactions.</div>
+      </div>
+      <button class="btn btn-primary" onclick="buildTable()" style="margin-top:10px;">🔄 Générer / Mettre à jour la grille</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(0,null)">← Retour</button>
+      <button class="btn btn-primary" onclick="showTab(2,null);calcResults()">Étape 3 — Résultats →</button>
+    </div>
+  </div>
+
+  <!-- ===== ÉTAPE 3 : RÉSULTATS & DÉCISION ===== -->
+  <div class="tab-content" id="tab-2">
+
+    <div class="section">
+      <div class="section-title">Résultats de la consultation</div>
+      <div id="resultsContainer">
+        <div class="info-box">Complétez la grille à l'étape 2 et revenez ici pour voir les résultats.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Synthèse des questions et préoccupations</div>
+      <div class="grid">
+        <div class="field"><label>Questions soulevées par l'équipe</label>
+          <textarea style="min-height:80px;" placeholder="Résumez les principales questions posées par les employés lors de la consultation..."></textarea>
+        </div>
+        <div class="field"><label>Préoccupations principales</label>
+          <textarea style="min-height:80px;" placeholder="Quelles sont les résistances ou craintes identifiées? Qu&#39;est-ce qui inquiète l&#39;équipe?"></textarea>
+        </div>
+        <div class="field"><label>Suggestions retenues</label>
+          <textarea style="min-height:80px;" placeholder="Quelles suggestions de l&#39;équipe seront intégrées dans l&#39;implantation du changement?"></textarea>
+        </div>
+        <div class="field"><label>Points à clarifier avant l'implantation</label>
+          <textarea style="min-height:80px;" placeholder="Qu&#39;est-ce qui doit être clarifié, ajusté ou communiqué avant d&#39;aller de l&#39;avant?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Décision finale</div>
+      <div class="decision-block">
+        <div style="font-size:.76rem;font-weight:700;color:#7a4400;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">Suite donnée au changement proposé :</div>
+        <div class="dec-options">
+          <button class="dec-btn" onclick="selectDec(this,&#39;approuve&#39;)">✅ Approuvé tel quel</button>
+          <button class="dec-btn" onclick="selectDec(this,&#39;modifie&#39;)">🔄 Approuvé avec modifications</button>
+          <button class="dec-btn" onclick="selectDec(this,&#39;reporte&#39;)">⏳ Reporté temporairement</button>
+          <button class="dec-btn" onclick="selectDec(this,&#39;abandonne&#39;)">❌ Abandonné</button>
+        </div>
+        <div class="grid">
+          <div class="field"><label>Justification de la décision</label>
+            <textarea style="min-height:70px;" placeholder="Expliquez pourquoi cette décision a été prise, comment les préoccupations ont été prises en compte..."></textarea>
+          </div>
+          <div class="field"><label>Modifications apportées (si applicable)</label>
+            <textarea style="min-height:70px;" placeholder="Détaillez les ajustements au plan original suite aux commentaires de l&#39;équipe..."></textarea>
+          </div>
+        </div>
+        <div class="grid" style="margin-top:10px;">
+          <div class="field"><label>Date d'implantation confirmée</label><input type="date"></div>
+          <div class="field"><label>Décidé par</label><input type="text" placeholder="Nom et titre"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Plan de communication à l'équipe</div>
+      <div class="grid">
+        <div class="field"><label>Comment sera communiquée la décision?</label>
+          <select>
+            <option>Réunion d'équipe</option>
+            <option>Courriel</option>
+            <option>Rencontres individuelles</option>
+            <option>Affichage en clinique</option>
+            <option>Combinaison de moyens</option>
+          </select>
+        </div>
+        <div class="field"><label>Date de communication prévue</label><input type="date"></div>
+        <div class="field full"><label>Message clé à communiquer</label>
+          <textarea style="min-height:65px;" placeholder="Résumez le message principal qui sera communiqué à toute l&#39;équipe concernant ce changement et la décision prise..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(1,null)">← Retour</button>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+        <button class="btn btn-primary" onclick="showTab(3,null)">Étape 4 — Suivi →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ÉTAPE 4 : SUIVI POST-IMPLANTATION ===== -->
+  <div class="tab-content" id="tab-3">
+
+    <div class="section">
+      <div class="section-title">Bilan d'implantation</div>
+      <div class="info-box">À compléter <strong>4 à 6 semaines après l'implantation</strong> du changement pour évaluer son succès et identifier les ajustements nécessaires.</div>
+
+      <div class="grid" style="margin-bottom:14px;">
+        <div class="field"><label>Date du bilan</label><input type="date"></div>
+        <div class="field"><label>Complété par</label><input type="text" placeholder="Nom du gestionnaire"></div>
+      </div>
+
+      <div class="suivi-block">
+        <div class="suivi-title">Évaluation du changement</div>
+        <div class="field" style="margin-bottom:12px;"><label>Le changement a-t-il été implanté tel que prévu?</label>
+          <div style="display:flex;gap:8px;margin-top:6px;">
+            <button class="dec-btn" onclick="selectDec(this,&#39;approuve&#39;)" style="font-size:.8rem;">✅ Oui, complètement</button>
+            <button class="dec-btn" onclick="selectDec(this,&#39;modifie&#39;)" style="font-size:.8rem;">🔄 Partiellement</button>
+            <button class="dec-btn" onclick="selectDec(this,&#39;abandonne&#39;)" style="font-size:.8rem;">❌ Non</button>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:14px;"><label>Satisfaction globale de l'équipe face au changement</label>
+          <div class="satisfaction-btns" style="margin-top:6px;">
+            <button class="sat-btn" onclick="selectSat(this,&#39;tres-bien&#39;)">😊 Très bien accepté</button>
+            <button class="sat-btn" onclick="selectSat(this,&#39;bien&#39;)">🙂 Bien accepté</button>
+            <button class="sat-btn" onclick="selectSat(this,&#39;moyen&#39;)">😐 Acceptation mitigée</button>
+            <button class="sat-btn" onclick="selectSat(this,&#39;difficile&#39;)">😟 Résistance persistante</button>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="field"><label>Ce qui a bien fonctionné</label>
+            <textarea style="min-height:75px;" placeholder="Qu&#39;est-ce qui s&#39;est bien passé lors de l&#39;implantation? Qu&#39;est-ce que l&#39;équipe a bien reçu?"></textarea>
+          </div>
+          <div class="field"><label>Ce qui a posé des défis</label>
+            <textarea style="min-height:75px;" placeholder="Quels problèmes ou résistances ont été rencontrés? Qu&#39;est-ce qui a été plus difficile que prévu?"></textarea>
+          </div>
+          <div class="field"><label>Ajustements effectués</label>
+            <textarea style="min-height:75px;" placeholder="Quelles modifications ont été apportées au plan original durant l&#39;implantation?"></textarea>
+          </div>
+          <div class="field"><label>Actions de suivi nécessaires</label>
+            <textarea style="min-height:75px;" placeholder="Y a-t-il des actions supplémentaires à prendre? Formation complémentaire, soutien additionnel, révision prévue?"></textarea>
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px;"><label>Apprentissages pour les prochains changements</label>
+          <textarea style="min-height:65px;" placeholder="Que retenez-vous de ce processus de changement? Qu&#39;est-ce que vous feriez différemment la prochaine fois?"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Signatures — Approbation du bilan</div>
+      <div class="grid">
+        <div>
+          <div class="field" style="margin-bottom:20px;"><label>Gestionnaire</label><input type="text" placeholder="Nom et prénom"></div>
+          <div style="border-top:1.5px solid var(--border);padding-top:8px;font-size:.77rem;color:#5a6a80;">Signature ____________________________ Date ___________</div>
+        </div>
+        <div>
+          <div class="field" style="margin-bottom:20px;"><label>Propriétaire / Dentiste</label><input type="text" placeholder="Nom et prénom"></div>
+          <div style="border-top:1.5px solid var(--border);padding-top:8px;font-size:.77rem;color:#5a6a80;">Signature ____________________________ Date ___________</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(2,null)">← Retour</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer le dossier complet</button>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+let empCount = 0;
+
+document.getElementById('dateConsult').valueAsDate = new Date();
+
+function showTab(n, btn) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('.phase-step').forEach((b,i) => b.classList.toggle('active', i===n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function addEmp() {
+  empCount++;
+  const list = document.getElementById('empList');
+  const row = document.createElement('div');
+  row.className = 'emp-row';
+  row.innerHTML = `
+    <div class="emp-num">${empCount}</div>
+    <input type="text" placeholder="Prénom et nom de l'employé(e)">
+    <button class="btn-del" onclick="this.closest('.emp-row').remove();updateNums()">×</button>`;
+  list.appendChild(row);
+}
+
+function updateNums() {
+  document.querySelectorAll('#empList .emp-num').forEach((n,i) => n.textContent = i+1);
+}
+
+function buildTable() {
+  const emps = Array.from(document.querySelectorAll('#empList input[type=text]')).map(i => i.value || 'Employé(e)');
+  if (emps.length === 0) {
+    document.getElementById('tableContainer').innerHTML = '<div class="info-box">⚠️ Ajoutez au moins un(e) participant(e).</div>';
+    return;
+  }
+
+  let html = `<div class="table-wrap"><table class="react-table">
+    <thead><tr>
+      <th class="th-emp">Employé(e)</th>
+      <th class="th-fav">👍 Favorable</th>
+      <th class="th-neut">😐 Neutre</th>
+      <th class="th-def">👎 Défavorable</th>
+      <th class="th-quest" style="text-align:left;">❓ Questions / Préoccupations</th>
+      <th class="th-sugg" style="text-align:left;background:var(--purple);">💡 Suggestions</th>
+    </tr></thead><tbody>`;
+
+  emps.forEach((emp, i) => {
+    html += `<tr>
+      <td>${emp}</td>
+      <td class="choice-cell"><button class="cbtn" onclick="pickReact(this,'c-fav',${i})">👍</button></td>
+      <td class="choice-cell"><button class="cbtn" onclick="pickReact(this,'c-neut',${i})">😐</button></td>
+      <td class="choice-cell"><button class="cbtn" onclick="pickReact(this,'c-def',${i})">👎</button></td>
+      <td><textarea placeholder="Questions, inquiétudes, besoins de clarification..."></textarea></td>
+      <td><textarea placeholder="Idées, propositions d'amélioration..."></textarea></td>
+    </tr>`;
+  });
+
+  html += '</tbody></table></div>';
+  document.getElementById('tableContainer').innerHTML = html;
+}
+
+function pickReact(btn, cls, idx) {
+  const row = btn.closest('tr');
+  row.querySelectorAll('.cbtn').forEach(b => b.classList.remove('c-fav','c-neut','c-def'));
+  btn.classList.add(cls);
+  calcResults();
+}
+
+function calcResults() {
+  const container = document.getElementById('resultsContainer');
+  const table = document.querySelector('.react-table');
+  if (!table) {
+    container.innerHTML = '<div class="info-box">Complétez la grille à l\'étape 2 d\'abord.</div>';
+    return;
+  }
+
+  const rows = table.querySelectorAll('tbody tr');
+  let fav=0, neut=0, def=0, total=rows.length;
+  rows.forEach(row => {
+    if(row.querySelector('.c-fav')) fav++;
+    else if(row.querySelector('.c-neut')) neut++;
+    else if(row.querySelector('.c-def')) def++;
+  });
+
+  const pct = n => total > 0 ? Math.round(n/total*100) : 0;
+  const pfav=pct(fav), pneut=pct(neut), pdef=pct(def);
+
+  let climat = '';
+  if (fav > total/2) climat = `<div class="climate-badge" style="background:#f0fdf4;color:var(--green);border:1.5px solid var(--green);">✅ Changement bien reçu — majorité favorable</div>`;
+  else if (def > total/2) climat = `<div class="climate-badge" style="background:#fef2f2;color:var(--red);border:1.5px solid var(--red);">⚠️ Résistance importante — revoir la communication</div>`;
+  else climat = `<div class="climate-badge" style="background:#fff8f0;color:var(--orange);border:1.5px solid var(--orange);">🤔 Opinion partagée — clarifications nécessaires</div>`;
+
+  let html = `<div class="results-box">
+    <div class="results-title">Réactions de l'équipe</div>
+    ${resRow('👍 Favorable', fav, total, 'bar-fav', 'var(--green)')}
+    ${resRow('😐 Neutre', neut, total, 'bar-neut', '#7f8c8d')}
+    ${resRow('👎 Défavorable', def, total, 'bar-def', 'var(--red)')}
+    <div style="font-size:.78rem;color:#5a6a80;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">${total} participant(s) consulté(s)</div>
+    <div class="thermo-wrap">
+      <div class="thermo-title">Thermomètre du changement</div>
+      <div class="thermo-bar">
+        <div class="thermo-seg" style="width:${pfav}%;background:var(--green);">${pfav>8?pfav+'%':''}</div>
+        <div class="thermo-seg" style="width:${pneut}%;background:#7f8c8d;">${pneut>8?pneut+'%':''}</div>
+        <div class="thermo-seg" style="width:${pdef}%;background:var(--red);">${pdef>8?pdef+'%':''}</div>
+        ${pfav+pneut+pdef===0?'<div class="thermo-seg" style="width:100%;background:#e0e0e0;"></div>':''}
+      </div>
+      <div class="thermo-labels"><span>👍 Favorable</span><span>😐 Neutre</span><span>👎 Défavorable</span></div>
+      ${climat}
+    </div>
+  </div>`;
+  container.innerHTML = html;
+}
+
+function resRow(label, count, total, barClass, color) {
+  const pct = total > 0 ? Math.round(count/total*100) : 0;
+  return `<div class="res-row">
+    <span class="res-lbl"><span class="res-dot" style="background:${color};display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;"></span>${label}</span>
+    <div class="res-bar-wrap"><div class="res-bar ${barClass}" style="width:${pct}%"></div></div>
+    <span class="res-count">${count} (${pct}%)</span>
+  </div>`;
+}
+
+function selectDec(btn, type) {
+  btn.closest('.dec-options,div').querySelectorAll('.dec-btn').forEach(b =>
+    b.classList.remove('sel-approuve','sel-modifie','sel-reporte','sel-abandonne'));
+  btn.classList.add('sel-'+type);
+}
+
+function selectSat(btn, type) {
+  btn.closest('.satisfaction-btns').querySelectorAll('.sat-btn').forEach(b =>
+    b.classList.remove('sel-tres-bien','sel-bien','sel-moyen','sel-difficile'));
+  btn.classList.add('sel-'+type);
+}
+
+// Init employees
+for(let i=0;i<4;i++) addEmp();
+</script>
+
+
+</body></html>

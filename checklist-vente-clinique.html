@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/info/Downloads/checklist-vente-clinique.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist vente d'une clinique — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;--gold:#d4a017;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1000px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--gold) 0%,#b8860b 100%);color:white;padding:18px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.85;}
+  .top-bar{padding:10px 24px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--gold);border-color:var(--gold);color:white;}
+  .prog-strip{padding:8px 24px;background:white;border-bottom:1px solid var(--border);}
+  .prog-top{display:flex;justify-content:space-between;font-size:.72rem;margin-bottom:3px;}
+  .prog-track{background:#e0e0e0;border-radius:6px;height:7px;overflow:hidden;}
+  .prog-fill{height:7px;background:linear-gradient(90deg,var(--gold),var(--green));border-radius:6px;transition:width .3s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .content{padding:18px 24px;}
+  .warn-box{background:#fff8e1;border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.82rem;color:#7a4400;line-height:1.7;margin-bottom:16px;}
+  /* PHASE */
+  .phase{background:white;border:1.5px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden;}
+  .phase-header{padding:12px 16px;color:white;display:flex;align-items:center;gap:10px;cursor:pointer;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ph-icon{font-size:1.1rem;}
+  .ph-title{font-size:.9rem;font-weight:700;flex:1;}
+  .ph-prog{font-size:.75rem;opacity:.85;white-space:nowrap;}
+  .ph-arrow{font-size:.8rem;opacity:.75;}
+  .phase-body{padding:10px 14px;display:block;}
+  .phase-body.collapsed{display:none;}
+  /* TASKS */
+  .task-item{display:flex;align-items:flex-start;gap:9px;padding:8px 10px;border-radius:7px;margin-bottom:5px;background:var(--light);border:1.5px solid var(--border);transition:background .1s;}
+  .task-item:hover{background:white;}
+  .task-item.done{background:#f0fdf4;border-color:rgba(26,158,90,.2);}
+  .task-item.done .tl{text-decoration:line-through;color:#8a9ab0;}
+  .ti-cb{width:17px;height:17px;cursor:pointer;accent-color:var(--green);flex-shrink:0;margin-top:2px;}
+  .tl{flex:1;font-size:.84rem;line-height:1.5;color:var(--text);}
+  .tn{font-size:.73rem;color:#8a9ab0;margin-top:2px;font-style:italic;}
+  .crit-badge{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.2);border-radius:5px;padding:1px 6px;font-size:.62rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+  .legal-badge{background:#f3e8ff;color:var(--purple);border:1px solid rgba(142,68,173,.2);border-radius:5px;padding:1px 6px;font-size:.62rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+  /* NOTES */
+  .phase-note{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px;font-size:.82rem;font-family:inherit;resize:vertical;min-height:55px;background:var(--light);margin-top:8px;line-height:1.6;}
+  .phase-note:focus{outline:none;border-color:var(--accent);background:white;}
+  /* INFO */
+  .info-card{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:10px;}
+  .ic-title{font-size:.78rem;font-weight:700;color:var(--blue);margin-bottom:6px;}
+  .ic-body{font-size:.8rem;line-height:1.8;}
+  .actions{padding:12px 24px;background:var(--light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.top-bar,.actions,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.phase-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.prog-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.phase-body.collapsed{display:block!important;}input,select,textarea{border:none!important;background:transparent!important;}}
+  @media(max-width:700px){.content{padding:12px 14px;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Consultation stratégique — Transactions</div></div>
+<div class="container">
+  <div class="doc-header"><h1>🏦 Checklist — Vente d'une clinique dentaire</h1><p>Guide complet de préparation et de réalisation d'une transaction de vente · Gestion Mel</p></div>
+  <div class="top-bar">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <input class="ci" type="text" id="clinicSell" placeholder="Clinique à vendre...">
+      <input class="ci" type="text" id="vendeur" placeholder="Nom du vendeur...">
+      <input class="ci" type="date" id="dateVente">
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn" onclick="resetAll()">↺ Réinitialiser</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+  <div class="prog-strip">
+    <div class="prog-top">
+      <span style="font-weight:700;color:#5a6a80;font-size:.72rem;text-transform:uppercase;letter-spacing:.5px;" id="progLabel">0/54 étapes complétées</span>
+      <span style="font-weight:700;color:var(--gold);font-size:.72rem;" id="progPct">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="content">
+    <div class="warn-box">⚠️ <strong>Avis important :</strong> La vente d'une clinique dentaire est une transaction complexe aux implications légales, fiscales et professionnelles importantes. Ce guide est un outil d'accompagnement. Il est essentiel de travailler avec un avocat spécialisé en droit des affaires, un comptable et un conseiller en transactions dentaires.</div>
+
+    <div id="phaseList"><div class="phase">
+      <div class="phase-header" style="background:#1a6abf;" onclick="togglePhase(&#39;pb_eval&#39;,this)">
+        <span class="ph-icon">📊</span>
+        <span class="ph-title">Phase 1 — Évaluation et préparation</span>
+        <span class="ph-prog">0/8</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_eval">
+        <div class="task-item" id="ti_eval_0">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,0,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Décision formelle de vendre — objectifs et délais définis</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_eval_1">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,1,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Consultation avec un comptable — optimisation fiscale de la structure de vente (vente d'actifs vs. actions)</div>
+            <div class="tn">💡 Vente d'actions souvent préférable pour le vendeur — exonération du gain en capital (limite à vie)</div>
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_eval_2">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,2,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Engagement d'un courtier spécialisé en cliniques dentaires ou d'un consultant</div>
+            <div class="tn">💡 Évaluation indépendante recommandée avant toute mise en marché</div>
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_eval_3">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,3,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Évaluation de la clinique (EBITDA, multiple du secteur, valeur des actifs)</div>
+            <div class="tn">💡 Multiple typique au Canada : 4-7x EBITDA selon la région, taille et localisation</div>
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_eval_4">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,4,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Revue des états financiers des 3 dernières années (P&amp;L, bilan, flux de trésorerie)</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_eval_5">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,5,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Identification des points à améliorer avant la vente (productivité, rétention, dossiers)</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_eval_6">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,6,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Revue de la liste de patients actifs (patients vus dans les 12-24 derniers mois)</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_eval_7">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;eval&#39;,7,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Vérification de l'état des équipements — liste des réparations à effectuer</div>
+            
+          </div>
+          
+          
+        </div>
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div><div class="phase">
+      <div class="phase-header" style="background:#8e44ad;" onclick="togglePhase(&#39;pb_docs&#39;,this)">
+        <span class="ph-icon">📁</span>
+        <span class="ph-title">Phase 2 — Documentation financière et légale</span>
+        <span class="ph-prog">0/11</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_docs">
+        <div class="task-item" id="ti_docs_0">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,0,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">États financiers certifiés (3 dernières années) — préparés par un comptable</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_docs_1">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,1,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Déclarations fiscales corporatives (T2) — 3 dernières années</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_docs_2">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,2,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Rapport de production — dentiste par dentiste, par service (3 ans)</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_docs_3">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,3,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Rapport de collecte / collection rate par année</div>
+            <div class="tn">💡 Idéalement 95%+ de la production facturée</div>
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_docs_4">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,4,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Liste des équipements avec âge, valeur comptable et état</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_docs_5">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,5,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Baux commerciaux en cours — copie et conditions de renouvellement / cession</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_docs_6">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,6,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Licences professionnelles en règle — ODQ, permis d'exploitation</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_docs_7">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,7,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Contrats de service (stérilisateurs, rayons X, compresseur, logiciel)</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_docs_8">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,8,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Contrats d'emploi et conventions collectives (si applicable)</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_docs_9">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,9,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Documentation des équipements et conformité radioprotection (RAMQ, autorisation)</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_docs_10">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;docs&#39;,10,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Assurances en vigueur (responsabilité, locaux, équipements) — liste des polices</div>
+            
+          </div>
+          
+          
+        </div>
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div><div class="phase">
+      <div class="phase-header" style="background:#e67e22;" onclick="togglePhase(&#39;pb_mise_marche&#39;,this)">
+        <span class="ph-icon">📢</span>
+        <span class="ph-title">Phase 3 — Mise en marché</span>
+        <span class="ph-prog">0/6</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_mise_marche">
+        <div class="task-item" id="ti_mise_marche_0">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;mise_marche&#39;,0,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Préparation du mémorandum d'information confidentiel (CIM)</div>
+            <div class="tn">💡 Document de présentation pour les acheteurs qualifiés — préparé avec le courtier</div>
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_mise_marche_1">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;mise_marche&#39;,1,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Fixation du prix de demande — prix ferme ou à négocier</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_mise_marche_2">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;mise_marche&#39;,2,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Diffusion confidentielle — sans identifier la clinique publiquement</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_mise_marche_3">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;mise_marche&#39;,3,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Qualification des acheteurs — preuve de fonds ou financement disponible</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_mise_marche_4">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;mise_marche&#39;,4,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Signature d'ententes de confidentialité (NDA) avec chaque acheteur potentiel</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_mise_marche_5">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;mise_marche&#39;,5,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Organisation des visites de la clinique — en dehors des heures de bureau si possible</div>
+            <div class="tn">💡 Protéger la confidentialité vis-à-vis des employés et patients</div>
+          </div>
+          
+          
+        </div>
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div><div class="phase">
+      <div class="phase-header" style="background:#1a9e5a;" onclick="togglePhase(&#39;pb_nego&#39;,this)">
+        <span class="ph-icon">🤝</span>
+        <span class="ph-title">Phase 4 — Négociation et lettre d'intention</span>
+        <span class="ph-prog">0/7</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_nego">
+        <div class="task-item" id="ti_nego_0">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;nego&#39;,0,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Réception et évaluation des offres d'achat</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_nego_1">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;nego&#39;,1,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Négociation du prix, des conditions et des modalités de paiement</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_nego_2">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;nego&#39;,2,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Détermination de la structure de la transaction (actifs vs. actions)</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_nego_3">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;nego&#39;,3,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Lettre d'intention (LOI) signée — conditions suspensives définies</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_nego_4">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;nego&#39;,4,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Période d'exclusivité accordée à l'acheteur retenu</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_nego_5">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;nego&#39;,5,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Accord sur les modalités de transition (période, rôle du vendeur après vente)</div>
+            <div class="tn">💡 Ex: Le vendeur reste 6-12 mois pour assurer la transition des patients</div>
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_nego_6">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;nego&#39;,6,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Accord sur le traitement des employés — reprise ou nouvelles conditions</div>
+            
+          </div>
+          
+          
+        </div>
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div><div class="phase">
+      <div class="phase-header" style="background:#c0392b;" onclick="togglePhase(&#39;pb_diligence&#39;,this)">
+        <span class="ph-icon">🔍</span>
+        <span class="ph-title">Phase 5 — Vérification diligente (côté vendeur)</span>
+        <span class="ph-prog">0/6</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_diligence">
+        <div class="task-item" id="ti_diligence_0">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;diligence&#39;,0,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Accès sécurisé à la data room — documents organisés et disponibles</div>
+            <div class="tn">💡 Préférablement via une plateforme sécurisée (SharePoint, Dropbox confidentiel)</div>
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_diligence_1">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;diligence&#39;,1,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Répondre aux questions de l'acheteur et de ses conseillers dans les délais</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_diligence_2">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;diligence&#39;,2,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Vérification de la liste de patients — ne pas divulguer les dossiers patients (LPRPDE / Loi 25)</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_diligence_3">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;diligence&#39;,3,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Permettre l'inspection des équipements par un technicien désigné</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_diligence_4">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;diligence&#39;,4,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Revue du bail avec le propriétaire — cession ou nouveau bail négocié</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_diligence_5">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;diligence&#39;,5,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Vérification de l'absence de litiges en cours (RAMQ, plaintes, assurances)</div>
+            
+          </div>
+          
+          
+        </div>
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div><div class="phase">
+      <div class="phase-header" style="background:#d4a017;" onclick="togglePhase(&#39;pb_contrat&#39;,this)">
+        <span class="ph-icon">✍️</span>
+        <span class="ph-title">Phase 6 — Contrat de vente et clôture</span>
+        <span class="ph-prog">0/8</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_contrat">
+        <div class="task-item" id="ti_contrat_0">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,0,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Contrat d'achat-vente définitif rédigé par l'avocat</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_contrat_1">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,1,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Révision de toutes les clauses par les deux parties et leurs avocats</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_contrat_2">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,2,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Clause de non-concurrence négociée et signée</div>
+            <div class="tn">💡 Zone géographique, durée (typiquement 3-5 ans, rayon de 5-10 km)</div>
+          </div>
+          <span class="crit-badge">Critique</span>
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_contrat_3">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,3,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Convention de transition (période de collaboration post-vente)</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_contrat_4">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,4,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Ententes de confidentialité (protection des données patients)</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_contrat_5">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,5,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Conditions de paiement finalisées (comptant, versements, earn-out)</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_contrat_6">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,6,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Notarisation des documents si requis — transfert de propriété</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_contrat_7">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;contrat&#39;,7,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Réception du dépôt ou paiement intégral (selon les conditions)</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div>
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div><div class="phase">
+      <div class="phase-header" style="background:#00897b;" onclick="togglePhase(&#39;pb_transition&#39;,this)">
+        <span class="ph-icon">🔄</span>
+        <span class="ph-title">Phase 7 — Transition et post-vente</span>
+        <span class="ph-prog">0/8</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_transition">
+        <div class="task-item" id="ti_transition_0">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,0,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Communication aux employés — timing et message définis avec le nouvel acquéreur</div>
+            <div class="tn">💡 Généralement annoncé au moment ou après la clôture</div>
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_transition_1">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,1,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Communication aux patients — lettre ou courriel de transition</div>
+            <div class="tn">💡 Le vendeur présente le nouveau dentiste de façon chaleureuse</div>
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_transition_2">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,2,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Transfert des accès systèmes et logiciels (Dentitek, Progident, etc.)</div>
+            
+          </div>
+          <span class="crit-badge">Critique</span>
+          
+        </div><div class="task-item" id="ti_transition_3">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,3,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Formation du nouveau propriétaire sur les spécificités de la clinique</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_transition_4">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,4,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Période d'accompagnement du vendeur (selon la convention)</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_transition_5">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,5,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Clôture des comptes bancaires corporatifs / transfert</div>
+            
+          </div>
+          
+          
+        </div><div class="task-item" id="ti_transition_6">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,6,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Dissolution ou mise en veilleuse de la société (selon les conseils du comptable)</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div><div class="task-item" id="ti_transition_7">
+          <input type="checkbox" class="ti-cb" onchange="toggleTask(&#39;transition&#39;,7,this.checked)">
+          <div style="flex:1;">
+            <div class="tl">Déclaration de revenus finale — rapports de gain en capital</div>
+            
+          </div>
+          
+          <span class="legal-badge">⚖️ Légal</span>
+        </div>
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div></div>
+
+    <div class="info-card">
+      <div class="ic-title">👥 Professionnels recommandés lors d'une vente</div>
+      <div class="ic-body">
+        • <strong>Avocat spécialisé</strong> en droit des affaires / transactions dentaires<br>
+        • <strong>Comptable / Fiscaliste</strong> — structure optimale de la transaction<br>
+        • <strong>Courtier en cliniques dentaires</strong> — évaluation et mise en marché<br>
+        • <strong>Consultant en gestion</strong> (Gestion Mel) — valorisation et préparation opérationnelle<br>
+        • <strong>Banquier / Conseiller financier</strong> — planification des produits de la vente
+      </div>
+    </div>
+    <div style="margin-top:10px;"><textarea class="phase-note" style="min-height:80px;" placeholder="Notes générales sur la transaction..."></textarea></div>
+  </div>
+  <div class="actions">
+    <button class="btn" style="color:var(--red);border-color:rgba(192,57,43,.2);" onclick="resetAll()">↺ Réinitialiser</button>
+    <button class="btn primary" onclick="window.print()">🖨️ Imprimer le rapport</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Outil de consultation stratégique — Confidentiel</div>
+</div>
+
+<script>
+document.getElementById('dateVente').valueAsDate=new Date();
+const PHASES=[
+  {
+    id:'eval', title:'Phase 1 — Évaluation et préparation', color:'#1a6abf', icon:'📊',
+    tasks:[
+      {l:'Décision formelle de vendre — objectifs et délais définis',crit:true},
+      {l:'Consultation avec un comptable — optimisation fiscale de la structure de vente (vente d\'actifs vs. actions)',legal:true,n:'Vente d\'actions souvent préférable pour le vendeur — exonération du gain en capital (limite à vie)'},
+      {l:'Engagement d\'un courtier spécialisé en cliniques dentaires ou d\'un consultant',n:'Évaluation indépendante recommandée avant toute mise en marché'},
+      {l:'Évaluation de la clinique (EBITDA, multiple du secteur, valeur des actifs)',crit:true,n:'Multiple typique au Canada : 4-7x EBITDA selon la région, taille et localisation'},
+      {l:'Revue des états financiers des 3 dernières années (P&L, bilan, flux de trésorerie)',crit:true},
+      {l:'Identification des points à améliorer avant la vente (productivité, rétention, dossiers)'},
+      {l:'Revue de la liste de patients actifs (patients vus dans les 12-24 derniers mois)'},
+      {l:'Vérification de l\'état des équipements — liste des réparations à effectuer'},
+    ]
+  },
+  {
+    id:'docs', title:'Phase 2 — Documentation financière et légale', color:'#8e44ad', icon:'📁',
+    tasks:[
+      {l:'États financiers certifiés (3 dernières années) — préparés par un comptable',crit:true,legal:true},
+      {l:'Déclarations fiscales corporatives (T2) — 3 dernières années',legal:true},
+      {l:'Rapport de production — dentiste par dentiste, par service (3 ans)'},
+      {l:'Rapport de collecte / collection rate par année',n:'Idéalement 95%+ de la production facturée'},
+      {l:'Liste des équipements avec âge, valeur comptable et état'},
+      {l:'Baux commerciaux en cours — copie et conditions de renouvellement / cession',crit:true,legal:true},
+      {l:'Licences professionnelles en règle — ODQ, permis d\'exploitation'},
+      {l:'Contrats de service (stérilisateurs, rayons X, compresseur, logiciel)'},
+      {l:'Contrats d\'emploi et conventions collectives (si applicable)',legal:true},
+      {l:'Documentation des équipements et conformité radioprotection (RAMQ, autorisation)'},
+      {l:'Assurances en vigueur (responsabilité, locaux, équipements) — liste des polices'},
+    ]
+  },
+  {
+    id:'mise_marche', title:'Phase 3 — Mise en marché', color:'#e67e22', icon:'📢',
+    tasks:[
+      {l:'Préparation du mémorandum d\'information confidentiel (CIM)',n:'Document de présentation pour les acheteurs qualifiés — préparé avec le courtier'},
+      {l:'Fixation du prix de demande — prix ferme ou à négocier'},
+      {l:'Diffusion confidentielle — sans identifier la clinique publiquement',crit:true},
+      {l:'Qualification des acheteurs — preuve de fonds ou financement disponible'},
+      {l:'Signature d\'ententes de confidentialité (NDA) avec chaque acheteur potentiel',legal:true},
+      {l:'Organisation des visites de la clinique — en dehors des heures de bureau si possible',n:'Protéger la confidentialité vis-à-vis des employés et patients'},
+    ]
+  },
+  {
+    id:'nego', title:'Phase 4 — Négociation et lettre d\'intention', color:'#1a9e5a', icon:'🤝',
+    tasks:[
+      {l:'Réception et évaluation des offres d\'achat',crit:true},
+      {l:'Négociation du prix, des conditions et des modalités de paiement'},
+      {l:'Détermination de la structure de la transaction (actifs vs. actions)',legal:true},
+      {l:'Lettre d\'intention (LOI) signée — conditions suspensives définies',crit:true,legal:true},
+      {l:'Période d\'exclusivité accordée à l\'acheteur retenu'},
+      {l:'Accord sur les modalités de transition (période, rôle du vendeur après vente)',n:'Ex: Le vendeur reste 6-12 mois pour assurer la transition des patients'},
+      {l:'Accord sur le traitement des employés — reprise ou nouvelles conditions'},
+    ]
+  },
+  {
+    id:'diligence', title:'Phase 5 — Vérification diligente (côté vendeur)', color:'#c0392b', icon:'🔍',
+    tasks:[
+      {l:'Accès sécurisé à la data room — documents organisés et disponibles',n:'Préférablement via une plateforme sécurisée (SharePoint, Dropbox confidentiel)'},
+      {l:'Répondre aux questions de l\'acheteur et de ses conseillers dans les délais'},
+      {l:'Vérification de la liste de patients — ne pas divulguer les dossiers patients (LPRPDE / Loi 25)',crit:true,legal:true},
+      {l:'Permettre l\'inspection des équipements par un technicien désigné'},
+      {l:'Revue du bail avec le propriétaire — cession ou nouveau bail négocié',crit:true},
+      {l:'Vérification de l\'absence de litiges en cours (RAMQ, plaintes, assurances)'},
+    ]
+  },
+  {
+    id:'contrat', title:'Phase 6 — Contrat de vente et clôture', color:'#d4a017', icon:'✍️',
+    tasks:[
+      {l:'Contrat d\'achat-vente définitif rédigé par l\'avocat',crit:true,legal:true},
+      {l:'Révision de toutes les clauses par les deux parties et leurs avocats',legal:true},
+      {l:'Clause de non-concurrence négociée et signée',crit:true,legal:true,n:'Zone géographique, durée (typiquement 3-5 ans, rayon de 5-10 km)'},
+      {l:'Convention de transition (période de collaboration post-vente)'},
+      {l:'Ententes de confidentialité (protection des données patients)',legal:true},
+      {l:'Conditions de paiement finalisées (comptant, versements, earn-out)',crit:true},
+      {l:'Notarisation des documents si requis — transfert de propriété'},
+      {l:'Réception du dépôt ou paiement intégral (selon les conditions)',crit:true},
+    ]
+  },
+  {
+    id:'transition', title:'Phase 7 — Transition et post-vente', color:'#00897b', icon:'🔄',
+    tasks:[
+      {l:'Communication aux employés — timing et message définis avec le nouvel acquéreur',crit:true,n:'Généralement annoncé au moment ou après la clôture'},
+      {l:'Communication aux patients — lettre ou courriel de transition',n:'Le vendeur présente le nouveau dentiste de façon chaleureuse'},
+      {l:'Transfert des accès systèmes et logiciels (Dentitek, Progident, etc.)',crit:true},
+      {l:'Formation du nouveau propriétaire sur les spécificités de la clinique'},
+      {l:'Période d\'accompagnement du vendeur (selon la convention)'},
+      {l:'Clôture des comptes bancaires corporatifs / transfert'},
+      {l:'Dissolution ou mise en veilleuse de la société (selon les conseils du comptable)',legal:true},
+      {l:'Déclaration de revenus finale — rapports de gain en capital',legal:true},
+    ]
+  },
+];
+
+function drawPhases(){
+  const el=document.getElementById('phaseList');
+  el.innerHTML=PHASES.map(p=>{
+    const total=p.tasks.length, done=p.tasks.filter(t=>t._done).length;
+    return `<div class="phase">
+      <div class="phase-header" style="background:${p.color};" onclick="togglePhase('pb_${p.id}',this)">
+        <span class="ph-icon">${p.icon}</span>
+        <span class="ph-title">${p.title}</span>
+        <span class="ph-prog">${done}/${total}</span>
+        <span class="ph-arrow">▼</span>
+      </div>
+      <div class="phase-body" id="pb_${p.id}">
+        ${p.tasks.map((t,i)=>`<div class="task-item${t._done?' done':''}" id="ti_${p.id}_${i}">
+          <input type="checkbox" class="ti-cb" ${t._done?'checked':''} onchange="toggleTask('${p.id}',${i},this.checked)">
+          <div style="flex:1;">
+            <div class="tl">${t.l}</div>
+            ${t.n?`<div class="tn">💡 ${t.n}</div>`:''}
+          </div>
+          ${t.crit?'<span class="crit-badge">Critique</span>':''}
+          ${t.legal?'<span class="legal-badge">⚖️ Légal</span>':''}
+        </div>`).join('')}
+        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+      </div>
+    </div>`;
+  }).join('');
+  updateProg();
+}
+
+function togglePhase(id,hdr){const b=document.getElementById(id);b.classList.toggle('collapsed');hdr.querySelector('.ph-arrow').textContent=b.classList.contains('collapsed')?'►':'▼';}
+function toggleTask(pid,idx,v){PHASES.find(p=>p.id===pid).tasks[idx]._done=v;const el=document.getElementById(`ti_${pid}_${idx}`);if(el)el.classList.toggle('done',v);updateProg();}
+function updateProg(){
+  const all=PHASES.flatMap(p=>p.tasks);
+  const done=all.filter(t=>t._done).length,total=all.length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progLabel').textContent=`${done}/${total} étapes complétées`;
+}
+function resetAll(){if(!confirm('Réinitialiser toutes les cases?'))return;PHASES.forEach(p=>p.tasks.forEach(t=>t._done=false));drawPhases();}
+
+drawPhases();
+</script>
+
+
+</body></html>

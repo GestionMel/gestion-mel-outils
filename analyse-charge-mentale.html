@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)file:///C:/Users/info/Downloads/analyse-charge-mentale.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyse charge mentale — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:900px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .main-tabs{display:flex;background:var(--dark);border-bottom:3px solid var(--accent);}
+  .mt{padding:12px 24px;background:none;border:none;border-bottom:4px solid transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:-3px;}
+  .mt:hover{color:white;background:rgba(255,255,255,.08);}
+  .mt.active{color:white;border-bottom-color:var(--accent);}
+  .mpane{display:none;} .mpane.active{display:block;}
+  .info-bar{padding:10px 28px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .anon{background:#f0fdf4;color:var(--green);border:1.5px solid rgba(26,158,90,.3);border-radius:20px;padding:4px 12px;font-size:.75rem;font-weight:700;}
+  .section{padding:18px 28px;border-bottom:1px solid var(--border);}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;}
+  /* DIM CARD */
+  .dim-card{background:white;border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+  .dim-head{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+  .dim-icon{font-size:1.2rem;}
+  .dim-label{font-size:.9rem;font-weight:700;color:var(--dark);}
+  .dim-sub{font-size:.74rem;color:#8a9ab0;margin-top:2px;}
+  /* SLIDER */
+  .q-row{margin-bottom:12px;}
+  .q-text{font-size:.85rem;color:var(--text);margin-bottom:8px;line-height:1.5;}
+  .slider-wrap{display:flex;align-items:center;gap:10px;}
+  .sl{flex:1;-webkit-appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--orange),var(--red));outline:none;cursor:pointer;}
+  .sl::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--blue);border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer;}
+  .sl-val{width:28px;text-align:center;font-weight:700;font-size:.85rem;color:var(--blue);}
+  .sl-labels{display:flex;justify-content:space-between;font-size:.68rem;color:#8a9ab0;margin-top:2px;}
+  /* SUBMIT */
+  .submit-wrap{padding:16px 28px;background:var(--light);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+  .btn-submit{padding:10px 24px;border-radius:8px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;}
+  .btn-reset{padding:8px 16px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.82rem;cursor:pointer;color:#5a6a80;}
+  /* SUCCESS */
+  .success-box{text-align:center;padding:36px;display:none;}
+  .sb-icon{font-size:2.5rem;margin-bottom:10px;}
+  /* DASHBOARD */
+  .mgr-bar{padding:10px 28px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  /* SAISIE GESTIONNAIRE */
+  .emp-saisie{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:12px 16px;margin-bottom:10px;}
+  .es-name{font-size:.84rem;font-weight:700;color:var(--dark);margin-bottom:10px;}
+  .es-sliders{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .es-row{display:flex;align-items:center;gap:8px;font-size:.78rem;}
+  .es-lbl{flex:1;color:#5a6a80;}
+  .mini-sl{flex:1;-webkit-appearance:none;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--green),var(--orange),var(--red));outline:none;cursor:pointer;}
+  .mini-sl::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--blue);border:2px solid white;box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:pointer;}
+  /* GAUGE CARDS */
+  .gauge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:14px;}
+  .gauge-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:12px 14px;text-align:center;}
+  .gc-icon{font-size:1.3rem;margin-bottom:4px;}
+  .gc-score{font-size:1.5rem;font-weight:700;margin-bottom:3px;}
+  .gc-label{font-size:.73rem;color:#5a6a80;margin-bottom:6px;line-height:1.3;}
+  .gc-bar{background:#e0e0e0;border-radius:4px;height:7px;overflow:hidden;}
+  .gc-fill{height:7px;border-radius:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  /* ALERT */
+  .alert-card{border-radius:8px;padding:12px 16px;margin-bottom:8px;font-size:.83rem;display:flex;align-items:flex-start;gap:9px;}
+  .ac-red{background:#fef2f2;border:1.5px solid rgba(192,57,43,.2);color:var(--red);}
+  .ac-orange{background:#fff8f0;border:1.5px solid rgba(230,126,34,.2);color:var(--orange);}
+  .ac-green{background:#f0fdf4;border:1.5px solid rgba(26,158,90,.2);color:var(--green);}
+  /* EMP CONFIG */
+  .emp-setup{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+  .er{display:flex;gap:8px;align-items:center;}
+  .er input{flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;background:var(--light);}
+  .btn-del{width:22px;height:22px;border-radius:5px;border:1px solid rgba(192,57,43,.3);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .btn-add-sm{display:flex;align-items:center;gap:5px;padding:5px 11px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  .global-gauge{background:var(--light);border:1.5px solid var(--border);border-radius:10px;padding:16px 20px;text-align:center;margin-bottom:14px;}
+  .gg-score{font-size:2.5rem;font-weight:700;margin-bottom:5px;}
+  .gg-lbl{font-size:.9rem;font-weight:700;margin-bottom:8px;}
+  .gg-bar-wrap{background:#e0e0e0;border-radius:6px;height:12px;max-width:400px;margin:0 auto;overflow:hidden;}
+  .gg-bar{height:12px;border-radius:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media(max-width:700px){.es-sliders{grid-template-columns:1fr;}.gauge-grid{grid-template-columns:1fr 1fr;}}
+  @media print{body{background:white;}.page-header,.main-tabs,.info-bar,.mgr-bar,.submit-wrap,.btn-add-sm,.btn-del,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.mpane{display:block!important;}.gg-bar,.gc-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">RH — Bien-être au travail</div></div>
+<div class="container">
+  <div class="doc-header"><h1>🧠 Analyse de la charge mentale</h1><p>Évaluation de la surcharge cognitive et du bien-être au travail de l'équipe</p></div>
+  <div class="main-tabs">
+    <button class="mt active" onclick="showM(0,this)">🧠 Sondage employé(e)<span style="background:rgba(255,255,255,.15);border-radius:4px;padding:1px 6px;font-size:.67rem;margin-left:7px;">Anonyme</span></button>
+    <button class="mt" onclick="showM(1,this)">📊 Tableau de bord<span style="background:rgba(255,255,255,.15);border-radius:4px;padding:1px 6px;font-size:.67rem;margin-left:7px;">Gestionnaire</span></button>
+  </div>
+
+  <!-- PANE 0 : SONDAGE -->
+  <div class="mpane active" id="mp0">
+    <div class="info-bar">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <input class="ci" type="text" placeholder="Clinique...">
+        <input class="ci" type="month" id="periodeSondage">
+      </div>
+      <div class="anon">🔒 Réponses anonymes · ~5 minutes</div>
+    </div>
+    <div id="formViewCM">
+      <div class="section">
+        <div style="background:var(--light);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.82rem;margin-bottom:16px;color:#2a3a4a;line-height:1.7;">
+          Sur une échelle de <strong>1 (faible) à 10 (élevé)</strong>, évaluez votre ressenti pour chaque dimension. Répondez selon comment vous vous sentez en ce moment, pas comment vous aimeriez vous sentir.
+        </div>
+
+        <div class="dim-card">
+          <div class="dim-head"><span class="dim-icon">📋</span><div><div class="dim-label">Volume de travail</div><div class="dim-sub">Quantité de tâches à accomplir</div></div></div>
+          <div class="q-row">
+            <div class="q-text">En ce moment, je trouve que la quantité de travail qui m'est demandée est...</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Très gérable</span><input type="range" class="sl" min="1" max="10" value="5" id="s_vol" oninput="sv(&#39;s_vol&#39;,&#39;v_vol&#39;)"><span class="sl-val" id="v_vol">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Ingérable</span></div>
+          </div>
+          <div class="q-row">
+            <div class="q-text">J'ai suffisamment de temps pour accomplir mes tâches correctement.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Jamais</span><input type="range" class="sl" min="1" max="10" value="5" id="s_temps" oninput="sv(&#39;s_temps&#39;,&#39;v_temps&#39;)"><span class="sl-val" id="v_temps">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Toujours</span></div>
+          </div>
+        </div>
+
+        <div class="dim-card">
+          <div class="dim-head"><span class="dim-icon">🔀</span><div><div class="dim-label">Interruptions et multitâches</div><div class="dim-sub">Capacité à se concentrer et finir ce qu'on commence</div></div></div>
+          <div class="q-row">
+            <div class="q-text">Je suis souvent interrompu(e) dans mon travail avant de terminer une tâche.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Rarement</span><input type="range" class="sl" min="1" max="10" value="5" id="s_inter" oninput="sv(&#39;s_inter&#39;,&#39;v_inter&#39;)"><span class="sl-val" id="v_inter">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Constamment</span></div>
+          </div>
+          <div class="q-row">
+            <div class="q-text">Je dois gérer plusieurs tâches simultanément, ce qui me cause du stress.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Non</span><input type="range" class="sl" min="1" max="10" value="5" id="s_multi" oninput="sv(&#39;s_multi&#39;,&#39;v_multi&#39;)"><span class="sl-val" id="v_multi">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Oui, beaucoup</span></div>
+          </div>
+        </div>
+
+        <div class="dim-card">
+          <div class="dim-head"><span class="dim-icon">📌</span><div><div class="dim-label">Clarté des rôles et des attentes</div><div class="dim-sub">Savoir exactement ce qui est attendu de moi</div></div></div>
+          <div class="q-row">
+            <div class="q-text">Mes tâches et responsabilités sont clairement définies.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Pas du tout</span><input type="range" class="sl" min="1" max="10" value="5" id="s_clarte" oninput="sv(&#39;s_clarte&#39;,&#39;v_clarte&#39;)"><span class="sl-val" id="v_clarte">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Très clairement</span></div>
+          </div>
+          <div class="q-row">
+            <div class="q-text">Je reçois des informations suffisantes pour faire mon travail correctement.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Jamais</span><input type="range" class="sl" min="1" max="10" value="5" id="s_info" oninput="sv(&#39;s_info&#39;,&#39;v_info&#39;)"><span class="sl-val" id="v_info">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Toujours</span></div>
+          </div>
+        </div>
+
+        <div class="dim-card">
+          <div class="dim-head"><span class="dim-icon">💆</span><div><div class="dim-label">Charge émotionnelle</div><div class="dim-sub">Gestion des émotions et des situations difficiles</div></div></div>
+          <div class="q-row">
+            <div class="q-text">Mon travail me demande beaucoup d'efforts émotionnels (patients difficiles, tensions, décisions difficiles).</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Très peu</span><input type="range" class="sl" min="1" max="10" value="5" id="s_emot" oninput="sv(&#39;s_emot&#39;,&#39;v_emot&#39;)"><span class="sl-val" id="v_emot">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Énormément</span></div>
+          </div>
+          <div class="q-row">
+            <div class="q-text">Je parviens à me déconnecter du travail après ma journée.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Jamais</span><input type="range" class="sl" min="1" max="10" value="5" id="s_deco" oninput="sv(&#39;s_deco&#39;,&#39;v_deco&#39;)"><span class="sl-val" id="v_deco">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Facilement</span></div>
+          </div>
+        </div>
+
+        <div class="dim-card">
+          <div class="dim-head"><span class="dim-icon">🤝</span><div><div class="dim-label">Soutien et ressources</div><div class="dim-sub">Aide disponible et accès aux outils nécessaires</div></div></div>
+          <div class="q-row">
+            <div class="q-text">Je me sens soutenu(e) par mon équipe et ma gestionnaire quand j'en ai besoin.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Pas du tout</span><input type="range" class="sl" min="1" max="10" value="5" id="s_sout" oninput="sv(&#39;s_sout&#39;,&#39;v_sout&#39;)"><span class="sl-val" id="v_sout">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Pleinement</span></div>
+          </div>
+          <div class="q-row">
+            <div class="q-text">J'ai les outils et les ressources nécessaires pour bien faire mon travail.</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Non</span><input type="range" class="sl" min="1" max="10" value="5" id="s_ress" oninput="sv(&#39;s_ress&#39;,&#39;v_ress&#39;)"><span class="sl-val" id="v_ress">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Oui, tout</span></div>
+          </div>
+        </div>
+
+        <div class="dim-card">
+          <div class="dim-head"><span class="dim-icon">⚡</span><div><div class="dim-label">Niveau d'épuisement général</div><div class="dim-sub">Énergie et récupération</div></div></div>
+          <div class="q-row">
+            <div class="q-text">En ce moment, mon niveau d'épuisement au travail est...</div>
+            <div class="slider-wrap"><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Aucun</span><input type="range" class="sl" min="1" max="10" value="5" id="s_epuis" oninput="sv(&#39;s_epuis&#39;,&#39;v_epuis&#39;)"><span class="sl-val" id="v_epuis">5</span><span style="font-size:.72rem;color:#8a9ab0;white-space:nowrap;">Épuisé(e)</span></div>
+          </div>
+        </div>
+
+        <div class="dim-card">
+          <div class="dim-head"><span class="dim-icon">💬</span><div><div class="dim-label">Ce qui alourdit ma charge (optionnel)</div></div></div>
+          <textarea id="s_open" style="width:100%;border:1.5px solid var(--border);border-radius:7px;padding:9px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:70px;background:var(--light);line-height:1.6;" placeholder="Décrivez librement ce qui contribue le plus à votre charge en ce moment..."></textarea>
+        </div>
+      </div>
+      <div class="submit-wrap">
+        <button class="btn-reset" onclick="resetSondage()">↺ Recommencer</button>
+        <button class="btn-submit" onclick="submitCM()">✅ Soumettre</button>
+      </div>
+    </div>
+    <div class="success-box" id="successCM">
+      <div class="sb-icon">🙏</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--green);margin-bottom:8px;">Merci pour votre participation!</div>
+      <div style="font-size:.84rem;color:#5a6a80;line-height:1.7;">Vos réponses contribuent à améliorer les conditions de travail de toute l'équipe. Elles sont traitées de façon anonyme et confidentielle.</div>
+      <button class="btn-submit" style="margin-top:16px;display:inline-block;width:auto;" onclick="newSondage()">Retour</button>
+    </div>
+  </div>
+
+  <!-- PANE 1 : DASHBOARD -->
+  <div class="mpane" id="mp1">
+    <div class="mgr-bar">
+      <input class="ci" type="month" id="periodeD">
+      <input class="ci" type="text" placeholder="Équipe / Clinique..." style="min-width:160px;">
+      <button class="btn primary" onclick="buildDashCM()">📊 Calculer</button>
+      <button class="btn" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+    <div class="section">
+      <div class="sec-title">Configuration de l'équipe</div>
+      <div class="emp-setup" id="empSetupCM"><div class="er"><span style="font-size:.73rem;font-weight:700;color:#5a6a80;min-width:18px;">1</span><input type="text" placeholder="Employé(e) 1" value="" oninput="empsCM[0].name=this.value"><button class="btn-del" onclick="empsCM.splice(0,1);delete respCM[&#39;e1&#39;];renderEmpSetupCM();renderSaisie()">×</button></div><div class="er"><span style="font-size:.73rem;font-weight:700;color:#5a6a80;min-width:18px;">2</span><input type="text" placeholder="Employé(e) 2" value="" oninput="empsCM[1].name=this.value"><button class="btn-del" onclick="empsCM.splice(1,1);delete respCM[&#39;e2&#39;];renderEmpSetupCM();renderSaisie()">×</button></div><div class="er"><span style="font-size:.73rem;font-weight:700;color:#5a6a80;min-width:18px;">3</span><input type="text" placeholder="Employé(e) 3" value="" oninput="empsCM[2].name=this.value"><button class="btn-del" onclick="empsCM.splice(2,1);delete respCM[&#39;e3&#39;];renderEmpSetupCM();renderSaisie()">×</button></div><div class="er"><span style="font-size:.73rem;font-weight:700;color:#5a6a80;min-width:18px;">4</span><input type="text" placeholder="Employé(e) 4" value="" oninput="empsCM[3].name=this.value"><button class="btn-del" onclick="empsCM.splice(3,1);delete respCM[&#39;e4&#39;];renderEmpSetupCM();renderSaisie()">×</button></div><div class="er"><span style="font-size:.73rem;font-weight:700;color:#5a6a80;min-width:18px;">5</span><input type="text" placeholder="Employé(e) 5" value="" oninput="empsCM[4].name=this.value"><button class="btn-del" onclick="empsCM.splice(4,1);delete respCM[&#39;e5&#39;];renderEmpSetupCM();renderSaisie()">×</button></div></div>
+      <button class="btn-add-sm" onclick="addEmpCM()">+ Ajouter un(e) employé(e)</button>
+    </div>
+    <div class="section">
+      <div class="sec-title">Saisie des scores par employé(e)</div>
+      <div style="background:var(--light);border-left:3px solid var(--accent);padding:8px 12px;font-size:.8rem;margin-bottom:12px;border-radius:0 6px 6px 0;color:#2a3a4a;">Saisissez les scores sur 10 pour chaque dimension selon les sondages complétés.</div>
+      <div id="saisieWrapCM"><div class="emp-saisie"><div class="es-name">Employé(e) 1</div><div class="es-sliders"><div class="es-row"><span class="es-lbl">📋 Volume de travail</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e1&#39;][&#39;vol&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🔀 Interruptions</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e1&#39;][&#39;inter&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">📌 Clarté des rôles</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e1&#39;][&#39;clarte&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">💆 Charge émotionnelle</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e1&#39;][&#39;emot&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🤝 Soutien / Ressources</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e1&#39;][&#39;sout&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">⚡ Épuisement</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e1&#39;][&#39;epuis&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div></div></div><div class="emp-saisie"><div class="es-name">Employé(e) 2</div><div class="es-sliders"><div class="es-row"><span class="es-lbl">📋 Volume de travail</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e2&#39;][&#39;vol&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🔀 Interruptions</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e2&#39;][&#39;inter&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">📌 Clarté des rôles</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e2&#39;][&#39;clarte&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">💆 Charge émotionnelle</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e2&#39;][&#39;emot&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🤝 Soutien / Ressources</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e2&#39;][&#39;sout&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">⚡ Épuisement</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e2&#39;][&#39;epuis&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div></div></div><div class="emp-saisie"><div class="es-name">Employé(e) 3</div><div class="es-sliders"><div class="es-row"><span class="es-lbl">📋 Volume de travail</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e3&#39;][&#39;vol&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🔀 Interruptions</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e3&#39;][&#39;inter&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">📌 Clarté des rôles</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e3&#39;][&#39;clarte&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">💆 Charge émotionnelle</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e3&#39;][&#39;emot&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🤝 Soutien / Ressources</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e3&#39;][&#39;sout&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">⚡ Épuisement</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e3&#39;][&#39;epuis&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div></div></div><div class="emp-saisie"><div class="es-name">Employé(e) 4</div><div class="es-sliders"><div class="es-row"><span class="es-lbl">📋 Volume de travail</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e4&#39;][&#39;vol&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🔀 Interruptions</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e4&#39;][&#39;inter&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">📌 Clarté des rôles</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e4&#39;][&#39;clarte&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">💆 Charge émotionnelle</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e4&#39;][&#39;emot&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🤝 Soutien / Ressources</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e4&#39;][&#39;sout&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">⚡ Épuisement</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e4&#39;][&#39;epuis&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div></div></div><div class="emp-saisie"><div class="es-name">Employé(e) 5</div><div class="es-sliders"><div class="es-row"><span class="es-lbl">📋 Volume de travail</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e5&#39;][&#39;vol&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🔀 Interruptions</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e5&#39;][&#39;inter&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">📌 Clarté des rôles</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e5&#39;][&#39;clarte&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">💆 Charge émotionnelle</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e5&#39;][&#39;emot&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">🤝 Soutien / Ressources</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e5&#39;][&#39;sout&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div><div class="es-row"><span class="es-lbl">⚡ Épuisement</span><input type="range" class="mini-sl" min="1" max="10" value="5" oninput="respCM[&#39;e5&#39;][&#39;epuis&#39;]=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">5</span></div></div></div></div>
+      <button class="btn primary" style="margin-top:10px;" onclick="buildDashCM()">📊 Calculer les résultats</button>
+    </div>
+    <div class="section" id="dashCMSection" style="display:none;">
+      <div class="sec-title">Résultats — Charge mentale de l'équipe</div>
+      <div class="global-gauge" id="ggCM"></div>
+      <div class="gauge-grid" id="dimGaugesCM"></div>
+      <div class="sec-title" style="margin-top:4px;">🚨 Alertes et recommandations</div>
+      <div id="alertsCM"></div>
+    </div>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+<script>
+const TODAY=new Date();
+document.getElementById('periodeSondage').value=TODAY.toISOString().slice(0,7);
+document.getElementById('periodeD').value=TODAY.toISOString().slice(0,7);
+
+const DIMS=[
+  {id:'vol',icon:'📋',label:'Volume de travail',sIds:['s_vol','s_temps'],invert:[false,true]},
+  {id:'inter',icon:'🔀',label:'Interruptions',sIds:['s_inter','s_multi'],invert:[true,true]},
+  {id:'clarte',icon:'📌',label:'Clarté des rôles',sIds:['s_clarte','s_info'],invert:[false,false]},
+  {id:'emot',icon:'💆',label:'Charge émotionnelle',sIds:['s_emot','s_deco'],invert:[true,false]},
+  {id:'sout',icon:'🤝',label:'Soutien / Ressources',sIds:['s_sout','s_ress'],invert:[false,false]},
+  {id:'epuis',icon:'⚡',label:'Épuisement',sIds:['s_epuis'],invert:[true]},
+];
+
+function sv(sId,vId){
+  const v=document.getElementById(sId).value;
+  document.getElementById(vId).textContent=v;
+}
+
+function getDimScore(dim){
+  let total=0;
+  dim.sIds.forEach((sId,i)=>{
+    const v=parseFloat(document.getElementById(sId)?.value)||5;
+    total+=dim.invert[i]?(11-v):v;
+  });
+  return total/dim.sIds.length;
+}
+
+function resetSondage(){DIMS.forEach(d=>d.sIds.forEach(s=>{const el=document.getElementById(s);if(el)el.value=5;}));DIMS.forEach(d=>d.sIds.forEach((s,i)=>{const vId=s.replace('s_','v_');const el=document.getElementById(vId);if(el)el.textContent='5';}));document.getElementById('s_open').value='';}
+function submitCM(){document.getElementById('formViewCM').style.display='none';document.getElementById('successCM').style.display='block';}
+function newSondage(){document.getElementById('formViewCM').style.display='block';document.getElementById('successCM').style.display='none';resetSondage();}
+function showM(n,btn){document.querySelectorAll('.mpane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.mt').forEach((b,i)=>b.classList.toggle('active',i===n));}
+
+// GESTIONNAIRE
+let empsCM=[],empIdCM=1,respCM={};
+function addEmpCM(){const id='e'+empIdCM++;empsCM.push({id,name:''});respCM[id]={};renderEmpSetupCM();renderSaisie();}
+function renderEmpSetupCM(){const el=document.getElementById('empSetupCM');el.innerHTML=empsCM.map((e,i)=>`<div class="er"><span style="font-size:.73rem;font-weight:700;color:#5a6a80;min-width:18px;">${i+1}</span><input type="text" placeholder="Employé(e) ${i+1}" value="${e.name}" oninput="empsCM[${i}].name=this.value"><button class="btn-del" onclick="empsCM.splice(${i},1);delete respCM['${e.id}'];renderEmpSetupCM();renderSaisie()">×</button></div>`).join('');}
+function renderSaisie(){
+  const w=document.getElementById('saisieWrapCM');
+  if(!empsCM.length){w.innerHTML='<div style="font-size:.82rem;color:#8a9ab0;">Ajoutez des employé(e)s ci-dessus.</div>';return;}
+  w.innerHTML=empsCM.map((e,ei)=>{
+    const rows=DIMS.map(d=>`<div class="es-row"><span class="es-lbl">${d.icon} ${d.label}</span><input type="range" class="mini-sl" min="1" max="10" value="${respCM[e.id][d.id]||5}" oninput="respCM['${e.id}']['${d.id}']=+this.value;this.nextElementSibling.textContent=this.value"><span style="font-size:.72rem;font-weight:700;color:var(--blue);min-width:20px;">${respCM[e.id][d.id]||5}</span></div>`).join('');
+    return `<div class="emp-saisie"><div class="es-name">Employé(e) ${ei+1}${e.name?' — '+e.name:''}</div><div class="es-sliders">${rows}</div></div>`;
+  }).join('');
+}
+function buildDashCM(){
+  const scored=empsCM.filter(e=>Object.keys(respCM[e.id]||{}).length>0);
+  if(!scored.length){alert('Aucune réponse saisie.');return;}
+  document.getElementById('dashCMSection').style.display='block';
+  const color=v=>v>=7?'var(--green)':v>=4.5?'var(--orange)':'var(--red)';
+  const dimAvgs=DIMS.map(d=>{const vals=scored.map(e=>respCM[e.id][d.id]||5);return{...d,avg:vals.reduce((a,b)=>a+b,0)/vals.length};});
+  const global=dimAvgs.reduce((s,d)=>s+d.avg,0)/dimAvgs.length;
+  const lbl=global>=7?'🟢 Charge mentale acceptable — bonne santé de l\'équipe':global>=5?'🟡 Charge modérée — vigilance recommandée':'🔴 Charge élevée — intervention requise';
+  const gg=document.getElementById('ggCM');
+  gg.innerHTML=`<div class="gg-score" style="color:${color(global)}">${global.toFixed(1)}/10</div><div class="gg-lbl" style="color:${color(global)}">${lbl}</div><div class="gg-bar-wrap"><div class="gg-bar" style="width:${global/10*100}%;background:${color(global)};"></div></div><div style="font-size:.76rem;color:#8a9ab0;margin-top:6px;">${scored.length} répondant(e)(s)</div>`;
+  document.getElementById('dimGaugesCM').innerHTML=dimAvgs.map(d=>`<div class="gauge-card"><div class="gc-icon">${d.icon}</div><div class="gc-score" style="color:${color(d.avg)}">${d.avg.toFixed(1)}/10</div><div class="gc-label">${d.label}</div><div class="gc-bar"><div class="gc-fill" style="width:${d.avg/10*100}%;background:${color(d.avg)};"></div></div></div>`).join('');
+  const alerts=[];
+  dimAvgs.forEach(d=>{
+    if(d.avg<4){alerts.push({cls:'ac-red',msg:`🔴 <strong>${d.label}</strong> — Score critique (${d.avg.toFixed(1)}/10). Intervention prioritaire recommandée.`});}
+    else if(d.avg<6){alerts.push({cls:'ac-orange',msg:`🟡 <strong>${d.label}</strong> — Score à surveiller (${d.avg.toFixed(1)}/10). Discuter en équipe.`});}
+  });
+  if(!alerts.length)alerts.push({cls:'ac-green',msg:'✅ Toutes les dimensions sont dans la zone acceptable. Maintenez les pratiques actuelles.'});
+  document.getElementById('alertsCM').innerHTML=alerts.map(a=>`<div class="alert-card ${a.cls}"><span style="font-size:1rem;">⚡</span><span>${a.msg}</span></div>`).join('');
+}
+for(let i=0;i<5;i++)addEmpCM();
+</script>
+
+
+</body></html>

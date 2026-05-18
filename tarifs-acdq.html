@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/info/Downloads/tarifs-acdq-abreges.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarifs ACDQ — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:950px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 30px;}
+  .dh-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:6px;}
+  .dh-title{font-size:1.2rem;font-weight:700;}
+  .year-edit{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:6px;color:white;font-family:inherit;font-size:1rem;font-weight:700;padding:4px 10px;text-align:center;width:80px;}
+  .year-edit:focus{outline:none;background:rgba(255,255,255,.25);}
+  .dh-sub{font-size:.8rem;opacity:.7;}
+  .info-banner{background:#fff8e1;border-bottom:2px solid var(--orange);padding:9px 28px;font-size:.8rem;color:#7a4400;line-height:1.6;}
+  .top-bar{padding:9px 24px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .search-in{border:1.5px solid var(--border);border-radius:6px;padding:6px 11px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;width:240px;}
+  .search-in:focus{outline:none;border-color:var(--accent);}
+  /* TABLE */
+  .section{margin-bottom:0;}
+  .cat-header{background:var(--dark);color:white;padding:8px 16px;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sub-header{background:#1a3a5c;color:rgba(255,255,255,.8);padding:5px 16px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  table{width:100%;border-collapse:collapse;}
+  thead th{background:var(--light);padding:7px 12px;font-size:.7rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;border-bottom:2px solid var(--border);text-align:left;}
+  thead th.r{text-align:right;}
+  tbody tr:nth-child(even) td{background:#fafbfc;}
+  tbody tr:hover td{background:var(--light);}
+  tbody td{padding:7px 12px;border-bottom:1px solid var(--border);font-size:.82rem;vertical-align:middle;}
+  .code{font-family:monospace;font-weight:700;color:var(--blue);font-size:.83rem;}
+  .price-cell{text-align:right;white-space:nowrap;}
+  .price-in{border:1.5px solid var(--border);border-radius:5px;padding:3px 7px;font-size:.82rem;font-family:inherit;text-align:right;width:90px;color:var(--text);background:white;}
+  .price-in:focus{outline:none;border-color:var(--accent);}
+  .suffix{font-size:.72rem;color:#8a9ab0;margin-left:3px;}
+  .note-row td{background:#fff8e1!important;font-size:.75rem;color:#7a4400;padding:5px 12px;font-style:italic;}
+  /* STATS */
+  .stats-bar{padding:10px 24px;background:var(--light);border-top:1px solid var(--border);display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .sc{font-size:.78rem;color:#5a6a80;} .sc strong{color:var(--blue);}
+  .actions{padding:12px 24px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{
+    body{background:white;}
+    .page-header,.info-banner,.top-bar,.actions,.search-in{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .cat-header,.sub-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    thead th{background:var(--light)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .price-in{border:none!important;background:transparent!important;}
+    .year-edit{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:650px){.price-in{width:75px;}.search-in{width:100%;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Facturation — Référence tarifaire ACDQ</div></div>
+<div class="container">
+  <div class="doc-header">
+    <div class="dh-top">
+      <div class="dh-title">📋 Liste des tarifs de l'ACDQ abrégée</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:.85rem;opacity:.8;">Édition</span>
+        <input class="year-edit" type="text" id="annee" value="2026" maxlength="4">
+      </div>
+    </div>
+    <div class="dh-sub">Guide des tarifs et nomenclature des actes buccodentaires — Actes les plus courants · Tarifs suggérés ACDQ</div>
+  </div>
+
+  <div class="info-banner">⚠️ Ces tarifs sont <strong>suggérés</strong> par l'ACDQ. Chaque dentiste est libre de fixer ses propres honoraires. Les prix ci-dessous sont modifiables pour refléter les tarifs de votre clinique. + L = frais de laboratoire en sus · + C.M. = coût des matériaux en sus.</div>
+
+  <div class="top-bar">
+    <input class="search-in" type="text" id="searchIn" placeholder="🔍 Rechercher un code ou une nomenclature..." oninput="filterTable()">
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn" onclick="resetPrices()">↺ Réinitialiser les prix</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimer / PDF</button>
+    </div>
+  </div>
+
+  <div id="tableWrap"><div class="section">
+      <div class="cat-header">🔍 Diagnostic</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Examen buccal clinique</td></tr><tr data-code="01130" data-nom="examen buccal complet — dentition permanente">
+          <td><span class="code">01130</span></td>
+          <td>Examen buccal complet — dentition permanente</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_0" type="text" value="119–197">
+            
+          </td>
+        </tr><tr data-code="01200" data-nom="examen buccal préventif (de rappel ou périodique)">
+          <td><span class="code">01200</span></td>
+          <td>Examen buccal préventif (de rappel ou périodique)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_1" type="text" value="64–118">
+            
+          </td>
+        </tr><tr data-code="01250" data-nom="examen buccal des enfants de moins de 10 ans (non remboursable ramq)">
+          <td><span class="code">01250</span></td>
+          <td>Examen buccal des enfants de moins de 10 ans (non remboursable RAMQ)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_2" type="text" value="84">
+            
+          </td>
+        </tr><tr data-code="01300" data-nom="examen d&#39;urgence : douleur aiguë et/ou infection">
+          <td><span class="code">01300</span></td>
+          <td>Examen d'urgence : douleur aiguë et/ou infection</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_3" type="text" value="61">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Radiographies</td></tr><tr class="note-row"><td colspan="3">💡 Les radiographies intraorales et photographies sont incluses dans le tarif d'un examen buccal complet et d'un examen préventif.</td></tr><tr data-code="02111" data-nom="radiographie périapicale (rétroalvéolaire), un cliché">
+          <td><span class="code">02111</span></td>
+          <td>Radiographie périapicale (rétroalvéolaire), un cliché</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_4" type="text" value="44">
+            
+          </td>
+        </tr><tr data-code="02112" data-nom="radiographie périapicale (rétroalvéolaire), deux clichés">
+          <td><span class="code">02112</span></td>
+          <td>Radiographie périapicale (rétroalvéolaire), deux clichés</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_5" type="text" value="54">
+            
+          </td>
+        </tr><tr data-code="02141" data-nom="radiographie interproximale (rétrocoronaire), un cliché">
+          <td><span class="code">02141</span></td>
+          <td>Radiographie interproximale (rétrocoronaire), un cliché</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_6" type="text" value="44">
+            
+          </td>
+        </tr><tr data-code="02142" data-nom="radiographie interproximale (rétrocoronaire), deux clichés">
+          <td><span class="code">02142</span></td>
+          <td>Radiographie interproximale (rétrocoronaire), deux clichés</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_7" type="text" value="54">
+            
+          </td>
+        </tr><tr data-code="02600" data-nom="radiographie panoramique">
+          <td><span class="code">02600</span></td>
+          <td>Radiographie panoramique</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_8" type="text" value="110">
+            
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">🛡️ Prévention</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Prophylaxie</td></tr><tr data-code="11100" data-nom="prophylaxie, dentition primaire (bouche complète)">
+          <td><span class="code">11100</span></td>
+          <td>Prophylaxie, dentition primaire (bouche complète)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_9" type="text" value="55">
+            
+          </td>
+        </tr><tr data-code="11200" data-nom="prophylaxie, dentition mixte (bouche complète)">
+          <td><span class="code">11200</span></td>
+          <td>Prophylaxie, dentition mixte (bouche complète)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_10" type="text" value="71">
+            
+          </td>
+        </tr><tr data-code="11300" data-nom="prophylaxie, dentition permanente (bouche complète)">
+          <td><span class="code">11300</span></td>
+          <td>Prophylaxie, dentition permanente (bouche complète)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_11" type="text" value="81">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Fluorure</td></tr><tr data-code="12400" data-nom="application topique de fluorure (avec ou sans porte-empreinte)">
+          <td><span class="code">12400</span></td>
+          <td>Application topique de fluorure (avec ou sans porte-empreinte)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_12" type="text" value="38">
+            
+          </td>
+        </tr><tr data-code="12410" data-nom="application de vernis fluoré, par séance">
+          <td><span class="code">12410</span></td>
+          <td>Application de vernis fluoré, par séance</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_13" type="text" value="42">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Scellants des puits et fissures</td></tr><tr data-code="13401" data-nom="scellants — première dent de chaque quadrant">
+          <td><span class="code">13401</span></td>
+          <td>Scellants — première dent de chaque quadrant</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_14" type="text" value="58">
+            
+          </td>
+        </tr><tr data-code="13404" data-nom="scellant — chaque dent additionnelle (même quadrant, même séance)">
+          <td><span class="code">13404</span></td>
+          <td>Scellant — chaque dent additionnelle (même quadrant, même séance)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_15" type="text" value="50">
+            
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">🔩 Dentisterie opératoire</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Restaurations — dents primaires</td></tr><tr data-code="23411" data-nom="composite, postérieure primaire, une surface">
+          <td><span class="code">23411</span></td>
+          <td>Composite, postérieure primaire, une surface</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_16" type="text" value="132">
+            
+          </td>
+        </tr><tr data-code="23412" data-nom="composite, postérieure primaire, deux surfaces">
+          <td><span class="code">23412</span></td>
+          <td>Composite, postérieure primaire, deux surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_17" type="text" value="216">
+            
+          </td>
+        </tr><tr data-code="23413" data-nom="composite, postérieure primaire, trois surfaces">
+          <td><span class="code">23413</span></td>
+          <td>Composite, postérieure primaire, trois surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_18" type="text" value="270">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Restaurations — dents permanentes (Amalgame)</td></tr><tr data-code="21212" data-nom="amalgame, antérieure permanente et prémolaire, deux surfaces">
+          <td><span class="code">21212</span></td>
+          <td>Amalgame, antérieure permanente et prémolaire, deux surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_19" type="text" value="179">
+            
+          </td>
+        </tr><tr data-code="21221" data-nom="amalgame conventionnel, molaire permanente, une surface">
+          <td><span class="code">21221</span></td>
+          <td>Amalgame conventionnel, molaire permanente, une surface</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_20" type="text" value="118">
+            
+          </td>
+        </tr><tr data-code="21222" data-nom="amalgame conventionnel, molaire permanente, deux surfaces">
+          <td><span class="code">21222</span></td>
+          <td>Amalgame conventionnel, molaire permanente, deux surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_21" type="text" value="203">
+            
+          </td>
+        </tr><tr data-code="21223" data-nom="amalgame conventionnel, molaire permanente, trois surfaces">
+          <td><span class="code">21223</span></td>
+          <td>Amalgame conventionnel, molaire permanente, trois surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_22" type="text" value="264">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Restaurations — dents permanentes (Composite antérieur)</td></tr><tr data-code="23111" data-nom="composite, antérieure permanente, classes i, v, vi">
+          <td><span class="code">23111</span></td>
+          <td>Composite, antérieure permanente, classes I, V, VI</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_23" type="text" value="167">
+            
+          </td>
+        </tr><tr data-code="23112" data-nom="composite, antérieure permanente, classe iii (mésiale ou distale)">
+          <td><span class="code">23112</span></td>
+          <td>Composite, antérieure permanente, classe III (mésiale ou distale)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_24" type="text" value="187">
+            
+          </td>
+        </tr><tr data-code="23113" data-nom="composite, antérieure permanente, classe iv (mésiale ou distale)">
+          <td><span class="code">23113</span></td>
+          <td>Composite, antérieure permanente, classe IV (mésiale ou distale)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_25" type="text" value="312">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Restaurations — dents permanentes (Composite prémolaire)</td></tr><tr data-code="23211" data-nom="composite prémolaire, une surface">
+          <td><span class="code">23211</span></td>
+          <td>Composite prémolaire, une surface</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_26" type="text" value="183">
+            
+          </td>
+        </tr><tr data-code="23212" data-nom="composite, prémolaire, deux surfaces">
+          <td><span class="code">23212</span></td>
+          <td>Composite, prémolaire, deux surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_27" type="text" value="285">
+            
+          </td>
+        </tr><tr data-code="23213" data-nom="composite, prémolaire, trois surfaces">
+          <td><span class="code">23213</span></td>
+          <td>Composite, prémolaire, trois surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_28" type="text" value="327">
+            
+          </td>
+        </tr><tr data-code="23214" data-nom="composite, prémolaire, quatre surfaces">
+          <td><span class="code">23214</span></td>
+          <td>Composite, prémolaire, quatre surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_29" type="text" value="406">
+            
+          </td>
+        </tr><tr data-code="23215" data-nom="composite, prémolaire, cinq surfaces">
+          <td><span class="code">23215</span></td>
+          <td>Composite, prémolaire, cinq surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_30" type="text" value="454">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Restaurations — dents permanentes (Composite molaire)</td></tr><tr data-code="23221" data-nom="composite, molaire permanente, une surface">
+          <td><span class="code">23221</span></td>
+          <td>Composite, molaire permanente, une surface</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_31" type="text" value="205">
+            
+          </td>
+        </tr><tr data-code="23222" data-nom="composite, molaire permanente, deux surfaces">
+          <td><span class="code">23222</span></td>
+          <td>Composite, molaire permanente, deux surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_32" type="text" value="306">
+            
+          </td>
+        </tr><tr data-code="23223" data-nom="composite, molaire permanente, trois surfaces">
+          <td><span class="code">23223</span></td>
+          <td>Composite, molaire permanente, trois surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_33" type="text" value="370">
+            
+          </td>
+        </tr><tr data-code="23224" data-nom="composite, molaire permanente, quatre surfaces">
+          <td><span class="code">23224</span></td>
+          <td>Composite, molaire permanente, quatre surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_34" type="text" value="435">
+            
+          </td>
+        </tr><tr data-code="23225" data-nom="composite, molaire permanente, cinq surfaces">
+          <td><span class="code">23225</span></td>
+          <td>Composite, molaire permanente, cinq surfaces</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_35" type="text" value="523">
+            
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">🔧 Endodontie</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Urgence endodontique</td></tr><tr data-code="39202" data-nom="ouverture et drainage, molaire">
+          <td><span class="code">39202</span></td>
+          <td>Ouverture et drainage, molaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_36" type="text" value="179">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Thérapie canalaire</td></tr><tr data-code="33100" data-nom="traitement de canal, un canal">
+          <td><span class="code">33100</span></td>
+          <td>Traitement de canal, un canal</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_37" type="text" value="749">
+            
+          </td>
+        </tr><tr data-code="33200" data-nom="traitement de canal, deux canaux">
+          <td><span class="code">33200</span></td>
+          <td>Traitement de canal, deux canaux</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_38" type="text" value="1 065">
+            
+          </td>
+        </tr><tr data-code="33300" data-nom="traitement de canal, trois canaux">
+          <td><span class="code">33300</span></td>
+          <td>Traitement de canal, trois canaux</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_39" type="text" value="1 366">
+            
+          </td>
+        </tr><tr data-code="33400" data-nom="traitement de canal, quatre canaux">
+          <td><span class="code">33400</span></td>
+          <td>Traitement de canal, quatre canaux</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_40" type="text" value="1 584">
+            
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">🩺 Parodontie</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Traitements initiaux</td></tr><tr class="note-row"><td colspan="3">💡 Une unité de temps équivaut à 15 minutes.</td></tr><tr data-code="43411" data-nom="détartrage parodontal (supra et subgingival) avec ou sans anesthésie — 1 unité de temps (15 min)">
+          <td><span class="code">43411</span></td>
+          <td>Détartrage parodontal (supra et subgingival) avec ou sans anesthésie — 1 unité de temps (15 min)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_41" type="text" value="73">
+            
+          </td>
+        </tr><tr data-code="43412" data-nom="détartrage parodontal — 2 unités de temps (30 min)">
+          <td><span class="code">43412</span></td>
+          <td>Détartrage parodontal — 2 unités de temps (30 min)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_42" type="text" value="125">
+            
+          </td>
+        </tr><tr data-code="43413" data-nom="détartrage parodontal — 3 unités de temps (45 min)">
+          <td><span class="code">43413</span></td>
+          <td>Détartrage parodontal — 3 unités de temps (45 min)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_43" type="text" value="179">
+            
+          </td>
+        </tr><tr data-code="43414" data-nom="détartrage parodontal — 4 unités de temps (60 min)">
+          <td><span class="code">43414</span></td>
+          <td>Détartrage parodontal — 4 unités de temps (60 min)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_44" type="text" value="230">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Appareils parodontaux</td></tr><tr data-code="43611" data-nom="appareil intrabuccal pour parafonction, maxillaire">
+          <td><span class="code">43611</span></td>
+          <td>Appareil intrabuccal pour parafonction, maxillaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_45" type="text" value="668">
+            <span class="suffix">+L ou C.M.</span>
+          </td>
+        </tr><tr data-code="43612" data-nom="appareil intrabuccal pour parafonction, mandibulaire">
+          <td><span class="code">43612</span></td>
+          <td>Appareil intrabuccal pour parafonction, mandibulaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_46" type="text" value="668">
+            <span class="suffix">+L ou C.M.</span>
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">👑 Prothèse fixe</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Couronne individuelle</td></tr><tr data-code="27200" data-nom="couronne, porcelaine, zircone ou autre céramique / résine">
+          <td><span class="code">27200</span></td>
+          <td>Couronne, porcelaine, zircone ou autre céramique / résine</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_47" type="text" value="1 261">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="27210" data-nom="couronne, porcelaine, acrylique ou résine sur métal">
+          <td><span class="code">27210</span></td>
+          <td>Couronne, porcelaine, acrylique ou résine sur métal</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_48" type="text" value="1 261">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Actes complémentaires couronne</td></tr><tr data-code="29100" data-nom="recimentation d&#39;une incrustation, couronne, facette ou pivot">
+          <td><span class="code">29100</span></td>
+          <td>Recimentation d'une incrustation, couronne, facette ou pivot</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_49" type="text" value="137">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="29600" data-nom="reconstitution d&#39;une dent (pile) en vue d&#39;une couronne ou pont">
+          <td><span class="code">29600</span></td>
+          <td>Reconstitution d'une dent (pile) en vue d'une couronne ou pont</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_50" type="text" value="261">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Pivot radiculaire</td></tr><tr data-code="27700" data-nom="corps coulé, pour couronne ou prothèse hybride, fabriqué en laboratoire">
+          <td><span class="code">27700</span></td>
+          <td>Corps coulé, pour couronne ou prothèse hybride, fabriqué en laboratoire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_51" type="text" value="562">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="29501" data-nom="pivot préfabriqué, un pivot">
+          <td><span class="code">29501</span></td>
+          <td>Pivot préfabriqué, un pivot</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_52" type="text" value="286">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Bridge</td></tr><tr data-code="62510" data-nom="pontique, porcelaine, acrylique ou résine sur métal">
+          <td><span class="code">62510</span></td>
+          <td>Pontique, porcelaine, acrylique ou résine sur métal</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_53" type="text" value="768">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="67210" data-nom="pilier de pont, porcelaine, acrylique ou résine sur métal">
+          <td><span class="code">67210</span></td>
+          <td>Pilier de pont, porcelaine, acrylique ou résine sur métal</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_54" type="text" value="1 337">
+            <span class="suffix">+L</span>
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">🦷 Prothèse amovible</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Prothèses complètes</td></tr><tr data-code="51100" data-nom="prothèse complète standard, maxillaire">
+          <td><span class="code">51100</span></td>
+          <td>Prothèse complète standard, maxillaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_55" type="text" value="1 183">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="51110" data-nom="prothèse complète standard, mandibule">
+          <td><span class="code">51110</span></td>
+          <td>Prothèse complète standard, mandibule</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_56" type="text" value="1 526">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="51120" data-nom="prothèse complète standard, maxillaire et mandibule">
+          <td><span class="code">51120</span></td>
+          <td>Prothèse complète standard, maxillaire et mandibule</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_57" type="text" value="2 221">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Prothèses partielles</td></tr><tr data-code="52400" data-nom="prothèse partielle, base coulée avec selle libre, maxillaire">
+          <td><span class="code">52400</span></td>
+          <td>Prothèse partielle, base coulée avec selle libre, maxillaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_58" type="text" value="1 526">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52410" data-nom="prothèse partielle, base coulée avec selle libre, mandibule">
+          <td><span class="code">52410</span></td>
+          <td>Prothèse partielle, base coulée avec selle libre, mandibule</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_59" type="text" value="1 526">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52420" data-nom="prothèse partielle, base coulée avec selle libre, maxillaire et mandibule">
+          <td><span class="code">52420</span></td>
+          <td>Prothèse partielle, base coulée avec selle libre, maxillaire et mandibule</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_60" type="text" value="2 503">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52500" data-nom="prothèse partielle, base coulée sans selle libre, maxillaire">
+          <td><span class="code">52500</span></td>
+          <td>Prothèse partielle, base coulée sans selle libre, maxillaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_61" type="text" value="1 427">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52510" data-nom="prothèse partielle, base coulée sans selle libre, mandibule">
+          <td><span class="code">52510</span></td>
+          <td>Prothèse partielle, base coulée sans selle libre, mandibule</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_62" type="text" value="1 427">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52520" data-nom="prothèse partielle, base coulée sans selle libre, maxillaire et mandibule">
+          <td><span class="code">52520</span></td>
+          <td>Prothèse partielle, base coulée sans selle libre, maxillaire et mandibule</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_63" type="text" value="2 340">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52531" data-nom="prothèse complète avec partielle opposée, base coulée, sans selle, standard">
+          <td><span class="code">52531</span></td>
+          <td>Prothèse complète avec partielle opposée, base coulée, sans selle, standard</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_64" type="text" value="2 211">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52532" data-nom="prothèse complète avec partielle opposée, base coulée, sans selle, équilibrées">
+          <td><span class="code">52532</span></td>
+          <td>Prothèse complète avec partielle opposée, base coulée, sans selle, équilibrées</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_65" type="text" value="2 775">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52542" data-nom="prothèse complète avec partielle opposée, base coulée, avec selle, standard">
+          <td><span class="code">52542</span></td>
+          <td>Prothèse complète avec partielle opposée, base coulée, avec selle, standard</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_66" type="text" value="2 368">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="52543" data-nom="prothèse complète avec partielle opposée, base coulée, avec selle, équilibrées">
+          <td><span class="code">52543</span></td>
+          <td>Prothèse complète avec partielle opposée, base coulée, avec selle, équilibrées</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_67" type="text" value="2 953">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Services complémentaires</td></tr><tr data-code="55101" data-nom="réparation sans empreinte, prothèse complète, maxillaire">
+          <td><span class="code">55101</span></td>
+          <td>Réparation sans empreinte, prothèse complète, maxillaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_68" type="text" value="94">
+            <span class="suffix">+L</span>
+          </td>
+        </tr><tr data-code="55203" data-nom="réparation avec empreinte, prothèse partielle, maxillaire">
+          <td><span class="code">55203</span></td>
+          <td>Réparation avec empreinte, prothèse partielle, maxillaire</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_69" type="text" value="201">
+            <span class="suffix">+L</span>
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">✂️ Chirurgie buccale</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Ablation — sans complication</td></tr><tr data-code="71101" data-nom="ablation de dent ayant fait éruption (sans complication), 1re dent par quadrant">
+          <td><span class="code">71101</span></td>
+          <td>Ablation de dent ayant fait éruption (sans complication), 1re dent par quadrant</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_70" type="text" value="176">
+            
+          </td>
+        </tr><tr data-code="71111" data-nom="ablation, toute autre dent du même quadrant, même visite">
+          <td><span class="code">71111</span></td>
+          <td>Ablation, toute autre dent du même quadrant, même visite</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_71" type="text" value="121">
+            
+          </td>
+        </tr><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Ablation chirurgicale</td></tr><tr data-code="72100" data-nom="dent ayant fait éruption (complexe) — avec lambeau et/ou odontectomie/ostéoectomie">
+          <td><span class="code">72100</span></td>
+          <td>Dent ayant fait éruption (complexe) — avec lambeau et/ou odontectomie/ostéoectomie</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_72" type="text" value="315">
+            
+          </td>
+        </tr><tr data-code="72110" data-nom="dent ayant fait éruption (complexe) — avec lambeau, odontectomie et ostéoectomie">
+          <td><span class="code">72110</span></td>
+          <td>Dent ayant fait éruption (complexe) — avec lambeau, odontectomie ET ostéoectomie</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_73" type="text" value="437">
+            
+          </td>
+        </tr><tr data-code="72210" data-nom="dent incluse, sous-muqueuse">
+          <td><span class="code">72210</span></td>
+          <td>Dent incluse, sous-muqueuse</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_74" type="text" value="284">
+            
+          </td>
+        </tr><tr data-code="72220" data-nom="dent incluse — nécessitant ostéoectomie ou odontectomie (sectionnement)">
+          <td><span class="code">72220</span></td>
+          <td>Dent incluse — nécessitant ostéoectomie ou odontectomie (sectionnement)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_75" type="text" value="406">
+            
+          </td>
+        </tr><tr data-code="72230" data-nom="dent incluse — nécessitant ostéoectomie et odontectomie (sectionnement)">
+          <td><span class="code">72230</span></td>
+          <td>Dent incluse — nécessitant ostéoectomie ET odontectomie (sectionnement)</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_76" type="text" value="542">
+            
+          </td>
+        </tr></tbody></table></div><div class="section">
+      <div class="cat-header">⭐ Services généraux</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody><tr><td colspan="3" class="sub-header" style="padding:5px 14px;">Blanchiment</td></tr><tr data-code="97133" data-nom="blanchiment à domicile, maxillaire et mandibule">
+          <td><span class="code">97133</span></td>
+          <td>Blanchiment à domicile, maxillaire et mandibule</td>
+          <td class="price-cell">
+            <input class="price-in" id="r_77" type="text" value="643">
+            <span class="suffix">+L +C.M.</span>
+          </td>
+        </tr></tbody></table></div></div>
+
+  <div class="stats-bar" id="statsBar"><span class="sc">📋 <strong>78</strong> codes d'actes</span><span class="sc">🦷 <strong>9</strong> catégories</span><span class="sc">✏️ Prix modifiables directement dans le tableau</span></div>
+  <div class="actions"><button class="btn primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Source : ACDQ — Guide des tarifs <span id="footerYear">2026</span> · À titre de référence seulement</div>
+</div>
+
+<script>
+const DATA = [
+  { cat:'Diagnostic', icon:'🔍', sub:null, rows:[
+    { sub:'Examen buccal clinique' },
+    { code:'01130', nom:'Examen buccal complet — dentition permanente', prix:'119–197', suffix:'' },
+    { code:'01200', nom:'Examen buccal préventif (de rappel ou périodique)', prix:'64–118', suffix:'' },
+    { code:'01250', nom:'Examen buccal des enfants de moins de 10 ans (non remboursable RAMQ)', prix:'84', suffix:'' },
+    { code:'01300', nom:'Examen d\'urgence : douleur aiguë et/ou infection', prix:'61', suffix:'' },
+    { sub:'Radiographies', note:'Les radiographies intraorales et photographies sont incluses dans le tarif d\'un examen buccal complet et d\'un examen préventif.' },
+    { code:'02111', nom:'Radiographie périapicale (rétroalvéolaire), un cliché', prix:'44', suffix:'' },
+    { code:'02112', nom:'Radiographie périapicale (rétroalvéolaire), deux clichés', prix:'54', suffix:'' },
+    { code:'02141', nom:'Radiographie interproximale (rétrocoronaire), un cliché', prix:'44', suffix:'' },
+    { code:'02142', nom:'Radiographie interproximale (rétrocoronaire), deux clichés', prix:'54', suffix:'' },
+    { code:'02600', nom:'Radiographie panoramique', prix:'110', suffix:'' },
+  ]},
+  { cat:'Prévention', icon:'🛡️', rows:[
+    { sub:'Prophylaxie' },
+    { code:'11100', nom:'Prophylaxie, dentition primaire (bouche complète)', prix:'55', suffix:'' },
+    { code:'11200', nom:'Prophylaxie, dentition mixte (bouche complète)', prix:'71', suffix:'' },
+    { code:'11300', nom:'Prophylaxie, dentition permanente (bouche complète)', prix:'81', suffix:'' },
+    { sub:'Fluorure' },
+    { code:'12400', nom:'Application topique de fluorure (avec ou sans porte-empreinte)', prix:'38', suffix:'' },
+    { code:'12410', nom:'Application de vernis fluoré, par séance', prix:'42', suffix:'' },
+    { sub:'Scellants des puits et fissures' },
+    { code:'13401', nom:'Scellants — première dent de chaque quadrant', prix:'58', suffix:'' },
+    { code:'13404', nom:'Scellant — chaque dent additionnelle (même quadrant, même séance)', prix:'50', suffix:'' },
+  ]},
+  { cat:'Dentisterie opératoire', icon:'🔩', rows:[
+    { sub:'Restaurations — dents primaires' },
+    { code:'23411', nom:'Composite, postérieure primaire, une surface', prix:'132', suffix:'' },
+    { code:'23412', nom:'Composite, postérieure primaire, deux surfaces', prix:'216', suffix:'' },
+    { code:'23413', nom:'Composite, postérieure primaire, trois surfaces', prix:'270', suffix:'' },
+    { sub:'Restaurations — dents permanentes (Amalgame)' },
+    { code:'21212', nom:'Amalgame, antérieure permanente et prémolaire, deux surfaces', prix:'179', suffix:'' },
+    { code:'21221', nom:'Amalgame conventionnel, molaire permanente, une surface', prix:'118', suffix:'' },
+    { code:'21222', nom:'Amalgame conventionnel, molaire permanente, deux surfaces', prix:'203', suffix:'' },
+    { code:'21223', nom:'Amalgame conventionnel, molaire permanente, trois surfaces', prix:'264', suffix:'' },
+    { sub:'Restaurations — dents permanentes (Composite antérieur)' },
+    { code:'23111', nom:'Composite, antérieure permanente, classes I, V, VI', prix:'167', suffix:'' },
+    { code:'23112', nom:'Composite, antérieure permanente, classe III (mésiale ou distale)', prix:'187', suffix:'' },
+    { code:'23113', nom:'Composite, antérieure permanente, classe IV (mésiale ou distale)', prix:'312', suffix:'' },
+    { sub:'Restaurations — dents permanentes (Composite prémolaire)' },
+    { code:'23211', nom:'Composite prémolaire, une surface', prix:'183', suffix:'' },
+    { code:'23212', nom:'Composite, prémolaire, deux surfaces', prix:'285', suffix:'' },
+    { code:'23213', nom:'Composite, prémolaire, trois surfaces', prix:'327', suffix:'' },
+    { code:'23214', nom:'Composite, prémolaire, quatre surfaces', prix:'406', suffix:'' },
+    { code:'23215', nom:'Composite, prémolaire, cinq surfaces', prix:'454', suffix:'' },
+    { sub:'Restaurations — dents permanentes (Composite molaire)' },
+    { code:'23221', nom:'Composite, molaire permanente, une surface', prix:'205', suffix:'' },
+    { code:'23222', nom:'Composite, molaire permanente, deux surfaces', prix:'306', suffix:'' },
+    { code:'23223', nom:'Composite, molaire permanente, trois surfaces', prix:'370', suffix:'' },
+    { code:'23224', nom:'Composite, molaire permanente, quatre surfaces', prix:'435', suffix:'' },
+    { code:'23225', nom:'Composite, molaire permanente, cinq surfaces', prix:'523', suffix:'' },
+  ]},
+  { cat:'Endodontie', icon:'🔧', rows:[
+    { sub:'Urgence endodontique' },
+    { code:'39202', nom:'Ouverture et drainage, molaire', prix:'179', suffix:'' },
+    { sub:'Thérapie canalaire' },
+    { code:'33100', nom:'Traitement de canal, un canal', prix:'749', suffix:'' },
+    { code:'33200', nom:'Traitement de canal, deux canaux', prix:'1 065', suffix:'' },
+    { code:'33300', nom:'Traitement de canal, trois canaux', prix:'1 366', suffix:'' },
+    { code:'33400', nom:'Traitement de canal, quatre canaux', prix:'1 584', suffix:'' },
+  ]},
+  { cat:'Parodontie', icon:'🩺', rows:[
+    { sub:'Traitements initiaux', note:'Une unité de temps équivaut à 15 minutes.' },
+    { code:'43411', nom:'Détartrage parodontal (supra et subgingival) avec ou sans anesthésie — 1 unité de temps (15 min)', prix:'73', suffix:'' },
+    { code:'43412', nom:'Détartrage parodontal — 2 unités de temps (30 min)', prix:'125', suffix:'' },
+    { code:'43413', nom:'Détartrage parodontal — 3 unités de temps (45 min)', prix:'179', suffix:'' },
+    { code:'43414', nom:'Détartrage parodontal — 4 unités de temps (60 min)', prix:'230', suffix:'' },
+    { sub:'Appareils parodontaux' },
+    { code:'43611', nom:'Appareil intrabuccal pour parafonction, maxillaire', prix:'668', suffix:'+L ou C.M.' },
+    { code:'43612', nom:'Appareil intrabuccal pour parafonction, mandibulaire', prix:'668', suffix:'+L ou C.M.' },
+  ]},
+  { cat:'Prothèse fixe', icon:'👑', rows:[
+    { sub:'Couronne individuelle' },
+    { code:'27200', nom:'Couronne, porcelaine, zircone ou autre céramique / résine', prix:'1 261', suffix:'+L' },
+    { code:'27210', nom:'Couronne, porcelaine, acrylique ou résine sur métal', prix:'1 261', suffix:'+L' },
+    { sub:'Actes complémentaires couronne' },
+    { code:'29100', nom:'Recimentation d\'une incrustation, couronne, facette ou pivot', prix:'137', suffix:'+L' },
+    { code:'29600', nom:'Reconstitution d\'une dent (pile) en vue d\'une couronne ou pont', prix:'261', suffix:'' },
+    { sub:'Pivot radiculaire' },
+    { code:'27700', nom:'Corps coulé, pour couronne ou prothèse hybride, fabriqué en laboratoire', prix:'562', suffix:'+L' },
+    { code:'29501', nom:'Pivot préfabriqué, un pivot', prix:'286', suffix:'' },
+    { sub:'Bridge' },
+    { code:'62510', nom:'Pontique, porcelaine, acrylique ou résine sur métal', prix:'768', suffix:'+L' },
+    { code:'67210', nom:'Pilier de pont, porcelaine, acrylique ou résine sur métal', prix:'1 337', suffix:'+L' },
+  ]},
+  { cat:'Prothèse amovible', icon:'🦷', rows:[
+    { sub:'Prothèses complètes' },
+    { code:'51100', nom:'Prothèse complète standard, maxillaire', prix:'1 183', suffix:'+L' },
+    { code:'51110', nom:'Prothèse complète standard, mandibule', prix:'1 526', suffix:'+L' },
+    { code:'51120', nom:'Prothèse complète standard, maxillaire et mandibule', prix:'2 221', suffix:'+L' },
+    { sub:'Prothèses partielles' },
+    { code:'52400', nom:'Prothèse partielle, base coulée avec selle libre, maxillaire', prix:'1 526', suffix:'+L' },
+    { code:'52410', nom:'Prothèse partielle, base coulée avec selle libre, mandibule', prix:'1 526', suffix:'+L' },
+    { code:'52420', nom:'Prothèse partielle, base coulée avec selle libre, maxillaire et mandibule', prix:'2 503', suffix:'+L' },
+    { code:'52500', nom:'Prothèse partielle, base coulée sans selle libre, maxillaire', prix:'1 427', suffix:'+L' },
+    { code:'52510', nom:'Prothèse partielle, base coulée sans selle libre, mandibule', prix:'1 427', suffix:'+L' },
+    { code:'52520', nom:'Prothèse partielle, base coulée sans selle libre, maxillaire et mandibule', prix:'2 340', suffix:'+L' },
+    { code:'52531', nom:'Prothèse complète avec partielle opposée, base coulée, sans selle, standard', prix:'2 211', suffix:'+L' },
+    { code:'52532', nom:'Prothèse complète avec partielle opposée, base coulée, sans selle, équilibrées', prix:'2 775', suffix:'+L' },
+    { code:'52542', nom:'Prothèse complète avec partielle opposée, base coulée, avec selle, standard', prix:'2 368', suffix:'+L' },
+    { code:'52543', nom:'Prothèse complète avec partielle opposée, base coulée, avec selle, équilibrées', prix:'2 953', suffix:'+L' },
+    { sub:'Services complémentaires' },
+    { code:'55101', nom:'Réparation sans empreinte, prothèse complète, maxillaire', prix:'94', suffix:'+L' },
+    { code:'55203', nom:'Réparation avec empreinte, prothèse partielle, maxillaire', prix:'201', suffix:'+L' },
+  ]},
+  { cat:'Chirurgie buccale', icon:'✂️', rows:[
+    { sub:'Ablation — sans complication' },
+    { code:'71101', nom:'Ablation de dent ayant fait éruption (sans complication), 1re dent par quadrant', prix:'176', suffix:'' },
+    { code:'71111', nom:'Ablation, toute autre dent du même quadrant, même visite', prix:'121', suffix:'' },
+    { sub:'Ablation chirurgicale' },
+    { code:'72100', nom:'Dent ayant fait éruption (complexe) — avec lambeau et/ou odontectomie/ostéoectomie', prix:'315', suffix:'' },
+    { code:'72110', nom:'Dent ayant fait éruption (complexe) — avec lambeau, odontectomie ET ostéoectomie', prix:'437', suffix:'' },
+    { code:'72210', nom:'Dent incluse, sous-muqueuse', prix:'284', suffix:'' },
+    { code:'72220', nom:'Dent incluse — nécessitant ostéoectomie ou odontectomie (sectionnement)', prix:'406', suffix:'' },
+    { code:'72230', nom:'Dent incluse — nécessitant ostéoectomie ET odontectomie (sectionnement)', prix:'542', suffix:'' },
+  ]},
+  { cat:'Services généraux', icon:'⭐', rows:[
+    { sub:'Blanchiment' },
+    { code:'97133', nom:'Blanchiment à domicile, maxillaire et mandibule', prix:'643', suffix:'+L +C.M.' },
+  ]},
+];
+
+const defaultPrices = {};
+let rowId = 0;
+
+function buildTable(){
+  const wrap = document.getElementById('tableWrap');
+  let html = '';
+  let totalRows = 0;
+
+  DATA.forEach(cat => {
+    html += `<div class="section">
+      <div class="cat-header">${cat.icon} ${cat.cat}</div>
+      <table>
+        <thead><tr>
+          <th style="width:90px;">Code</th>
+          <th>Nomenclature</th>
+          <th class="r" style="width:130px;">Tarif suggéré ($)</th>
+        </tr></thead>
+        <tbody>`;
+
+    cat.rows.forEach(row => {
+      if (row.sub !== undefined) {
+        html += `<tr><td colspan="3" class="sub-header" style="padding:5px 14px;">${row.sub}</td></tr>`;
+        if (row.note) html += `<tr class="note-row"><td colspan="3">💡 ${row.note}</td></tr>`;
+      } else {
+        const rid = 'r_' + rowId++;
+        defaultPrices[rid] = row.prix;
+        totalRows++;
+        html += `<tr data-code="${row.code}" data-nom="${row.nom.toLowerCase()}">
+          <td><span class="code">${row.code}</span></td>
+          <td>${row.nom}</td>
+          <td class="price-cell">
+            <input class="price-in" id="${rid}" type="text" value="${row.prix}">
+            ${row.suffix ? `<span class="suffix">${row.suffix}</span>` : ''}
+          </td>
+        </tr>`;
+      }
+    });
+    html += `</tbody></table></div>`;
+  });
+
+  wrap.innerHTML = html;
+  document.getElementById('statsBar').innerHTML = `<span class="sc">📋 <strong>${totalRows}</strong> codes d'actes</span><span class="sc">🦷 <strong>${DATA.length}</strong> catégories</span><span class="sc">✏️ Prix modifiables directement dans le tableau</span>`;
+}
+
+function filterTable(){
+  const q = document.getElementById('searchIn').value.toLowerCase();
+  document.querySelectorAll('#tableWrap tbody tr').forEach(tr => {
+    if(tr.classList.contains('note-row')) return;
+    const code = tr.dataset.code||'', nom = tr.dataset.nom||'';
+    if(!code && !nom) return; // sub-header
+    tr.style.display = (!q || code.includes(q) || nom.includes(q)) ? '' : 'none';
+  });
+}
+
+function resetPrices(){
+  if(!confirm('Remettre tous les prix aux valeurs ACDQ originales?')) return;
+  Object.keys(defaultPrices).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = defaultPrices[id];
+  });
+}
+
+document.getElementById('annee').addEventListener('input', function(){
+  document.getElementById('footerYear').textContent = this.value;
+});
+
+buildTable();
+</script>
+
+
+</body></html>

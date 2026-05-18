@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)file:///C:/Users/info/Downloads/guide-employe.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide de l'employé — Gestion Mel</title>
+<style>
+  :root {
+    --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3;
+    --light: #f4f8ff; --border: #d0dff0; --text: #1a2535;
+    --green: #1a9e5a; --orange: #e67e22; --red: #c0392b; --purple: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 920px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: .85rem; opacity: .75; }
+
+  /* NAV */
+  .nav-tabs { display: flex; background: #f0f5fb; border-bottom: 2px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 11px 18px; background: none; border: none; border-bottom: 3px solid transparent; color: #5a6a80; font-family: inherit; font-size: .8rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all .2s; margin-bottom: -2px; }
+  .tab-btn:hover { color: var(--blue); background: #e8f0fb; }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--accent); background: white; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* SECTIONS */
+  .section { padding: 20px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: .82rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field.full { grid-column: 1/-1; }
+  label { font-size: .74rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: .5px; }
+  input[type=text], input[type=date], input[type=number], select {
+    border: 1.5px solid var(--border); border-radius: 6px; padding: 8px 11px;
+    font-size: .88rem; font-family: inherit; color: var(--text); background: var(--light);
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); background: white; }
+
+  /* PARAGRAPHE SUGGERÉ */
+  .para-block { margin-bottom: 16px; }
+  .para-label { font-size: .74rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+  .para-hint { font-size: .72rem; color: #8a9ab0; font-style: italic; background: #fff8e1; border-left: 3px solid var(--orange); padding: 5px 10px; border-radius: 3px; margin-bottom: 6px; }
+  textarea {
+    width: 100%; border: 1.5px solid var(--border); border-radius: 6px;
+    padding: 10px 13px; font-size: .87rem; font-family: inherit; color: var(--text);
+    background: var(--light); resize: vertical; line-height: 1.75;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea.suggested { min-height: 100px; }
+  textarea.large { min-height: 130px; }
+  textarea.small { min-height: 70px; }
+
+  /* VALEUR CARD */
+  .valeur-card { background: var(--light); border: 1.5px solid var(--border); border-left: 4px solid var(--blue); border-radius: 8px; padding: 16px 18px; margin-bottom: 14px; }
+  .valeur-title { font-size: .88rem; font-weight: 700; color: var(--blue); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .valeur-icon { font-size: 1.1rem; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+  .data-table th { background: var(--dark); color: white; padding: 8px 12px; text-align: left; font-size: .76rem; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .data-table td { border: 1px solid var(--border); padding: 7px 10px; vertical-align: middle; }
+  .data-table tr:nth-child(even) td { background: var(--light); }
+  .data-table input { border: none; background: transparent; width: 100%; font-family: inherit; font-size: .84rem; padding: 3px; }
+  .data-table input:focus { outline: none; background: #fffde7; }
+  .btn-add-row { margin-top: 8px; padding: 7px 14px; background: white; border: 1.5px dashed var(--accent); border-radius: 6px; color: var(--blue); font-size: .81rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .btn-add-row:hover { background: #e8f0fb; }
+
+  /* INFO BOX */
+  .info-box { background: var(--light); border-left: 4px solid var(--accent); border-radius: 4px; padding: 10px 14px; font-size: .84rem; color: #2a3a4a; margin-bottom: 14px; line-height: 1.7; }
+  .warn-box { background: #fff8e1; border-left: 4px solid var(--orange); border-radius: 4px; padding: 10px 14px; font-size: .83rem; color: #7a4400; margin-bottom: 14px; line-height: 1.7; }
+
+  /* SIGNATURE */
+  .sig-box { border-top: 1.5px solid var(--border); padding-top: 8px; margin-top: 6px; font-size: .78rem; color: #5a6a80; }
+
+  /* ACTIONS */
+  .actions { padding: 20px 36px; background: var(--light); display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .btn { padding: 9px 20px; border-radius: 7px; font-size: .87rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; font-family: inherit; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #155a9e; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-secondary:hover { background: #e8f0fb; }
+  .btn-print { background: white; color: #5a6a80; border: 1.5px solid var(--border); }
+
+  .footer-note { text-align: center; font-size: .75rem; color: #8a9ab0; padding: 12px; }
+
+  /* PRINT */
+  @media print {
+    body { background: white; font-size: 11px; }
+    .page-header, .nav-tabs, .actions, .para-hint { display: none !important; }
+    .container { box-shadow: none; margin: 0; border-radius: 0; }
+    .tab-content { display: block !important; }
+    .doc-header, .data-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section { page-break-inside: avoid; }
+    textarea, input { border: none !important; background: transparent !important; }
+    .valeur-card { border: 1px solid #ddd; }
+    .tab-print-title { display: block !important; font-size: 1rem; font-weight: 700; color: var(--blue); padding: 14px 36px 0; border-top: 2px solid var(--border); margin-top: 10px; }
+  }
+  .tab-print-title { display: none; }
+
+  @media (max-width: 600px) {
+    .section { padding: 14px 16px; }
+    .grid, .grid3 { grid-template-columns: 1fr; }
+    .actions { padding: 14px 16px; }
+    .page-header { padding: 14px 20px; }
+    .doc-header { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Ressources humaines</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Guide de l'employé(e)</h1>
+    <p>Document personnalisable — Clinique dentaire</p>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="show(0)">🏥 Clinique</button>
+    <button class="tab-btn" onclick="show(1)">💎 Valeurs</button>
+    <button class="tab-btn" onclick="show(2)">👤 Parcours</button>
+    <button class="tab-btn" onclick="show(3)">💰 Rémunération</button>
+    <button class="tab-btn" onclick="show(4)">🕐 Horaires</button>
+    <button class="tab-btn" onclick="show(5)">🌴 Congés</button>
+    <button class="tab-btn" onclick="show(6)">🎁 Avantages</button>
+    <button class="tab-btn" onclick="show(7)">🦺 Santé &amp; Sécurité</button>
+    <button class="tab-btn" onclick="show(8)">📋 Politiques</button>
+    <button class="tab-btn" onclick="show(9)">✍️ Attestation</button>
+  </div>
+
+  <!-- ===== 0 : CLINIQUE ===== -->
+  <div class="tab-content active" id="tab-0">
+    <div class="section">
+      <div class="section-title">Informations de la clinique</div>
+      <div class="grid">
+        <div class="field"><label>Nom de la clinique</label><input type="text" id="nomClinique" placeholder="Clinique Dentaire..." oninput="updateAll()"></div>
+        <div class="field"><label>Nom du (de la) propriétaire</label><input type="text" id="nomProprio" placeholder="Dr / Dre ..."></div>
+        <div class="field"><label>Adresse</label><input type="text" placeholder="123, rue..."></div>
+        <div class="field"><label>Ville</label><input type="text" placeholder="Québec"></div>
+        <div class="field"><label>Téléphone</label><input type="text" placeholder="418-000-0000"></div>
+        <div class="field"><label>Courriel</label><input type="text" placeholder="info@cliniqueXYZ.com"></div>
+        <div class="field"><label>Date de mise à jour du guide</label><input type="date" id="dateGuide"></div>
+        <div class="field"><label>Version</label><input type="text" placeholder="1.0"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Message de bienvenue</div>
+      <div class="para-hint">💡 Suggestion — Personnalisez ce message avec le nom de votre clinique et votre propriétaire.</div>
+      <div class="para-block">
+        <textarea class="large" id="bienvenue">Nous sommes heureux(se) de vous accueillir au sein de notre équipe. La qualité de vie au travail, dans le respect de nos valeurs communes, demeure notre priorité. Nous offrons des soins dentaires de qualité dans une ambiance chaleureuse et professionnelle, dans le plus grand respect de nos patients et de notre clientèle.
+
+Notre réputation repose sur l'excellence du service à la clientèle et sur le talent de notre équipe. Nous espérons sincèrement que vous vous épanouirez au sein de notre clinique et que vous contribuerez, à votre façon, à notre succès collectif.
+
+Bienvenue dans notre équipe!</textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Historique et présentation de la clinique</div>
+      <div class="para-hint">💡 Suggestion — Décrivez brièvement l'histoire de votre clinique, sa fondation, sa mission et ce qui la distingue.</div>
+      <textarea class="large">Notre clinique a été fondée avec la volonté d'offrir des soins dentaires complets et accessibles dans un environnement accueillant. Au fil des années, nous avons développé une expertise reconnue et bâti une relation de confiance durable avec notre clientèle.
+
+Nous offrons une gamme complète de services dentaires, allant des soins préventifs aux traitements spécialisés. Notre équipe de professionnels compétents et dévoués travaille chaque jour à vous offrir un milieu de travail sain, stimulant et respectueux.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Mission et vision</div>
+      <div class="grid">
+        <div class="para-block">
+          <div class="para-label">Notre mission</div>
+          <div class="para-hint">💡 Suggestion</div>
+          <textarea class="suggested">Offrir des soins dentaires de qualité supérieure dans un environnement professionnel, chaleureux et sécuritaire, en plaçant le bien-être de nos patients et de notre équipe au cœur de nos actions.</textarea>
+        </div>
+        <div class="para-block">
+          <div class="para-label">Notre vision</div>
+          <div class="para-hint">💡 Suggestion</div>
+          <textarea class="suggested">Être reconnus comme une clinique dentaire de référence dans notre communauté, grâce à l'excellence de nos soins, à la compétence de notre équipe et à notre engagement envers l'amélioration continue.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <span></span>
+      <button class="btn btn-primary" onclick="show(1)">Suivant — Valeurs →</button>
+    </div>
+  </div>
+
+  <!-- ===== 1 : VALEURS ===== -->
+  <div class="tab-content" id="tab-1">
+    <div class="tab-print-title">Section 2 — Valeurs de la clinique</div>
+    <div class="section">
+      <div class="section-title">Nos valeurs fondamentales</div>
+      <div class="info-box">Chaque valeur ci-dessous est accompagnée d'un texte suggéré. Personnalisez-le selon votre culture d'entreprise.</div>
+
+      <div class="valeur-card">
+        <div class="valeur-title"><span class="valeur-icon">🚀</span> Initiative</div>
+        <div class="para-hint">💡 Suggestion</div>
+        <textarea class="suggested">Nous encourageons chaque membre de l'équipe à proposer, à entreprendre et à organiser des actions pouvant améliorer l'efficacité de notre travail collectif. Faire preuve d'initiative, c'est agir plutôt que réagir : c'est anticiper les besoins, apporter des idées constructives et proposer des solutions plutôt que de simplement identifier des problèmes. C'est être en constante évolution pour faire avancer la clinique.</textarea>
+      </div>
+
+      <div class="valeur-card">
+        <div class="valeur-title"><span class="valeur-icon">🤝</span> Respect</div>
+        <div class="para-hint">💡 Suggestion</div>
+        <textarea class="suggested">Le respect est au cœur de toutes nos interactions. Il suppose une compréhension et un partage des valeurs de chacun. Nous accordons une grande importance au respect de la vie privée de tous — patients comme collègues. Nous priorisons l'égalité envers chacun et ne tolérons pas les comportements abusifs, méprisants ou offensifs. La direction s'attend à ce que chaque employé(e) respecte ses engagements, tienne ses promesses et se conforme aux règles établies.</textarea>
+      </div>
+
+      <div class="valeur-card">
+        <div class="valeur-title"><span class="valeur-icon">🎓</span> Professionnalisme</div>
+        <div class="para-hint">💡 Suggestion</div>
+        <textarea class="suggested">Le professionnalisme nous distingue par notre éthique, nos compétences et notre savoir-être. Il se reflète dans la qualité de nos soins, nos services personnalisés et l'attention portée à nos patients. Nous valorisons une équipe fiable, ponctuelle, respectueuse et compétente. Le professionnalisme doit également se refléter dans nos communications sur les réseaux sociaux — tout commentaire inapproprié pouvant entacher la réputation de la clinique est inacceptable.</textarea>
+      </div>
+
+      <div class="valeur-card">
+        <div class="valeur-title"><span class="valeur-icon">👥</span> Travail d'équipe</div>
+        <div class="para-hint">💡 Suggestion</div>
+        <textarea class="suggested">Notre équipe démontre une collaboration axée sur le travail d'équipe en apportant de l'aide aux collègues dans le besoin, en communiquant les informations nécessaires et en mettant à profit les efforts de chacun. La collaboration signifie que chaque membre partage ses compétences et connaissances avec ses collègues. Tous travaillent de concert pour atteindre un but commun : offrir des soins de qualité dans un environnement harmonieux.</textarea>
+      </div>
+
+      <div class="valeur-card">
+        <div class="valeur-title"><span class="valeur-icon">⭐</span> Service à la clientèle</div>
+        <div class="para-hint">💡 Suggestion</div>
+        <textarea class="suggested">Le service à la clientèle est l'art de bien servir nos patients, de l'identification de leurs besoins jusqu'à leur fidélisation. C'est accueillir les patients avec le sourire, les remercier de leur confiance et utiliser un ton respectueux et calme en tout temps. Notre personnel met en pratique une écoute active et prend le temps de bien comprendre les besoins de chaque patient afin d'offrir les meilleurs soins possibles selon leur condition.</textarea>
+      </div>
+
+      <div class="valeur-card">
+        <div class="valeur-title"><span class="valeur-icon">🏠</span> Sentiment d'appartenance</div>
+        <div class="para-hint">💡 Suggestion</div>
+        <textarea class="suggested">Chaque employé(e) fait partie intégrante de notre équipe et participe à la réussite de notre clinique. Chaque personne occupe une place importante par ses connaissances, ses compétences et ses habiletés. Nous tenons à ce que chacun évolue dans un environnement sain et s'intègre pleinement dans son milieu de travail. Par son sentiment d'appartenance, chaque employé(e) adhère aux valeurs, à la vision et à la mission de la clinique.</textarea>
+      </div>
+
+      <div class="para-block" style="margin-top:16px;">
+        <div class="para-label">Valeur personnalisée (optionnel)</div>
+        <input type="text" placeholder="Nom de la valeur..." style="margin-bottom:8px;">
+        <textarea class="small" placeholder="Décrivez cette valeur..."></textarea>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(0)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(2)">Suivant — Parcours →</button>
+    </div>
+  </div>
+
+  <!-- ===== 2 : PARCOURS ===== -->
+  <div class="tab-content" id="tab-2">
+    <div class="tab-print-title">Section 3 — Parcours professionnel</div>
+    <div class="section">
+      <div class="section-title">Période de probation</div>
+      <div class="grid" style="margin-bottom:10px;">
+        <div class="field"><label>Durée de la probation</label>
+          <select><option>3 mois</option><option>6 mois</option><option>90 jours</option><option>Autre</option></select>
+        </div>
+      </div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Une période de probation permettra à la direction d'évaluer vos compétences et vous offrira l'opportunité de vous familiariser avec la culture de la clinique, les outils disponibles et l'environnement de travail. À l'intérieur de cette période, la direction se réserve le droit de mettre fin à votre emploi si votre travail est jugé inadéquat. Cette période peut être prolongée au besoin.
+
+À l'échéance de la période de probation, une rencontre d'évaluation aura lieu avec votre gestionnaire. Cette rencontre permettra d'officialiser la continuité de votre contrat ou, le cas échéant, les conditions de votre permanence au sein de l'équipe.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Dossier de l'employé(e)</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Votre dossier d'employé(e) est confidentiel et conservé en lieu sûr. Il contient, entre autres, votre curriculum vitae, vos évaluations de rendement, vos exemptions d'impôt, vos informations bancaires, vos données d'assurance collective ainsi que les informations relatives à votre absentéisme et aux avis disciplinaires, le cas échéant.
+
+Vous pouvez consulter votre dossier sur demande auprès de votre gestionnaire. Toute modification à vos informations personnelles (adresse, numéro de téléphone, personne à contacter en cas d'urgence) doit être communiquée rapidement à l'administration.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Évaluations de rendement</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Des évaluations de performance sont réalisées régulièrement afin de favoriser votre développement professionnel et de reconnaître votre contribution. Une évaluation a lieu à la fin de la période de probation, puis de façon annuelle par la suite.
+
+Ces rencontres sont l'occasion d'échanger sur vos forces, vos axes d'amélioration, vos objectifs et vos besoins en formation. Elles permettent également de fixer des objectifs clairs et mesurables pour la prochaine période.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Formation et développement</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La clinique encourage le développement des compétences de son équipe. Des formations peuvent être offertes en cours d'emploi, que ce soit pour maîtriser nos logiciels, mettre à jour vos connaissances cliniques ou améliorer vos compétences en service à la clientèle.
+
+Nous vous encourageons à faire part de vos intérêts de formation à votre gestionnaire. Le développement de chaque membre de notre équipe contribue à la qualité de nos services et à notre succès collectif.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Fin d'emploi</div>
+      <div class="grid" style="margin-bottom:10px;">
+        <div class="field"><label>Préavis requis (semaines)</label>
+          <select><option>2 semaines</option><option>3 semaines</option><option>4 semaines</option><option>Selon ancienneté</option></select>
+        </div>
+      </div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">En cas de démission, nous vous demandons de respecter le délai de préavis prévu afin de faciliter la transition. Lors de votre départ, il vous sera demandé de remettre tout équipement, accès et matériel appartenant à la clinique, et de vous conformer à vos engagements de confidentialité.
+
+Un entretien de départ pourra être organisé afin de recueillir vos commentaires sur votre expérience au sein de notre équipe.</textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(1)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(3)">Suivant — Rémunération →</button>
+    </div>
+  </div>
+
+  <!-- ===== 3 : RÉMUNÉRATION ===== -->
+  <div class="tab-content" id="tab-3">
+    <div class="tab-print-title">Section 4 — Rémunération et reconnaissance</div>
+    <div class="section">
+      <div class="section-title">Rémunération</div>
+      <div class="grid" style="margin-bottom:10px;">
+        <div class="field"><label>Fréquence de paie</label>
+          <select><option>Aux deux semaines</option><option>Hebdomadaire</option><option>Mensuelle</option><option>Semi-mensuelle</option></select>
+        </div>
+        <div class="field"><label>Mode de versement</label>
+          <select><option>Dépôt direct</option><option>Chèque</option><option>Les deux</option></select>
+        </div>
+      </div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Votre salaire vous sera versé selon la fréquence convenue dans votre contrat de travail. Tout relevé de paie vous sera remis à chaque période de paie. En cas d'erreur sur votre paie, veuillez en aviser votre gestionnaire dans les plus brefs délais afin qu'une correction soit effectuée rapidement.
+
+Toute augmentation salariale est déterminée à la suite d'une évaluation de rendement et tient compte de votre performance, de votre ancienneté et des conditions du marché.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Programme de reconnaissance — Ancienneté</div>
+      <div class="para-hint">💡 Suggestion — Ajustez les montants selon votre politique interne.</div>
+      <div class="warn-box">⚠️ Note fiscale : Les cadeaux sont considérés comme un avantage imposable au fédéral. Au provincial, ils ne sont pas imposables si le montant total ne dépasse pas 500 $ dans l'année.</div>
+      <table class="data-table">
+        <thead><tr><th>Années d'ancienneté</th><th>Type de reconnaissance</th><th>Valeur maximale ($)</th></tr></thead>
+        <tbody id="recoTable">
+          <tr><td><input type="text" value="5 ans"></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td></tr>
+          <tr><td><input type="text" value="10 ans"></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td></tr>
+          <tr><td><input type="text" value="15 ans"></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td></tr>
+          <tr><td><input type="text" value="20 ans"></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td></tr>
+          <tr><td><input type="text" value="25 ans"></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td></tr>
+        </tbody>
+      </table>
+      <button class="btn-add-row" onclick="addRecoRow()">+ Ajouter une ligne</button>
+      <div class="para-hint" style="margin-top:10px;">💡 Suggestion — Texte d'introduction au programme</div>
+      <textarea class="suggested" style="margin-top:6px;">La clinique a à cœur le bien-être de son équipe et désire reconnaître la loyauté de ses employés. Un programme de reconnaissance basé sur les années d'ancienneté a été mis en place afin de remercier les membres dévoués de notre équipe pour leurs années de service continus. Des activités à caractère social et de reconnaissance sont également organisées au minimum une fois par année.</textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(2)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(4)">Suivant — Horaires →</button>
+    </div>
+  </div>
+
+  <!-- ===== 4 : HORAIRES ===== -->
+  <div class="tab-content" id="tab-4">
+    <div class="tab-print-title">Section 5 — Horaires de travail</div>
+    <div class="section">
+      <div class="section-title">Horaire de travail</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Votre horaire de travail vous sera remis lors de votre entrée en fonction. Les horaires sont établis en tenant compte des besoins de la clinique et, dans la mesure du possible, de vos préférences personnelles. Tout changement d'horaire doit être approuvé par votre gestionnaire.
+
+Nous vous demandons d'être présent(e) et prêt(e) à travailler à l'heure prévue à votre horaire. Les retards répétés ou les absences non justifiées peuvent entraîner des mesures disciplinaires.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Ponctualité et arrivée</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La ponctualité est essentielle au bon fonctionnement de la clinique et au respect de nos patients. Nous vous demandons d'arriver à l'heure prévue à votre horaire, voire quelques minutes à l'avance afin d'être prêt(e) à accueillir les patients dès l'ouverture.
+
+En cas de retard imprévu, vous devez en aviser votre gestionnaire ou un(e) collègue responsable dès que possible, avant votre heure de début de quart.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Heures supplémentaires</div>
+      <div class="para-hint">💡 Suggestion — Ajustez selon votre politique interne et les normes du travail.</div>
+      <textarea class="suggested">Les heures supplémentaires doivent être préalablement autorisées par la direction. Elles sont compensées conformément aux dispositions de la Loi sur les normes du travail du Québec. La clinique peut offrir, selon le cas, une compensation monétaire ou une banque de temps en remplacement des heures supplémentaires effectuées.
+
+Toute heure supplémentaire travaillée sans autorisation préalable ne sera pas nécessairement compensée.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Pauses et repas</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Conformément à la Loi sur les normes du travail, les employés ont droit à une période de repas non rémunérée d'au moins 30 minutes après chaque période de travail de 5 heures consécutives. Des pauses peuvent également être prévues selon l'organisation de la journée.
+
+Nous encourageons nos employés à prendre leurs pauses complètes afin de maintenir leur bien-être physique et psychologique. Un(e) employé(e) bien reposé(e) est plus efficace et plus épanoui(e) dans son travail.</textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(3)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(5)">Suivant — Congés →</button>
+    </div>
+  </div>
+
+  <!-- ===== 5 : CONGÉS ===== -->
+  <div class="tab-content" id="tab-5">
+    <div class="tab-print-title">Section 6 — Congés et absences</div>
+    <div class="section">
+      <div class="section-title">Jours fériés</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Les employés bénéficient des jours fériés prévus par la Loi sur les normes du travail du Québec. Si un jour férié tombe un jour de congé habituel de l'employé(e), il lui sera accordé un jour de congé compensatoire. Les jours fériés travaillés seront compensés conformément à la loi.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Congés de maladie</div>
+      <div class="grid" style="margin-bottom:10px;">
+        <div class="field"><label>Jours de maladie payés par année</label>
+          <input type="number" placeholder="Ex : 2" min="0" max="20">
+        </div>
+      </div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">En cas d'absence pour maladie, vous devez aviser votre gestionnaire ou un(e) collègue responsable dès que possible, avant le début de votre quart de travail. Un billet médical peut être exigé pour une absence de trois (3) jours consécutifs ou plus, ou en cas d'absences fréquentes.
+
+Les absences répétées non justifiées peuvent faire l'objet de mesures disciplinaires. Nous comprenons que la maladie est parfois inévitable et nous vous encourageons à prendre soin de votre santé.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Vacances annuelles</div>
+      <div class="para-hint">💡 Suggestion — Ajustez selon vos politiques et la Loi sur les normes du travail.</div>
+      <textarea class="suggested">Les vacances annuelles sont accordées conformément aux dispositions de la Loi sur les normes du travail du Québec. Le calendrier des vacances est établi en tenant compte des besoins opérationnels de la clinique et des demandes des employés, soumises dans les délais requis.
+
+Nous encourageons les employés à planifier leurs vacances à l'avance afin de faciliter l'organisation et d'assurer la continuité des services. Les demandes de congé doivent être soumises par écrit à votre gestionnaire selon le délai de préavis établi.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Autres congés</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La clinique se conforme aux dispositions de la Loi sur les normes du travail en ce qui concerne les congés pour obligations familiales, les congés de maternité, de paternité et parentaux, ainsi que les congés pour événements familiaux (mariage, décès, naissance).
+
+Pour tout congé spécial, nous vous demandons d'en aviser votre gestionnaire le plus tôt possible afin de permettre une organisation adéquate. Toute demande de congé doit être faite par écrit via le formulaire prévu à cet effet.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Procédure de demande de congé</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Toute demande de congé doit être soumise par écrit à votre gestionnaire, idéalement avec un préavis suffisant selon le type de congé demandé. Les demandes sont traitées selon les besoins opérationnels de la clinique et selon l'ordre de priorité établi.
+
+La clinique se réserve le droit d'accepter ou de refuser une demande de congé selon les impératifs du service. En cas de refus, une explication vous sera fournie et une alternative sera proposée dans la mesure du possible.</textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(4)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(6)">Suivant — Avantages →</button>
+    </div>
+  </div>
+
+  <!-- ===== 6 : AVANTAGES ===== -->
+  <div class="tab-content" id="tab-6">
+    <div class="tab-print-title">Section 7 — Avantages sociaux</div>
+    <div class="section">
+      <div class="section-title">Assurances collectives</div>
+      <div class="grid" style="margin-bottom:10px;">
+        <div class="field"><label>Assurances collectives offertes?</label>
+          <select><option>Oui</option><option>Non</option><option>Selon le poste</option></select>
+        </div>
+        <div class="field"><label>Admissibilité après (mois)</label>
+          <input type="number" placeholder="Ex : 3" min="0">
+        </div>
+      </div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La clinique offre un régime d'assurances collectives à ses employés admissibles. Ce régime peut comprendre des garanties en assurance-vie, assurance-maladie complémentaire, assurance-médicaments et invalidité. Les détails complets du régime vous seront remis lors de votre adhésion.
+
+La contribution de l'employeur et celle de l'employé(e) varient selon le régime choisi. Pour toute question concernant vos assurances collectives, veuillez communiquer avec votre gestionnaire.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Traitements dentaires</div>
+      <div class="para-hint">💡 Suggestion — Ajustez selon votre politique interne.</div>
+      <textarea class="suggested">À titre d'employé(e) de la clinique, vous bénéficiez d'avantages sur les traitements dentaires. Les conditions spécifiques — types de traitements couverts, pourcentage de réduction, admissibilité des membres de la famille — vous seront communiquées lors de votre entrée en fonction.
+
+Ces avantages constituent un bénéfice non imposable dans les limites prévues par les lois fiscales. Votre gestionnaire pourra vous fournir tous les détails à ce sujet.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Régime d'épargne retraite</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La clinique peut offrir à ses employés admissibles la possibilité de cotiser à un régime volontaire d'épargne retraite (RVER) ou tout autre régime d'épargne retraite. Les détails et conditions d'admissibilité vous seront communiqués par votre gestionnaire.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Autres avantages</div>
+      <div class="para-hint">💡 Suggestion — Personnalisez selon ce que vous offrez (stationnement, uniforme, rabais, etc.)</div>
+      <textarea class="suggested">La clinique peut offrir d'autres avantages à ses employés, tels que :
+
+• Stationnement gratuit ou à tarif réduit selon disponibilité
+• Uniformes ou tenues de travail fournis ou subventionnés
+• Rabais sur certains produits offerts à la clinique
+• Accès à des formations continues
+• Activités sociales et de reconnaissance d'équipe
+
+Les détails concernant ces avantages vous seront communiqués lors de votre entrée en fonction.</textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(5)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(7)">Suivant — Santé &amp; Sécurité →</button>
+    </div>
+  </div>
+
+  <!-- ===== 7 : SANTÉ & SÉCURITÉ ===== -->
+  <div class="tab-content" id="tab-7">
+    <div class="tab-print-title">Section 8 — Santé et sécurité au travail</div>
+    <div class="section">
+      <div class="section-title">Engagement en santé et sécurité</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La santé et la sécurité de notre équipe sont une priorité absolue. La clinique s'engage à fournir un milieu de travail sécuritaire et à respecter l'ensemble des lois et règlements applicables en matière de santé et sécurité au travail.
+
+Chaque employé(e) a la responsabilité de contribuer à maintenir un environnement de travail sécuritaire, de signaler tout danger ou situation à risque, et de respecter les procédures établies.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Équipements de protection</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Dans le cadre de vos fonctions, vous serez amené(e) à utiliser des équipements de protection individuelle (EPI) : gants, masques, lunettes de protection, etc. Le port de ces équipements est obligatoire et non négociable lors des soins aux patients.
+
+La clinique fournit les équipements de protection nécessaires. Il est de votre responsabilité de les porter correctement et d'en signaler le manque ou la défectuosité à votre gestionnaire.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Prévention et contrôle des infections</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La prévention et le contrôle des infections font partie intégrante de notre pratique quotidienne. Tous les membres de l'équipe doivent respecter rigoureusement les protocoles établis en matière de stérilisation, de désinfection et d'hygiène des mains.
+
+Des formations en PCI (prévention et contrôle des infections) sont requises et doivent être tenues à jour conformément aux lignes directrices de l'Ordre des dentistes du Québec et de l'Ordre des hygiénistes dentaires du Québec.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Déclaration d'incidents et accidents</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Tout incident, accident de travail ou situation dangereuse doit être signalé immédiatement à votre gestionnaire, puis documenté dans le registre des accidents de travail. Une déclaration rapide permet d'obtenir les soins nécessaires dans les meilleurs délais et de prévenir la répétition de l'incident.
+
+En cas de blessure par instrument souillé ou d'exposition à du sang, vous devez suivre immédiatement le protocole prévu et vous rendre à l'urgence ou à une clinique médicale dès que possible.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Harcèlement au travail</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La clinique s'engage à maintenir un milieu de travail exempt de harcèlement psychologique, verbal ou sexuel. Tout comportement harcelant est inacceptable et fera l'objet de mesures disciplinaires pouvant aller jusqu'au congédiement.
+
+Tout employé(e) qui croit être victime ou témoin de harcèlement est encouragé(e) à en informer son gestionnaire ou la direction. Une politique de harcèlement détaillée est disponible sur demande. La clinique s'engage à traiter toute plainte avec sérieux, confidentialité et diligence.</textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(6)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(8)">Suivant — Politiques →</button>
+    </div>
+  </div>
+
+  <!-- ===== 8 : POLITIQUES ===== -->
+  <div class="tab-content" id="tab-8">
+    <div class="tab-print-title">Section 9 — Politiques de la clinique</div>
+    <div class="section">
+      <div class="section-title">Confidentialité et protection des renseignements</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Tous les renseignements personnels des patients et de l'équipe sont strictement confidentiels. À titre d'employé(e), vous vous engagez à ne jamais divulguer d'informations sur les patients à des tiers non autorisés, à respecter la Loi 25 sur la protection des renseignements personnels, et à protéger les accès informatiques en ne partageant jamais vos identifiants de connexion.
+
+Cet engagement de confidentialité demeure en vigueur pendant la durée de votre emploi et pour une période de trois (3) ans suivant la fin de votre emploi, pour quelque motif que ce soit.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Téléphones cellulaires</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">L'utilisation des téléphones cellulaires personnels pendant les heures de travail doit être limitée au strict minimum et faite de façon discrète, sans nuire au travail ou à l'image professionnelle de la clinique. En présence des patients, l'utilisation de son téléphone personnel est interdite.
+
+Les téléphones doivent être en mode silencieux ou vibreur pendant les heures de travail. En cas d'urgence personnelle, veuillez informer votre gestionnaire afin qu'une solution appropriée soit trouvée.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Réseaux sociaux</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Toute publication sur les réseaux sociaux en lien avec la clinique, les patients ou les collègues doit respecter les règles de confidentialité et de professionnalisme. Il est strictement interdit de publier des photos, vidéos ou informations concernant les patients, les dossiers ou toute information interne de la clinique.
+
+Les commentaires sur les réseaux sociaux pouvant entacher la réputation de la clinique, des patients ou des collègues ne sont en aucun cas tolérés et peuvent entraîner des mesures disciplinaires.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Utilisation des équipements et ressources</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Les équipements, fournitures et ressources de la clinique sont destinés à un usage professionnel uniquement. Il est interdit de les utiliser à des fins personnelles sans autorisation préalable. Tout bris ou dysfonctionnement d'équipement doit être signalé immédiatement à votre gestionnaire.
+
+Les accès informatiques et les logiciels sont accordés uniquement pour les besoins professionnels. Toute utilisation non autorisée peut faire l'objet de mesures disciplinaires.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Tenue vestimentaire et apparence</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Dans un milieu de soins de santé, une tenue vestimentaire professionnelle et une hygiène irréprochable sont essentielles. Vous devez porter l'uniforme ou la tenue de travail fourni(e) ou approuvé(e) par la clinique, propre et en bon état, en tout temps durant votre quart de travail.
+
+Les parfums et lotions à odeur forte sont à éviter afin de respecter les patients pouvant avoir des allergies ou sensibilités. Veuillez vous conformer aux protocoles d'hygiène des mains requis dans votre domaine de travail.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Alcool, drogues et médicaments</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">La présence au travail sous l'influence de l'alcool, de drogues ou de médicaments affectant les capacités est strictement interdite. Un employé(e) se présentant au travail dans cet état pourra être renvoyé(e) à la maison et faire l'objet de mesures disciplinaires.
+
+Si vous prenez des médicaments prescrits pouvant affecter votre capacité à travailler, vous devez en informer votre gestionnaire afin qu'une adaptation de vos tâches puisse être envisagée si nécessaire.</textarea>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(7)">← Retour</button>
+      <button class="btn btn-primary" onclick="show(9)">Suivant — Attestation →</button>
+    </div>
+  </div>
+
+  <!-- ===== 9 : ATTESTATION ===== -->
+  <div class="tab-content" id="tab-9">
+    <div class="tab-print-title">Section 10 — Attestation de réception</div>
+    <div class="section">
+      <div class="section-title">Attestation de réception et d'acceptation</div>
+      <div class="para-hint">💡 Suggestion</div>
+      <textarea class="suggested">Je soussigné(e) déclare avoir reçu, lu et compris l'ensemble des dispositions contenues dans le présent Guide de l'employé(e). Je m'engage à respecter les politiques, règles et procédures qui y sont décrites dans l'exercice de mes fonctions.
+
+Je comprends que ce guide peut être modifié par la direction en tout temps, avec préavis raisonnable, et que toute modification me sera communiquée. Je m'engage à consulter mon gestionnaire pour toute question relative à l'interprétation ou à l'application des politiques contenues dans ce guide.</textarea>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Identification</div>
+      <div class="grid">
+        <div class="field"><label>Nom et prénom de l'employé(e)</label><input type="text" placeholder="Nom et prénom"></div>
+        <div class="field"><label>Poste occupé</label><input type="text" placeholder="Titre du poste"></div>
+        <div class="field"><label>Date d'entrée en fonction</label><input type="date"></div>
+        <div class="field"><label>Date de signature</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Signatures</div>
+      <div class="grid" style="margin-top:8px;">
+        <div>
+          <div class="field" style="margin-bottom:30px;"><label>Signature de l'employé(e)</label><input type="text" placeholder="(manuscrite à l&#39;impression)"></div>
+          <div class="sig-box">Signature ____________________________<br><br>Date : ___________________________</div>
+        </div>
+        <div>
+          <div class="field" style="margin-bottom:30px;"><label>Signature du (de la) gestionnaire</label><input type="text" placeholder="(manuscrite à l&#39;impression)"></div>
+          <div class="sig-box">Signature ____________________________<br><br>Date : ___________________________</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;font-size:.78rem;color:#8a9ab0;font-style:italic;">
+        Une copie signée doit être remise à l'employé(e) et une copie doit être versée à son dossier d'employé.
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="show(8)">← Retour</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer le guide complet</button>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+function show(n) {
+  document.querySelectorAll('.tab-content').forEach((t,i) => t.classList.toggle('active', i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function addRecoRow() {
+  const tbody = document.getElementById('recoTable');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input type="text" placeholder="Ex : 30 ans"></td><td><input type="text" placeholder="Type de cadeau"></td><td><input type="text" placeholder="Montant ($)"></td>`;
+  tbody.appendChild(tr);
+}
+
+// Set today's date
+document.getElementById('dateGuide').valueAsDate = new Date();
+</script>
+
+
+</body></html>

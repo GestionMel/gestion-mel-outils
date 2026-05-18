@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/info/Downloads/protocole-no-shows.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocole no-shows — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:960px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .tab-btn{padding:11px 18px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:22px 32px;}
+  .tab-pane.active{display:block;}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.86rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ff input:focus,.ff select:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* STEPS */
+  .step-list{display:flex;flex-direction:column;gap:0;}
+  .step{display:flex;gap:14px;position:relative;padding-bottom:16px;}
+  .step:last-child{padding-bottom:0;}
+  .step-line{position:absolute;left:19px;top:38px;bottom:0;width:2px;background:var(--border);}
+  .step:last-child .step-line{display:none;}
+  .step-num{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:700;color:white;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .step-body{flex:1;background:white;border:1.5px solid var(--border);border-radius:8px;padding:12px 16px;}
+  .step-title{font-size:.88rem;font-weight:700;color:var(--dark);margin-bottom:6px;}
+  .step-desc{font-size:.83rem;color:#4a5a6a;line-height:1.65;}
+  .step-time{font-size:.72rem;color:#8a9ab0;margin-top:5px;font-style:italic;}
+
+  /* SCRIPTS */
+  .script-card{background:#f8fbff;border:1.5px solid var(--border);border-left:4px solid var(--blue);border-radius:8px;padding:14px 16px;margin-bottom:14px;}
+  .sc-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+  .sc-text{font-size:.86rem;line-height:1.8;color:var(--text);font-style:italic;}
+  .sc-text .placeholder{color:var(--blue);font-weight:700;font-style:normal;}
+
+  /* FRAIS CONFIG */
+  .frais-card{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:16px 18px;margin-bottom:16px;}
+  .fc-title{font-size:.8rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;}
+
+  /* SUIVI */
+  .suivi-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .suivi-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.72rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .suivi-table td{border-bottom:1px solid var(--border);padding:7px 9px;vertical-align:middle;}
+  .suivi-table tr:last-child td{border-bottom:none;}
+  .suivi-table tr:nth-child(even) td{background:var(--light);}
+  .suivi-table input,.suivi-table select{border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.78rem;font-family:inherit;width:100%;background:white;}
+  .suivi-table input:focus,.suivi-table select:focus{outline:none;border-color:var(--accent);}
+  .badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:.71rem;font-weight:700;}
+  .b-noshow{background:#fef2f2;color:var(--red);}
+  .b-annul{background:#fff8e1;color:var(--orange);}
+  .b-tardif{background:#f3e8ff;color:var(--purple);}
+  .btn-add{display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;width:fit-content;}
+  .btn-del{width:22px;height:22px;border-radius:5px;border:1px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .stats-row{display:flex;gap:12px;flex-wrap:wrap;padding:12px 16px;background:var(--light);border-radius:8px;margin-top:12px;}
+  .stat-chip{display:flex;align-items:center;gap:6px;font-size:.8rem;}
+  .stat-num{font-weight:700;font-size:.92rem;}
+  .actions{padding:14px 32px;background:var(--light);display:flex;justify-content:flex-end;border-top:1px solid var(--border);}
+  .btn-print{padding:8px 18px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+  @media print{body{background:white;}.page-header,.nav-tabs,.actions,.btn-add,.btn-del{display:none!important;}.tab-pane{display:block!important;}.container{box-shadow:none;margin:0;border-radius:0;}.step-num{-webkit-print-color-adjust:exact;print-color-adjust:exact;}input,select{border:none!important;background:transparent!important;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Clinique dentaire — Administration</div></div>
+<div class="container">
+  <div class="doc-header"><h1>📅 Protocole — No-shows et annulations</h1><p>Procédures, scripts téléphoniques, frais et suivi des patients</p></div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="show(0,this)">📋 Protocole</button>
+    <button class="tab-btn" onclick="show(1,this)">💬 Scripts</button>
+    <button class="tab-btn" onclick="show(2,this)">💰 Politique des frais</button>
+    <button class="tab-btn" onclick="show(3,this)">📊 Suivi des incidents</button>
+  </div>
+
+  <!-- PROTOCOLE -->
+  <div class="tab-pane active" id="tp0">
+    <div class="sec-title">Protocole — Absence (no-show)</div>
+    <div class="step-list">
+      <div class="step"><div class="step-num" style="background:var(--red);">1</div><div class="step-line"></div><div class="step-body"><div class="step-title">Constatation de l'absence</div><div class="step-desc">Le patient ne s'est pas présenté au rendez-vous et n'a pas contacté la clinique. Attendre <strong>15 minutes</strong> après l'heure du rendez-vous avant d'appliquer la procédure de no-show.</div><div class="step-time">⏱️ T+15 minutes</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--orange);">2</div><div class="step-line"></div><div class="step-body"><div class="step-title">Tentative de contact</div><div class="step-desc">Contacter immédiatement le patient par téléphone. Utiliser le script no-show (onglet Scripts). Si pas de réponse, laisser un message vocal professionnel. Tenter une 2e fois si pas de retour dans l'heure.</div><div class="step-time">⏱️ T+15 à T+45 minutes</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--blue);">3</div><div class="step-line"></div><div class="step-body"><div class="step-title">Documentation au dossier</div><div class="step-desc">Inscrire dans le dossier du patient : date, heure, type de no-show, tentatives de contact effectuées, résultat. Cette documentation est essentielle pour l'application des frais et le suivi du comportement.</div><div class="step-time">⏱️ Immédiatement</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--purple);">4</div><div class="step-line"></div><div class="step-body"><div class="step-title">Offrir l'horaire disponible / liste d'attente</div><div class="step-desc">Proposer immédiatement ce créneau libéré aux patients sur la liste de priorité d'attente. Contacter 3 à 5 patients avant de laisser le créneau vide.</div><div class="step-time">⏱️ T+20 minutes — Dès constatation</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--green);">5</div><div class="step-line"></div><div class="step-body"><div class="step-title">Suivi et frais</div><div class="step-desc">Lors du prochain contact avec le patient : exprimer que son absence a causé une perte de temps pour l'équipe et les autres patients. Informer des frais applicables si la politique le prévoit. Inscrire l'incident dans le registre de suivi.</div><div class="step-time">⏱️ Lors du prochain contact</div></div></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:22px;">Protocole — Annulation de dernière minute</div>
+    <div class="step-list">
+      <div class="step"><div class="step-num" style="background:var(--orange);">1</div><div class="step-line"></div><div class="step-body"><div class="step-title">Réception de l'annulation</div><div class="step-desc">Définir clairement le préavis requis : <strong>idéalement 24-48 heures</strong>. Toute annulation avec moins de 24h de préavis est considérée tardive. Remercier le patient d'avoir contacté la clinique, même tardivement.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--blue);">2</div><div class="step-line"></div><div class="step-body"><div class="step-title">Replanification immédiate</div><div class="step-desc">Proposer immédiatement 2 ou 3 dates de remplacement. Viser à replanifier dans les 2 à 4 semaines selon l'urgence du traitement. Ne pas laisser le patient raccrocher sans une nouvelle date.</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--green);">3</div><div class="step-line"></div><div class="step-body"><div class="step-title">Combler le créneau libéré</div><div class="step-desc">Contacter immédiatement les patients sur la liste de priorité d'attente pour ce type de traitement et cette durée de rendez-vous. Prioriser les urgences.</div></div></div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <div class="tab-pane" id="tp1">
+    <div class="sec-title">Scripts téléphoniques</div>
+    <div class="script-card">
+      <div class="sc-title">📞 Script no-show — Appel au patient absent</div>
+      <div class="sc-text">« Bonjour, puis-je parler à <span class="placeholder">[Prénom + Nom du patient]</span>? … Bonjour <span class="placeholder">[Prénom]</span>, ici <span class="placeholder">[Votre prénom]</span> de la Clinique dentaire <span class="placeholder">[Nom de la clinique]</span>. Nous vous attendions aujourd'hui à <span class="placeholder">[heure du RV]</span> pour <span class="placeholder">[type de traitement]</span>. Je voulais simplement m'assurer que tout allait bien de votre côté. … Je comprends. Nous devons replanifier votre rendez-vous le plus tôt possible car votre traitement est important. Auriez-vous de la disponibilité <span class="placeholder">[proposer 2 dates]</span>? »</div>
+    </div>
+    <div class="script-card">
+      <div class="sc-title">📞 Script no-show — Message vocal</div>
+      <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, ici <span class="placeholder">[Prénom]</span> de la Clinique <span class="placeholder">[Nom]</span>. Nous vous attendions aujourd'hui à <span class="placeholder">[heure]</span> et nous n'avons pas eu de vos nouvelles. J'espère que tout va bien. Veuillez nous rappeler au <span class="placeholder">[numéro de téléphone]</span> dès que possible afin de replanifier votre rendez-vous. Merci et bonne journée. »</div>
+    </div>
+    <div class="script-card">
+      <div class="sc-title">📞 Script annulation tardive — Réponse à une annulation</div>
+      <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, pas de problème, je comprends que des imprévus arrivent. Je vais tout de même vous mentionner que nous appliquons une politique de préavis de <span class="placeholder">[24h / 48h]</span>. Pour cette fois, nous allons replanifier votre rendez-vous sans frais, mais je vous rappelle l'importance d'un préavis pour permettre à d'autres patients de prendre votre place. Aurais-tu de la disponibilité le <span class="placeholder">[proposer 2 dates]</span>? »</div>
+    </div>
+    <div class="script-card" style="border-left-color:var(--red);">
+      <div class="sc-title" style="color:var(--red);">📞 Script récidive (2e no-show ou plus)</div>
+      <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, c'est <span class="placeholder">[Prénom]</span> de la Clinique <span class="placeholder">[Nom]</span>. Je vous contacte suite à votre absence du <span class="placeholder">[date]</span>. Je dois vous informer que c'est la <span class="placeholder">[2e / 3e]</span> fois que vous vous absentez sans nous prévenir. Notre politique prévoit des frais de <span class="placeholder">[montant]</span> $ pour les no-shows répétés. Ces frais couvrent le temps réservé pour vous. Je souhaite tout de même vous proposer de replanifier, mais je dois m'assurer que vous serez présent(e). Avez-vous des questions? »</div>
+    </div>
+    <div class="script-card" style="border-left-color:var(--green);">
+      <div class="sc-title" style="color:var(--green);">📞 Script liste d'attente — Créneau disponible</div>
+      <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, ici <span class="placeholder">[Prénom]</span> de la Clinique <span class="placeholder">[Nom]</span>. Nous venons d'avoir une ouverture dans notre horaire pour <span class="placeholder">[traitement / nettoyage / etc.]</span> aujourd'hui à <span class="placeholder">[heure]</span> / demain le <span class="placeholder">[date]</span>. Est-ce que vous seriez disponible? »</div>
+    </div>
+  </div>
+
+  <!-- POLITIQUE FRAIS -->
+  <div class="tab-pane" id="tp2">
+    <div class="sec-title">Configuration de la politique des frais</div>
+    <div class="frais-card">
+      <div class="fc-title">⚠️ Politique de votre clinique</div>
+      <div class="grid" style="margin-bottom:12px;">
+        <div class="ff"><label>Préavis requis (heures)</label><input type="number" value="24" placeholder="24"> h</div>
+        <div class="ff"><label>Frais no-show — 1er incident</label>
+          <select><option>Aucun frais — avertissement verbal</option><option>25 $</option><option>50 $</option><option>75 $</option><option>100 $</option><option>Montant du RV manqué</option></select>
+        </div>
+        <div class="ff"><label>Frais no-show — 2e incident</label>
+          <select><option>Aucun frais</option><option>25 $</option><option>50 $</option><option>75 $</option><option selected="">100 $</option><option>Montant du RV manqué</option></select>
+        </div>
+        <div class="ff"><label>Frais no-show — 3e incident et +</label>
+          <select><option>Aucun frais</option><option>50 $</option><option>100 $</option><option selected="">150 $</option><option>Retrait du fichier patient</option></select>
+        </div>
+        <div class="ff"><label>Frais annulation tardive (- de 24h)</label>
+          <select><option selected="">Aucun frais — 1re fois</option><option>25 $</option><option>50 $</option><option>75 $</option></select>
+        </div>
+        <div class="ff"><label>Seuil de retrait du fichier patient</label>
+          <select><option>Jamais</option><option>Après 3 no-shows</option><option selected="">Après 4 no-shows</option><option>Après 5 no-shows</option></select>
+        </div>
+      </div>
+      <div class="ff"><label>Note à inclure dans le guide de l'employé</label><textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:.84rem;font-family:inherit;resize:vertical;min-height:70px;background:white;line-height:1.6;" placeholder="Ex: La clinique applique une politique de frais pour les absences sans préavis. Ces frais couvrent le temps réservé..."></textarea></div>
+    </div>
+
+    <div style="background:var(--light);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.83rem;color:#2a3a4a;line-height:1.7;">
+      <strong style="color:var(--blue);">💡 Conseil de Gestion Mel :</strong> La politique de frais doit être communiquée clairement dès la prise de rendez-vous (verbalement et par confirmation écrite). Elle doit aussi figurer dans le formulaire de consentement signé par le patient. Sans cette documentation, les frais sont difficiles à percevoir.
+    </div>
+  </div>
+
+  <!-- SUIVI -->
+  <div class="tab-pane" id="tp3">
+    <div class="sec-title">Registre de suivi des no-shows et annulations</div>
+    <table class="suivi-table">
+      <thead><tr><th>Date</th><th>Patient</th><th>No dossier</th><th>Type</th><th>Traitement manqué</th><th>Contact effectué</th><th>Replanifié</th><th>Frais</th><th>Notes</th></tr></thead>
+      <tbody id="suiviBody"><tr>
+    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
+      <option value="noshow">❌ No-show</option>
+      <option value="annul">⚠️ Annulation tardive</option>
+      <option value="tardif">🕐 Annulation courte notice</option>
+    </select></td>
+    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
+    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
+    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td></tr><tr>
+    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
+      <option value="noshow">❌ No-show</option>
+      <option value="annul">⚠️ Annulation tardive</option>
+      <option value="tardif">🕐 Annulation courte notice</option>
+    </select></td>
+    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
+    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
+    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td></tr><tr>
+    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
+      <option value="noshow">❌ No-show</option>
+      <option value="annul">⚠️ Annulation tardive</option>
+      <option value="tardif">🕐 Annulation courte notice</option>
+    </select></td>
+    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
+    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
+    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td></tr></tbody>
+    </table>
+    <button class="btn-add" onclick="addSuiviRow()">+ Ajouter un incident</button>
+    <div class="stats-row" id="statsRow">
+      <div class="stat-chip"><span style="color:var(--red);font-size:.9rem;">❌</span><span class="stat-num" id="st-ns">3</span><span style="color:#5a6a80;font-size:.78rem;">no-shows</span></div>
+      <div class="stat-chip"><span style="color:var(--orange);font-size:.9rem;">⚠️</span><span class="stat-num" id="st-an">0</span><span style="color:#5a6a80;font-size:.78rem;">annulations</span></div>
+      <div class="stat-chip"><span style="color:var(--green);font-size:.9rem;">✅</span><span class="stat-num" id="st-rep">0</span><span style="color:#5a6a80;font-size:.78rem;">replanifiés</span></div>
+    </div>
+  </div>
+
+  <div class="actions"><button class="btn-print" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+<script>
+function show(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+function addSuiviRow(){
+  const tbody=document.getElementById('suiviBody');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
+      <option value="noshow">❌ No-show</option>
+      <option value="annul">⚠️ Annulation tardive</option>
+      <option value="tardif">🕐 Annulation courte notice</option>
+    </select></td>
+    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
+    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
+    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
+    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>`;
+  tbody.appendChild(tr);
+  updateStats();
+}
+function updateStats(){
+  const rows=document.querySelectorAll('#suiviBody tr');
+  let ns=0,an=0,rep=0;
+  rows.forEach(r=>{
+    const sel=r.querySelector('select');
+    if(sel&&sel.value==='noshow')ns++;
+    else an++;
+    const repCb=r.querySelectorAll('input[type=checkbox]')[1];
+    if(repCb&&repCb.checked)rep++;
+  });
+  document.getElementById('st-ns').textContent=ns;
+  document.getElementById('st-an').textContent=an;
+  document.getElementById('st-rep').textContent=rep;
+}
+for(let i=0;i<3;i++)addSuiviRow();
+</script>
+
+
+</body></html>

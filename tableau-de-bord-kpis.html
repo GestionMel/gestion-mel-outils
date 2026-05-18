@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///C:/Users/info/Downloads/tableau-bord-clinique.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau de bord — Clinique dentaire | Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+    --gold:#d4a017;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);font-size:14px;}
+  .page-header{background:var(--dark);color:white;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1200px;margin:20px auto;padding:0 14px 30px;}
+
+  /* CLINIC HEADER */
+  .clinic-header{background:white;border-radius:10px;box-shadow:0 2px 12px rgba(26,106,191,.08);padding:16px 24px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+  .ch-title{flex:1;}
+  .ch-clinic{font-size:1.2rem;font-weight:700;color:var(--dark);}
+  .ch-sub{font-size:.8rem;color:#5a6a80;margin-top:2px;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ci:focus{outline:none;border-color:var(--accent);background:white;}
+  .btn-top{padding:7px 16px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.79rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn-top:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-top.primary{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* PERIOD SELECTOR */
+  .period-bar{background:white;border-radius:10px;box-shadow:0 2px 12px rgba(26,106,191,.08);padding:12px 22px;margin-bottom:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .period-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .period-btn:hover{border-color:var(--accent);color:var(--blue);}
+  .period-btn.active{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* SECTION TITLE */
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin:18px 0 10px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+
+  /* KPI CARDS */
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px;}
+  .kpi-card{background:white;border-radius:10px;box-shadow:0 2px 12px rgba(26,106,191,.07);padding:16px 18px;border-top:4px solid var(--border);position:relative;overflow:hidden;transition:box-shadow .2s;}
+  .kpi-card:hover{box-shadow:0 4px 20px rgba(26,106,191,.14);}
+  .kpi-icon{font-size:1.5rem;margin-bottom:6px;}
+  .kpi-label{font-size:.73rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+  .kpi-value-wrap{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;}
+  .kpi-value{font-size:1.7rem;font-weight:700;color:var(--dark);line-height:1;}
+  .kpi-unit{font-size:.82rem;color:#5a6a80;}
+  .kpi-input{border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:1rem;font-family:inherit;font-weight:700;width:100%;color:var(--text);background:var(--light);text-align:right;}
+  .kpi-input:focus{outline:none;border-color:var(--accent);background:white;}
+  .kpi-target{font-size:.74rem;color:#8a9ab0;margin-top:3px;}
+  .kpi-target input{width:70px;border:1px solid var(--border);border-radius:4px;padding:2px 5px;font-size:.73rem;font-family:inherit;background:var(--light);text-align:right;}
+  .kpi-target input:focus{outline:none;border-color:var(--accent);}
+  .kpi-status{position:absolute;top:10px;right:12px;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:8px;}
+  .st-ok{background:#f0fdf4;color:var(--green);}
+  .st-warn{background:#fff8e1;color:var(--orange);}
+  .st-bad{background:#fef2f2;color:var(--red);}
+  .kpi-bar-wrap{background:#eee;border-radius:3px;height:4px;margin-top:8px;overflow:hidden;}
+  .kpi-bar{height:4px;border-radius:3px;transition:width .5s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* OBJECTIF CARD */
+  .obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-bottom:16px;}
+  .obj-card{background:white;border-radius:10px;box-shadow:0 2px 12px rgba(26,106,191,.07);padding:16px 18px;}
+  .obj-header{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+  .obj-icon{font-size:1.2rem;}
+  .obj-title{font-size:.86rem;font-weight:700;color:var(--dark);}
+  .obj-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:.82rem;}
+  .obj-lbl{flex:1;color:#5a6a80;}
+  .obj-val{font-weight:700;min-width:90px;text-align:right;}
+  .obj-pct{font-size:.75rem;font-weight:600;padding:1px 7px;border-radius:8px;}
+  .obj-pct.ok{background:#f0fdf4;color:var(--green);}
+  .obj-pct.warn{background:#fff8e1;color:var(--orange);}
+  .obj-pct.bad{background:#fef2f2;color:var(--red);}
+  .donut-wrap{display:flex;justify-content:center;margin:10px 0;}
+  .donut{width:80px;height:80px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;}
+  .donut-label{font-size:.82rem;font-weight:700;color:var(--dark);}
+
+  /* PROGRESS BARS */
+  .prog-row{margin-bottom:8px;}
+  .prog-top{display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:3px;}
+  .prog-lbl{color:#5a6a80;}
+  .prog-val{font-weight:700;}
+  .prog-track{background:#e0e0e0;border-radius:4px;height:8px;overflow:hidden;}
+  .prog-fill{height:8px;border-radius:4px;transition:width .5s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* COMPARISON TABLE */
+  .comp-card{background:white;border-radius:10px;box-shadow:0 2px 12px rgba(26,106,191,.07);padding:16px 20px;margin-bottom:16px;}
+  .comp-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .comp-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.72rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .comp-table td{border-bottom:1px solid var(--border);padding:8px 10px;vertical-align:middle;}
+  .comp-table tr:nth-child(even) td{background:var(--light);}
+  .comp-table input{border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.79rem;font-family:inherit;width:100%;background:var(--light);text-align:right;}
+  .comp-table input:focus{outline:none;border-color:var(--accent);background:white;}
+  .change-pos{color:var(--green);font-weight:700;}
+  .change-neg{color:var(--red);font-weight:700;}
+  .change-neu{color:#8a9ab0;}
+
+  /* NOTES */
+  .notes-card{background:white;border-radius:10px;box-shadow:0 2px 12px rgba(26,106,191,.07);padding:16px 20px;margin-bottom:16px;}
+  .notes-card textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:10px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:80px;background:var(--light);line-height:1.6;}
+  .notes-card textarea:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* DENTIST ROWS */
+  .dentist-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:.82rem;}
+  .dentist-row:last-child{border-bottom:none;}
+  .d-name{flex:1;font-weight:600;}
+  .d-input{width:100px;border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.79rem;font-family:inherit;text-align:right;background:var(--light);}
+  .d-input:focus{outline:none;border-color:var(--accent);background:white;}
+  .btn-add-d{display:flex;align-items:center;gap:5px;padding:5px 11px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:7px;width:fit-content;}
+  .btn-del-d{width:22px;height:22px;border-radius:5px;border:1px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.75rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+
+  /* ALERT STRIP */
+  .alert-strip{border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:9px;font-size:.82rem;}
+  .alert-strip.green{background:#f0fdf4;border:1px solid rgba(26,158,90,.2);color:var(--green);}
+  .alert-strip.orange{background:#fff8f0;border:1px solid rgba(230,126,34,.2);color:var(--orange);}
+  .alert-strip.red{background:#fef2f2;border:1px solid rgba(192,57,43,.2);color:var(--red);}
+
+  @media print{
+    body{background:white;font-size:10px;}
+    .page-header,.period-bar,.btn-top,.btn-add-d,.btn-del-d{display:none!important;}
+    .container{padding:0;}
+    .kpi-card,.obj-card,.comp-card,.notes-card,.clinic-header{box-shadow:none;border:1px solid #ddd;}
+    .kpi-bar,.prog-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input{border:none!important;background:transparent!important;}
+    .kpi-input{font-size:.88rem;}
+  }
+  @media(max-width:700px){
+    .kpi-grid{grid-template-columns:1fr 1fr;}
+    .obj-grid{grid-template-columns:1fr;}
+    .container{padding:0 8px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.8rem;opacity:.7;">Tableau de bord — Clinique dentaire</div>
+</div>
+
+<div class="container">
+
+  <!-- CLINIC HEADER -->
+  <div class="clinic-header">
+    <div class="ch-title">
+      <div class="ch-clinic"><input class="ci" type="text" id="nomClinique" placeholder="Clinique Dentaire..." style="font-size:1.1rem;font-weight:700;min-width:250px;background:transparent;border-color:transparent;" oninput="this.style.borderColor=&#39;var(--border)&#39;"></div>
+      <div class="ch-sub" id="periodLabel">avril 2026</div>
+    </div>
+    <input class="ci" type="month" id="periodMonth" onchange="updatePeriodLabel()">
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn-top" onclick="calcAll()">🔄 Recalculer</button>
+      <button class="btn-top primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <!-- PERIOD BUTTONS -->
+  <div class="period-bar">
+    <span style="font-size:.76rem;font-weight:700;color:#5a6a80;">Vue :</span>
+    <button class="period-btn active" onclick="setView(&#39;mensuel&#39;,this)">📅 Mensuel</button>
+    <button class="period-btn" onclick="setView(&#39;trimestriel&#39;,this)">📊 Trimestriel</button>
+    <button class="period-btn" onclick="setView(&#39;annuel&#39;,this)">📈 Annuel</button>
+    <span style="margin-left:auto;font-size:.76rem;color:#8a9ab0;" id="lastCalc"></span>
+  </div>
+
+  <!-- ALERTS -->
+  <div id="alertsWrap"></div>
+
+  <!-- KPI SECTION : PRODUCTION -->
+  <div class="sec-title">💰 Production et facturation</div>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-top-color:var(--green);">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">Production brute</div>
+      <input class="kpi-input" type="number" id="kpi_prod_brut" placeholder="0" oninput="calcAll()">
+      <div class="kpi-target">Objectif : <input type="number" id="obj_prod_brut" placeholder="0" oninput="calcAll()"> $</div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_prod_brut" style="background:var(--green);width:0%"></div></div>
+      <span class="kpi-status" id="st_prod_brut"></span>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--blue);">
+      <div class="kpi-icon">💳</div>
+      <div class="kpi-label">Collection (encaissements)</div>
+      <input class="kpi-input" type="number" id="kpi_collection" placeholder="0" oninput="calcAll()">
+      <div class="kpi-target">Objectif : <input type="number" id="obj_collection" placeholder="0" oninput="calcAll()"> $</div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_collection" style="background:var(--blue);width:0%"></div></div>
+      <span class="kpi-status" id="st_collection"></span>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--purple);">
+      <div class="kpi-icon">📊</div>
+      <div class="kpi-label">Taux de collection</div>
+      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_taux_coll">—</span><span class="kpi-unit">%</span></div>
+      <div class="kpi-target" style="font-size:.75rem;color:#5a6a80;">Cible : ≥ 98%</div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_taux_coll" style="background:var(--purple);width:0%"></div></div>
+      <span class="kpi-status" id="st_taux_coll"></span>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--orange);">
+      <div class="kpi-icon">📋</div>
+      <div class="kpi-label">Comptes à recevoir (AR)</div>
+      <input class="kpi-input" type="number" id="kpi_ar" placeholder="0" oninput="calcAll()">
+      <div class="kpi-target">Seuil d'alerte : <input type="number" id="obj_ar" placeholder="0" oninput="calcAll()"> $</div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_ar" style="background:var(--orange);width:0%"></div></div>
+      <span class="kpi-status" id="st_ar"></span>
+    </div>
+  </div>
+
+  <!-- KPI SECTION : PATIENTS -->
+  <div class="sec-title">🦷 Patients et rendez-vous</div>
+  <div class="kpi-grid">
+    <div class="kpi-card" style="border-top-color:var(--green);">
+      <div class="kpi-icon">🆕</div>
+      <div class="kpi-label">Nouveaux patients</div>
+      <input class="kpi-input" type="number" id="kpi_new_pat" placeholder="0" oninput="calcAll()">
+      <div class="kpi-target">Objectif : <input type="number" id="obj_new_pat" placeholder="20" oninput="calcAll()"></div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_new_pat" style="background:var(--green);width:0%"></div></div>
+      <span class="kpi-status" id="st_new_pat"></span>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--blue);">
+      <div class="kpi-icon">📅</div>
+      <div class="kpi-label">RV complétés</div>
+      <input class="kpi-input" type="number" id="kpi_rv_comp" placeholder="0" oninput="calcAll()">
+      <div class="kpi-target">RV planifiés : <input type="number" id="obj_rv_total" placeholder="0" oninput="calcAll()"></div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_rv_comp" style="background:var(--blue);width:0%"></div></div>
+      <span class="kpi-status" id="st_rv_comp"></span>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--red);">
+      <div class="kpi-icon">❌</div>
+      <div class="kpi-label">Taux de no-show/annulation</div>
+      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_noshow">—</span><span class="kpi-unit">%</span></div>
+      <div class="kpi-target" style="font-size:.75rem;color:#5a6a80;">Cible : ≤ 5%</div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_noshow" style="background:var(--red);width:0%"></div></div>
+      <span class="kpi-status" id="st_noshow"></span>
+    </div>
+    <div class="kpi-card" style="border-top-color:var(--orange);">
+      <div class="kpi-icon">🔔</div>
+      <div class="kpi-label">Rappels hygiène (taux)</div>
+      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_rappels">—</span><span class="kpi-unit">%</span></div>
+      <input type="number" id="kpi_rappels_prises" placeholder="RV rappels pris" style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;background:var(--light);margin-bottom:3px;" oninput="calcAll()">
+      <div class="kpi-target">Rappels dus : <input type="number" id="kpi_rappels_dus" placeholder="0" style="width:70px;" oninput="calcAll()"> Cible : ≥ 85%</div>
+      <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_rappels" style="background:var(--orange);width:0%"></div></div>
+      <span class="kpi-status" id="st_rappels"></span>
+    </div>
+  </div>
+
+  <!-- PRODUCTION PAR DENTISTE -->
+  <div class="sec-title">👨‍⚕️ Production par dentiste/hygiéniste</div>
+  <div class="comp-card">
+    <div id="dentistRows">
+    <div class="dentist-row">
+      <input style="flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;background:var(--light);" type="text" value="Dentiste principal" placeholder="Nom du (de la) praticien(ne)..." oninput="dentists[0].name=this.value" onfocus="this.style.borderColor=&#39;var(--accent)&#39;" onblur="this.style.borderColor=&#39;var(--border)&#39;">
+      <input class="d-input" type="number" placeholder="Production $" id="d_prod_1" oninput="calcDentistTotal()">
+      <input class="d-input" type="number" placeholder="% atteinte" id="d_pct_1" oninput="calcDentistTotal()" style="width:80px;">
+      <button class="btn-del-d" onclick="removeDentist(1)">×</button>
+    </div>
+    <div class="dentist-row">
+      <input style="flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;background:var(--light);" type="text" value="Hygiéniste" placeholder="Nom du (de la) praticien(ne)..." oninput="dentists[1].name=this.value" onfocus="this.style.borderColor=&#39;var(--accent)&#39;" onblur="this.style.borderColor=&#39;var(--border)&#39;">
+      <input class="d-input" type="number" placeholder="Production $" id="d_prod_2" oninput="calcDentistTotal()">
+      <input class="d-input" type="number" placeholder="% atteinte" id="d_pct_2" oninput="calcDentistTotal()" style="width:80px;">
+      <button class="btn-del-d" onclick="removeDentist(2)">×</button>
+    </div></div>
+    <button class="btn-add-d" onclick="addDentist()">+ Ajouter un(e) dentiste/hygiéniste</button>
+    <div style="margin-top:14px;padding-top:10px;border-top:2px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:.82rem;font-weight:700;color:var(--dark);">Production totale (calculée)</span>
+      <span style="font-size:1rem;font-weight:700;color:var(--blue);" id="totalDentist">0 $</span>
+    </div>
+  </div>
+
+  <!-- COMPARAISON AVEC PÉRIODE PRÉCÉDENTE -->
+  <div class="sec-title">📊 Comparaison — Période précédente</div>
+  <div class="comp-card">
+    <table class="comp-table">
+      <thead><tr><th>Indicateur</th><th>Période actuelle</th><th>Période précédente</th><th>Variation</th></tr></thead>
+      <tbody id="compBody"></tbody>
+    </table>
+  </div>
+
+  <!-- OBJECTIFS VISUELS -->
+  <div class="sec-title">🎯 Atteinte des objectifs</div>
+  <div class="obj-grid">
+    <div class="obj-card">
+      <div class="obj-header"><span class="obj-icon">💰</span><span class="obj-title">Production et facturation</span></div>
+      <div id="objProd"></div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-header"><span class="obj-icon">🦷</span><span class="obj-title">Patients et rendez-vous</span></div>
+      <div id="objPat"></div>
+    </div>
+    <div class="obj-card">
+      <div class="obj-header"><span class="obj-icon">📝</span><span class="obj-title">Notes et observations</span></div>
+      <textarea placeholder="Faits saillants de la période, points d&#39;attention, actions à prendre, contexte particulier..." style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:9px;font-size:.83rem;font-family:inherit;resize:vertical;min-height:120px;background:var(--light);line-height:1.6;" id="notesPeriod"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ===== INIT =====
+const today = new Date();
+document.getElementById('periodMonth').value = today.getFullYear()+'-'+(String(today.getMonth()+1).padStart(2,'0'));
+updatePeriodLabel();
+
+// Dentist rows
+const dentists = [];
+let dentistId = 1;
+addDentist('Dentiste principal');
+addDentist('Hygiéniste');
+
+function addDentist(name) {
+  const id = dentistId++;
+  dentists.push({ id, name: name || '' });
+  renderDentists();
+}
+
+function removeDentist(id) {
+  const idx = dentists.findIndex(d => d.id === id);
+  if (idx >= 0) dentists.splice(idx, 1);
+  renderDentists(); calcAll();
+}
+
+function renderDentists() {
+  const el = document.getElementById('dentistRows');
+  el.innerHTML = dentists.map((d, i) => `
+    <div class="dentist-row">
+      <input style="flex:1;border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;background:var(--light);" 
+        type="text" value="${d.name}" placeholder="Nom du (de la) praticien(ne)..." 
+        oninput="dentists[${i}].name=this.value" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+      <input class="d-input" type="number" placeholder="Production $" id="d_prod_${d.id}" oninput="calcDentistTotal()">
+      <input class="d-input" type="number" placeholder="% atteinte" id="d_pct_${d.id}" oninput="calcDentistTotal()" style="width:80px;">
+      <button class="btn-del-d" onclick="removeDentist(${d.id})">×</button>
+    </div>`).join('');
+}
+
+function calcDentistTotal() {
+  let total = 0;
+  dentists.forEach(d => {
+    const v = parseFloat(document.getElementById('d_prod_'+d.id)?.value) || 0;
+    total += v;
+  });
+  document.getElementById('totalDentist').textContent = fmt(total);
+}
+
+// ===== CALC =====
+function getVal(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+
+function setStatus(id, val, target, higher=true) {
+  const el = document.getElementById('st_'+id);
+  if (!el || !val || !target) return;
+  const ratio = val / target;
+  const ok = higher ? ratio >= 1 : ratio <= 1;
+  const warn = higher ? ratio >= 0.85 : ratio <= 1.15;
+  el.className = 'kpi-status ' + (ok ? 'st-ok' : warn ? 'st-warn' : 'st-bad');
+  el.textContent = ok ? '✅' : warn ? '⚠️' : '🔴';
+}
+
+function setBar(id, pct, color) {
+  const el = document.getElementById('bar_'+id);
+  if (!el) return;
+  el.style.width = Math.min(100, pct) + '%';
+  el.style.background = color;
+}
+
+function fmt(n) { return n ? n.toLocaleString('fr-CA') + ' $' : '—'; }
+
+function calcAll() {
+  const prodBrut = getVal('kpi_prod_brut');
+  const collection = getVal('kpi_collection');
+  const ar = getVal('kpi_ar');
+  const objProdBrut = getVal('obj_prod_brut');
+  const objColl = getVal('obj_collection');
+  const objAr = getVal('obj_ar');
+
+  const newPat = getVal('kpi_new_pat');
+  const objNewPat = getVal('obj_new_pat');
+  const rvComp = getVal('kpi_rv_comp');
+  const rvTotal = getVal('obj_rv_total');
+  const rappelsPrises = getVal('kpi_rappels_prises');
+  const rappelsDus = getVal('kpi_rappels_dus');
+
+  // Taux collection
+  const tauxColl = prodBrut > 0 ? Math.round(collection / prodBrut * 100) : null;
+  document.getElementById('kpi_taux_coll').textContent = tauxColl !== null ? tauxColl : '—';
+
+  // No-show rate
+  const noshow = rvTotal > 0 ? Math.round((rvTotal - rvComp) / rvTotal * 100) : null;
+  document.getElementById('kpi_noshow').textContent = noshow !== null ? noshow : '—';
+
+  // Rappels
+  const rappelsPct = rappelsDus > 0 ? Math.round(rappelsPrises / rappelsDus * 100) : null;
+  document.getElementById('kpi_rappels').textContent = rappelsPct !== null ? rappelsPct : '—';
+
+  // Status & bars
+  if (objProdBrut) { setBar('prod_brut', prodBrut/objProdBrut*100, 'var(--green)'); setStatus('prod_brut', prodBrut, objProdBrut); }
+  if (objColl) { setBar('collection', collection/objColl*100, 'var(--blue)'); setStatus('collection', collection, objColl); }
+  if (tauxColl !== null) { setBar('taux_coll', tauxColl, tauxColl>=98?'var(--green)':tauxColl>=90?'var(--orange)':'var(--red)'); const el=document.getElementById('st_taux_coll'); if(el){el.className='kpi-status '+(tauxColl>=98?'st-ok':tauxColl>=90?'st-warn':'st-bad');el.textContent=tauxColl>=98?'✅':tauxColl>=90?'⚠️':'🔴';} }
+  if (objAr && ar) { const ok = ar <= objAr; setBar('ar', ar/objAr*100,'var(--orange)'); const el=document.getElementById('st_ar'); if(el){el.className='kpi-status '+(ok?'st-ok':'st-bad');el.textContent=ok?'✅':'🔴';} }
+  if (objNewPat) { setBar('new_pat', newPat/objNewPat*100, 'var(--green)'); setStatus('new_pat', newPat, objNewPat); }
+  if (rvTotal) { setBar('rv_comp', rvComp/rvTotal*100, 'var(--blue)'); const el=document.getElementById('st_rv_comp'); if(el){const pct=rvComp/rvTotal;el.className='kpi-status '+(pct>=0.95?'st-ok':pct>=0.85?'st-warn':'st-bad');el.textContent=pct>=0.95?'✅':pct>=0.85?'⚠️':'🔴';} }
+  if (noshow !== null) { setBar('noshow', noshow/10*100,'var(--red)'); const el=document.getElementById('st_noshow'); if(el){el.className='kpi-status '+(noshow<=5?'st-ok':noshow<=10?'st-warn':'st-bad');el.textContent=noshow<=5?'✅':noshow<=10?'⚠️':'🔴';} }
+  if (rappelsPct !== null) { setBar('rappels', rappelsPct, 'var(--orange)'); const el=document.getElementById('st_rappels'); if(el){el.className='kpi-status '+(rappelsPct>=85?'st-ok':rappelsPct>=70?'st-warn':'st-bad');el.textContent=rappelsPct>=85?'✅':rappelsPct>=70?'⚠️':'🔴';} }
+
+  calcDentistTotal();
+  buildObjProd(prodBrut, objProdBrut, collection, objColl, tauxColl, ar, objAr);
+  buildObjPat(newPat, objNewPat, noshow, rappelsPct, rvComp, rvTotal);
+  buildCompTable(prodBrut, collection, newPat, noshow, tauxColl);
+  buildAlerts(tauxColl, noshow, rappelsPct, ar, objAr);
+  document.getElementById('lastCalc').textContent = 'Mis à jour : ' + new Date().toLocaleTimeString('fr-CA');
+}
+
+function buildProgRow(label, val, target, higherBetter=true, unit='$') {
+  if (!val || !target) return `<div class="prog-row"><div class="prog-top"><span class="prog-lbl">${label}</span><span class="prog-val" style="color:#8a9ab0;">—</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#ddd;"></div></div></div>`;
+  const pct = Math.min(100, Math.round(val/target*100));
+  const color = higherBetter ? (pct>=100?'var(--green)':pct>=85?'var(--orange)':'var(--red)') : (pct<=100?'var(--green)':pct<=115?'var(--orange)':'var(--red)');
+  const label2 = unit === '$' ? (val.toLocaleString('fr-CA')+' / '+target.toLocaleString('fr-CA')+' $') : (val+' / '+target);
+  return `<div class="prog-row"><div class="prog-top"><span class="prog-lbl">${label}</span><span class="prog-val" style="color:${color};">${pct}% — ${label2}</span></div><div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${color};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div></div>`;
+}
+
+function buildObjProd(prod, objProd, coll, objColl, tauxColl, ar, objAr) {
+  document.getElementById('objProd').innerHTML =
+    buildProgRow('Production brute', prod, objProd) +
+    buildProgRow('Collection', coll, objColl) +
+    (tauxColl !== null ? buildProgRow('Taux de collection', tauxColl, 98, true, '%') : '') +
+    (ar && objAr ? buildProgRow('Comptes à recevoir (≤ seuil)', objAr, ar, true, '$') : '');
+}
+
+function buildObjPat(newPat, objNew, noshow, rappelsPct, rvComp, rvTotal) {
+  document.getElementById('objPat').innerHTML =
+    buildProgRow('Nouveaux patients', newPat, objNew || 20, true, 'patients') +
+    (noshow !== null ? buildProgRow('Taux no-show (≤ 5%)', 5, noshow < 0.1 ? null : noshow, false, '%') : '') +
+    (rappelsPct !== null ? buildProgRow('Taux de rappels hygiène', rappelsPct, 85, true, '%') : '') +
+    (rvTotal ? buildProgRow('RV complétés', rvComp, rvTotal, true, 'RV') : '');
+}
+
+function buildCompTable(prod, coll, newPat, noshow, tauxColl) {
+  const rows = [
+    { label:'Production brute', cur:prod?fmt(prod):'—', prev:'', unit:'$' },
+    { label:'Collection', cur:coll?fmt(coll):'—', prev:'', unit:'$' },
+    { label:'Taux de collection', cur:tauxColl!==null?tauxColl+'%':'—', prev:'', unit:'%' },
+    { label:'Nouveaux patients', cur:newPat||'—', prev:'', unit:'' },
+    { label:'Taux no-show', cur:noshow!==null?noshow+'%':'—', prev:'', unit:'%' },
+  ];
+  document.getElementById('compBody').innerHTML = rows.map(r => `
+    <tr>
+      <td style="font-weight:600;">${r.label}</td>
+      <td style="font-weight:700;color:var(--blue);">${r.cur}</td>
+      <td><input type="text" placeholder="Période précédente..." class="comp-prev" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.79rem;font-family:inherit;width:130px;background:var(--light);text-align:right;" oninput="updateVariation(this,'${r.unit}')"></td>
+      <td class="variation" style="font-weight:700;">—</td>
+    </tr>`).join('');
+}
+
+function updateVariation(input, unit) {
+  const row = input.closest('tr');
+  const curTd = row.cells[1];
+  const varTd = row.cells[3];
+  const prev = parseFloat(input.value.replace(/[^0-9.-]/g,''));
+  const curText = curTd.textContent.replace(/[^0-9.-]/g,'');
+  const cur = parseFloat(curText);
+  if (!isNaN(prev) && !isNaN(cur) && prev !== 0) {
+    const pct = Math.round((cur - prev) / prev * 100);
+    const pos = pct >= 0;
+    varTd.innerHTML = `<span class="${pos?'change-pos':'change-neg'}">${pos?'+':''}${pct}%</span>`;
+  } else { varTd.textContent = '—'; }
+}
+
+function buildAlerts(tauxColl, noshow, rappels, ar, objAr) {
+  const alerts = [];
+  if (tauxColl !== null && tauxColl < 90) alerts.push({ msg:`Taux de collection critique : ${tauxColl}% (cible ≥ 98%)`, level:'red' });
+  else if (tauxColl !== null && tauxColl < 98) alerts.push({ msg:`Taux de collection à améliorer : ${tauxColl}% (cible ≥ 98%)`, level:'orange' });
+  if (noshow !== null && noshow > 10) alerts.push({ msg:`Taux de no-show élevé : ${noshow}% (cible ≤ 5%)`, level:'red' });
+  else if (noshow !== null && noshow > 5) alerts.push({ msg:`Taux de no-show à surveiller : ${noshow}%`, level:'orange' });
+  if (rappels !== null && rappels < 70) alerts.push({ msg:`Taux de rappels hygiène faible : ${rappels}% (cible ≥ 85%)`, level:'red' });
+  else if (rappels !== null && rappels < 85) alerts.push({ msg:`Rappels hygiène à améliorer : ${rappels}%`, level:'orange' });
+  if (ar && objAr && ar > objAr) alerts.push({ msg:`Comptes à recevoir dépassent le seuil d'alerte : ${ar.toLocaleString('fr-CA')} $`, level:'orange' });
+  if (alerts.length === 0 && (tauxColl||noshow||rappels)) alerts.push({ msg:'Tous les indicateurs sont dans les cibles — Excellent travail!', level:'green' });
+  document.getElementById('alertsWrap').innerHTML = alerts.map(a => `<div class="alert-strip ${a.level}"><span style="font-size:1rem;">${a.level==='red'?'🔴':a.level==='orange'?'🟡':'✅'}</span>${a.msg}</div>`).join('');
+}
+
+function updatePeriodLabel() {
+  const v = document.getElementById('periodMonth').value;
+  if (!v) return;
+  const d = new Date(v + '-01');
+  document.getElementById('periodLabel').textContent = d.toLocaleDateString('fr-CA',{year:'numeric',month:'long'});
+}
+
+function setView(view, btn) {
+  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+
+
+</body></html>

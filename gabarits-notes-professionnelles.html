@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)file:///C:/Users/info/Downloads/gabarits-notes-professionnelles.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gabarits notes professionnelles — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1000px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .warn-banner{background:#fff8e1;border-bottom:3px solid var(--orange);padding:10px 28px;font-size:.82rem;color:#7a4400;line-height:1.7;display:flex;align-items:flex-start;gap:8px;}
+  .top-bar{padding:10px 24px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  /* TREATMENT SELECTOR */
+  .treat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:9px;padding:16px 24px;border-bottom:1px solid var(--border);}
+  .treat-btn{padding:10px 12px;border-radius:9px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.79rem;font-weight:600;cursor:pointer;text-align:center;transition:all .15s;color:#5a6a80;}
+  .treat-btn:hover{border-color:var(--accent);color:var(--blue);background:var(--light);}
+  .treat-btn.active{border-color:var(--blue);background:var(--blue);color:white;}
+  .treat-icon{font-size:1.2rem;display:block;margin-bottom:4px;}
+  /* NOTE FORM */
+  .note-wrap{padding:18px 24px;}
+  .note-header{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:13px 16px;margin-bottom:16px;}
+  .nh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select{border:1.5px solid var(--border);border-radius:5px;padding:6px 9px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
+  .ff input:focus,.ff select:focus{outline:none;border-color:var(--accent);}
+  .sec-title{font-size:.75rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:9px;margin-top:14px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;}
+  /* FIELDS */
+  .field-row{margin-bottom:9px;}
+  .field-row label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;display:block;margin-bottom:3px;}
+  .field-row textarea{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:.86rem;font-family:inherit;resize:vertical;background:var(--light);line-height:1.65;color:var(--text);}
+  .field-row textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  .field-row input[type=text]{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.86rem;font-family:inherit;background:var(--light);color:var(--text);}
+  .field-row input[type=text]:focus{outline:none;border-color:var(--accent);background:white;}
+  .field-row select{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.86rem;font-family:inherit;background:var(--light);color:var(--text);}
+  .field-row select:focus{outline:none;border-color:var(--accent);background:white;}
+  .check-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+  .chk-lbl{display:flex;align-items:center;gap:5px;font-size:.82rem;cursor:pointer;padding:4px 8px;border:1.5px solid var(--border);border-radius:6px;background:white;transition:all .12s;}
+  .chk-lbl:hover{border-color:var(--accent);}
+  .chk-lbl input:checked + span{font-weight:700;color:var(--blue);}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  /* SIG */
+  .sig-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);}
+  .sig-field label{font-size:.7rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:4px;}
+  .sig-line{border-top:1px solid #aaa;padding-top:3px;font-size:.71rem;color:#8a9ab0;margin-top:22px;}
+  .actions{padding:12px 24px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.warn-banner,.top-bar,.treat-grid,.actions,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.treat-btn{display:none!important;}input,select,textarea{border:none!important;background:transparent!important;}}
+  @media(max-width:700px){.nh-grid{grid-template-columns:1fr 1fr;}.grid2{grid-template-columns:1fr;}.sig-row{grid-template-columns:1fr;}.treat-grid{grid-template-columns:repeat(3,1fr);}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Documentation clinique</div></div>
+<div class="container">
+  <div class="doc-header"><h1>📝 Gabarits — Notes professionnelles</h1><p>Modèles de documentation par type de traitement · À valider avec le dentiste traitant</p></div>
+
+  <div class="warn-banner">⚠️ <strong>Note importante :</strong> Ces gabarits sont des aides-mémoires à titre d'exemple et de formation. La documentation clinique relève de la responsabilité professionnelle du dentiste traitant et doit être conforme aux exigences de l'Ordre des dentistes du Québec (ODQ). Toujours faire valider par le dentiste avant utilisation officielle.
+  </div>
+
+  <div class="top-bar">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <input class="ci" type="text" id="clinicName" placeholder="Clinique Dentaire...">
+      <input class="ci" type="date" id="dateNote">
+      <input class="ci" type="text" id="dentistName" placeholder="Dr/Dre Nom...">
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn" onclick="clearNote()">↺ Effacer</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="treat-grid" id="treatGrid">
+    <button class="treat-btn" onclick="selectTreat(&#39;exam&#39;)" style="">
+      <span class="treat-icon">🔍</span>Examen complet
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;exam_lim&#39;)" style="">
+      <span class="treat-icon">🔎</span>Examen limité/Urgence
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;nettoyage&#39;)" style="">
+      <span class="treat-icon">🦷</span>Nettoyage / Prophylaxie
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;obturation&#39;)" style="">
+      <span class="treat-icon">🔩</span>Obturation / Composite
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;extraction&#39;)" style="">
+      <span class="treat-icon">✂️</span>Extraction
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;canal&#39;)" style="">
+      <span class="treat-icon">🔧</span>Traitement de canal
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;couronne&#39;)" style="">
+      <span class="treat-icon">👑</span>Couronne / Bridge
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;paro&#39;)" style="">
+      <span class="treat-icon">🩺</span>Traitement parodontal
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;radiographie&#39;)" style="">
+      <span class="treat-icon">📸</span>Radiographies
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;blanchiment&#39;)" style="">
+      <span class="treat-icon">✨</span>Blanchiment
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;scellant&#39;)" style="">
+      <span class="treat-icon">🛡️</span>Scellants
+    </button>
+    <button class="treat-btn" onclick="selectTreat(&#39;trauma&#39;)" style="">
+      <span class="treat-icon">🚨</span>Trauma dentaire
+    </button></div>
+
+  <div class="note-wrap" id="noteWrap"><div style="padding:24px;text-align:center;color:#8a9ab0;">👆 Sélectionnez un type de traitement ci-dessus pour afficher le gabarit correspondant.</div></div>
+
+  <div class="actions">
+    <button class="btn" onclick="clearNote()">↺ Nouveau gabarit</button>
+    <button class="btn primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Gabarits à titre éducatif — Validation professionnelle requise</div>
+</div>
+
+<script>
+document.getElementById('dateNote').valueAsDate = new Date();
+
+const TREATMENTS = [
+  { id:'exam', icon:'🔍', label:'Examen complet', color:'#1a6abf' },
+  { id:'exam_lim', icon:'🔎', label:'Examen limité/Urgence', color:'#c0392b' },
+  { id:'nettoyage', icon:'🦷', label:'Nettoyage / Prophylaxie', color:'#1a9e5a' },
+  { id:'obturation', icon:'🔩', label:'Obturation / Composite', color:'#e67e22' },
+  { id:'extraction', icon:'✂️', label:'Extraction', color:'#c0392b' },
+  { id:'canal', icon:'🔧', label:'Traitement de canal', color:'#8e44ad' },
+  { id:'couronne', icon:'👑', label:'Couronne / Bridge', color:'#d4a017' },
+  { id:'paro', icon:'🩺', label:'Traitement parodontal', color:'#00897b' },
+  { id:'radiographie', icon:'📸', label:'Radiographies', color:'#5a6a80' },
+  { id:'blanchiment', icon:'✨', label:'Blanchiment', color:'#2196f3' },
+  { id:'scellant', icon:'🛡️', label:'Scellants', color:'#1a9e5a' },
+  { id:'trauma', icon:'🚨', label:'Trauma dentaire', color:'#c0392b' },
+];
+
+let currentTreat = null;
+
+const TEMPLATES = {
+  exam: {
+    title: '🔍 Examen complet (01100)',
+    sections: [
+      { title: 'Motif de consultation', fields: [
+        { type:'textarea', label:'Motif de la visite / Plainte principale', rows:2, ph:'Ex: Examen annuel de routine, le patient ne rapporte aucune douleur particulière.' },
+      ]},
+      { title: 'Anamnèse médicale', fields: [
+        { type:'checkrow', label:'Questionnaire médical', options:['À jour','Modifié — voir dossier','Nouveau patient — questionnaire complété','Allergie documentée'] },
+        { type:'text', label:'Médicaments (si pertinents)', ph:'Ex: Bisphosphonates, anticoagulants... ou Aucun médicament rapporté' },
+      ]},
+      { title: 'Examen extra-oral', fields: [
+        { type:'select', label:'Ganglions', opts:['Absence de lymphadénopathie palpable','Lymphadénopathie légère notée — à surveiller'] },
+        { type:'text', label:'ATM et musculature', ph:'Ex: ATM sans signe de dysfonction. Pas de craquement ni douleur à la palpation.' },
+        { type:'text', label:'Lèvres / Muqueuses / Peau faciale', ph:'Ex: Sans particularité' },
+      ]},
+      { title: 'Examen intra-oral', fields: [
+        { type:'textarea', label:'Muqueuses buccales', rows:2, ph:'Ex: Muqueuses saines, sans lésion apparente. Langue, plancher buccal et palais sans particularité.' },
+        { type:'textarea', label:'Gencives / Parodonte', rows:2, ph:'Ex: Gencives légèrement érythémateuses dans le secteur postérieur. Saignement au sondage noté en 3.6-3.7.' },
+        { type:'textarea', label:'Dents — Observations', rows:3, ph:'Ex: Carie occlusale suspectée en 4.6 (confirmation radiographique requise). Facettes d\'usure légères en secteur antérieur.' },
+        { type:'text', label:'Occlusion', ph:'Ex: Classe I. Pas d\'interférence notable.' },
+      ]},
+      { title: 'Radiographies prises', fields: [
+        { type:'checkrow', label:'Type', options:['Panoramique','Bitewings antérieurs','Bitewings postérieurs','PA ciblée','Aucune ce rendez-vous'] },
+        { type:'text', label:'Observations radiographiques', ph:'Ex: Carie interproximale débutante visible en 1.4-1.5. Crête alvéolaire stable.' },
+      ]},
+      { title: 'Diagnostic et plan de traitement', fields: [
+        { type:'textarea', label:'Diagnostic', rows:2, ph:'Ex: Carie débutante #14 et #15. Gingivite localisée secteur mandibulaire gauche.' },
+        { type:'textarea', label:'Plan de traitement recommandé', rows:3, ph:'Ex: 1. Obturations composites #14 et #15 (priorité 2). 2. Détartrage-polissage complet + instructions d\'hygiène. 3. Réévaluation parodontale dans 6 mois.' },
+      ]},
+      { title: 'Consentement et communication', fields: [
+        { type:'checkrow', label:'', options:['Plan de traitement expliqué au patient','Questions du patient répondues','Consentement verbal obtenu','Consentement écrit obtenu (si requis)'] },
+        { type:'text', label:'Prochain rendez-vous recommandé', ph:'Ex: Hygiène dans 6 mois + obturations à planifier' },
+      ]},
+    ]
+  },
+
+  nettoyage: {
+    title: '🦷 Nettoyage / Prophylaxie (11101)',
+    sections: [
+      { title: 'Informations du rendez-vous', fields: [
+        { type:'select', label:'Type de soin', opts:['Prophylaxie adulte (11101)','Prophylaxie enfant (11101)','Détartrage supra-gingival','Détartrage sous-gingival','Surfaçage radiculaire'] },
+        { type:'text', label:'Dernier nettoyage', ph:'Ex: Il y a 6 mois / 1 an / Première visite' },
+      ]},
+      { title: 'Évaluation gingivale', fields: [
+        { type:'select', label:'Condition gingivale générale', opts:['Gencives saines — aucun saignement au sondage','Gingivite légère — saignement léger localisé','Gingivite modérée — saignement au sondage généralisé','Parodontite — adressée / référée au spécialiste'] },
+        { type:'text', label:'Sondage (secteurs significatifs)', ph:'Ex: Poches ≤3mm généralisées. Poches de 4mm notées en 3.6D et 2.6M.' },
+        { type:'checkrow', label:'Observations', options:['Tartre supra-gingival localisé','Tartre supra-gingival abondant','Tartre sous-gingival','Calcul interproximal important','Coloration extrinsèque (café, tabac)'] },
+      ]},
+      { title: 'Soins effectués', fields: [
+        { type:'checkrow', label:'Traitements réalisés', options:['Détartrage supra-gingival (ultrasons + curettes)','Détartrage sous-gingival ciblé','Polissage (prophylaxie paste)','Application de fluorure','Irrigation antiseptique','Instructions d\'hygiène données'] },
+        { type:'textarea', label:'Détails des soins / Zones traitées', rows:2, ph:'Ex: Détartrage et polissage complet. Tartre sous-gingival retiré en 3.6-3.7. Instructions de fil dentaire données.' },
+      ]},
+      { title: 'Fluorure', fields: [
+        { type:'select', label:'Application fluorure', opts:['Non appliqué — patient adulte sans risque élevé','Fluorure topique 1,23% APF — 4 minutes','Vernis fluoré (NaF 5%)','Refus du patient documenté'] },
+      ]},
+      { title: 'Instructions et prochaines étapes', fields: [
+        { type:'textarea', label:'Instructions d\'hygiène données', rows:2, ph:'Ex: Technique de Bass démontrée pour le brossage. Utilisation du fil de soie interdentaire recommandée BID. Brossette interdentaire suggérée pour les espaces élargis.' },
+        { type:'select', label:'Prochain rappel recommandé', opts:['3 mois — risque élevé / suivi parodontal','4 mois — risque modéré','6 mois — risque faible / routine','12 mois — selon le cas'] },
+      ]},
+    ]
+  },
+
+  obturation: {
+    title: '🔩 Obturation / Composite (21XX0)',
+    sections: [
+      { title: 'Identification du soin', fields: [
+        { type:'text', label:'Dent(s) traitée(s)', ph:'Ex: #36 (dent 36 — première molaire inférieure gauche)' },
+        { type:'select', label:'Type d\'obturation', opts:['Composite direct (résine)','Amalgame','Ciment verre ionomère (CVI)','IRM (provisoire)'] },
+        { type:'text', label:'Surfaces traitées', ph:'Ex: MOD (mésiale-occlusale-distale) / Occlusale / Linguale...' },
+        { type:'select', label:'Anesthésie', opts:['Lidocaïne 2% avec épinéphrine 1:100,000','Articaïne 4% avec épinéphrine 1:100,000','Mépivacaïne 3% sans vasoconstricteur','Anesthésie topique seulement — zone d\'intervention légère'] },
+      ]},
+      { title: 'Condition pré-opératoire', fields: [
+        { type:'textarea', label:'Diagnostic et justification', rows:2, ph:'Ex: Carie secondaire sous l\'ancienne obturation. Patient asymptomatique. Pulpe vitalité positive normale.' },
+        { type:'checkrow', label:'Radiographie(s) prise(s)', options:['Pré-op PA','Post-op PA','Bitewing de contrôle','Aucune radiographie ce rendez-vous'] },
+      ]},
+      { title: 'Procédure', fields: [
+        { type:'textarea', label:'Déroulement du traitement', rows:3, ph:'Ex: Anesthésie locale infiltrée sans complication. Pose de la digue. Ablation de la carie à l\'aide de curettes et pièce à main. Profondeur : mésiale jusqu\'à la DEJ. Application du système adhésif (Scotchbond Universal). Stratification du composite (Filtek Z350 XT). Polymérisation par couches. Vérification de l\'occlusion — ajustement léger à la fraise finissante. Polissage final.' },
+        { type:'select', label:'Vitalité pulpaire observée', opts:['Pulpe saine — aucune exposition','Exposition pulpaire mineure — coiffage direct effectué','Pulpe exposée — référence traitement de canal'] },
+      ]},
+      { title: 'Post-opératoire', fields: [
+        { type:'textarea', label:'Instructions données au patient', rows:2, ph:'Ex: Insensibilité locale pour 1-2h. Éviter les aliments durs et collants pour 24h (si composite). Aviser la clinique si douleur persiste plus de 48h.' },
+        { type:'select', label:'Prochain suivi recommandé', opts:['Examen de routine / Hygiène — 6 mois','Suivi si sensibilité persiste — 4 semaines','Réévaluation pulpaire — 3 mois','Traitement de canal — à planifier'] },
+      ]},
+    ]
+  },
+
+  extraction: {
+    title: '✂️ Extraction / Avulsion',
+    sections: [
+      { title: 'Identification', fields: [
+        { type:'text', label:'Dent extraite', ph:'Ex: #47 (deuxième molaire inférieure droite)' },
+        { type:'select', label:'Type d\'extraction', opts:['Extraction simple (forceps)','Extraction chirurgicale (lambeau)','Extraction dent de sagesse partiellement incluse','Extraction dent de sagesse totalement incluse'] },
+        { type:'textarea', label:'Indication clinique / Diagnostic', rows:2, ph:'Ex: Carie étendue non restaurable. Nécrose pulpaire. Résorption radiculaire externe avancée. Patient informé des options alternatives.' },
+      ]},
+      { title: 'Consentement', fields: [
+        { type:'checkrow', label:'Consentement éclairé', options:['Risques expliqués (alvéolite, paresthésie, saignement, infection)','Alternatives présentées (traitement de canal + couronne, implant)','Consentement écrit signé','Questionnaire médical vérifié — pas de contre-indication'] },
+      ]},
+      { title: 'Anesthésie et procédure', fields: [
+        { type:'text', label:'Anesthésie administrée', ph:'Ex: Articaïne 4% épi. 1:100,000 — infiltration et bloc mentonnier' },
+        { type:'textarea', label:'Déroulement de la procédure', rows:3, ph:'Ex: Anesthésie profonde obtenue. Section de la papille mésiale. Syndesmotomie circulaire. Luxation progressive avec élévateur. Extraction à la pince avec mouvement de rotation. Dent extraite intacte. Curetage de l\'alvéole. Vérification de l\'hémostase. Pose de compresse de gaze. Suture non requise.' },
+        { type:'select', label:'Difficultés / Complications', opts:['Aucune complication — extraction sans incident','Saignement contrôlé par compression','Fracture radiculaire — fragment retiré','Fragment laissé en place — documenté — suivi'] },
+      ]},
+      { title: 'Post-opératoire', fields: [
+        { type:'checkrow', label:'Instructions remises', options:['Feuillet écrit post-extraction remis','Comprimer la gaze 30-45 min','Pas de rinçage vigoureux x 24h','Alimentation molle x 24-48h','Ibuprofène/Tylenol recommandé','Numéro d\'urgence fourni'] },
+        { type:'select', label:'Suivi', opts:['Aucun suivi requis — extraction simple non compliquée','Retrait de sutures — 7 jours','Réévaluation cicatrisation — 2 semaines','Discussion implant / prothèse — à planifier'] },
+      ]},
+    ]
+  },
+
+  canal: {
+    title: '🔧 Traitement de canal / Endodontie',
+    sections: [
+      { title: 'Identification', fields: [
+        { type:'text', label:'Dent traitée', ph:'Ex: #26 (première molaire supérieure gauche)' },
+        { type:'select', label:'Séance', opts:['Séance unique — traitement complet','Séance 1/2 — mise en forme et irrigation','Séance 2/2 — obturation canalaire','Séance de reprise/retraitement'] },
+        { type:'select', label:'Diagnostic pulpaire', opts:['Pulpite irréversible symptomatique','Pulpite irréversible asymptomatique','Nécrose pulpaire sans lésion péri-apicale','Nécrose pulpaire avec lésion péri-apicale','Dent préalablement traitée (retraitement)'] },
+      ]},
+      { title: 'Examens', fields: [
+        { type:'checkrow', label:'Tests effectués', options:['Test froid','Test chaleur','Percussion axiale','Percussion latérale','Palpation apicale','Sondage parodontal'] },
+        { type:'text', label:'Résultats des tests', ph:'Ex: Douleur vive et prolongée au froid. Percussion axiale légèrement positive. Palpation apicale sensible.' },
+        { type:'checkrow', label:'Radiographies', options:['PA pré-opératoire','Radiographies de travail (lime en place)','PA post-obturation','Cone beam (CBCT) — si requis'] },
+      ]},
+      { title: 'Procédure — Mise en forme', fields: [
+        { type:'text', label:'Nombre de canaux', ph:'Ex: 4 canaux (MB1, MB2, DB, P)' },
+        { type:'text', label:'Longueurs de travail', ph:'Ex: MB1: 19mm / MB2: 18.5mm / DB: 20mm / P: 22mm' },
+        { type:'select', label:'Système de mise en forme', opts:['Protaper Next (Dentsply)','WaveOne Gold','Reciproc','Lime manuelle K-file','Autre système rotatif'] },
+        { type:'text', label:'Irrigation utilisée', ph:'Ex: NaOCl 5.25% alternant avec EDTA 17%, irrigation finale avec CHX 2%' },
+      ]},
+      { title: 'Obturation canalaire (si effectuée)', fields: [
+        { type:'select', label:'Technique d\'obturation', opts:['Condensation latérale à froid','Gutta-percha chauffée (Obtura/System B)','Single cone avec ciment époxyde','Provisoire — Ca(OH)2 en place'] },
+        { type:'select', label:'Résultat radiographique', opts:['Obturation homogène jusqu\'à la jonction C-D','Légère sous-obturation — documentée','Dépassement du matériau — documenté, patient informé'] },
+      ]},
+      { title: 'Restauration et suivi', fields: [
+        { type:'textarea', label:'Restauration coronaire prévue', rows:2, ph:'Ex: Pose d\'une couronne recommandée pour protéger la dent fragilisée. RV couronnes à planifier.' },
+        { type:'select', label:'Prochain suivi', opts:['Réévaluation 6 mois — radiographique','Couronne à planifier sous 3 mois','Douleur persistante — réévaluation 2 semaines'] },
+      ]},
+    ]
+  },
+
+  couronne: {
+    title: '👑 Couronne / Bridge',
+    sections: [
+      { title: 'Identification', fields: [
+        { type:'text', label:'Dent(s) concernée(s)', ph:'Ex: Couronne #36 / Bridge #34-#36 (pontique #35)' },
+        { type:'select', label:'Type de restauration', opts:['Couronne complète — zircone','Couronne complète — porcelaine-métal','Couronne complète — métal','Inlay-Onlay — composite','Inlay-Onlay — porcelaine','Facette — composite','Facette — porcelaine','Bridge 3 unités'] },
+        { type:'select', label:'Séance', opts:['Séance 1 — préparation + empreinte + temporaire','Séance 2 — cimentage de la restauration définitive','Séance d\'essayage / ajustement'] },
+      ]},
+      { title: 'Séance de préparation (si applicable)', fields: [
+        { type:'textarea', label:'Indication / Justification', rows:2, ph:'Ex: Dent fragilisée post-traitement de canal. Fracture cuspidienne importante. Restauration provisoire répétée non satisfaisante.' },
+        { type:'select', label:'Anesthésie', opts:['Lidocaïne 2% épi. 1:100,000','Articaïne 4% épi. 1:100,000','Aucune — restauration indirecte sans préparation sous pulpe'] },
+        { type:'textarea', label:'Préparation effectuée', rows:2, ph:'Ex: Préparation coronaire totale avec réduction occlusale de 2mm et axiale de 1.5mm. Biseau gingival. Ligne de finition en épaulement arrondi.' },
+        { type:'checkrow', label:'Empreinte', options:['Empreinte en polyvinylsiloxane (PVS)','Empreinte numérique (scanner intra-oral)','Empreinte alginate modèle antagoniste','Enregistrement occlusal'] },
+        { type:'text', label:'Teinte sélectionnée', ph:'Ex: A2 (guide Vita) / B1 / OM3 — vérifiée avec le patient' },
+        { type:'select', label:'Temporaire posé', opts:['Couronne temporaire en composite — ciment temporaire Temp-Bond','Couronne temporaire préfabriquée','Instructions données pour le temporaire'] },
+      ]},
+      { title: 'Séance de cimentage (si applicable)', fields: [
+        { type:'text', label:'Restauration reçue du laboratoire', ph:'Ex: Couronne zircone #36 — laboratoire XYZ' },
+        { type:'checkrow', label:'Vérifications', options:['Adaptation marginale vérifiée','Occlusion vérifiée et ajustée','Contacts proximaux vérifiés','Teinte validée avec le patient','Patient satisfait de l\'esthétique'] },
+        { type:'select', label:'Ciment utilisé', opts:['Ciment résine — Panavia / RelyX','Ciment verre ionomère (CVIMAR)','Ciment provisoire (si essayage)'] },
+        { type:'textarea', label:'Observations', rows:2, ph:'Ex: Couronne bien ajustée. Adaptation marginale excellente. Occlusion équilibrée — pas d\'ajustement requis. Patient satisfait.' },
+      ]},
+      { title: 'Instructions et suivi', fields: [
+        { type:'textarea', label:'Instructions remises', rows:2, ph:'Ex: Éviter les aliments durs x 24h (ciment résine). Hygiène avec fil dentaire sous le bridge (si applicable). Aviser si sensibilité persistante.' },
+      ]},
+    ]
+  },
+
+  radiographie: {
+    title: '📸 Radiographies',
+    sections: [
+      { title: 'Radiographies effectuées', fields: [
+        { type:'checkrow', label:'Types de radiographies', options:['Panoramique (02103)','Bitewing postérieur (02401)','Bitewing antérieur','Péri-apicale (PA) ciblée (02401)','Série complète (full mouth)','Cône beam CBCT'] },
+        { type:'text', label:'Dents ciblées (pour PA)', ph:'Ex: PA #36, PA #46' },
+        { type:'select', label:'Indication', opts:['Examen de routine annuel / bisannuel','Suivi de traitement en cours','Évaluation d\'urgence / douleur','Évaluation implantaire','Suivi parodontal','Évaluation orthodontique'] },
+      ]},
+      { title: 'Observations radiographiques', fields: [
+        { type:'textarea', label:'Résultats et interprétation', rows:4, ph:'Ex: Panoramique : pas de lésion apicale évidente. Légère perte osseuse horizontale généralisée compatible avec parodontite de stade I. Dents de sagesse 1.8 et 4.8 partiellement incluses — à surveiller...' },
+        { type:'text', label:'Dentisterie signifiante notée', ph:'Ex: Restaurations stables. Pas de carie visible inter-proximalement.' },
+      ]},
+      { title: 'Qualité technique', fields: [
+        { type:'select', label:'Qualité des clichés', opts:['Excellente — toutes les structures bien visibles','Bonne — légère distorsion, interprétation fiable','Acceptable — qualité limitée, retake effectué','Retake requis — non effectué (patient non-coopérant / limite de dose)'] },
+        { type:'text', label:'Notes techniques', ph:'Ex: Patient difficile — superposition du palais mou sur PA 1.6' },
+      ]},
+    ]
+  },
+};
+
+function renderTreatButtons(){
+  const g=document.getElementById('treatGrid');
+  g.innerHTML=TREATMENTS.map(t=>`
+    <button class="treat-btn${t.id===currentTreat?' active':''}" onclick="selectTreat('${t.id}')" style="${t.id===currentTreat?`background:${t.color};border-color:${t.color};`:''}">
+      <span class="treat-icon">${t.icon}</span>${t.label}
+    </button>`).join('');
+}
+
+function selectTreat(id){
+  currentTreat=id;
+  renderTreatButtons();
+  renderNote();
+}
+
+function renderNote(){
+  const tpl=TEMPLATES[currentTreat];
+  if(!tpl){document.getElementById('noteWrap').innerHTML='<div style="padding:20px;text-align:center;color:#8a9ab0;">Sélectionnez un type de traitement ci-dessus.</div>';return;}
+
+  const patInfo=`
+    <div class="note-header">
+      <div class="nh-grid">
+        <div class="ff"><label>Nom du patient</label><input type="text" placeholder="Prénom Nom..."></div>
+        <div class="ff"><label>Date de naissance</label><input type="date"></div>
+        <div class="ff"><label>No de dossier</label><input type="text" placeholder="Dossier #..."></div>
+        <div class="ff"><label>Date du traitement</label><input type="date" value="${document.getElementById('dateNote').value}"></div>
+        <div class="ff"><label>Dentiste / Hygiéniste</label><input type="text" value="${document.getElementById('dentistName').value}" placeholder="Dr/Dre Nom..."></div>
+        <div class="ff"><label>Assistant(e)</label><input type="text" placeholder="Nom..."></div>
+      </div>
+    </div>`;
+
+  let html=patInfo+`<div style="font-size:1rem;font-weight:700;color:var(--blue);padding:4px 0 10px;border-bottom:2px solid var(--blue);margin-bottom:12px;">${tpl.title}</div>`;
+
+  tpl.sections.forEach(s=>{
+    html+=`<div class="sec-title">${s.title}</div>`;
+    s.fields.forEach(f=>{
+      if(f.type==='textarea') html+=`<div class="field-row"><label>${f.label}</label><textarea rows="${f.rows||3}" placeholder="${f.ph||''}"></textarea></div>`;
+      else if(f.type==='text') html+=`<div class="field-row"><label>${f.label}</label><input type="text" placeholder="${f.ph||''}"></div>`;
+      else if(f.type==='select') html+=`<div class="field-row"><label>${f.label}</label><select>${(f.opts||[]).map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+      else if(f.type==='checkrow') html+=`<div class="field-row"><label>${f.label}</label><div class="check-row">${(f.options||[]).map(o=>`<label class="chk-lbl"><input type="checkbox"><span>${o}</span></label>`).join('')}</div></div>`;
+    });
+  });
+
+  html+=`<div class="sig-row">
+    <div class="sig-field">
+      <label>Dentiste / Hygiéniste responsable</label>
+      <div style="margin-top:30px;" class="sig-line">Signature _________________________________ Date _________</div>
+    </div>
+    <div class="sig-field">
+      <label>Notes supplémentaires</label>
+      <textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:7px;font-size:.82rem;font-family:inherit;resize:vertical;min-height:60px;background:var(--light);"></textarea>
+    </div>
+  </div>`;
+
+  document.getElementById('noteWrap').innerHTML=html;
+}
+
+function clearNote(){currentTreat=null;renderTreatButtons();document.getElementById('noteWrap').innerHTML='<div style="padding:24px;text-align:center;color:#8a9ab0;">👆 Sélectionnez un type de traitement ci-dessus pour afficher le gabarit correspondant.</div>';}
+
+renderTreatButtons();
+document.getElementById('noteWrap').innerHTML='<div style="padding:24px;text-align:center;color:#8a9ab0;">👆 Sélectionnez un type de traitement ci-dessus pour afficher le gabarit correspondant.</div>';
+</script>
+
+
+</body></html>

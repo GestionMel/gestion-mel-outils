@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/info/Downloads/charte-parodontale%20(4).html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charte parodontale — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);font-size:12px;}
+  .page-header{background:var(--dark);color:white;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.15rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1450px;margin:12px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .doc-header h1{font-size:1rem;font-weight:700;} .doc-header p{font-size:.72rem;opacity:.7;}
+  .btn{padding:6px 13px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .btn.danger{border-color:rgba(192,57,43,.3);color:var(--red);}
+
+  /* PATIENT */
+  .pat-bar{padding:8px 16px;background:var(--light);border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:7px;}
+  .ff{display:flex;flex-direction:column;gap:2px;}
+  .ff label{font-size:.61rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
+  .ff input,.ff select{border:1.5px solid var(--border);border-radius:5px;padding:4px 8px;font-size:.77rem;font-family:inherit;background:white;color:var(--text);}
+  .ff input:focus,.ff select:focus{outline:none;border-color:var(--accent);}
+
+  /* LEGEND */
+  .legend{padding:6px 16px;background:#f8f8f8;border-bottom:1px solid var(--border);display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  .leg{display:flex;align-items:center;gap:5px;font-size:.7rem;}
+  .lcol{width:14px;height:14px;border-radius:3px;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* ACTIONS */
+  .action-bar{padding:7px 16px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+
+  /* CHART */
+  .chart-section{padding:10px 8px;}
+  .section-label{text-align:center;font-size:.7rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;padding:4px;background:var(--light);border-radius:5px;}
+  .teeth-grid{display:flex;align-items:stretch;}
+  .row-labels-col{display:flex;flex-direction:column;gap:0;width:68px;flex-shrink:0;}
+  .row-lbl{font-size:.58rem;font-weight:700;color:#5a6a80;text-align:right;padding-right:5px;display:flex;align-items:center;justify-content:flex-end;white-space:nowrap;}
+  .teeth-data{display:flex;gap:1px;overflow-x:auto;padding-bottom:4px;}
+  .tooth-col{display:flex;flex-direction:column;align-items:center;min-width:50px;max-width:56px;}
+  .tooth-num{font-size:.7rem;font-weight:700;color:var(--dark);text-align:center;padding:1px 0;}
+  .tooth-num.missing{color:#bbb;text-decoration:line-through;}
+
+  /* PROBING */
+  .probe-row{display:flex;justify-content:center;gap:1px;margin:1px 0;}
+  .p{width:15px;height:19px;border:1px solid var(--border);border-radius:2px;text-align:center;font-size:.7rem;font-weight:700;font-family:inherit;color:var(--text);background:white;padding:0;}
+  .p:focus{outline:none;border-color:var(--accent);}
+  .p.c1{background:#d4edda;color:#155724;border-color:#b8dacc;}
+  .p.c2{background:#fff3cd;color:#856404;border-color:#f0d080;}
+  .p.c3{background:#f8d7da;color:#721c24;border-color:#e8b0b5;}
+  .p.c4{background:#c0392b;color:white;border-color:#a02020;}
+
+  /* BLEEDING */
+  .bleed-row{display:flex;justify-content:center;gap:1px;margin:1px 0;}
+  .bd{width:15px;height:13px;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:white;transition:background .1s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .bd.on{background:#c0392b;border-color:#a02020;}
+  .bd:hover:not(.on){background:#fce4e1;}
+
+  /* FURCATION */
+  .furc-row{display:flex;justify-content:center;gap:1px;margin:1px 0;min-height:18px;}
+  .fsel{width:32px;height:17px;border:1px solid var(--border);border-radius:2px;font-size:.61rem;font-family:inherit;text-align:center;background:white;cursor:pointer;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .fsel.f1{background:#fff3cd;color:#856404;border-color:#f0d080;}
+  .fsel.f2{background:#f8d7da;color:#721c24;border-color:#e8b0b5;}
+  .fsel.f3{background:#c0392b;color:white;border-color:#a02020;}
+
+  /* MOBILITY / RECESSION */
+  .mob-row{display:flex;justify-content:center;margin:1px 0;}
+  .msel{width:32px;height:17px;border:1px solid var(--border);border-radius:2px;font-size:.64rem;font-family:inherit;text-align:center;background:white;cursor:pointer;padding:0;}
+  .msel.m1{background:#fff3cd;color:#856404;}
+  .msel.m2{background:#f8d7da;color:#721c24;}
+  .msel.m3{background:#c0392b;color:white;}
+  .rec-in{width:15px;height:18px;border:1px solid var(--border);border-radius:2px;text-align:center;font-size:.68rem;font-family:inherit;color:#1a6abf;background:#eaf3ff;padding:0;font-weight:700;}
+  .rec-in:focus{outline:none;border-color:var(--accent);}
+
+  /* ARCH DIVIDER */
+  .arch-div{border-top:3px solid var(--dark);margin:8px 0 6px;position:relative;}
+  .arch-div::after{content:'Gingive / Ligne cervicale';position:absolute;left:50%;transform:translateX(-50%);top:-9px;background:white;padding:0 8px;font-size:.6rem;color:#5a6a80;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+
+  /* TOOTH AREA */
+  .tooth-area{margin:2px 0;display:flex;align-items:center;justify-content:center;}
+
+  /* STATS */
+  .stats-section{padding:9px 16px;background:var(--light);border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;}
+  .sc{background:white;border:1.5px solid var(--border);border-radius:7px;padding:6px 11px;text-align:center;}
+  .sc-n{font-size:1rem;font-weight:700;} .sc-l{font-size:.62rem;color:#5a6a80;margin-top:1px;}
+
+  /* NOTES / SIG */
+  .notes-row{padding:9px 16px;border-top:1px solid var(--border);}
+  .notes-ta{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:7px;font-size:.78rem;font-family:inherit;resize:vertical;min-height:48px;background:var(--light);}
+  .notes-ta:focus{outline:none;border-color:var(--accent);}
+  .sig-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:9px 16px;border-top:1px solid var(--border);}
+  .sig-f label{font-size:.62rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:2px;}
+  .sig-f input{width:100%;border:none;border-bottom:1.5px solid #aaa;padding:2px 0;font-size:.77rem;font-family:inherit;background:transparent;}
+  .sig-line{font-size:.61rem;color:#8a9ab0;margin-top:16px;border-top:1px solid #aaa;padding-top:2px;}
+  .footer-note{text-align:center;font-size:.67rem;color:#8a9ab0;padding:7px;}
+
+  @media print{
+    body{background:white;font-size:9px;}
+    .page-header,.action-bar,.btn{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .p,.fsel,.msel,.bd,.bd.on{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,select{border-color:#ddd!important;}
+    .chart-section{padding:4px;}
+    .tooth-col{min-width:44px;max-width:50px;}
+    .p{width:13px;height:16px;font-size:.62rem;}
+    .bd{width:13px;height:11px;}
+    .fsel,.msel{width:28px;}
+  }
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.73rem;opacity:.7;">Clinique dentaire — Parodontie</div></div>
+<div class="container">
+  <div class="doc-header">
+    <div><h1>🦷 Charte parodontale</h1><p>Examen complet — sondages, saignements, furcations, mobilité</p></div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn danger" onclick="resetAll()">↺ Réinitialiser</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="pat-bar">
+    <div class="ff"><label>Nom du patient</label><input type="text" id="pat_nom" placeholder="Prénom Nom..."></div>
+    <div class="ff"><label>No de dossier</label><input type="text" id="pat_dos" placeholder="#..."></div>
+    <div class="ff"><label>Date de naissance</label><input type="date" id="pat_ddn"></div>
+    <div class="ff"><label>Date d'examen</label><input type="date" id="pat_date"></div>
+    <div class="ff"><label>Hygiéniste / Dentiste</label><input type="text" id="pat_hyg" placeholder="Nom..."></div>
+    <div class="ff"><label>Classe parodontale (AAP)</label>
+      <select id="pat_class">
+        <option value="">— Non déterminée —</option>
+        <option>Santé parodontale</option>
+        <option>Gingivite — Stade I (pré-parodontite)</option>
+        <option>Parodontite Stade I — Légère</option>
+        <option>Parodontite Stade II — Modérée</option>
+        <option>Parodontite Stade III — Sévère</option>
+        <option>Parodontite Stade IV — Très sévère</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span style="font-size:.7rem;font-weight:700;color:#5a6a80;">Sondage :</span>
+    <div class="leg"><div class="lcol" style="background:#d4edda;"></div>≤ 3 mm</div>
+    <div class="leg"><div class="lcol" style="background:#fff3cd;"></div>4–5 mm</div>
+    <div class="leg"><div class="lcol" style="background:#f8d7da;"></div>6 mm</div>
+    <div class="leg"><div class="lcol" style="background:#c0392b;"></div>≥ 7 mm</div>
+    <span style="font-size:.7rem;font-weight:700;color:#5a6a80;margin-left:8px;">BOP :</span>
+    <div class="leg"><div class="lcol" style="background:#c0392b;"></div>Saignement +</div>
+    <div class="leg"><div class="lcol" style="background:white;border:1px solid #ccc;"></div>Négatif</div>
+    <span style="font-size:.7rem;font-weight:700;color:#5a6a80;margin-left:8px;">Furcation :</span>
+    <div class="leg"><div class="lcol" style="background:#fff3cd;"></div>F1</div>
+    <div class="leg"><div class="lcol" style="background:#f8d7da;"></div>F2</div>
+    <div class="leg"><div class="lcol" style="background:#c0392b;"></div>F3</div>
+    <span style="font-size:.7rem;font-weight:700;color:#5a6a80;margin-left:8px;">Récession :</span>
+    <div class="leg"><div class="lcol" style="background:#eaf3ff;border:1px solid #aaccee;"></div>mm (bleu)</div>
+  </div>
+
+  <div class="action-bar">
+    <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center;">
+      <span style="font-size:.73rem;font-weight:700;color:#5a6a80;">Dent absente :</span>
+      <input type="text" id="absentIn" placeholder="Ex: 36" maxlength="3" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 8px;font-size:.77rem;font-family:inherit;width:55px;">
+      <button class="btn" onclick="markAbsent()">Absente</button>
+      <button class="btn" onclick="unmarkAbsent()">Restaurer</button>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;">
+      <button class="btn" onclick="calcStats()">📊 Statistiques</button>
+      <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="section-label">🔼 MAXILLAIRE (supérieur) — Vue palatine (haut) ↔ Vue buccale (bas)</div>
+    <div id="chartUpper"><div class="teeth-grid"><div class="row-labels-col">
+      <div class="row-lbl" style="height:20px;"></div><!-- num -->
+      <div class="row-lbl" style="height:22px;">Sondage palatin</div>
+      <div class="row-lbl" style="height:16px;">BOP palatin</div>
+      <div class="row-lbl" style="height:19px;">Furcation</div>
+      <div class="row-lbl" style="height:48px;">Dent</div>
+      <div class="row-lbl" style="height:19px;">Furcation bucc.</div>
+      <div class="row-lbl" style="height:16px;">BOP buccal</div>
+      <div class="row-lbl" style="height:22px;">Sondage buccal</div>
+      <div class="row-lbl" style="height:21px;">Récession</div>
+      <div class="row-lbl" style="height:19px;">Mobilité</div>
+    </div><div class="teeth-data"><div class="tooth-col" id="tc_18">
+      <div class="tooth-num">18</div>
+      <div class="probe-row"><input class="p " id="p_18_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_18_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_18_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_18_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_18_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_18_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_18_P_M" onclick="toggleB(&#39;b_18_P_M&#39;)"></div><div class="bd" id="b_18_P_C" onclick="toggleB(&#39;b_18_P_C&#39;)"></div><div class="bd" id="b_18_P_D" onclick="toggleB(&#39;b_18_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_18" onchange="store[&#39;f_18&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- Racine palatine (centre, légèrement en arrière des buccales) -->
+      <path d="M17,0 Q23,-2 29,0 L28,11 L18,11 Z" fill="#D5B080" stroke="#B89A6A" stroke-width="1" opacity="0.75"></path>
+      <!-- Racine mésio-buccale (gauche) -->
+      <path d="M4,2 Q8,0 13,2 L13,11 L5,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine disto-buccale (droite) -->
+      <path d="M33,2 Q38,0 42,2 L41,11 L32,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal central (fosse centrale) -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <!-- Sillon mésio-distal -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflet cuspide MB -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- Reflet cuspide DB -->
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- Sillon buccal -->
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_18" onchange="store[&#39;f_18&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_18_B_M" onclick="toggleB(&#39;b_18_B_M&#39;)"></div><div class="bd" id="b_18_B_C" onclick="toggleB(&#39;b_18_B_C&#39;)"></div><div class="bd" id="b_18_B_D" onclick="toggleB(&#39;b_18_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_18_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_18_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_18_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_18_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_18_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_18_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_18_B" type="text" maxlength="1" value="" oninput="store[&#39;r_18_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_18" onchange="store[&#39;m_18&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_17">
+      <div class="tooth-num">17</div>
+      <div class="probe-row"><input class="p " id="p_17_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_17_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_17_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_17_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_17_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_17_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_17_P_M" onclick="toggleB(&#39;b_17_P_M&#39;)"></div><div class="bd" id="b_17_P_C" onclick="toggleB(&#39;b_17_P_C&#39;)"></div><div class="bd" id="b_17_P_D" onclick="toggleB(&#39;b_17_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_17" onchange="store[&#39;f_17&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- Racine palatine (centre, légèrement en arrière des buccales) -->
+      <path d="M17,0 Q23,-2 29,0 L28,11 L18,11 Z" fill="#D5B080" stroke="#B89A6A" stroke-width="1" opacity="0.75"></path>
+      <!-- Racine mésio-buccale (gauche) -->
+      <path d="M4,2 Q8,0 13,2 L13,11 L5,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine disto-buccale (droite) -->
+      <path d="M33,2 Q38,0 42,2 L41,11 L32,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal central (fosse centrale) -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <!-- Sillon mésio-distal -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflet cuspide MB -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- Reflet cuspide DB -->
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- Sillon buccal -->
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_17" onchange="store[&#39;f_17&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_17_B_M" onclick="toggleB(&#39;b_17_B_M&#39;)"></div><div class="bd" id="b_17_B_C" onclick="toggleB(&#39;b_17_B_C&#39;)"></div><div class="bd" id="b_17_B_D" onclick="toggleB(&#39;b_17_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_17_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_17_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_17_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_17_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_17_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_17_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_17_B" type="text" maxlength="1" value="" oninput="store[&#39;r_17_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_17" onchange="store[&#39;m_17&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_16">
+      <div class="tooth-num">16</div>
+      <div class="probe-row"><input class="p " id="p_16_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_16_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_16_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_16_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_16_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_16_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_16_P_M" onclick="toggleB(&#39;b_16_P_M&#39;)"></div><div class="bd" id="b_16_P_C" onclick="toggleB(&#39;b_16_P_C&#39;)"></div><div class="bd" id="b_16_P_D" onclick="toggleB(&#39;b_16_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_16" onchange="store[&#39;f_16&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- Racine palatine (centre, légèrement en arrière des buccales) -->
+      <path d="M17,0 Q23,-2 29,0 L28,11 L18,11 Z" fill="#D5B080" stroke="#B89A6A" stroke-width="1" opacity="0.75"></path>
+      <!-- Racine mésio-buccale (gauche) -->
+      <path d="M4,2 Q8,0 13,2 L13,11 L5,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine disto-buccale (droite) -->
+      <path d="M33,2 Q38,0 42,2 L41,11 L32,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal central (fosse centrale) -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <!-- Sillon mésio-distal -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflet cuspide MB -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- Reflet cuspide DB -->
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- Sillon buccal -->
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_16" onchange="store[&#39;f_16&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_16_B_M" onclick="toggleB(&#39;b_16_B_M&#39;)"></div><div class="bd" id="b_16_B_C" onclick="toggleB(&#39;b_16_B_C&#39;)"></div><div class="bd" id="b_16_B_D" onclick="toggleB(&#39;b_16_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_16_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_16_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_16_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_16_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_16_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_16_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_16_B" type="text" maxlength="1" value="" oninput="store[&#39;r_16_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_16" onchange="store[&#39;m_16&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_15">
+      <div class="tooth-num">15</div>
+      <div class="probe-row"><input class="p " id="p_15_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_15_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_15_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_15_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_15_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_15_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_15_P_M" onclick="toggleB(&#39;b_15_P_M&#39;)"></div><div class="bd" id="b_15_P_C" onclick="toggleB(&#39;b_15_P_C&#39;)"></div><div class="bd" id="b_15_P_D" onclick="toggleB(&#39;b_15_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_15" onchange="store[&#39;f_15&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_15" onchange="store[&#39;f_15&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_15_B_M" onclick="toggleB(&#39;b_15_B_M&#39;)"></div><div class="bd" id="b_15_B_C" onclick="toggleB(&#39;b_15_B_C&#39;)"></div><div class="bd" id="b_15_B_D" onclick="toggleB(&#39;b_15_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_15_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_15_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_15_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_15_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_15_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_15_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_15_B" type="text" maxlength="1" value="" oninput="store[&#39;r_15_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_15" onchange="store[&#39;m_15&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_14">
+      <div class="tooth-num">14</div>
+      <div class="probe-row"><input class="p " id="p_14_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_14_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_14_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_14_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_14_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_14_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_14_P_M" onclick="toggleB(&#39;b_14_P_M&#39;)"></div><div class="bd" id="b_14_P_C" onclick="toggleB(&#39;b_14_P_C&#39;)"></div><div class="bd" id="b_14_P_D" onclick="toggleB(&#39;b_14_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_14" onchange="store[&#39;f_14&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_14" onchange="store[&#39;f_14&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_14_B_M" onclick="toggleB(&#39;b_14_B_M&#39;)"></div><div class="bd" id="b_14_B_C" onclick="toggleB(&#39;b_14_B_C&#39;)"></div><div class="bd" id="b_14_B_D" onclick="toggleB(&#39;b_14_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_14_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_14_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_14_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_14_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_14_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_14_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_14_B" type="text" maxlength="1" value="" oninput="store[&#39;r_14_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_14" onchange="store[&#39;m_14&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_13">
+      <div class="tooth-num">13</div>
+      <div class="probe-row"><input class="p " id="p_13_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_13_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_13_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_13_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_13_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_13_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_13_P_M" onclick="toggleB(&#39;b_13_P_M&#39;)"></div><div class="bd" id="b_13_P_C" onclick="toggleB(&#39;b_13_P_C&#39;)"></div><div class="bd" id="b_13_P_D" onclick="toggleB(&#39;b_13_P_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- root - long single root -->
+      <path d="M18,0 Q23,-2 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - tapers to single cusp -->
+      <path d="M10,10 C14,8 32,8 36,10 L35,22 Q30,28 23,43 Q16,28 11,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- buccal ridge highlight -->
+      <path d="M13,12 C16,11 22,11 23,12 L23,38 Q18,30 13,22 Z" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M23,12 C24,11 30,11 33,12 L33,22 Q28,30 23,38 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- distal/mesial ridges -->
+      <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+      <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_13_B_M" onclick="toggleB(&#39;b_13_B_M&#39;)"></div><div class="bd" id="b_13_B_C" onclick="toggleB(&#39;b_13_B_C&#39;)"></div><div class="bd" id="b_13_B_D" onclick="toggleB(&#39;b_13_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_13_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_13_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_13_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_13_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_13_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_13_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_13_B" type="text" maxlength="1" value="" oninput="store[&#39;r_13_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_13" onchange="store[&#39;m_13&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_12">
+      <div class="tooth-num">12</div>
+      <div class="probe-row"><input class="p " id="p_12_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_12_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_12_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_12_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_12_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_12_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_12_P_M" onclick="toggleB(&#39;b_12_P_M&#39;)"></div><div class="bd" id="b_12_P_C" onclick="toggleB(&#39;b_12_P_C&#39;)"></div><div class="bd" id="b_12_P_D" onclick="toggleB(&#39;b_12_P_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- root -->
+      <path d="M18,0 Q23,-1 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - narrower than central, slightly more rounded -->
+      <path d="M9,10 C13,8 33,8 37,10 L36,31 Q30,40 23,41 Q16,40 10,31 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight -->
+      <path d="M12,12 C15,11 21,11 22,12 L21,29 Q17,36 13,32 Q10,27 12,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_12_B_M" onclick="toggleB(&#39;b_12_B_M&#39;)"></div><div class="bd" id="b_12_B_C" onclick="toggleB(&#39;b_12_B_C&#39;)"></div><div class="bd" id="b_12_B_D" onclick="toggleB(&#39;b_12_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_12_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_12_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_12_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_12_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_12_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_12_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_12_B" type="text" maxlength="1" value="" oninput="store[&#39;r_12_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_12" onchange="store[&#39;m_12&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_11">
+      <div class="tooth-num">11</div>
+      <div class="probe-row"><input class="p " id="p_11_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_11_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_11_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_11_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_11_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_11_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_11_P_M" onclick="toggleB(&#39;b_11_P_M&#39;)"></div><div class="bd" id="b_11_P_C" onclick="toggleB(&#39;b_11_P_C&#39;)"></div><div class="bd" id="b_11_P_D" onclick="toggleB(&#39;b_11_P_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- root -->
+      <path d="M17,0 Q23,-1 29,0 L28,11 L18,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - wide trapezoid, flat incisal edge -->
+      <path d="M7,10 C12,8 34,8 39,10 L38,32 Q32,40 23,41 Q14,40 8,32 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight left -->
+      <path d="M10,12 C14,11 21,11 22,12 L22,29 Q17,36 12,32 Q8,27 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- highlight right -->
+      <path d="M24,12 C25,11 32,11 36,12 Q38,27 34,32 Q29,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- incisal edge groove -->
+      <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_11_B_M" onclick="toggleB(&#39;b_11_B_M&#39;)"></div><div class="bd" id="b_11_B_C" onclick="toggleB(&#39;b_11_B_C&#39;)"></div><div class="bd" id="b_11_B_D" onclick="toggleB(&#39;b_11_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_11_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_11_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_11_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_11_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_11_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_11_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_11_B" type="text" maxlength="1" value="" oninput="store[&#39;r_11_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_11" onchange="store[&#39;m_11&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_21">
+      <div class="tooth-num">21</div>
+      <div class="probe-row"><input class="p " id="p_21_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_21_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_21_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_21_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_21_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_21_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_21_P_M" onclick="toggleB(&#39;b_21_P_M&#39;)"></div><div class="bd" id="b_21_P_C" onclick="toggleB(&#39;b_21_P_C&#39;)"></div><div class="bd" id="b_21_P_D" onclick="toggleB(&#39;b_21_P_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- root -->
+      <path d="M17,0 Q23,-1 29,0 L28,11 L18,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - wide trapezoid, flat incisal edge -->
+      <path d="M7,10 C12,8 34,8 39,10 L38,32 Q32,40 23,41 Q14,40 8,32 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight left -->
+      <path d="M10,12 C14,11 21,11 22,12 L22,29 Q17,36 12,32 Q8,27 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- highlight right -->
+      <path d="M24,12 C25,11 32,11 36,12 Q38,27 34,32 Q29,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- incisal edge groove -->
+      <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_21_B_M" onclick="toggleB(&#39;b_21_B_M&#39;)"></div><div class="bd" id="b_21_B_C" onclick="toggleB(&#39;b_21_B_C&#39;)"></div><div class="bd" id="b_21_B_D" onclick="toggleB(&#39;b_21_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_21_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_21_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_21_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_21_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_21_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_21_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_21_B" type="text" maxlength="1" value="" oninput="store[&#39;r_21_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_21" onchange="store[&#39;m_21&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_22">
+      <div class="tooth-num">22</div>
+      <div class="probe-row"><input class="p " id="p_22_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_22_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_22_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_22_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_22_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_22_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_22_P_M" onclick="toggleB(&#39;b_22_P_M&#39;)"></div><div class="bd" id="b_22_P_C" onclick="toggleB(&#39;b_22_P_C&#39;)"></div><div class="bd" id="b_22_P_D" onclick="toggleB(&#39;b_22_P_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- root -->
+      <path d="M18,0 Q23,-1 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - narrower than central, slightly more rounded -->
+      <path d="M9,10 C13,8 33,8 37,10 L36,31 Q30,40 23,41 Q16,40 10,31 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight -->
+      <path d="M12,12 C15,11 21,11 22,12 L21,29 Q17,36 13,32 Q10,27 12,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_22_B_M" onclick="toggleB(&#39;b_22_B_M&#39;)"></div><div class="bd" id="b_22_B_C" onclick="toggleB(&#39;b_22_B_C&#39;)"></div><div class="bd" id="b_22_B_D" onclick="toggleB(&#39;b_22_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_22_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_22_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_22_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_22_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_22_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_22_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_22_B" type="text" maxlength="1" value="" oninput="store[&#39;r_22_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_22" onchange="store[&#39;m_22&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_23">
+      <div class="tooth-num">23</div>
+      <div class="probe-row"><input class="p " id="p_23_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_23_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_23_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_23_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_23_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_23_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_23_P_M" onclick="toggleB(&#39;b_23_P_M&#39;)"></div><div class="bd" id="b_23_P_C" onclick="toggleB(&#39;b_23_P_C&#39;)"></div><div class="bd" id="b_23_P_D" onclick="toggleB(&#39;b_23_P_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- root - long single root -->
+      <path d="M18,0 Q23,-2 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - tapers to single cusp -->
+      <path d="M10,10 C14,8 32,8 36,10 L35,22 Q30,28 23,43 Q16,28 11,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- buccal ridge highlight -->
+      <path d="M13,12 C16,11 22,11 23,12 L23,38 Q18,30 13,22 Z" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M23,12 C24,11 30,11 33,12 L33,22 Q28,30 23,38 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- distal/mesial ridges -->
+      <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+      <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_23_B_M" onclick="toggleB(&#39;b_23_B_M&#39;)"></div><div class="bd" id="b_23_B_C" onclick="toggleB(&#39;b_23_B_C&#39;)"></div><div class="bd" id="b_23_B_D" onclick="toggleB(&#39;b_23_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_23_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_23_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_23_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_23_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_23_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_23_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_23_B" type="text" maxlength="1" value="" oninput="store[&#39;r_23_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_23" onchange="store[&#39;m_23&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_24">
+      <div class="tooth-num">24</div>
+      <div class="probe-row"><input class="p " id="p_24_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_24_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_24_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_24_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_24_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_24_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_24_P_M" onclick="toggleB(&#39;b_24_P_M&#39;)"></div><div class="bd" id="b_24_P_C" onclick="toggleB(&#39;b_24_P_C&#39;)"></div><div class="bd" id="b_24_P_D" onclick="toggleB(&#39;b_24_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_24" onchange="store[&#39;f_24&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_24" onchange="store[&#39;f_24&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_24_B_M" onclick="toggleB(&#39;b_24_B_M&#39;)"></div><div class="bd" id="b_24_B_C" onclick="toggleB(&#39;b_24_B_C&#39;)"></div><div class="bd" id="b_24_B_D" onclick="toggleB(&#39;b_24_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_24_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_24_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_24_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_24_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_24_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_24_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_24_B" type="text" maxlength="1" value="" oninput="store[&#39;r_24_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_24" onchange="store[&#39;m_24&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_25">
+      <div class="tooth-num">25</div>
+      <div class="probe-row"><input class="p " id="p_25_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_25_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_25_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_25_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_25_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_25_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_25_P_M" onclick="toggleB(&#39;b_25_P_M&#39;)"></div><div class="bd" id="b_25_P_C" onclick="toggleB(&#39;b_25_P_C&#39;)"></div><div class="bd" id="b_25_P_D" onclick="toggleB(&#39;b_25_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_25" onchange="store[&#39;f_25&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_25" onchange="store[&#39;f_25&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_25_B_M" onclick="toggleB(&#39;b_25_B_M&#39;)"></div><div class="bd" id="b_25_B_C" onclick="toggleB(&#39;b_25_B_C&#39;)"></div><div class="bd" id="b_25_B_D" onclick="toggleB(&#39;b_25_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_25_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_25_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_25_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_25_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_25_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_25_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_25_B" type="text" maxlength="1" value="" oninput="store[&#39;r_25_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_25" onchange="store[&#39;m_25&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_26">
+      <div class="tooth-num">26</div>
+      <div class="probe-row"><input class="p " id="p_26_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_26_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_26_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_26_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_26_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_26_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_26_P_M" onclick="toggleB(&#39;b_26_P_M&#39;)"></div><div class="bd" id="b_26_P_C" onclick="toggleB(&#39;b_26_P_C&#39;)"></div><div class="bd" id="b_26_P_D" onclick="toggleB(&#39;b_26_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_26" onchange="store[&#39;f_26&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- Racine palatine (centre, légèrement en arrière des buccales) -->
+      <path d="M17,0 Q23,-2 29,0 L28,11 L18,11 Z" fill="#D5B080" stroke="#B89A6A" stroke-width="1" opacity="0.75"></path>
+      <!-- Racine mésio-buccale (gauche) -->
+      <path d="M4,2 Q8,0 13,2 L13,11 L5,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine disto-buccale (droite) -->
+      <path d="M33,2 Q38,0 42,2 L41,11 L32,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal central (fosse centrale) -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <!-- Sillon mésio-distal -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflet cuspide MB -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- Reflet cuspide DB -->
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- Sillon buccal -->
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_26" onchange="store[&#39;f_26&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_26_B_M" onclick="toggleB(&#39;b_26_B_M&#39;)"></div><div class="bd" id="b_26_B_C" onclick="toggleB(&#39;b_26_B_C&#39;)"></div><div class="bd" id="b_26_B_D" onclick="toggleB(&#39;b_26_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_26_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_26_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_26_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_26_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_26_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_26_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_26_B" type="text" maxlength="1" value="" oninput="store[&#39;r_26_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_26" onchange="store[&#39;m_26&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_27">
+      <div class="tooth-num">27</div>
+      <div class="probe-row"><input class="p " id="p_27_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_27_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_27_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_27_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_27_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_27_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_27_P_M" onclick="toggleB(&#39;b_27_P_M&#39;)"></div><div class="bd" id="b_27_P_C" onclick="toggleB(&#39;b_27_P_C&#39;)"></div><div class="bd" id="b_27_P_D" onclick="toggleB(&#39;b_27_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_27" onchange="store[&#39;f_27&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- Racine palatine (centre, légèrement en arrière des buccales) -->
+      <path d="M17,0 Q23,-2 29,0 L28,11 L18,11 Z" fill="#D5B080" stroke="#B89A6A" stroke-width="1" opacity="0.75"></path>
+      <!-- Racine mésio-buccale (gauche) -->
+      <path d="M4,2 Q8,0 13,2 L13,11 L5,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine disto-buccale (droite) -->
+      <path d="M33,2 Q38,0 42,2 L41,11 L32,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal central (fosse centrale) -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <!-- Sillon mésio-distal -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflet cuspide MB -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- Reflet cuspide DB -->
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- Sillon buccal -->
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_27" onchange="store[&#39;f_27&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_27_B_M" onclick="toggleB(&#39;b_27_B_M&#39;)"></div><div class="bd" id="b_27_B_C" onclick="toggleB(&#39;b_27_B_C&#39;)"></div><div class="bd" id="b_27_B_D" onclick="toggleB(&#39;b_27_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_27_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_27_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_27_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_27_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_27_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_27_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_27_B" type="text" maxlength="1" value="" oninput="store[&#39;r_27_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_27" onchange="store[&#39;m_27&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div><div class="tooth-col" id="tc_28">
+      <div class="tooth-num">28</div>
+      <div class="probe-row"><input class="p " id="p_28_P_M" type="text" maxlength="1" value="" oninput="store[&#39;p_28_P_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_28_P_C" type="text" maxlength="1" value="" oninput="store[&#39;p_28_P_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_28_P_D" type="text" maxlength="1" value="" oninput="store[&#39;p_28_P_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_28_P_M" onclick="toggleB(&#39;b_28_P_M&#39;)"></div><div class="bd" id="b_28_P_C" onclick="toggleB(&#39;b_28_P_C&#39;)"></div><div class="bd" id="b_28_P_D" onclick="toggleB(&#39;b_28_P_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_28" onchange="store[&#39;f_28&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <!-- Racine palatine (centre, légèrement en arrière des buccales) -->
+      <path d="M17,0 Q23,-2 29,0 L28,11 L18,11 Z" fill="#D5B080" stroke="#B89A6A" stroke-width="1" opacity="0.75"></path>
+      <!-- Racine mésio-buccale (gauche) -->
+      <path d="M4,2 Q8,0 13,2 L13,11 L5,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine disto-buccale (droite) -->
+      <path d="M33,2 Q38,0 42,2 L41,11 L32,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal central (fosse centrale) -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <!-- Sillon mésio-distal -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflet cuspide MB -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- Reflet cuspide DB -->
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- Sillon buccal -->
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_28" onchange="store[&#39;f_28&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_28_B_M" onclick="toggleB(&#39;b_28_B_M&#39;)"></div><div class="bd" id="b_28_B_C" onclick="toggleB(&#39;b_28_B_C&#39;)"></div><div class="bd" id="b_28_B_D" onclick="toggleB(&#39;b_28_B_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_28_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_28_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_28_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_28_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_28_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_28_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_28_B" type="text" maxlength="1" value="" oninput="store[&#39;r_28_B&#39;]=this.value"></div>
+      <div class="mob-row"><select class="msel " id="m_28" onchange="store[&#39;m_28&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+    </div></div></div></div>
+    <div class="arch-div"></div>
+    <div class="section-label">🔽 MANDIBULE (inférieur) — Vue buccale (haut) ↔ Vue linguale (bas)</div>
+    <div id="chartLower"><div class="teeth-grid"><div class="row-labels-col">
+      <div class="row-lbl" style="height:19px;">Mobilité</div>
+      <div class="row-lbl" style="height:21px;">Récession</div>
+      <div class="row-lbl" style="height:22px;">Sondage buccal</div>
+      <div class="row-lbl" style="height:16px;">BOP buccal</div>
+      <div class="row-lbl" style="height:19px;">Furcation bucc.</div>
+      <div class="row-lbl" style="height:48px;">Dent</div>
+      <div class="row-lbl" style="height:19px;">Furcation ling.</div>
+      <div class="row-lbl" style="height:16px;">BOP lingual</div>
+      <div class="row-lbl" style="height:22px;">Sondage lingual</div>
+      <div class="row-lbl" style="height:20px;"></div><!-- num -->
+    </div><div class="teeth-data"><div class="tooth-col" id="tc_48">
+      <div class="mob-row"><select class="msel " id="m_48" onchange="store[&#39;m_48&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_48_B" type="text" maxlength="1" value="" oninput="store[&#39;r_48_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_48_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_48_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_48_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_48_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_48_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_48_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_48_B_M" onclick="toggleB(&#39;b_48_B_M&#39;)"></div><div class="bd" id="b_48_B_C" onclick="toggleB(&#39;b_48_B_C&#39;)"></div><div class="bd" id="b_48_B_D" onclick="toggleB(&#39;b_48_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_48" onchange="store[&#39;f_48&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- Racine mésiale (gauche) -->
+      <path d="M7,0 Q12,-1 17,0 L16,11 L8,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine distale (droite) -->
+      <path d="M29,0 Q34,-1 39,0 L38,11 L28,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflets -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_48" onchange="store[&#39;f_48&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_48_L_M" onclick="toggleB(&#39;b_48_L_M&#39;)"></div><div class="bd" id="b_48_L_C" onclick="toggleB(&#39;b_48_L_C&#39;)"></div><div class="bd" id="b_48_L_D" onclick="toggleB(&#39;b_48_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_48_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_48_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_48_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_48_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_48_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_48_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">48</div>
+    </div><div class="tooth-col" id="tc_47">
+      <div class="mob-row"><select class="msel " id="m_47" onchange="store[&#39;m_47&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_47_B" type="text" maxlength="1" value="" oninput="store[&#39;r_47_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_47_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_47_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_47_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_47_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_47_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_47_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_47_B_M" onclick="toggleB(&#39;b_47_B_M&#39;)"></div><div class="bd" id="b_47_B_C" onclick="toggleB(&#39;b_47_B_C&#39;)"></div><div class="bd" id="b_47_B_D" onclick="toggleB(&#39;b_47_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_47" onchange="store[&#39;f_47&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- Racine mésiale (gauche) -->
+      <path d="M7,0 Q12,-1 17,0 L16,11 L8,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine distale (droite) -->
+      <path d="M29,0 Q34,-1 39,0 L38,11 L28,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflets -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_47" onchange="store[&#39;f_47&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_47_L_M" onclick="toggleB(&#39;b_47_L_M&#39;)"></div><div class="bd" id="b_47_L_C" onclick="toggleB(&#39;b_47_L_C&#39;)"></div><div class="bd" id="b_47_L_D" onclick="toggleB(&#39;b_47_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_47_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_47_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_47_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_47_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_47_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_47_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">47</div>
+    </div><div class="tooth-col" id="tc_46">
+      <div class="mob-row"><select class="msel " id="m_46" onchange="store[&#39;m_46&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_46_B" type="text" maxlength="1" value="" oninput="store[&#39;r_46_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_46_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_46_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_46_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_46_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_46_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_46_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_46_B_M" onclick="toggleB(&#39;b_46_B_M&#39;)"></div><div class="bd" id="b_46_B_C" onclick="toggleB(&#39;b_46_B_C&#39;)"></div><div class="bd" id="b_46_B_D" onclick="toggleB(&#39;b_46_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_46" onchange="store[&#39;f_46&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- Racine mésiale (gauche) -->
+      <path d="M7,0 Q12,-1 17,0 L16,11 L8,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine distale (droite) -->
+      <path d="M29,0 Q34,-1 39,0 L38,11 L28,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflets -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_46" onchange="store[&#39;f_46&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_46_L_M" onclick="toggleB(&#39;b_46_L_M&#39;)"></div><div class="bd" id="b_46_L_C" onclick="toggleB(&#39;b_46_L_C&#39;)"></div><div class="bd" id="b_46_L_D" onclick="toggleB(&#39;b_46_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_46_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_46_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_46_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_46_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_46_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_46_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">46</div>
+    </div><div class="tooth-col" id="tc_45">
+      <div class="mob-row"><select class="msel " id="m_45" onchange="store[&#39;m_45&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_45_B" type="text" maxlength="1" value="" oninput="store[&#39;r_45_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_45_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_45_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_45_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_45_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_45_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_45_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_45_B_M" onclick="toggleB(&#39;b_45_B_M&#39;)"></div><div class="bd" id="b_45_B_C" onclick="toggleB(&#39;b_45_B_C&#39;)"></div><div class="bd" id="b_45_B_D" onclick="toggleB(&#39;b_45_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_45" onchange="store[&#39;f_45&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_45" onchange="store[&#39;f_45&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_45_L_M" onclick="toggleB(&#39;b_45_L_M&#39;)"></div><div class="bd" id="b_45_L_C" onclick="toggleB(&#39;b_45_L_C&#39;)"></div><div class="bd" id="b_45_L_D" onclick="toggleB(&#39;b_45_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_45_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_45_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_45_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_45_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_45_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_45_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">45</div>
+    </div><div class="tooth-col" id="tc_44">
+      <div class="mob-row"><select class="msel " id="m_44" onchange="store[&#39;m_44&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_44_B" type="text" maxlength="1" value="" oninput="store[&#39;r_44_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_44_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_44_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_44_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_44_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_44_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_44_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_44_B_M" onclick="toggleB(&#39;b_44_B_M&#39;)"></div><div class="bd" id="b_44_B_C" onclick="toggleB(&#39;b_44_B_C&#39;)"></div><div class="bd" id="b_44_B_D" onclick="toggleB(&#39;b_44_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_44" onchange="store[&#39;f_44&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_44" onchange="store[&#39;f_44&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_44_L_M" onclick="toggleB(&#39;b_44_L_M&#39;)"></div><div class="bd" id="b_44_L_C" onclick="toggleB(&#39;b_44_L_C&#39;)"></div><div class="bd" id="b_44_L_D" onclick="toggleB(&#39;b_44_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_44_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_44_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_44_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_44_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_44_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_44_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">44</div>
+    </div><div class="tooth-col" id="tc_43">
+      <div class="mob-row"><select class="msel " id="m_43" onchange="store[&#39;m_43&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_43_B" type="text" maxlength="1" value="" oninput="store[&#39;r_43_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_43_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_43_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_43_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_43_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_43_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_43_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_43_B_M" onclick="toggleB(&#39;b_43_B_M&#39;)"></div><div class="bd" id="b_43_B_C" onclick="toggleB(&#39;b_43_B_C&#39;)"></div><div class="bd" id="b_43_B_D" onclick="toggleB(&#39;b_43_B_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- root - long single root -->
+      <path d="M18,0 Q23,-2 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - tapers to single cusp -->
+      <path d="M10,10 C14,8 32,8 36,10 L35,22 Q30,28 23,43 Q16,28 11,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- buccal ridge highlight -->
+      <path d="M13,12 C16,11 22,11 23,12 L23,38 Q18,30 13,22 Z" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M23,12 C24,11 30,11 33,12 L33,22 Q28,30 23,38 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- distal/mesial ridges -->
+      <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+      <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_43_L_M" onclick="toggleB(&#39;b_43_L_M&#39;)"></div><div class="bd" id="b_43_L_C" onclick="toggleB(&#39;b_43_L_C&#39;)"></div><div class="bd" id="b_43_L_D" onclick="toggleB(&#39;b_43_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_43_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_43_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_43_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_43_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_43_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_43_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">43</div>
+    </div><div class="tooth-col" id="tc_42">
+      <div class="mob-row"><select class="msel " id="m_42" onchange="store[&#39;m_42&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_42_B" type="text" maxlength="1" value="" oninput="store[&#39;r_42_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_42_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_42_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_42_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_42_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_42_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_42_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_42_B_M" onclick="toggleB(&#39;b_42_B_M&#39;)"></div><div class="bd" id="b_42_B_C" onclick="toggleB(&#39;b_42_B_C&#39;)"></div><div class="bd" id="b_42_B_D" onclick="toggleB(&#39;b_42_B_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- root -->
+      <path d="M18,0 Q23,-1 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - narrower than central, slightly more rounded -->
+      <path d="M9,10 C13,8 33,8 37,10 L36,31 Q30,40 23,41 Q16,40 10,31 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight -->
+      <path d="M12,12 C15,11 21,11 22,12 L21,29 Q17,36 13,32 Q10,27 12,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_42_L_M" onclick="toggleB(&#39;b_42_L_M&#39;)"></div><div class="bd" id="b_42_L_C" onclick="toggleB(&#39;b_42_L_C&#39;)"></div><div class="bd" id="b_42_L_D" onclick="toggleB(&#39;b_42_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_42_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_42_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_42_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_42_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_42_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_42_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">42</div>
+    </div><div class="tooth-col" id="tc_41">
+      <div class="mob-row"><select class="msel " id="m_41" onchange="store[&#39;m_41&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_41_B" type="text" maxlength="1" value="" oninput="store[&#39;r_41_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_41_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_41_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_41_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_41_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_41_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_41_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_41_B_M" onclick="toggleB(&#39;b_41_B_M&#39;)"></div><div class="bd" id="b_41_B_C" onclick="toggleB(&#39;b_41_B_C&#39;)"></div><div class="bd" id="b_41_B_D" onclick="toggleB(&#39;b_41_B_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- root -->
+      <path d="M17,0 Q23,-1 29,0 L28,11 L18,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - wide trapezoid, flat incisal edge -->
+      <path d="M7,10 C12,8 34,8 39,10 L38,32 Q32,40 23,41 Q14,40 8,32 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight left -->
+      <path d="M10,12 C14,11 21,11 22,12 L22,29 Q17,36 12,32 Q8,27 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- highlight right -->
+      <path d="M24,12 C25,11 32,11 36,12 Q38,27 34,32 Q29,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- incisal edge groove -->
+      <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_41_L_M" onclick="toggleB(&#39;b_41_L_M&#39;)"></div><div class="bd" id="b_41_L_C" onclick="toggleB(&#39;b_41_L_C&#39;)"></div><div class="bd" id="b_41_L_D" onclick="toggleB(&#39;b_41_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_41_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_41_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_41_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_41_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_41_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_41_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">41</div>
+    </div><div class="tooth-col" id="tc_31">
+      <div class="mob-row"><select class="msel " id="m_31" onchange="store[&#39;m_31&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_31_B" type="text" maxlength="1" value="" oninput="store[&#39;r_31_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_31_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_31_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_31_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_31_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_31_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_31_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_31_B_M" onclick="toggleB(&#39;b_31_B_M&#39;)"></div><div class="bd" id="b_31_B_C" onclick="toggleB(&#39;b_31_B_C&#39;)"></div><div class="bd" id="b_31_B_D" onclick="toggleB(&#39;b_31_B_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- root -->
+      <path d="M17,0 Q23,-1 29,0 L28,11 L18,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - wide trapezoid, flat incisal edge -->
+      <path d="M7,10 C12,8 34,8 39,10 L38,32 Q32,40 23,41 Q14,40 8,32 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight left -->
+      <path d="M10,12 C14,11 21,11 22,12 L22,29 Q17,36 12,32 Q8,27 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- highlight right -->
+      <path d="M24,12 C25,11 32,11 36,12 Q38,27 34,32 Q29,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- incisal edge groove -->
+      <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_31_L_M" onclick="toggleB(&#39;b_31_L_M&#39;)"></div><div class="bd" id="b_31_L_C" onclick="toggleB(&#39;b_31_L_C&#39;)"></div><div class="bd" id="b_31_L_D" onclick="toggleB(&#39;b_31_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_31_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_31_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_31_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_31_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_31_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_31_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">31</div>
+    </div><div class="tooth-col" id="tc_32">
+      <div class="mob-row"><select class="msel " id="m_32" onchange="store[&#39;m_32&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_32_B" type="text" maxlength="1" value="" oninput="store[&#39;r_32_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_32_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_32_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_32_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_32_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_32_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_32_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_32_B_M" onclick="toggleB(&#39;b_32_B_M&#39;)"></div><div class="bd" id="b_32_B_C" onclick="toggleB(&#39;b_32_B_C&#39;)"></div><div class="bd" id="b_32_B_D" onclick="toggleB(&#39;b_32_B_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- root -->
+      <path d="M18,0 Q23,-1 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - narrower than central, slightly more rounded -->
+      <path d="M9,10 C13,8 33,8 37,10 L36,31 Q30,40 23,41 Q16,40 10,31 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- highlight -->
+      <path d="M12,12 C15,11 21,11 22,12 L21,29 Q17,36 13,32 Q10,27 12,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_32_L_M" onclick="toggleB(&#39;b_32_L_M&#39;)"></div><div class="bd" id="b_32_L_C" onclick="toggleB(&#39;b_32_L_C&#39;)"></div><div class="bd" id="b_32_L_D" onclick="toggleB(&#39;b_32_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_32_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_32_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_32_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_32_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_32_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_32_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">32</div>
+    </div><div class="tooth-col" id="tc_33">
+      <div class="mob-row"><select class="msel " id="m_33" onchange="store[&#39;m_33&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_33_B" type="text" maxlength="1" value="" oninput="store[&#39;r_33_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_33_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_33_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_33_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_33_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_33_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_33_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_33_B_M" onclick="toggleB(&#39;b_33_B_M&#39;)"></div><div class="bd" id="b_33_B_C" onclick="toggleB(&#39;b_33_B_C&#39;)"></div><div class="bd" id="b_33_B_D" onclick="toggleB(&#39;b_33_B_D&#39;)"></div></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- root - long single root -->
+      <path d="M18,0 Q23,-2 28,0 L27,11 L19,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - tapers to single cusp -->
+      <path d="M10,10 C14,8 32,8 36,10 L35,22 Q30,28 23,43 Q16,28 11,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- buccal ridge highlight -->
+      <path d="M13,12 C16,11 22,11 23,12 L23,38 Q18,30 13,22 Z" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M23,12 C24,11 30,11 33,12 L33,22 Q28,30 23,38 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- distal/mesial ridges -->
+      <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+      <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
+    </g>
+  </svg></div>
+      <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
+      <div class="bleed-row"><div class="bd" id="b_33_L_M" onclick="toggleB(&#39;b_33_L_M&#39;)"></div><div class="bd" id="b_33_L_C" onclick="toggleB(&#39;b_33_L_C&#39;)"></div><div class="bd" id="b_33_L_D" onclick="toggleB(&#39;b_33_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_33_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_33_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_33_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_33_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_33_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_33_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">33</div>
+    </div><div class="tooth-col" id="tc_34">
+      <div class="mob-row"><select class="msel " id="m_34" onchange="store[&#39;m_34&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_34_B" type="text" maxlength="1" value="" oninput="store[&#39;r_34_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_34_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_34_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_34_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_34_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_34_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_34_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_34_B_M" onclick="toggleB(&#39;b_34_B_M&#39;)"></div><div class="bd" id="b_34_B_C" onclick="toggleB(&#39;b_34_B_C&#39;)"></div><div class="bd" id="b_34_B_D" onclick="toggleB(&#39;b_34_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_34" onchange="store[&#39;f_34&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_34" onchange="store[&#39;f_34&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_34_L_M" onclick="toggleB(&#39;b_34_L_M&#39;)"></div><div class="bd" id="b_34_L_C" onclick="toggleB(&#39;b_34_L_C&#39;)"></div><div class="bd" id="b_34_L_D" onclick="toggleB(&#39;b_34_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_34_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_34_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_34_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_34_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_34_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_34_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">34</div>
+    </div><div class="tooth-col" id="tc_35">
+      <div class="mob-row"><select class="msel " id="m_35" onchange="store[&#39;m_35&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_35_B" type="text" maxlength="1" value="" oninput="store[&#39;r_35_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_35_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_35_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_35_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_35_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_35_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_35_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_35_B_M" onclick="toggleB(&#39;b_35_B_M&#39;)"></div><div class="bd" id="b_35_B_C" onclick="toggleB(&#39;b_35_B_C&#39;)"></div><div class="bd" id="b_35_B_D" onclick="toggleB(&#39;b_35_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_35" onchange="store[&#39;f_35&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.55"></line>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+      <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_35" onchange="store[&#39;f_35&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_35_L_M" onclick="toggleB(&#39;b_35_L_M&#39;)"></div><div class="bd" id="b_35_L_C" onclick="toggleB(&#39;b_35_L_C&#39;)"></div><div class="bd" id="b_35_L_D" onclick="toggleB(&#39;b_35_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_35_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_35_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_35_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_35_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_35_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_35_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">35</div>
+    </div><div class="tooth-col" id="tc_36">
+      <div class="mob-row"><select class="msel " id="m_36" onchange="store[&#39;m_36&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_36_B" type="text" maxlength="1" value="" oninput="store[&#39;r_36_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_36_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_36_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_36_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_36_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_36_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_36_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_36_B_M" onclick="toggleB(&#39;b_36_B_M&#39;)"></div><div class="bd" id="b_36_B_C" onclick="toggleB(&#39;b_36_B_C&#39;)"></div><div class="bd" id="b_36_B_D" onclick="toggleB(&#39;b_36_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_36" onchange="store[&#39;f_36&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- Racine mésiale (gauche) -->
+      <path d="M7,0 Q12,-1 17,0 L16,11 L8,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine distale (droite) -->
+      <path d="M29,0 Q34,-1 39,0 L38,11 L28,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflets -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_36" onchange="store[&#39;f_36&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_36_L_M" onclick="toggleB(&#39;b_36_L_M&#39;)"></div><div class="bd" id="b_36_L_C" onclick="toggleB(&#39;b_36_L_C&#39;)"></div><div class="bd" id="b_36_L_D" onclick="toggleB(&#39;b_36_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_36_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_36_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_36_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_36_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_36_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_36_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">36</div>
+    </div><div class="tooth-col" id="tc_37">
+      <div class="mob-row"><select class="msel " id="m_37" onchange="store[&#39;m_37&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_37_B" type="text" maxlength="1" value="" oninput="store[&#39;r_37_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_37_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_37_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_37_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_37_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_37_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_37_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_37_B_M" onclick="toggleB(&#39;b_37_B_M&#39;)"></div><div class="bd" id="b_37_B_C" onclick="toggleB(&#39;b_37_B_C&#39;)"></div><div class="bd" id="b_37_B_D" onclick="toggleB(&#39;b_37_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_37" onchange="store[&#39;f_37&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- Racine mésiale (gauche) -->
+      <path d="M7,0 Q12,-1 17,0 L16,11 L8,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine distale (droite) -->
+      <path d="M29,0 Q34,-1 39,0 L38,11 L28,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflets -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_37" onchange="store[&#39;f_37&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_37_L_M" onclick="toggleB(&#39;b_37_L_M&#39;)"></div><div class="bd" id="b_37_L_C" onclick="toggleB(&#39;b_37_L_C&#39;)"></div><div class="bd" id="b_37_L_D" onclick="toggleB(&#39;b_37_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_37_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_37_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_37_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_37_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_37_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_37_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">37</div>
+    </div><div class="tooth-col" id="tc_38">
+      <div class="mob-row"><select class="msel " id="m_38" onchange="store[&#39;m_38&#39;]=this.value;this.className=&#39;msel &#39;+(this.value===&#39;1&#39;?&#39;m1&#39;:this.value===&#39;2&#39;?&#39;m2&#39;:this.value===&#39;3&#39;?&#39;m3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">1</option><option value="2" "="">2</option><option value="3" "="">3</option>
+    </select></div>
+      <div class="probe-row" title="Récession"><input class="rec-in" id="r_38_B" type="text" maxlength="1" value="" oninput="store[&#39;r_38_B&#39;]=this.value"></div>
+      <div class="probe-row"><input class="p " id="p_38_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_38_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_38_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_38_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_38_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_38_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="bleed-row"><div class="bd" id="b_38_B_M" onclick="toggleB(&#39;b_38_B_M&#39;)"></div><div class="bd" id="b_38_B_C" onclick="toggleB(&#39;b_38_B_C&#39;)"></div><div class="bd" id="b_38_B_D" onclick="toggleB(&#39;b_38_B_D&#39;)"></div></div>
+      <div class="furc-row"><select class="fsel " id="f_38" onchange="store[&#39;f_38&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="tooth-area"><svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(0,44) scale(1,-1)">
+      <!-- Racine mésiale (gauche) -->
+      <path d="M7,0 Q12,-1 17,0 L16,11 L8,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Racine distale (droite) -->
+      <path d="M29,0 Q34,-1 39,0 L38,11 L28,11 Z" fill="#E0C49A" stroke="#B89A6A" stroke-width="1"></path>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z" fill="#F5EDD6" stroke="#B89A6A" stroke-width="1.5"></path>
+      <!-- Sillon occlusal -->
+      <path d="M15,11 Q23,16 31,11" stroke="#C8A870" stroke-width="0.8" fill="none" opacity="0.55"></path>
+      <line x1="23" y1="10" x2="23" y2="24" stroke="#C8A870" stroke-width="0.8" opacity="0.5"></line>
+      <!-- Reflets -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="rgba(255,255,255,0.45)" stroke="none"></path>
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
+      <line x1="23" y1="22" x2="23" y2="10" stroke="#C8A870" stroke-width="0.6" opacity="0.4"></line>
+      <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+      <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
+    </g>
+  </svg></div>
+      <div class="furc-row"><select class="fsel " id="f_38" onchange="store[&#39;f_38&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
+      <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
+    </select></div>
+      <div class="bleed-row"><div class="bd" id="b_38_L_M" onclick="toggleB(&#39;b_38_L_M&#39;)"></div><div class="bd" id="b_38_L_C" onclick="toggleB(&#39;b_38_L_C&#39;)"></div><div class="bd" id="b_38_L_D" onclick="toggleB(&#39;b_38_L_D&#39;)"></div></div>
+      <div class="probe-row"><input class="p " id="p_38_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_38_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_38_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_38_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_38_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_38_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
+      <div class="tooth-num">38</div>
+    </div></div></div></div>
+  </div>
+
+  <div class="stats-section" id="statsSection">
+    <div class="sc"><div class="sc-n" id="s_teeth" style="color:var(--blue);">—</div><div class="sc-l">Dents présentes</div></div>
+    <div class="sc"><div class="sc-n" id="s_bop_r" style="color:var(--red);">—</div><div class="sc-l">Sites BOP+ / total</div></div>
+    <div class="sc"><div class="sc-n" id="s_bop_p" style="color:var(--red);">—</div><div class="sc-l">% Saignement (BOP)</div></div>
+    <div class="sc"><div class="sc-n" id="s_4mm" style="color:var(--orange);">—</div><div class="sc-l">Sites ≥ 4 mm</div></div>
+    <div class="sc"><div class="sc-n" id="s_6mm" style="color:var(--red);">—</div><div class="sc-l">Sites ≥ 6 mm</div></div>
+    <div class="sc"><div class="sc-n" id="s_avg" style="color:var(--blue);">—</div><div class="sc-l">Prof. moyenne (mm)</div></div>
+  </div>
+
+  <div class="notes-row">
+    <div style="font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">📝 Observations et plan de traitement</div>
+    <textarea class="notes-ta" placeholder="Observations cliniques, zones de préoccupation, recommandations de traitement..."></textarea>
+  </div>
+  <div class="sig-row">
+    <div class="sig-f"><label>Patient(e)</label><input type="text" placeholder="Signature"><div class="sig-line">Date : _______________</div></div>
+    <div class="sig-f"><label>Hygiéniste dentaire</label><input type="text" placeholder="Signature"><div class="sig-line">No de permis : _______________</div></div>
+    <div class="sig-f"><label>Dentiste responsable</label><input type="text" placeholder="Signature"><div class="sig-line">No de permis : _______________</div></div>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document clinique confidentiel</div>
+</div>
+
+<script>
+document.getElementById('pat_date').valueAsDate = new Date();
+
+const UPPER = [18,17,16,15,14,13,12,11,21,22,23,24,25,26,27,28];
+const LOWER = [48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
+
+const hasFurc = n => [16,17,18,26,27,28,36,37,38,46,47,48,14,15,24,25,34,35,44,45].includes(n);
+const absent = new Set();
+const store = {};
+
+// ── TOOTH TYPE ──────────────────────────────────────────────
+function toothType(n) {
+  const pos = n % 10;
+  if (pos === 1) return 'ci';   // central incisor
+  if (pos === 2) return 'li';   // lateral incisor
+  if (pos === 3) return 'ca';   // canine
+  if (pos === 4 || pos === 5) return 'pm'; // premolar
+  return 'mo';                  // molar (6,7,8)
+}
+
+// ── REALISTIC TOOTH SVG ──────────────────────────────────────
+// All shapes defined with crown pointing DOWN (occlusal/incisal at bottom).
+// For lower teeth we flip with transform.
+function toothSVG(n, isUpper) {
+  if (absent.has(n)) {
+    return `<svg viewBox="0 0 46 44" width="46" height="44">
+      <text x="23" y="28" text-anchor="middle" font-size="18" fill="#ccc" font-family="Arial">✕</text>
+    </svg>`;
+  }
+
+  const type = toothType(n);
+  const flip = isUpper ? '' : 'transform="translate(0,44) scale(1,-1)"';
+
+  // Colors
+  const enamel   = '#F5EDD6';
+  const enamelHi = 'rgba(255,255,255,0.45)';
+  const root     = '#E0C49A';
+  const outline  = '#B89A6A';
+  const groove   = '#C8A870';
+
+  const shapes = {
+
+    // ── CENTRAL INCISOR ─────────────────────────────────
+    ci: `
+      <!-- root -->
+      <path d="M17,0 Q23,-1 29,0 L28,11 L18,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- crown - wide trapezoid, flat incisal edge -->
+      <path d="M7,10 C12,8 34,8 39,10 L38,32 Q32,40 23,41 Q14,40 8,32 Z"
+        fill="${enamel}" stroke="${outline}" stroke-width="1.5"/>
+      <!-- highlight left -->
+      <path d="M10,12 C14,11 21,11 22,12 L22,29 Q17,36 12,32 Q8,27 10,12" fill="${enamelHi}" stroke="none"/>
+      <!-- highlight right -->
+      <path d="M24,12 C25,11 32,11 36,12 Q38,27 34,32 Q29,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"/>
+      <!-- incisal edge groove -->
+      <path d="M9,33 Q23,40 37,33" stroke="${groove}" stroke-width="0.6" fill="none" opacity="0.5"/>
+    `,
+
+    // ── LATERAL INCISOR ──────────────────────────────────
+    li: `
+      <!-- root -->
+      <path d="M18,0 Q23,-1 28,0 L27,11 L19,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- crown - narrower than central, slightly more rounded -->
+      <path d="M9,10 C13,8 33,8 37,10 L36,31 Q30,40 23,41 Q16,40 10,31 Z"
+        fill="${enamel}" stroke="${outline}" stroke-width="1.5"/>
+      <!-- highlight -->
+      <path d="M12,12 C15,11 21,11 22,12 L21,29 Q17,36 13,32 Q10,27 12,12" fill="${enamelHi}" stroke="none"/>
+      <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"/>
+      <path d="M10,32 Q23,40 36,32" stroke="${groove}" stroke-width="0.5" fill="none" opacity="0.4"/>
+    `,
+
+    // ── CANINE ───────────────────────────────────────────
+    ca: `
+      <!-- root - long single root -->
+      <path d="M18,0 Q23,-2 28,0 L27,11 L19,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- crown - tapers to single cusp -->
+      <path d="M10,10 C14,8 32,8 36,10 L35,22 Q30,28 23,43 Q16,28 11,22 Z"
+        fill="${enamel}" stroke="${outline}" stroke-width="1.5"/>
+      <!-- buccal ridge highlight -->
+      <path d="M13,12 C16,11 22,11 23,12 L23,38 Q18,30 13,22 Z" fill="${enamelHi}" stroke="none"/>
+      <path d="M23,12 C24,11 30,11 33,12 L33,22 Q28,30 23,38 Z" fill="rgba(255,255,255,0.2)" stroke="none"/>
+      <!-- distal/mesial ridges -->
+      <line x1="13" y1="13" x2="23" y2="40" stroke="${groove}" stroke-width="0.6" opacity="0.35"/>
+      <line x1="33" y1="13" x2="23" y2="40" stroke="${groove}" stroke-width="0.6" opacity="0.35"/>
+    `,
+
+    // ── PREMOLAR ─────────────────────────────────────────
+    pm: `
+      <!-- two roots -->
+      <path d="M12,0 Q16,-1 20,0 L20,11 L13,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <path d="M26,0 Q30,-1 34,0 L33,11 L25,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- crown - two cusps (buccal taller) -->
+      <path d="M7,10 C11,8 35,8 39,10 L38,22 Q34,26 29,24 Q25,22 23,24 Q21,26 17,24 Q12,26 8,22 Z"
+        fill="${enamel}" stroke="${outline}" stroke-width="1.5"/>
+      <!-- central occlusal groove -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="${groove}" stroke-width="0.8" opacity="0.55"/>
+      <!-- buccal cusp highlight -->
+      <path d="M10,12 Q15,11 22,12 L22,21 Q16,24 11,22 Q8,19 10,12" fill="${enamelHi}" stroke="none"/>
+      <!-- lingual cusp highlight -->
+      <path d="M24,12 Q29,11 36,12 Q38,19 35,22 Q30,24 24,21 Z" fill="rgba(255,255,255,0.2)" stroke="none"/>
+      <!-- buccal developmental groove -->
+      <path d="M10,22 Q15,19 17,22" stroke="${groove}" stroke-width="0.5" fill="none" opacity="0.4"/>
+      <path d="M29,22 Q31,19 36,22" stroke="${groove}" stroke-width="0.5" fill="none" opacity="0.4"/>
+    `,
+
+    // ── MOLAR supérieure — 3 racines (MB + DB + palatine) ───
+    mo_upper: `
+      <!-- Racine palatine (centre, légèrement en arrière des buccales) -->
+      <path d="M17,0 Q23,-2 29,0 L28,11 L18,11 Z" fill="#D5B080" stroke="${outline}" stroke-width="1" opacity="0.75"/>
+      <!-- Racine mésio-buccale (gauche) -->
+      <path d="M4,2 Q8,0 13,2 L13,11 L5,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- Racine disto-buccale (droite) -->
+      <path d="M33,2 Q38,0 42,2 L41,11 L32,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z"
+        fill="${enamel}" stroke="${outline}" stroke-width="1.5"/>
+      <!-- Sillon occlusal central (fosse centrale) -->
+      <path d="M15,11 Q23,16 31,11" stroke="${groove}" stroke-width="0.8" fill="none" opacity="0.55"/>
+      <!-- Sillon mésio-distal -->
+      <line x1="23" y1="10" x2="23" y2="24" stroke="${groove}" stroke-width="0.8" opacity="0.5"/>
+      <!-- Reflet cuspide MB -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="${enamelHi}" stroke="none"/>
+      <!-- Reflet cuspide DB -->
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"/>
+      <!-- Sillon buccal -->
+      <line x1="23" y1="22" x2="23" y2="10" stroke="${groove}" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="16" cy="15" r="1" fill="${groove}" opacity="0.3"/>
+      <circle cx="30" cy="15" r="1" fill="${groove}" opacity="0.3"/>
+    `,
+
+    // ── MOLAR inférieure — 2 racines (mésiale + distale) ─────
+    mo_lower: `
+      <!-- Racine mésiale (gauche) -->
+      <path d="M7,0 Q12,-1 17,0 L16,11 L8,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- Racine distale (droite) -->
+      <path d="M29,0 Q34,-1 39,0 L38,11 L28,11 Z" fill="${root}" stroke="${outline}" stroke-width="1"/>
+      <!-- Couronne — large, vue buccale -->
+      <path d="M3,10 C8,8 38,8 43,10 L42,22 Q36,26 30,24 Q26,22 23,24 Q20,26 16,24 Q10,26 4,22 Z"
+        fill="${enamel}" stroke="${outline}" stroke-width="1.5"/>
+      <!-- Sillon occlusal -->
+      <path d="M15,11 Q23,16 31,11" stroke="${groove}" stroke-width="0.8" fill="none" opacity="0.55"/>
+      <line x1="23" y1="10" x2="23" y2="24" stroke="${groove}" stroke-width="0.8" opacity="0.5"/>
+      <!-- Reflets -->
+      <path d="M6,12 Q12,11 16,12 L16,22 Q10,24 6,22 Q3,19 6,12" fill="${enamelHi}" stroke="none"/>
+      <path d="M30,12 Q34,11 40,12 Q43,19 40,22 Q36,24 30,22 Z" fill="rgba(255,255,255,0.2)" stroke="none"/>
+      <line x1="23" y1="22" x2="23" y2="10" stroke="${groove}" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="16" cy="15" r="1" fill="${groove}" opacity="0.3"/>
+      <circle cx="30" cy="15" r="1" fill="${groove}" opacity="0.3"/>
+    `
+  };
+
+  // Sélection de la bonne forme pour les molaires
+  let effectiveType = type;
+  if (type === 'mo') {
+    effectiveType = [16,17,18,26,27,28].includes(n) ? 'mo_upper' : 'mo_lower';
+  }
+  const sh = shapes[effectiveType] || shapes.mo_lower;
+  return `<svg viewBox="0 0 46 44" width="46" height="44" xmlns="http://www.w3.org/2000/svg">
+    <g ${flip}>${sh}</g>
+  </svg>`;
+}
+
+// ── TOOTH COLUMN ─────────────────────────────────────────────
+function makeCol(n, isUpper) {
+  const ab = absent.has(n);
+  const dis = ab ? 'disabled style="opacity:.4;pointer-events:none;"' : '';
+
+  function probeInput(side, pos) {
+    const id = `p_${n}_${side}_${pos}`;
+    const v = store[id] || '';
+    const cls = pcls(v);
+    return `<input class="p ${cls}" id="${id}" type="text" maxlength="1" value="${v}"
+      oninput="store['${id}']=this.value;this.className='p '+pcls(this.value);calcStats()" ${ab?'disabled':''}>`;
+  }
+
+  function bleedDot(side, pos) {
+    const id = `b_${n}_${side}_${pos}`;
+    const on = store[id] || false;
+    return `<div class="bd${on?' on':''}" id="${id}" onclick="toggleB('${id}')" ${ab?'style="pointer-events:none;opacity:.4;"':''}></div>`;
+  }
+
+  function furcSel() {
+    if (!hasFurc(n)) return `<div style="width:32px;height:17px;"></div>`;
+    const id = `f_${n}`;
+    const v = store[id] || '0';
+    const cls = v==='1'?'f1':v==='2'?'f2':v==='3'?'f3':'';
+    return `<select class="fsel ${cls}" id="${id}" onchange="store['${id}']=this.value;this.className='fsel '+(this.value==='1'?'f1':this.value==='2'?'f2':this.value==='3'?'f3':'')" ${ab?'disabled':''}">
+      <option value="0">—</option><option value="1" ${v==='1'?'sel':''}">F1</option><option value="2" ${v==='2'?'sel':''}">F2</option><option value="3" ${v==='3'?'sel':''}">F3</option>
+    </select>`;
+  }
+
+  function mobSel() {
+    const id = `m_${n}`;
+    const v = store[id] || '0';
+    const cls = v==='1'?'m1':v==='2'?'m2':v==='3'?'m3':'';
+    return `<select class="msel ${cls}" id="${id}" onchange="store['${id}']=this.value;this.className='msel '+(this.value==='1'?'m1':this.value==='2'?'m2':this.value==='3'?'m3':'')" ${ab?'disabled':''}">
+      <option value="0">—</option><option value="1" ${v==='1'?'sel':''}">1</option><option value="2" ${v==='2'?'sel':''}">2</option><option value="3" ${v==='3'?'sel':''}">3</option>
+    </select>`;
+  }
+
+  function recInput(side) {
+    const id = `r_${n}_${side}`;
+    const v = store[id] || '';
+    return `<input class="rec-in" id="${id}" type="text" maxlength="1" value="${v}"
+      oninput="store['${id}']=this.value" ${ab?'disabled':''}>`;
+  }
+
+  const sideL = isUpper ? 'P' : 'L'; // palatal or lingual
+
+  if (isUpper) {
+    return `<div class="tooth-col" id="tc_${n}">
+      <div class="tooth-num${ab?' missing':''}">${n}</div>
+      <div class="probe-row">${probeInput('P','M')}${probeInput('P','C')}${probeInput('P','D')}</div>
+      <div class="bleed-row">${bleedDot('P','M')}${bleedDot('P','C')}${bleedDot('P','D')}</div>
+      <div class="furc-row">${furcSel()}</div>
+      <div class="tooth-area">${toothSVG(n, true)}</div>
+      <div class="furc-row">${furcSel()}</div>
+      <div class="bleed-row">${bleedDot('B','M')}${bleedDot('B','C')}${bleedDot('B','D')}</div>
+      <div class="probe-row">${probeInput('B','M')}${probeInput('B','C')}${probeInput('B','D')}</div>
+      <div class="probe-row" title="Récession">${recInput('B')}</div>
+      <div class="mob-row">${mobSel()}</div>
+    </div>`;
+  } else {
+    return `<div class="tooth-col" id="tc_${n}">
+      <div class="mob-row">${mobSel()}</div>
+      <div class="probe-row" title="Récession">${recInput('B')}</div>
+      <div class="probe-row">${probeInput('B','M')}${probeInput('B','C')}${probeInput('B','D')}</div>
+      <div class="bleed-row">${bleedDot('B','M')}${bleedDot('B','C')}${bleedDot('B','D')}</div>
+      <div class="furc-row">${furcSel()}</div>
+      <div class="tooth-area">${toothSVG(n, false)}</div>
+      <div class="furc-row">${furcSel()}</div>
+      <div class="bleed-row">${bleedDot('L','M')}${bleedDot('L','C')}${bleedDot('L','D')}</div>
+      <div class="probe-row">${probeInput('L','M')}${probeInput('L','C')}${probeInput('L','D')}</div>
+      <div class="tooth-num${ab?' missing':''}">${n}</div>
+    </div>`;
+  }
+}
+
+// ── HELPERS ──────────────────────────────────────────────────
+function pcls(v) {
+  const n = parseInt(v);
+  if (!v || isNaN(n) || n === 0) return '';
+  if (n <= 3) return 'c1';
+  if (n <= 5) return 'c2';
+  if (n === 6) return 'c3';
+  return 'c4';
+}
+
+function toggleB(id) {
+  store[id] = !store[id];
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('on', store[id]);
+  calcStats();
+}
+
+// ── BUILD CHART ──────────────────────────────────────────────
+function buildLabels(isUpper) {
+  if (isUpper) {
+    return `<div class="row-labels-col">
+      <div class="row-lbl" style="height:20px;"></div><!-- num -->
+      <div class="row-lbl" style="height:22px;">Sondage palatin</div>
+      <div class="row-lbl" style="height:16px;">BOP palatin</div>
+      <div class="row-lbl" style="height:19px;">Furcation</div>
+      <div class="row-lbl" style="height:48px;">Dent</div>
+      <div class="row-lbl" style="height:19px;">Furcation bucc.</div>
+      <div class="row-lbl" style="height:16px;">BOP buccal</div>
+      <div class="row-lbl" style="height:22px;">Sondage buccal</div>
+      <div class="row-lbl" style="height:21px;">Récession</div>
+      <div class="row-lbl" style="height:19px;">Mobilité</div>
+    </div>`;
+  } else {
+    return `<div class="row-labels-col">
+      <div class="row-lbl" style="height:19px;">Mobilité</div>
+      <div class="row-lbl" style="height:21px;">Récession</div>
+      <div class="row-lbl" style="height:22px;">Sondage buccal</div>
+      <div class="row-lbl" style="height:16px;">BOP buccal</div>
+      <div class="row-lbl" style="height:19px;">Furcation bucc.</div>
+      <div class="row-lbl" style="height:48px;">Dent</div>
+      <div class="row-lbl" style="height:19px;">Furcation ling.</div>
+      <div class="row-lbl" style="height:16px;">BOP lingual</div>
+      <div class="row-lbl" style="height:22px;">Sondage lingual</div>
+      <div class="row-lbl" style="height:20px;"></div><!-- num -->
+    </div>`;
+  }
+}
+
+function buildChart() {
+  const upper = UPPER.map(n => makeCol(n, true)).join('');
+  const lower = LOWER.map(n => makeCol(n, false)).join('');
+  document.getElementById('chartUpper').innerHTML = `<div class="teeth-grid">${buildLabels(true)}<div class="teeth-data">${upper}</div></div>`;
+  document.getElementById('chartLower').innerHTML = `<div class="teeth-grid">${buildLabels(false)}<div class="teeth-data">${lower}</div></div>`;
+  setupAutoAdvance();
+}
+
+// ── AUTO-AVANCE ─────────────────────────────────────────────
+// Gauche à droite, ligne par ligne :
+// 1. Maxillaire palatin  (18→28) M-C-D par dent
+// 2. Maxillaire buccal   (18→28) M-C-D par dent
+// 3. Mandibule buccal    (48→38) M-C-D par dent
+// 4. Mandibule lingual   (48→38) M-C-D par dent
+function getProbeOrder() {
+  const order = [];
+  const ROWS = [
+    { teeth: UPPER, side: 'P' },
+    { teeth: UPPER, side: 'B' },
+    { teeth: LOWER, side: 'B' },
+    { teeth: LOWER, side: 'L' },
+  ];
+  ROWS.forEach(({ teeth, side }) => {
+    teeth.forEach(n => {
+      if (absent.has(n)) return;
+      ['M','C','D'].forEach(pos => {
+        const el = document.getElementById('p_' + n + '_' + side + '_' + pos);
+        if (el) order.push(el);
+      });
+    });
+  });
+  return order;
+}
+
+function setupAutoAdvance() {
+  const chart = document.querySelector('.chart-section');
+  if (!chart) return;
+  chart.removeEventListener('keydown', onProbeKey);
+  chart.addEventListener('keydown', onProbeKey);
+}
+
+function onProbeKey(e) {
+  const inp = e.target;
+  if (!inp.classList.contains('p') || inp.disabled) return;
+
+  if (/^[0-9]$/.test(e.key)) {
+    e.preventDefault();
+    inp.value = e.key;
+    store[inp.id] = e.key;
+    inp.className = 'p ' + pcls(e.key);
+    calcStats();
+    const order = getProbeOrder();
+    const idx = order.indexOf(inp);
+    if (idx >= 0 && idx + 1 < order.length) {
+      order[idx + 1].focus();
+      order[idx + 1].select();
+    }
+  } else if (e.key === 'Backspace') {
+    e.preventDefault();
+    inp.value = '';
+    store[inp.id] = '';
+    inp.className = 'p';
+    calcStats();
+    const order = getProbeOrder();
+    const idx = order.indexOf(inp);
+    if (idx > 0) {
+      order[idx - 1].focus();
+      order[idx - 1].select();
+    }
+  }
+}
+
+// ── STATS ─────────────────────────────────────────────────────
+function calcStats() {
+  const all = [...UPPER, ...LOWER].filter(n => !absent.has(n));
+  let bopP = 0, bopT = 0, d4 = 0, d6 = 0, pSum = 0, pCnt = 0;
+  all.forEach(n => {
+    ['B','P','L'].forEach(s => {
+      ['M','C','D'].forEach(pos => {
+        bopT++;
+        if (store[`b_${n}_${s}_${pos}`]) bopP++;
+        const v = parseInt(store[`p_${n}_${s}_${pos}`] || '');
+        if (!isNaN(v) && v > 0) { pSum += v; pCnt++; if (v >= 4) d4++; if (v >= 6) d6++; }
+      });
+    });
+  });
+  const pct = bopT ? Math.round(bopP/bopT*100) : 0;
+  const avg = pCnt ? (pSum/pCnt).toFixed(1) : 0;
+  document.getElementById('s_teeth').textContent = all.length;
+  document.getElementById('s_bop_r').textContent = `${bopP}/${bopT}`;
+  document.getElementById('s_bop_p').textContent = `${pct}%`;
+  document.getElementById('s_4mm').textContent = d4;
+  document.getElementById('s_6mm').textContent = d6;
+  document.getElementById('s_avg').textContent = `${avg} mm`;
+}
+
+function markAbsent() {
+  const v = parseInt(document.getElementById('absentIn').value);
+  if (!v) return;
+  absent.add(v); buildChart(); calcStats();
+}
+function unmarkAbsent() {
+  const v = parseInt(document.getElementById('absentIn').value);
+  if (!v) return;
+  absent.delete(v); buildChart(); calcStats();
+}
+function resetAll() {
+  if (!confirm('Réinitialiser toute la charte?')) return;
+  Object.keys(store).forEach(k => delete store[k]);
+  absent.clear(); buildChart(); calcStats();
+}
+
+buildChart();
+</script>
+
+
+</body></html>

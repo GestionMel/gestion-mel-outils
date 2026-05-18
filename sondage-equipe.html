@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)file:///C:/Users/info/Downloads/sondage-equipe.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sondage d'équipe — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:940px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.85rem;opacity:.75;}
+  .section{padding:20px 36px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  label{font-size:.74rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  input[type=text],input[type=date],select{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--light);}
+  input:focus,select:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.86rem;font-family:inherit;color:var(--text);background:var(--light);resize:vertical;line-height:1.65;min-height:70px;}
+  textarea:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* TITRE SONDAGE */
+  .titre-sondage{background:var(--light);border:2px solid var(--accent);border-radius:8px;padding:16px 20px;margin-bottom:4px;}
+  .titre-sondage input{width:100%;border:none;background:transparent;font-size:1.1rem;font-weight:700;color:var(--dark);font-family:inherit;padding:0;}
+  .titre-sondage input:focus{outline:none;}
+  .titre-sondage input::placeholder{color:#b0bec5;font-weight:400;}
+
+  /* CONTEXTE */
+  .ctx-grid{display:flex;flex-direction:column;gap:9px;}
+  .ctx-row{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:start;}
+  .ctx-tag{padding:9px 12px;border-radius:7px;font-size:.78rem;font-weight:700;color:white;text-align:center;line-height:1.3;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ctx-input{border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:.85rem;font-family:inherit;color:var(--text);background:var(--light);width:100%;resize:vertical;min-height:52px;line-height:1.55;}
+  .ctx-input:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* OPTIONS */
+  .option-list{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+  .option-row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;}
+  .opt-num{width:26px;height:26px;border-radius:6px;background:var(--blue);color:white;font-size:.76rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .btn-del{width:26px;height:26px;border-radius:6px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .btn-del:hover{background:#fef2f2;border-color:var(--red);}
+  .btn-add{display:flex;align-items:center;gap:7px;padding:7px 14px;background:var(--light);border:1.5px dashed var(--accent);border-radius:7px;color:var(--blue);font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  .btn-add:hover{background:#e8f0fb;}
+
+  /* TABLE SONDAGE */
+  .table-wrap{overflow-x:auto;margin-bottom:12px;}
+  .sondage-table{width:100%;border-collapse:collapse;font-size:.84rem;}
+  .sondage-table th{padding:9px 10px;font-size:.74rem;font-weight:700;color:white;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sondage-table th.th-emp{background:var(--dark);text-align:left;min-width:150px;}
+  .sondage-table th.th-oui{background:var(--green);}
+  .sondage-table th.th-non{background:var(--red);}
+  .sondage-table th.th-peut{background:var(--orange);}
+  .sondage-table th.th-sugg{background:var(--blue);min-width:180px;text-align:left;}
+  .sondage-table td{border:1px solid var(--border);padding:6px 8px;vertical-align:middle;}
+  .sondage-table tr:nth-child(even) td{background:var(--light);}
+  .sondage-table td:first-child{font-weight:600;color:var(--text);}
+  .sondage-table td.choice-cell{text-align:center;}
+  .sondage-table td input.td-text{border:none;background:transparent;width:100%;font-family:inherit;font-size:.83rem;padding:2px;}
+  .sondage-table td input.td-text:focus{outline:none;background:#fffde7;}
+  .sondage-table td textarea.td-ta{border:none;background:transparent;width:100%;font-family:inherit;font-size:.81rem;padding:2px;min-height:36px;resize:vertical;line-height:1.5;}
+  .sondage-table td textarea.td-ta:focus{outline:none;background:#fffde7;}
+
+  /* CHOICE BTNS */
+  .cbtn{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:white;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .12s;display:inline-flex;align-items:center;justify-content:center;}
+  .cbtn:hover{border-color:var(--accent);}
+  .cbtn.c-oui{background:var(--green);border-color:var(--green);color:white;}
+  .cbtn.c-non{background:var(--red);border-color:var(--red);color:white;}
+  .cbtn.c-peut{background:var(--orange);border-color:var(--orange);color:white;}
+
+  /* OPTION-SPECIFIC TABLE (mode multi-options) */
+  .sondage-table th.th-opt{background:var(--dark);min-width:80px;}
+  .cbtn.c-choix{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* RESULTS */
+  .results-box{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 18px;}
+  .results-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .results-title::before{content:'📊';}
+  .res-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .res-lbl{font-size:.82rem;font-weight:700;min-width:110px;display:flex;align-items:center;gap:5px;}
+  .res-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .res-bar-wrap{flex:1;background:#e0e0e0;border-radius:4px;height:10px;overflow:hidden;}
+  .res-bar{height:10px;border-radius:4px;transition:width .5s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .bar-oui{background:var(--green);}
+  .bar-non{background:var(--red);}
+  .bar-peut{background:var(--orange);}
+  .res-count{font-size:.84rem;font-weight:700;min-width:40px;text-align:right;}
+
+  /* CONCLUSION */
+  .conclusion-box{background:#fff8e1;border-left:4px solid var(--orange);border-radius:6px;padding:14px 16px;}
+  .conc-title{font-size:.76rem;font-weight:700;color:#7a4400;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+
+  /* ACTIONS */
+  .actions{padding:18px 36px;background:var(--light);display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;}
+  .btn{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-primary{background:var(--blue);color:white;}
+  .btn-primary:hover{background:#155a9e;}
+  .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .btn-print:hover{background:var(--light);}
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#2a3a4a;margin-bottom:14px;line-height:1.7;}
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
+
+  /* MODE SELECTOR */
+  .mode-wrap{display:flex;gap:10px;margin-bottom:16px;}
+  .mode-card{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;cursor:pointer;transition:all .15s;background:white;}
+  .mode-card:hover{border-color:var(--accent);}
+  .mode-card.active{border-color:var(--blue);background:var(--light);}
+  .mode-card.active .mode-icon{color:var(--blue);}
+  .mode-icon{font-size:1.4rem;margin-bottom:6px;}
+  .mode-title{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+  .mode-desc{font-size:.76rem;color:#5a6a80;line-height:1.4;}
+  .mode-view{display:none;}
+  .mode-view.active{display:block;}
+
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.actions{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .doc-header,.sondage-table th,.opt-num,.ctx-tag,.res-bar,.res-dot{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,textarea,select{border:none!important;background:transparent!important;}
+    .section{page-break-inside:avoid;}
+  }
+  @media(max-width:600px){
+    .section{padding:14px 16px;}
+    .grid,.grid3{grid-template-columns:1fr;}
+    .ctx-row{grid-template-columns:1fr;}
+    .mode-wrap{flex-direction:column;}
+    .actions{padding:14px 16px;}
+    .page-header{padding:14px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Gestion d'équipe</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Sondage d'équipe</h1>
+    <p>Outil de consultation rapide — Clinique dentaire</p>
+  </div>
+
+  <!-- INFOS -->
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid3">
+      <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+      <div class="field"><label>Date du sondage</label><input type="date" id="dateSondage"></div>
+      <div class="field"><label>Date limite de réponse</label><input type="date"></div>
+      <div class="field"><label>Créé par</label><input type="text" placeholder="Nom du gestionnaire"></div>
+      <div class="field"><label>Destiné à</label><input type="text" placeholder="Ex : Toute l&#39;équipe, Secrétariat..."></div>
+    </div>
+  </div>
+
+  <!-- TITRE & CONTEXTE -->
+  <div class="section">
+    <div class="section-title">Sujet du sondage</div>
+    <div class="titre-sondage" style="margin-bottom:14px;">
+      <input type="text" placeholder="✏️  Inscrivez ici le titre ou la question principale du sondage...">
+    </div>
+    <div class="ctx-grid">
+      <div class="ctx-row">
+        <div class="ctx-tag" style="background:#1a6abf;">📋 Quoi</div>
+        <textarea class="ctx-input" placeholder="De quoi s&#39;agit-il exactement? Décrivez la proposition ou la question..."></textarea>
+      </div>
+      <div class="ctx-row">
+        <div class="ctx-tag" style="background:#1a9e5a;">💡 Pourquoi</div>
+        <textarea class="ctx-input" placeholder="Pourquoi ce sondage? Quelle est la raison ou l&#39;enjeu derrière cette consultation?"></textarea>
+      </div>
+      <div class="ctx-row">
+        <div class="ctx-tag" style="background:#e67e22;">📅 Quand</div>
+        <textarea class="ctx-input" placeholder="À quel moment cela aurait lieu ou s&#39;appliquerait? (optionnel)"></textarea>
+      </div>
+      <div class="ctx-row">
+        <div class="ctx-tag" style="background:#8e44ad;">⚙️ Comment</div>
+        <textarea class="ctx-input" placeholder="Comment cela se passerait concrètement? (optionnel)"></textarea>
+      </div>
+      <div class="ctx-row">
+        <div class="ctx-tag" style="background:#c0392b;">📍 Où</div>
+        <textarea class="ctx-input" placeholder="Où cela se déroulerait-il? (optionnel)"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODE SELECTION -->
+  <div class="section">
+    <div class="section-title">Type de sondage</div>
+    <div class="mode-wrap">
+      <div class="mode-card active" onclick="setMode(&#39;simple&#39;,this)">
+        <div class="mode-icon">✅</div>
+        <div class="mode-title">Proposition unique</div>
+        <div class="mode-desc">Une seule question — les employés répondent Oui, Non, Peut-être ou laissent une suggestion.</div>
+      </div>
+      <div class="mode-card" onclick="setMode(&#39;options&#39;,this)">
+        <div class="mode-icon">🗳️</div>
+        <div class="mode-title">Choix multiples</div>
+        <div class="mode-desc">Plusieurs options à choisir — idéal pour choisir une date, une activité ou une préférence.</div>
+      </div>
+    </div>
+
+    <!-- MODE SIMPLE -->
+    <div class="mode-view active" id="mode-simple">
+      <div class="info-box">Les employés répondent à la proposition principale avec <strong>Oui ✅</strong>, <strong>Non ❌</strong>, <strong>Peut-être 🤔</strong> ou laissent une suggestion.</div>
+    </div>
+
+    <!-- MODE OPTIONS -->
+    <div class="mode-view" id="mode-options">
+      <div class="info-box">Ajoutez les options à soumettre au vote (ex : dates, activités, choix de procédure...). Les employés cochent leur préférence pour chaque option.</div>
+      <div class="option-list" id="optionList"><div class="option-row" id="opt-1">
+    <div class="opt-num">1</div>
+    <input type="text" placeholder="Décrivez l&#39;option 1... (ex : Vendredi 14 décembre 17h)">
+    <button class="btn-del" onclick="this.closest(&#39;.option-row&#39;).remove();updateOptNums()">×</button></div><div class="option-row" id="opt-2">
+    <div class="opt-num">2</div>
+    <input type="text" placeholder="Décrivez l&#39;option 2... (ex : Vendredi 14 décembre 17h)">
+    <button class="btn-del" onclick="this.closest(&#39;.option-row&#39;).remove();updateOptNums()">×</button></div></div>
+      <button class="btn-add" onclick="addOption()">+ Ajouter une option</button>
+    </div>
+  </div>
+
+  <!-- LISTE DES EMPLOYÉS -->
+  <div class="section">
+    <div class="section-title">Participants</div>
+    <div class="info-box">Ajoutez les noms des employés concernés par ce sondage.</div>
+    <div class="option-list" id="empList"><div class="option-row" id="emp-1">
+    <div class="opt-num" style="background:#2c3e50;">1</div>
+    <input type="text" placeholder="Prénom et nom de l&#39;employé(e)">
+    <button class="btn-del" onclick="this.closest(&#39;.option-row&#39;).remove();updateEmpNums()">×</button></div><div class="option-row" id="emp-2">
+    <div class="opt-num" style="background:#2c3e50;">2</div>
+    <input type="text" placeholder="Prénom et nom de l&#39;employé(e)">
+    <button class="btn-del" onclick="this.closest(&#39;.option-row&#39;).remove();updateEmpNums()">×</button></div><div class="option-row" id="emp-3">
+    <div class="opt-num" style="background:#2c3e50;">3</div>
+    <input type="text" placeholder="Prénom et nom de l&#39;employé(e)">
+    <button class="btn-del" onclick="this.closest(&#39;.option-row&#39;).remove();updateEmpNums()">×</button></div></div>
+    <button class="btn-add" onclick="addEmp()">+ Ajouter un(e) employé(e)</button>
+  </div>
+
+  <!-- TABLE DU SONDAGE -->
+  <div class="section">
+    <div class="section-title">Grille de réponses</div>
+    <div id="tableContainer">
+      <div class="info-box">Ajoutez les participants et générez la grille pour recueillir les réponses.</div>
+    </div>
+    <button class="btn-primary btn" onclick="buildTable()" style="margin-top:10px;">🔄 Générer / Mettre à jour la grille</button>
+  </div>
+
+  <!-- RÉSULTATS -->
+  <div class="section">
+    <div class="section-title">Résultats</div>
+    <div id="resultsContainer">
+      <div class="info-box">Les résultats se calculeront automatiquement après avoir rempli la grille.</div>
+    </div>
+    <button class="btn btn-primary" onclick="calcResults()" style="margin-top:10px;">📊 Calculer les résultats</button>
+  </div>
+
+  <!-- CONCLUSION -->
+  <div class="section">
+    <div class="section-title">Conclusion et suivi</div>
+    <div class="conclusion-box">
+      <div class="conc-title">Décision et prochaines étapes</div>
+      <div class="field" style="margin-bottom:10px;"><label>Suite donnée au sondage</label>
+        <textarea placeholder="Résumez la décision prise à la suite des résultats et les prochaines étapes..."></textarea>
+      </div>
+      <div class="grid">
+        <div class="field"><label>Communiqué à l'équipe le</label><input type="date"></div>
+        <div class="field"><label>Par</label><input type="text" placeholder="Nom du gestionnaire"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <span></span>
+    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+let currentMode = 'simple';
+let options = [];
+let employees = [];
+let optCount = 0;
+let empCount = 0;
+
+// Set today
+document.getElementById('dateSondage').valueAsDate = new Date();
+
+function setMode(mode, card) {
+  currentMode = mode;
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  document.querySelectorAll('.mode-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('mode-' + mode).classList.add('active');
+}
+
+function addOption() {
+  optCount++;
+  const list = document.getElementById('optionList');
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.id = 'opt-' + optCount;
+  row.innerHTML = `
+    <div class="opt-num">${optCount}</div>
+    <input type="text" placeholder="Décrivez l'option ${optCount}... (ex : Vendredi 14 décembre 17h)">
+    <button class="btn-del" onclick="this.closest('.option-row').remove();updateOptNums()">×</button>`;
+  list.appendChild(row);
+}
+
+function updateOptNums() {
+  document.querySelectorAll('#optionList .opt-num').forEach((n, i) => n.textContent = i + 1);
+}
+
+function addEmp() {
+  empCount++;
+  const list = document.getElementById('empList');
+  const row = document.createElement('div');
+  row.className = 'option-row';
+  row.id = 'emp-' + empCount;
+  row.innerHTML = `
+    <div class="opt-num" style="background:#2c3e50;">${empCount}</div>
+    <input type="text" placeholder="Prénom et nom de l'employé(e)">
+    <button class="btn-del" onclick="this.closest('.option-row').remove();updateEmpNums()">×</button>`;
+  list.appendChild(row);
+}
+
+function updateEmpNums() {
+  document.querySelectorAll('#empList .opt-num').forEach((n, i) => n.textContent = i + 1);
+}
+
+function getEmployees() {
+  return Array.from(document.querySelectorAll('#empList input[type=text]')).map(i => i.value || 'Employé(e)');
+}
+
+function getOptions() {
+  return Array.from(document.querySelectorAll('#optionList input[type=text]')).map(i => i.value || 'Option');
+}
+
+function buildTable() {
+  const emps = getEmployees();
+  if (emps.length === 0) {
+    document.getElementById('tableContainer').innerHTML = '<div class="info-box">⚠️ Ajoutez au moins un(e) participant(e) avant de générer la grille.</div>';
+    return;
+  }
+
+  let html = '<div class="table-wrap"><table class="sondage-table"><thead><tr>';
+
+  if (currentMode === 'simple') {
+    html += `<th class="th-emp">Employé(e)</th>
+             <th class="th-oui">✅ Oui</th>
+             <th class="th-non">❌ Non</th>
+             <th class="th-peut">🤔 Peut-être</th>
+             <th class="th-sugg">💬 Autre suggestion</th></tr></thead><tbody>`;
+    emps.forEach((emp, i) => {
+      html += `<tr>
+        <td>${emp}</td>
+        <td class="choice-cell"><button class="cbtn" onclick="pickChoice(this,'c-oui','simple',${i})">✅</button></td>
+        <td class="choice-cell"><button class="cbtn" onclick="pickChoice(this,'c-non','simple',${i})">❌</button></td>
+        <td class="choice-cell"><button class="cbtn" onclick="pickChoice(this,'c-peut','simple',${i})">🤔</button></td>
+        <td><textarea class="td-ta" placeholder="Suggestion..."></textarea></td>
+      </tr>`;
+    });
+  } else {
+    const opts = getOptions();
+    if (opts.length === 0) {
+      document.getElementById('tableContainer').innerHTML = '<div class="info-box">⚠️ Ajoutez au moins une option avant de générer la grille.</div>';
+      return;
+    }
+    opts.forEach(opt => { html += `<th class="th-opt">${opt}</th>`; });
+    html += `<th class="th-sugg">💬 Commentaire</th></tr></thead><tbody>`;
+    emps.forEach((emp, i) => {
+      html += `<tr><td>${emp}</td>`;
+      opts.forEach((opt, j) => {
+        html += `<td class="choice-cell"><button class="cbtn" onclick="pickChoixOpt(this,${i},${j})">✓</button></td>`;
+      });
+      html += `<td><textarea class="td-ta" placeholder="Commentaire..."></textarea></td></tr>`;
+    });
+  }
+
+  html += '</tbody></table></div>';
+  document.getElementById('tableContainer').innerHTML = html;
+}
+
+function pickChoice(btn, cls, mode, empIdx) {
+  const row = btn.closest('tr');
+  row.querySelectorAll('.cbtn').forEach(b => b.classList.remove('c-oui','c-non','c-peut'));
+  btn.classList.add(cls);
+  calcResults();
+}
+
+function pickChoixOpt(btn, empIdx, optIdx) {
+  const row = btn.closest('tr');
+  row.querySelectorAll('.cbtn').forEach(b => b.classList.remove('c-choix'));
+  btn.classList.add('c-choix');
+  calcResults();
+}
+
+function calcResults() {
+  const container = document.getElementById('resultsContainer');
+  const table = document.querySelector('.sondage-table');
+  if (!table) {
+    container.innerHTML = '<div class="info-box">Générez la grille d\'abord.</div>';
+    return;
+  }
+
+  let html = '<div class="results-box"><div class="results-title">Résultats du sondage</div>';
+
+  if (currentMode === 'simple') {
+    const rows = table.querySelectorAll('tbody tr');
+    let oui = 0, non = 0, peut = 0, total = rows.length;
+    rows.forEach(row => {
+      if (row.querySelector('.c-oui')) oui++;
+      else if (row.querySelector('.c-non')) non++;
+      else if (row.querySelector('.c-peut')) peut++;
+    });
+    const pct = (n) => total > 0 ? Math.round(n / total * 100) : 0;
+    html += resRow('✅ Oui', oui, total, 'bar-oui', '#1a9e5a') +
+            resRow('❌ Non', non, total, 'bar-non', '#c0392b') +
+            resRow('🤔 Peut-être', peut, total, 'bar-peut', '#e67e22');
+    const nonRepondu = total - oui - non - peut;
+    if (nonRepondu > 0) html += resRow('⬜ Sans réponse', nonRepondu, total, 'bar-peut', '#b0bec5');
+    html += `<div style="font-size:.78rem;color:#5a6a80;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">${total} participant(s) au total</div>`;
+  } else {
+    const opts = getOptions();
+    const rows = table.querySelectorAll('tbody tr');
+    const counts = opts.map(() => 0);
+    rows.forEach(row => {
+      const btns = row.querySelectorAll('.cbtn');
+      btns.forEach((btn, j) => { if (btn.classList.contains('c-choix')) counts[j]++; });
+    });
+    const maxCount = Math.max(...counts, 1);
+    opts.forEach((opt, i) => {
+      const pctW = Math.round(counts[i] / rows.length * 100);
+      html += `<div class="res-row">
+        <span class="res-lbl" style="font-size:.79rem;">${opt}</span>
+        <div class="res-bar-wrap"><div class="res-bar" style="width:${pctW}%;background:${i%2===0?'var(--blue)':'var(--purple)'}"></div></div>
+        <span class="res-count">${counts[i]}</span>
+      </div>`;
+    });
+    const winner = opts[counts.indexOf(Math.max(...counts))];
+    html += `<div style="font-size:.82rem;color:var(--green);font-weight:700;margin-top:10px;padding-top:8px;border-top:1px solid var(--border);">🏆 Option favorite : ${winner}</div>`;
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function resRow(label, count, total, barClass, color) {
+  const pct = total > 0 ? Math.round(count / total * 100) : 0;
+  return `<div class="res-row">
+    <span class="res-lbl"><span class="res-dot" style="background:${color};display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;"></span>${label}</span>
+    <div class="res-bar-wrap"><div class="res-bar ${barClass}" style="width:${pct}%"></div></div>
+    <span class="res-count">${count} (${pct}%)</span>
+  </div>`;
+}
+
+// Init with 3 employees
+for(let i=0;i<3;i++) addEmp();
+// Init with 2 options
+addOption(); addOption();
+</script>
+
+
+</body></html>

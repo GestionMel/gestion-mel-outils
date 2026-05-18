@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/info/Downloads/suivi-candidatures.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi des candidatures — Gestion Mel</title>
+<style>
+  :root {
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+    --green-bg:#f0fdf4;--orange-bg:#fff8f0;--red-bg:#fef2f2;--purple-bg:#fdf4ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:1020px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.85rem;opacity:.75;}
+
+  /* TOOLBAR */
+  .toolbar{padding:16px 36px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .toolbar-left{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .filter-select{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;cursor:pointer;}
+  .filter-select:focus{outline:none;border-color:var(--accent);}
+  .search-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 12px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;width:200px;}
+  .search-input:focus{outline:none;border-color:var(--accent);}
+  .btn-add-cand{display:flex;align-items:center;gap:7px;padding:8px 18px;background:var(--blue);color:white;border:none;border-radius:7px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;}
+  .btn-add-cand:hover{background:#155a9e;}
+
+  /* STATS BAR */
+  .stats-bar{padding:12px 36px;background:white;border-bottom:1px solid var(--border);display:flex;gap:20px;flex-wrap:wrap;}
+  .stat-item{display:flex;align-items:center;gap:6px;font-size:.8rem;color:#5a6a80;}
+  .stat-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .stat-num{font-weight:700;color:var(--text);}
+
+  /* CANDIDATURES LIST */
+  .cand-list{padding:20px 36px;}
+  .no-cand{text-align:center;padding:40px;color:#8a9ab0;font-size:.9rem;}
+  .no-cand span{font-size:2rem;display:block;margin-bottom:8px;}
+
+  /* CANDIDATURE CARD */
+  .cand-card{border:1.5px solid var(--border);border-radius:10px;margin-bottom:14px;overflow:hidden;transition:box-shadow .2s;}
+  .cand-card:hover{box-shadow:0 2px 12px rgba(26,106,191,.08);}
+  .cand-card.retenu{border-color:var(--green);border-left:4px solid var(--green);}
+  .cand-card.non-retenu{border-color:#ccc;border-left:4px solid #ccc;opacity:.75;}
+  .cand-card.en-cours{border-left:4px solid var(--accent);}
+  .cand-card.en-attente{border-left:4px solid var(--orange);}
+  .cand-card.embauche{border-color:var(--green);border-left:4px solid var(--green);background:var(--green-bg);}
+
+  .card-header{padding:14px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;background:white;}
+  .cand-card.embauche .card-header{background:var(--green-bg);}
+  .cand-card.non-retenu .card-header{background:#f8f8f8;}
+
+  .cand-avatar{width:40px;height:40px;border-radius:50%;background:var(--dark);color:white;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  .cand-info{flex:1;min-width:0;}
+  .cand-name{font-size:.95rem;font-weight:700;color:var(--text);}
+  .cand-meta{font-size:.78rem;color:#5a6a80;margin-top:2px;display:flex;flex-wrap:wrap;gap:8px;}
+  .cand-meta span{display:flex;align-items:center;gap:4px;}
+
+  .poste-badge{padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;color:white;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .pb-sec{background:#1a6abf;}
+  .pb-hyg{background:var(--green);}
+  .pb-ass{background:var(--purple);}
+  .pb-gest{background:#2c3e50;}
+  .pb-aide{background:var(--orange);}
+  .pb-autre{background:#7f8c8d;}
+
+  .status-badge{padding:4px 11px;border-radius:20px;font-size:.72rem;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sb-cours{background:#e3f2fd;color:var(--blue);}
+  .sb-attente{background:var(--orange-bg);color:var(--orange);}
+  .sb-retenu{background:var(--green-bg);color:var(--green);}
+  .sb-nonretenu{background:#f0f0f0;color:#5a6a80;}
+  .sb-embauche{background:var(--green);color:white;}
+
+  /* STAGES MINI */
+  .stages-mini{display:flex;gap:4px;align-items:center;margin-left:auto;padding-right:8px;}
+  .stage-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:.65rem;title:attr(data-title);}
+  .stage-dot.done{background:var(--green);border-color:var(--green);color:white;}
+  .stage-dot.current{background:var(--accent);border-color:var(--accent);color:white;}
+
+  .expand-icon{font-size:.8rem;color:#8a9ab0;flex-shrink:0;transition:transform .2s;}
+  .cand-card.open .expand-icon{transform:rotate(180deg);}
+
+  /* CARD BODY */
+  .card-body{display:none;border-top:1px solid var(--border);padding:18px;background:white;}
+  .cand-card.embauche .card-body{background:var(--green-bg);}
+  .cand-card.open .card-body{display:block;}
+
+  /* FIELDS IN CARD */
+  .cb-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
+  .cb-field{display:flex;flex-direction:column;gap:3px;}
+  .cb-label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  .cb-input{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .cb-input:focus{outline:none;border-color:var(--accent);background:white;}
+  select.cb-input{cursor:pointer;}
+  textarea.cb-input{resize:vertical;min-height:60px;line-height:1.55;}
+
+  /* STAGES */
+  .stages-section{margin-top:4px;}
+  .stages-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+  .stages-title::before{content:'';display:block;width:3px;height:11px;background:var(--accent);border-radius:2px;}
+
+  .stage-row{display:grid;grid-template-columns:24px 1fr 140px 200px auto;gap:10px;align-items:start;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;margin-bottom:8px;background:white;transition:background .15s;}
+  .stage-row.done-row{background:var(--green-bg);border-color:rgba(26,158,90,.2);}
+  .stage-row.skip-row{background:#f8f8f8;opacity:.6;}
+
+  .stage-cb{width:18px;height:18px;cursor:pointer;margin-top:3px;flex-shrink:0;}
+  .stage-name{font-size:.85rem;font-weight:600;color:var(--text);padding-top:2px;}
+  .stage-name small{display:block;font-size:.74rem;font-weight:400;color:#8a9ab0;margin-top:1px;}
+  .stage-date{border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;color:var(--text);background:var(--light);width:100%;}
+  .stage-date:focus{outline:none;border-color:var(--accent);}
+  .stage-notes{border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;color:var(--text);background:var(--light);width:100%;resize:none;min-height:34px;}
+  .stage-notes:focus{outline:none;border-color:var(--accent);}
+  .stage-skip{font-size:.72rem;color:#8a9ab0;display:flex;align-items:center;gap:4px;cursor:pointer;padding-top:4px;white-space:nowrap;}
+  .stage-skip input{margin:0;}
+
+  /* CV NOTE */
+  .cv-note{background:#e8f4fe;border:1.5px solid #b3d4f5;border-radius:7px;padding:10px 14px;font-size:.82rem;color:#1a3a5c;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+  /* CARD ACTIONS */
+  .card-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap;}
+  .btn-sm{padding:6px 14px;border-radius:6px;font-size:.79rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+  .btn-retenu{background:var(--green);color:white;}
+  .btn-retenu:hover{background:#157a47;}
+  .btn-nonretenu{background:#f0f0f0;color:#5a6a80;border:1.5px solid #ddd;}
+  .btn-nonretenu:hover{background:#e0e0e0;}
+  .btn-embauche{background:var(--dark);color:white;}
+  .btn-embauche:hover{background:#1a2a3a;}
+  .btn-delete{background:var(--red-bg);color:var(--red);border:1.5px solid var(--red);}
+  .btn-delete:hover{background:var(--red);color:white;}
+
+  /* ACTIONS BAR */
+  .actions{padding:18px 36px;background:var(--light);display:flex;gap:10px;justify-content:flex-end;}
+  .btn-print{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:white;color:#5a6a80;font-family:inherit;}
+
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
+
+  @media print{
+    body{background:white;}
+    .page-header,.toolbar,.stats-bar,.card-actions,.actions,.expand-icon,.btn-add-cand{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .cand-card{page-break-inside:avoid;}
+    .card-body{display:block!important;}
+    .doc-header,.poste-badge,.status-badge,.cand-avatar{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,textarea,select{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:700px){
+    .cand-list{padding:14px 16px;}
+    .toolbar{padding:12px 16px;}
+    .stats-bar{padding:10px 16px;}
+    .cb-grid{grid-template-columns:1fr 1fr;}
+    .stage-row{grid-template-columns:18px 1fr;gap:8px;}
+    .stage-date,.stage-notes,.stage-skip{grid-column:2;}
+    .stages-mini{display:none;}
+    .page-header{padding:14px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Ressources humaines</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Suivi des candidatures</h1>
+    <p>Gestion du processus d'embauche — Clinique dentaire</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <input class="search-input" type="text" placeholder="🔍 Rechercher un candidat..." oninput="filterCards()">
+      <select class="filter-select" id="filterPoste" onchange="filterCards()">
+        <option value="">Tous les postes</option>
+        <option value="Secrétaire dentaire">Secrétaire dentaire</option>
+        <option value="Hygiéniste dentaire">Hygiéniste dentaire</option>
+        <option value="Assistante dentaire">Assistante dentaire</option>
+        <option value="Gestionnaire">Gestionnaire</option>
+        <option value="Aide à la stérilisation">Aide à la stérilisation</option>
+        <option value="Autre">Autre</option>
+      </select>
+      <select class="filter-select" id="filterStatus" onchange="filterCards()">
+        <option value="">Tous les statuts</option>
+        <option value="en-cours">En cours</option>
+        <option value="en-attente">En attente</option>
+        <option value="retenu">Retenu(e)</option>
+        <option value="embauche">Embauché(e)</option>
+        <option value="non-retenu">Non retenu(e)</option>
+      </select>
+    </div>
+    <button class="btn-add-cand" onclick="addCandidat()">+ Ajouter une candidature</button>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item"><div class="stat-dot" style="background:var(--accent)"></div><span class="stat-num" id="statTotal">0</span>&nbsp;candidature(s)</div>
+    <div class="stat-item"><div class="stat-dot" style="background:var(--accent)"></div><span class="stat-num" id="statCours">0</span>&nbsp;en cours</div>
+    <div class="stat-item"><div class="stat-dot" style="background:var(--green)"></div><span class="stat-num" id="statRetenu">0</span>&nbsp;retenu(e)(s)</div>
+    <div class="stat-item"><div class="stat-dot" style="background:var(--dark)"></div><span class="stat-num" id="statEmbauche">0</span>&nbsp;embauché(e)(s)</div>
+    <div class="stat-item"><div class="stat-dot" style="background:#ccc)"></div><span class="stat-num" id="statNon">0</span>&nbsp;non retenu(e)(s)</div>
+  </div>
+
+  <div class="cand-list" id="candList">
+    <div class="no-cand" id="noCand"><span>📂</span>Aucune candidature pour l'instant.<br>Cliquez sur « + Ajouter une candidature » pour commencer.</div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimer le suivi</button>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+const POSTES = ['Secrétaire dentaire','Hygiéniste dentaire','Assistante dentaire','Gestionnaire','Aide à la stérilisation','Autre'];
+const POSTE_CLASSES = {'Secrétaire dentaire':'pb-sec','Hygiéniste dentaire':'pb-hyg','Assistante dentaire':'pb-ass','Gestionnaire':'pb-gest','Aide à la stérilisation':'pb-aide','Autre':'pb-autre'};
+const POSTE_AVATARS = {'Secrétaire dentaire':'🗂️','Hygiéniste dentaire':'🦷','Assistante dentaire':'🔧','Gestionnaire':'👤','Aide à la stérilisation':'🧼','Autre':'📄'};
+
+const STAGES = [
+  { id:'cv',      label:'CV reçu',                      hint:'Date de réception du CV' },
+  { id:'tel',     label:'Entrevue téléphonique',         hint:'Date et résultat de l\'entretien téléphonique' },
+  { id:'pres',    label:'Entrevue en présentiel',        hint:'Date de l\'entrevue en personne' },
+  { id:'refs',    label:'Vérification des références',   hint:'Références contactées et résultats' },
+  { id:'essai',   label:'Journée d\'essai / observation',hint:'Date de la journée d\'essai ou d\'observation' },
+  { id:'offre',   label:'Offre d\'emploi',               hint:'Date d\'émission et conditions de l\'offre' },
+];
+
+let candidats = [];
+let idCounter = 0;
+
+function posteClass(p){ return POSTE_CLASSES[p]||'pb-autre'; }
+function posteAvatar(p){ return POSTE_AVATARS[p]||'📄'; }
+
+function initials(name){
+  if(!name||!name.trim()) return '?';
+  const parts=name.trim().split(' ');
+  return (parts[0][0]+(parts[1]?parts[1][0]:'')).toUpperCase();
+}
+
+function statusLabel(s){
+  const map={'en-cours':'En cours','en-attente':'En attente','retenu':'Retenu(e)','embauche':'Embauché(e)','non-retenu':'Non retenu(e)'};
+  return map[s]||s;
+}
+function statusClass(s){
+  const map={'en-cours':'sb-cours','en-attente':'sb-attente','retenu':'sb-retenu','embauche':'sb-embauche','non-retenu':'sb-nonretenu'};
+  return map[s]||'sb-cours';
+}
+
+function countDoneStages(c){
+  return STAGES.filter(s=>c.stages&&c.stages[s.id]&&c.stages[s.id].done).length;
+}
+
+function addCandidat(){
+  const id = ++idCounter;
+  const c = { id, nom:'', poste:'Secrétaire dentaire', tel:'', courriel:'', dateRecu:'', cv:'', status:'en-cours', notes:'', raisonNon:'', stages:{} };
+  STAGES.forEach(s=>{ c.stages[s.id]={done:false,date:'',notes:'',skip:false}; });
+  candidats.push(c);
+  renderAll();
+  // Auto-open new card
+  setTimeout(()=>{
+    const card = document.getElementById('card-'+id);
+    if(card){ card.classList.add('open'); }
+  },50);
+}
+
+function removeCandidat(id){
+  if(confirm('Supprimer cette candidature?')){
+    candidats=candidats.filter(c=>c.id!==id);
+    renderAll();
+  }
+}
+
+function setStatus(id,status){
+  const c=candidats.find(x=>x.id===id);
+  if(c){ c.status=status; renderAll(); }
+}
+
+function renderAll(){
+  updateStats();
+  filterCards();
+}
+
+function updateStats(){
+  const total=candidats.length;
+  const cours=candidats.filter(c=>c.status==='en-cours').length;
+  const attente=candidats.filter(c=>c.status==='en-attente').length;
+  const retenu=candidats.filter(c=>c.status==='retenu').length;
+  const embauche=candidats.filter(c=>c.status==='embauche').length;
+  const non=candidats.filter(c=>c.status==='non-retenu').length;
+  document.getElementById('statTotal').textContent=total;
+  document.getElementById('statCours').textContent=cours;
+  document.getElementById('statRetenu').textContent=retenu;
+  document.getElementById('statEmbauche').textContent=embauche;
+  document.getElementById('statNon').textContent=non;
+}
+
+function filterCards(){
+  const search=document.querySelector('.search-input').value.toLowerCase();
+  const filterP=document.getElementById('filterPoste').value;
+  const filterS=document.getElementById('filterStatus').value;
+  const list=document.getElementById('candList');
+  list.innerHTML='';
+
+  const filtered=candidats.filter(c=>{
+    const matchSearch=!search||(c.nom.toLowerCase().includes(search)||c.poste.toLowerCase().includes(search)||c.courriel.toLowerCase().includes(search));
+    const matchPoste=!filterP||c.poste===filterP;
+    const matchStatus=!filterS||c.status===filterS;
+    return matchSearch&&matchPoste&&matchStatus;
+  });
+
+  if(filtered.length===0){
+    list.innerHTML='<div class="no-cand"><span>🔍</span>'+(candidats.length===0?'Aucune candidature.<br>Cliquez sur « + Ajouter une candidature » pour commencer.':'Aucun résultat pour ces filtres.')+'</div>';
+    return;
+  }
+
+  filtered.forEach(c=>list.appendChild(buildCard(c)));
+}
+
+function buildCard(c){
+  const div=document.createElement('div');
+  div.className=`cand-card ${c.status}`;
+  div.id='card-'+c.id;
+
+  const doneCount=countDoneStages(c);
+  const stagesDots=STAGES.map((s,i)=>{
+    const done=c.stages[s.id]&&c.stages[s.id].done;
+    const isCurrent=!done&&doneCount===i;
+    return `<div class="stage-dot ${done?'done':isCurrent?'current':''}" title="${s.label}">${done?'✓':i+1}</div>`;
+  }).join('');
+
+  div.innerHTML=`
+    <div class="card-header" onclick="toggleCard(${c.id})">
+      <div class="cand-avatar" style="background:${avatarColor(c.poste)};">${posteAvatar(c.poste)}</div>
+      <div class="cand-info">
+        <div class="cand-name">${c.nom||'Nouveau(elle) candidat(e)'}</div>
+        <div class="cand-meta">
+          ${c.tel?`<span>📞 ${c.tel}</span>`:''}
+          ${c.courriel?`<span>✉️ ${c.courriel}</span>`:''}
+          ${c.dateRecu?`<span>📅 Reçu le ${c.dateRecu}</span>`:''}
+          ${c.cv?`<span>📎 ${c.cv}</span>`:''}
+        </div>
+      </div>
+      <span class="poste-badge ${posteClass(c.poste)}">${c.poste}</span>
+      <div class="stages-mini">${stagesDots}</div>
+      <span class="status-badge ${statusClass(c.status)}">${statusLabel(c.status)}</span>
+      <span class="expand-icon">▼</span>
+    </div>
+    <div class="card-body" id="body-${c.id}">
+      <div class="cv-note">📎 <strong>CV reçu :</strong> Notez le nom du fichier CV ou son emplacement pour faciliter le suivi.</div>
+      <div class="cb-grid">
+        <div class="cb-field"><div class="cb-label">Nom complet</div><input class="cb-input" type="text" value="${c.nom}" placeholder="Prénom et nom" onchange="updateField(${c.id},'nom',this.value);rehashCard(${c.id});"></div>
+        <div class="cb-field"><div class="cb-label">Poste convoité</div>
+          <select class="cb-input" onchange="updateField(${c.id},'poste',this.value);rehashCard(${c.id});">
+            ${POSTES.map(p=>`<option ${p===c.poste?'selected':''}>${p}</option>`).join('')}
+          </select>
+        </div>
+        <div class="cb-field"><div class="cb-label">Date de réception du CV</div><input class="cb-input" type="date" value="${c.dateRecu}" onchange="updateField(${c.id},'dateRecu',this.value);rehashCard(${c.id});"></div>
+        <div class="cb-field"><div class="cb-label">Téléphone</div><input class="cb-input" type="text" value="${c.tel}" placeholder="000-000-0000" onchange="updateField(${c.id},'tel',this.value);rehashCard(${c.id});"></div>
+        <div class="cb-field"><div class="cb-label">Courriel</div><input class="cb-input" type="text" value="${c.courriel}" placeholder="email@exemple.com" onchange="updateField(${c.id},'courriel',this.value);rehashCard(${c.id});"></div>
+        <div class="cb-field"><div class="cb-label">Nom du fichier CV</div><input class="cb-input" type="text" value="${c.cv}" placeholder="Ex : CV_NomPrenom.pdf" onchange="updateField(${c.id},'cv',this.value);rehashCard(${c.id});"></div>
+      </div>
+
+      <div class="stages-section">
+        <div class="stages-title">Étapes du processus d'embauche</div>
+        ${STAGES.map(s=>{
+          const st=c.stages[s.id];
+          return `<div class="stage-row ${st.done?'done-row':''} ${st.skip?'skip-row':''}" id="stage-${c.id}-${s.id}">
+            <input type="checkbox" class="stage-cb" ${st.done?'checked':''} ${st.skip?'disabled':''} onchange="toggleStage(${c.id},'${s.id}',this.checked)">
+            <div class="stage-name">${s.label}<small>${s.hint}</small></div>
+            <input type="date" class="stage-date" value="${st.date}" onchange="updateStage(${c.id},'${s.id}','date',this.value)">
+            <textarea class="stage-notes" rows="1" placeholder="Notes, résultat..." onchange="updateStage(${c.id},'${s.id}','notes',this.value)">${st.notes}</textarea>
+            <label class="stage-skip"><input type="checkbox" ${st.skip?'checked':''} onchange="skipStage(${c.id},'${s.id}',this.checked)"> Ignorer</label>
+          </div>`;
+        }).join('')}
+      </div>
+
+      <div class="cb-field" style="margin-top:14px;"><div class="cb-label">Notes générales sur la candidature</div>
+        <textarea class="cb-input" style="min-height:65px;" placeholder="Impressions générales, points forts, points à valider..." onchange="updateField(${c.id},'notes',this.value)">${c.notes}</textarea>
+      </div>
+
+      <div class="cb-field" id="raisonField-${c.id}" style="margin-top:10px;${c.status==='non-retenu'?'':'display:none;'}">
+        <div class="cb-label">Raison du refus</div>
+        <textarea class="cb-input" style="min-height:55px;" placeholder="Expliquez brièvement pourquoi la candidature n'est pas retenue..." onchange="updateField(${c.id},'raisonNon',this.value)">${c.raisonNon}</textarea>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-sm btn-retenu" onclick="setStatus(${c.id},'retenu')">✅ Retenu(e)</button>
+        <button class="btn-sm" style="background:#e3f2fd;color:var(--blue);border:1.5px solid var(--accent);" onclick="setStatus(${c.id},'en-attente')">⏳ En attente</button>
+        <button class="btn-sm btn-embauche" onclick="setStatus(${c.id},'embauche')">🎉 Embauché(e)</button>
+        <button class="btn-sm btn-nonretenu" onclick="setStatusNonRetenu(${c.id})">❌ Non retenu(e)</button>
+        <button class="btn-sm btn-delete" onclick="removeCandidat(${c.id})">🗑️ Supprimer</button>
+      </div>
+    </div>`;
+  return div;
+}
+
+function avatarColor(poste){
+  const map={'Secrétaire dentaire':'#1a6abf','Hygiéniste dentaire':'#1a9e5a','Assistante dentaire':'#8e44ad','Gestionnaire':'#2c3e50','Aide à la stérilisation':'#e67e22','Autre':'#7f8c8d'};
+  return map[poste]||'#0d1b2a';
+}
+
+function toggleCard(id){
+  const card=document.getElementById('card-'+id);
+  card.classList.toggle('open');
+}
+
+function rehashCard(id){
+  const c=candidats.find(x=>x.id===id);
+  if(!c)return;
+  const old=document.getElementById('card-'+id);
+  if(!old)return;
+  const wasOpen=old.classList.contains('open');
+  const newCard=buildCard(c);
+  if(wasOpen) newCard.classList.add('open');
+  old.replaceWith(newCard);
+  updateStats();
+}
+
+function updateField(id,field,val){
+  const c=candidats.find(x=>x.id===id);
+  if(c) c[field]=val;
+  if(field==='status') updateStats();
+}
+
+function toggleStage(id,stageId,checked){
+  const c=candidats.find(x=>x.id===id);
+  if(c&&c.stages[stageId]){
+    c.stages[stageId].done=checked;
+    const row=document.getElementById(`stage-${id}-${stageId}`);
+    if(row) row.className=`stage-row ${checked?'done-row':''}`;
+    // Update dots
+    const card=document.getElementById('card-'+id);
+    if(card){
+      const dots=card.querySelector('.stages-mini');
+      if(dots){
+        const doneCount=countDoneStages(c);
+        dots.innerHTML=STAGES.map((s,i)=>{
+          const done=c.stages[s.id]&&c.stages[s.id].done;
+          const isCurrent=!done&&doneCount===i;
+          return `<div class="stage-dot ${done?'done':isCurrent?'current':''}" title="${s.label}">${done?'✓':i+1}</div>`;
+        }).join('');
+      }
+    }
+  }
+}
+
+function updateStage(id,stageId,field,val){
+  const c=candidats.find(x=>x.id===id);
+  if(c&&c.stages[stageId]) c.stages[stageId][field]=val;
+}
+
+function skipStage(id,stageId,skip){
+  const c=candidats.find(x=>x.id===id);
+  if(c&&c.stages[stageId]){
+    c.stages[stageId].skip=skip;
+    const row=document.getElementById(`stage-${id}-${stageId}`);
+    if(row) row.className=`stage-row ${c.stages[stageId].done?'done-row':''} ${skip?'skip-row':''}`;
+    const cb=row&&row.querySelector('.stage-cb');
+    if(cb) cb.disabled=skip;
+  }
+}
+
+function setStatusNonRetenu(id){
+  const c=candidats.find(x=>x.id===id);
+  if(c){
+    c.status='non-retenu';
+    const wasOpen=document.getElementById('card-'+id)&&document.getElementById('card-'+id).classList.contains('open');
+    const newCard=buildCard(c);
+    if(wasOpen) newCard.classList.add('open');
+    document.getElementById('card-'+id).replaceWith(newCard);
+    // Show raison field
+    const rf=document.getElementById(`raisonField-${id}`);
+    if(rf) rf.style.display='block';
+    updateStats();
+  }
+}
+</script>
+
+
+</body></html>

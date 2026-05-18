@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)file:///C:/Users/info/Downloads/alerte-dernier-item-inventaire.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alerte dernier item — Inventaire | Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:920px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+
+  /* MAIN TABS */
+  .main-tabs{display:flex;background:var(--dark);border-bottom:3px solid var(--accent);}
+  .mt{padding:12px 24px;background:none;border:none;border-bottom:4px solid transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:.84rem;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:-3px;display:flex;align-items:center;gap:7px;}
+  .mt:hover{color:white;background:rgba(255,255,255,.08);}
+  .mt.active{color:white;border-bottom-color:var(--accent);background:rgba(33,150,243,.15);}
+  .mt .badge{background:rgba(255,255,255,.15);border-radius:4px;padding:2px 7px;font-size:.68rem;}
+  .mt.active .badge{background:var(--accent);}
+  .mpane{display:none;}
+  .mpane.active{display:block;}
+
+  /* EMPLOYEE FORM */
+  .form-wrap{padding:24px 30px;}
+  .clinic-bar{padding:10px 30px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:7px 11px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+
+  /* BIG ALERT CARD */
+  .alert-card{background:white;border:2px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:20px;}
+  .ac-title{font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+  .ac-title::before{content:'📦';}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .ff{display:flex;flex-direction:column;gap:4px;}
+  .ff label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select{border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ff input:focus,.ff select:focus{outline:none;border-color:var(--accent);background:white;}
+  .ff input.big{font-size:1.1rem;font-weight:600;padding:11px 13px;}
+  .ff input.big:focus{background:white;}
+  .initiales-input{max-width:100px;font-size:1.1rem;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:3px;}
+  .btn-submit{width:100%;padding:14px;border-radius:9px;background:var(--orange);color:white;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-submit:hover{background:#d35400;}
+  .btn-submit:active{transform:scale(.98);}
+
+  /* SUCCESS FLASH */
+  .success-flash{background:#f0fdf4;border:2px solid var(--green);border-radius:10px;padding:16px 20px;text-align:center;display:none;}
+  .sf-icon{font-size:2rem;margin-bottom:6px;}
+  .sf-title{font-size:1rem;font-weight:700;color:var(--green);margin-bottom:4px;}
+  .sf-sub{font-size:.84rem;color:#5a6a80;}
+  .btn-new{margin-top:14px;padding:9px 22px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;}
+
+  /* INFO NOTE */
+  .info-note{background:#fff8e1;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:11px 15px;font-size:.82rem;color:#7a4400;line-height:1.7;margin-bottom:16px;}
+
+  /* MANAGER VIEW */
+  .mgr-bar{padding:10px 28px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .btn.green{background:var(--green);border-color:var(--green);color:white;}
+
+  /* STATS CHIPS */
+  .stats-chips{display:flex;gap:10px;flex-wrap:wrap;padding:12px 28px;border-bottom:1px solid var(--border);}
+  .sc{display:flex;align-items:center;gap:7px;padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);font-size:.8rem;background:white;}
+  .sc-num{font-weight:700;font-size:.94rem;}
+
+  /* ALERT TABLE */
+  .table-wrap{padding:14px 28px;}
+  .al-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .al-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.7rem;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .al-table th.c{text-align:center;}
+  .al-table td{border-bottom:1px solid var(--border);padding:8px 10px;vertical-align:middle;}
+  .al-table tr:nth-child(even) td{background:#fafbfc;}
+  .al-table tr.done-row td{opacity:.55;}
+  .al-table tr.done-row .prod-name{text-decoration:line-through;}
+  .cat-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.71rem;font-weight:700;}
+  .cb-clin{background:#e3f2fd;color:var(--blue);}
+  .cb-ster{background:#f3e8ff;color:var(--purple);}
+  .cb-bur{background:#fff8e1;color:var(--orange);}
+  .cb-hy{background:#f0fdf4;color:var(--green);}
+  .cb-pp{background:#fef2f2;color:var(--red);}
+  .cb-aut{background:#f4f8ff;color:#5a6a80;}
+  .urgence-badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:.71rem;font-weight:700;background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  .normal-badge{display:inline-block;padding:2px 9px;border-radius:8px;font-size:.71rem;font-weight:700;background:#fff8e1;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .check-badge{font-size:.75rem;padding:2px 8px;border-radius:8px;background:#f0fdf4;color:var(--green);font-weight:700;}
+  .cmd-btn{padding:4px 10px;border-radius:5px;border:1.5px solid var(--border);background:white;font-size:.74rem;font-weight:600;cursor:pointer;font-family:inherit;}
+  .cmd-btn.done{background:var(--green);border-color:var(--green);color:white;}
+  .del-btn{width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .empty-state{text-align:center;padding:40px;color:#8a9ab0;}
+  .empty-state .ei{font-size:2.5rem;margin-bottom:8px;}
+
+  @media print{
+    body{background:white;}.page-header,.main-tabs,.mgr-bar,.del-btn,.cmd-btn,.btn,.btn-submit,.btn-new,.alert-card{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}.mpane{display:block!important;}
+    .al-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .cat-badge,.urgence-badge,.normal-badge,.check-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+  @media(max-width:650px){.form-grid{grid-template-columns:1fr;}.stats-chips{padding:10px 14px;}.table-wrap{padding:10px 12px;}.form-wrap{padding:16px;}}
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Gestion des stocks</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>📦 Alerte — Dernier item inventaire</h1>
+    <p>Signalez quand vous prenez le dernier item d'un produit · Commande automatiquement identifiée</p>
+  </div>
+
+  <div class="main-tabs">
+    <button class="mt active" onclick="showMain(0,this)">📦 Signaler un produit<span class="badge">Employé(e)</span></button>
+    <button class="mt" onclick="showMain(1,this)">📋 Liste des commandes<span class="badge" id="pendingBadge">0</span></button>
+  </div>
+
+  <!-- PANE 0 : EMPLOYEE -->
+  <div class="mpane active" id="mp0">
+    <div class="clinic-bar">
+      <input class="ci" type="text" id="clinicName" placeholder="Clinique Dentaire..." style="min-width:200px;">
+      <span style="font-size:.78rem;color:#8a9ab0;" id="todayLabel">Aujourd'hui : dimanche 17 mai 2026</span>
+    </div>
+    <div class="form-wrap">
+      <div class="info-note">
+        📌 <strong>Vous venez de prendre le dernier article d'un produit?</strong><br>
+        Remplissez ce formulaire pour alerter la gestionnaire. La commande sera ajoutée automatiquement à la liste de réapprovisionnement.
+      </div>
+
+      <div id="formView">
+        <div class="alert-card">
+          <div class="ac-title">Informations du produit</div>
+          <div class="form-grid">
+            <div class="ff" style="grid-column:1/-1;"><label>Nom du produit *</label><input class="big" type="text" id="f_nom" placeholder="Ex: Gants latex taille M, Bavettes bleues..."></div>
+            <div class="ff"><label>Numéro / Code produit</label><input type="text" id="f_code" placeholder="Ex: GL-MED-100, DEN-4892..."></div>
+            <div class="ff"><label>Catégorie</label>
+              <select id="f_cat">
+                <option value="clin">🦷 Clinique / Soins</option>
+                <option value="ster">🧪 Stérilisation</option>
+                <option value="bur">📋 Bureau / Administratif</option>
+                <option value="hy">🧼 Hygiène / Entretien</option>
+                <option value="pp">🛡️ Protection / EPI</option>
+                <option value="aut">📦 Autre</option>
+              </select>
+            </div>
+            <div class="ff"><label>Niveau d'urgence</label>
+              <select id="f_urg">
+                <option value="norm">🟡 Normal — Commander sous peu</option>
+                <option value="urg">🔴 Urgent — Besoin dans 24-48h</option>
+              </select>
+            </div>
+            <div class="ff"><label>Fournisseur habituel (optionnel)</label><input type="text" id="f_fourn" placeholder="Ex: Henry Schein, Patterson..."></div>
+            <div class="ff"><label>Note (optionnel)</label><input type="text" id="f_note" placeholder="Quantité habituelle, référence..."></div>
+            <div class="ff"><label>Date</label><input type="date" id="f_date" readonly="" style="background:#f4f8ff;color:#5a6a80;font-style:italic;"></div>
+            <div class="ff"><label>Vos initiales *</label><input class="initiales-input" type="text" id="f_init" placeholder="EX" maxlength="4"></div>
+          </div>
+        </div>
+        <button class="btn-submit" onclick="submitAlert()">📦 Signaler le dernier item →</button>
+      </div>
+
+      <div class="success-flash" id="successView">
+        <div class="sf-icon">✅</div>
+        <div class="sf-title">Alerte envoyée avec succès!</div>
+        <div class="sf-sub" id="sf_detail"></div>
+        <button class="btn-new" onclick="newAlert()">+ Signaler un autre produit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANE 1 : MANAGER -->
+  <div class="mpane" id="mp1">
+    <div class="mgr-bar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="filterCat" class="ci" style="font-size:.8rem;" onchange="drawManager()">
+          <option value="">Toutes les catégories</option>
+          <option value="clin">🦷 Clinique</option>
+          <option value="ster">🧪 Stérilisation</option>
+          <option value="bur">📋 Bureau</option>
+          <option value="hy">🧼 Hygiène</option>
+          <option value="pp">🛡️ Protection</option>
+          <option value="aut">📦 Autre</option>
+        </select>
+        <select id="filterStatus" class="ci" style="font-size:.8rem;" onchange="drawManager()">
+          <option value="">Tous les statuts</option>
+          <option value="pending">⏳ À commander</option>
+          <option value="done">✅ Commandé</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <button class="btn green" onclick="markAllDone()">✅ Tout marquer commandé</button>
+        <button class="btn" onclick="clearDone()">🗑️ Retirer les commandés</button>
+        <button class="btn primary" onclick="window.print()">🖨️ Imprimer la liste</button>
+      </div>
+    </div>
+
+    <div class="stats-chips" id="statsChips">
+    <div class="sc"><span style="font-size:.9rem;">📦</span><span class="sc-num">0</span><span style="color:#5a6a80;">signalement(s) total</span></div>
+    <div class="sc"><span style="font-size:.9rem;">⏳</span><span class="sc-num" style="color:var(--orange);">0</span><span style="color:#5a6a80;">à commander</span></div>
+    <div class="sc"><span style="font-size:.9rem;">🔴</span><span class="sc-num" style="color:var(--red);">0</span><span style="color:#5a6a80;">urgent(s)</span></div>
+    <div class="sc"><span style="font-size:.9rem;">✅</span><span class="sc-num" style="color:var(--green);">0</span><span style="color:#5a6a80;">commandé(s)</span></div></div>
+
+    <div class="table-wrap">
+      <table class="al-table">
+        <thead><tr>
+          <th>Date</th>
+          <th>Produit</th>
+          <th class="c">Code</th>
+          <th class="c">Catégorie</th>
+          <th>Fournisseur</th>
+          <th class="c">Urgence</th>
+          <th>Note</th>
+          <th class="c">Initiales</th>
+          <th class="c">Commandé</th>
+          <th class="c no-print"></th>
+        </tr></thead>
+        <tbody id="alertBody"></tbody>
+      </table>
+      <div class="empty-state" id="alertEmpty" style="display:none;">
+        <div class="ei">📦</div>
+        <div>Aucune alerte pour le moment.<br>Les signalements des employé(e)s apparaîtront ici.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+document.getElementById('todayLabel').textContent = 'Aujourd\'hui : ' + TODAY.toLocaleDateString('fr-CA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+document.getElementById('f_date').valueAsDate = TODAY;
+
+let alerts = [];
+let alertId = 1;
+
+const CAT_INFO = {
+  clin:{label:'🦷 Clinique',cls:'cb-clin'},
+  ster:{label:'🧪 Stérilisation',cls:'cb-ster'},
+  bur:{label:'📋 Bureau',cls:'cb-bur'},
+  hy:{label:'🧼 Hygiène',cls:'cb-hy'},
+  pp:{label:'🛡️ Protection',cls:'cb-pp'},
+  aut:{label:'📦 Autre',cls:'cb-aut'},
+};
+
+function submitAlert() {
+  const nom = document.getElementById('f_nom').value.trim();
+  const init = document.getElementById('f_init').value.trim();
+  if (!nom) { alert('Veuillez indiquer le nom du produit.'); document.getElementById('f_nom').focus(); return; }
+  if (!init) { alert('Veuillez entrer vos initiales.'); document.getElementById('f_init').focus(); return; }
+
+  const entry = {
+    id: alertId++,
+    date: document.getElementById('f_date').value,
+    nom,
+    code: document.getElementById('f_code').value.trim(),
+    cat: document.getElementById('f_cat').value,
+    urg: document.getElementById('f_urg').value,
+    fourn: document.getElementById('f_fourn').value.trim(),
+    note: document.getElementById('f_note').value.trim(),
+    init: init.toUpperCase(),
+    done: false,
+    doneDate: null,
+  };
+  alerts.push(entry);
+
+  document.getElementById('formView').style.display = 'none';
+  const sf = document.getElementById('successView');
+  sf.style.display = 'block';
+  document.getElementById('sf_detail').innerHTML = `<strong>${nom}</strong>${entry.code?' ('+entry.code+')':''} a été ajouté à la liste de commande.<br>Initiales : <strong>${entry.init}</strong> · ${new Date(entry.date+'T00:00:00').toLocaleDateString('fr-CA',{day:'numeric',month:'long'})}`;
+
+  updatePendingBadge();
+  drawManager();
+}
+
+function newAlert() {
+  document.getElementById('f_nom').value='';
+  document.getElementById('f_code').value='';
+  document.getElementById('f_cat').value='clin';
+  document.getElementById('f_urg').value='norm';
+  document.getElementById('f_fourn').value='';
+  document.getElementById('f_note').value='';
+  document.getElementById('f_init').value='';
+  document.getElementById('f_date').valueAsDate=TODAY;
+  document.getElementById('formView').style.display='block';
+  document.getElementById('successView').style.display='none';
+}
+
+function drawManager() {
+  const catF = document.getElementById('filterCat').value;
+  const statF = document.getElementById('filterStatus').value;
+  let data = [...alerts].sort((a,b)=>{
+    if(a.done!==b.done) return a.done?1:-1;
+    if(a.urg!==b.urg) return a.urg==='urg'?-1:1;
+    return b.date.localeCompare(a.date);
+  });
+  if(catF) data=data.filter(a=>a.cat===catF);
+  if(statF==='pending') data=data.filter(a=>!a.done);
+  if(statF==='done') data=data.filter(a=>a.done);
+
+  const tbody = document.getElementById('alertBody');
+  const empty = document.getElementById('alertEmpty');
+  if(!data.length){tbody.innerHTML='';empty.style.display='block';drawStats();return;}
+  empty.style.display='none';
+
+  tbody.innerHTML = data.map(a=>{
+    const d=new Date(a.date+'T00:00:00');
+    const ci=CAT_INFO[a.cat]||CAT_INFO.aut;
+    const urgBadge=a.urg==='urg'?'<span class="urgence-badge">🔴 Urgent</span>':'<span class="normal-badge">🟡 Normal</span>';
+    return `<tr class="${a.done?'done-row':''}">
+      <td style="font-size:.79rem;white-space:nowrap;">${d.toLocaleDateString('fr-CA',{day:'numeric',month:'short'})}</td>
+      <td><div class="prod-name" style="font-weight:700;font-size:.83rem;">${a.nom}</div></td>
+      <td class="c" style="font-size:.78rem;color:#5a6a80;font-family:monospace;">${a.code||'—'}</td>
+      <td class="c"><span class="cat-badge ${ci.cls}">${ci.label}</span></td>
+      <td style="font-size:.79rem;color:#5a6a80;">${a.fourn||'—'}</td>
+      <td class="c">${urgBadge}</td>
+      <td style="font-size:.78rem;color:#5a6a80;">${a.note||'—'}</td>
+      <td class="c" style="font-weight:700;font-size:.84rem;letter-spacing:2px;">${a.init}</td>
+      <td class="c">
+        ${a.done
+          ? `<span class="check-badge">✅ ${a.doneDate?new Date(a.doneDate+'T00:00:00').toLocaleDateString('fr-CA',{day:'numeric',month:'short'}):''}</span>`
+          : `<button class="cmd-btn" onclick="markDone(${a.id})">Marquer commandé</button>`
+        }
+      </td>
+      <td class="c no-print"><button class="del-btn" onclick="delAlert(${a.id})">×</button></td>
+    </tr>`;
+  }).join('');
+  drawStats();
+}
+
+function drawStats() {
+  const total=alerts.length;
+  const pending=alerts.filter(a=>!a.done).length;
+  const urgent=alerts.filter(a=>!a.done&&a.urg==='urg').length;
+  document.getElementById('statsChips').innerHTML=`
+    <div class="sc"><span style="font-size:.9rem;">📦</span><span class="sc-num">${total}</span><span style="color:#5a6a80;">signalement(s) total</span></div>
+    <div class="sc"><span style="font-size:.9rem;">⏳</span><span class="sc-num" style="color:var(--orange);">${pending}</span><span style="color:#5a6a80;">à commander</span></div>
+    <div class="sc"><span style="font-size:.9rem;">🔴</span><span class="sc-num" style="color:var(--red);">${urgent}</span><span style="color:#5a6a80;">urgent(s)</span></div>
+    <div class="sc"><span style="font-size:.9rem;">✅</span><span class="sc-num" style="color:var(--green);">${alerts.filter(a=>a.done).length}</span><span style="color:#5a6a80;">commandé(s)</span></div>`;
+  updatePendingBadge();
+}
+
+function markDone(id) {
+  const a=alerts.find(a=>a.id===id);
+  if(a){a.done=true;a.doneDate=TODAY.toISOString().split('T')[0];}
+  drawManager();
+}
+
+function markAllDone() {
+  alerts.filter(a=>!a.done).forEach(a=>{a.done=true;a.doneDate=TODAY.toISOString().split('T')[0];});
+  drawManager();
+}
+
+function delAlert(id) {
+  alerts=alerts.filter(a=>a.id!==id);
+  drawManager();
+}
+
+function clearDone() {
+  if(!confirm('Retirer tous les articles déjà commandés de la liste?')) return;
+  alerts=alerts.filter(a=>!a.done);
+  drawManager();
+}
+
+function updatePendingBadge() {
+  document.getElementById('pendingBadge').textContent=alerts.filter(a=>!a.done).length;
+}
+
+function showMain(n,btn) {
+  document.querySelectorAll('.mpane').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.mt').forEach((b,i)=>b.classList.toggle('active',i===n));
+  if(n===1) drawManager();
+}
+
+drawStats();
+</script>
+
+
+</body></html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/info/Downloads/lexique-dentaire.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lexique dentaire — Académie Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1100px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+
+  /* SEARCH BAR */
+  .search-bar{padding:14px 28px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .search-input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:9px 16px;font-size:.92rem;font-family:inherit;color:var(--text);background:white;min-width:200px;}
+  .search-input:focus{outline:none;border-color:var(--accent);}
+  .cat-filter{border:1.5px solid var(--border);border-radius:6px;padding:7px 11px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;cursor:pointer;}
+  .cat-filter:focus{outline:none;border-color:var(--accent);}
+  .search-count{font-size:.78rem;color:#8a9ab0;white-space:nowrap;}
+
+  /* ALPHABET NAV */
+  .alpha-nav{padding:8px 28px;background:white;border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:4px;}
+  .alpha-btn{width:26px;height:26px;border-radius:5px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.73rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .12s;display:flex;align-items:center;justify-content:center;}
+  .alpha-btn:hover{border-color:var(--accent);color:var(--blue);}
+  .alpha-btn.active{background:var(--blue);border-color:var(--blue);color:white;}
+  .alpha-btn.disabled{opacity:.25;cursor:default;}
+
+  /* TERMS GRID */
+  .terms-wrap{padding:18px 28px;}
+  .letter-section{margin-bottom:18px;}
+  .letter-header{font-size:1.4rem;font-weight:700;color:var(--blue);border-bottom:2px solid var(--accent);padding-bottom:4px;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+  .letter-count{font-size:.75rem;color:#8a9ab0;font-weight:400;}
+  .terms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px;}
+  .term-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:12px 14px;transition:box-shadow .15s,border-color .15s;}
+  .term-card:hover{box-shadow:0 2px 12px rgba(26,106,191,.12);border-color:var(--accent);}
+  .term-header{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+  .term-name{font-size:.92rem;font-weight:700;color:var(--dark);flex:1;}
+  .term-en{font-size:.72rem;color:#8a9ab0;font-style:italic;margin-top:2px;}
+  .cat-badge{font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:8px;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .term-def{font-size:.81rem;color:#4a5a6a;line-height:1.6;}
+  .term-tip{margin-top:7px;padding:6px 9px;background:var(--light);border-radius:5px;font-size:.76rem;color:#5a6a80;border-left:2px solid var(--accent);}
+  .term-tip::before{content:'💡 '}
+
+  /* EMPTY */
+  .empty-state{text-align:center;padding:40px;color:#8a9ab0;}
+  .empty-state .es-icon{font-size:2.5rem;margin-bottom:8px;}
+
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+  @media print{body{background:white;}.page-header,.search-bar,.alpha-nav{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.cat-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.terms-wrap{padding:10px;}}
+  @media(max-width:700px){.terms-grid{grid-template-columns:1fr;}.terms-wrap{padding:12px 14px;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Académie — Formation secrétaire dentaire</div></div>
+<div class="container">
+  <div class="doc-header"><h1>📖 Lexique dentaire</h1><p>Terminologie essentielle pour la secrétaire dentaire — Académie Gestion Mel</p></div>
+
+  <div class="search-bar">
+    <input class="search-input" type="text" id="searchInput" placeholder="🔍 Rechercher un terme..." oninput="filterTerms()">
+    <select class="cat-filter" id="catFilter" onchange="filterTerms()">
+      <option value="">Toutes les catégories</option>
+      <option value="anatomie">🦷 Anatomie</option>
+      <option value="traitements">🔧 Traitements</option>
+      <option value="admin">📋 Administratif</option>
+      <option value="radio">📷 Radiographie</option>
+      <option value="materiau">🧪 Matériaux</option>
+      <option value="speciaux">⭐ Spécialités</option>
+    </select>
+    <span class="search-count" id="countDisplay">59 terme(s)</span>
+  </div>
+
+  <div class="alpha-nav" id="alphaNav"><button class="alpha-btn active" onclick="setAlpha(&#39;&#39;)">Tous</button><button class="alpha-btn  " onclick="setAlpha(&#39;A&#39;)">A</button><button class="alpha-btn  " onclick="setAlpha(&#39;B&#39;)">B</button><button class="alpha-btn  " onclick="setAlpha(&#39;C&#39;)">C</button><button class="alpha-btn  " onclick="setAlpha(&#39;D&#39;)">D</button><button class="alpha-btn  " onclick="setAlpha(&#39;E&#39;)">E</button><button class="alpha-btn  " onclick="setAlpha(&#39;F&#39;)">F</button><button class="alpha-btn  " onclick="setAlpha(&#39;G&#39;)">G</button><button class="alpha-btn  disabled" onclick="">H</button><button class="alpha-btn  " onclick="setAlpha(&#39;I&#39;)">I</button><button class="alpha-btn  disabled" onclick="">J</button><button class="alpha-btn  disabled" onclick="">K</button><button class="alpha-btn  " onclick="setAlpha(&#39;L&#39;)">L</button><button class="alpha-btn  " onclick="setAlpha(&#39;M&#39;)">M</button><button class="alpha-btn  " onclick="setAlpha(&#39;N&#39;)">N</button><button class="alpha-btn  " onclick="setAlpha(&#39;O&#39;)">O</button><button class="alpha-btn  " onclick="setAlpha(&#39;P&#39;)">P</button><button class="alpha-btn  disabled" onclick="">Q</button><button class="alpha-btn  " onclick="setAlpha(&#39;R&#39;)">R</button><button class="alpha-btn  " onclick="setAlpha(&#39;S&#39;)">S</button><button class="alpha-btn  " onclick="setAlpha(&#39;T&#39;)">T</button><button class="alpha-btn  " onclick="setAlpha(&#39;U&#39;)">U</button><button class="alpha-btn  " onclick="setAlpha(&#39;V&#39;)">V</button><button class="alpha-btn  disabled" onclick="">W</button><button class="alpha-btn  disabled" onclick="">X</button><button class="alpha-btn  disabled" onclick="">Y</button><button class="alpha-btn  " onclick="setAlpha(&#39;Z&#39;)">Z</button></div>
+  <div class="terms-wrap" id="termsWrap"><div class="letter-section" id="letter_A">
+      <div class="letter-header">A <span class="letter-count">5 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">ACDQ</div><div class="term-en">EN: ACDQ</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Association des chirurgiens-dentistes du Québec. Organisme regroupant les dentistes du Québec, qui publie la nomenclature des actes et les honoraires de référence.</div>
+          <div class="term-tip">La nomenclature ACDQ est le guide de facturation de référence en dentisterie au Québec.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Alvéole</div><div class="term-en">EN: Alveolar socket</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Cavité osseuse dans laquelle la racine de la dent est enchâssée. Après une extraction, l'alvéole se comble progressivement par du tissu osseux.</div>
+          <div class="term-tip">Important lors des extractions — l'alvéole doit se refermer normalement en quelques semaines.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Amalgame</div><div class="term-en">EN: Amalgam</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Restauration dentaire métallique composée d'un alliage contenant du mercure. Très résistant et durable, utilisé principalement sur les dents postérieures. Son usage diminue au profit des composites.</div>
+          <div class="term-tip">Certains patients demandent le retrait de leur amalgame — orienter vers le dentiste.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Apex</div><div class="term-en">EN: Apex</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Extrémité de la racine d'une dent. Lors d'un traitement de canal, le dentiste atteint l'apex pour désinfecter jusqu'au bout de la racine.</div>
+          <div class="term-tip">On parle de «traitement jusqu'à l'apex» lors des endodontie — termes à connaître pour la facturation.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Assurance dentaire</div><div class="term-en">EN: Dental insurance</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Régime privé ou collectif qui rembourse tout ou partie des soins dentaires. Le patient paie sa partie (coassurance) et l'assureur rembourse le reste selon le plan.</div>
+          <div class="term-tip">Toujours vérifier les maximums annuels et les fréquences de remboursement avant de planifier les traitements.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_B">
+      <div class="letter-header">B <span class="letter-count">3 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Bite-wing (BW)</div><div class="term-en">EN: Bitewing X-ray</div></div>
+            <span class="cat-badge" style="background:#f3e8ff;color:#8e44ad;">📷 Radio</span>
+          </div>
+          <div class="term-def">Radiographie intra-orale montrant les couronnes des dents du haut et du bas côte à côte, permettant de détecter les caries interproximales et la perte osseuse.</div>
+          <div class="term-tip">Généralement prescrit en série de 2 ou 4 — code de facturation séparé.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Blanchiment dentaire</div><div class="term-en">EN: Teeth whitening</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Traitement cosmétique visant à éclaircir la teinte des dents grâce à des agents à base de peroxyde d'hydrogène ou de carbamide. Peut être effectué en cabinet ou à domicile.</div>
+          <div class="term-tip">Service populaire — code de facturation différent selon le type (cabinet vs à domicile).</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Bridge (pont dentaire)</div><div class="term-en">EN: Fixed bridge</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Prothèse fixe remplaçant une ou plusieurs dents manquantes, ancrée sur les dents adjacentes (piliers). Cementé en permanence et non amovible.</div>
+          <div class="term-tip">Facturation selon le nombre d'unités (piliers + pontiques) — vérifier avec le dentiste.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_C">
+      <div class="letter-header">C <span class="letter-count">11 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Canine</div><div class="term-en">EN: Canine</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Dent pointue situated à la 3e position dans chaque quadrant. Numérotée #13, #23, #33, #43.</div>
+          <div class="term-tip">Connaître la numérotation des dents est essentiel pour la facturation.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Carie</div><div class="term-en">EN: Cavity / Caries</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Terme médical pour désigner une carie dentaire, causée par des bactéries qui produisent des acides détruisant l'émail et la dentine.</div>
+          <div class="term-tip">Les patients disent souvent «j'ai un trou» — c'est une carie! Toujours inscrire «carie» au dossier.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Cément</div><div class="term-en">EN: Cementum</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Tissu calcifié fin qui recouvre la racine de la dent et assure l'attache des fibres du ligament parodontal.</div>
+          <div class="term-tip">Terme utilisé lors de discussions sur les maladies parodontales.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Céphalométrique (céphalo)</div><div class="term-en">EN: Cephalometric X-ray</div></div>
+            <span class="cat-badge" style="background:#f3e8ff;color:#8e44ad;">📷 Radio</span>
+          </div>
+          <div class="term-def">Radiographie latérale du crâne utilisée en orthodontie pour analyser les relations squelettiques et dentaires.</div>
+          <div class="term-tip">Surtout utilisé par les orthodontistes — peut être référé.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Céramique (porcelaine)</div><div class="term-en">EN: Ceramic/Porcelain</div></div>
+            <span class="cat-badge" style="background:#fef2f2;color:#c0392b;">🧪 Matériau</span>
+          </div>
+          <div class="term-def">Matériau esthétique utilisé pour les couronnes, facettes et bridges. Mimique parfaite de l'apparence naturelle des dents. Excellent résultat esthétique.</div>
+          <div class="term-tip">Option premium souvent souhaitée par les patients pour les dents visibles.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Coassurance</div><div class="term-en">EN: Co-insurance</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Pourcentage que le patient paie lui-même après la franchise. Exemple : si le plan couvre 80%, le patient paie 20% (la coassurance).</div>
+          <div class="term-tip">Bien expliquer la différence entre franchise (montant fixe) et coassurance (pourcentage).</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Composite</div><div class="term-en">EN: Composite resin</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Résine esthétique de couleur naturelle utilisée pour les restaurations. Collée directement à la dent. Teinte s'approchant des dents naturelles.</div>
+          <div class="term-tip">Le composite est classifié selon le nombre de surfaces restaurées (1, 2, 3, 4, 5 surfaces) pour la facturation.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Coordonnées des bénéfices</div><div class="term-en">EN: Coordination of benefits</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Procédure pour les patients qui ont deux assurances. Le remboursement de la première est complété par la seconde. L'assureur du patient est primaire; celui du conjoint est secondaire.</div>
+          <div class="term-tip">La 1re assurance paie d'abord; la 2e complète. Le total ne peut pas dépasser le coût réel des soins.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Couronne (prothétique)</div><div class="term-en">EN: Crown</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Restauration qui recouvre entièrement la couronne d'une dent endommagée ou traitée. Peut être en zircone, céramique, métal-céramique ou or.</div>
+          <div class="term-tip">Souvent précédée d'un traitement de canal — planifier 2 à 3 rendez-vous.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Couronne clinique</div><div class="term-en">EN: Clinical crown</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Partie visible de la dent au-dessus de la ligne gingivale. La couronne anatomique comprend aussi la partie recouverte de gencive.</div>
+          <div class="term-tip">À distinguer de la couronne prothétique (restauration).</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Curetage</div><div class="term-en">EN: Scaling and root planing</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Traitement parodontal profond effectué par l'hygiéniste ou le dentiste pour retirer le tartre sous-gingival et aplanir les surfaces radiculaires.</div>
+          <div class="term-tip">Facturation par sextant ou par quadrant — durée plus longue qu'un nettoyage de routine.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_D">
+      <div class="letter-header">D <span class="letter-count">3 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Dentine</div><div class="term-en">EN: Dentin</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Tissu dur calcifié qui constitue la majeure partie de la dent, sous l'émail. Plus mou que l'émail, il contient de petits canaux (tubules dentinaires).</div>
+          <div class="term-tip">Exposée lors de caries profondes — les patients ressentent une sensibilité.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Détartrage</div><div class="term-en">EN: Scaling</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Retrait du tartre (calcul dentaire) et de la plaque accumulés sur les dents à l'aide d'instruments ultrasoniques et manuels.</div>
+          <div class="term-tip">Code de facturation différent selon la profondeur et la complexité (routine vs curetage).</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Devis (estimé)</div><div class="term-en">EN: Treatment estimate</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Document fourni au patient et à son assurance estimant le coût des traitements proposés avant leur réalisation. Permet à l'assurance de prédéterminer le remboursement.</div>
+          <div class="term-tip">Envoyer le devis à l'assurance AVANT le traitement pour éviter les surprises de remboursement.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_E">
+      <div class="letter-header">E <span class="letter-count">5 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Email</div><div class="term-en">EN: Enamel</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Tissu le plus dur du corps humain qui recouvre la couronne de la dent. Blanc nacré, il protège la dentine et la pulpe.</div>
+          <div class="term-tip">Ne se régénère pas — d'où l'importance des soins préventifs à expliquer aux patients.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Endodontie (traitement de canal)</div><div class="term-en">EN: Root canal treatment</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Traitement visant à retirer la pulpe infectée d'une dent, à nettoyer et désinfecter les canaux radiculaires, puis à les obturer (obturation).</div>
+          <div class="term-tip">Plusieurs rendez-vous peuvent être nécessaires. Souvent suivi d'une couronne.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Endodontiste</div><div class="term-en">EN: Endodontist</div></div>
+            <span class="cat-badge" style="background:#e8f4fe;color:#0277bd;">⭐ Spécialité</span>
+          </div>
+          <div class="term-def">Dentiste spécialisé dans les traitements de l'intérieur de la dent (pulpe, canaux). Traite les cas complexes de traitement de canal.</div>
+          <div class="term-tip">Les cas difficiles peuvent être référés à un endodontiste — important de bien expliquer au patient.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Examen dentaire</div><div class="term-en">EN: Dental exam</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Évaluation complète de la santé bucco-dentaire par le dentiste. Comprend examen visuel, sondage parodontal, radiographies et évaluation de la muqueuse.</div>
+          <div class="term-tip">Code 01100 — examen complet. Code 01200 — examen limité/urgence.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Extraction</div><div class="term-en">EN: Extraction</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Retrait complet d'une dent de son alvéole. Simple (sans chirurgie) ou chirurgicale (nécessite incision et sutures).</div>
+          <div class="term-tip">Différence de facturation importante entre extraction simple et chirurgicale.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_F">
+      <div class="letter-header">F <span class="letter-count">2 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Fluoration</div><div class="term-en">EN: Fluoride treatment</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Application topique de fluorure pour renforcer l'émail et prévenir les caries. Peut être en gel, vernis ou mousse.</div>
+          <div class="term-tip">Recommandé particulièrement pour les enfants et les patients à risque élevé de caries.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Franchise</div><div class="term-en">EN: Deductible</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Montant fixe que le patient doit payer de sa poche avant que son assurance commence à rembourser. Ex: franchise annuelle de 50 $.</div>
+          <div class="term-tip">La franchise est souvent annuelle. Demander si déjà atteinte pour l'année courante.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_G">
+      <div class="letter-header">G <span class="letter-count">1 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Gingivale (gencive)</div><div class="term-en">EN: Gingiva</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Tissu mou rosé qui entoure et protège les dents et l'os alvéolaire. Une gencive saine est ferme, rose pâle et ne saigne pas.</div>
+          <div class="term-tip">Les patients posent souvent des questions sur les saignements des gencives — orienter vers l'hygiéniste.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_I">
+      <div class="letter-header">I <span class="letter-count">3 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Implant dentaire</div><div class="term-en">EN: Dental implant</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Vis en titane insérée chirurgicalement dans l'os maxillaire ou mandibulaire pour remplacer la racine d'une dent manquante, sur laquelle on fixe une couronne.</div>
+          <div class="term-tip">Processus en plusieurs étapes (chirurgie, cicatrisation 3-6 mois, couronne) — planification complexe.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Incisive</div><div class="term-en">EN: Incisor</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Dents plates situées à l'avant de la bouche pour couper les aliments. Les incisives centrales sont #11, #21, #31, #41 et les latérales #12, #22, #32, #42.</div>
+          <div class="term-tip">Souvent impliquées dans les traumatismes — fracturer une incisive = urgence esthétique.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Inlay / Onlay</div><div class="term-en">EN: Inlay/Onlay</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Restauration indirecte fabriquée en laboratoire en céramique ou composite. L'inlay est à l'intérieur des cuspides, l'onlay recouvre une ou plusieurs cuspides.</div>
+          <div class="term-tip">Différents codes de facturation selon le type (inlay vs onlay) et le matériau.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_L">
+      <div class="letter-header">L <span class="letter-count">1 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Ligament parodontal</div><div class="term-en">EN: Periodontal ligament</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Tissu fibreux reliant la racine dentaire à l'os alvéolaire, permettant de légers mouvements de la dent.</div>
+          <div class="term-tip">Détruit lors de maladies parodontales avancées, causant la mobilité des dents.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_M">
+      <div class="letter-header">M <span class="letter-count">1 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Molaire</div><div class="term-en">EN: Molar</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Grosses dents à l'arrière de la bouche pour mâcher. Premières molaires #16, #26, #36, #46. Deuxièmes molaires #17, #27, #37, #47. Troisièmes molaires (dents de sagesse) #18, #28, #38, #48.</div>
+          <div class="term-tip">Les dents de sagesse sont souvent extractees — savoir expliquer la procédure aux patients.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_N">
+      <div class="letter-header">N <span class="letter-count">2 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Nettoyage prophylactique</div><div class="term-en">EN: Prophylaxis</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Nettoyage professionnel préventif des dents par l'hygiéniste, comprenant détartrage, polissage et soins préventifs. Recommandé 1 à 2 fois par an.</div>
+          <div class="term-tip">Code 11101 (enfant) et 11111 (adulte) dans la nomenclature ACDQ.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Numérotation FDI</div><div class="term-en">EN: FDI notation</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Système international de numérotation des dents. Premier chiffre = quadrant (1=sup. droit, 2=sup. gauche, 3=inf. gauche, 4=inf. droit). Deuxième chiffre = position (1=centrale à 8=dent de sagesse).</div>
+          <div class="term-tip">La numérotation FDI est la plus utilisée en clinique dentaire québécoise — à maîtriser absolument!</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_O">
+      <div class="letter-header">O <span class="letter-count">2 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Obturation (plombage)</div><div class="term-en">EN: Filling</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Restauration d'une dent cariée ou fracturée. Peut être en composite (blanc), amalgame (gris) ou verre ionomère. Le mot «plombage» est populaire mais inexact.</div>
+          <div class="term-tip">Facturation selon le matériau et le nombre de surfaces : 1 surface = code différent de 5 surfaces.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Orthodontie / Orthodontiste</div><div class="term-en">EN: Orthodontics</div></div>
+            <span class="cat-badge" style="background:#e8f4fe;color:#0277bd;">⭐ Spécialité</span>
+          </div>
+          <div class="term-def">Spécialité dentaire traitant les malpositions dentaires et les malocclusions à l'aide d'appareils (broches, aligneurs invisibles). L'orthodontiste est le spécialiste.</div>
+          <div class="term-tip">Les assurances orthodontiques ont souvent un maximum à vie différent du maximum dentaire général.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_P">
+      <div class="letter-header">P <span class="letter-count">11 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Panoramique (pan-x)</div><div class="term-en">EN: Panoramic X-ray</div></div>
+            <span class="cat-badge" style="background:#f3e8ff;color:#8e44ad;">📷 Radio</span>
+          </div>
+          <div class="term-def">Radiographie extraorale montrant l'ensemble des dents, des mâchoires, des articulations temporo-mandibulaires et des sinus en une seule image.</div>
+          <div class="term-tip">Code 02910 — recommandée aux 5 ans environ pour les adultes.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Parodonte</div><div class="term-en">EN: Periodontium</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Ensemble des tissus de soutien de la dent : gencive, ligament parodontal, cément et os alvéolaire.</div>
+          <div class="term-tip">La parodontite est une infection du parodonte — les soins parodontaux sont facturés séparément.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Parodontiste</div><div class="term-en">EN: Periodontist</div></div>
+            <span class="cat-badge" style="background:#e8f4fe;color:#0277bd;">⭐ Spécialité</span>
+          </div>
+          <div class="term-def">Dentiste spécialisé dans le traitement des maladies parodontales (gencives et os). Traite les cas avancés de gingivite et parodontite, et pose des implants.</div>
+          <div class="term-tip">Référence nécessaire pour les cas de parodontite avancée — important de documenter au dossier.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Pédodontiste</div><div class="term-en">EN: Pediatric dentist</div></div>
+            <span class="cat-badge" style="background:#e8f4fe;color:#0277bd;">⭐ Spécialité</span>
+          </div>
+          <div class="term-def">Dentiste spécialisé dans les soins aux enfants, incluant les dents de lait (décidues) et la transition vers les dents permanentes.</div>
+          <div class="term-tip">Les cas d'anxiété sévère ou de besoins spéciaux chez l'enfant sont souvent référés en pédodontie.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Periapicale (PA)</div><div class="term-en">EN: Periapical X-ray</div></div>
+            <span class="cat-badge" style="background:#f3e8ff;color:#8e44ad;">📷 Radio</span>
+          </div>
+          <div class="term-def">Petite radiographie intra-orale montrant une ou deux dents en entier, de la couronne jusqu'à la pointe de la racine et l'os environnant.</div>
+          <div class="term-tip">Code varie selon le nombre de radiographies prises — important de bien comptabiliser.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Plan de traitement</div><div class="term-en">EN: Treatment plan</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Document préparé par le dentiste détaillant les soins recommandés, leur ordre de priorité, les coûts estimés et les alternatives thérapeutiques.</div>
+          <div class="term-tip">La secrétaire présente souvent le plan de traitement et les coûts — être préparée aux questions.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Prédétermination</div><div class="term-en">EN: Predetermination</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Demande envoyée à l'assurance AVANT d'effectuer les traitements pour obtenir une confirmation écrite du remboursement prévu.</div>
+          <div class="term-tip">Recommandée pour tous les traitements importants (couronnes, bridges, implants) +300 $.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Prémolaire</div><div class="term-en">EN: Premolar</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Dents entre canines et molaires. Premières prémolaires #14, #24, #34, #44. Deuxièmes prémolaires #15, #25, #35, #45.</div>
+          <div class="term-tip">Souvent impliquées dans les plans de traitement avec bridges ou prothèses.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Prothèse amovible</div><div class="term-en">EN: Removable denture</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Prothèse dentaire que le patient retire pour le nettoyage. Peut être complète (toutes les dents manquantes) ou partielle (quelques dents manquantes).</div>
+          <div class="term-tip">Le dentiste prend des empreintes, envoie au laboratoire — délai de 2 à 4 semaines généralement.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Prothésiste dentaire</div><div class="term-en">EN: Dental prosthetist</div></div>
+            <span class="cat-badge" style="background:#e8f4fe;color:#0277bd;">⭐ Spécialité</span>
+          </div>
+          <div class="term-def">Professionnel qui fabrique les prothèses dentaires amovibles (dentiers) et les appareils buccaux en laboratoire.</div>
+          <div class="term-tip">À distinguer du chirurgien-dentiste — le prothésiste ne traite pas les patients directement en clinique.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Pulpe</div><div class="term-en">EN: Pulp</div></div>
+            <span class="cat-badge" style="background:#e3f2fd;color:#1a6abf;">🦷 Anatomie</span>
+          </div>
+          <div class="term-def">Tissu mou central de la dent contenant les nerfs et vaisseaux sanguins. Lorsqu'infectée, elle nécessite un traitement de canal.</div>
+          <div class="term-tip">«Le nerf est atteint» = la pulpe est infectée = traitement endodontique requis.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_R">
+      <div class="letter-header">R <span class="letter-count">2 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">RAMQ</div><div class="term-en">EN: RAMQ</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Régie de l'assurance maladie du Québec. Gère l'assurance maladie publique. En dentisterie, couvre certains soins pour enfants jusqu'à 10 ans et personnes assistées sociales.</div>
+          <div class="term-tip">Vérifier l'admissibilité RAMQ pour chaque patient — numéro de pratique du dentiste requis.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Rappel (hygiène)</div><div class="term-en">EN: Recall</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Convocation périodique du patient pour son nettoyage et son examen de contrôle. Fréquence recommandée : tous les 6 mois, ou plus souvent selon le risque parodontal.</div>
+          <div class="term-tip">La gestion des rappels est une tâche clé de la secrétaire aux rappels — liste toujours à jour.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_S">
+      <div class="letter-header">S <span class="letter-count">3 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Scellant</div><div class="term-en">EN: Sealant</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Résine liquide appliquée dans les sillons des molaires pour prévenir les caries. Procédure simple et rapide, surtout pour les enfants.</div>
+          <div class="term-tip">Code de facturation spécifique par dent — souvent couvert par les assurances pour les enfants.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Stomatologiste</div><div class="term-en">EN: Oral medicine specialist</div></div>
+            <span class="cat-badge" style="background:#e8f4fe;color:#0277bd;">⭐ Spécialité</span>
+          </div>
+          <div class="term-def">Dentiste spécialisé dans les maladies de la muqueuse buccale et les affections orales. Diagnostic et traitement des lésions et pathologies buccales.</div>
+          <div class="term-tip">Référence pour les lésions buccales suspectes — important de ne pas tarder dans ces cas.</div>
+        </div><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Surfaçage radiculaire</div><div class="term-en">EN: Root planing</div></div>
+            <span class="cat-badge" style="background:#f0fdf4;color:#1a9e5a;">🔧 Traitement</span>
+          </div>
+          <div class="term-def">Traitement parodontal approfondi qui consiste à aplanir les surfaces radiculaires pour éliminer le biofilm bactérien et favoriser la guérison des tissus.</div>
+          <div class="term-tip">Effectué sous anesthésie locale — prévenir le patient du temps requis et des suites.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_T">
+      <div class="letter-header">T <span class="letter-count">1 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Tomographie (CBCT)</div><div class="term-en">EN: Cone-beam CT</div></div>
+            <span class="cat-badge" style="background:#f3e8ff;color:#8e44ad;">📷 Radio</span>
+          </div>
+          <div class="term-def">Imagerie 3D en faisceau conique permettant une visualisation tridimensionnelle des structures dentaires et osseuses. Utilisé pour les implants, endodontie complexe, chirurgie.</div>
+          <div class="term-tip">Technologie coûteuse — peut être référé à un spécialiste.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_U">
+      <div class="letter-header">U <span class="letter-count">1 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Urgence dentaire</div><div class="term-en">EN: Dental emergency</div></div>
+            <span class="cat-badge" style="background:#fff8e1;color:#e67e22;">📋 Admin</span>
+          </div>
+          <div class="term-def">Situation nécessitant un rendez-vous dans les 24-48 heures : douleur aiguë, trauma, fracture, abcès, perte d'une restauration gênante.</div>
+          <div class="term-tip">Toujours réserver des plages horaires d'urgence dans l'horaire quotidien.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_V">
+      <div class="letter-header">V <span class="letter-count">1 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Verre ionomère</div><div class="term-en">EN: Glass ionomer</div></div>
+            <span class="cat-badge" style="background:#fef2f2;color:#c0392b;">🧪 Matériau</span>
+          </div>
+          <div class="term-def">Matériau de restauration qui libère du fluorure et adhère chimiquement à la dent. Moins résistant que le composite, mais idéal pour les dents temporaires ou comme base sous composite.</div>
+          <div class="term-tip">Souvent utilisé pour les enfants et les caries radiculaires — bonne longévité en zone peu chargée.</div>
+        </div></div>
+    </div><div class="letter-section" id="letter_Z">
+      <div class="letter-header">Z <span class="letter-count">1 terme(s)</span></div>
+      <div class="terms-grid"><div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">Zircone</div><div class="term-en">EN: Zirconia</div></div>
+            <span class="cat-badge" style="background:#fef2f2;color:#c0392b;">🧪 Matériau</span>
+          </div>
+          <div class="term-def">Matériau céramique très résistant utilisé pour les couronnes et bridges postérieurs. Blanc opaque, monolithique ou recouvert de céramique esthétique.</div>
+          <div class="term-tip">Très populaire — résistant et esthétique. Couronne zircone = souvent le premier choix actuellement.</div>
+        </div></div>
+    </div></div>
+  <div class="footer-note">© Gestion Mel — Académie de formation | gestionmel.com</div>
+</div>
+
+<script>
+const CAT_COLORS = {
+  anatomie: { bg:'#e3f2fd', color:'#1a6abf', label:'🦷 Anatomie' },
+  traitements: { bg:'#f0fdf4', color:'#1a9e5a', label:'🔧 Traitement' },
+  admin: { bg:'#fff8e1', color:'#e67e22', label:'📋 Admin' },
+  radio: { bg:'#f3e8ff', color:'#8e44ad', label:'📷 Radio' },
+  materiau: { bg:'#fef2f2', color:'#c0392b', label:'🧪 Matériau' },
+  speciaux: { bg:'#e8f4fe', color:'#0277bd', label:'⭐ Spécialité' },
+};
+
+const TERMS = [
+  // ANATOMIE
+  { term:'Alvéole', en:'Alveolar socket', cat:'anatomie', def:'Cavité osseuse dans laquelle la racine de la dent est enchâssée. Après une extraction, l\'alvéole se comble progressivement par du tissu osseux.', tip:'Important lors des extractions — l\'alvéole doit se refermer normalement en quelques semaines.' },
+  { term:'Apex', en:'Apex', cat:'anatomie', def:'Extrémité de la racine d\'une dent. Lors d\'un traitement de canal, le dentiste atteint l\'apex pour désinfecter jusqu\'au bout de la racine.', tip:'On parle de «traitement jusqu\'à l\'apex» lors des endodontie — termes à connaître pour la facturation.' },
+  { term:'Canine', en:'Canine', cat:'anatomie', def:'Dent pointue situated à la 3e position dans chaque quadrant. Numérotée #13, #23, #33, #43.', tip:'Connaître la numérotation des dents est essentiel pour la facturation.' },
+  { term:'Cément', en:'Cementum', cat:'anatomie', def:'Tissu calcifié fin qui recouvre la racine de la dent et assure l\'attache des fibres du ligament parodontal.', tip:'Terme utilisé lors de discussions sur les maladies parodontales.' },
+  { term:'Couronne clinique', en:'Clinical crown', cat:'anatomie', def:'Partie visible de la dent au-dessus de la ligne gingivale. La couronne anatomique comprend aussi la partie recouverte de gencive.', tip:'À distinguer de la couronne prothétique (restauration).' },
+  { term:'Dentine', en:'Dentin', cat:'anatomie', def:'Tissu dur calcifié qui constitue la majeure partie de la dent, sous l\'émail. Plus mou que l\'émail, il contient de petits canaux (tubules dentinaires).', tip:'Exposée lors de caries profondes — les patients ressentent une sensibilité.' },
+  { term:'Email', en:'Enamel', cat:'anatomie', def:'Tissu le plus dur du corps humain qui recouvre la couronne de la dent. Blanc nacré, il protège la dentine et la pulpe.', tip:'Ne se régénère pas — d\'où l\'importance des soins préventifs à expliquer aux patients.' },
+  { term:'Gingivale (gencive)', en:'Gingiva', cat:'anatomie', def:'Tissu mou rosé qui entoure et protège les dents et l\'os alvéolaire. Une gencive saine est ferme, rose pâle et ne saigne pas.', tip:'Les patients posent souvent des questions sur les saignements des gencives — orienter vers l\'hygiéniste.' },
+  { term:'Incisive', en:'Incisor', cat:'anatomie', def:'Dents plates situées à l\'avant de la bouche pour couper les aliments. Les incisives centrales sont #11, #21, #31, #41 et les latérales #12, #22, #32, #42.', tip:'Souvent impliquées dans les traumatismes — fracturer une incisive = urgence esthétique.' },
+  { term:'Ligament parodontal', en:'Periodontal ligament', cat:'anatomie', def:'Tissu fibreux reliant la racine dentaire à l\'os alvéolaire, permettant de légers mouvements de la dent.', tip:'Détruit lors de maladies parodontales avancées, causant la mobilité des dents.' },
+  { term:'Molaire', en:'Molar', cat:'anatomie', def:'Grosses dents à l\'arrière de la bouche pour mâcher. Premières molaires #16, #26, #36, #46. Deuxièmes molaires #17, #27, #37, #47. Troisièmes molaires (dents de sagesse) #18, #28, #38, #48.', tip:'Les dents de sagesse sont souvent extractees — savoir expliquer la procédure aux patients.' },
+  { term:'Numérotation FDI', en:'FDI notation', cat:'anatomie', def:'Système international de numérotation des dents. Premier chiffre = quadrant (1=sup. droit, 2=sup. gauche, 3=inf. gauche, 4=inf. droit). Deuxième chiffre = position (1=centrale à 8=dent de sagesse).', tip:'La numérotation FDI est la plus utilisée en clinique dentaire québécoise — à maîtriser absolument!' },
+  { term:'Parodonte', en:'Periodontium', cat:'anatomie', def:'Ensemble des tissus de soutien de la dent : gencive, ligament parodontal, cément et os alvéolaire.', tip:'La parodontite est une infection du parodonte — les soins parodontaux sont facturés séparément.' },
+  { term:'Prémolaire', en:'Premolar', cat:'anatomie', def:'Dents entre canines et molaires. Premières prémolaires #14, #24, #34, #44. Deuxièmes prémolaires #15, #25, #35, #45.', tip:'Souvent impliquées dans les plans de traitement avec bridges ou prothèses.' },
+  { term:'Pulpe', en:'Pulp', cat:'anatomie', def:'Tissu mou central de la dent contenant les nerfs et vaisseaux sanguins. Lorsqu\'infectée, elle nécessite un traitement de canal.', tip:'«Le nerf est atteint» = la pulpe est infectée = traitement endodontique requis.' },
+
+  // TRAITEMENTS
+  { term:'Amalgame', en:'Amalgam', cat:'traitements', def:'Restauration dentaire métallique composée d\'un alliage contenant du mercure. Très résistant et durable, utilisé principalement sur les dents postérieures. Son usage diminue au profit des composites.', tip:'Certains patients demandent le retrait de leur amalgame — orienter vers le dentiste.' },
+  { term:'Blanchiment dentaire', en:'Teeth whitening', cat:'traitements', def:'Traitement cosmétique visant à éclaircir la teinte des dents grâce à des agents à base de peroxyde d\'hydrogène ou de carbamide. Peut être effectué en cabinet ou à domicile.', tip:'Service populaire — code de facturation différent selon le type (cabinet vs à domicile).' },
+  { term:'Bridge (pont dentaire)', en:'Fixed bridge', cat:'traitements', def:'Prothèse fixe remplaçant une ou plusieurs dents manquantes, ancrée sur les dents adjacentes (piliers). Cementé en permanence et non amovible.', tip:'Facturation selon le nombre d\'unités (piliers + pontiques) — vérifier avec le dentiste.' },
+  { term:'Composite', en:'Composite resin', cat:'traitements', def:'Résine esthétique de couleur naturelle utilisée pour les restaurations. Collée directement à la dent. Teinte s\'approchant des dents naturelles.', tip:'Le composite est classifié selon le nombre de surfaces restaurées (1, 2, 3, 4, 5 surfaces) pour la facturation.' },
+  { term:'Couronne (prothétique)', en:'Crown', cat:'traitements', def:'Restauration qui recouvre entièrement la couronne d\'une dent endommagée ou traitée. Peut être en zircone, céramique, métal-céramique ou or.', tip:'Souvent précédée d\'un traitement de canal — planifier 2 à 3 rendez-vous.' },
+  { term:'Curetage', en:'Scaling and root planing', cat:'traitements', def:'Traitement parodontal profond effectué par l\'hygiéniste ou le dentiste pour retirer le tartre sous-gingival et aplanir les surfaces radiculaires.', tip:'Facturation par sextant ou par quadrant — durée plus longue qu\'un nettoyage de routine.' },
+  { term:'Détartrage', en:'Scaling', cat:'traitements', def:'Retrait du tartre (calcul dentaire) et de la plaque accumulés sur les dents à l\'aide d\'instruments ultrasoniques et manuels.', tip:'Code de facturation différent selon la profondeur et la complexité (routine vs curetage).' },
+  { term:'Endodontie (traitement de canal)', en:'Root canal treatment', cat:'traitements', def:'Traitement visant à retirer la pulpe infectée d\'une dent, à nettoyer et désinfecter les canaux radiculaires, puis à les obturer (obturation).', tip:'Plusieurs rendez-vous peuvent être nécessaires. Souvent suivi d\'une couronne.' },
+  { term:'Extraction', en:'Extraction', cat:'traitements', def:'Retrait complet d\'une dent de son alvéole. Simple (sans chirurgie) ou chirurgicale (nécessite incision et sutures).', tip:'Différence de facturation importante entre extraction simple et chirurgicale.' },
+  { term:'Examen dentaire', en:'Dental exam', cat:'traitements', def:'Évaluation complète de la santé bucco-dentaire par le dentiste. Comprend examen visuel, sondage parodontal, radiographies et évaluation de la muqueuse.', tip:'Code 01100 — examen complet. Code 01200 — examen limité/urgence.' },
+  { term:'Fluoration', en:'Fluoride treatment', cat:'traitements', def:'Application topique de fluorure pour renforcer l\'émail et prévenir les caries. Peut être en gel, vernis ou mousse.', tip:'Recommandé particulièrement pour les enfants et les patients à risque élevé de caries.' },
+  { term:'Implant dentaire', en:'Dental implant', cat:'traitements', def:'Vis en titane insérée chirurgicalement dans l\'os maxillaire ou mandibulaire pour remplacer la racine d\'une dent manquante, sur laquelle on fixe une couronne.', tip:'Processus en plusieurs étapes (chirurgie, cicatrisation 3-6 mois, couronne) — planification complexe.' },
+  { term:'Inlay / Onlay', en:'Inlay/Onlay', cat:'traitements', def:'Restauration indirecte fabriquée en laboratoire en céramique ou composite. L\'inlay est à l\'intérieur des cuspides, l\'onlay recouvre une ou plusieurs cuspides.', tip:'Différents codes de facturation selon le type (inlay vs onlay) et le matériau.' },
+  { term:'Nettoyage prophylactique', en:'Prophylaxis', cat:'traitements', def:'Nettoyage professionnel préventif des dents par l\'hygiéniste, comprenant détartrage, polissage et soins préventifs. Recommandé 1 à 2 fois par an.', tip:'Code 11101 (enfant) et 11111 (adulte) dans la nomenclature ACDQ.' },
+  { term:'Obturation (plombage)', en:'Filling', cat:'traitements', def:'Restauration d\'une dent cariée ou fracturée. Peut être en composite (blanc), amalgame (gris) ou verre ionomère. Le mot «plombage» est populaire mais inexact.', tip:'Facturation selon le matériau et le nombre de surfaces : 1 surface = code différent de 5 surfaces.' },
+  { term:'Prothèse amovible', en:'Removable denture', cat:'traitements', def:'Prothèse dentaire que le patient retire pour le nettoyage. Peut être complète (toutes les dents manquantes) ou partielle (quelques dents manquantes).', tip:'Le dentiste prend des empreintes, envoie au laboratoire — délai de 2 à 4 semaines généralement.' },
+  { term:'Scellant', en:'Sealant', cat:'traitements', def:'Résine liquide appliquée dans les sillons des molaires pour prévenir les caries. Procédure simple et rapide, surtout pour les enfants.', tip:'Code de facturation spécifique par dent — souvent couvert par les assurances pour les enfants.' },
+  { term:'Surfaçage radiculaire', en:'Root planing', cat:'traitements', def:'Traitement parodontal approfondi qui consiste à aplanir les surfaces radiculaires pour éliminer le biofilm bactérien et favoriser la guérison des tissus.', tip:'Effectué sous anesthésie locale — prévenir le patient du temps requis et des suites.' },
+
+  // ADMINISTRATIF
+  { term:'ACDQ', en:'ACDQ', cat:'admin', def:'Association des chirurgiens-dentistes du Québec. Organisme regroupant les dentistes du Québec, qui publie la nomenclature des actes et les honoraires de référence.', tip:'La nomenclature ACDQ est le guide de facturation de référence en dentisterie au Québec.' },
+  { term:'Assurance dentaire', en:'Dental insurance', cat:'admin', def:'Régime privé ou collectif qui rembourse tout ou partie des soins dentaires. Le patient paie sa partie (coassurance) et l\'assureur rembourse le reste selon le plan.', tip:'Toujours vérifier les maximums annuels et les fréquences de remboursement avant de planifier les traitements.' },
+  { term:'Coordonnées des bénéfices', en:'Coordination of benefits', cat:'admin', def:'Procédure pour les patients qui ont deux assurances. Le remboursement de la première est complété par la seconde. L\'assureur du patient est primaire; celui du conjoint est secondaire.', tip:'La 1re assurance paie d\'abord; la 2e complète. Le total ne peut pas dépasser le coût réel des soins.' },
+  { term:'Coassurance', en:'Co-insurance', cat:'admin', def:'Pourcentage que le patient paie lui-même après la franchise. Exemple : si le plan couvre 80%, le patient paie 20% (la coassurance).', tip:'Bien expliquer la différence entre franchise (montant fixe) et coassurance (pourcentage).' },
+  { term:'Carie', en:'Cavity / Caries', cat:'admin', def:'Terme médical pour désigner une carie dentaire, causée par des bactéries qui produisent des acides détruisant l\'émail et la dentine.', tip:'Les patients disent souvent «j\'ai un trou» — c\'est une carie! Toujours inscrire «carie» au dossier.' },
+  { term:'Devis (estimé)', en:'Treatment estimate', cat:'admin', def:'Document fourni au patient et à son assurance estimant le coût des traitements proposés avant leur réalisation. Permet à l\'assurance de prédéterminer le remboursement.', tip:'Envoyer le devis à l\'assurance AVANT le traitement pour éviter les surprises de remboursement.' },
+  { term:'Franchise', en:'Deductible', cat:'admin', def:'Montant fixe que le patient doit payer de sa poche avant que son assurance commence à rembourser. Ex: franchise annuelle de 50 $.', tip:'La franchise est souvent annuelle. Demander si déjà atteinte pour l\'année courante.' },
+  { term:'RAMQ', en:'RAMQ', cat:'admin', def:'Régie de l\'assurance maladie du Québec. Gère l\'assurance maladie publique. En dentisterie, couvre certains soins pour enfants jusqu\'à 10 ans et personnes assistées sociales.', tip:'Vérifier l\'admissibilité RAMQ pour chaque patient — numéro de pratique du dentiste requis.' },
+  { term:'Plan de traitement', en:'Treatment plan', cat:'admin', def:'Document préparé par le dentiste détaillant les soins recommandés, leur ordre de priorité, les coûts estimés et les alternatives thérapeutiques.', tip:'La secrétaire présente souvent le plan de traitement et les coûts — être préparée aux questions.' },
+  { term:'Prédétermination', en:'Predetermination', cat:'admin', def:'Demande envoyée à l\'assurance AVANT d\'effectuer les traitements pour obtenir une confirmation écrite du remboursement prévu.', tip:'Recommandée pour tous les traitements importants (couronnes, bridges, implants) +300 $.' },
+  { term:'Rappel (hygiène)', en:'Recall', cat:'admin', def:'Convocation périodique du patient pour son nettoyage et son examen de contrôle. Fréquence recommandée : tous les 6 mois, ou plus souvent selon le risque parodontal.', tip:'La gestion des rappels est une tâche clé de la secrétaire aux rappels — liste toujours à jour.' },
+  { term:'Urgence dentaire', en:'Dental emergency', cat:'admin', def:'Situation nécessitant un rendez-vous dans les 24-48 heures : douleur aiguë, trauma, fracture, abcès, perte d\'une restauration gênante.', tip:'Toujours réserver des plages horaires d\'urgence dans l\'horaire quotidien.' },
+
+  // RADIOGRAPHIE
+  { term:'Céphalométrique (céphalo)', en:'Cephalometric X-ray', cat:'radio', def:'Radiographie latérale du crâne utilisée en orthodontie pour analyser les relations squelettiques et dentaires.', tip:'Surtout utilisé par les orthodontistes — peut être référé.' },
+  { term:'Panoramique (pan-x)', en:'Panoramic X-ray', cat:'radio', def:'Radiographie extraorale montrant l\'ensemble des dents, des mâchoires, des articulations temporo-mandibulaires et des sinus en une seule image.', tip:'Code 02910 — recommandée aux 5 ans environ pour les adultes.' },
+  { term:'Periapicale (PA)', en:'Periapical X-ray', cat:'radio', def:'Petite radiographie intra-orale montrant une ou deux dents en entier, de la couronne jusqu\'à la pointe de la racine et l\'os environnant.', tip:'Code varie selon le nombre de radiographies prises — important de bien comptabiliser.' },
+  { term:'Bite-wing (BW)', en:'Bitewing X-ray', cat:'radio', def:'Radiographie intra-orale montrant les couronnes des dents du haut et du bas côte à côte, permettant de détecter les caries interproximales et la perte osseuse.', tip:'Généralement prescrit en série de 2 ou 4 — code de facturation séparé.' },
+  { term:'Tomographie (CBCT)', en:'Cone-beam CT', cat:'radio', def:'Imagerie 3D en faisceau conique permettant une visualisation tridimensionnelle des structures dentaires et osseuses. Utilisé pour les implants, endodontie complexe, chirurgie.', tip:'Technologie coûteuse — peut être référé à un spécialiste.' },
+
+  // MATÉRIAUX
+  { term:'Céramique (porcelaine)', en:'Ceramic/Porcelain', cat:'materiau', def:'Matériau esthétique utilisé pour les couronnes, facettes et bridges. Mimique parfaite de l\'apparence naturelle des dents. Excellent résultat esthétique.', tip:'Option premium souvent souhaitée par les patients pour les dents visibles.' },
+  { term:'Verre ionomère', en:'Glass ionomer', cat:'materiau', def:'Matériau de restauration qui libère du fluorure et adhère chimiquement à la dent. Moins résistant que le composite, mais idéal pour les dents temporaires ou comme base sous composite.', tip:'Souvent utilisé pour les enfants et les caries radiculaires — bonne longévité en zone peu chargée.' },
+  { term:'Zircone', en:'Zirconia', cat:'materiau', def:'Matériau céramique très résistant utilisé pour les couronnes et bridges postérieurs. Blanc opaque, monolithique ou recouvert de céramique esthétique.', tip:'Très populaire — résistant et esthétique. Couronne zircone = souvent le premier choix actuellement.' },
+
+  // SPÉCIALITÉS
+  { term:'Endodontiste', en:'Endodontist', cat:'speciaux', def:'Dentiste spécialisé dans les traitements de l\'intérieur de la dent (pulpe, canaux). Traite les cas complexes de traitement de canal.', tip:'Les cas difficiles peuvent être référés à un endodontiste — important de bien expliquer au patient.' },
+  { term:'Orthodontie / Orthodontiste', en:'Orthodontics', cat:'speciaux', def:'Spécialité dentaire traitant les malpositions dentaires et les malocclusions à l\'aide d\'appareils (broches, aligneurs invisibles). L\'orthodontiste est le spécialiste.', tip:'Les assurances orthodontiques ont souvent un maximum à vie différent du maximum dentaire général.' },
+  { term:'Pédodontiste', en:'Pediatric dentist', cat:'speciaux', def:'Dentiste spécialisé dans les soins aux enfants, incluant les dents de lait (décidues) et la transition vers les dents permanentes.', tip:'Les cas d\'anxiété sévère ou de besoins spéciaux chez l\'enfant sont souvent référés en pédodontie.' },
+  { term:'Parodontiste', en:'Periodontist', cat:'speciaux', def:'Dentiste spécialisé dans le traitement des maladies parodontales (gencives et os). Traite les cas avancés de gingivite et parodontite, et pose des implants.', tip:'Référence nécessaire pour les cas de parodontite avancée — important de documenter au dossier.' },
+  { term:'Prothésiste dentaire', en:'Dental prosthetist', cat:'speciaux', def:'Professionnel qui fabrique les prothèses dentaires amovibles (dentiers) et les appareils buccaux en laboratoire.', tip:'À distinguer du chirurgien-dentiste — le prothésiste ne traite pas les patients directement en clinique.' },
+  { term:'Stomatologiste', en:'Oral medicine specialist', cat:'speciaux', def:'Dentiste spécialisé dans les maladies de la muqueuse buccale et les affections orales. Diagnostic et traitement des lésions et pathologies buccales.', tip:'Référence pour les lésions buccales suspectes — important de ne pas tarder dans ces cas.' },
+];
+
+let currentFilter = '';
+let currentAlpha = '';
+
+function filterTerms() {
+  const search = document.getElementById('searchInput').value.toLowerCase().trim();
+  const cat = document.getElementById('catFilter').value;
+  currentFilter = cat;
+
+  const filtered = TERMS.filter(t => {
+    const matchSearch = !search || t.term.toLowerCase().includes(search) || t.def.toLowerCase().includes(search) || (t.en && t.en.toLowerCase().includes(search));
+    const matchCat = !cat || t.cat === cat;
+    const matchAlpha = !currentAlpha || t.term[0].toUpperCase() === currentAlpha;
+    return matchSearch && matchCat && matchAlpha;
+  });
+
+  document.getElementById('countDisplay').textContent = filtered.length + ' terme(s)';
+  renderTerms(filtered);
+  updateAlphaNav(filtered);
+}
+
+function renderTerms(terms) {
+  const wrap = document.getElementById('termsWrap');
+  if (terms.length === 0) {
+    wrap.innerHTML = '<div class="empty-state"><div class="es-icon">🔍</div><div>Aucun terme trouvé. Essayez un autre mot-clé.</div></div>';
+    return;
+  }
+
+  const grouped = {};
+  terms.forEach(t => {
+    const letter = t.term[0].toUpperCase();
+    if (!grouped[letter]) grouped[letter] = [];
+    grouped[letter].push(t);
+  });
+
+  wrap.innerHTML = Object.keys(grouped).sort().map(letter => {
+    const items = grouped[letter].sort((a,b) => a.term.localeCompare(b.term, 'fr'));
+    return `<div class="letter-section" id="letter_${letter}">
+      <div class="letter-header">${letter} <span class="letter-count">${items.length} terme(s)</span></div>
+      <div class="terms-grid">${items.map(t => {
+        const cc = CAT_COLORS[t.cat] || {};
+        return `<div class="term-card">
+          <div class="term-header">
+            <div><div class="term-name">${t.term}</div>${t.en?`<div class="term-en">EN: ${t.en}</div>`:''}</div>
+            <span class="cat-badge" style="background:${cc.bg};color:${cc.color};">${cc.label}</span>
+          </div>
+          <div class="term-def">${t.def}</div>
+          ${t.tip?`<div class="term-tip">${t.tip}</div>`:''}
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function updateAlphaNav(terms) {
+  const letters = new Set(terms.map(t => t.term[0].toUpperCase()));
+  const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const nav = document.getElementById('alphaNav');
+  nav.innerHTML = `<button class="alpha-btn ${!currentAlpha?'active':''}" onclick="setAlpha('')">Tous</button>` +
+    allLetters.map(l => `<button class="alpha-btn ${currentAlpha===l?'active':''} ${!letters.has(l)?'disabled':''}" onclick="${letters.has(l)?`setAlpha('${l}')`:''}">${l}</button>`).join('');
+}
+
+function setAlpha(letter) {
+  currentAlpha = letter;
+  filterTerms();
+  if (letter) { const el = document.getElementById('letter_'+letter); if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+
+filterTerms();
+</script>
+
+
+</body></html>

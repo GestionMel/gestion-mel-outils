@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<!-- saved from url=(0070)file:///C:/Users/info/Downloads/calculateur-productivite-fauteuil.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Productivité par fauteuil — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+    --gold:#d4a017;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);font-size:14px;}
+  .page-header{background:var(--dark);color:white;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1100px;margin:20px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 30px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .tab-btn{padding:11px 20px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;display:flex;align-items:center;gap:6px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:20px 28px;}
+  .tab-pane.active{display:block;}
+  .sec-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:11px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px;}
+  .ff{display:flex;flex-direction:column;gap:3px;}
+  .ff label{font-size:.69rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff input,.ff select{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.85rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ff input:focus,.ff select:focus{outline:none;border-color:var(--accent);background:white;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .btn-primary{padding:8px 18px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;}
+  .btn-primary:hover{background:#155a9e;}
+  .btn-ghost{padding:6px 13px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-danger{padding:4px 9px;border-radius:5px;border:1px solid rgba(192,57,43,.3);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;font-family:inherit;}
+  .btn-add{display:flex;align-items:center;gap:5px;padding:6px 13px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.75rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:0 7px 7px 0;padding:10px 14px;font-size:.81rem;color:#2a3a4a;line-height:1.7;margin-bottom:14px;}
+
+  /* CHAIR CONFIG */
+  .chair-config-row{display:grid;grid-template-columns:1fr 1fr auto auto;gap:8px;align-items:end;padding:9px 12px;background:var(--light);border:1.5px solid var(--border);border-radius:7px;margin-bottom:6px;}
+
+  /* DAY FORM */
+  .day-form{background:#f8fbff;border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:16px;}
+  .day-form-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:11px;display:flex;align-items:center;gap:6px;}
+  .day-form-title::before{content:'➕';}
+  .chairs-entry-grid{display:grid;gap:8px;margin-top:10px;}
+  .chair-entry-row{padding:10px 13px;background:white;border:1.5px solid var(--border);border-radius:7px;border-left-width:4px;}
+  .chair-entry-name{font-size:.84rem;font-weight:700;color:var(--dark);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+  .chair-entry-fields{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+  .mini-in{border:1.5px solid var(--border);border-radius:5px;padding:6px 9px;font-size:.84rem;font-family:inherit;color:var(--text);background:var(--light);width:100%;text-align:right;}
+  .mini-in:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* TABLES */
+  .data-table{width:100%;border-collapse:collapse;font-size:.79rem;}
+  .data-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.7rem;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .data-table th.c{text-align:center;}
+  .data-table td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:middle;}
+  .data-table tr:nth-child(even) td{background:#fafbfc;}
+  .data-table tr:hover td{background:var(--light);}
+  .data-table tfoot td{background:var(--dark);color:white;font-weight:700;padding:8px 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* KPI */
+  .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:16px;}
+  .kpi-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:13px 15px;border-top:3px solid var(--border);}
+  .kc-icon{font-size:1.2rem;margin-bottom:4px;}
+  .kc-label{font-size:.69rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+  .kc-value{font-size:1.4rem;font-weight:700;color:var(--dark);margin-bottom:2px;}
+  .kc-sub{font-size:.71rem;color:#8a9ab0;}
+  .kc-st{font-size:.69rem;font-weight:700;padding:2px 8px;border-radius:8px;margin-top:5px;display:inline-block;}
+  .st-ok{background:#f0fdf4;color:var(--green);}
+  .st-warn{background:#fff8e1;color:var(--orange);}
+  .st-bad{background:#fef2f2;color:var(--red);}
+  .bar-w{background:#e0e0e0;border-radius:3px;height:5px;overflow:hidden;margin-top:6px;}
+  .bar-f{height:5px;border-radius:3px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* MONTH NAV */
+  .month-nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+  .mnav-btn{width:28px;height:28px;border-radius:6px;border:1.5px solid var(--border);background:white;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--blue);}
+  .mnav-btn:hover{background:var(--light);}
+  .mdisplay{font-size:1rem;font-weight:700;color:var(--dark);min-width:140px;text-align:center;}
+
+  /* BREAKDOWN TABLE */
+  .btable{width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:14px;}
+  .btable th{background:var(--dark);color:white;padding:7px 10px;text-align:left;font-size:.71rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .btable th.c{text-align:center;}
+  .btable td{border-bottom:1px solid var(--border);padding:7px 10px;}
+  .btable tr:nth-child(even) td{background:var(--light);}
+  .btable tfoot td{background:#f0f5fb;font-weight:700;color:var(--blue);border-top:2px solid var(--border);}
+
+  /* ANNUAL BARS */
+  .abar-row{display:grid;grid-template-columns:90px 1fr 100px 90px;gap:10px;align-items:center;padding:9px 13px;background:white;border:1.5px solid var(--border);border-radius:8px;margin-bottom:6px;}
+  .abar-month{font-size:.84rem;font-weight:700;color:var(--dark);}
+  .abar-track{background:#e0e0e0;border-radius:3px;height:8px;overflow:hidden;}
+  .abar-fill{height:8px;border-radius:3px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .abar-val{font-size:.84rem;font-weight:700;text-align:right;}
+  .abar-ph{font-size:.76rem;font-weight:700;text-align:right;}
+
+  .empty-state{text-align:center;padding:28px;color:#8a9ab0;}
+  .bench-box{background:var(--light);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:11px 15px;font-size:.81rem;color:#2a3a4a;line-height:1.8;margin-top:14px;}
+  .actions{padding:12px 28px;background:var(--light);display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--border);}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+
+  #notif{position:fixed;top:20px;right:20px;background:var(--green);color:white;padding:10px 18px;border-radius:8px;font-weight:700;font-size:.86rem;z-index:9999;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:opacity .4s;pointer-events:none;}
+
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.nav-tabs,.day-form,.actions,.btn-add,.btn-danger,.btn-ghost,.btn-primary,.mnav-btn,.no-print{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .tab-pane{display:block!important;}
+    .data-table th,.data-table tfoot td,.btable th,.btable tfoot td,.bar-f,.abar-fill,.kpi-card{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,select{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:750px){
+    .grid2,.grid3{grid-template-columns:1fr 1fr;}
+    .tab-pane{padding:14px 14px;}
+    .kpi-grid{grid-template-columns:1fr 1fr;}
+    .abar-row{grid-template-columns:70px 1fr 80px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="notif" style="opacity:0;"></div>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.79rem;opacity:.7;">Administration — Productivité clinique</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <div>
+      <h1>🦷 Productivité par fauteuil</h1>
+      <p>Saisie quotidienne · Compilation mensuelle automatique · Rapport annuel</p>
+    </div>
+    <button class="btn-ghost" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="go(0,this)">⚙️ Configuration</button>
+    <button class="tab-btn" onclick="go(1,this)">📅 Saisie du jour</button>
+    <button class="tab-btn" onclick="go(2,this)">📊 Rapport mensuel</button>
+    <button class="tab-btn" onclick="go(3,this)">📈 Rapport annuel</button>
+  </div>
+
+  <!-- CONFIG -->
+  <div class="tab-pane active" id="tp0">
+    <div class="grid2" style="margin-bottom:16px;">
+      <div class="ff"><label>Nom de la clinique</label><input type="text" id="cfg_clinic" placeholder="Clinique Dentaire..."></div>
+      <div class="ff"><label>Objectif production / heure / fauteuil ($)</label><input type="number" id="cfg_obj" value="250"><span style="font-size:.71rem;color:#8a9ab0;margin-top:2px;">Référence secteur : 200–350 $/h</span></div>
+      <div class="ff"><label>Heures d'ouverture par journée</label><input type="number" id="cfg_hjour" value="9" step=".5"></div>
+      <div class="ff"><label>Jours ouvrables par mois (type)</label><input type="number" id="cfg_jours" value="22"></div>
+    </div>
+
+    <div class="sec-title">Fauteuils et praticien(ne)s</div>
+    <div class="info-box">Configurez vos fauteuils ici — ils apparaîtront automatiquement dans la saisie quotidienne.</div>
+    <div id="chairList">
+    <div class="chair-config-row" style="border-left:3px solid #1a6abf;">
+      <div class="ff"><label>Nom du fauteuil</label>
+        <input type="text" value="Fauteuil 1 — Dentiste" placeholder="Fauteuil..." oninput="chairs[0].name=this.value">
+      </div>
+      <div class="ff"><label>Praticien(ne)</label>
+        <input type="text" value="" placeholder="Nom ou titre..." oninput="chairs[0].praticien=this.value">
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;">
+        <div style="width:28px;height:28px;border-radius:5px;background:#1a6abf;flex-shrink:0;"></div>
+        <input type="color" value="#1a6abf" onchange="chairs[0].color=this.value;this.previousElementSibling.style.background=this.value" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
+      </div>
+      <button class="btn-danger" onclick="chairs.splice(0,1);drawChairList();buildDayForm()">× Retirer</button>
+    </div>
+    <div class="chair-config-row" style="border-left:3px solid #1a9e5a;">
+      <div class="ff"><label>Nom du fauteuil</label>
+        <input type="text" value="Fauteuil 2 — Hygiène" placeholder="Fauteuil..." oninput="chairs[1].name=this.value">
+      </div>
+      <div class="ff"><label>Praticien(ne)</label>
+        <input type="text" value="" placeholder="Nom ou titre..." oninput="chairs[1].praticien=this.value">
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;">
+        <div style="width:28px;height:28px;border-radius:5px;background:#1a9e5a;flex-shrink:0;"></div>
+        <input type="color" value="#1a9e5a" onchange="chairs[1].color=this.value;this.previousElementSibling.style.background=this.value" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
+      </div>
+      <button class="btn-danger" onclick="chairs.splice(1,1);drawChairList();buildDayForm()">× Retirer</button>
+    </div>
+    <div class="chair-config-row" style="border-left:3px solid #8e44ad;">
+      <div class="ff"><label>Nom du fauteuil</label>
+        <input type="text" value="Fauteuil 3 — Hygiène" placeholder="Fauteuil..." oninput="chairs[2].name=this.value">
+      </div>
+      <div class="ff"><label>Praticien(ne)</label>
+        <input type="text" value="" placeholder="Nom ou titre..." oninput="chairs[2].praticien=this.value">
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;">
+        <div style="width:28px;height:28px;border-radius:5px;background:#8e44ad;flex-shrink:0;"></div>
+        <input type="color" value="#8e44ad" onchange="chairs[2].color=this.value;this.previousElementSibling.style.background=this.value" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
+      </div>
+      <button class="btn-danger" onclick="chairs.splice(2,1);drawChairList();buildDayForm()">× Retirer</button>
+    </div></div>
+    <button class="btn-add" onclick="addChair()" style="margin-bottom:14px;">+ Ajouter un fauteuil</button>
+
+    <div class="bench-box">
+      <strong>📊 Repères du secteur dentaire (Québec) :</strong><br>
+      🔴 Moins de 150 $/h — Sous-productif &nbsp;·&nbsp; 🟡 150–200 $/h — En développement &nbsp;·&nbsp; 🔵 200–300 $/h — Dans la moyenne &nbsp;·&nbsp; 🟢 300 $/h et + — Très performant<br>
+      <strong>Taux d'occupation idéal :</strong> 85 % à 95 % du temps disponible
+    </div>
+    <div class="actions"><button class="btn-primary" onclick="go(1,null);buildDayForm()">Aller à la saisie →</button></div>
+  </div>
+
+  <!-- SAISIE DU JOUR -->
+  <div class="tab-pane" id="tp1">
+    <div class="day-form">
+      <div class="day-form-title">Enregistrer une journée</div>
+      <div class="grid3" style="margin-bottom:10px;">
+        <div class="ff"><label>Date</label><input type="date" id="in_date"></div>
+        <div class="ff"><label>Type de journée</label>
+          <select id="in_type">
+            <option value="normal">Journée régulière</option>
+            <option value="partiel">Journée partielle</option>
+            <option value="ferme">Clinique fermée</option>
+          </select>
+        </div>
+        <div class="ff"><label>Note (optionnel)</label><input type="text" id="in_note" placeholder="Congé, événement..."></div>
+      </div>
+      <div id="chairInputs" class="chairs-entry-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="chair-entry-row" style="border-left-color:#1a6abf;">
+      <div class="chair-entry-name">
+        <div style="width:10px;height:10px;border-radius:2px;background:#1a6abf;"></div>
+        Fauteuil 1 — Dentiste
+      </div>
+      <div class="chair-entry-fields">
+        <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_c1" min="0" placeholder="0"></div>
+        <div class="ff"><label>⏱️ Heures travaillées</label><input class="mini-in" type="number" id="d_h_c1" min="0" max="24" step=".5" placeholder="9"></div>
+      </div>
+    </div>
+    <div class="chair-entry-row" style="border-left-color:#1a9e5a;">
+      <div class="chair-entry-name">
+        <div style="width:10px;height:10px;border-radius:2px;background:#1a9e5a;"></div>
+        Fauteuil 2 — Hygiène
+      </div>
+      <div class="chair-entry-fields">
+        <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_c2" min="0" placeholder="0"></div>
+        <div class="ff"><label>⏱️ Heures travaillées</label><input class="mini-in" type="number" id="d_h_c2" min="0" max="24" step=".5" placeholder="9"></div>
+      </div>
+    </div>
+    <div class="chair-entry-row" style="border-left-color:#8e44ad;">
+      <div class="chair-entry-name">
+        <div style="width:10px;height:10px;border-radius:2px;background:#8e44ad;"></div>
+        Fauteuil 3 — Hygiène
+      </div>
+      <div class="chair-entry-fields">
+        <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_c3" min="0" placeholder="0"></div>
+        <div class="ff"><label>⏱️ Heures travaillées</label><input class="mini-in" type="number" id="d_h_c3" min="0" max="24" step=".5" placeholder="9"></div>
+      </div>
+    </div></div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="saveDay()">✅ Enregistrer la journée</button>
+        <button class="btn-ghost" onclick="clearDay()">↺ Effacer</button>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
+      <div class="sec-title" style="margin-bottom:0;">Journal</div>
+      <select id="filterMonth" class="mini-in" style="border:1.5px solid var(--border);border-radius:6px;padding:5px 9px;font-size:.8rem;font-family:inherit;background:white;" onchange="drawJournal()"><option value="">Tous les mois</option><option value="2026-05">Avril 2026</option></select>
+      <span id="journalInfo" style="font-size:.76rem;color:#8a9ab0;"></span>
+    </div>
+    <div style="overflow-x:auto;"><table class="data-table"><thead><tr id="jHead"></tr></thead><tbody id="jBody"></tbody><tfoot id="jFoot"></tfoot></table></div>
+    <div class="empty-state" id="jEmpty" style="display:none;"><div style="font-size:2rem;margin-bottom:8px;">📅</div>Aucune journée enregistrée. Utilisez le formulaire ci-dessus.</div>
+  </div>
+
+  <!-- RAPPORT MENSUEL -->
+  <div class="tab-pane" id="tp2">
+    <div class="month-nav">
+      <button class="mnav-btn" onclick="moveMonth(-1)">‹</button>
+      <div class="mdisplay" id="mLabel"></div>
+      <button class="mnav-btn" onclick="moveMonth(1)">›</button>
+      <button class="btn-ghost" onclick="gotoNow()">Mois actuel</button>
+      <span id="mInfo" style="font-size:.74rem;color:#8a9ab0;"></span>
+    </div>
+    <div class="kpi-grid" id="mKpis"></div>
+    <div class="sec-title">Détail par fauteuil</div>
+    <div style="overflow-x:auto;"><table class="btable" id="mChairs"></table></div>
+    <div class="sec-title" style="margin-top:14px;">Détail journalier</div>
+    <div style="overflow-x:auto;"><table class="data-table"><thead><tr id="mDHead"></tr></thead><tbody id="mDBody"></tbody><tfoot id="mDFoot"></tfoot></table></div>
+    <div class="empty-state" id="mEmpty" style="display:none;"><div style="font-size:2rem;margin-bottom:8px;">📊</div>Aucune donnée pour ce mois. Enregistrez des journées dans l'onglet «Saisie du jour».</div>
+  </div>
+
+  <!-- RAPPORT ANNUEL -->
+  <div class="tab-pane" id="tp3">
+    <div class="month-nav">
+      <button class="mnav-btn" onclick="moveYear(-1)">‹</button>
+      <div class="mdisplay" style="min-width:80px;" id="yLabel"></div>
+      <button class="mnav-btn" onclick="moveYear(1)">›</button>
+      <button class="btn-ghost" onclick="gotoYear()">Année actuelle</button>
+    </div>
+    <div class="kpi-grid" id="yKpis"></div>
+    <div class="sec-title">Production par mois</div>
+    <div id="yBars"></div>
+    <div class="sec-title" style="margin-top:14px;">Totaux annuels par fauteuil</div>
+    <div style="overflow-x:auto;"><table class="btable" id="yChairs"></table></div>
+    <div class="empty-state" id="yEmpty" style="display:none;"><div style="font-size:2rem;margin-bottom:8px;">📈</div>Aucune donnée pour cette année.</div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+
+<script>
+// ===== DATA =====
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const MN = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const COLORS = ['#1a6abf','#1a9e5a','#8e44ad','#e67e22','#c0392b','#d4a017','#2c3e50','#00897b'];
+
+let chairs = [
+  {id:'c1',name:'Fauteuil 1 — Dentiste',praticien:'',color:'#1a6abf'},
+  {id:'c2',name:'Fauteuil 2 — Hygiène',praticien:'',color:'#1a9e5a'},
+  {id:'c3',name:'Fauteuil 3 — Hygiène',praticien:'',color:'#8e44ad'},
+];
+let cid = 4;
+let entries = []; // {date,type,note,data:{cid:{prod,h}}}
+let vm = TODAY.getMonth(), vy = TODAY.getFullYear(), vay = TODAY.getFullYear();
+
+// ===== UTILS =====
+const $ = id => document.getElementById(id);
+const fmt = n => n ? Math.round(n).toLocaleString('fr-CA')+' $' : '0 $';
+const fh = h => h ? parseFloat(h).toFixed(1)+'h' : '—';
+const cfg = () => ({
+  objH: parseFloat($('cfg_obj')?.value)||250,
+  hjour: parseFloat($('cfg_hjour')?.value)||9,
+  jours: parseInt($('cfg_jours')?.value)||22
+});
+const bcolor = (v,t) => v>=t?'var(--green)':v>=t*.8?'var(--orange)':'var(--red)';
+const stcls = (v,t) => v>=t?'st-ok':v>=t*.8?'st-warn':'st-bad';
+const mEntries = (y,m) => entries.filter(e=>{const d=new Date(e.date+'T00:00:00');return d.getFullYear()===y&&d.getMonth()===m;}).sort((a,b)=>a.date.localeCompare(b.date));
+const yEntries = y => entries.filter(e=>new Date(e.date+'T00:00:00').getFullYear()===y);
+const eChairProd = (e,cid) => e.data[cid]?.prod||0;
+const eChairH = (e,cid) => e.data[cid]?.h||0;
+const eTotalProd = e => chairs.reduce((s,c)=>s+eChairProd(e,c.id),0);
+const eTotalH = e => chairs.reduce((s,c)=>s+eChairH(e,c.id),0);
+
+function notif(msg) {
+  const n = $('notif'); n.textContent=msg; n.style.opacity='1';
+  clearTimeout(n._t); n._t=setTimeout(()=>n.style.opacity='0',2500);
+}
+
+// ===== CHAIR CONFIG =====
+function drawChairList() {
+  $('chairList').innerHTML = chairs.map((c,i)=>`
+    <div class="chair-config-row" style="border-left:3px solid ${c.color};">
+      <div class="ff"><label>Nom du fauteuil</label>
+        <input type="text" value="${c.name}" placeholder="Fauteuil..." oninput="chairs[${i}].name=this.value">
+      </div>
+      <div class="ff"><label>Praticien(ne)</label>
+        <input type="text" value="${c.praticien}" placeholder="Nom ou titre..." oninput="chairs[${i}].praticien=this.value">
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:6px;">
+        <div style="width:28px;height:28px;border-radius:5px;background:${c.color};flex-shrink:0;"></div>
+        <input type="color" value="${c.color}" onchange="chairs[${i}].color=this.value;this.previousElementSibling.style.background=this.value" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
+      </div>
+      <button class="btn-danger" onclick="chairs.splice(${i},1);drawChairList();buildDayForm()">× Retirer</button>
+    </div>`).join('');
+}
+
+function addChair() {
+  chairs.push({id:'c'+cid++,name:'Fauteuil '+(chairs.length+1),praticien:'',color:COLORS[chairs.length%COLORS.length]});
+  drawChairList(); buildDayForm();
+}
+
+// ===== DAY FORM =====
+function buildDayForm() {
+  $('in_date').valueAsDate = TODAY;
+  const cols = chairs.length>=3?'1fr 1fr 1fr':'1fr 1fr';
+  $('chairInputs').style.gridTemplateColumns = cols;
+  $('chairInputs').innerHTML = chairs.map(c=>`
+    <div class="chair-entry-row" style="border-left-color:${c.color};">
+      <div class="chair-entry-name">
+        <div style="width:10px;height:10px;border-radius:2px;background:${c.color};"></div>
+        ${c.name}${c.praticien?`<span style="font-size:.73rem;color:#8a9ab0;font-weight:400;">— ${c.praticien}</span>`:''}
+      </div>
+      <div class="chair-entry-fields">
+        <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_${c.id}" min="0" placeholder="0"></div>
+        <div class="ff"><label>⏱️ Heures travaillées</label><input class="mini-in" type="number" id="d_h_${c.id}" min="0" max="24" step=".5" placeholder="${cfg().hjour}"></div>
+      </div>
+    </div>`).join('');
+}
+
+function saveDay() {
+  const date = $('in_date').value;
+  if (!date) { alert('Veuillez sélectionner une date.'); return; }
+  const data = {};
+  chairs.forEach(c => {
+    data[c.id] = {
+      prod: parseFloat($('d_prod_'+c.id)?.value)||0,
+      h: parseFloat($('d_h_'+c.id)?.value)||0
+    };
+  });
+  const entry = {date, type:$('in_type').value, note:$('in_note').value, data};
+  const idx = entries.findIndex(e=>e.date===date);
+  if (idx>=0) {
+    if (!confirm(`Une entrée pour le ${new Date(date+'T00:00:00').toLocaleDateString('fr-CA')} existe déjà. Remplacer?`)) return;
+    entries[idx] = entry;
+  } else { entries.push(entry); }
+  clearDay(); refreshMonthFilter(); drawJournal();
+  notif('✅ Journée enregistrée!');
+}
+
+function clearDay() {
+  $('in_date').valueAsDate = TODAY;
+  $('in_type').value = 'normal';
+  $('in_note').value = '';
+  chairs.forEach(c => {
+    const p=$('d_prod_'+c.id), h=$('d_h_'+c.id);
+    if(p)p.value=''; if(h)h.value='';
+  });
+}
+
+function delEntry(date) {
+  if (!confirm('Supprimer cette journée?')) return;
+  entries = entries.filter(e=>e.date!==date);
+  refreshMonthFilter(); drawJournal();
+}
+
+// ===== JOURNAL =====
+function refreshMonthFilter() {
+  const sel = $('filterMonth');
+  const months = [...new Set(entries.map(e=>e.date.slice(0,7)))].sort().reverse();
+  sel.innerHTML = '<option value="">Tous les mois</option>'+months.map(m=>{
+    const d=new Date(m+'-01');
+    return `<option value="${m}">${MN[d.getMonth()]} ${d.getFullYear()}</option>`;
+  }).join('');
+}
+
+function drawJournal() {
+  const filter = $('filterMonth').value;
+  const data = (filter?entries.filter(e=>e.date.startsWith(filter)):entries).sort((a,b)=>b.date.localeCompare(a.date));
+  const empty=$('jEmpty'), table=document.querySelector('#tp1 table');
+  if (!data.length) {table.style.display='none';empty.style.display='block';$('journalInfo').textContent='';return;}
+  table.style.display=''; empty.style.display='none';
+  $('journalInfo').textContent = data.length+' journée(s)';
+
+  // Build header row
+  $('jHead').innerHTML = `<th>Date</th><th>Type</th>`+
+    chairs.map(c=>`<th colspan="2" class="c" style="background:#1a3a5c;">${c.name.split('—')[0].trim()}</th>`).join('')+
+    `<th class="c">Total prod.</th><th class="c">H. totales</th><th class="c">Prod./h</th><th class="c no-print"></th>`;
+
+  // Sub row
+  let sub='<tr style="background:#243b55;">';
+  sub+='<td colspan="2" style="padding:3px 10px;"></td>';
+  chairs.forEach(()=>sub+=`<td style="padding:3px 8px;font-size:.65rem;color:rgba(255,255,255,.65);font-weight:700;text-align:right;">Prod.</td><td style="padding:3px 8px;font-size:.65rem;color:rgba(255,255,255,.65);font-weight:700;text-align:right;">H.</td>`);
+  sub+='<td colspan="4" style="padding:3px;"></td></tr>';
+  $('jHead').innerHTML += sub;
+
+  let tP=0, tH=0;
+  const cTot={}; chairs.forEach(c=>cTot[c.id]={prod:0,h:0});
+
+  $('jBody').innerHTML = data.map(e=>{
+    const d=new Date(e.date+'T00:00:00');
+    const dP=eTotalProd(e), dH=eTotalH(e), ph=dH>0?dP/dH:0;
+    tP+=dP; tH+=dH;
+    chairs.forEach(c=>{cTot[c.id].prod+=eChairProd(e,c.id);cTot[c.id].h+=eChairH(e,c.id);});
+    const tl = e.type==='ferme'?`<span style="font-size:.7rem;background:#fef2f2;color:var(--red);padding:1px 7px;border-radius:6px;font-weight:700;">Fermée</span>`:e.type==='partiel'?`<span style="font-size:.7rem;background:#fff8e1;color:var(--orange);padding:1px 7px;border-radius:6px;font-weight:700;">Partielle</span>`:'';
+    return `<tr>
+      <td style="font-weight:700;font-size:.82rem;">${d.toLocaleDateString('fr-CA',{weekday:'short',day:'numeric',month:'short'})}</td>
+      <td>${tl}${e.note?`<span style="font-size:.72rem;color:#8a9ab0;"> ${e.note}</span>`:''}</td>
+      ${chairs.map(c=>`<td style="text-align:right;font-size:.8rem;">${eChairProd(e,c.id)?eChairProd(e,c.id).toLocaleString('fr-CA')+' $':'—'}</td><td style="text-align:right;font-size:.8rem;color:#5a6a80;">${eChairH(e,c.id)?eChairH(e,c.id)+'h':'—'}</td>`).join('')}
+      <td style="text-align:center;font-weight:700;">${fmt(dP)}</td>
+      <td style="text-align:center;color:#5a6a80;">${fh(dH)}</td>
+      <td style="text-align:center;font-weight:700;color:${bcolor(ph,cfg().objH)};">${ph?Math.round(ph)+' $/h':'—'}</td>
+      <td class="no-print" style="text-align:center;"><button class="btn-danger" onclick="delEntry('${e.date}')">×</button></td>
+    </tr>`;
+  }).join('');
+
+  const avPH=tH>0?tP/tH:0;
+  $('jFoot').innerHTML=`<tr>
+    <td colspan="2">TOTAL PÉRIODE</td>
+    ${chairs.map(c=>`<td style="text-align:right;">${fmt(cTot[c.id].prod)}</td><td style="text-align:right;">${fh(cTot[c.id].h)}</td>`).join('')}
+    <td style="text-align:center;">${fmt(tP)}</td>
+    <td style="text-align:center;">${fh(tH)}</td>
+    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'—'}</td>
+    <td class="no-print"></td>
+  </tr>`;
+}
+
+// ===== MONTHLY =====
+function drawMonthly() {
+  $('mLabel').textContent = MN[vm]+' '+vy;
+  const me = mEntries(vy,vm), c=cfg();
+  $('mEmpty').style.display=me.length?'none':'block';
+  if (!me.length) {$('mKpis').innerHTML='';$('mChairs').innerHTML='';$('mDHead').innerHTML='';$('mDBody').innerHTML='';$('mDFoot').innerHTML='';$('mInfo').textContent='';return;}
+  $('mInfo').textContent=me.length+' jour(s) enregistré(s)';
+
+  let tP=0,tH=0; const cd={};
+  chairs.forEach(ch=>cd[ch.id]={prod:0,h:0});
+  me.forEach(e=>{
+    chairs.forEach(ch=>{cd[ch.id].prod+=eChairProd(e,ch.id);cd[ch.id].h+=eChairH(e,ch.id);});
+    tP+=eTotalProd(e); tH+=eTotalH(e);
+  });
+  const avPH=tH>0?tP/tH:0, heuresDispo=c.jours*c.hjour*chairs.length;
+  const tauxOcc=heuresDispo>0?tH/heuresDispo*100:0;
+  const avgJour=me.length>0?tP/me.length:0;
+  const objM=c.objH*c.hjour*c.jours*chairs.length;
+
+  // KPIs
+  $('mKpis').innerHTML=[
+    {icon:'💰',label:'Production totale',val:fmt(tP),sub:'Obj. : '+fmt(objM),col:bcolor(tP,objM),pct:Math.min(100,tP/objM*100),st:stcls(tP,objM)},
+    {icon:'⚡',label:'Prod. / heure moy.',val:avPH?Math.round(avPH)+' $/h':'—',sub:'Objectif : '+c.objH+' $/h',col:bcolor(avPH,c.objH),pct:Math.min(100,avPH/c.objH*100),st:stcls(avPH,c.objH)},
+    {icon:'📅',label:'Moyenne journalière',val:fmt(avgJour),sub:me.length+' jours saisis',col:'var(--blue)',pct:0,st:''},
+    {icon:'🪑',label:'Taux d\'occupation',val:Math.round(tauxOcc)+'%',sub:'Cible : 85–95%',col:tauxOcc>=85?'var(--green)':tauxOcc>=70?'var(--orange)':'var(--red)',pct:Math.min(100,tauxOcc),st:tauxOcc>=85?'st-ok':tauxOcc>=70?'st-warn':'st-bad'},
+    {icon:'🔢',label:'Fauteuils',val:chairs.length,sub:heuresDispo+'h dispo. au total',col:'var(--dark)',pct:0,st:''},
+    {icon:'📈',label:'Opportunité',val:fmt(Math.max(0,objM-tP)),sub:'Production additionnelle possible',col:'var(--orange)',pct:0,st:''},
+  ].map(k=>`<div class="kpi-card" style="border-top-color:${k.col};">
+    <div class="kc-icon">${k.icon}</div><div class="kc-label">${k.label}</div>
+    <div class="kc-value">${k.val}</div><div class="kc-sub">${k.sub}</div>
+    ${k.st?`<span class="kc-st ${k.st}">${k.st==='st-ok'?'✅ Objectif':k.st==='st-warn'?'⚠️ Proche':'🔴 Sous objectif'}</span>`:''}
+    ${k.pct?`<div class="bar-w"><div class="bar-f" style="width:${k.pct}%;background:${k.col};"></div></div>`:''}
+  </div>`).join('');
+
+  // Chair breakdown
+  $('mChairs').innerHTML=`<thead><tr>
+    <th>Fauteuil</th><th class="c">Production</th><th class="c">% total</th>
+    <th class="c">Heures</th><th class="c">Prod./h</th><th class="c">vs Objectif</th>
+    <th class="c" style="min-width:110px;">Progression</th>
+  </tr></thead>
+  <tbody>${chairs.map(ch=>{
+    const d=cd[ch.id], ph=d.h>0?d.prod/d.h:0, pct=tP>0?Math.round(d.prod/tP*100):0;
+    const vsObj=c.objH>0?Math.round(ph/c.objH*100):0, bc=bcolor(ph,c.objH);
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:7px;"><div style="width:10px;height:10px;border-radius:2px;background:${ch.color};"></div><strong>${ch.name}</strong></div></td>
+      <td style="text-align:center;font-weight:700;">${fmt(d.prod)}</td><td style="text-align:center;">${pct}%</td>
+      <td style="text-align:center;color:#5a6a80;">${fh(d.h)}</td>
+      <td style="text-align:center;font-weight:700;color:${bc};">${ph?Math.round(ph)+' $/h':'—'}</td>
+      <td style="text-align:center;font-weight:700;color:${bc};">${vsObj?vsObj+'%':'—'}</td>
+      <td><div class="bar-w"><div class="bar-f" style="width:${Math.min(100,vsObj)}%;background:${bc};"></div></div></td>
+    </tr>`;
+  }).join('')}</tbody>
+  <tfoot><tr>
+    <td>TOTAL MOIS</td><td style="text-align:center;">${fmt(tP)}</td><td style="text-align:center;">100%</td>
+    <td style="text-align:center;">${fh(tH)}</td>
+    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'—'}</td>
+    <td style="text-align:center;">${c.objH>0?Math.round(avPH/c.objH*100)+'%':'—'}</td><td></td>
+  </tr></tfoot>`;
+
+  // Daily table
+  $('mDHead').innerHTML=`<th>Date</th>`+chairs.map(ch=>`<th class="c" style="background:#1a3a5c;">${ch.name.split('—')[0].trim()}<br><span style="font-size:.64rem;opacity:.7;font-weight:400;">Prod. / H.</span></th>`).join('')+`<th class="c">Total</th><th class="c">$/h</th>`;
+  $('mDBody').innerHTML=me.map(e=>{
+    const d=new Date(e.date+'T00:00:00');
+    const dP=eTotalProd(e),dH=eTotalH(e),ph=dH>0?Math.round(dP/dH):0;
+    return `<tr>
+      <td style="font-weight:600;font-size:.81rem;">${d.toLocaleDateString('fr-CA',{weekday:'short',day:'numeric',month:'short'})}</td>
+      ${chairs.map(ch=>`<td style="text-align:center;font-size:.79rem;"><b>${eChairProd(e,ch.id)?eChairProd(e,ch.id).toLocaleString('fr-CA')+' $':'—'}</b> <span style="color:#8a9ab0;">/ ${eChairH(e,ch.id)?eChairH(e,ch.id)+'h':'—'}</span></td>`).join('')}
+      <td style="text-align:center;font-weight:700;">${fmt(dP)}</td>
+      <td style="text-align:center;font-weight:700;color:${bcolor(ph,c.objH)};">${ph?ph+' $/h':'—'}</td>
+    </tr>`;
+  }).join('');
+  const avPH2=tH>0?Math.round(tP/tH):0;
+  $('mDFoot').innerHTML=`<tr><td>TOTAL MOIS</td>${chairs.map(ch=>`<td style="text-align:center;">${fmt(cd[ch.id].prod)} / ${fh(cd[ch.id].h)}</td>`).join('')}<td style="text-align:center;">${fmt(tP)}</td><td style="text-align:center;color:${bcolor(avPH2,c.objH)};">${avPH2?avPH2+' $/h':'—'}</td></tr>`;
+}
+
+// ===== ANNUAL =====
+function drawAnnual() {
+  $('yLabel').textContent = vay;
+  const ye=yEntries(vay), c=cfg();
+  $('yEmpty').style.display=ye.length?'none':'block';
+  if(!ye.length){$('yKpis').innerHTML='';$('yBars').innerHTML='';$('yChairs').innerHTML='';return;}
+
+  const mData=Array.from({length:12},(_,m)=>{
+    const me=mEntries(vay,m);
+    return {m, prod:me.reduce((s,e)=>s+eTotalProd(e),0), h:me.reduce((s,e)=>s+eTotalH(e),0), days:me.length};
+  });
+
+  const tP=mData.reduce((s,m)=>s+m.prod,0), tH=mData.reduce((s,m)=>s+m.h,0);
+  const avPH=tH>0?tP/tH:0;
+  const best=mData.reduce((a,b)=>b.prod>a.prod?b:a);
+  const objAnn=c.objH*c.hjour*c.jours*12*chairs.length;
+  const moisActifs=mData.filter(m=>m.days>0).length||1;
+
+  $('yKpis').innerHTML=[
+    {icon:'💰',label:'Production annuelle',val:fmt(tP),sub:'Obj. : '+fmt(objAnn),col:bcolor(tP,objAnn),pct:Math.min(100,tP/objAnn*100)},
+    {icon:'⚡',label:'Prod. / heure moy.',val:avPH?Math.round(avPH)+' $/h':'—',sub:'Objectif : '+c.objH+' $/h',col:bcolor(avPH,c.objH),pct:Math.min(100,avPH/c.objH*100)},
+    {icon:'🏆',label:'Meilleur mois',val:MN[best.m].slice(0,3)+'.',sub:fmt(best.prod),col:'var(--gold)',pct:0},
+    {icon:'📋',label:'Mois enregistrés',val:moisActifs+'/12',sub:ye.length+' journées au total',col:'var(--blue)',pct:0},
+  ].map(k=>`<div class="kpi-card" style="border-top-color:${k.col};">
+    <div class="kc-icon">${k.icon}</div><div class="kc-label">${k.label}</div>
+    <div class="kc-value">${k.val}</div><div class="kc-sub">${k.sub}</div>
+    ${k.pct?`<div class="bar-w"><div class="bar-f" style="width:${k.pct}%;background:${k.col};"></div></div>`:''}
+  </div>`).join('');
+
+  const maxP=Math.max(...mData.map(m=>m.prod),1);
+  $('yBars').innerHTML=mData.map(m=>{
+    if(!m.days) return `<div class="abar-row" style="opacity:.4;"><div class="abar-month">${MN[m.m]}</div><div style="font-size:.76rem;color:#8a9ab0;font-style:italic;">Aucune donnée</div><div></div><div></div></div>`;
+    const pct=Math.round(m.prod/maxP*100), ph=m.h>0?Math.round(m.prod/m.h):0, bc=bcolor(ph,c.objH);
+    return `<div class="abar-row">
+      <div class="abar-month">${MN[m.m]}</div>
+      <div><div class="abar-track"><div class="abar-fill" style="width:${pct}%;background:${bc};"></div></div></div>
+      <div class="abar-val" style="color:${bc};">${fmt(m.prod)}</div>
+      <div class="abar-ph" style="color:${bc};">${ph?ph+' $/h':'—'}<br><span style="color:#8a9ab0;font-weight:400;font-size:.7rem;">${m.days}j</span></div>
+    </div>`;
+  }).join('');
+
+  // Annual chairs
+  const ca={};
+  chairs.forEach(ch=>ca[ch.id]={prod:0,h:0});
+  ye.forEach(e=>chairs.forEach(ch=>{ca[ch.id].prod+=eChairProd(e,ch.id);ca[ch.id].h+=eChairH(e,ch.id);}));
+
+  $('yChairs').innerHTML=`<thead><tr>
+    <th>Fauteuil</th><th class="c">Production annuelle</th><th class="c">% du total</th>
+    <th class="c">Heures totales</th><th class="c">Prod. moy./h</th><th class="c">Moy. mensuelle</th>
+  </tr></thead>
+  <tbody>${chairs.map(ch=>{
+    const d=ca[ch.id], ph=d.h>0?Math.round(d.prod/d.h):0, pct=tP>0?Math.round(d.prod/tP*100):0, bc=bcolor(ph,c.objH);
+    return `<tr>
+      <td><div style="display:flex;align-items:center;gap:7px;"><div style="width:10px;height:10px;border-radius:2px;background:${ch.color};"></div><strong>${ch.name}</strong></div></td>
+      <td style="text-align:center;font-weight:700;">${fmt(d.prod)}</td>
+      <td style="text-align:center;">${pct}%</td>
+      <td style="text-align:center;color:#5a6a80;">${fh(d.h)}</td>
+      <td style="text-align:center;font-weight:700;color:${bc};">${ph?ph+' $/h':'—'}</td>
+      <td style="text-align:center;">${fmt(Math.round(d.prod/moisActifs))}</td>
+    </tr>`;
+  }).join('')}</tbody>
+  <tfoot><tr>
+    <td>TOTAL ANNUEL</td><td style="text-align:center;">${fmt(tP)}</td><td style="text-align:center;">100%</td>
+    <td style="text-align:center;">${fh(tH)}</td>
+    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'—'}</td>
+    <td style="text-align:center;">${fmt(Math.round(tP/moisActifs))}</td>
+  </tr></tfoot>`;
+}
+
+// ===== NAV =====
+function go(n,btn) {
+  document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
+  if(n===1){buildDayForm();drawJournal();}
+  if(n===2){vm=TODAY.getMonth();vy=TODAY.getFullYear();drawMonthly();}
+  if(n===3){vay=TODAY.getFullYear();drawAnnual();}
+}
+function moveMonth(d){vm+=d;if(vm>11){vm=0;vy++;}if(vm<0){vm=11;vy--;}drawMonthly();}
+function gotoNow(){vm=TODAY.getMonth();vy=TODAY.getFullYear();drawMonthly();}
+function moveYear(d){vay+=d;drawAnnual();}
+function gotoYear(){vay=TODAY.getFullYear();drawAnnual();}
+
+// ===== INIT =====
+drawChairList();
+buildDayForm();
+refreshMonthFilter();
+
+// Inject realistic demo data for current month
+(()=>{
+  const base=new Date(TODAY.getFullYear(),TODAY.getMonth(),1);
+  for(let d=0;d<Math.min(TODAY.getDate()-1,18);d++){
+    const dt=new Date(base); dt.setDate(d+1);
+    if(dt.getDay()===0||dt.getDay()===6) continue;
+    const ds=dt.toISOString().split('T')[0];
+    const data={};
+    chairs.forEach((c,i)=>{
+      data[c.id]={
+        prod:i===0?2000+Math.round(Math.random()*800):1400+Math.round(Math.random()*500),
+        h:i===0?9:8.5
+      };
+    });
+    entries.push({date:ds,type:'normal',note:'',data});
+  }
+  refreshMonthFilter();
+})();
+</script>
+
+
+</body></html>

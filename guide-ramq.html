@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)file:///C:/Users/info/Downloads/guide-ramq.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide RAMQ — Académie Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:15px 32px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1100px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+  .search-bar{padding:12px 28px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .search-input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;font-size:.88rem;font-family:inherit;background:white;min-width:200px;}
+  .search-input:focus{outline:none;border-color:var(--accent);}
+  .cat-filter{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem;font-family:inherit;cursor:pointer;background:white;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .tab-btn{padding:10px 20px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;padding:20px 28px;}
+  .tab-pane.active{display:block;}
+  .sec-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+  .sec-title::before{content:'';display:block;width:3px;height:13px;background:var(--accent);border-radius:2px;}
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.83rem;color:#2a3a4a;line-height:1.7;margin-bottom:14px;}
+  .warn-box{background:#fff8e1;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.83rem;color:#7a4400;line-height:1.7;margin-bottom:14px;}
+
+  /* CODES TABLE */
+  .codes-table{width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:16px;}
+  .codes-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.72rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .codes-table td{border-bottom:1px solid var(--border);padding:8px 10px;vertical-align:top;}
+  .codes-table tr:nth-child(even) td{background:var(--light);}
+  .codes-table tr:hover td{background:#f0f7ff;}
+  .code-num{font-family:monospace;font-weight:700;color:var(--blue);font-size:.88rem;white-space:nowrap;}
+  .code-desc{font-size:.82rem;color:var(--text);}
+  .code-note{font-size:.75rem;color:#5a6a80;margin-top:3px;font-style:italic;}
+  .covered-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700;}
+  .cov-yes{background:#f0fdf4;color:var(--green);}
+  .cov-cond{background:#fff8e1;color:var(--orange);}
+  .cov-no{background:#fef2f2;color:var(--red);}
+  .age-badge{display:inline-block;padding:2px 7px;border-radius:8px;font-size:.7rem;font-weight:600;background:#e3f2fd;color:var(--blue);}
+
+  /* QUICK CARDS */
+  .quick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:16px;}
+  .quick-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:13px 15px;border-top:3px solid var(--border);}
+  .qc-code{font-family:monospace;font-size:1rem;font-weight:700;color:var(--blue);margin-bottom:4px;}
+  .qc-title{font-size:.86rem;font-weight:700;color:var(--dark);margin-bottom:4px;}
+  .qc-desc{font-size:.78rem;color:#5a6a80;line-height:1.5;}
+  .qc-tag{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:8px;font-size:.68rem;font-weight:700;}
+
+  /* ELIGIBILITY */
+  .elig-card{background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:10px;}
+  .ec-title{font-size:.85rem;font-weight:700;color:var(--dark);margin-bottom:8px;display:flex;align-items:center;gap:7px;}
+  .ec-icon{font-size:1.1rem;}
+  .ec-rules{font-size:.82rem;color:#4a5a6a;line-height:1.8;}
+  .ec-rules li{margin-left:16px;}
+
+  /* ERRORS */
+  .error-card{background:white;border:1.5px solid var(--border);border-left:4px solid var(--red);border-radius:8px;padding:12px 16px;margin-bottom:8px;}
+  .err-title{font-size:.84rem;font-weight:700;color:var(--red);margin-bottom:6px;}
+  .err-desc{font-size:.81rem;color:#4a5a6a;line-height:1.6;}
+  .err-fix{margin-top:6px;font-size:.78rem;color:var(--green);font-weight:600;}
+
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.search-bar,.nav-tabs{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.tab-pane{display:block!important;}.codes-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  @media(max-width:700px){.tab-pane{padding:12px 14px;}.quick-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Académie — Formation secrétaire dentaire</div></div>
+<div class="container">
+  <div class="doc-header"><h1>🏥 Guide de référence RAMQ</h1><p>Codes, admissibilité, erreurs courantes et procédures — Académie Gestion Mel</p></div>
+
+  <div class="search-bar">
+    <input class="search-input" type="text" id="searchInput" placeholder="🔍 Rechercher un code ou un traitement..." oninput="filterCodes()">
+    <select class="cat-filter" id="catFilter" onchange="filterCodes()">
+      <option value="">Toutes les catégories</option>
+      <option value="examen">Examens</option>
+      <option value="prevention">Prévention</option>
+      <option value="radio">Radiographies</option>
+      <option value="restauration">Restaurations</option>
+      <option value="endo">Endodontie</option>
+      <option value="chirurgie">Chirurgie</option>
+      <option value="prothese">Prothèses</option>
+    </select>
+    <span style="font-size:.76rem;color:#8a9ab0;" id="countDisplay">24 code(s)</span>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="show(0,this)">📋 Codes fréquents</button>
+    <button class="tab-btn" onclick="show(1,this)">👤 Admissibilité RAMQ</button>
+    <button class="tab-btn" onclick="show(2,this)">❌ Erreurs courantes</button>
+    <button class="tab-btn" onclick="show(3,this)">📚 Procédures</button>
+  </div>
+
+  <!-- CODES -->
+  <div class="tab-pane active" id="tp0">
+    <div class="info-box">Cette liste présente les <strong>codes ACDQ/RAMQ les plus fréquents</strong> en clinique dentaire générale. La nomenclature complète est disponible sur le portail ACDQ. Les codes présentés correspondent à la <strong>structure numérique FDI</strong> utilisée en dentisterie québécoise.</div>
+    <div id="codesContainer">
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--blue)40;">Examens <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(3 code(s))</span></div>
+      <div class="quick-grid"><div class="quick-card" style="border-top-color:var(--blue);">
+          <div class="qc-code">01100</div>
+          <div class="qc-title">Examen complet (adulte et enfant)</div>
+          <div class="qc-desc">Inclut l'évaluation de la dentition, parodonte, muqueuse, occlusion et ATM. À compléter par le dentiste.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/an</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--blue);">
+          <div class="qc-code">01200</div>
+          <div class="qc-title">Examen limité / d'urgence</div>
+          <div class="qc-desc">Pour un problème spécifique ou une urgence. Plus court que l'examen complet.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Au besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--blue);">
+          <div class="qc-code">01300</div>
+          <div class="qc-title">Examen de suivi</div>
+          <div class="qc-desc">Réévaluation après un traitement spécifique.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-no">❌ Non couvert</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div></div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--green)40;">Prévention <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(4 code(s))</span></div>
+      <div class="quick-grid"><div class="quick-card" style="border-top-color:var(--green);">
+          <div class="qc-code">11101</div>
+          <div class="qc-title">Prophylaxie (nettoyage) — Enfant</div>
+          <div class="qc-desc">Détartrage et polissage pour les enfants. Couvert RAMQ pour les moins de 10 ans.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-yes">✅ Couvert RAMQ</span>
+            <span class="age-badge">&lt; 10 ans</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/9 mois</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--green);">
+          <div class="qc-code">11111</div>
+          <div class="qc-title">Prophylaxie (nettoyage) — Adulte</div>
+          <div class="qc-desc">Détartrage et polissage pour adultes. Non couvert par RAMQ standard.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-no">❌ Non couvert</span>
+            <span class="age-badge">Adulte</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1-2×/an</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--green);">
+          <div class="qc-code">12101</div>
+          <div class="qc-title">Application de fluorure topique — Enfant</div>
+          <div class="qc-desc">Application de gel, mousse ou vernis fluoré pour prévenir les caries. Couvert pour les moins de 10 ans.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-yes">✅ Couvert RAMQ</span>
+            <span class="age-badge">&lt; 10 ans</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/6 mois</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--green);">
+          <div class="qc-code">13101</div>
+          <div class="qc-title">Scellant dentaire — par dent</div>
+          <div class="qc-desc">Application de résine protectrice dans les sillons des molaires permanentes. Couvert pour les molaires permanentes chez les enfants.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">6-16 ans</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/dent</span>
+          </div>
+        </div></div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--purple)40;">Radiographies <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(4 code(s))</span></div>
+      <div class="quick-grid"><div class="quick-card" style="border-top-color:var(--purple);">
+          <div class="qc-code">02101</div>
+          <div class="qc-title">Radiographie périapicale (par cliché)</div>
+          <div class="qc-desc">Petite radio montrant une à deux dents complètes. Facturée par cliché.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--purple);">
+          <div class="qc-code">02201</div>
+          <div class="qc-title">Radiographie bite-wing — 2 clichés</div>
+          <div class="qc-desc">Série de 2 radiographies interproximales pour détecter les caries entre les dents.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/an</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--purple);">
+          <div class="qc-code">02202</div>
+          <div class="qc-title">Radiographie bite-wing — 4 clichés</div>
+          <div class="qc-desc">Série complète de 4 radiographies interproximales.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/an</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--purple);">
+          <div class="qc-code">02910</div>
+          <div class="qc-title">Panoramique (pan-x)</div>
+          <div class="qc-desc">Vue d'ensemble de toute la dentition et des mâchoires. Utile pour les plans de traitement.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/5 ans</span>
+          </div>
+        </div></div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--orange)40;">Restaurations <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(3 code(s))</span></div>
+      <div class="quick-grid"><div class="quick-card" style="border-top-color:var(--orange);">
+          <div class="qc-code">21211</div>
+          <div class="qc-title">Obturation composite 1 surface — dent antérieure</div>
+          <div class="qc-desc">Composite sur dent avant (incisive, canine). Facturation par surface.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--orange);">
+          <div class="qc-code">22311</div>
+          <div class="qc-title">Obturation composite 1 surface — dent postérieure</div>
+          <div class="qc-desc">Composite sur prémolaire ou molaire.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--orange);">
+          <div class="qc-code">22313</div>
+          <div class="qc-title">Obturation composite 3 surfaces — dent postérieure</div>
+          <div class="qc-desc">Restauration couvrant 3 surfaces de la dent. Honoraire plus élevé.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div></div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid var(--red)40;">Endodontie <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(4 code(s))</span></div>
+      <div class="quick-grid"><div class="quick-card" style="border-top-color:var(--red);">
+          <div class="qc-code">31111</div>
+          <div class="qc-title">Traitement de canal — 1 canal</div>
+          <div class="qc-desc">Pulpectomie et obturation. Incisive centrale, canine. 1 séance ou plusieurs.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--red);">
+          <div class="qc-code">31211</div>
+          <div class="qc-title">Traitement de canal — 2 canaux</div>
+          <div class="qc-desc">Prémolaires supérieures, incisives mandibulaires.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--red);">
+          <div class="qc-code">31311</div>
+          <div class="qc-title">Traitement de canal — 3 canaux</div>
+          <div class="qc-desc">Molaires mandibulaires, prémolaires à 3 canaux.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:var(--red);">
+          <div class="qc-code">31411</div>
+          <div class="qc-title">Traitement de canal — 4 canaux</div>
+          <div class="qc-desc">Premières molaires maxillaires (souvent 4 canaux).</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div></div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:#c0392b;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #c0392b40;">Chirurgie <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(3 code(s))</span></div>
+      <div class="quick-grid"><div class="quick-card" style="border-top-color:#c0392b;">
+          <div class="qc-code">71111</div>
+          <div class="qc-title">Extraction simple — dent permanente</div>
+          <div class="qc-desc">Extraction sans complication chirurgicale. Anesthésie locale incluse.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:#c0392b;">
+          <div class="qc-code">71141</div>
+          <div class="qc-title">Extraction chirurgicale — dent incluse</div>
+          <div class="qc-desc">Nécessite incision et/ou ostéotomie. Honoraire plus élevé.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:#c0392b;">
+          <div class="qc-code">72111</div>
+          <div class="qc-title">Extraction dent de sagesse — éruptée</div>
+          <div class="qc-desc">Extraction de la 3e molaire lorsqu'accessible en bouche.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Tous</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div></div>
+    </div>
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:#2c3e50;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #2c3e5040;">Prothèses <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(3 code(s))</span></div>
+      <div class="quick-grid"><div class="quick-card" style="border-top-color:#2c3e50;">
+          <div class="qc-code">51131</div>
+          <div class="qc-title">Couronne complète — porcelaine/céramique</div>
+          <div class="qc-desc">Couronne esthétique sur dent antérieure ou postérieure.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-no">❌ Non couvert</span>
+            <span class="age-badge">Adulte</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/5 ans</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:#2c3e50;">
+          <div class="qc-code">62111</div>
+          <div class="qc-title">Prothèse complète maxillaire</div>
+          <div class="qc-desc">Dentier complet supérieur.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Adulte</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 1×/5 ans</span>
+          </div>
+        </div><div class="quick-card" style="border-top-color:#2c3e50;">
+          <div class="qc-code">64111</div>
+          <div class="qc-title">Prothèse partielle amovible</div>
+          <div class="qc-desc">Prothèse partielle à crochets.</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge cov-cond">🟡 Sous conditions</span>
+            <span class="age-badge">Adulte</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 Selon besoin</span>
+          </div>
+        </div></div>
+    </div></div>
+  </div>
+
+  <!-- ADMISSIBILITÉ -->
+  <div class="tab-pane" id="tp1">
+    <div class="warn-box"><strong>⚠️ Important :</strong> La RAMQ en dentisterie couvre une gamme limitée de soins, ciblant principalement les enfants (Programme Sourire) et certains bénéficiaires de l'aide sociale. Toujours vérifier l'admissibilité AVANT d'effectuer les traitements.</div>
+    <div class="elig-card"><div class="ec-title"><span class="ec-icon">👦</span>Programme Sourire — Enfants 0 à 9 ans</div>
+      <ul class="ec-rules"><li>Enfants québécois de <strong>0 à 9 ans</strong> (inclus)</li><li>Examens, radiographies, nettoyages, obturations, extractions</li><li>Les soins doivent être <strong>médicalement nécessaires</strong></li><li>Couverture de base — certains soins exclus (couronnes, orthodontie)</li><li>Vérifier la carte d'assurance maladie — doit être valide</li></ul></div>
+    <div class="elig-card"><div class="ec-title"><span class="ec-icon">💼</span>Aide sociale / Sécurité du revenu</div>
+      <ul class="ec-rules"><li>Bénéficiaires de l'aide sociale (Programme d'assistance emploi)</li><li>Carte d'assurance maladie + preuve de prestations requise</li><li>Soins de base couverts — grille tarifaire RAMQ s'applique</li><li>Orthodontie, blanchiment, implants généralement exclus</li><li>Dentiers couverts dans certaines conditions</li></ul></div>
+    <div class="elig-card"><div class="ec-title"><span class="ec-icon">🏥</span>Premières Nations et Inuits (SSNA)</div>
+      <ul class="ec-rules"><li>Membres admissibles des Premières Nations et Inuits reconnus</li><li>Programme administré par <strong>Express Scripts Canada</strong></li><li>Formulaires de facturation spéciaux requis</li><li>Le dentiste doit être inscrit au programme SSNA</li><li>Couverture plus étendue que la RAMQ provinciale</li></ul></div>
+    <div class="elig-card"><div class="ec-title"><span class="ec-icon">👴</span>Autres populations admissibles</div>
+      <ul class="ec-rules"><li>Certains programmes spéciaux (handicaps, maladies chroniques)</li><li>Patients en centres d'hébergement (CHSLD) — couverture partielle</li><li>Toujours vérifier avec la RAMQ au <strong>1-800-561-9749</strong></li></ul></div>
+  </div>
+
+  <!-- ERREURS -->
+  <div class="tab-pane" id="tp2">
+    <div class="warn-box"><strong>Bon à savoir :</strong> Les erreurs de facturation RAMQ peuvent entraîner des refus, des demandes de remboursement ou des audits. En cas de doute, appelez la RAMQ avant de soumettre.</div>
+    <div class="error-card"><div class="err-title">❌ Code incorrect pour l'âge du patient</div><div class="err-desc">Utiliser un code adulte pour un enfant de moins de 10 ans, ou vice-versa. La RAMQ a des codes différents selon l'âge.</div><div class="err-fix">✅ Solution : Toujours vérifier la date de naissance dans le dossier avant de facturer.</div></div>
+    <div class="error-card"><div class="err-title">❌ Numéro de permis du dentiste manquant ou incorrect</div><div class="err-desc">Le numéro de pratique RAMQ du dentiste est obligatoire sur chaque demande de paiement. Un mauvais numéro entraîne un refus automatique.</div><div class="err-fix">✅ Solution : Configurer le numéro dans le logiciel dentaire et vérifier annuellement.</div></div>
+    <div class="error-card"><div class="err-title">❌ Oublier de vérifier l'admissibilité avant les soins</div><div class="err-desc">Effectuer les traitements sans confirmer que le patient est admissible à la RAMQ. Risque de ne pas être payé.</div><div class="err-fix">✅ Solution : Toujours vérifier la carte d'assurance maladie ET l'admissibilité au programme avant chaque soins.</div></div>
+    <div class="error-card"><div class="err-title">❌ Code de surface incorrect pour les obturations</div><div class="err-desc">Facturer 1 surface quand 3 ont été restaurées, ou l'inverse. Chaque surface a son propre code et honoraire.</div><div class="err-fix">✅ Solution : Confirmer avec le dentiste le nombre exact de surfaces restaurées après chaque rendez-vous.</div></div>
+    <div class="error-card"><div class="err-title">❌ Fréquence dépassée (nettoyage, radiographies)</div><div class="err-desc">La RAMQ limite la fréquence de certains soins (ex: 1 nettoyage par 9 mois pour les enfants). Refacturé trop tôt = refus.</div><div class="err-fix">✅ Solution : Vérifier la date du dernier soin de même nature dans les notes RAMQ avant de facturer.</div></div>
+    <div class="error-card"><div class="err-title">❌ Carte d'assurance maladie expirée ou invalide</div><div class="err-desc">Facturer sans vérifier la validité de la carte. La RAMQ peut rejeter la demande si la carte est expirée.</div><div class="err-fix">✅ Solution : Toujours demander la carte et vérifier la date de validité à chaque visite.</div></div>
+    <div class="error-card"><div class="err-title">❌ Traitement non couvert soumis par erreur</div><div class="err-desc">Soumettre un traitement cosmétique ou non couvert (blanchiment, implant) à la RAMQ par erreur.</div><div class="err-fix">✅ Solution : Connaître la liste des soins couverts et ne soumettre que les soins admissibles.</div></div>
+  </div>
+
+  <!-- PROCÉDURES -->
+  <div class="tab-pane" id="tp3">
+    <div class="sec-title">Procédure de facturation RAMQ</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px;">
+      <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:10px 14px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:.83rem;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">1</div>
+        <div><strong>Vérifier l'admissibilité du patient</strong><br><span style="color:#5a6a80;">Carte d'assurance maladie valide + confirmation du programme applicable (Sourire, aide sociale, SSNA).</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:10px 14px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:.83rem;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">2</div>
+        <div><strong>Confirmer les soins avec le dentiste</strong><br><span style="color:#5a6a80;">Obtenir les codes, le nombre de surfaces, le numéro de dent et la confirmation de la prestation.</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:10px 14px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:.83rem;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">3</div>
+        <div><strong>Saisir dans le logiciel dentaire</strong><br><span style="color:#5a6a80;">Entrer les codes, numéros de dents, surfaces et montants. Vérifier que le numéro de pratique du dentiste est correct.</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:10px 14px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:.83rem;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--blue);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">4</div>
+        <div><strong>Transmission électronique à la RAMQ</strong><br><span style="color:#5a6a80;">Envoyer la demande via le logiciel (EDI). La RAMQ confirme la réception. Conserver le numéro de transaction.</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;padding:10px 14px;background:white;border:1.5px solid var(--border);border-radius:8px;font-size:.83rem;">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--green);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;">5</div>
+        <div><strong>Réception du paiement et suivi</strong><br><span style="color:#5a6a80;">La RAMQ paie généralement dans les 2 à 4 semaines. Vérifier les rejets et corriger si nécessaire.</span></div>
+      </div>
+    </div>
+
+    <div class="sec-title">Contacts utiles</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:.82rem;"><strong>RAMQ — Professionnels</strong><br>📞 1-800-561-9749<br>🌐 ramq.gouv.qc.ca</div>
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:.82rem;"><strong>ACDQ</strong><br>📞 514-282-1425<br>🌐 acdq.qc.ca</div>
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:.82rem;"><strong>Express Scripts (SSNA)</strong><br>📞 1-800-663-8433<br>🌐 fr.provider.express-scripts.ca</div>
+      <div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:.82rem;"><strong>Programme Sourire (enfants)</strong><br>📞 1-800-561-9749<br>Via portail RAMQ</div>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — Académie de formation | gestionmel.com — <em>Ce guide est à des fins éducatives. Consultez toujours la nomenclature officielle ACDQ/RAMQ pour la facturation réelle.</em></div>
+</div>
+
+<script>
+const CODES = [
+  // EXAMENS
+  {code:'01100',cat:'examen',desc:'Examen complet (adulte et enfant)',note:'Inclut l\'évaluation de la dentition, parodonte, muqueuse, occlusion et ATM. À compléter par le dentiste.',covered:'cond',age:'Tous',freq:'1×/an'},
+  {code:'01200',cat:'examen',desc:'Examen limité / d\'urgence',note:'Pour un problème spécifique ou une urgence. Plus court que l\'examen complet.',covered:'cond',age:'Tous',freq:'Au besoin'},
+  {code:'01300',cat:'examen',desc:'Examen de suivi',note:'Réévaluation après un traitement spécifique.',covered:'non',age:'Tous',freq:'Selon besoin'},
+  // PRÉVENTION
+  {code:'11101',cat:'prevention',desc:'Prophylaxie (nettoyage) — Enfant',note:'Détartrage et polissage pour les enfants. Couvert RAMQ pour les moins de 10 ans.',covered:'oui',age:'< 10 ans',freq:'1×/9 mois'},
+  {code:'11111',cat:'prevention',desc:'Prophylaxie (nettoyage) — Adulte',note:'Détartrage et polissage pour adultes. Non couvert par RAMQ standard.',covered:'non',age:'Adulte',freq:'1-2×/an'},
+  {code:'12101',cat:'prevention',desc:'Application de fluorure topique — Enfant',note:'Application de gel, mousse ou vernis fluoré pour prévenir les caries. Couvert pour les moins de 10 ans.',covered:'oui',age:'< 10 ans',freq:'1×/6 mois'},
+  {code:'13101',cat:'prevention',desc:'Scellant dentaire — par dent',note:'Application de résine protectrice dans les sillons des molaires permanentes. Couvert pour les molaires permanentes chez les enfants.',covered:'cond',age:'6-16 ans',freq:'1×/dent'},
+  // RADIOGRAPHIES
+  {code:'02101',cat:'radio',desc:'Radiographie périapicale (par cliché)',note:'Petite radio montrant une à deux dents complètes. Facturée par cliché.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'02201',cat:'radio',desc:'Radiographie bite-wing — 2 clichés',note:'Série de 2 radiographies interproximales pour détecter les caries entre les dents.',covered:'cond',age:'Tous',freq:'1×/an'},
+  {code:'02202',cat:'radio',desc:'Radiographie bite-wing — 4 clichés',note:'Série complète de 4 radiographies interproximales.',covered:'cond',age:'Tous',freq:'1×/an'},
+  {code:'02910',cat:'radio',desc:'Panoramique (pan-x)',note:'Vue d\'ensemble de toute la dentition et des mâchoires. Utile pour les plans de traitement.',covered:'cond',age:'Tous',freq:'1×/5 ans'},
+  // RESTAURATIONS
+  {code:'21211',cat:'restauration',desc:'Obturation composite 1 surface — dent antérieure',note:'Composite sur dent avant (incisive, canine). Facturation par surface.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'22311',cat:'restauration',desc:'Obturation composite 1 surface — dent postérieure',note:'Composite sur prémolaire ou molaire.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'22313',cat:'restauration',desc:'Obturation composite 3 surfaces — dent postérieure',note:'Restauration couvrant 3 surfaces de la dent. Honoraire plus élevé.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  // ENDODONTIE
+  {code:'31111',cat:'endo',desc:'Traitement de canal — 1 canal',note:'Pulpectomie et obturation. Incisive centrale, canine. 1 séance ou plusieurs.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'31211',cat:'endo',desc:'Traitement de canal — 2 canaux',note:'Prémolaires supérieures, incisives mandibulaires.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'31311',cat:'endo',desc:'Traitement de canal — 3 canaux',note:'Molaires mandibulaires, prémolaires à 3 canaux.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'31411',cat:'endo',desc:'Traitement de canal — 4 canaux',note:'Premières molaires maxillaires (souvent 4 canaux).',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  // CHIRURGIE
+  {code:'71111',cat:'chirurgie',desc:'Extraction simple — dent permanente',note:'Extraction sans complication chirurgicale. Anesthésie locale incluse.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'71141',cat:'chirurgie',desc:'Extraction chirurgicale — dent incluse',note:'Nécessite incision et/ou ostéotomie. Honoraire plus élevé.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  {code:'72111',cat:'chirurgie',desc:'Extraction dent de sagesse — éruptée',note:'Extraction de la 3e molaire lorsqu\'accessible en bouche.',covered:'cond',age:'Tous',freq:'Selon besoin'},
+  // PROTHESES
+  {code:'51131',cat:'prothese',desc:'Couronne complète — porcelaine/céramique',note:'Couronne esthétique sur dent antérieure ou postérieure.',covered:'non',age:'Adulte',freq:'1×/5 ans'},
+  {code:'62111',cat:'prothese',desc:'Prothèse complète maxillaire',note:'Dentier complet supérieur.',covered:'cond',age:'Adulte',freq:'1×/5 ans'},
+  {code:'64111',cat:'prothese',desc:'Prothèse partielle amovible',note:'Prothèse partielle à crochets.',covered:'cond',age:'Adulte',freq:'Selon besoin'},
+];
+
+const CAT_LABELS = {examen:'Examens',prevention:'Prévention',radio:'Radiographies',restauration:'Restaurations',endo:'Endodontie',chirurgie:'Chirurgie',prothese:'Prothèses'};
+const CAT_COLORS = {examen:'var(--blue)',prevention:'var(--green)',radio:'var(--purple)',restauration:'var(--orange)',endo:'var(--red)',chirurgie:'#c0392b',prothese:'#2c3e50'};
+
+function filterCodes() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const cat = document.getElementById('catFilter').value;
+  const filtered = CODES.filter(c => {
+    const matchSearch = !search || c.code.includes(search) || c.desc.toLowerCase().includes(search) || (c.note&&c.note.toLowerCase().includes(search));
+    const matchCat = !cat || c.cat === cat;
+    return matchSearch && matchCat;
+  });
+  document.getElementById('countDisplay').textContent = filtered.length + ' code(s)';
+  renderCodes(filtered);
+}
+
+function renderCodes(codes) {
+  const container = document.getElementById('codesContainer');
+  if(codes.length === 0){container.innerHTML='<div style="text-align:center;padding:30px;color:#8a9ab0;">Aucun code trouvé.</div>';return;}
+  
+  // Group by category
+  const grouped = {};
+  codes.forEach(c => { if(!grouped[c.cat])grouped[c.cat]=[]; grouped[c.cat].push(c); });
+  
+  container.innerHTML = Object.keys(grouped).map(cat => `
+    <div style="margin-bottom:18px;">
+      <div style="font-size:.78rem;font-weight:700;color:${CAT_COLORS[cat]};text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid ${CAT_COLORS[cat]}40;">${CAT_LABELS[cat]||cat} <span style="font-weight:400;color:#8a9ab0;font-size:.73rem;">(${grouped[cat].length} code(s))</span></div>
+      <div class="quick-grid">${grouped[cat].map(c => {
+        const covCls = c.covered==='oui'?'cov-yes':c.covered==='cond'?'cov-cond':'cov-no';
+        const covLbl = c.covered==='oui'?'✅ Couvert RAMQ':c.covered==='cond'?'🟡 Sous conditions':'❌ Non couvert';
+        return `<div class="quick-card" style="border-top-color:${CAT_COLORS[cat]};">
+          <div class="qc-code">${c.code}</div>
+          <div class="qc-title">${c.desc}</div>
+          <div class="qc-desc">${c.note}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;">
+            <span class="qc-tag covered-badge ${covCls}">${covLbl}</span>
+            <span class="age-badge">${c.age}</span>
+            <span class="qc-tag" style="background:var(--light);color:#5a6a80;border:1px solid var(--border);">📅 ${c.freq}</span>
+          </div>
+        </div>`;
+      }).join('')}</div>
+    </div>`).join('');
+}
+
+function show(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
+
+filterCodes();
+</script>
+
+
+</body></html>

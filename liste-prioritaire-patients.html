@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)file:///C:/Users/info/Downloads/liste-priorite-patients.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liste de priorité — Patients en attente | Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1100px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 32px;}
+  .doc-header h1{font-size:1.25rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+  /* TOP CONTROLS */
+  .top-controls{padding:12px 32px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .tc-left{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .filter-btn{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
+  .filter-btn:hover{border-color:var(--accent);color:var(--blue);}
+  .filter-btn.f-active{background:var(--blue);border-color:var(--blue);color:white;}
+  .filter-btn.f-urg.f-active{background:var(--red);border-color:var(--red);}
+  .filter-btn.f-imp.f-active{background:var(--orange);border-color:var(--orange);}
+  .filter-btn.f-rout.f-active{background:var(--green);border-color:var(--green);}
+  /* STATS */
+  .stats-bar{padding:8px 32px;background:white;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;}
+  .stat-chip{display:flex;align-items:center;gap:6px;font-size:.76rem;}
+  .stat-dot{width:9px;height:9px;border-radius:50%;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .stat-num{font-weight:700;color:var(--text);}
+  /* ADD FORM */
+  .add-form{padding:14px 32px;background:#f8fbff;border-bottom:2px solid var(--border);}
+  .form-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .form-title::before{content:'➕';}
+  .form-grid{display:grid;grid-template-columns:1.5fr 1fr 2fr 90px 1fr 110px auto auto;gap:8px;align-items:end;}
+  .fg{display:flex;flex-direction:column;gap:3px;}
+  .fg label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
+  .fg input,.fg select{border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
+  .fg input:focus,.fg select:focus{outline:none;border-color:var(--accent);}
+  .btn-ajouter{padding:8px 16px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .btn-ajouter:hover{background:#155a9e;}
+  .rv-toggle{display:flex;flex-direction:column;gap:4px;}
+  .rv-toggle label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
+  .rv-toggle-btns{display:flex;gap:4px;}
+  .rv-tb{padding:6px 9px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .12s;white-space:nowrap;}
+  .rv-tb.sel{background:var(--blue);border-color:var(--blue);color:white;}
+  /* TABLE */
+  .table-wrap{overflow-x:auto;padding:0 32px 16px;}
+  .patient-table{width:100%;border-collapse:collapse;font-size:.81rem;margin-top:12px;}
+  .patient-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.71rem;font-weight:600;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .patient-table th.th-c{text-align:center;}
+  .patient-table td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:middle;}
+  .patient-table tr:nth-child(even) td{background:#fafbfc;}
+  .patient-table tr:hover td{background:var(--light);}
+  /* URGENCY */
+  .urg-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:10px;font-size:.72rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;white-space:nowrap;}
+  .urg-1{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.2);}
+  .urg-2{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.2);}
+  .urg-3{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.2);}
+  .urg-4{background:#f3e8ff;color:var(--purple);border:1px solid rgba(142,68,173,.2);}
+  /* RANK */
+  .rank-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .rank-1{background:var(--red);}
+  .rank-2{background:var(--orange);}
+  .rank-3{background:var(--green);}
+  .rank-other{background:#8a9ab0;}
+  /* RV STATUS */
+  .rv-status{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:8px;font-size:.73rem;font-weight:600;}
+  .rv-fixed{background:#f0fdf4;color:var(--green);}
+  .rv-unfixed{background:#fff8e1;color:var(--orange);}
+  .rv-past{background:#fef2f2;color:var(--red);}
+  /* BUTTONS */
+  .btn-remove{width:24px;height:24px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;}
+  .btn-remove:hover{background:#fef2f2;border-color:var(--red);}
+  .btn-note{width:24px;height:24px;border-radius:5px;border:1.5px solid var(--border);background:white;color:var(--blue);cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;}
+  .btn-note:hover{background:var(--light);border-color:var(--blue);}
+  /* EMPTY */
+  .empty-state{text-align:center;padding:40px;color:#8a9ab0;}
+  .empty-state .es-icon{font-size:2.5rem;margin-bottom:10px;}
+  .empty-state .es-msg{font-size:.88rem;}
+  /* AUTO REMOVED NOTICE */
+  .notice{margin:10px 32px 0;background:#fff8e1;border-left:4px solid var(--orange);border-radius:0 6px 6px 0;padding:9px 14px;font-size:.8rem;color:#7a4400;}
+  .actions{padding:12px 32px;background:var(--light);display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);}
+  .btn{padding:7px 16px;border-radius:7px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+  .btn-secondary{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+  .row-removed{opacity:.5;background:#fafafa!important;}
+  @media print{
+    body{background:white;}
+    .page-header,.top-controls,.add-form,.actions,.btn-remove,.btn-note,.filter-btn{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .table-wrap{padding:0 12px;}
+    .patient-table th,.urg-badge,.rank-num{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+  @media(max-width:900px){
+    .form-grid{grid-template-columns:1fr 1fr 1fr;}.table-wrap{padding:0 12px 12px;}
+    .top-controls{padding:10px 14px;}.stats-bar{padding:7px 14px;}.add-form{padding:12px 14px;}
+  }
+</style>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Gestion des patients</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Liste de priorité d'attente — Patients</h1><p>Classement automatique par niveau d'urgence • Retrait automatique si la date de RV est passée</p></div>
+
+  <div class="top-controls">
+    <div class="tc-left">
+      <input class="ci" type="text" placeholder="🔍 Rechercher un patient..." id="searchInput" oninput="renderTable()" style="min-width:220px;">
+      <button class="filter-btn f-active" onclick="setFilter(&#39;all&#39;,this)">Tous</button>
+      <button class="filter-btn f-urg" onclick="setFilter(&#39;1&#39;,this)">🔴 Urgent</button>
+      <button class="filter-btn f-imp" onclick="setFilter(&#39;2&#39;,this)">🟠 Important</button>
+      <button class="filter-btn f-rout" onclick="setFilter(&#39;3&#39;,this)">🟢 Routine</button>
+      <button class="filter-btn" onclick="setFilter(&#39;4&#39;,this)" style="color:var(--purple);">🔵 Rappel</button>
+    </div>
+    <div style="display:flex;gap:7px;">
+      <button class="btn btn-secondary" onclick="autoRemoveExpired()" style="font-size:.76rem;">🗑️ Retirer RV passés</button>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--blue)"></div><span class="stat-num">4</span>&nbsp;patients en liste</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--red)"></div><span class="stat-num">1</span>&nbsp;urgent(s)</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--orange)"></div><span class="stat-num">2</span>&nbsp;important(s)</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--green)"></div><span class="stat-num">1</span>&nbsp;routine</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--purple)"></div><span class="stat-num">0</span>&nbsp;rappel(s)</div>
+    </div>
+
+  <div id="autoRemovedNotice" style="display:none;" class="notice">⏰ <strong id="removedCount">0</strong> patient(s) retiré(s) automatiquement car leur date de rendez-vous est passée.</div>
+
+  <!-- ADD FORM -->
+  <div class="add-form">
+    <div class="form-title">Ajouter un patient à la liste d'attente</div>
+    <div class="form-grid">
+      <div class="fg"><label>Nom du patient</label><input type="text" id="f_nom" placeholder="Nom, Prénom"></div>
+      <div class="fg"><label>No dossier</label><input type="text" id="f_dossier" placeholder="00000"></div>
+      <div class="fg"><label>Traitement à faire</label><input type="text" id="f_traitement" placeholder="ex: Extraction #36, Couronne..."></div>
+      <div class="fg"><label>Durée RV</label>
+        <select id="f_duree">
+          <option value="30">30 min</option>
+          <option value="45">45 min</option>
+          <option value="60" selected="">60 min</option>
+          <option value="75">75 min</option>
+          <option value="90">90 min</option>
+          <option value="120">2 h</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Niveau d'urgence</label>
+        <select id="f_urgence">
+          <option value="1">🔴 Urgent</option>
+          <option value="2" selected="">🟠 Important</option>
+          <option value="3">🟢 Routine</option>
+          <option value="4">🔵 Rappel</option>
+        </select>
+      </div>
+      <div class="rv-toggle">
+        <label>Date de RV</label>
+        <div class="rv-toggle-btns">
+          <button class="rv-tb sel" id="rvNonFixeBtn" onclick="toggleRvMode(&#39;nonfixe&#39;)">RV non fixé</button>
+          <button class="rv-tb" id="rvFixeBtn" onclick="toggleRvMode(&#39;fixe&#39;)">Date fixée</button>
+        </div>
+        <input type="date" id="f_dateRV" style="display:none;margin-top:4px;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;">
+      </div>
+      <div class="fg"><label>Téléphone</label><input type="tel" id="f_tel" placeholder="418-000-0000"></div>
+      <button class="btn-ajouter" onclick="addPatient()">+ Ajouter</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table class="patient-table" id="patientTable">
+      <thead><tr>
+        <th class="th-c" style="width:40px;">#</th>
+        <th>Nom du patient</th>
+        <th class="th-c">No dossier</th>
+        <th>Traitement</th>
+        <th class="th-c">Durée RV</th>
+        <th>Niveau d'urgence</th>
+        <th>Date de RV</th>
+        <th>Téléphone</th>
+        <th>Notes</th>
+        <th class="th-c" style="width:50px;">Ajouté le</th>
+        <th class="th-c no-print" style="width:55px;">Actions</th>
+      </tr></thead>
+      <tbody id="patientTbody"><tr>
+      <td style="text-align:center;"><div class="rank-num rank-1">1</div></td>
+      <td style="font-weight:700;">Tremblay, Jean</td>
+      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10234</td>
+      <td>Extraction urgente #36 + antibiotiques</td>
+      <td style="text-align:center;font-size:.8rem;">1 h</td>
+      <td><span class="urg-badge urg-1">🔴 Urgent</span></td>
+      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
+      <td style="font-size:.8rem;">418-555-0101</td>
+      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Douleur intense — a appelé 3x">Douleur intense — a appelé 3x</td>
+      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
+      <td class="no-print" style="text-align:center;">
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button class="btn-note" onclick="editNotes(1)" title="Modifier notes">📝</button>
+          <button class="btn-remove" onclick="removePatient(1)" title="Retirer de la liste">×</button>
+        </div>
+      </td></tr><tr>
+      <td style="text-align:center;"><div class="rank-num rank-2">2</div></td>
+      <td style="font-weight:700;">Gagnon, Marie</td>
+      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10456</td>
+      <td>Couronne céramique #24</td>
+      <td style="text-align:center;font-size:.8rem;">1.5 h</td>
+      <td><span class="urg-badge urg-2">🟠 Important</span></td>
+      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
+      <td style="font-size:.8rem;">418-555-0202</td>
+      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Préfère les matins">Préfère les matins</td>
+      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
+      <td class="no-print" style="text-align:center;">
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button class="btn-note" onclick="editNotes(2)" title="Modifier notes">📝</button>
+          <button class="btn-remove" onclick="removePatient(2)" title="Retirer de la liste">×</button>
+        </div>
+      </td></tr><tr>
+      <td style="text-align:center;"><div class="rank-num rank-3">3</div></td>
+      <td style="font-weight:700;">Fortin, Sophie</td>
+      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10112</td>
+      <td>Obturation composite #15</td>
+      <td style="text-align:center;font-size:.8rem;">45 min</td>
+      <td><span class="urg-badge urg-2">🟠 Important</span></td>
+      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
+      <td style="font-size:.8rem;">418-555-0404</td>
+      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Allergie latex — noter au dossier">Allergie latex — noter au dossier</td>
+      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
+      <td class="no-print" style="text-align:center;">
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button class="btn-note" onclick="editNotes(4)" title="Modifier notes">📝</button>
+          <button class="btn-remove" onclick="removePatient(4)" title="Retirer de la liste">×</button>
+        </div>
+      </td></tr><tr>
+      <td style="text-align:center;"><div class="rank-num rank-other">4</div></td>
+      <td style="font-weight:700;">Bouchard, Luc</td>
+      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10789</td>
+      <td>Nettoyage + radiographies</td>
+      <td style="text-align:center;font-size:.8rem;">1 h</td>
+      <td><span class="urg-badge urg-3">🟢 Routine</span></td>
+      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
+      <td style="font-size:.8rem;">418-555-0303</td>
+      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="">—</td>
+      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
+      <td class="no-print" style="text-align:center;">
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button class="btn-note" onclick="editNotes(3)" title="Modifier notes">📝</button>
+          <button class="btn-remove" onclick="removePatient(3)" title="Retirer de la liste">×</button>
+        </div>
+      </td></tr></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="es-icon">📋</div>
+      <div class="es-msg">Aucun patient dans la liste d'attente pour le moment.</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-secondary" onclick="if(confirm(&#39;Vider toute la liste?&#39;)) { patients=[]; renderTable(); }">🗑️ Vider la liste</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer la liste</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+let patients = [];
+let currentFilter = 'all';
+let idCounter = 1;
+let rvMode = 'nonfixe';
+
+// Sample data
+const SAMPLES = [
+  { nom:'Tremblay, Jean', dossier:'10234', traitement:'Extraction urgente #36 + antibiotiques', duree:60, urgence:1, dateRV:'', tel:'418-555-0101', notes:'Douleur intense — a appelé 3x', added: new Date().toLocaleDateString('fr-CA') },
+  { nom:'Gagnon, Marie', dossier:'10456', traitement:'Couronne céramique #24', duree:90, urgence:2, dateRV:'', tel:'418-555-0202', notes:'Préfère les matins', added: new Date().toLocaleDateString('fr-CA') },
+  { nom:'Bouchard, Luc', dossier:'10789', traitement:'Nettoyage + radiographies', duree:60, urgence:3, dateRV:'', tel:'418-555-0303', notes:'', added: new Date().toLocaleDateString('fr-CA') },
+  { nom:'Fortin, Sophie', dossier:'10112', traitement:'Obturation composite #15', duree:45, urgence:2, dateRV:'', tel:'418-555-0404', notes:'Allergie latex — noter au dossier', added: new Date().toLocaleDateString('fr-CA') },
+];
+SAMPLES.forEach(s => { s.id = idCounter++; patients.push(s); });
+
+function toggleRvMode(mode) {
+  rvMode = mode;
+  document.getElementById('rvNonFixeBtn').classList.toggle('sel', mode==='nonfixe');
+  document.getElementById('rvFixeBtn').classList.toggle('sel', mode==='fixe');
+  document.getElementById('f_dateRV').style.display = mode==='fixe' ? 'block' : 'none';
+}
+
+function addPatient() {
+  const nom = document.getElementById('f_nom').value.trim();
+  if (!nom) { document.getElementById('f_nom').focus(); return; }
+  const dateRV = rvMode === 'fixe' ? document.getElementById('f_dateRV').value : '';
+  const p = {
+    id: idCounter++,
+    nom,
+    dossier: document.getElementById('f_dossier').value || '—',
+    traitement: document.getElementById('f_traitement').value || '—',
+    duree: parseInt(document.getElementById('f_duree').value),
+    urgence: parseInt(document.getElementById('f_urgence').value),
+    dateRV,
+    tel: document.getElementById('f_tel').value || '—',
+    notes: '',
+    added: new Date().toLocaleDateString('fr-CA'),
+  };
+  patients.push(p);
+  // Clear form
+  ['f_nom','f_dossier','f_traitement','f_tel'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f_dateRV').value = '';
+  toggleRvMode('nonfixe');
+  renderTable();
+}
+
+function removePatient(id) {
+  patients = patients.filter(p => p.id !== id);
+  renderTable();
+}
+
+function editNotes(id) {
+  const p = patients.find(x => x.id === id);
+  if (!p) return;
+  const note = prompt('Notes pour ' + p.nom + ' :', p.notes || '');
+  if (note !== null) { p.notes = note; renderTable(); }
+}
+
+function autoRemoveExpired() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const before = patients.length;
+  patients = patients.filter(p => {
+    if (!p.dateRV) return true;
+    const rv = new Date(p.dateRV + 'T00:00:00');
+    return rv >= today;
+  });
+  const removed = before - patients.length;
+  if (removed > 0) {
+    document.getElementById('autoRemovedNotice').style.display = 'block';
+    document.getElementById('removedCount').textContent = removed;
+  }
+  renderTable();
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('f-active'));
+  btn.classList.add('f-active');
+  renderTable();
+}
+
+function urgLabel(u) {
+  const map = {1:'🔴 Urgent', 2:'🟠 Important', 3:'🟢 Routine', 4:'🔵 Rappel'};
+  return map[u] || '—';
+}
+function urgClass(u) {
+  return ['','urg-1','urg-2','urg-3','urg-4'][u] || '';
+}
+function rankClass(rank) {
+  if (rank === 1) return 'rank-1';
+  if (rank === 2) return 'rank-2';
+  if (rank === 3) return 'rank-3';
+  return 'rank-other';
+}
+function rvStatusHtml(p) {
+  if (!p.dateRV) return '<span class="rv-status rv-unfixed">RV non fixé</span>';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const rv = new Date(p.dateRV + 'T00:00:00');
+  const cls = rv < today ? 'rv-past' : 'rv-fixed';
+  const icon = rv < today ? '⚠️ ' : '📅 ';
+  return `<span class="rv-status ${cls}">${icon}${rv.toLocaleDateString('fr-CA')}</span>`;
+}
+function dureeLabel(min) {
+  return min >= 60 ? (min/60 === 1 ? '1 h' : min/60 + ' h') : min + ' min';
+}
+
+function renderTable() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const tbody = document.getElementById('patientTbody');
+  const empty = document.getElementById('emptyState');
+
+  // Sort: urgence asc, then dateRV asc (no date last), then added
+  const sorted = [...patients].sort((a,b) => {
+    if (a.urgence !== b.urgence) return a.urgence - b.urgence;
+    if (a.dateRV && b.dateRV) return new Date(a.dateRV) - new Date(b.dateRV);
+    if (a.dateRV) return -1;
+    if (b.dateRV) return 1;
+    return 0;
+  });
+
+  // Filter
+  const filtered = sorted.filter(p => {
+    const matchFilter = currentFilter === 'all' || p.urgence == currentFilter;
+    const matchSearch = !search || p.nom.toLowerCase().includes(search) || p.dossier.toLowerCase().includes(search) || p.traitement.toLowerCase().includes(search);
+    return matchFilter && matchSearch;
+  });
+
+  tbody.innerHTML = '';
+  if (filtered.length === 0) { empty.style.display = 'block'; } else { empty.style.display = 'none'; }
+
+  filtered.forEach((p, idx) => {
+    const rank = idx + 1;
+    const rankC = rankClass(rank);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="text-align:center;"><div class="rank-num ${rankC}">${rank}</div></td>
+      <td style="font-weight:700;">${p.nom}</td>
+      <td style="text-align:center;font-family:monospace;font-size:.8rem;">${p.dossier}</td>
+      <td>${p.traitement}</td>
+      <td style="text-align:center;font-size:.8rem;">${dureeLabel(p.duree)}</td>
+      <td><span class="urg-badge ${urgClass(p.urgence)}">${urgLabel(p.urgence)}</span></td>
+      <td>${rvStatusHtml(p)}</td>
+      <td style="font-size:.8rem;">${p.tel}</td>
+      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${p.notes}">${p.notes || '—'}</td>
+      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">${p.added}</td>
+      <td class="no-print" style="text-align:center;">
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button class="btn-note" onclick="editNotes(${p.id})" title="Modifier notes">📝</button>
+          <button class="btn-remove" onclick="removePatient(${p.id})" title="Retirer de la liste">×</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  updateStats();
+}
+
+function updateStats() {
+  const counts = {1:0, 2:0, 3:0, 4:0};
+  patients.forEach(p => counts[p.urgence]++);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const pastRV = patients.filter(p => p.dateRV && new Date(p.dateRV+'T00:00:00') < today).length;
+  document.getElementById('statsBar').innerHTML = `
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--blue)"></div><span class="stat-num">${patients.length}</span>&nbsp;patients en liste</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--red)"></div><span class="stat-num">${counts[1]}</span>&nbsp;urgent(s)</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--orange)"></div><span class="stat-num">${counts[2]}</span>&nbsp;important(s)</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--green)"></div><span class="stat-num">${counts[3]}</span>&nbsp;routine</div>
+    <div class="stat-chip"><div class="stat-dot" style="background:var(--purple)"></div><span class="stat-num">${counts[4]}</span>&nbsp;rappel(s)</div>
+    ${pastRV > 0 ? `<div class="stat-chip"><div class="stat-dot" style="background:var(--red)"></div><span class="stat-num" style="color:var(--red);">${pastRV}</span>&nbsp;<span style="color:var(--red);">RV passé(s) à retirer</span></div>` : ''}`;
+}
+
+// Auto-check expired on load
+autoRemoveExpired();
+renderTable();
+</script>
+
+
+</body></html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)file:///C:/Users/info/Downloads/sondage-satisfaction-patient%20(2).html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Votre opinion — Clinique Dentaire</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;
+    --star:#f4b942;--star-empty:#e0e0e0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f5fb;color:var(--text);min-height:100vh;}
+
+  /* HEADER */
+  .hero{background:linear-gradient(145deg,var(--dark) 0%,#1a4a7a 100%);color:white;padding:28px 22px 22px;text-align:center;}
+  .hero-icon{font-size:2.8rem;margin-bottom:10px;}
+  .hero-clinic{font-size:.78rem;font-weight:700;opacity:.65;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;}
+  .hero-title{font-size:1.35rem;font-weight:700;margin-bottom:6px;line-height:1.3;}
+  .hero-sub{font-size:.85rem;opacity:.75;line-height:1.6;}
+
+  /* PROGRESS */
+  .prog-bar-wrap{background:rgba(255,255,255,.15);height:4px;width:100%;}
+  .prog-bar-fill{height:4px;background:var(--star);transition:width .4s;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* MAIN */
+  .main{max-width:600px;margin:0 auto;padding:0 0 40px;}
+
+  /* SECTION CARD */
+  .sec-card{background:white;border-radius:14px;margin:14px 14px 0;box-shadow:0 2px 12px rgba(0,0,0,.07);overflow:hidden;}
+  .sec-head{background:var(--dark);color:white;padding:11px 16px;display:flex;align-items:center;gap:8px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sec-icon{font-size:1.1rem;}
+  .sec-title-txt{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+  .sec-body{padding:14px 16px;}
+
+  /* STAR QUESTION */
+  .q-item{margin-bottom:16px;}
+  .q-item:last-child{margin-bottom:0;}
+  .q-label{font-size:.88rem;color:var(--text);margin-bottom:8px;line-height:1.45;}
+  .stars{display:flex;gap:4px;}
+  .star{font-size:2rem;cursor:pointer;color:var(--star-empty);transition:color .12s, transform .1s;line-height:1;user-select:none;-webkit-user-select:none;}
+  .star.lit{color:var(--star);}
+  .star:hover{transform:scale(1.12);}
+  .star-lbl{display:flex;justify-content:space-between;font-size:.67rem;color:#8a9ab0;margin-top:3px;padding:0 2px;}
+
+  /* OPEN TEXT */
+  .open-q{margin-bottom:14px;}
+  .open-q:last-child{margin-bottom:0;}
+  .open-lbl{font-size:.88rem;color:var(--text);margin-bottom:7px;line-height:1.45;}
+  .open-ta{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-size:.88rem;font-family:inherit;resize:vertical;min-height:80px;background:var(--light);line-height:1.6;color:var(--text);}
+  .open-ta:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* RECOMMEND */
+  .recommend-wrap{display:flex;gap:8px;flex-wrap:wrap;}
+  .rec-btn{flex:1;min-width:80px;padding:10px 6px;border:1.5px solid var(--border);border-radius:10px;background:white;font-family:inherit;font-size:.84rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .15s;text-align:center;}
+  .rec-btn:hover{border-color:var(--accent);color:var(--blue);}
+  .rec-btn.sel-oui{background:#f0fdf4;border-color:var(--green);color:var(--green);}
+  .rec-btn.sel-prob{background:#fff8e1;border-color:var(--orange);color:var(--orange);}
+  .rec-btn.sel-non{background:#fef2f2;border-color:var(--red);color:var(--red);}
+
+  /* SUBMIT AREA */
+  .submit-area{margin:16px 14px 0;background:white;border-radius:14px;padding:18px 16px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
+  .submit-note{font-size:.8rem;color:#8a9ab0;text-align:center;margin-bottom:14px;line-height:1.6;}
+  .btn-send{width:100%;padding:15px;border-radius:12px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;margin-bottom:10px;}
+  .btn-send:hover{background:#155a9e;}
+  .btn-send:active{transform:scale(.98);}
+  .btn-print{width:100%;padding:11px;border-radius:12px;background:white;color:#5a6a80;border:1.5px solid var(--border);font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;}
+  .btn-print:hover{border-color:var(--accent);color:var(--blue);}
+
+  /* MERCI SCREEN */
+  .merci{display:none;text-align:center;padding:50px 22px;}
+  .merci-icon{font-size:3.5rem;margin-bottom:14px;}
+  .merci-title{font-size:1.3rem;font-weight:700;color:var(--green);margin-bottom:10px;}
+  .merci-sub{font-size:.9rem;color:#5a6a80;line-height:1.8;max-width:400px;margin:0 auto;}
+
+  /* CONFIG (pour la clinique seulement) */
+  .config-toggle{text-align:center;padding:18px;font-size:.72rem;color:#bbb;cursor:pointer;user-select:none;}
+  .config-toggle:hover{color:#8a9ab0;}
+  .config-panel{display:none;margin:0 14px 14px;background:#f8f8f8;border:1.5px dashed #ccc;border-radius:10px;padding:14px;}
+  .config-panel.open{display:block;}
+  .config-title{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+  .cfg-row{margin-bottom:9px;}
+  .cfg-row label{font-size:.7rem;font-weight:700;color:#5a6a80;display:block;margin-bottom:3px;text-transform:uppercase;}
+  .cfg-row input{width:100%;border:1.5px solid #ddd;border-radius:7px;padding:7px 10px;font-size:.85rem;font-family:inherit;background:white;}
+  .cfg-row input:focus{outline:none;border-color:var(--accent);}
+  .btn-cfg{padding:8px 16px;border-radius:7px;background:var(--dark);color:white;border:none;font-family:inherit;font-size:.8rem;font-weight:600;cursor:pointer;}
+  .cfg-note{font-size:.71rem;color:#8a9ab0;margin-top:8px;line-height:1.6;}
+
+  .footer-note{text-align:center;font-size:.68rem;color:#bbb;padding:16px;}
+
+  @media print{
+    body{background:white;}.hero{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.sec-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.star.lit{color:var(--star)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.config-toggle,.config-panel,.btn-send,.btn-print,.prog-bar-wrap{display:none!important;}.merci{display:none!important;}}
+</style>
+</head>
+<body>
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     ASSISTANT DE CONFIGURATION (affiché au premier démarrage)
+════════════════════════════════════════════════════════════ -->
+<div id="wizardView" style="display: block;">
+  <div style="background:linear-gradient(145deg,#0d1b2a 0%,#1a4a7a 100%);color:white;padding:28px 22px 22px;text-align:center;">
+    <div style="font-size:2.2rem;margin-bottom:10px;">⚙️</div>
+    <div style="font-size:.75rem;font-weight:700;opacity:.6;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Gestion Mel</div>
+    <div style="font-size:1.25rem;font-weight:700;margin-bottom:6px;">Bienvenue dans votre outil!</div>
+    <div style="font-size:.84rem;opacity:.75;line-height:1.6;">Prenez 2 minutes pour configurer<br>le sondage de satisfaction patient.</div>
+  </div>
+
+  <div style="max-width:600px;margin:0 auto;padding:16px;">
+
+    <!-- ÉTAPE 1 : MODE -->
+    <div id="wStep1">
+      <div style="background:white;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+        <div style="font-size:.72rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;">Étape 1 sur 3 — Comment allez-vous l'utiliser?</div>
+        <div style="font-size:.9rem;font-weight:700;color:#1a2535;margin-bottom:14px;">Choisissez votre mode d'utilisation</div>
+
+        <div id="modeTablet" onclick="selectMode(&#39;tablet&#39;)" style="border:2px solid #d0dff0;border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .15s;">
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="font-size:1.8rem;flex-shrink:0;">📱</div>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;color:#1a2535;margin-bottom:4px;">Tablette à la réception</div>
+              <div style="font-size:.8rem;color:#5a6a80;line-height:1.6;">Un iPad ou tablette posé sur le comptoir. Le patient remplit sur place. <strong>Recommandé pour commencer</strong> — aucune configuration technique requise!</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="modeQR" onclick="selectMode(&#39;qr&#39;)" style="border:2px solid #d0dff0;border-radius:12px;padding:14px;cursor:pointer;transition:all .15s;">
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="font-size:1.8rem;flex-shrink:0;">📲</div>
+            <div>
+              <div style="font-size:.9rem;font-weight:700;color:#1a2535;margin-bottom:4px;">Code QR (téléphone du patient)</div>
+              <div style="font-size:.8rem;color:#5a6a80;line-height:1.6;">Le patient scanne un QR code avec son propre téléphone. Nécessite d'héberger l'outil en ligne (quelques étapes supplémentaires).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button onclick="goStep(2)" style="width:100%;padding:14px;border-radius:12px;background:#aaa;color:white;border:none;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;" id="btnStep1Next">Continuer →</button>
+    </div>
+
+    <!-- ÉTAPE 2 : CONFIG -->
+    <div id="wStep2" style="display:none;">
+      <div style="background:white;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+        <div style="font-size:.72rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;">Étape 2 sur 3 — Informations de votre clinique</div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:5px;">Nom de la clinique *</label>
+          <input id="w_clinic" type="text" placeholder="Clinique Dentaire Exemple..." style="width:100%;border:1.5px solid #d0dff0;border-radius:9px;padding:11px 13px;font-size:.9rem;font-family:inherit;">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:5px;">Courriel pour recevoir les sondages *</label>
+          <input id="w_email" type="email" placeholder="info@votreclinique.com..." style="width:100%;border:1.5px solid #d0dff0;border-radius:9px;padding:11px 13px;font-size:.9rem;font-family:inherit;">
+          <div style="font-size:.74rem;color:#8a9ab0;margin-top:5px;">📬 Les réponses des patients arriveront à cette adresse.</div>
+        </div>
+        <div>
+          <label style="font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:5px;">Praticien(ne) du jour (optionnel)</label>
+          <input id="w_prat" type="text" placeholder="Dr. / Hyg. Nom..." style="width:100%;border:1.5px solid #d0dff0;border-radius:9px;padding:11px 13px;font-size:.9rem;font-family:inherit;">
+        </div>
+      </div>
+      <div style="display:flex;gap:9px;">
+        <button onclick="goStep(1)" style="padding:14px 18px;border-radius:12px;background:white;color:#5a6a80;border:1.5px solid #d0dff0;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;">← Retour</button>
+        <button onclick="saveAndNext()" style="flex:1;padding:14px;border-radius:12px;background:#1a6abf;color:white;border:none;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;">Continuer →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3 : INSTRUCTIONS -->
+    <div id="wStep3" style="display:none;">
+      <div style="background:white;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 2px 10px rgba(0,0,0,.08);">
+        <div style="font-size:.72rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;">Étape 3 sur 3 — Vous êtes presque prêt(e)!</div>
+
+        <!-- MODE TABLETTE -->
+        <div id="instr_tablet">
+          <div style="background:#f0fdf4;border:1.5px solid rgba(26,158,90,.25);border-radius:10px;padding:14px;margin-bottom:10px;">
+            <div style="font-size:.84rem;font-weight:700;color:#1a9e5a;margin-bottom:10px;">✅ Mode tablette — 3 étapes simples</div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a9e5a;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;">Gardez <strong>ce fichier ouvert</strong> sur votre tablette/iPad. Fermez cet assistant en cliquant «Terminer» ci-dessous.</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a9e5a;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;"><strong>Placez la tablette</strong> à la réception avec un petit carton d'invitation : «Avez-vous 2 minutes? Dites-nous comment s'est passée votre visite!»</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a9e5a;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;">Le patient remplit le sondage, clique «Envoyer» → son application courriel s'ouvre avec les réponses pré-remplies. Il n'a qu'à appuyer <strong>Envoyer</strong>!</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff8e1;border-radius:9px;padding:11px 13px;font-size:.78rem;color:#7a4400;line-height:1.6;">💡 <strong>Conseil :</strong> Mettez la tablette en mode «Ne pas déranger» et désactivez les notifications pour une meilleure expérience patient.</div>
+        </div>
+
+        <!-- MODE QR -->
+        <div id="instr_qr" style="display:none;">
+          <div style="background:#e3f2fd;border:1.5px solid rgba(26,106,191,.25);border-radius:10px;padding:14px;margin-bottom:10px;">
+            <div style="font-size:.84rem;font-weight:700;color:#1a6abf;margin-bottom:10px;">📲 Mode QR Code — 5 étapes</div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a6abf;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;"><strong>Héberger le fichier</strong> sur GitHub Pages (gratuit). Allez sur <strong>github.com</strong>, créez un compte gratuit, créez un dépôt et déposez-y ce fichier HTML.</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a6abf;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;">Activez <strong>GitHub Pages</strong> dans les paramètres du dépôt. Vous obtenez une URL du type : <em>votrecompte.github.io/sondage</em></div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a6abf;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;">Allez sur <strong>qrcode-monkey.com</strong> (gratuit), collez votre URL, personnalisez les couleurs et téléchargez le QR code.</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a6abf;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;"><strong>Imprimez le QR code</strong> et placez-le à la réception, en salle d'attente, ou sur le dessus du comptoir de paiement.</div>
+              </div>
+              <div style="display:flex;gap:10px;align-items:flex-start;">
+                <div style="width:26px;height:26px;background:#1a6abf;border-radius:50%;color:white;font-size:.8rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">5</div>
+                <div style="font-size:.84rem;color:#1a2535;line-height:1.5;">Le patient scanne → remplit le sondage sur son téléphone → clique «Envoyer» → les réponses vous arrivent par courriel!</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#fff8e1;border-radius:9px;padding:11px 13px;font-size:.78rem;color:#7a4400;line-height:1.6;">💡 <strong>Besoin d'aide?</strong> Consultez la fiche d'instructions fournie avec cet outil, ou contactez Gestion Mel à <strong>info@gestionmel.com</strong></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:9px;">
+        <button onclick="goStep(2)" style="padding:14px 18px;border-radius:12px;background:white;color:#5a6a80;border:1.5px solid #d0dff0;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;">← Retour</button>
+        <button onclick="finishWizard()" style="flex:1;padding:14px;border-radius:12px;background:#1a9e5a;color:white;border:none;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;">✅ C'est parti! Voir le sondage</button>
+      </div>
+    </div>
+
+  </div>
+  <div style="text-align:center;font-size:.68rem;color:#bbb;padding:16px;">© Gestion Mel — gestionmel.com</div>
+</div>
+
+
+<div id="mainView" style="display: none;">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-icon">🦷</div>
+    <div class="hero-clinic" id="h_clinic">Clinique Dentaire</div>
+    <div class="hero-title">Votre opinion compte!</div>
+    <div class="hero-sub">2 minutes pour nous aider à vous offrir la meilleure expérience possible.</div>
+  </div>
+  <div class="prog-bar-wrap"><div class="prog-bar-fill" id="progBar" style="width:0%"></div></div>
+
+  <div class="main">
+
+    <!-- SECTION 1 : ACCUEIL -->
+    <div class="sec-card">
+      <div class="sec-head"><span class="sec-icon">👋</span><span class="sec-title-txt">Accueil et réception</span></div>
+      <div class="sec-body">
+        <div class="q-item">
+          <div class="q-label">L'amabilité et le professionnalisme à la réception</div>
+          <div class="stars" id="s1" data-q="s1"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+        <div class="q-item">
+          <div class="q-label">La facilité à obtenir votre rendez-vous</div>
+          <div class="stars" id="s2" data-q="s2"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+        <div class="q-item">
+          <div class="q-label">Le temps d'attente à votre arrivée</div>
+          <div class="stars" id="s3" data-q="s3"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 : SOINS -->
+    <div class="sec-card">
+      <div class="sec-head"><span class="sec-icon">🩺</span><span class="sec-title-txt">Soins et confort</span></div>
+      <div class="sec-body">
+        <div class="q-item">
+          <div class="q-label">La douceur et la délicatesse du personnel clinique</div>
+          <div class="stars" id="s4" data-q="s4"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+        <div class="q-item">
+          <div class="q-label">Les explications reçues sur votre traitement</div>
+          <div class="stars" id="s5" data-q="s5"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+        <div class="q-item">
+          <div class="q-label">Votre confort et gestion de la douleur durant le soin</div>
+          <div class="stars" id="s6" data-q="s6"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 : INFORMATION -->
+    <div class="sec-card">
+      <div class="sec-head"><span class="sec-icon">💬</span><span class="sec-title-txt">Communication et information</span></div>
+      <div class="sec-body">
+        <div class="q-item">
+          <div class="q-label">La clarté des informations sur les coûts et assurances</div>
+          <div class="stars" id="s7" data-q="s7"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+        <div class="q-item">
+          <div class="q-label">La facilité à poser vos questions et obtenir des réponses</div>
+          <div class="stars" id="s8" data-q="s8"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 : ENVIRONNEMENT -->
+    <div class="sec-card">
+      <div class="sec-head"><span class="sec-icon">✨</span><span class="sec-title-txt">Environnement et propreté</span></div>
+      <div class="sec-body">
+        <div class="q-item">
+          <div class="q-label">La propreté et l'hygiène de la clinique</div>
+          <div class="stars" id="s9" data-q="s9"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+        <div class="q-item">
+          <div class="q-label">Le confort et l'ambiance générale de la clinique</div>
+          <div class="stars" id="s10" data-q="s10"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Décevant</span><span>Excellent</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 : SATISFACTION GLOBALE -->
+    <div class="sec-card">
+      <div class="sec-head"><span class="sec-icon">⭐</span><span class="sec-title-txt">Satisfaction globale</span></div>
+      <div class="sec-body">
+        <div class="q-item">
+          <div class="q-label" style="font-weight:700;font-size:.94rem;">Votre satisfaction globale pour cette visite</div>
+          <div class="stars" id="s11" data-q="s11" style="gap:6px;"><span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span></div>
+          <div class="star-lbl"><span>Très insatisfait(e)</span><span>Très satisfait(e)</span></div>
+        </div>
+        <div class="q-item" style="margin-top:18px;">
+          <div class="q-label" style="font-weight:700;">Recommanderiez-vous notre clinique à vos proches?</div>
+          <div class="recommend-wrap" id="rec_wrap">
+            <button class="rec-btn" id="rec_oui" onclick="setRec(&#39;Oui, certainement 😊&#39;)">😊 Oui, certainement!</button>
+            <button class="rec-btn" id="rec_prob" onclick="setRec(&#39;Probablement&#39;)">🙂 Probablement</button>
+            <button class="rec-btn" id="rec_non" onclick="setRec(&#39;Non&#39;)">😐 Pas vraiment</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 : COMMENTAIRES -->
+    <div class="sec-card">
+      <div class="sec-head"><span class="sec-icon">📝</span><span class="sec-title-txt">Vos commentaires</span></div>
+      <div class="sec-body">
+        <div class="open-q">
+          <div class="open-lbl">Qu'est-ce que vous avez le plus apprécié lors de cette visite?</div>
+          <textarea class="open-ta" id="c_aime" placeholder="Ce qui vous a fait sourire, ce qui vous a impressionné(e)..." oninput="updateProg()"></textarea>
+        </div>
+        <div class="open-q">
+          <div class="open-lbl">Avez-vous des suggestions pour améliorer notre service?</div>
+          <textarea class="open-ta" id="c_amelio" placeholder="Vos idées sont précieuses — n&#39;hésitez pas à être précis(e)..." oninput="updateProg()"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <div class="submit-note">🔒 Vos réponses sont envoyées directement à l'équipe de la clinique.<br>Elles sont utilisées uniquement pour améliorer nos services.</div>
+      <button class="btn-send" onclick="envoyerSondage()">📧 Envoyer mes réponses</button>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimer plutôt</button>
+    </div>
+
+    <!-- CONFIG (clinique) -->
+    <div class="config-toggle" onclick="toggleConfig()">⚙️ Configuration (clinique seulement)</div>
+    <div class="config-panel" id="configPanel">
+      <div class="config-title">⚙️ Paramètres de la clinique</div>
+      <div class="cfg-row"><label>Nom de la clinique</label><input type="text" id="cfg_clinic" placeholder="Clinique Dentaire..." oninput="updateClinicName()"></div>
+      <div class="cfg-row"><label>Courriel de réception des sondages</label><input type="email" id="cfg_email" placeholder="info@clinique.com"></div>
+      <div class="cfg-row"><label>Praticien(ne) du jour (optionnel)</label><input type="text" id="cfg_prat" placeholder="Dr / Hyg. Nom..."></div>
+      <button class="btn-cfg" onclick="saveConfig()">✅ Enregistrer</button>
+      <div class="cfg-note">💡 <strong>Comment utiliser :</strong> Configurez la clinique une fois, puis générez un QR code pointant vers ce fichier hébergé sur GitHub Pages. Affichez le QR code à la réception ou dans la salle d'attente. Les réponses arrivent par courriel directement dans votre boîte de réception.</div>
+    </div>
+
+    <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  </div>
+</div>
+
+<!-- MERCI -->
+<div class="merci" id="merciView">
+  <div class="merci-icon">🙏</div>
+  <div class="merci-title">Merci infiniment!</div>
+  <div class="merci-sub">Votre opinion a été transmise à l'équipe de <span id="merci_clinic">la clinique</span>.<br><br>Votre satisfaction est notre priorité — nous prenons chaque commentaire au sérieux pour continuer à vous offrir le meilleur soin possible.<br><br><strong>À très bientôt! 😊</strong></div>
+</div>
+
+<script>
+
+// ── WIZARD ───────────────────────────────────────────────────
+let selectedMode = '';
+
+function selectMode(mode) {
+  selectedMode = mode;
+  document.getElementById('modeTablet').style.border = '2px solid ' + (mode === 'tablet' ? '#1a9e5a' : '#d0dff0');
+  document.getElementById('modeTablet').style.background = mode === 'tablet' ? '#f0fdf4' : 'white';
+  document.getElementById('modeQR').style.border = '2px solid ' + (mode === 'qr' ? '#1a6abf' : '#d0dff0');
+  document.getElementById('modeQR').style.background = mode === 'qr' ? '#e3f2fd' : 'white';
+  document.getElementById('btnStep1Next').style.background = '#1a6abf';
+}
+
+function goStep(n) {
+  document.getElementById('wStep1').style.display = n === 1 ? 'block' : 'none';
+  document.getElementById('wStep2').style.display = n === 2 ? 'block' : 'none';
+  document.getElementById('wStep3').style.display = n === 3 ? 'block' : 'none';
+}
+
+function saveAndNext() {
+  const clinic = document.getElementById('w_clinic').value.trim();
+  const email = document.getElementById('w_email').value.trim();
+  if (!clinic) { document.getElementById('w_clinic').focus(); alert('Veuillez entrer le nom de la clinique.'); return; }
+  if (!email || !email.includes('@')) { document.getElementById('w_email').focus(); alert('Veuillez entrer une adresse courriel valide.'); return; }
+  cfg.clinic = clinic;
+  cfg.email = email;
+  cfg.prat = document.getElementById('w_prat').value.trim();
+  localStorage.setItem('sdp_clinic', cfg.clinic);
+  localStorage.setItem('sdp_email', cfg.email);
+  localStorage.setItem('sdp_prat', cfg.prat);
+  // Show right instructions
+  document.getElementById('instr_tablet').style.display = selectedMode === 'tablet' ? 'block' : 'none';
+  document.getElementById('instr_qr').style.display = selectedMode === 'qr' ? 'block' : 'none';
+  goStep(3);
+  updateClinicName();
+}
+
+function finishWizard() {
+  localStorage.setItem('sdp_setup_done', '1');
+  document.getElementById('wizardView').style.display = 'none';
+  document.getElementById('mainView').style.display = 'block';
+}
+
+function checkFirstRun() {
+  const done = localStorage.getItem('sdp_setup_done');
+  const hasEmail = localStorage.getItem('sdp_email');
+  if (!done || !hasEmail) {
+    document.getElementById('wizardView').style.display = 'block';
+    document.getElementById('mainView').style.display = 'none';
+  }
+}
+
+
+// ── CONFIG ──────────────────────────────────────────────────
+let cfg = {
+  clinic: localStorage.getItem('sdp_clinic') || '',
+  email: localStorage.getItem('sdp_email') || '',
+  prat: localStorage.getItem('sdp_prat') || ''
+};
+
+function loadConfig() {
+  if (cfg.clinic) { document.getElementById('cfg_clinic').value = cfg.clinic; updateClinicName(); }
+  if (cfg.email) document.getElementById('cfg_email').value = cfg.email;
+  if (cfg.prat) document.getElementById('cfg_prat').value = cfg.prat;
+}
+
+function saveConfig() {
+  cfg.clinic = document.getElementById('cfg_clinic').value.trim();
+  cfg.email = document.getElementById('cfg_email').value.trim();
+  cfg.prat = document.getElementById('cfg_prat').value.trim();
+  localStorage.setItem('sdp_clinic', cfg.clinic);
+  localStorage.setItem('sdp_email', cfg.email);
+  localStorage.setItem('sdp_prat', cfg.prat);
+  updateClinicName();
+  alert('✅ Configuration sauvegardée!');
+}
+
+function updateClinicName() {
+  const val = document.getElementById('cfg_clinic').value || 'Clinique Dentaire';
+  document.getElementById('h_clinic').textContent = val;
+  cfg.clinic = val;
+}
+
+function toggleConfig() {
+  document.getElementById('configPanel').classList.toggle('open');
+}
+
+// ── STARS ───────────────────────────────────────────────────
+const ratings = {};
+let recVal = '';
+
+const STAR_IDS = ['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11'];
+
+function buildStars() {
+  STAR_IDS.forEach(id => {
+    const wrap = document.getElementById(id);
+    for (let i = 1; i <= 5; i++) {
+      const s = document.createElement('span');
+      s.className = 'star';
+      s.textContent = '★';
+      s.dataset.val = i;
+      s.onclick = () => pickStar(id, i);
+      wrap.appendChild(s);
+    }
+  });
+}
+
+function pickStar(qId, val) {
+  ratings[qId] = val;
+  const stars = document.querySelectorAll(`#${qId} .star`);
+  stars.forEach((s, i) => s.classList.toggle('lit', i < val));
+  updateProg();
+  // Haptic feedback on mobile
+  if (navigator.vibrate) navigator.vibrate(30);
+}
+
+function setRec(val) {
+  recVal = val;
+  document.getElementById('rec_oui').className = 'rec-btn' + (val === 'Oui, certainement 😊' ? ' sel-oui' : '');
+  document.getElementById('rec_prob').className = 'rec-btn' + (val === 'Probablement' ? ' sel-prob' : '');
+  document.getElementById('rec_non').className = 'rec-btn' + (val === 'Non' ? ' sel-non' : '');
+  updateProg();
+}
+
+// ── PROGRESS ────────────────────────────────────────────────
+function updateProg() {
+  const starDone = STAR_IDS.filter(id => ratings[id]).length;
+  const recDone = recVal ? 1 : 0;
+  const total = STAR_IDS.length + 1; // stars + recommend
+  const pct = Math.round((starDone + recDone) / total * 100);
+  document.getElementById('progBar').style.width = pct + '%';
+}
+
+// ── ENVOYER ──────────────────────────────────────────────────
+function envoyerSondage() {
+  const email = cfg.email || '';
+  if (!email) {
+    alert('⚠️ Veuillez configurer l\'adresse courriel de la clinique dans la section Configuration.');
+    document.getElementById('configPanel').classList.add('open');
+    document.getElementById('cfg_email').focus();
+    return;
+  }
+
+  const LABELS = {
+    s1: 'Accueil et professionnalisme à la réception',
+    s2: 'Facilité à obtenir un rendez-vous',
+    s3: 'Temps d\'attente à l\'arrivée',
+    s4: 'Douceur et délicatesse du personnel clinique',
+    s5: 'Explications sur le traitement',
+    s6: 'Confort et gestion de la douleur',
+    s7: 'Clarté des informations coûts et assurances',
+    s8: 'Facilité à poser des questions',
+    s9: 'Propreté et hygiène de la clinique',
+    s10: 'Confort et ambiance générale',
+    s11: 'SATISFACTION GLOBALE',
+  };
+
+  const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  const date = new Date().toLocaleDateString('fr-CA', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  const time = new Date().toLocaleTimeString('fr-CA', {hour:'2-digit', minute:'2-digit'});
+
+  let body = `SONDAGE DE SATISFACTION PATIENT\n`;
+  body += `Clinique : ${cfg.clinic || 'Non configuré'}\n`;
+  if (cfg.prat) body += `Praticien(ne) : ${cfg.prat}\n`;
+  body += `Date : ${date} à ${time}\n`;
+  body += `${'─'.repeat(40)}\n\n`;
+
+  body += `ÉVALUATIONS (sur 5 étoiles)\n\n`;
+  STAR_IDS.forEach(id => {
+    const v = ratings[id];
+    const lbl = LABELS[id];
+    body += `${lbl}\n${v ? stars(v) + ' (' + v + '/5)' : 'Non répondu'}\n\n`;
+  });
+
+  body += `${'─'.repeat(40)}\n`;
+  body += `RECOMMANDATION\n${recVal || 'Non répondu'}\n\n`;
+
+  const aime = document.getElementById('c_aime').value.trim();
+  const amelio = document.getElementById('c_amelio').value.trim();
+
+  if (aime) body += `${'─'.repeat(40)}\nCE QUI A ÉTÉ APPRÉCIÉ\n${aime}\n\n`;
+  if (amelio) body += `${'─'.repeat(40)}\nSUGGESTIONS D'AMÉLIORATION\n${amelio}\n\n`;
+
+  // Score moyen
+  const vals = STAR_IDS.map(id => ratings[id]).filter(v => v);
+  if (vals.length) {
+    const avg = (vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1);
+    body += `${'─'.repeat(40)}\nMOYENNE GLOBALE : ${avg}/5\n`;
+  }
+
+  const subject = encodeURIComponent(`Sondage satisfaction — ${cfg.clinic || 'Clinique'} — ${new Date().toLocaleDateString('fr-CA')}`);
+  const bodyEnc = encodeURIComponent(body);
+
+  // Ouvrir l'appli courriel
+  window.location.href = `mailto:${email}?subject=${subject}&body=${bodyEnc}`;
+
+  // Afficher l'écran merci après un léger délai
+  setTimeout(() => {
+    document.getElementById('mainView').style.display = 'none';
+    const merci = document.getElementById('merciView');
+    merci.style.display = 'block';
+    document.getElementById('merci_clinic').textContent = cfg.clinic || 'la clinique';
+    window.scrollTo(0, 0);
+  }, 800);
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+buildStars();
+loadConfig();
+updateProg();
+checkFirstRun();
+</script>
+
+
+</body></html>

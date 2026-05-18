@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/info/Downloads/formulaires-entrevue.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulaires d'entrevue — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:920px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:24px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.85rem;opacity:.75;}
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);}
+  .tab-btn{padding:13px 28px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:-2px;}
+  .tab-btn:hover{color:var(--blue);background:#e8f0fb;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+  .section{padding:18px 36px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  label{font-size:.74rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  input[type=text],input[type=date],input[type=time],select{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--light);}
+  input:focus,select:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.85rem;font-family:inherit;color:var(--text);background:var(--light);resize:vertical;line-height:1.6;}
+  textarea:focus{outline:none;border-color:var(--accent);background:white;}
+
+  /* POSTE SELECTOR */
+  .poste-selector{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+  .poste-btn{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:white;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s;}
+  .poste-btn:hover{border-color:var(--accent);color:var(--blue);}
+  .poste-btn.active{color:white;border-color:transparent;}
+  .pb-sec.active{background:#1a6abf;}
+  .pb-hyg.active{background:#1a9e5a;}
+  .pb-ass.active{background:#8e44ad;}
+  .pb-gest.active{background:#2c3e50;}
+  .pb-aide.active{background:#e67e22;}
+  .pb-autre.active{background:#7f8c8d;}
+
+  /* QUESTION BLOCKS */
+  .q-block{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px;}
+  .q-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+  .q-num{width:26px;height:26px;border-radius:6px;background:var(--dark);color:white;font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .q-text{font-size:.88rem;font-weight:600;color:var(--text);line-height:1.45;flex:1;}
+  .q-text.editable{border:none;background:transparent;padding:0;font-weight:600;width:100%;}
+  .q-text.editable:focus{outline:none;}
+  .q-notes{font-size:.83rem;min-height:55px;}
+  .q-rating{display:flex;gap:6px;margin-top:8px;align-items:center;}
+  .q-rating label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#5a6a80;margin-right:4px;}
+  .rating-btn{padding:4px 12px;border-radius:20px;border:1.5px solid var(--border);background:white;font-size:.74rem;font-weight:700;cursor:pointer;transition:all .12s;font-family:inherit;color:#5a6a80;}
+  .rating-btn:hover{border-color:var(--accent);}
+  .rating-btn.sel-ex{background:#1a9e5a;border-color:#1a9e5a;color:white;}
+  .rating-btn.sel-bien{background:#2196f3;border-color:#2196f3;color:white;}
+  .rating-btn.sel-moy{background:#e67e22;border-color:#e67e22;color:white;}
+  .rating-btn.sel-ins{background:#c0392b;border-color:#c0392b;color:white;}
+  .btn-add-q{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--light);border:1.5px dashed var(--accent);border-radius:7px;color:var(--blue);font-size:.81rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px;}
+  .btn-add-q:hover{background:#e8f0fb;}
+  .btn-del-q{width:22px;height:22px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.8rem;flex-shrink:0;margin-top:3px;font-family:inherit;}
+  .btn-del-q:hover{background:#fef2f2;}
+
+  /* EVALUATION GRID */
+  .eval-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;}
+  .eval-card{border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;text-align:center;cursor:pointer;transition:all .15s;}
+  .eval-card.sel-recommande{background:#f0fdf4;border-color:#1a9e5a;}
+  .eval-card.sel-recommande .eval-icon{color:#1a9e5a;}
+  .eval-card.sel-2entrevue{background:#e3f2fd;border-color:var(--blue);}
+  .eval-card.sel-2entrevue .eval-icon{color:var(--blue);}
+  .eval-card.sel-nonretenu{background:#f0f0f0;border-color:#ccc;}
+  .eval-card.sel-nonretenu .eval-icon{color:#5a6a80;}
+  .eval-icon{font-size:1.6rem;margin-bottom:4px;}
+  .eval-label{font-size:.78rem;font-weight:700;color:var(--text);}
+  .eval-sublabel{font-size:.7rem;color:#8a9ab0;margin-top:2px;}
+
+  /* SCORE */
+  .score-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .score-btn{width:36px;height:36px;border-radius:8px;border:1.5px solid var(--border);background:white;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit;color:#5a6a80;transition:all .12s;}
+  .score-btn:hover{border-color:var(--accent);}
+  .score-btn.sel{background:var(--dark);border-color:var(--dark);color:white;}
+
+  /* SECTION TITLES COLORED */
+  .cat-title{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:8px 12px;border-radius:6px;margin:18px 0 10px;display:flex;align-items:center;gap:8px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cat-gen{background:#1a3a5c;color:white;}
+  .cat-poste{background:var(--blue);color:white;}
+  .cat-soft{background:#2c3e50;color:white;}
+  .cat-clinique{background:var(--green);color:white;}
+  .cat-fin{background:var(--purple);color:white;}
+
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#2a3a4a;margin-bottom:14px;line-height:1.7;}
+
+  .sig-box{border-top:1.5px solid var(--border);padding-top:8px;margin-top:8px;font-size:.78rem;color:#5a6a80;}
+  .actions{padding:18px 36px;background:var(--light);display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;}
+  .btn{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+  .btn-primary{background:var(--blue);color:white;}
+  .btn-primary:hover{background:#155a9e;}
+  .btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+  .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
+
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.nav-tabs,.actions,.btn-add-q,.btn-del-q{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .tab-content{display:block!important;}
+    .doc-header,.q-num,.cat-title,.poste-btn.active{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,textarea,select{border:none!important;background:transparent!important;}
+    .section{page-break-inside:avoid;}
+  }
+  @media(max-width:600px){
+    .section{padding:14px 16px;}
+    .grid,.grid3{grid-template-columns:1fr;}
+    .eval-grid{grid-template-columns:1fr;}
+    .page-header{padding:14px 20px;}
+    .doc-header{padding:18px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Ressources humaines</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Formulaires d'entrevue</h1>
+    <p>Entrevue téléphonique et entrevue en présentiel — Questions par type de poste</p>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab(0)">📞 Entrevue téléphonique</button>
+    <button class="tab-btn" onclick="showTab(1)">👥 Entrevue en présentiel</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ENTREVUE TÉLÉPHONIQUE -->
+  <!-- ============================================================ -->
+  <div class="tab-content active" id="tab-0">
+
+    <div class="section">
+      <div class="section-title">Informations générales</div>
+      <div class="grid3">
+        <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+        <div class="field"><label>Nom du (de la) candidat(e)</label><input type="text" placeholder="Prénom et nom"></div>
+        <div class="field"><label>Date de l'entrevue</label><input type="date"></div>
+        <div class="field"><label>Heure</label><input type="time"></div>
+        <div class="field"><label>Poste convoité</label><input type="text" placeholder="Ex : Secrétaire dentaire"></div>
+        <div class="field"><label>Intervieweur(euse)</label><input type="text" placeholder="Nom et titre"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Sélectionner le type de poste</div>
+      <div class="info-box">Sélectionnez le poste pour charger les questions suggérées. Vous pouvez modifier, ajouter ou supprimer des questions selon vos besoins.</div>
+      <div class="poste-selector">
+        <button class="poste-btn pb-sec active" onclick="loadTel(&#39;sec&#39;,this)">🗂️ Secrétaire dentaire</button>
+        <button class="poste-btn pb-hyg" onclick="loadTel(&#39;hyg&#39;,this)">🦷 Hygiéniste dentaire</button>
+        <button class="poste-btn pb-ass" onclick="loadTel(&#39;ass&#39;,this)">🔧 Assistante dentaire</button>
+        <button class="poste-btn pb-gest" onclick="loadTel(&#39;gest&#39;,this)">👤 Gestionnaire</button>
+        <button class="poste-btn pb-aide" onclick="loadTel(&#39;aide&#39;,this)">🧼 Aide à la stérilisation</button>
+      </div>
+    </div>
+
+    <div class="section" id="telQuestions"><div class="cat-title cat-gen">📋 Questions générales — Tous les postes</div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <input class="q-text editable" type="text" value="Comment avez-vous entendu parler de ce poste?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <input class="q-text editable" type="text" value="Quelle est votre disponibilité? (temps plein / partiel, horaires, début possible)" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <input class="q-text editable" type="text" value="Pourquoi souhaitez-vous quitter votre emploi actuel ou pourquoi êtes-vous disponible?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <input class="q-text editable" type="text" value="Quelles sont vos attentes salariales?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><button class="btn-add-q" onclick="addQ(&#39;telQuestions&#39;,&#39;tel_gen_add&#39;)">+ Ajouter une question générale</button><div class="cat-title cat-poste" style="margin-top:20px;">🎯 Questions spécifiques — Secrétaire dentaire</div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <input class="q-text editable" type="text" value="Combien d&#39;années d&#39;expérience avez-vous en clinique dentaire?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <input class="q-text editable" type="text" value="Quel(s) logiciel(s) dentaire(s) connaissez-vous? (Dentitek, Progident, Ortholink...)" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <input class="q-text editable" type="text" value="Êtes-vous à l&#39;aise avec la facturation, les soumissions d&#39;assurance et la RAMQ?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <input class="q-text editable" type="text" value="Comment décrieriez-vous votre aisance au téléphone et en service à la clientèle?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <input class="q-text editable" type="text" value="Avez-vous de l&#39;expérience avec la gestion de l&#39;agenda et les rappels de patients?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><button class="btn-add-q" onclick="addQ(&#39;telQuestions&#39;,&#39;tel_poste_add&#39;)">+ Ajouter une question spécifique</button></div>
+
+    <div class="section">
+      <div class="section-title">Évaluation globale — Entrevue téléphonique</div>
+      <div class="eval-grid">
+        <div class="eval-card" onclick="selectEval(this,&#39;tel&#39;,&#39;recommande&#39;)">
+          <div class="eval-icon">✅</div>
+          <div class="eval-label">Convoquer en présentiel</div>
+          <div class="eval-sublabel">Candidat(e) prometteur(se)</div>
+        </div>
+        <div class="eval-card" onclick="selectEval(this,&#39;tel&#39;,&#39;2entrevue&#39;)">
+          <div class="eval-icon">🔄</div>
+          <div class="eval-label">À reconsidérer</div>
+          <div class="eval-sublabel">Profil intéressant — vérifier d'abord</div>
+        </div>
+        <div class="eval-card" onclick="selectEval(this,&#39;tel&#39;,&#39;nonretenu&#39;)">
+          <div class="eval-icon">❌</div>
+          <div class="eval-label">Ne pas retenir</div>
+          <div class="eval-sublabel">Profil ne correspond pas</div>
+        </div>
+      </div>
+      <div class="field"><label>Notes et impressions générales</label>
+        <textarea style="min-height:80px;" placeholder="Notez vos impressions générales : ton de voix, enthousiasme, clarté des réponses, points forts, points à approfondir en présentiel..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Signature</div>
+      <div class="grid">
+        <div class="field"><label>Signé par</label><input type="text" placeholder="Nom et titre"></div>
+        <div class="field"><label>Date</label><input type="date"></div>
+      </div>
+      <div class="sig-box" style="margin-top:16px;">Signature ____________________________</div>
+    </div>
+
+    <div class="actions">
+      <span></span>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+        <button class="btn btn-primary" onclick="showTab(1)">Entrevue présentielle →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ENTREVUE EN PRÉSENTIEL -->
+  <!-- ============================================================ -->
+  <div class="tab-content" id="tab-1">
+
+    <div class="section">
+      <div class="section-title">Informations générales</div>
+      <div class="grid3">
+        <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+        <div class="field"><label>Nom du (de la) candidat(e)</label><input type="text" placeholder="Prénom et nom"></div>
+        <div class="field"><label>Date de l'entrevue</label><input type="date"></div>
+        <div class="field"><label>Heure de début</label><input type="time"></div>
+        <div class="field"><label>Heure de fin</label><input type="time"></div>
+        <div class="field"><label>Poste convoité</label><input type="text" placeholder="Ex : Hygiéniste dentaire"></div>
+        <div class="field"><label>Intervieweur(euse) #1</label><input type="text" placeholder="Nom et titre"></div>
+        <div class="field"><label>Intervieweur(euse) #2 (optionnel)</label><input type="text" placeholder="Nom et titre"></div>
+        <div class="field"><label>Lieu</label><input type="text" placeholder="Ex : Salle de repos, bureau..."></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Sélectionner le type de poste</div>
+      <div class="info-box">Sélectionnez le poste pour charger les questions suggérées adaptées. Modifiez, ajoutez ou supprimez selon vos besoins.</div>
+      <div class="poste-selector">
+        <button class="poste-btn pb-sec active" onclick="loadPres(&#39;sec&#39;,this)">🗂️ Secrétaire dentaire</button>
+        <button class="poste-btn pb-hyg" onclick="loadPres(&#39;hyg&#39;,this)">🦷 Hygiéniste dentaire</button>
+        <button class="poste-btn pb-ass" onclick="loadPres(&#39;ass&#39;,this)">🔧 Assistante dentaire</button>
+        <button class="poste-btn pb-gest" onclick="loadPres(&#39;gest&#39;,this)">👤 Gestionnaire</button>
+        <button class="poste-btn pb-aide" onclick="loadPres(&#39;aide&#39;,this)">🧼 Aide à la stérilisation</button>
+      </div>
+    </div>
+
+    <div class="section" id="presQuestions"><div class="cat-title cat-gen">📋 Questions générales — Tous les postes</div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <input class="q-text editable" type="text" value="Comment avez-vous entendu parler de ce poste?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <input class="q-text editable" type="text" value="Quelle est votre disponibilité? (temps plein / partiel, horaires, début possible)" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <input class="q-text editable" type="text" value="Pourquoi souhaitez-vous quitter votre emploi actuel ou pourquoi êtes-vous disponible?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <input class="q-text editable" type="text" value="Quelles sont vos attentes salariales?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><button class="btn-add-q" onclick="addQ(&#39;presQuestions&#39;,&#39;pres_gen_add&#39;)">+ Ajouter une question générale</button><div class="cat-title cat-poste" style="margin-top:20px;">🎯 Questions spécifiques — Secrétaire dentaire</div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <input class="q-text editable" type="text" value="Comment gérez-vous un patient difficile ou agressif au téléphone? Donnez-moi un exemple concret." style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <input class="q-text editable" type="text" value="Décrivez comment vous procédez pour optimiser un horaire chargé avec plusieurs dentistes." style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <input class="q-text editable" type="text" value="Avez-vous déjà géré des comptes à recevoir? Comment procédiez-vous pour les suivis?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <input class="q-text editable" type="text" value="Comment gérez-vous les situations où l&#39;agenda est surchargé et les patients arrivent en retard?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <input class="q-text editable" type="text" value="Comment expliquez-vous un traitement coûteux à un patient réticent?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">6</div>
+      <input class="q-text editable" type="text" value="Êtes-vous à l&#39;aise de gérer plusieurs tâches simultanément sous pression? Donnez un exemple." style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">7</div>
+      <input class="q-text editable" type="text" value="Que faites-vous quand vous ne connaissez pas la réponse à une question d&#39;un patient?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">8</div>
+      <input class="q-text editable" type="text" value="Comment assurez-vous la confidentialité des informations des patients (Loi 25)?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><button class="btn-add-q" onclick="addQ(&#39;presQuestions&#39;,&#39;pres_poste_add&#39;)">+ Ajouter une question spécifique</button><div class="cat-title cat-soft" style="margin-top:20px;">💡 Savoir-être et valeurs</div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">1</div>
+      <input class="q-text editable" type="text" value="Comment gérez-vous le stress et la pression dans un environnement de travail rapide?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">2</div>
+      <input class="q-text editable" type="text" value="Donnez un exemple de moment où vous avez dû faire preuve d&#39;initiative sans attendre d&#39;instructions." style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">3</div>
+      <input class="q-text editable" type="text" value="Comment réagissez-vous face à une critique ou un commentaire constructif?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">4</div>
+      <input class="q-text editable" type="text" value="Décrivez votre façon de travailler en équipe — quel rôle adoptez-vous naturellement?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">5</div>
+      <input class="q-text editable" type="text" value="Qu&#39;est-ce que le professionnalisme signifie pour vous au quotidien?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><div class="q-block">
+    <div class="q-header">
+      <div class="q-num">6</div>
+      <input class="q-text editable" type="text" value="Avez-vous déjà dû adapter votre comportement ou votre communication selon l&#39;interlocuteur?" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;">
+      <button class="btn-del-q" onclick="this.closest(&#39;.q-block&#39;).remove()" title="Supprimer cette question">×</button>
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,&#39;ex&#39;)">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,&#39;bien&#39;)">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,&#39;moy&#39;)">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,&#39;ins&#39;)">❌ Insuffisant</button>
+    </div>
+  </div><button class="btn-add-q" onclick="addQ(&#39;presQuestions&#39;,&#39;pres_soft_add&#39;)">+ Ajouter une question savoir-être</button></div>
+
+    <div class="section">
+      <div class="section-title">Questions du (de la) candidat(e)</div>
+      <div class="q-block">
+        <div class="q-header">
+          <div class="q-num" style="background:#8e44ad;">Q</div>
+          <div class="q-text">Questions posées par le (la) candidat(e)</div>
+        </div>
+        <textarea style="min-height:70px;" placeholder="Notez les questions que le (la) candidat(e) vous a posées — cela donne de l&#39;information sur sa motivation et sa réflexion..."></textarea>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Grille d'évaluation globale</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;" id="evalGrid"><div class="field"><label style="font-size:.71rem;">Expérience clinique et logiciels</label>
+        <div class="score-row"><button class="score-btn" onclick="pickScore(this)">1</button><button class="score-btn" onclick="pickScore(this)">2</button><button class="score-btn" onclick="pickScore(this)">3</button><button class="score-btn" onclick="pickScore(this)">4</button><button class="score-btn" onclick="pickScore(this)">5</button>
+        <span style="font-size:.72rem;color:#8a9ab0;padding-top:9px;margin-left:4px;">/ 5</span></div></div><div class="field"><label style="font-size:.71rem;">Service à la clientèle</label>
+        <div class="score-row"><button class="score-btn" onclick="pickScore(this)">1</button><button class="score-btn" onclick="pickScore(this)">2</button><button class="score-btn" onclick="pickScore(this)">3</button><button class="score-btn" onclick="pickScore(this)">4</button><button class="score-btn" onclick="pickScore(this)">5</button>
+        <span style="font-size:.72rem;color:#8a9ab0;padding-top:9px;margin-left:4px;">/ 5</span></div></div><div class="field"><label style="font-size:.71rem;">Gestion du stress</label>
+        <div class="score-row"><button class="score-btn" onclick="pickScore(this)">1</button><button class="score-btn" onclick="pickScore(this)">2</button><button class="score-btn" onclick="pickScore(this)">3</button><button class="score-btn" onclick="pickScore(this)">4</button><button class="score-btn" onclick="pickScore(this)">5</button>
+        <span style="font-size:.72rem;color:#8a9ab0;padding-top:9px;margin-left:4px;">/ 5</span></div></div><div class="field"><label style="font-size:.71rem;">Organisation et polyvalence</label>
+        <div class="score-row"><button class="score-btn" onclick="pickScore(this)">1</button><button class="score-btn" onclick="pickScore(this)">2</button><button class="score-btn" onclick="pickScore(this)">3</button><button class="score-btn" onclick="pickScore(this)">4</button><button class="score-btn" onclick="pickScore(this)">5</button>
+        <span style="font-size:.72rem;color:#8a9ab0;padding-top:9px;margin-left:4px;">/ 5</span></div></div><div class="field"><label style="font-size:.71rem;">Communication orale</label>
+        <div class="score-row"><button class="score-btn" onclick="pickScore(this)">1</button><button class="score-btn" onclick="pickScore(this)">2</button><button class="score-btn" onclick="pickScore(this)">3</button><button class="score-btn" onclick="pickScore(this)">4</button><button class="score-btn" onclick="pickScore(this)">5</button>
+        <span style="font-size:.72rem;color:#8a9ab0;padding-top:9px;margin-left:4px;">/ 5</span></div></div><div class="field"><label style="font-size:.71rem;">Connaissance facturation/assurance</label>
+        <div class="score-row"><button class="score-btn" onclick="pickScore(this)">1</button><button class="score-btn" onclick="pickScore(this)">2</button><button class="score-btn" onclick="pickScore(this)">3</button><button class="score-btn" onclick="pickScore(this)">4</button><button class="score-btn" onclick="pickScore(this)">5</button>
+        <span style="font-size:.72rem;color:#8a9ab0;padding-top:9px;margin-left:4px;">/ 5</span></div></div></div>
+      <div class="eval-grid" style="margin-top:8px;">
+        <div class="eval-card" onclick="selectEval(this,&#39;pres&#39;,&#39;recommande&#39;)">
+          <div class="eval-icon">🌟</div>
+          <div class="eval-label">Recommander l'embauche</div>
+          <div class="eval-sublabel">Candidat(e) excellent(e) — procéder</div>
+        </div>
+        <div class="eval-card" onclick="selectEval(this,&#39;pres&#39;,&#39;2entrevue&#39;)">
+          <div class="eval-icon">🔄</div>
+          <div class="eval-label">Journée d'essai / observation</div>
+          <div class="eval-sublabel">Prometteuse — valider en pratique</div>
+        </div>
+        <div class="eval-card" onclick="selectEval(this,&#39;pres&#39;,&#39;nonretenu&#39;)">
+          <div class="eval-icon">❌</div>
+          <div class="eval-label">Ne pas retenir</div>
+          <div class="eval-sublabel">Profil ne correspond pas au poste</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Synthèse et recommandation</div>
+      <div class="grid">
+        <div class="field"><label>Points forts du (de la) candidat(e)</label>
+          <textarea style="min-height:80px;" placeholder="Compétences, qualités, expériences remarquables..."></textarea>
+        </div>
+        <div class="field"><label>Points à surveiller / améliorer</label>
+          <textarea style="min-height:80px;" placeholder="Lacunes, points d&#39;interrogation, conditions particulières..."></textarea>
+        </div>
+        <div class="field" style="grid-column:1/-1;"><label>Commentaires et recommandation finale</label>
+          <textarea style="min-height:80px;" placeholder="Votre recommandation détaillée, conditions si embauché(e), prochaines étapes suggérées..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Signatures</div>
+      <div class="grid">
+        <div>
+          <div class="field" style="margin-bottom:20px;"><label>Intervieweur(euse) #1</label><input type="text" placeholder="Nom et titre"></div>
+          <div class="sig-box">Signature ____________________________<br><br>Date : ___________________________</div>
+        </div>
+        <div>
+          <div class="field" style="margin-bottom:20px;"><label>Intervieweur(euse) #2 (si applicable)</label><input type="text" placeholder="Nom et titre"></div>
+          <div class="sig-box">Signature ____________________________<br><br>Date : ___________________________</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-secondary" onclick="showTab(0)">← Téléphonique</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+// ===================== QUESTIONS DATA =====================
+const TEL_QS = {
+  gen: [
+    "Comment avez-vous entendu parler de ce poste?",
+    "Quelle est votre disponibilité? (temps plein / partiel, horaires, début possible)",
+    "Pourquoi souhaitez-vous quitter votre emploi actuel ou pourquoi êtes-vous disponible?",
+    "Quelles sont vos attentes salariales?",
+  ],
+  sec: [
+    "Combien d'années d'expérience avez-vous en clinique dentaire?",
+    "Quel(s) logiciel(s) dentaire(s) connaissez-vous? (Dentitek, Progident, Ortholink...)",
+    "Êtes-vous à l'aise avec la facturation, les soumissions d'assurance et la RAMQ?",
+    "Comment décrieriez-vous votre aisance au téléphone et en service à la clientèle?",
+    "Avez-vous de l'expérience avec la gestion de l'agenda et les rappels de patients?",
+  ],
+  hyg: [
+    "Êtes-vous membre en règle de l'Ordre des hygiénistes dentaires du Québec (OHDQ)?",
+    "Combien d'années d'expérience clinique avez-vous?",
+    "Êtes-vous à l'aise avec toutes les classes de détartrage?",
+    "Avez-vous de l'expérience avec les nouvelles technologies (laser, caméra intra-orale, etc.)?",
+    "Votre formation en PCI est-elle à jour?",
+  ],
+  ass: [
+    "Avez-vous une formation reconnue en assistance dentaire?",
+    "Combien d'années d'expérience avez-vous comme assistante dentaire?",
+    "Êtes-vous à l'aise avec la stérilisation et les protocoles de contrôle des infections?",
+    "Avez-vous de l'expérience avec les empreintes, les matériaux dentaires et les procédures cliniques courantes?",
+    "Avez-vous de l'expérience en orthodontie ou dans des spécialités particulières?",
+  ],
+  gest: [
+    "Combien d'années d'expérience en gestion ou en coordination de clinique dentaire avez-vous?",
+    "Avez-vous de l'expérience en gestion d'équipe? Combien de personnes avez-vous supervisées?",
+    "Avez-vous une formation en ressources humaines ou en gestion (CRHA, MBA, etc.)?",
+    "Êtes-vous à l'aise avec la gestion financière, les indicateurs de performance et la rentabilité d'une clinique?",
+    "Quelle est votre expérience avec les logiciels dentaires et les outils administratifs?",
+  ],
+  aide: [
+    "Avez-vous déjà travaillé dans un milieu médical ou dentaire?",
+    "Êtes-vous à l'aise avec les procédures de nettoyage, de désinfection et de stérilisation?",
+    "Êtes-vous disponible tôt le matin ou en fin de journée selon les besoins?",
+    "Êtes-vous à l'aise d'apprendre de nouvelles procédures et protocoles?",
+    "Avez-vous de la facilité à travailler en équipe dans un environnement clinique?",
+  ],
+};
+
+const PRES_QS = {
+  gen: [
+    "Parlez-moi de votre parcours professionnel et de ce qui vous a amené(e) à postuler chez nous.",
+    "Qu'est-ce qui vous attire particulièrement dans ce poste et dans notre clinique?",
+    "Décrivez-moi votre style de travail — comment organisez-vous votre journée?",
+    "Donnez-moi un exemple de situation difficile que vous avez vécue au travail et comment vous l'avez gérée.",
+    "Comment vous décrieriez vos collègues si je les appelais?",
+    "Où vous voyez-vous professionnellement dans 3 à 5 ans?",
+  ],
+  sec: [
+    "Comment gérez-vous un patient difficile ou agressif au téléphone? Donnez-moi un exemple concret.",
+    "Décrivez comment vous procédez pour optimiser un horaire chargé avec plusieurs dentistes.",
+    "Avez-vous déjà géré des comptes à recevoir? Comment procédiez-vous pour les suivis?",
+    "Comment gérez-vous les situations où l'agenda est surchargé et les patients arrivent en retard?",
+    "Comment expliquez-vous un traitement coûteux à un patient réticent?",
+    "Êtes-vous à l'aise de gérer plusieurs tâches simultanément sous pression? Donnez un exemple.",
+    "Que faites-vous quand vous ne connaissez pas la réponse à une question d'un patient?",
+    "Comment assurez-vous la confidentialité des informations des patients (Loi 25)?",
+  ],
+  hyg: [
+    "Décrivez votre approche avec un patient anxieux lors d'un nettoyage.",
+    "Comment adaptez-vous votre approche selon la condition parodontale du patient?",
+    "Parlez-moi de votre expérience avec la détection du cancer buccal et les recommandations de prévention.",
+    "Comment gérez-vous un patient qui refuse systématiquement les radiographies?",
+    "Comment organisez-vous votre salle entre deux patients pour respecter les délais?",
+    "Avez-vous de l'expérience en hygiène pédiatrique? Comment adaptez-vous votre approche?",
+    "Comment restez-vous à jour avec les nouvelles normes et procédures de l'OHDQ?",
+    "Décrivez votre expérience avec les instruments ultrasoniques et manuels.",
+  ],
+  ass: [
+    "Décrivez votre routine de préparation d'une salle de traitement avant l'arrivée du patient.",
+    "Comment gérez-vous une urgence pendant un traitement (réaction allergique, syncope)?",
+    "Décrivez votre expérience avec la prise d'empreintes — quels matériaux avez-vous utilisés?",
+    "Comment vous assurez-vous que la stérilisation est faite correctement et dans les délais?",
+    "Comment gérez-vous un dentiste qui travaille vite et qui demande beaucoup en même temps?",
+    "Avez-vous déjà eu à gérer des conflits avec un collègue? Comment l'avez-vous résolu?",
+    "Décrivez votre expérience avec la radiographie dentaire.",
+    "Comment réagissez-vous quand vous commettez une erreur en présence d'un patient?",
+  ],
+  gest: [
+    "Décrivez une situation où vous avez dû gérer un conflit d'équipe. Quelle a été votre approche?",
+    "Comment procédez-vous pour l'évaluation des performances de votre équipe?",
+    "Comment gérez-vous un employé dont la performance est insuffisante?",
+    "Quelle est votre approche pour maintenir un bon climat de travail et mobiliser votre équipe?",
+    "Décrivez votre expérience en recrutement et en intégration de nouveaux employés.",
+    "Comment structurez-vous vos réunions d'équipe? Quelle fréquence recommandez-vous?",
+    "Comment gérez-vous les abences imprévues et les remplacements à court préavis?",
+    "Quels indicateurs de performance utilisez-vous pour évaluer la santé d'une clinique?",
+    "Comment collaborez-vous avec les dentistes propriétaires tout en maintenant votre neutralité?",
+  ],
+  aide: [
+    "Qu'est-ce qui vous attire dans le travail en clinique dentaire?",
+    "Décrivez comment vous apprendre quelque chose de nouveau — donnez un exemple concret.",
+    "Comment vous adaptez-vous quand les procédures changent ou qu'on vous demande de faire les choses différemment?",
+    "Êtes-vous à l'aise de demander de l'aide quand vous ne comprenez pas quelque chose?",
+    "Comment réagissez-vous quand vous êtes sous pression ou que le rythme de travail est élevé?",
+    "Qu'est-ce que le travail d'équipe représente pour vous?",
+  ],
+  soft: [
+    "Comment gérez-vous le stress et la pression dans un environnement de travail rapide?",
+    "Donnez un exemple de moment où vous avez dû faire preuve d'initiative sans attendre d'instructions.",
+    "Comment réagissez-vous face à une critique ou un commentaire constructif?",
+    "Décrivez votre façon de travailler en équipe — quel rôle adoptez-vous naturellement?",
+    "Qu'est-ce que le professionnalisme signifie pour vous au quotidien?",
+    "Avez-vous déjà dû adapter votre comportement ou votre communication selon l'interlocuteur?",
+  ],
+};
+
+const EVAL_CRITERES = {
+  sec: ['Expérience clinique et logiciels','Service à la clientèle','Gestion du stress','Organisation et polyvalence','Communication orale','Connaissance facturation/assurance'],
+  hyg: ['Compétences cliniques','Relation patient','Connaissance des normes PCI','Organisation et gestion du temps','Communication','Travail d\'équipe'],
+  ass: ['Compétences cliniques','Protocoles de stérilisation','Réactivité et gestion des urgences','Communication avec le dentiste','Organisation de la salle','Travail d\'équipe'],
+  gest: ['Leadership et gestion d\'équipe','Connaissance RH et droit du travail','Gestion financière et indicateurs','Communication et médiation','Organisation et structure','Vision stratégique'],
+  aide: ['Motivation et attitude','Capacité d\'apprentissage','Rigueur et souci du détail','Travail d\'équipe','Ponctualité et fiabilité','Adaptabilité'],
+};
+
+// ===================== RENDER FUNCTIONS =====================
+function renderQ(containerId, categories, poste, prefix){
+  const cont = document.getElementById(containerId);
+  let html = '';
+
+  // Questions générales
+  html += `<div class="cat-title cat-gen">📋 Questions générales — Tous les postes</div>`;
+  TEL_QS.gen.forEach((q,i)=>{ html += qBlock(q,i+1,prefix+'gen',false); });
+  html += `<button class="btn-add-q" onclick="addQ('${containerId}','${prefix}gen_add')">+ Ajouter une question générale</button>`;
+
+  // Questions par poste
+  const posteLbl = {'sec':'Secrétaire dentaire','hyg':'Hygiéniste dentaire','ass':'Assistante dentaire','gest':'Gestionnaire','aide':'Aide à la stérilisation'};
+  html += `<div class="cat-title cat-poste" style="margin-top:20px;">🎯 Questions spécifiques — ${posteLbl[poste]||poste}</div>`;
+  const qs = (prefix==='tel_' ? TEL_QS : PRES_QS)[poste] || [];
+  qs.forEach((q,i)=>{ html += qBlock(q,i+1,prefix+'poste',false); });
+  html += `<button class="btn-add-q" onclick="addQ('${containerId}','${prefix}poste_add')">+ Ajouter une question spécifique</button>`;
+
+  // Soft skills (présentiel seulement)
+  if(prefix==='pres_'){
+    html += `<div class="cat-title cat-soft" style="margin-top:20px;">💡 Savoir-être et valeurs</div>`;
+    PRES_QS.soft.forEach((q,i)=>{ html += qBlock(q,i+1,prefix+'soft',false); });
+    html += `<button class="btn-add-q" onclick="addQ('${containerId}','${prefix}soft_add')">+ Ajouter une question savoir-être</button>`;
+  }
+
+  cont.innerHTML = html;
+
+  // Eval grid (présentiel)
+  if(prefix==='pres_'){
+    const crit = EVAL_CRITERES[poste]||[];
+    let eg='';
+    crit.forEach(c=>{
+      eg += `<div class="field"><label style="font-size:.71rem;">${c}</label>
+        <div class="score-row">${[1,2,3,4,5].map(n=>`<button class="score-btn" onclick="pickScore(this)">${n}</button>`).join('')}
+        <span style="font-size:.72rem;color:#8a9ab0;padding-top:9px;margin-left:4px;">/ 5</span></div></div>`;
+    });
+    document.getElementById('evalGrid').innerHTML = eg;
+  }
+}
+
+function qBlock(q, num, prefix, deletable){
+  return `<div class="q-block">
+    <div class="q-header">
+      <div class="q-num">${num}</div>
+      <input class="q-text editable" type="text" value="${q.replace(/"/g,'&quot;')}" style="border:none;background:transparent;font-size:.88rem;font-weight:600;color:var(--text);font-family:inherit;width:100%;padding:0;" />
+      ${deletable?`<button class="btn-del-q" onclick="this.closest('.q-block').remove()">×</button>`:'<button class="btn-del-q" onclick="this.closest(\'.\q-block\').remove()" title="Supprimer cette question">×</button>'}
+    </div>
+    <textarea class="q-notes" placeholder="Notes / réponse du (de la) candidat(e)..."></textarea>
+    <div class="q-rating">
+      <label>Évaluation :</label>
+      <button class="rating-btn" onclick="rate(this,'ex')">⭐ Excellent</button>
+      <button class="rating-btn" onclick="rate(this,'bien')">👍 Bien</button>
+      <button class="rating-btn" onclick="rate(this,'moy')">⚠️ Moyen</button>
+      <button class="rating-btn" onclick="rate(this,'ins')">❌ Insuffisant</button>
+    </div>
+  </div>`;
+}
+
+function addQ(containerId, prefix){
+  const cont = document.getElementById(containerId);
+  const blocks = cont.querySelectorAll('.q-block');
+  const newBlock = document.createElement('div');
+  newBlock.innerHTML = qBlock('',blocks.length+1,'',true);
+  const btn = cont.querySelector(`.btn-add-q[onclick*="${prefix}"]`);
+  if(btn) btn.before(newBlock.firstChild);
+  else cont.appendChild(newBlock.firstChild);
+}
+
+function rate(btn, level){
+  btn.closest('.q-rating').querySelectorAll('.rating-btn').forEach(b=>b.classList.remove('sel-ex','sel-bien','sel-moy','sel-ins'));
+  btn.classList.add('sel-'+level);
+}
+
+function pickScore(btn){
+  btn.closest('.score-row').querySelectorAll('.score-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+function selectEval(card, form, type){
+  const grid = card.closest('.eval-grid');
+  grid.querySelectorAll('.eval-card').forEach(c=>{c.classList.remove('sel-recommande','sel-2entrevue','sel-nonretenu');});
+  card.classList.add('sel-'+type);
+}
+
+// Load telephone questions
+function loadTel(poste, btn){
+  document.querySelectorAll('#tab-0 .poste-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderQ('telQuestions', TEL_QS, poste, 'tel_');
+}
+
+// Load presentiel questions
+function loadPres(poste, btn){
+  document.querySelectorAll('#tab-1 .poste-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderQ('presQuestions', PRES_QS, poste, 'pres_');
+}
+
+function showTab(n){
+  document.querySelectorAll('.tab-content').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Init on load
+loadTel('sec', document.querySelector('#tab-0 .pb-sec'));
+loadPres('sec', document.querySelector('#tab-1 .pb-sec'));
+</script>
+
+
+</body></html>

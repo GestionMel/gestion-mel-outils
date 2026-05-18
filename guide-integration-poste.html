@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/info/Downloads/guide-integration-par-poste.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide d'intégration par poste — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
+  .page-header .brand{font-size:1.5rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .container{max-width:960px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:26px 36px;}
+  .doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.85rem;opacity:.75;}
+
+  /* IDENTITY */
+  .identity-bar{background:var(--light);border-bottom:1px solid var(--border);padding:14px 36px;display:flex;flex-wrap:wrap;gap:12px;}
+  .id-field{display:flex;flex-direction:column;gap:3px;flex:1;min-width:160px;}
+  .id-field label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  .id-field input{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.86rem;font-family:inherit;color:var(--text);background:white;}
+  .id-field input:focus{outline:none;border-color:var(--accent);}
+
+  /* POSTE TABS */
+  .poste-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+  .poste-tabs::-webkit-scrollbar{display:none;}
+  .poste-tab{padding:12px 20px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;margin-bottom:-2px;display:flex;align-items:center;gap:6px;}
+  .poste-tab:hover{color:var(--blue);background:#e8f0fb;}
+  .poste-tab.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .poste-content{display:none;}
+  .poste-content.active{display:block;}
+
+  /* PROGRESS */
+  .progress-wrap{padding:16px 36px;background:white;border-bottom:1px solid var(--border);}
+  .progress-label{font-size:.76rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;justify-content:space-between;}
+  .progress-track{background:#e0e0e0;border-radius:10px;height:8px;overflow:hidden;}
+  .progress-fill{height:8px;border-radius:10px;background:var(--accent);transition:width .4s;}
+
+  /* PHASES */
+  .phase{border-radius:10px;margin:16px 36px;overflow:hidden;border:1.5px solid var(--border);}
+  .phase-header{padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;}
+  .phase-sem1 .phase-header{background:#e8f0fb;border-bottom:2px solid var(--blue);}
+  .phase-sem24 .phase-header{background:#f0fdf4;border-bottom:2px solid var(--green);}
+  .phase-mois23 .phase-header{background:#fff8f0;border-bottom:2px solid var(--orange);}
+  .phase-fin .phase-header{background:#fdf4ff;border-bottom:2px solid var(--purple);}
+  .phase-icon{font-size:1.3rem;flex-shrink:0;}
+  .phase-title{font-size:.95rem;font-weight:700;flex:1;}
+  .phase-sem1 .phase-title{color:var(--blue);}
+  .phase-sem24 .phase-title{color:var(--green);}
+  .phase-mois23 .phase-title{color:var(--orange);}
+  .phase-fin .phase-title{color:var(--purple);}
+  .phase-badge{padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .badge-s1{background:var(--blue);}
+  .badge-s2{background:var(--green);}
+  .badge-s3{background:var(--orange);}
+  .badge-s4{background:var(--purple);}
+  .phase-progress{font-size:.75rem;color:#8a9ab0;margin-left:auto;padding-right:8px;}
+  .expand-arrow{color:#8a9ab0;font-size:.8rem;transition:transform .2s;flex-shrink:0;}
+  .phase.open .expand-arrow{transform:rotate(180deg);}
+  .phase-body{display:none;background:white;}
+  .phase.open .phase-body{display:block;}
+
+  /* COMPETENCY BLOCKS */
+  .comp-block{padding:14px 20px;border-bottom:1px solid var(--border);}
+  .comp-block:last-child{border-bottom:none;}
+  .comp-title{font-size:.77rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+  .comp-title::before{content:'';display:block;width:3px;height:11px;background:var(--accent);border-radius:2px;}
+  .comp-items{display:flex;flex-direction:column;gap:6px;}
+  .comp-item{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;background:var(--light);transition:background .15s;}
+  .comp-item:hover{background:#e8f0fb;}
+  .comp-item.checked{background:#f0fdf4;border-color:rgba(26,158,90,.25);}
+  .comp-cb{width:17px;height:17px;cursor:pointer;flex-shrink:0;margin-top:2px;accent-color:var(--green);}
+  .comp-text{font-size:.84rem;color:var(--text);line-height:1.5;flex:1;}
+  .comp-text.done{color:#8a9ab0;text-decoration:line-through;}
+  .comp-date{font-size:.74rem;color:#8a9ab0;white-space:nowrap;padding-top:2px;}
+  .comp-date input{border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:.73rem;font-family:inherit;background:white;color:var(--text);width:105px;}
+  .comp-date input:focus{outline:none;border-color:var(--accent);}
+
+  /* NOTES */
+  .phase-notes{padding:14px 20px;background:#fffde7;border-top:1px dashed var(--border);}
+  .phase-notes label{font-size:.73rem;font-weight:700;color:#7a5a00;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;}
+  .phase-notes textarea{width:100%;border:1.5px solid #f0d060;border-radius:6px;padding:8px 11px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;resize:vertical;min-height:55px;line-height:1.6;}
+  .phase-notes textarea:focus{outline:none;border-color:var(--orange);}
+
+  /* INDICATEURS */
+  .indicateurs{margin:14px 20px;background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;}
+  .ind-title{font-size:.75rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:7px;}
+  .ind-title::before{content:'🎯';}
+  .ind-item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:.83rem;}
+  .ind-item:last-child{border-bottom:none;}
+  .ind-level{padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700;color:white;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .ind-base{background:var(--green);}
+  .ind-inter{background:var(--orange);}
+  .ind-avance{background:var(--purple);}
+
+  /* OVERALL EVAL */
+  .eval-section{margin:14px 20px 20px;}
+  .eval-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+  .eval-card{border:1.5px solid var(--border);border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:all .15s;}
+  .eval-card:hover{border-color:var(--accent);}
+  .eval-card.sel-ok{background:#f0fdf4;border-color:var(--green);}
+  .eval-card.sel-prog{background:#fff8f0;border-color:var(--orange);}
+  .eval-card.sel-non{background:#fef2f2;border-color:var(--red);}
+  .eval-icon{font-size:1.4rem;margin-bottom:4px;}
+  .eval-lbl{font-size:.76rem;font-weight:700;color:var(--text);}
+
+  /* ACTIONS */
+  .actions{padding:18px 36px;background:var(--light);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+  .btn{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+  .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#2a3a4a;margin:0 36px 16px;line-height:1.7;}
+
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.poste-tabs,.actions,.expand-arrow{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .poste-content{display:block!important;}
+    .phase-body{display:block!important;}
+    .phase-header,.phase-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .phase{page-break-inside:avoid;}
+    input{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:600px){
+    .phase{margin:12px 16px;}
+    .identity-bar{padding:12px 16px;}
+    .actions{padding:14px 16px;}
+    .eval-grid{grid-template-columns:1fr;}
+    .info-box{margin:0 16px 12px;}
+    .progress-wrap{padding:12px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Ressources humaines</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Guide d'intégration — Par type de poste</h1>
+    <p>Complémentaire à la Checklist d'intégration — Contenu de formation et compétences attendues</p>
+  </div>
+
+  <div class="identity-bar">
+    <div class="id-field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
+    <div class="id-field"><label>Nom de l'employé(e)</label><input type="text" placeholder="Prénom et nom"></div>
+    <div class="id-field"><label>Date d'entrée en fonction</label><input type="date" id="dateEntree"></div>
+    <div class="id-field"><label>Responsable de l'intégration</label><input type="text" placeholder="Nom et titre"></div>
+  </div>
+
+  <div class="poste-tabs">
+    <button class="poste-tab active" onclick="showPoste(0,this)">🗂️ Secrétaire dentaire</button>
+    <button class="poste-tab" onclick="showPoste(1,this)">🦷 Hygiéniste dentaire</button>
+    <button class="poste-tab" onclick="showPoste(2,this)">🔧 Assistante dentaire</button>
+    <button class="poste-tab" onclick="showPoste(3,this)">🧼 Aide à la stérilisation</button>
+    <button class="poste-tab" onclick="showPoste(4,this)">👤 Gestionnaire</button>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span id="progLabel">Progression — 0 / 38 compétences acquises</span><span id="progPct">0%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="info-box">📌 <strong>Comment utiliser ce guide :</strong> Cochez chaque compétence au fur et à mesure qu'elle est acquise. Notez la date de maîtrise. Utilisez les zones de notes pour documenter les observations. Ce guide est <strong>complémentaire</strong> à la Checklist d'intégration — la checklist gère les tâches administratives, ce guide gère le développement des compétences.</div>
+
+  <!-- ============================================================ -->
+  <!-- SECRÉTAIRE DENTAIRE -->
+  <!-- ============================================================ -->
+  <div class="poste-content active" id="poste-0">
+
+    <div class="phase phase-sem1 open" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <span class="phase-icon">📅</span>
+        <div>
+          <div class="phase-title">Semaine 1 — Les essentiels</div>
+          <div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Priorités absolues pour fonctionner dès le premier jour</div>
+        </div>
+        <span class="phase-badge badge-s1">Sem. 1</span>
+        <span class="phase-progress" id="prog-s0-0"></span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="phase-body">
+        <div class="comp-block">
+          <div class="comp-title">Connaissance de la clinique et de l'équipe</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître les noms, rôles et postes de chaque membre de l'équipe</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre la structure d'une journée type à la clinique</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître les horaires d'ouverture, les dentistes et leurs spécialités</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser la localisation de tous les espaces (salles, stérilisation, vestiaires, urgences)</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Accueil téléphonique et en personne</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser le protocole d'accueil téléphonique (formule, ton, écoute active)</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Savoir transférer les appels et prendre des messages correctement</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître et appliquer la politique d'annulation et de no-show</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Savoir accueillir un patient à l'arrivée et à son départ</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Navigation de base — Logiciel dentaire</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Naviguer dans le logiciel (Dentitek, Progident ou autre) — ouverture, recherche de patients</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Consulter et comprendre le dossier patient de base</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Consulter l'agenda et comprendre les types de rendez-vous</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Créer un nouveau dossier patient</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Terminologie dentaire de base</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître la nomenclature des dents (numérotation universelle et FDI)</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître les actes dentaires courants et leur durée approximative</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre les abréviations et codes utilisés dans l'agenda</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="phase-notes"><label>📝 Notes — Semaine 1</label><textarea placeholder="Observations du responsable, difficultés rencontrées, points forts observés..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="phase phase-sem24" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <span class="phase-icon">📈</span>
+        <div>
+          <div class="phase-title">Semaines 2 à 4 — Approfondissement</div>
+          <div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Développement des compétences opérationnelles</div>
+        </div>
+        <span class="phase-badge badge-s2">Sem. 2-4</span>
+        <span class="phase-progress" id="prog-s0-1"></span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="phase-body">
+        <div class="comp-block">
+          <div class="comp-title">Gestion de l'agenda</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Prendre et modifier des rendez-vous de façon autonome</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Optimiser l'agenda selon les durées des actes et les disponibilités des dentistes</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer les rappels de patients et les confirmations de rendez-vous</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer les annulations et les remplacements de dernière minute</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Utiliser la liste d'attente efficacement</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Facturation de base</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Effectuer les encaissements (comptant, carte, chèque) et remettre les reçus</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre les modes de facturation des assurances privées</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Soumettre une réclamation d'assurance simple en format électronique</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Faire le balancement de la caisse en fin de journée</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Communication et service aux patients</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer un patient difficile ou insatisfait avec professionnalisme</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Expliquer les politiques de la clinique (annulations, paiements) avec diplomatie</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Répondre aux questions fréquentes des patients (tarifs, traitements, assurances)</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="phase-notes"><label>📝 Notes — Semaines 2 à 4</label><textarea placeholder="Observations du responsable, difficultés rencontrées, points forts observés..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="phase phase-mois23" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <span class="phase-icon">🚀</span>
+        <div>
+          <div class="phase-title">Mois 2 et 3 — Autonomie progressive</div>
+          <div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Maîtrise des compétences avancées et de l'autonomie</div>
+        </div>
+        <span class="phase-badge badge-s3">Mois 2-3</span>
+        <span class="phase-progress" id="prog-s0-2"></span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="phase-body">
+        <div class="comp-block">
+          <div class="comp-title">Facturation avancée</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser la facturation RAMQ (admissibilité, actes couverts, soumission)</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer les refus d'assurance et les demandes de préautorisation</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre et expliquer les plans de traitement aux patients</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Établir des ententes de paiement (ententes financières)</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Comptes à recevoir et administration</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Effectuer le suivi des comptes à recevoir et des paiements en retard</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Faire les appels de rappel pour les comptes en souffrance</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre le rapport de production journalier et les indicateurs de performance</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser la Loi 25 et les obligations de protection des renseignements personnels</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Gestion des urgences et situations complexes</div>
+          <div class="comp-items">
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer une urgence dentaire au téléphone et en clinique (triage de base)</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître les protocoles d'urgence médicale de la clinique</span><div class="comp-date"><input type="date"></div></div>
+            <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer plusieurs appels et demandes simultanément avec calme</span><div class="comp-date"><input type="date"></div></div>
+          </div>
+        </div>
+        <div class="phase-notes"><label>📝 Notes — Mois 2 et 3</label><textarea placeholder="Observations du responsable, difficultés rencontrées, points forts observés..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="phase phase-fin" onclick="togglePhase(this)">
+      <div class="phase-header">
+        <span class="phase-icon">🏆</span>
+        <div>
+          <div class="phase-title">Fin de probation — Compétences attendues</div>
+          <div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Niveau de maîtrise requis pour la confirmation du poste</div>
+        </div>
+        <span class="phase-badge badge-s4">90 jours</span>
+        <span class="phase-progress" id="prog-s0-3"></span>
+        <span class="expand-arrow">▼</span>
+      </div>
+      <div class="phase-body">
+        <div class="indicateurs">
+          <div class="ind-title">Indicateurs de réussite — Secrétaire dentaire</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Gestion autonome de l'agenda et des rendez-vous sans supervision</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Accueil téléphonique et en personne professionnel et chaleureux en tout temps</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Facturation de base (encaissements, soumissions assurances simples) sans erreurs</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Facturation RAMQ maîtrisée et soumissions effectuées correctement</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Gestion des situations difficiles avec patients avec professionnalisme</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Suivi des comptes à recevoir effectué régulièrement et de façon proactive</div>
+          <div class="ind-item"><span class="ind-level ind-avance">Avancé</span>Optimisation de l'agenda (remplissage, listes d'attente, ajustements)</div>
+          <div class="ind-item"><span class="ind-level ind-avance">Avancé</span>Connaissance complète des plans de traitement et capacité d'expliquer aux patients</div>
+        </div>
+        <div class="comp-block">
+          <div class="comp-title">Évaluation de fin de probation</div>
+          <div class="eval-grid">
+            <div class="eval-card" onclick="selectEval(this,&#39;ok&#39;)"><div class="eval-icon">✅</div><div class="eval-lbl">Probation réussie</div></div>
+            <div class="eval-card" onclick="selectEval(this,&#39;prog&#39;)"><div class="eval-icon">⏳</div><div class="eval-lbl">Prolongation requise</div></div>
+            <div class="eval-card" onclick="selectEval(this,&#39;non&#39;)"><div class="eval-icon">❌</div><div class="eval-lbl">Fin d'emploi</div></div>
+          </div>
+          <div class="field" style="margin-top:10px;"><label style="font-size:.73rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px;">Commentaires et décision</label>
+            <textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.84rem;font-family:inherit;background:var(--light);resize:vertical;min-height:70px;" placeholder="Justifiez votre décision et précisez les prochaines étapes..."></textarea>
+          </div>
+        </div>
+        <div class="phase-notes"><label>📝 Notes finales</label><textarea placeholder="Bilan global de la période d&#39;intégration..."></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- HYGIÉNISTE DENTAIRE -->
+  <!-- ============================================================ -->
+  <div class="poste-content" id="poste-1">
+    <div class="phase phase-sem1 open" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📅</span><div><div class="phase-title">Semaine 1 — Les essentiels</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Protocoles, équipements et intégration à l'équipe</div></div><span class="phase-badge badge-s1">Sem. 1</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Protocoles PCI et stérilisation</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser les protocoles PCI spécifiques à la clinique (désinfection, barrières, EPI)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître le circuit des instruments souillés et du matériel stérile</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser la préparation et la décontamination de la salle d'hygiène</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître et appliquer les protocoles de l'ODQ et de l'OHDQ en vigueur</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Équipements et logiciels</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser les équipements d'hygiène disponibles (ultrasons, détartreur, laser si applicable)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Naviguer dans le logiciel dentaire pour la prise de notes au dossier patient</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre les formulaires de dossier patient propres à la clinique</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser le système de radiographie numérique de la clinique</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Intégration à l'équipe</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre le flux de travail entre hygiéniste, assistante et secrétaire</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître les attentes de chaque dentiste en termes de communication et de procédures</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaine 1</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-sem24" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📈</span><div><div class="phase-title">Semaines 2 à 4 — Adaptation clinique</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">S'adapter au rythme et aux protocoles de la clinique</div></div><span class="phase-badge badge-s2">Sem. 2-4</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Pratique clinique</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser le rythme de la clinique et respecter les temps alloués par patient</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Effectuer tous les types de détartrage selon la classe parodontale (1 à 4)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Prendre les radiographies selon le protocole de la clinique</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Effectuer l'examen parodontal et compléter la charte correctement</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Appliquer les fluorures et les scellants selon les protocoles cliniques</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Communication avec les patients</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Adapter sa communication selon l'anxiété et les besoins de chaque patient</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Prodiguer des conseils d'hygiène bucco-dentaire personnalisés et motivants</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Communiquer efficacement avec le dentiste pour les besoins de traitement identifiés</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaines 2 à 4</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-mois23" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">🚀</span><div><div class="phase-title">Mois 2 et 3 — Autonomie et excellence</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Maîtrise complète et contribution à la clinique</div></div><span class="phase-badge badge-s3">Mois 2-3</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Compétences avancées</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Réaliser un dépistage du cancer buccal systématique et documenter les observations</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser les procédures avancées si applicable (laser, implants, ortho, pédiatrie)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Contribuer activement au recrutement de nouveaux patients par ses recommandations</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer efficacement les patients qui refusent certaines procédures (radios, fluorure)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Participer aux formations continues et tenir son dossier de formation à jour (OHDQ)</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Mois 2 et 3</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-fin" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">🏆</span><div><div class="phase-title">Fin de probation — Compétences attendues</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Niveau requis pour la confirmation du poste</div></div><span class="phase-badge badge-s4">90 jours</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="indicateurs"><div class="ind-title">Indicateurs de réussite — Hygiéniste dentaire</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Respect rigoureux de tous les protocoles PCI sans supervision</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Autonomie complète sur tous les types de nettoyage (classe 1 à 4)</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Respect du temps alloué par patient avec qualité de soins constante</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Communication patient exemplaire — patients satisfaits et fidèles</div>
+          <div class="ind-item"><span class="ind-level ind-avance">Avancé</span>Contribution à la production et aux recommandations de traitement</div>
+        </div>
+        <div class="comp-block"><div class="comp-title">Évaluation de fin de probation</div>
+          <div class="eval-grid"><div class="eval-card" onclick="selectEval(this,&#39;ok&#39;)"><div class="eval-icon">✅</div><div class="eval-lbl">Probation réussie</div></div><div class="eval-card" onclick="selectEval(this,&#39;prog&#39;)"><div class="eval-icon">⏳</div><div class="eval-lbl">Prolongation requise</div></div><div class="eval-card" onclick="selectEval(this,&#39;non&#39;)"><div class="eval-icon">❌</div><div class="eval-lbl">Fin d'emploi</div></div></div>
+          <div class="field" style="margin-top:10px;"><textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.84rem;font-family:inherit;background:var(--light);resize:vertical;min-height:70px;" placeholder="Justifiez votre décision..."></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ASSISTANTE DENTAIRE -->
+  <!-- ============================================================ -->
+  <div class="poste-content" id="poste-2">
+    <div class="phase phase-sem1 open" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📅</span><div><div class="phase-title">Semaine 1 — Les essentiels</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Stérilisation, salles et protocoles de base</div></div><span class="phase-badge badge-s1">Sem. 1</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Stérilisation et PCI</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser le protocole complet de stérilisation (transport, nettoyage, emballage, autoclave)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître et respecter les protocoles PCI de la clinique (barrières, désinfection)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser la préparation complète d'une salle de traitement selon l'acte prévu</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Remplir correctement le registre de stérilisation (intégré ou non intégré)</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Matériaux et instruments</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Identifier les instruments de base par acte dentaire</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître les matériaux couramment utilisés (composite, ciment, matériaux à empreinte)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Préparer correctement le matériel pour les actes courants (extractions, couronnes, obturations)</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaine 1</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-sem24" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📈</span><div><div class="phase-title">Semaines 2 à 4 — Assistance clinique</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Développement de l'assistance aux actes dentaires</div></div><span class="phase-badge badge-s2">Sem. 2-4</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Assistance aux actes</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Assister efficacement lors des soins préventifs (examens, nettoyages)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Assister lors des extractions simples et des obturations</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser la prise de radiographies (bitewings, périapicales, panoramique)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Prendre des empreintes selon les instructions du dentiste</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer efficacement le temps entre les patients (décontamination + préparation)</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Communication et travail d'équipe</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Communiquer proactivement avec le dentiste avant et pendant les procédures</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Rassurer les patients anxieux avant et pendant les traitements</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Informer la secrétaire des changements de planification en cours de journée</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaines 2 à 4</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-mois23" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">🚀</span><div><div class="phase-title">Mois 2 et 3 — Autonomie et actes avancés</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Maîtrise des actes complexes et autonomie complète</div></div><span class="phase-badge badge-s3">Mois 2-3</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Actes avancés et urgences</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Assister lors de procédures complexes (chirurgies, implants, traitements de canal)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître et appliquer le protocole d'urgence médicale (syncope, réaction allergique)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer la commande et l'inventaire de base des matériaux dentaires</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser les actes délégués permis selon la loi des Techniciens Dentaires du Québec</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Mois 2 et 3</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-fin" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">🏆</span><div><div class="phase-title">Fin de probation — Compétences attendues</div></div><span class="phase-badge badge-s4">90 jours</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="indicateurs"><div class="ind-title">Indicateurs de réussite — Assistante dentaire</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Stérilisation et PCI maîtrisées sans supervision ni rappels</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Préparation des salles rapide, complète et sans oublis</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Assistance fluide sur tous les actes courants — anticipe les besoins du dentiste</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Gestion efficace du temps entre les patients</div>
+          <div class="ind-item"><span class="ind-level ind-avance">Avancé</span>Assistance aux procédures complexes et gestion des urgences médicales</div>
+        </div>
+        <div class="comp-block"><div class="comp-title">Évaluation de fin de probation</div>
+          <div class="eval-grid"><div class="eval-card" onclick="selectEval(this,&#39;ok&#39;)"><div class="eval-icon">✅</div><div class="eval-lbl">Probation réussie</div></div><div class="eval-card" onclick="selectEval(this,&#39;prog&#39;)"><div class="eval-icon">⏳</div><div class="eval-lbl">Prolongation requise</div></div><div class="eval-card" onclick="selectEval(this,&#39;non&#39;)"><div class="eval-icon">❌</div><div class="eval-lbl">Fin d'emploi</div></div></div>
+          <div class="field" style="margin-top:10px;"><textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.84rem;font-family:inherit;background:var(--light);resize:vertical;min-height:70px;" placeholder="Justifiez votre décision..."></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- AIDE À LA STÉRILISATION -->
+  <!-- ============================================================ -->
+  <div class="poste-content" id="poste-3">
+    <div class="phase phase-sem1 open" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📅</span><div><div class="phase-title">Semaine 1 — Les essentiels</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Protocoles de stérilisation et sécurité</div></div><span class="phase-badge badge-s1">Sem. 1</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Stérilisation et désinfection</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre les différentes zones (contaminée, propre, stérile) et respecter leur intégrité</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser le cycle complet de stérilisation (collecte, nettoyage, inspection, emballage, autoclave)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Utiliser correctement les équipements (laveur désinfecteur, autoclave, thermoscelleuse)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Vérifier et documenter les indicateurs biologiques et chimiques</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Remplir correctement le registre de stérilisation</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Sécurité et protection</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Porter correctement tous les EPI requis (gants résistants, masque, lunettes, tablier)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Connaître le protocole en cas d'exposition accidentelle (piqûre, contact sanguin)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer et éliminer les déchets cliniques selon les règles en vigueur</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaine 1</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-sem24" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📈</span><div><div class="phase-title">Semaines 2 à 4 — Nettoyage et support clinique</div></div><span class="phase-badge badge-s2">Sem. 2-4</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Entretien et support</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Maîtriser la désinfection complète des salles de traitement entre chaque patient</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Entretenir et vérifier les équipements de stérilisation quotidiennement</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Gérer l'inventaire des fournitures de stérilisation et signaler les manques</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">S'assurer que les instruments stériles sont disponibles en quantité suffisante en tout temps</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaines 2 à 4</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-fin" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">🏆</span><div><div class="phase-title">Fin de probation — Compétences attendues</div></div><span class="phase-badge badge-s4">90 jours</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="indicateurs"><div class="ind-title">Indicateurs de réussite — Aide à la stérilisation</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Cycle de stérilisation maîtrisé sans supervision — zéro erreur de protocole</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Registres de stérilisation complétés correctement à chaque cycle</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Salles désinfectées rapidement et instruments disponibles sans délai</div>
+          <div class="ind-item"><span class="ind-level ind-avance">Avancé</span>Gestion proactive de l'inventaire et anticipation des besoins de l'équipe</div>
+        </div>
+        <div class="comp-block"><div class="comp-title">Évaluation de fin de probation</div>
+          <div class="eval-grid"><div class="eval-card" onclick="selectEval(this,&#39;ok&#39;)"><div class="eval-icon">✅</div><div class="eval-lbl">Probation réussie</div></div><div class="eval-card" onclick="selectEval(this,&#39;prog&#39;)"><div class="eval-icon">⏳</div><div class="eval-lbl">Prolongation requise</div></div><div class="eval-card" onclick="selectEval(this,&#39;non&#39;)"><div class="eval-icon">❌</div><div class="eval-lbl">Fin d'emploi</div></div></div>
+          <div class="field" style="margin-top:10px;"><textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.84rem;font-family:inherit;background:var(--light);resize:vertical;min-height:70px;" placeholder="Justifiez votre décision..."></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- GESTIONNAIRE -->
+  <!-- ============================================================ -->
+  <div class="poste-content" id="poste-4">
+    <div class="phase phase-sem1 open" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📅</span><div><div class="phase-title">Semaine 1 — Observation et immersion</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Comprendre l'organisation avant d'agir</div></div><span class="phase-badge badge-s1">Sem. 1</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Connaissance de l'organisation</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Rencontrer individuellement chaque membre de l'équipe pour apprendre à les connaître</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre la structure organisationnelle, les rôles et les responsabilités de chacun</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Observer le flux de travail quotidien — identifier les forces et les points de friction</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Prendre connaissance de tous les systèmes, outils et logiciels en place</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre la vision, les valeurs et les objectifs du (de la) propriétaire / dentiste</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Indicateurs et performance</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Analyser les indicateurs de performance actuels (production, collectes, taux d'occupation)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre la structure financière (salaires, masse salariale, coûts d'exploitation)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Identifier les priorités et les enjeux urgents à adresser</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaine 1</label><textarea placeholder="Observations et premières impressions..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-sem24" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">📈</span><div><div class="phase-title">Semaines 2 à 4 — Prise en main</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Établir sa présence et ses premières actions</div></div><span class="phase-badge badge-s2">Sem. 2-4</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Gestion des opérations</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Prendre en charge la gestion quotidienne des opérations (horaires, absences, imprévus)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Mettre en place ou optimiser les outils de communication d'équipe (réunions, notes)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Identifier et commencer à documenter les procédures manquantes ou à améliorer</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Établir sa crédibilité auprès de l'équipe par des actions concrètes et cohérentes</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="comp-block"><div class="comp-title">Gestion des ressources humaines</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Prendre en charge les dossiers RH actifs (probations, évaluations en cours, enjeux)</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Comprendre et appliquer les politiques RH en vigueur à la clinique</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Identifier les besoins de formation ou de soutien au sein de l'équipe</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Semaines 2 à 4</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-mois23" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">🚀</span><div><div class="phase-title">Mois 2 et 3 — Leadership et amélioration</div><div style="font-size:.75rem;color:#5a6a80;margin-top:2px;">Implanter ses premières améliorations et affirmer son leadership</div></div><span class="phase-badge badge-s3">Mois 2-3</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="comp-block"><div class="comp-title">Amélioration continue</div><div class="comp-items">
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Présenter un plan d'action structuré avec priorités et échéances au (à la) propriétaire</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Mettre en place au moins une amélioration concrète et mesurable dans les opérations</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Établir une structure de réunions d'équipe régulières et efficaces</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Mettre en place ou réviser le système d'évaluation de performance de l'équipe</span><div class="comp-date"><input type="date"></div></div>
+          <div class="comp-item"><input type="checkbox" class="comp-cb" onchange="updateItem(this)"><span class="comp-text">Suivre et présenter les indicateurs de performance de façon régulière</span><div class="comp-date"><input type="date"></div></div>
+        </div></div>
+        <div class="phase-notes"><label>📝 Notes — Mois 2 et 3</label><textarea placeholder="Observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="phase phase-fin" onclick="togglePhase(this)">
+      <div class="phase-header"><span class="phase-icon">🏆</span><div><div class="phase-title">Fin de probation — Compétences attendues</div></div><span class="phase-badge badge-s4">90 jours</span><span class="phase-progress"></span><span class="expand-arrow">▼</span></div>
+      <div class="phase-body">
+        <div class="indicateurs"><div class="ind-title">Indicateurs de réussite — Gestionnaire</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Gestion quotidienne des opérations maîtrisée — équipe bien encadrée</div>
+          <div class="ind-item"><span class="ind-level ind-base">Base</span>Crédibilité établie auprès de l'équipe et du (de la) propriétaire</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Au moins une amélioration concrète implantée avec résultats mesurables</div>
+          <div class="ind-item"><span class="ind-level ind-inter">Intermédiaire</span>Structure de réunions et de communication d'équipe en place</div>
+          <div class="ind-item"><span class="ind-level ind-avance">Avancé</span>Indicateurs de performance suivis et présentés au (à la) propriétaire de façon régulière</div>
+          <div class="ind-item"><span class="ind-level ind-avance">Avancé</span>Plan d'action pour l'année présenté et approuvé</div>
+        </div>
+        <div class="comp-block"><div class="comp-title">Évaluation de fin de probation</div>
+          <div class="eval-grid"><div class="eval-card" onclick="selectEval(this,&#39;ok&#39;)"><div class="eval-icon">✅</div><div class="eval-lbl">Probation réussie</div></div><div class="eval-card" onclick="selectEval(this,&#39;prog&#39;)"><div class="eval-icon">⏳</div><div class="eval-lbl">Prolongation requise</div></div><div class="eval-card" onclick="selectEval(this,&#39;non&#39;)"><div class="eval-icon">❌</div><div class="eval-lbl">Fin d'emploi</div></div></div>
+          <div class="field" style="margin-top:10px;"><textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.84rem;font-family:inherit;background:var(--light);resize:vertical;min-height:70px;" placeholder="Justifiez votre décision..."></textarea></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+function showPoste(n, btn){
+  document.querySelectorAll('.poste-content').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.poste-tab').forEach((b,i)=>b.classList.toggle('active',i===n));
+  updateProgress();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function togglePhase(phase){
+  // Don't toggle if clicking on input/checkbox/textarea
+  const target = event.target;
+  if(target.tagName==='INPUT'||target.tagName==='TEXTAREA'||target.tagName==='SELECT') return;
+  phase.classList.toggle('open');
+}
+
+function updateItem(cb){
+  const item = cb.closest('.comp-item');
+  const text = item.querySelector('.comp-text');
+  if(cb.checked){
+    item.classList.add('checked');
+    text.classList.add('done');
+  } else {
+    item.classList.remove('checked');
+    text.classList.remove('done');
+  }
+  updateProgress();
+}
+
+function updateProgress(){
+  const active = document.querySelector('.poste-content.active');
+  if(!active) return;
+  const total = active.querySelectorAll('.comp-cb').length;
+  const done = active.querySelectorAll('.comp-cb:checked').length;
+  const pct = total>0 ? Math.round(done/total*100) : 0;
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progLabel').textContent = `Progression — ${done} / ${total} compétences acquises`;
+}
+
+function selectEval(card, type){
+  card.closest('.eval-grid').querySelectorAll('.eval-card').forEach(c=>{
+    c.classList.remove('sel-ok','sel-prog','sel-non');
+  });
+  card.classList.add('sel-'+type);
+}
+
+// Init progress
+updateProgress();
+</script>
+
+
+</body></html>

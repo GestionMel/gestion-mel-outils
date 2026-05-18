@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<!-- saved from url=(0075)file:///C:/Users/info/Downloads/protocole-patient-retard-hygiene%20(1).html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocole patient en retard — Hygiène | Gestion Mel</title>
+<style>
+  :root {
+    --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3;
+    --light: #f4f8ff; --border: #d0dff0; --text: #1a2535;
+    --green: #1a9e5a; --orange: #e67e22; --red: #c0392b; --purple: #8e44ad;
+    --green-bg: #f0fdf4; --orange-bg: #fff8f0; --red-bg: #fef2f2;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 960px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 26px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: .85rem; opacity: .75; }
+
+  .section { padding: 20px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: .8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: .74rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: .5px; }
+  input[type=text], input[type=number] { border: 1.5px solid var(--border); border-radius: 6px; padding: 8px 11px; font-size: .88rem; font-family: inherit; color: var(--text); background: var(--light); }
+  input:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: .85rem; font-family: inherit; color: var(--text); background: var(--light); resize: vertical; line-height: 1.65; }
+  textarea:focus { outline: none; border-color: var(--accent); background: white; }
+
+  /* PROTOCOLE GRID */
+  .proto-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+
+  /* SCENARIO CARD */
+  .scenario { border-radius: 10px; overflow: hidden; border: 2px solid var(--border); }
+  .scenario-header { padding: 14px 18px; color: white; font-weight: 700; font-size: .95rem; display: flex; align-items: center; gap: 10px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .scenario-header .icon { font-size: 1.3rem; }
+  .scenario-header .min { font-size: .78rem; font-weight: 400; opacity: .85; display: block; margin-top: 2px; }
+  .s1 .scenario-header { background: var(--orange); }
+  .s2 .scenario-header { background: #c0392b; }
+  .s3 .scenario-header { background: var(--purple); }
+  .s1 { border-color: var(--orange); }
+  .s2 { border-color: #c0392b; }
+  .s3 { border-color: var(--purple); }
+
+  .scenario-body { padding: 14px 16px; background: white; }
+
+  /* ROLE STEP */
+  .role-step { margin-bottom: 12px; }
+  .role-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700; color: white; margin-bottom: 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .rb-sec { background: var(--blue); }
+  .rb-hyg { background: var(--green); }
+  .rb-ass { background: var(--purple); }
+  .rb-note { background: #7f8c8d; }
+
+  .step-text { font-size: .82rem; color: #2a3a4a; line-height: 1.6; background: var(--light); border-radius: 6px; padding: 8px 10px; border-left: 3px solid var(--border); }
+  .s1 .step-text { border-left-color: var(--orange); }
+  .s2 .step-text { border-left-color: #c0392b; }
+  .s3 .step-text { border-left-color: var(--purple); }
+
+  /* ARROW */
+  .arrow { text-align: center; font-size: 1.1rem; color: #b0b8c4; margin: 6px 0; }
+
+  /* FRAIS BOX */
+  .frais-box { background: #fff8e1; border: 1.5px solid var(--orange); border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; font-size: .83rem; color: #7a4400; display: flex; align-items: center; gap: 10px; }
+  .frais-box strong { font-size: 1rem; color: var(--orange); }
+
+  /* NOTE GENERALE */
+  .note-gen { background: var(--light); border: 1.5px solid var(--border); border-left: 4px solid var(--blue); border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; font-size: .84rem; color: #2a3a4a; line-height: 1.7; }
+  .note-gen strong { color: var(--blue); }
+
+  /* PERSONALISATION */
+  .perso-block { background: var(--light); border: 1.5px solid var(--border); border-radius: 8px; padding: 16px 18px; margin-bottom: 12px; }
+  .perso-title { font-size: .78rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .perso-title::before { content: ''; display: block; width: 3px; height: 12px; background: var(--accent); border-radius: 2px; }
+  .perso-row { display: grid; grid-template-columns: 200px 1fr; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .perso-row label { font-size: .78rem; font-weight: 600; color: #5a6a80; text-transform: none; letter-spacing: 0; }
+
+  /* ACTIONS */
+  .actions { padding: 20px 36px; background: var(--light); display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  .btn { padding: 9px 20px; border-radius: 7px; font-size: .87rem; font-weight: 600; cursor: pointer; border: none; transition: all .2s; font-family: inherit; }
+  .btn-print { background: white; color: #5a6a80; border: 1.5px solid var(--border); }
+  .btn-print:hover { background: var(--light); }
+
+  .footer-note { text-align: center; font-size: .75rem; color: #8a9ab0; padding: 12px; }
+  .clinic-name { font-size: .8rem; color: #5a6a80; font-style: italic; text-align: right; padding: 8px 36px 0; }
+
+  @media print {
+    body { background: white; font-size: 11px; }
+    .page-header, .actions { display: none !important; }
+    .container { box-shadow: none; margin: 0; border-radius: 0; }
+    .scenario-header, .role-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .proto-grid { gap: 10px; }
+    input, textarea { border: none !important; background: transparent !important; }
+  }
+  @media (max-width: 700px) {
+    .proto-grid { grid-template-columns: 1fr; }
+    .section { padding: 14px 16px; }
+    .perso-row { grid-template-columns: 1fr; }
+    .actions { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Protocoles cliniques</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Protocole — Gestion d'un patient en retard</h1>
+    <p>Département d'hygiène dentaire — Procédure selon les minutes de retard</p>
+  </div>
+
+  <!-- INFOS CLINIQUE -->
+  <div class="section">
+    <div class="section-title">Identification</div>
+    <div class="grid">
+      <div class="field"><label>Nom de la clinique</label><input type="text" id="clinique" placeholder="Clinique Dentaire..."></div>
+      <div class="field"><label>Date de mise à jour</label><input type="text" id="dateMAJ" placeholder="JJ/MM/AAAA"></div>
+    </div>
+  </div>
+
+  <!-- FRAIS PERSONNALISABLES -->
+  <div class="section">
+    <div class="section-title">Configuration des frais de retard</div>
+    <div class="perso-block">
+      <div class="perso-title">Frais applicables — À personnaliser selon votre politique</div>
+      <div class="perso-row">
+        <label>Frais de retard (no-show partiel)</label>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="number" id="fraisRetard" value="50" min="0" style="width:100px;"> <span style="font-size:.85rem;color:#5a6a80;">$</span>
+        </div>
+      </div>
+      <div class="perso-row">
+        <label>Seuil retard modéré (min)</label>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="number" id="min1" value="10" min="1" style="width:80px;"> <span style="font-size:.85rem;color:#5a6a80;">à</span>
+          <input type="number" id="min2" value="20" min="1" style="width:80px;"> <span style="font-size:.85rem;color:#5a6a80;">minutes</span>
+        </div>
+      </div>
+      <div class="perso-row">
+        <label>Seuil retard important (min)</label>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="number" id="min3" value="20" min="1" style="width:80px;"> <span style="font-size:.85rem;color:#5a6a80;">à</span>
+          <input type="number" id="min4" value="30" min="1" style="width:80px;"> <span style="font-size:.85rem;color:#5a6a80;">minutes</span>
+        </div>
+      </div>
+      <div class="perso-row">
+        <label>Seuil rendez-vous non récupérable</label>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:.85rem;color:#5a6a80;">Moins de</span>
+          <input type="number" id="min5" value="20" min="1" style="width:80px;"> <span style="font-size:.85rem;color:#5a6a80;">minutes restantes au RDV</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROTOCOLE VISUEL -->
+  <div class="section">
+    <div class="section-title">Protocole selon les minutes de retard</div>
+
+    <div class="note-gen">
+      <strong>Note générale :</strong> En tout temps, il est possible pour l'hygiéniste et l'assistante de demander de l'aide à un(e) autre hygiéniste ou assistante disponible pour la prise de radiographies ou toute autre tâche permettant d'optimiser le temps restant avec le patient.
+    </div>
+
+    <div class="proto-grid">
+
+      <!-- SCÉNARIO 1 -->
+      <div class="scenario s1">
+        <div class="scenario-header">
+          <span class="icon">🟡</span>
+          <div>
+            Retard modéré
+            <span class="min" id="label1">De 10 à 20 minutes de retard</span>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="role-step">
+            <span class="role-badge rb-sec">🗂️ Secrétaire</span>
+            <div class="step-text">Informe le patient qu'il est en retard et qu'il est possible qu'on ne puisse pas effectuer toutes les étapes en un seul rendez-vous. L'hygiéniste en jugera et l'informera.</div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="role-step">
+            <span class="role-badge rb-hyg">🦷 Hygiéniste</span>
+            <div class="step-text">Effectue le nettoyage et les radiographies si possible dans le temps disponible. Informe l'assistante s'il n'y a pas le temps pour l'examen et/ou les radiographies.</div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="role-step">
+            <span class="role-badge rb-hyg">🦷 Hygiéniste</span>
+            <div class="step-text">Retourne le patient dans la salle d'attente pour libérer la salle à temps.</div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="role-step">
+            <span class="role-badge rb-ass">🔧 Assistante</span>
+            <div class="step-text">Prend les radiographies et installe le patient pour l'examen du dentiste. Si impossible de voir le patient le jour même, informe la secrétaire de prévoir un rendez-vous de 20 minutes le lendemain.</div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="role-step">
+            <span class="role-badge rb-sec">🗂️ Secrétaire</span>
+            <div class="step-text">Fait payer en totalité et fixe le prochain rendez-vous si nécessaire.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCÉNARIO 2 -->
+      <div class="scenario s2">
+        <div class="scenario-header">
+          <span class="icon">🔴</span>
+          <div>
+            Retard important
+            <span class="min" id="label2">De 20 à 30 minutes de retard</span>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="role-step">
+            <span class="role-badge rb-sec">🗂️ Secrétaire</span>
+            <div class="step-text">Informe le patient de son retard. Le rendez-vous sera modifié — seules certaines étapes pourront être complétées aujourd'hui.</div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="role-step">
+            <span class="role-badge rb-hyg">🦷 Hygiéniste</span>
+            <div class="step-text">Effectue les radiographies et l'examen dans la salle. Informe le patient qu'un rendez-vous supplémentaire de 30, 40 ou 50 minutes (selon la classe) devra être pris pour compléter le nettoyage.</div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="role-step">
+            <span class="role-badge rb-sec">🗂️ Secrétaire</span>
+            <div class="step-text">Fait payer en totalité et planifie le rendez-vous de suivi pour compléter le nettoyage.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCÉNARIO 3 -->
+      <div class="scenario s3">
+        <div class="scenario-header">
+          <span class="icon">🟣</span>
+          <div>
+            Rendez-vous non récupérable
+            <span class="min" id="label3">Moins de 20 minutes restantes</span>
+          </div>
+        </div>
+        <div class="scenario-body">
+          <div class="frais-box">
+            <strong id="fraisLabel">50 $</strong>
+            <span>Frais de rendez-vous manqué applicables selon la politique de la clinique.</span>
+          </div>
+          <div class="role-step">
+            <span class="role-badge rb-sec">🗂️ Secrétaire</span>
+            <div class="step-text">Informe le patient des frais applicables pour le rendez-vous manqué et planifie un nouveau rendez-vous complet.</div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="role-step">
+            <span class="role-badge rb-note">📋 Note</span>
+            <div class="step-text">Le patient est avisé que tout retard futur de cette ampleur entraînera les mêmes frais. Cette politique est en vigueur afin de respecter le temps de toute l'équipe et des autres patients.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NOTES ET EXCEPTIONS -->
+  <div class="section">
+    <div class="section-title">Notes, exceptions et politique de communication</div>
+    <div class="perso-block">
+      <div class="perso-title">Communication au patient lors de la prise de rendez-vous</div>
+      <textarea style="min-height:80px;">Lors de la confirmation du rendez-vous, rappeler au patient l'importance d'arriver à l'heure. Préciser que des frais peuvent s'appliquer en cas de retard important ou de rendez-vous manqué.</textarea>
+    </div>
+    <div class="perso-block">
+      <div class="perso-title">Exceptions et cas particuliers</div>
+      <textarea style="min-height:70px;">Cas de force majeure (accident, urgence médicale) : les frais peuvent être annulés à la discrétion de la direction. Tout cas particulier doit être noté dans le dossier du patient.</textarea>
+    </div>
+    <div class="perso-block">
+      <div class="perso-title">Notes additionnelles</div>
+      <textarea style="min-height:60px;"></textarea>
+    </div>
+  </div>
+
+  <!-- SIGNATURES -->
+  <div class="section">
+    <div class="section-title">Approbation</div>
+    <div class="grid">
+      <div class="field"><label>Approuvé par</label><input type="text" placeholder="Nom du gestionnaire / dentiste"></div>
+      <div class="field"><label>Date d'entrée en vigueur</label><input type="text" placeholder="JJ/MM/AAAA"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+// Update labels dynamically
+function updateLabels() {
+  const m1 = document.getElementById('min1').value;
+  const m2 = document.getElementById('min2').value;
+  const m3 = document.getElementById('min3').value;
+  const m4 = document.getElementById('min4').value;
+  const m5 = document.getElementById('min5').value;
+  const frais = document.getElementById('fraisRetard').value;
+
+  document.getElementById('label1').textContent = `De ${m1} à ${m2} minutes de retard`;
+  document.getElementById('label2').textContent = `De ${m3} à ${m4} minutes de retard`;
+  document.getElementById('label3').textContent = `Moins de ${m5} minutes restantes au RDV`;
+  document.getElementById('fraisLabel').textContent = `${frais} $`;
+}
+
+['min1','min2','min3','min4','min5','fraisRetard'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateLabels);
+});
+</script>
+
+
+</body></html>

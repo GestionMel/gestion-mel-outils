@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)file:///C:/Users/info/Downloads/calendrier-reconnaissance.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendrier de reconnaissance — Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+    --gold:#d4a017;--pink:#e91e8c;--teal:#00897b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:1160px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 32px;}
+  .doc-header h1{font-size:1.3rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.82rem;opacity:.7;}
+
+  /* CONTROLS */
+  .controls{padding:12px 32px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:7px 11px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .year-nav{display:flex;align-items:center;gap:10px;}
+  .year-btn{width:30px;height:30px;border-radius:6px;border:1.5px solid var(--border);background:white;color:var(--blue);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .year-btn:hover{background:var(--light);border-color:var(--accent);}
+  .year-display{font-size:1.1rem;font-weight:700;color:var(--dark);min-width:60px;text-align:center;}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;}
+  .leg-item{display:flex;align-items:center;gap:5px;font-size:.75rem;color:#5a6a80;}
+  .leg-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .btn-top{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.79rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn-top:hover{border-color:var(--accent);color:var(--blue);}
+  .btn-top.primary{background:var(--blue);border-color:var(--blue);color:white;}
+
+  /* CALENDAR GRID */
+  .cal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:20px 32px;}
+  .month-card{border:1.5px solid var(--border);border-radius:9px;overflow:hidden;}
+  .month-header{padding:9px 14px;font-size:.83rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .month-body{padding:8px;}
+  .event-item{padding:6px 9px;border-radius:6px;margin-bottom:5px;border-left:3px solid transparent;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .event-item:last-child{margin-bottom:0;}
+  .ev-header{display:flex;align-items:flex-start;gap:7px;}
+  .ev-emoji{font-size:.95rem;flex-shrink:0;margin-top:1px;}
+  .ev-content{flex:1;}
+  .ev-name{font-size:.8rem;font-weight:700;line-height:1.3;}
+  .ev-date{font-size:.7rem;opacity:.7;margin-top:1px;}
+  .ev-actions{margin-top:6px;padding:6px 7px;background:rgba(255,255,255,.7);border-radius:5px;}
+  .ev-action-label{font-size:.67rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;}
+  .ev-action-input{width:100%;border:1px solid rgba(0,0,0,.1);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:rgba(255,255,255,.9);resize:none;line-height:1.4;}
+  .ev-action-input:focus{outline:none;border-color:var(--accent);}
+  .ev-meta{display:flex;align-items:center;gap:6px;margin-top:4px;}
+  .budget-input{width:75px;border:1px solid rgba(0,0,0,.1);border-radius:4px;padding:2px 5px;font-size:.73rem;font-family:inherit;text-align:right;background:rgba(255,255,255,.9);}
+  .budget-input:focus{outline:none;border-color:var(--accent);}
+  .done-check{width:15px;height:15px;cursor:pointer;accent-color:var(--green);}
+  .done-label{font-size:.7rem;color:#5a6a80;}
+  .btn-add-ev{display:flex;align-items:center;gap:5px;padding:5px 8px;background:rgba(255,255,255,.6);border:1px dashed rgba(0,0,0,.2);border-radius:5px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;color:#5a6a80;width:100%;justify-content:center;margin-top:5px;}
+  .btn-add-ev:hover{background:rgba(255,255,255,.9);}
+  .btn-del-ev{width:16px;height:16px;border-radius:3px;border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.7);color:var(--red);cursor:pointer;font-size:.68rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:inherit;}
+
+  /* UPCOMING BANNER */
+  .upcoming-wrap{padding:14px 32px 4px;}
+  .upcoming-title{font-size:.78rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+  .upcoming-title::before{content:'⚡';}
+  .upcoming-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+  .upcoming-chip{display:flex;align-items:center;gap:8px;padding:7px 13px;border-radius:20px;font-size:.77rem;font-weight:600;border:1.5px solid;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+  /* LIST VIEW */
+  .list-view{padding:16px 32px;}
+  .list-month{margin-bottom:16px;}
+  .lm-title{font-size:.82rem;font-weight:700;color:var(--dark);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+  .lm-events{display:flex;flex-direction:column;gap:6px;}
+  .le-row{display:grid;grid-template-columns:30px 140px 1fr 1fr 100px 60px;gap:10px;align-items:start;padding:8px 12px;background:var(--light);border-radius:7px;border-left:3px solid;font-size:.8rem;}
+  .le-row input,.le-row textarea{border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.78rem;font-family:inherit;background:white;width:100%;}
+
+  /* TABS */
+  .nav-tabs{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);}
+  .nav-tab{padding:10px 20px;background:none;border:none;border-bottom:3px solid transparent;color:#5a6a80;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:-2px;}
+  .nav-tab:hover{color:var(--blue);background:#e8f0fb;}
+  .nav-tab.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .tab-pane{display:none;}
+  .tab-pane.active{display:block;}
+
+  @media print{
+    body{background:white;font-size:10px;}
+    .page-header,.controls,.nav-tabs,.btn-add-ev,.btn-del-ev,.btn-top{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .tab-pane{display:block!important;}
+    .cal-grid{padding:8px;}
+    .month-header,.event-item,.upcoming-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input,textarea{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:900px){.cal-grid{grid-template-columns:repeat(2,1fr);}.controls{padding:10px 14px;}.cal-grid{padding:14px;}}
+  @media(max-width:600px){.cal-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Calendrier de reconnaissance</div>
+</div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>🎉 Calendrier de reconnaissance — Équipe dentaire</h1>
+    <p>Événements annuels, semaines de reconnaissance professionnelle et gestes planifiés pour votre équipe</p>
+  </div>
+
+  <div class="controls">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+      <input class="ci" type="text" id="nomClinique" placeholder="Nom de la clinique..." style="min-width:200px;">
+      <div class="year-nav">
+        <button class="year-btn" onclick="changeYear(-1)">‹</button>
+        <div class="year-display" id="yearDisplay">2026</div>
+        <button class="year-btn" onclick="changeYear(1)">›</button>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--pink)"></div>Fête / Social</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--blue)"></div>Professionnel</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Reconnaissance équipe</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Clinique / Dentaire</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--purple)"></div>Bien-être</div>
+    </div>
+    <button class="btn-top primary no-print" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+
+  <!-- UPCOMING EVENTS BANNER -->
+  <div class="upcoming-wrap">
+    <div class="upcoming-title">Prochains événements — 60 jours</div>
+    <div class="upcoming-chips" id="upcomingChips">
+    <div class="upcoming-chip" style="background:var(--gold)15;border-color:var(--gold)40;color:var(--gold);">
+      <span>🌟</span>
+      <span style="font-weight:700;">Réunion mi-année + bilan équipe</span>
+      <span style="background:var(--gold);color:white;border-radius:5px;padding:2px 8px;font-size:.71rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 22 j.</span>
+    </div>
+    <div class="upcoming-chip" style="background:var(--pink)15;border-color:var(--pink)40;color:var(--pink);">
+      <span>👨‍👧</span>
+      <span style="font-weight:700;">Fête des pères</span>
+      <span style="background:var(--pink);color:white;border-radius:5px;padding:2px 8px;font-size:.71rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 35 j.</span>
+    </div>
+    <div class="upcoming-chip" style="background:var(--pink)15;border-color:var(--pink)40;color:var(--pink);">
+      <span>🎡</span>
+      <span style="font-weight:700;">Fête nationale du Québec</span>
+      <span style="background:var(--pink);color:white;border-radius:5px;padding:2px 8px;font-size:.71rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 38 j.</span>
+    </div>
+    <div class="upcoming-chip" style="background:var(--pink)15;border-color:var(--pink)40;color:var(--pink);">
+      <span>🍁</span>
+      <span style="font-weight:700;">Fête du Canada</span>
+      <span style="background:var(--pink);color:white;border-radius:5px;padding:2px 8px;font-size:.71rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 45 j.</span>
+    </div>
+    <div class="upcoming-chip" style="background:var(--pink)15;border-color:var(--pink)40;color:var(--pink);">
+      <span>☀️</span>
+      <span style="font-weight:700;">Activité estivale d'équipe</span>
+      <span style="background:var(--pink);color:white;border-radius:5px;padding:2px 8px;font-size:.71rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;">Dans 57 j.</span>
+    </div></div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="cal-grid" id="calGrid"><div class="month-card">
+      <div class="month-header" style="background:#1a6abf;">
+        Janvier 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">2 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_1">
+        <div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">🎆</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Jour de l'An</div>
+        <div class="ev-date">1 janvier</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Bonne année à l&#39;équipe!" onchange="saveAction(&#39;e1&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e1&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e1&#39;,2026,&#39;done&#39;,this.checked)" id="done_e1_2026">
+        <label class="done-label" for="done_e1_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--gold)15;border-left-color:var(--gold);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">✨</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--gold);">Lancement des objectifs annuels</div>
+        <div class="ev-date">18 janvier</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Réunion de début d&#39;année — partager la vision" onchange="saveAction(&#39;e2&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e2&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e2&#39;,2026,&#39;done&#39;,this.checked)" id="done_e2_2026">
+        <label class="done-label" for="done_e2_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(1)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#e91e8c;">
+        Février 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">2 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_2">
+        <div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">💝</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Saint-Valentin</div>
+        <div class="ev-date">14 février</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Petite attention pour l&#39;équipe" onchange="saveAction(&#39;e3&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e3&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e3&#39;,2026,&#39;done&#39;,this.checked)" id="done_e3_2026">
+        <label class="done-label" for="done_e3_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--purple)15;border-left-color:var(--purple);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">🌿</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--purple);">Mois de la santé</div>
+        <div class="ev-date">16 février</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Activité bien-être pour l&#39;équipe" onchange="saveAction(&#39;e4&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e4&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e4&#39;,2026,&#39;done&#39;,this.checked)" id="done_e4_2026">
+        <label class="done-label" for="done_e4_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(2)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#1a9e5a;">
+        Mars 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">2 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_3">
+        <div class="event-item" style="background:var(--green)15;border-left-color:var(--green);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">🦷</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--green);">Semaine des assistantes dentaires</div>
+        <div class="ev-date">2 mars</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Semaine nationale — 1ère semaine de mars" onchange="saveAction(&#39;e5&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e5&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e5&#39;,2026,&#39;done&#39;,this.checked)" id="done_e5_2026">
+        <label class="done-label" for="done_e5_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">🎉</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Fête du printemps</div>
+        <div class="ev-date">16 mars</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Activité pour souligner l&#39;arrivée du printemps" onchange="saveAction(&#39;e6&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e6&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e6&#39;,2026,&#39;done&#39;,this.checked)" id="done_e6_2026">
+        <label class="done-label" for="done_e6_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(3)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#8e44ad;">
+        Avril 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">2 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_4">
+        <div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">🐣</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Pâques — Congé / Attention équipe</div>
+        <div class="ev-date">5 avril</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Petit panier de chocolats pour l&#39;équipe" onchange="saveAction(&#39;e7&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e7&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e7&#39;,2026,&#39;done&#39;,this.checked)" id="done_e7_2026">
+        <label class="done-label" for="done_e7_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--blue)15;border-left-color:var(--blue);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">🗂️</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--blue);">Semaine des secrétaires / assistants administratifs</div>
+        <div class="ev-date">29 avril</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Semaine des assistants administratifs — dernier mercredi d&#39;avril" onchange="saveAction(&#39;e8&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e8&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e8&#39;,2026,&#39;done&#39;,this.checked)" id="done_e8_2026">
+        <label class="done-label" for="done_e8_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(4)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#e67e22;">
+        Mai 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">3 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_5">
+        <div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">💐</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Fête des mères</div>
+        <div class="ev-date">10 mai</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Reconnaître les membres de l&#39;équipe qui sont mamans" onchange="saveAction(&#39;e9&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e9&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e9&#39;,2026,&#39;done&#39;,this.checked)" id="done_e9_2026">
+        <label class="done-label" for="done_e9_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--gold)15;border-left-color:var(--gold);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">🏥</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--gold);">Semaine nationale de l'action bénévole</div>
+        <div class="ev-date">11 mai</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Souligner les efforts collectifs de l&#39;équipe" onchange="saveAction(&#39;e11&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e11&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e11&#39;,2026,&#39;done&#39;,this.checked)" id="done_e11_2026">
+        <label class="done-label" for="done_e11_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--blue)15;border-left-color:var(--blue);opacity:.65;">
+    <div class="ev-header">
+      <span class="ev-emoji">👩‍⚕️</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--blue);">Journée internationale des infirmières</div>
+        <div class="ev-date">12 mai</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Reconnaître le personnel de santé de l&#39;équipe" onchange="saveAction(&#39;e10&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e10&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e10&#39;,2026,&#39;done&#39;,this.checked)" id="done_e10_2026">
+        <label class="done-label" for="done_e10_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(5)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#00897b;">
+        Juin 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">3 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_6">
+        <div class="event-item" style="background:var(--gold)15;border-left-color:var(--gold);">
+    <div class="ev-header">
+      <span class="ev-emoji">🌟</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--gold);">Réunion mi-année + bilan équipe</div>
+        <div class="ev-date">8 juin</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Point de mi-année — célébrer les succès de l&#39;équipe" onchange="saveAction(&#39;e14&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e14&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e14&#39;,2026,&#39;done&#39;,this.checked)" id="done_e14_2026">
+        <label class="done-label" for="done_e14_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);">
+    <div class="ev-header">
+      <span class="ev-emoji">👨‍👧</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Fête des pères</div>
+        <div class="ev-date">21 juin</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Reconnaître les membres de l&#39;équipe qui sont papas" onchange="saveAction(&#39;e13&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e13&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e13&#39;,2026,&#39;done&#39;,this.checked)" id="done_e13_2026">
+        <label class="done-label" for="done_e13_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);">
+    <div class="ev-header">
+      <span class="ev-emoji">🎡</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Fête nationale du Québec</div>
+        <div class="ev-date">24 juin</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Activité festive pour la St-Jean!" onchange="saveAction(&#39;e12&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e12&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e12&#39;,2026,&#39;done&#39;,this.checked)" id="done_e12_2026">
+        <label class="done-label" for="done_e12_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(6)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#c0392b;">
+        Juillet 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">2 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_7">
+        <div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);">
+    <div class="ev-header">
+      <span class="ev-emoji">🍁</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Fête du Canada</div>
+        <div class="ev-date">1 juillet</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Congé officiel — petit mot pour l&#39;équipe" onchange="saveAction(&#39;e15&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e15&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e15&#39;,2026,&#39;done&#39;,this.checked)" id="done_e15_2026">
+        <label class="done-label" for="done_e15_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);">
+    <div class="ev-header">
+      <span class="ev-emoji">☀️</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Activité estivale d'équipe</div>
+        <div class="ev-date">13 juillet</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="BBQ, pique-nique ou activité plein air" onchange="saveAction(&#39;e16&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e16&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e16&#39;,2026,&#39;done&#39;,this.checked)" id="done_e16_2026">
+        <label class="done-label" for="done_e16_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(7)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#1a6abf;">
+        Août 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">1 événement · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_8">
+        <div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);">
+    <div class="ev-header">
+      <span class="ev-emoji">👷</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Fête du Travail (longue fin de semaine)</div>
+        <div class="ev-date">3 août</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Mot de reconnaissance avant la longue fin de semaine" onchange="saveAction(&#39;e17&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e17&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e17&#39;,2026,&#39;done&#39;,this.checked)" id="done_e17_2026">
+        <label class="done-label" for="done_e17_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(8)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#d4a017;">
+        Septembre 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">2 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_9">
+        <div class="event-item" style="background:var(--gold)15;border-left-color:var(--gold);">
+    <div class="ev-header">
+      <span class="ev-emoji">🎒</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--gold);">Rentrée — Réunion d'équipe</div>
+        <div class="ev-date">7 septembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Réunion de rentrée — objectifs de l&#39;automne" onchange="saveAction(&#39;e18&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e18&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e18&#39;,2026,&#39;done&#39;,this.checked)" id="done_e18_2026">
+        <label class="done-label" for="done_e18_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--green)15;border-left-color:var(--green);">
+    <div class="ev-header">
+      <span class="ev-emoji">🦷</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--green);">Mois de la santé bucco-dentaire</div>
+        <div class="ev-date">21 septembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Activité de sensibilisation et fierté professionnelle" onchange="saveAction(&#39;e19&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e19&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e19&#39;,2026,&#39;done&#39;,this.checked)" id="done_e19_2026">
+        <label class="done-label" for="done_e19_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(9)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#2c3e50;">
+        Octobre 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">3 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_10">
+        <div class="event-item" style="background:var(--green)15;border-left-color:var(--green);">
+    <div class="ev-header">
+      <span class="ev-emoji">🫧</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--green);">Mois de l'hygiène dentaire</div>
+        <div class="ev-date">12 octobre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Semaine des hygiénistes dentaires — souligner leur rôle" onchange="saveAction(&#39;e20&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e20&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e20&#39;,2026,&#39;done&#39;,this.checked)" id="done_e20_2026">
+        <label class="done-label" for="done_e20_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--purple)15;border-left-color:var(--purple);">
+    <div class="ev-header">
+      <span class="ev-emoji">🧡</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--purple);">Mois de sensibilisation à la santé mentale</div>
+        <div class="ev-date">12 octobre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Activité bien-être — Check-in avec l&#39;équipe" onchange="saveAction(&#39;e21&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e21&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e21&#39;,2026,&#39;done&#39;,this.checked)" id="done_e21_2026">
+        <label class="done-label" for="done_e21_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);">
+    <div class="ev-header">
+      <span class="ev-emoji">🎃</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Halloween</div>
+        <div class="ev-date">31 octobre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Déco clinique, friandises pour l&#39;équipe!" onchange="saveAction(&#39;e22&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e22&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e22&#39;,2026,&#39;done&#39;,this.checked)" id="done_e22_2026">
+        <label class="done-label" for="done_e22_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(10)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#8e44ad;">
+        Novembre 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">3 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_11">
+        <div class="event-item" style="background:var(--gold)15;border-left-color:var(--gold);">
+    <div class="ev-header">
+      <span class="ev-emoji">🤝</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--gold);">Semaine de la gentillesse</div>
+        <div class="ev-date">2 novembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Cartons de gratitude entre collègues" onchange="saveAction(&#39;e23&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e23&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e23&#39;,2026,&#39;done&#39;,this.checked)" id="done_e23_2026">
+        <label class="done-label" for="done_e23_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--blue)15;border-left-color:var(--blue);">
+    <div class="ev-header">
+      <span class="ev-emoji">💼</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--blue);">Semaine des gestionnaires / coordonnateurs</div>
+        <div class="ev-date">9 novembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Reconnaître le leadership de l&#39;équipe de gestion" onchange="saveAction(&#39;e25&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e25&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e25&#39;,2026,&#39;done&#39;,this.checked)" id="done_e25_2026">
+        <label class="done-label" for="done_e25_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--blue)15;border-left-color:var(--blue);">
+    <div class="ev-header">
+      <span class="ev-emoji">📊</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--blue);">Évaluations annuelles de rendement</div>
+        <div class="ev-date">16 novembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Planifier et compléter les évaluations annuelles" onchange="saveAction(&#39;e24&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e24&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e24&#39;,2026,&#39;done&#39;,this.checked)" id="done_e24_2026">
+        <label class="done-label" for="done_e24_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(11)">+ Ajouter un événement</button>
+      </div></div><div class="month-card">
+      <div class="month-header" style="background:#c0392b;">
+        Décembre 2026
+        <span style="float:right;font-size:.7rem;opacity:.8;">3 événements · 0✓</span>
+      </div>
+      <div class="month-body" id="mb_12">
+        <div class="event-item" style="background:var(--pink)15;border-left-color:var(--pink);">
+    <div class="ev-header">
+      <span class="ev-emoji">🎄</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--pink);">Fête de Noël d'équipe</div>
+        <div class="ev-date">7 décembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Party de Noël — activité, repas ou célébration" onchange="saveAction(&#39;e26&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e26&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e26&#39;,2026,&#39;done&#39;,this.checked)" id="done_e26_2026">
+        <label class="done-label" for="done_e26_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--gold)15;border-left-color:var(--gold);">
+    <div class="ev-header">
+      <span class="ev-emoji">🎁</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--gold);">Noël — Cadeaux / Bonus</div>
+        <div class="ev-date">25 décembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Remise des bonus de fin d&#39;année et cadeaux" onchange="saveAction(&#39;e27&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e27&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e27&#39;,2026,&#39;done&#39;,this.checked)" id="done_e27_2026">
+        <label class="done-label" for="done_e27_2026">Complété</label>
+      </div>
+    </div>
+  </div><div class="event-item" style="background:var(--gold)15;border-left-color:var(--gold);">
+    <div class="ev-header">
+      <span class="ev-emoji">🥂</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:var(--gold);">Rétrospective annuelle</div>
+        <div class="ev-date">31 décembre</div>
+      </div>
+      
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="Bilan de l&#39;année — célébrer les réussites collectives" onchange="saveAction(&#39;e28&#39;,2026,&#39;action&#39;,this.value)"></textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="" onchange="saveAction(&#39;e28&#39;,2026,&#39;budget&#39;,this.value)">
+        <input type="checkbox" class="done-check" onchange="saveAction(&#39;e28&#39;,2026,&#39;done&#39;,this.checked)" id="done_e28_2026">
+        <label class="done-label" for="done_e28_2026">Complété</label>
+      </div>
+    </div>
+  </div>
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(12)">+ Ajouter un événement</button>
+      </div></div></div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+let currentYear = TODAY.getFullYear();
+
+// MONTH COLORS
+const MONTH_COLORS = [
+  '#1a6abf','#e91e8c','#1a9e5a','#8e44ad',
+  '#e67e22','#00897b','#c0392b','#1a6abf',
+  '#d4a017','#2c3e50','#8e44ad','#c0392b'
+];
+const MONTH_NAMES = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+// ===== EVENTS DATA =====
+// fixed: {month (1-12), day} | variable: computed per year
+// Types: social, professionnel, reconnaissance, dentaire, bienetre
+const BASE_EVENTS = [
+  // JANVIER
+  { id:'e1', month:1, day:1, emoji:'🎆', name:'Jour de l\'An', type:'social', color:'var(--pink)', desc:'Bonne année à l\'équipe!' },
+  { id:'e2', month:1, day:null, weekNum:3, dayOfWeek:0, emoji:'✨', name:'Lancement des objectifs annuels', type:'reconnaissance', color:'var(--gold)', desc:'Réunion de début d\'année — partager la vision' },
+
+  // FÉVRIER
+  { id:'e3', month:2, day:14, emoji:'💝', name:'Saint-Valentin', type:'social', color:'var(--pink)', desc:'Petite attention pour l\'équipe' },
+  { id:'e4', month:2, day:null, weekNum:3, dayOfWeek:1, emoji:'🌿', name:'Mois de la santé', type:'bienetre', color:'var(--purple)', desc:'Activité bien-être pour l\'équipe' },
+
+  // MARS
+  { id:'e5', month:3, day:null, weekNum:1, dayOfWeek:1, emoji:'🦷', name:'Semaine des assistantes dentaires', type:'dentaire', color:'var(--green)', desc:'Semaine nationale — 1ère semaine de mars' },
+  { id:'e6', month:3, day:null, weekNum:3, dayOfWeek:1, emoji:'🎉', name:'Fête du printemps', type:'social', color:'var(--pink)', desc:'Activité pour souligner l\'arrivée du printemps' },
+
+  // AVRIL
+  { id:'e7', month:4, day:null, easter:true, emoji:'🐣', name:'Pâques — Congé / Attention équipe', type:'social', color:'var(--pink)', desc:'Petit panier de chocolats pour l\'équipe' },
+  { id:'e8', month:4, day:null, weekNum:4, dayOfWeek:3, emoji:'🗂️', name:'Semaine des secrétaires / assistants administratifs', type:'professionnel', color:'var(--blue)', desc:'Semaine des assistants administratifs — dernier mercredi d\'avril' },
+
+  // MAI
+  { id:'e9', month:5, day:null, weekNum:2, dayOfWeek:0, emoji:'💐', name:'Fête des mères', type:'social', color:'var(--pink)', desc:'Reconnaître les membres de l\'équipe qui sont mamans' },
+  { id:'e10', month:5, day:12, emoji:'👩‍⚕️', name:'Journée internationale des infirmières', type:'professionnel', color:'var(--blue)', desc:'Reconnaître le personnel de santé de l\'équipe' },
+  { id:'e11', month:5, day:null, weekNum:2, dayOfWeek:1, emoji:'🏥', name:'Semaine nationale de l\'action bénévole', type:'reconnaissance', color:'var(--gold)', desc:'Souligner les efforts collectifs de l\'équipe' },
+
+  // JUIN
+  { id:'e12', month:6, day:24, emoji:'🎡', name:'Fête nationale du Québec', type:'social', color:'var(--pink)', desc:'Activité festive pour la St-Jean!' },
+  { id:'e13', month:6, day:null, weekNum:3, dayOfWeek:0, emoji:'👨‍👧', name:'Fête des pères', type:'social', color:'var(--pink)', desc:'Reconnaître les membres de l\'équipe qui sont papas' },
+  { id:'e14', month:6, day:null, weekNum:2, dayOfWeek:1, emoji:'🌟', name:'Réunion mi-année + bilan équipe', type:'reconnaissance', color:'var(--gold)', desc:'Point de mi-année — célébrer les succès de l\'équipe' },
+
+  // JUILLET
+  { id:'e15', month:7, day:1, emoji:'🍁', name:'Fête du Canada', type:'social', color:'var(--pink)', desc:'Congé officiel — petit mot pour l\'équipe' },
+  { id:'e16', month:7, day:null, weekNum:2, dayOfWeek:1, emoji:'☀️', name:'Activité estivale d\'équipe', type:'social', color:'var(--pink)', desc:'BBQ, pique-nique ou activité plein air' },
+
+  // AOÛT
+  { id:'e17', month:8, day:null, weekNum:1, dayOfWeek:1, emoji:'👷', name:'Fête du Travail (longue fin de semaine)', type:'social', color:'var(--pink)', desc:'Mot de reconnaissance avant la longue fin de semaine' },
+
+  // SEPTEMBRE
+  { id:'e18', month:9, day:null, weekNum:1, dayOfWeek:1, emoji:'🎒', name:'Rentrée — Réunion d\'équipe', type:'reconnaissance', color:'var(--gold)', desc:'Réunion de rentrée — objectifs de l\'automne' },
+  { id:'e19', month:9, day:null, weekNum:3, dayOfWeek:1, emoji:'🦷', name:'Mois de la santé bucco-dentaire', type:'dentaire', color:'var(--green)', desc:'Activité de sensibilisation et fierté professionnelle' },
+
+  // OCTOBRE
+  { id:'e20', month:10, day:null, weekNum:2, dayOfWeek:1, emoji:'🫧', name:'Mois de l\'hygiène dentaire', type:'dentaire', color:'var(--green)', desc:'Semaine des hygiénistes dentaires — souligner leur rôle' },
+  { id:'e21', month:10, day:null, weekNum:2, dayOfWeek:1, emoji:'🧡', name:'Mois de sensibilisation à la santé mentale', type:'bienetre', color:'var(--purple)', desc:'Activité bien-être — Check-in avec l\'équipe' },
+  { id:'e22', month:10, day:31, emoji:'🎃', name:'Halloween', type:'social', color:'var(--pink)', desc:'Déco clinique, friandises pour l\'équipe!' },
+
+  // NOVEMBRE
+  { id:'e23', month:11, day:null, weekNum:1, dayOfWeek:1, emoji:'🤝', name:'Semaine de la gentillesse', type:'reconnaissance', color:'var(--gold)', desc:'Cartons de gratitude entre collègues' },
+  { id:'e24', month:11, day:null, weekNum:3, dayOfWeek:1, emoji:'📊', name:'Évaluations annuelles de rendement', type:'professionnel', color:'var(--blue)', desc:'Planifier et compléter les évaluations annuelles' },
+  { id:'e25', month:11, day:null, weekNum:2, dayOfWeek:1, emoji:'💼', name:'Semaine des gestionnaires / coordonnateurs', type:'professionnel', color:'var(--blue)', desc:'Reconnaître le leadership de l\'équipe de gestion' },
+
+  // DÉCEMBRE
+  { id:'e26', month:12, day:null, weekNum:1, dayOfWeek:1, emoji:'🎄', name:'Fête de Noël d\'équipe', type:'social', color:'var(--pink)', desc:'Party de Noël — activité, repas ou célébration' },
+  { id:'e27', month:12, day:25, emoji:'🎁', name:'Noël — Cadeaux / Bonus', type:'reconnaissance', color:'var(--gold)', desc:'Remise des bonus de fin d\'année et cadeaux' },
+  { id:'e28', month:12, day:31, emoji:'🥂', name:'Rétrospective annuelle', type:'reconnaissance', color:'var(--gold)', desc:'Bilan de l\'année — célébrer les réussites collectives' },
+];
+
+// Per-year custom events (user-added)
+let customEvents = [];
+let plannings = {}; // { eventId_year: { action, budget, done } }
+
+// ===== HELPERS =====
+function getEasterDate(year) {
+  const a = year % 19, b = Math.floor(year/100), c = year % 100;
+  const d = Math.floor(b/4), e = b % 4, f = Math.floor((b+8)/25);
+  const g = Math.floor((b-f+1)/3), h = (19*a+b-d-g+15) % 30;
+  const i = Math.floor(c/4), k = c % 4;
+  const l = (32+2*e+2*i-h-k) % 7;
+  const m = Math.floor((a+11*h+22*l)/451);
+  const month = Math.floor((h+l-7*m+114)/31);
+  const day = ((h+l-7*m+114) % 31) + 1;
+  return { month, day };
+}
+
+function getNthWeekday(year, month, n, dow) {
+  // n = week number (1-based), dow = day of week (0=Sun)
+  let d = new Date(year, month-1, 1);
+  while (d.getDay() !== dow) d.setDate(d.getDate()+1);
+  d.setDate(d.getDate() + (n-1)*7);
+  return d.getDate();
+}
+
+function getLastWeekday(year, month, dow) {
+  let d = new Date(year, month, 0); // last day of month
+  while (d.getDay() !== dow) d.setDate(d.getDate()-1);
+  return d.getDate();
+}
+
+function resolveDay(ev, year) {
+  if (ev.day !== null && ev.day !== undefined) return ev.day;
+  if (ev.easter) {
+    const e = getEasterDate(year);
+    if (e.month === ev.month) return e.day;
+    return null; // Easter might be in different month
+  }
+  if (ev.weekNum !== undefined) {
+    if (ev.weekNum === -1 || ev.weekNum === 4) return getLastWeekday(year, ev.month, ev.dayOfWeek);
+    return getNthWeekday(year, ev.month, ev.weekNum, ev.dayOfWeek);
+  }
+  return 1;
+}
+
+function getEasterMonth(year) { return getEasterDate(year).month; }
+
+function getEventsForMonth(month, year) {
+  const events = [];
+  BASE_EVENTS.forEach(ev => {
+    let m = ev.month;
+    if (ev.easter) {
+      const e = getEasterDate(year);
+      m = e.month;
+    }
+    if (m !== month) return;
+    const day = resolveDay(ev, year);
+    if (!day) return;
+    events.push({ ...ev, resolvedDay: day, month: m });
+  });
+  // Custom events
+  customEvents.filter(e => e.month === month && e.year === year).forEach(ev => {
+    events.push({ ...ev, resolvedDay: ev.day });
+  });
+  events.sort((a,b) => a.resolvedDay - b.resolvedDay);
+  return events;
+}
+
+function getPlanKey(evId, year) { return `${evId}_${year}`; }
+function getPlan(evId, year) {
+  return plannings[getPlanKey(evId, year)] || { action:'', budget:'', done:false };
+}
+
+// ===== RENDER =====
+function render() {
+  document.getElementById('yearDisplay').textContent = currentYear;
+  renderCalendar();
+  renderUpcoming();
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  MONTH_NAMES.forEach((mName, mi) => {
+    const month = mi + 1;
+    const events = getEventsForMonth(month, currentYear);
+    const card = document.createElement('div');
+    card.className = 'month-card';
+    const doneCount = events.filter(ev => getPlan(ev.id, currentYear).done).length;
+    card.innerHTML = `
+      <div class="month-header" style="background:${MONTH_COLORS[mi]};">
+        ${mName} ${currentYear}
+        <span style="float:right;font-size:.7rem;opacity:.8;">${events.length} événement${events.length!==1?'s':''} · ${doneCount}✓</span>
+      </div>
+      <div class="month-body" id="mb_${month}">
+        ${events.map(ev => buildEventHtml(ev, currentYear)).join('')}
+        <button class="btn-add-ev no-print" onclick="addCustomEvent(${month})">+ Ajouter un événement</button>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function buildEventHtml(ev, year) {
+  const plan = getPlan(ev.id, year);
+  const dayStr = ev.resolvedDay ? `${ev.resolvedDay} ${MONTH_NAMES[ev.month-1].toLowerCase()}` : '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const evDate = new Date(year, ev.month-1, ev.resolvedDay || 1);
+  const isPast = evDate < today && year === currentYear;
+  const isToday = evDate.getTime() === today.getTime();
+  const opacity = isPast && !isToday ? 'opacity:.65;' : '';
+  const isCustom = !!ev.custom;
+
+  return `<div class="event-item" style="background:${ev.color}15;border-left-color:${ev.color};${opacity}">
+    <div class="ev-header">
+      <span class="ev-emoji">${ev.emoji}</span>
+      <div class="ev-content">
+        <div class="ev-name" style="color:${ev.color};">${ev.name}</div>
+        <div class="ev-date">${dayStr}${isToday?' — Aujourd\'hui! 🎉':''}</div>
+      </div>
+      ${isCustom ? `<button class="btn-del-ev" onclick="removeCustomEvent('${ev.id}',${year})" title="Supprimer">×</button>` : ''}
+    </div>
+    <div class="ev-actions">
+      <div class="ev-action-label">Ce que l'on prévoit faire :</div>
+      <textarea class="ev-action-input" rows="2" placeholder="${ev.desc}" onchange="saveAction('${ev.id}',${year},'action',this.value)">${plan.action}</textarea>
+      <div class="ev-meta">
+        <span style="font-size:.7rem;color:#5a6a80;">💰 Budget :</span>
+        <input class="budget-input" type="text" placeholder="0 $" value="${plan.budget}" onchange="saveAction('${ev.id}',${year},'budget',this.value)">
+        <input type="checkbox" class="done-check" ${plan.done?'checked':''} onchange="saveAction('${ev.id}',${year},'done',this.checked)" id="done_${ev.id}_${year}">
+        <label class="done-label" for="done_${ev.id}_${year}">Complété</label>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderUpcoming() {
+  const chips = document.getElementById('upcomingChips');
+  const today = new Date(); today.setHours(0,0,0,0);
+  const in60 = new Date(today); in60.setDate(in60.getDate() + 60);
+  const upcoming = [];
+
+  for (let m = 1; m <= 12; m++) {
+    getEventsForMonth(m, currentYear).forEach(ev => {
+      const d = new Date(currentYear, ev.month-1, ev.resolvedDay || 1);
+      if (d >= today && d <= in60) {
+        const diff = Math.round((d - today) / (1000*60*60*24));
+        upcoming.push({ ev, d, diff });
+      }
+    });
+  }
+  upcoming.sort((a,b) => a.diff - b.diff);
+
+  if (upcoming.length === 0) {
+    chips.innerHTML = '<div style="font-size:.82rem;color:#8a9ab0;padding:4px 0;">Aucun événement dans les 60 prochains jours.</div>';
+    return;
+  }
+
+  chips.innerHTML = upcoming.map(({ ev, diff }) => `
+    <div class="upcoming-chip" style="background:${ev.color}15;border-color:${ev.color}40;color:${ev.color};">
+      <span>${ev.emoji}</span>
+      <span style="font-weight:700;">${ev.name}</span>
+      <span style="background:${ev.color};color:white;border-radius:5px;padding:2px 8px;font-size:.71rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;">${diff === 0 ? 'Aujourd\'hui!' : 'Dans '+diff+' j.'}</span>
+    </div>`).join('');
+}
+
+// ===== ACTIONS =====
+function saveAction(evId, year, field, value) {
+  const key = getPlanKey(evId, year);
+  if (!plannings[key]) plannings[key] = { action:'', budget:'', done:false };
+  plannings[key][field] = value;
+}
+
+function changeYear(delta) {
+  currentYear += delta;
+  render();
+}
+
+function addCustomEvent(month) {
+  const name = prompt('Nom de l\'événement :');
+  if (!name) return;
+  const day = parseInt(prompt('Jour du mois (1-31) :') || '1');
+  const id = 'custom_' + Date.now();
+  customEvents.push({ id, month, day, year:currentYear, emoji:'📌', name, type:'reconnaissance', color:'var(--gold)', desc:'', custom:true });
+  renderCalendar();
+}
+
+function removeCustomEvent(id, year) {
+  customEvents = customEvents.filter(e => !(e.id === id && e.year === year));
+  renderCalendar();
+}
+
+// Init
+document.getElementById('yearDisplay').textContent = currentYear;
+render();
+</script>
+
+
+</body></html>
