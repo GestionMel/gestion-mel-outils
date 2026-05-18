@@ -135,18 +135,18 @@
 
   <!-- ONGLETS PRINCIPAUX -->
   <div class="main-tabs">
-    <button class="main-tab" onclick="showMain(0)">🗂️ Secrétaire</button>
+    <button class="main-tab active" onclick="showMain(0)">🗂️ Secrétaire</button>
     <button class="main-tab" onclick="showMain(1)">🦷 Hygiéniste</button>
     <button class="main-tab" onclick="showMain(2)">🔧 Assistant(e)</button>
     <button class="main-tab" onclick="showMain(3)">🧼 Stérilisation</button>
     <button class="main-tab" onclick="showMain(4)">📋 Coordonnatrice PT</button>
-    <button class="main-tab active" onclick="showMain(5)">👤 Gestionnaire</button>
+    <button class="main-tab" onclick="showMain(5)">👤 Gestionnaire</button>
   </div>
 
   <!-- ══════════════════════════════════════════ -->
   <!-- ONGLET 0 — SECRÉTAIRE (avec sous-onglets) -->
   <!-- ══════════════════════════════════════════ -->
-  <div class="main-content" id="main0">
+  <div class="main-content active" id="main0">
     <div class="sub-tabs">
       <button class="sub-tab" onclick="showSub(0,0)">Administration générale</button>
       <button class="sub-tab active" onclick="showSub(0,1)">Accueil &amp; Facturation</button>
@@ -1123,7 +1123,7 @@
       <div class="sfield"><label>Date de remise</label><input type="date"><div class="sig-line">&nbsp;</div></div>
     </div>
   </div></div></div>
-  <div class="main-content active" id="main5"><div class="desc-wrap">
+  <div class="main-content" id="main5"><div class="desc-wrap">
     <div class="poste-title-block">
       <div class="poste-icon">👤</div>
       <div class="pt-info">
