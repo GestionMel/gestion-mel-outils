@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0061)file:///C:/Users/info/Downloads/charte-parodontale%20(4).html -->
+<!-- saved from url=(0073)file:///C:/Users/info/Downloads/charte-parodontale-interactive%20(2).html -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +10,7 @@
   body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);font-size:12px;}
   .page-header{background:var(--dark);color:white;padding:11px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
   .brand{font-size:1.15rem;font-weight:700;} .brand span{color:var(--accent);}
-  .container{max-width:1450px;margin:12px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .container{max-width:1600px;margin:12px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:visible;}
   .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
   .doc-header h1{font-size:1rem;font-weight:700;} .doc-header p{font-size:.72rem;opacity:.7;}
   .btn{padding:6px 13px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;color:#5a6a80;}
@@ -34,11 +34,11 @@
   .action-bar{padding:7px 16px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
 
   /* CHART */
-  .chart-section{padding:10px 8px;}
+  .chart-section{padding:10px 8px 10px 12px;}
   .section-label{text-align:center;font-size:.7rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;padding:4px;background:var(--light);border-radius:5px;}
-  .teeth-grid{display:flex;align-items:stretch;}
-  .row-labels-col{display:flex;flex-direction:column;gap:0;width:68px;flex-shrink:0;}
-  .row-lbl{font-size:.58rem;font-weight:700;color:#5a6a80;text-align:right;padding-right:5px;display:flex;align-items:center;justify-content:flex-end;white-space:nowrap;}
+  .teeth-grid{display:flex;align-items:stretch;overflow:visible;}
+  .row-labels-col{display:flex;flex-direction:column;gap:0;width:130px;flex-shrink:0;}
+  .row-lbl{font-size:.58rem;font-weight:700;color:#5a6a80;text-align:right;padding-right:7px;display:flex;align-items:center;justify-content:flex-end;white-space:nowrap;overflow:visible;}
   .teeth-data{display:flex;gap:1px;overflow-x:auto;padding-bottom:4px;}
   .tooth-col{display:flex;flex-direction:column;align-items:center;min-width:50px;max-width:56px;}
   .tooth-num{font-size:.7rem;font-weight:700;color:var(--dark);text-align:center;padding:1px 0;}
@@ -75,12 +75,44 @@
   .rec-in{width:15px;height:18px;border:1px solid var(--border);border-radius:2px;text-align:center;font-size:.68rem;font-family:inherit;color:#1a6abf;background:#eaf3ff;padding:0;font-weight:700;}
   .rec-in:focus{outline:none;border-color:var(--accent);}
 
+  /* MODE BAR */
+  .mode-bar{padding:7px 16px;background:#f0f5fb;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .mode-label{font-size:.72rem;font-weight:700;color:#5a6a80;margin-right:4px;}
+  .mode-btn{padding:5px 13px;border-radius:20px;border:2px solid var(--border);background:white;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;color:#5a6a80;}
+  .mode-btn:hover{border-color:#aaa;}
+  .mode-btn.active-sang{background:#c0392b;border-color:#a02020;color:white;}
+  .mode-btn.active-tartre{background:#8B6914;border-color:#6B4F0F;color:white;}
+  .mode-btn.active-purulence{background:#7a9e3b;border-color:#5a7e2b;color:white;}
+  .mode-btn.active-efface{background:var(--dark);border-color:var(--dark);color:white;}
+  .mode-hint{font-size:.7rem;color:#8a9ab0;font-style:italic;margin-left:8px;}
+
+  /* ÉTATS DES CELLULES BOP */
+  /* Saignement — rouge (existant) */
+  .bd.on{background:#c0392b;border-color:#a02020;}
+  /* Tartre — brun doré avec motif */
+  .bd.tartre{background:#C4960A;border-color:#8B6914;position:relative;}
+  .bd.tartre::after{content:'T';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.52rem;font-weight:900;color:white;line-height:1;}
+  /* Purulence — vert-jaune */
+  .bd.purulence{background:#7a9e3b;border-color:#5a7e2b;position:relative;}
+  .bd.purulence::after{content:'P';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.52rem;font-weight:900;color:white;line-height:1;}
+
   /* ARCH DIVIDER */
   .arch-div{border-top:3px solid var(--dark);margin:8px 0 6px;position:relative;}
   .arch-div::after{content:'Gingive / Ligne cervicale';position:absolute;left:50%;transform:translateX(-50%);top:-9px;background:white;padding:0 8px;font-size:.6rem;color:#5a6a80;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
 
-  /* TOOTH AREA */
-  .tooth-area{margin:2px 0;display:flex;align-items:center;justify-content:center;}
+  /* TOOTH AREA + HOTSPOTS */
+  .tooth-area{margin:2px 0;display:flex;align-items:center;justify-content:center;position:relative;}
+  .tooth-overlay{position:absolute;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:0 4px;pointer-events:none;z-index:2;}
+  .tooth-overlay.upper{bottom:5px;}
+  .tooth-overlay.lower{top:5px;}
+  .ths{width:13px;height:13px;border-radius:50%;border:1.5px dashed rgba(80,80,80,0.28);cursor:pointer;display:flex;align-items:center;justify-content:center;pointer-events:all;transition:all .15s;background:transparent;flex-shrink:0;position:relative;}
+  .ths:hover{border-color:rgba(80,80,80,0.6);background:rgba(180,180,180,0.25);}
+  .ths.sang{background:#c0392b;border:1.5px solid #a02020;}
+  .ths.sang::after{content:'●';font-size:.5rem;color:white;}
+  .ths.tartre{background:#C4960A;border:1.5px solid #8B6914;}
+  .ths.tartre::after{content:'T';font-size:.5rem;font-weight:900;color:white;}
+  .ths.purulence{background:#7a9e3b;border:1.5px solid #5a7e2b;}
+  .ths.purulence::after{content:'P';font-size:.5rem;font-weight:900;color:white;}
 
   /* STATS */
   .stats-section{padding:9px 16px;background:var(--light);border-top:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;}
@@ -148,13 +180,18 @@
     <div class="leg"><div class="lcol" style="background:#f8d7da;"></div>6 mm</div>
     <div class="leg"><div class="lcol" style="background:#c0392b;"></div>≥ 7 mm</div>
     <span style="font-size:.7rem;font-weight:700;color:#5a6a80;margin-left:8px;">BOP :</span>
-    <div class="leg"><div class="lcol" style="background:#c0392b;"></div>Saignement +</div>
+    <div class="leg"><div class="lcol" style="background:#c0392b;"></div>🩸 Saignement</div>
+    <div class="leg"><div class="lcol" style="background:#C4960A;"></div>🟡 Tartre (T)</div>
+    <div class="leg"><div class="lcol" style="background:#7a9e3b;"></div>🟢 Purulence (P)</div>
     <div class="leg"><div class="lcol" style="background:white;border:1px solid #ccc;"></div>Négatif</div>
     <span style="font-size:.7rem;font-weight:700;color:#5a6a80;margin-left:8px;">Furcation :</span>
     <div class="leg"><div class="lcol" style="background:#fff3cd;"></div>F1</div>
     <div class="leg"><div class="lcol" style="background:#f8d7da;"></div>F2</div>
     <div class="leg"><div class="lcol" style="background:#c0392b;"></div>F3</div>
-    <span style="font-size:.7rem;font-weight:700;color:#5a6a80;margin-left:8px;">Récession :</span>
+    <span style="font-size:.7rem;font-weight:700;color:#5a6a80;margin-left:8px;">Sur dent :</span>
+    <div class="leg"><div class="lcol" style="background:#c0392b;border-radius:50%;"></div>● Saignement</div>
+    <div class="leg"><div class="lcol" style="background:#C4960A;border-radius:50%;"></div>T Tartre</div>
+    <div class="leg"><div class="lcol" style="background:#7a9e3b;border-radius:50%;"></div>P Purulence</div>
     <div class="leg"><div class="lcol" style="background:#eaf3ff;border:1px solid #aaccee;"></div>mm (bleu)</div>
   </div>
 
@@ -169,6 +206,15 @@
       <button class="btn" onclick="calcStats()">📊 Statistiques</button>
       <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
     </div>
+  </div>
+
+  <div class="mode-bar">
+    <span class="mode-label">Mode BOP :</span>
+    <button class="mode-btn active-sang" id="modeBtn_sang" onclick="setMode(&#39;sang&#39;)">🩸 Saignement</button>
+    <button class="mode-btn" id="modeBtn_tartre" onclick="setMode(&#39;tartre&#39;)">🟡 Tartre</button>
+    <button class="mode-btn" id="modeBtn_purulence" onclick="setMode(&#39;purulence&#39;)">🟢 Purulence</button>
+    <button class="mode-btn" id="modeBtn_efface" onclick="setMode(&#39;efface&#39;)">✕ Effacer</button>
+    <span class="mode-hint" id="modeHint">Cliquez sur une case BOP pour appliquer le saignement</span>
   </div>
 
   <div class="chart-section">
@@ -214,7 +260,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_18_M" onclick="toothClick(&#39;18&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_18_C" onclick="toothClick(&#39;18&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_18_D" onclick="toothClick(&#39;18&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_18" onchange="store[&#39;f_18&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -254,7 +304,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_17_M" onclick="toothClick(&#39;17&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_17_C" onclick="toothClick(&#39;17&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_17_D" onclick="toothClick(&#39;17&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_17" onchange="store[&#39;f_17&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -294,7 +348,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_16_M" onclick="toothClick(&#39;16&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_16_C" onclick="toothClick(&#39;16&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_16_D" onclick="toothClick(&#39;16&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_16" onchange="store[&#39;f_16&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -328,7 +386,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_15_M" onclick="toothClick(&#39;15&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_15_C" onclick="toothClick(&#39;15&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_15_D" onclick="toothClick(&#39;15&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_15" onchange="store[&#39;f_15&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -362,7 +424,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_14_M" onclick="toothClick(&#39;14&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_14_C" onclick="toothClick(&#39;14&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_14_D" onclick="toothClick(&#39;14&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_14" onchange="store[&#39;f_14&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -390,7 +456,11 @@
       <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
       <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_13_M" onclick="toothClick(&#39;13&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_13_C" onclick="toothClick(&#39;13&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_13_D" onclick="toothClick(&#39;13&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_13_B_M" onclick="toggleB(&#39;b_13_B_M&#39;)"></div><div class="bd" id="b_13_B_C" onclick="toggleB(&#39;b_13_B_C&#39;)"></div><div class="bd" id="b_13_B_D" onclick="toggleB(&#39;b_13_B_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_13_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_13_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_13_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_13_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_13_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_13_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -414,7 +484,11 @@
       <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
       <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_12_M" onclick="toothClick(&#39;12&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_12_C" onclick="toothClick(&#39;12&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_12_D" onclick="toothClick(&#39;12&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_12_B_M" onclick="toggleB(&#39;b_12_B_M&#39;)"></div><div class="bd" id="b_12_B_C" onclick="toggleB(&#39;b_12_B_C&#39;)"></div><div class="bd" id="b_12_B_D" onclick="toggleB(&#39;b_12_B_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_12_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_12_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_12_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_12_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_12_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_12_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -440,7 +514,11 @@
       <!-- incisal edge groove -->
       <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_11_M" onclick="toothClick(&#39;11&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_11_C" onclick="toothClick(&#39;11&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_11_D" onclick="toothClick(&#39;11&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_11_B_M" onclick="toggleB(&#39;b_11_B_M&#39;)"></div><div class="bd" id="b_11_B_C" onclick="toggleB(&#39;b_11_B_C&#39;)"></div><div class="bd" id="b_11_B_D" onclick="toggleB(&#39;b_11_B_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_11_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_11_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_11_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_11_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_11_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_11_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -466,7 +544,11 @@
       <!-- incisal edge groove -->
       <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_21_M" onclick="toothClick(&#39;21&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_21_C" onclick="toothClick(&#39;21&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_21_D" onclick="toothClick(&#39;21&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_21_B_M" onclick="toggleB(&#39;b_21_B_M&#39;)"></div><div class="bd" id="b_21_B_C" onclick="toggleB(&#39;b_21_B_C&#39;)"></div><div class="bd" id="b_21_B_D" onclick="toggleB(&#39;b_21_B_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_21_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_21_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_21_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_21_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_21_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_21_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -490,7 +572,11 @@
       <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
       <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_22_M" onclick="toothClick(&#39;22&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_22_C" onclick="toothClick(&#39;22&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_22_D" onclick="toothClick(&#39;22&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_22_B_M" onclick="toggleB(&#39;b_22_B_M&#39;)"></div><div class="bd" id="b_22_B_C" onclick="toggleB(&#39;b_22_B_C&#39;)"></div><div class="bd" id="b_22_B_D" onclick="toggleB(&#39;b_22_B_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_22_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_22_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_22_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_22_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_22_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_22_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -516,7 +602,11 @@
       <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
       <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_23_M" onclick="toothClick(&#39;23&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_23_C" onclick="toothClick(&#39;23&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_23_D" onclick="toothClick(&#39;23&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_23_B_M" onclick="toggleB(&#39;b_23_B_M&#39;)"></div><div class="bd" id="b_23_B_C" onclick="toggleB(&#39;b_23_B_C&#39;)"></div><div class="bd" id="b_23_B_D" onclick="toggleB(&#39;b_23_B_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_23_B_M" type="text" maxlength="1" value="" oninput="store[&#39;p_23_B_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_23_B_C" type="text" maxlength="1" value="" oninput="store[&#39;p_23_B_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_23_B_D" type="text" maxlength="1" value="" oninput="store[&#39;p_23_B_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -548,7 +638,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_24_M" onclick="toothClick(&#39;24&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_24_C" onclick="toothClick(&#39;24&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_24_D" onclick="toothClick(&#39;24&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_24" onchange="store[&#39;f_24&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -582,7 +676,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_25_M" onclick="toothClick(&#39;25&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_25_C" onclick="toothClick(&#39;25&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_25_D" onclick="toothClick(&#39;25&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_25" onchange="store[&#39;f_25&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -622,7 +720,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_26_M" onclick="toothClick(&#39;26&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_26_C" onclick="toothClick(&#39;26&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_26_D" onclick="toothClick(&#39;26&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_26" onchange="store[&#39;f_26&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -662,7 +764,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_27_M" onclick="toothClick(&#39;27&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_27_C" onclick="toothClick(&#39;27&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_27_D" onclick="toothClick(&#39;27&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_27" onchange="store[&#39;f_27&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -702,7 +808,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay upper">
+      <div class="ths " id="th_28_M" onclick="toothClick(&#39;28&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_28_C" onclick="toothClick(&#39;28&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_28_D" onclick="toothClick(&#39;28&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_28" onchange="store[&#39;f_28&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -754,7 +864,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_48_M" onclick="toothClick(&#39;48&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_48_C" onclick="toothClick(&#39;48&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_48_D" onclick="toothClick(&#39;48&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_48" onchange="store[&#39;f_48&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -789,7 +903,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_47_M" onclick="toothClick(&#39;47&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_47_C" onclick="toothClick(&#39;47&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_47_D" onclick="toothClick(&#39;47&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_47" onchange="store[&#39;f_47&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -824,7 +942,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_46_M" onclick="toothClick(&#39;46&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_46_C" onclick="toothClick(&#39;46&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_46_D" onclick="toothClick(&#39;46&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_46" onchange="store[&#39;f_46&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -858,7 +980,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_45_M" onclick="toothClick(&#39;45&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_45_C" onclick="toothClick(&#39;45&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_45_D" onclick="toothClick(&#39;45&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_45" onchange="store[&#39;f_45&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -892,7 +1018,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_44_M" onclick="toothClick(&#39;44&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_44_C" onclick="toothClick(&#39;44&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_44_D" onclick="toothClick(&#39;44&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_44" onchange="store[&#39;f_44&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -920,7 +1050,11 @@
       <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
       <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_43_M" onclick="toothClick(&#39;43&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_43_C" onclick="toothClick(&#39;43&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_43_D" onclick="toothClick(&#39;43&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_43_L_M" onclick="toggleB(&#39;b_43_L_M&#39;)"></div><div class="bd" id="b_43_L_C" onclick="toggleB(&#39;b_43_L_C&#39;)"></div><div class="bd" id="b_43_L_D" onclick="toggleB(&#39;b_43_L_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_43_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_43_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_43_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_43_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_43_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_43_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -944,7 +1078,11 @@
       <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
       <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_42_M" onclick="toothClick(&#39;42&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_42_C" onclick="toothClick(&#39;42&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_42_D" onclick="toothClick(&#39;42&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_42_L_M" onclick="toggleB(&#39;b_42_L_M&#39;)"></div><div class="bd" id="b_42_L_C" onclick="toggleB(&#39;b_42_L_C&#39;)"></div><div class="bd" id="b_42_L_D" onclick="toggleB(&#39;b_42_L_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_42_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_42_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_42_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_42_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_42_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_42_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -970,7 +1108,11 @@
       <!-- incisal edge groove -->
       <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_41_M" onclick="toothClick(&#39;41&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_41_C" onclick="toothClick(&#39;41&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_41_D" onclick="toothClick(&#39;41&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_41_L_M" onclick="toggleB(&#39;b_41_L_M&#39;)"></div><div class="bd" id="b_41_L_C" onclick="toggleB(&#39;b_41_L_C&#39;)"></div><div class="bd" id="b_41_L_D" onclick="toggleB(&#39;b_41_L_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_41_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_41_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_41_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_41_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_41_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_41_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -996,7 +1138,11 @@
       <!-- incisal edge groove -->
       <path d="M9,33 Q23,40 37,33" stroke="#C8A870" stroke-width="0.6" fill="none" opacity="0.5"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_31_M" onclick="toothClick(&#39;31&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_31_C" onclick="toothClick(&#39;31&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_31_D" onclick="toothClick(&#39;31&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_31_L_M" onclick="toggleB(&#39;b_31_L_M&#39;)"></div><div class="bd" id="b_31_L_C" onclick="toggleB(&#39;b_31_L_C&#39;)"></div><div class="bd" id="b_31_L_D" onclick="toggleB(&#39;b_31_L_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_31_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_31_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_31_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_31_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_31_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_31_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -1020,7 +1166,11 @@
       <path d="M24,12 C25,11 30,11 34,12 Q36,27 32,32 Q27,36 24,29 Z" fill="rgba(255,255,255,0.2)" stroke="none"></path>
       <path d="M10,32 Q23,40 36,32" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_32_M" onclick="toothClick(&#39;32&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_32_C" onclick="toothClick(&#39;32&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_32_D" onclick="toothClick(&#39;32&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_32_L_M" onclick="toggleB(&#39;b_32_L_M&#39;)"></div><div class="bd" id="b_32_L_C" onclick="toggleB(&#39;b_32_L_C&#39;)"></div><div class="bd" id="b_32_L_D" onclick="toggleB(&#39;b_32_L_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_32_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_32_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_32_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_32_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_32_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_32_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -1046,7 +1196,11 @@
       <line x1="13" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
       <line x1="33" y1="13" x2="23" y2="40" stroke="#C8A870" stroke-width="0.6" opacity="0.35"></line>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_33_M" onclick="toothClick(&#39;33&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_33_C" onclick="toothClick(&#39;33&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_33_D" onclick="toothClick(&#39;33&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><div style="width:32px;height:17px;"></div></div>
       <div class="bleed-row"><div class="bd" id="b_33_L_M" onclick="toggleB(&#39;b_33_L_M&#39;)"></div><div class="bd" id="b_33_L_C" onclick="toggleB(&#39;b_33_L_C&#39;)"></div><div class="bd" id="b_33_L_D" onclick="toggleB(&#39;b_33_L_D&#39;)"></div></div>
       <div class="probe-row"><input class="p " id="p_33_L_M" type="text" maxlength="1" value="" oninput="store[&#39;p_33_L_M&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_33_L_C" type="text" maxlength="1" value="" oninput="store[&#39;p_33_L_C&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"><input class="p " id="p_33_L_D" type="text" maxlength="1" value="" oninput="store[&#39;p_33_L_D&#39;]=this.value;this.className=&#39;p &#39;+pcls(this.value);calcStats()"></div>
@@ -1078,7 +1232,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_34_M" onclick="toothClick(&#39;34&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_34_C" onclick="toothClick(&#39;34&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_34_D" onclick="toothClick(&#39;34&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_34" onchange="store[&#39;f_34&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -1112,7 +1270,11 @@
       <path d="M10,22 Q15,19 17,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
       <path d="M29,22 Q31,19 36,22" stroke="#C8A870" stroke-width="0.5" fill="none" opacity="0.4"></path>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_35_M" onclick="toothClick(&#39;35&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_35_C" onclick="toothClick(&#39;35&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_35_D" onclick="toothClick(&#39;35&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_35" onchange="store[&#39;f_35&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -1147,7 +1309,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_36_M" onclick="toothClick(&#39;36&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_36_C" onclick="toothClick(&#39;36&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_36_D" onclick="toothClick(&#39;36&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_36" onchange="store[&#39;f_36&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -1182,7 +1348,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_37_M" onclick="toothClick(&#39;37&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_37_C" onclick="toothClick(&#39;37&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_37_D" onclick="toothClick(&#39;37&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_37" onchange="store[&#39;f_37&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -1217,7 +1387,11 @@
       <circle cx="16" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
       <circle cx="30" cy="15" r="1" fill="#C8A870" opacity="0.3"></circle>
     </g>
-  </svg></div>
+  </svg><div class="tooth-overlay lower">
+      <div class="ths " id="th_38_M" onclick="toothClick(&#39;38&#39;,&#39;M&#39;)" title="Mésial"></div>
+      <div class="ths " id="th_38_C" onclick="toothClick(&#39;38&#39;,&#39;C&#39;)" title="Centre"></div>
+      <div class="ths " id="th_38_D" onclick="toothClick(&#39;38&#39;,&#39;D&#39;)" title="Distal"></div>
+    </div></div>
       <div class="furc-row"><select class="fsel " id="f_38" onchange="store[&#39;f_38&#39;]=this.value;this.className=&#39;fsel &#39;+(this.value===&#39;1&#39;?&#39;f1&#39;:this.value===&#39;2&#39;?&#39;f2&#39;:this.value===&#39;3&#39;?&#39;f3&#39;:&#39;&#39;)" "="">
       <option value="0">—</option><option value="1" "="">F1</option><option value="2" "="">F2</option><option value="3" "="">F3</option>
     </select></div>
@@ -1257,6 +1431,7 @@ const LOWER = [48,47,46,45,44,43,42,41,31,32,33,34,35,36,37,38];
 const hasFurc = n => [16,17,18,26,27,28,36,37,38,46,47,48,14,15,24,25,34,35,44,45].includes(n);
 const absent = new Set();
 const store = {};
+const toothStore = {}; // th_N_M, th_N_C, th_N_D → 'sang'|'tartre'|'purulence'|''
 
 // ── TOOTH TYPE ──────────────────────────────────────────────
 function toothType(n) {
@@ -1456,13 +1631,25 @@ function makeCol(n, isUpper) {
 
   const sideL = isUpper ? 'P' : 'L'; // palatal or lingual
 
+  function toothHotspots(isUpper) {
+    const side = isUpper ? 'upper' : 'lower';
+    const cls_m = (toothStore[`th_${n}_M`]||'');
+    const cls_c = (toothStore[`th_${n}_C`]||'');
+    const cls_d = (toothStore[`th_${n}_D`]||'');
+    return `<div class="tooth-overlay ${side}">
+      <div class="ths ${cls_m}" id="th_${n}_M" onclick="toothClick('${n}','M')" title="Mésial"></div>
+      <div class="ths ${cls_c}" id="th_${n}_C" onclick="toothClick('${n}','C')" title="Centre"></div>
+      <div class="ths ${cls_d}" id="th_${n}_D" onclick="toothClick('${n}','D')" title="Distal"></div>
+    </div>`;
+  }
+
   if (isUpper) {
     return `<div class="tooth-col" id="tc_${n}">
       <div class="tooth-num${ab?' missing':''}">${n}</div>
       <div class="probe-row">${probeInput('P','M')}${probeInput('P','C')}${probeInput('P','D')}</div>
       <div class="bleed-row">${bleedDot('P','M')}${bleedDot('P','C')}${bleedDot('P','D')}</div>
       <div class="furc-row">${furcSel()}</div>
-      <div class="tooth-area">${toothSVG(n, true)}</div>
+      <div class="tooth-area">${toothSVG(n, true)}${toothHotspots(true)}</div>
       <div class="furc-row">${furcSel()}</div>
       <div class="bleed-row">${bleedDot('B','M')}${bleedDot('B','C')}${bleedDot('B','D')}</div>
       <div class="probe-row">${probeInput('B','M')}${probeInput('B','C')}${probeInput('B','D')}</div>
@@ -1476,7 +1663,7 @@ function makeCol(n, isUpper) {
       <div class="probe-row">${probeInput('B','M')}${probeInput('B','C')}${probeInput('B','D')}</div>
       <div class="bleed-row">${bleedDot('B','M')}${bleedDot('B','C')}${bleedDot('B','D')}</div>
       <div class="furc-row">${furcSel()}</div>
-      <div class="tooth-area">${toothSVG(n, false)}</div>
+      <div class="tooth-area">${toothSVG(n, false)}${toothHotspots(false)}</div>
       <div class="furc-row">${furcSel()}</div>
       <div class="bleed-row">${bleedDot('L','M')}${bleedDot('L','C')}${bleedDot('L','D')}</div>
       <div class="probe-row">${probeInput('L','M')}${probeInput('L','C')}${probeInput('L','D')}</div>
@@ -1496,10 +1683,63 @@ function pcls(v) {
 }
 
 function toggleB(id) {
-  store[id] = !store[id];
   const el = document.getElementById(id);
-  if (el) el.classList.toggle('on', store[id]);
+  if (!el) return;
+
+  const cur = store[id] || 'off'; // 'off' | 'sang' | 'tartre' | 'purulence'
+
+  if (currentMode === 'efface') {
+    store[id] = 'off';
+  } else if (cur === currentMode) {
+    // Cliquer deux fois sur le même mode = effacer
+    store[id] = 'off';
+  } else {
+    store[id] = currentMode;
+  }
+
+  applyBopClass(el, store[id]);
   calcStats();
+}
+
+function toothClick(tooth, pos) {
+  if (currentMode === 'efface') {
+    toothStore[`th_${tooth}_${pos}`] = '';
+  } else {
+    const cur = toothStore[`th_${tooth}_${pos}`] || '';
+    toothStore[`th_${tooth}_${pos}`] = (cur === currentMode) ? '' : currentMode;
+  }
+  const el = document.getElementById(`th_${tooth}_${pos}`);
+  if (el) {
+    el.className = 'ths ' + (toothStore[`th_${tooth}_${pos}`] || '');
+  }
+}
+
+function applyBopClass(el, state) {
+  el.classList.remove('on', 'tartre', 'purulence');
+  if (state === 'sang')      el.classList.add('on');
+  else if (state === 'tartre')    el.classList.add('tartre');
+  else if (state === 'purulence') el.classList.add('purulence');
+}
+
+let currentMode = 'sang';
+
+function setMode(mode) {
+  currentMode = mode;
+  const modes = ['sang','tartre','purulence','efface'];
+  const hints = {
+    sang:      'Cliquez sur une case BOP pour marquer un saignement',
+    tartre:    'Cliquez sur une case BOP pour indiquer du tartre',
+    purulence: 'Cliquez sur une case BOP pour indiquer de la purulence',
+    efface:    'Cliquez sur une case BOP pour l\'effacer',
+  };
+  modes.forEach(m => {
+    const btn = document.getElementById('modeBtn_' + m);
+    if (!btn) return;
+    btn.classList.remove('active-sang','active-tartre','active-purulence','active-efface');
+    if (m === mode) btn.classList.add('active-' + mode);
+  });
+  const hint = document.getElementById('modeHint');
+  if (hint) hint.textContent = hints[mode] || '';
 }
 
 // ── BUILD CHART ──────────────────────────────────────────────
@@ -1538,6 +1778,18 @@ function buildChart() {
   const lower = LOWER.map(n => makeCol(n, false)).join('');
   document.getElementById('chartUpper').innerHTML = `<div class="teeth-grid">${buildLabels(true)}<div class="teeth-data">${upper}</div></div>`;
   document.getElementById('chartLower').innerHTML = `<div class="teeth-grid">${buildLabels(false)}<div class="teeth-data">${lower}</div></div>`;
+  // Restaurer états BOP
+  Object.keys(store).forEach(k => {
+    if (k.startsWith('b_')) {
+      const el = document.getElementById(k);
+      if (el) applyBopClass(el, store[k]);
+    }
+  });
+  // Restaurer hotspots sur les dents
+  Object.keys(toothStore).forEach(k => {
+    const el = document.getElementById(k);
+    if (el) el.className = 'ths ' + (toothStore[k] || '');
+  });
   setupAutoAdvance();
 }
 
@@ -1613,7 +1865,7 @@ function calcStats() {
     ['B','P','L'].forEach(s => {
       ['M','C','D'].forEach(pos => {
         bopT++;
-        if (store[`b_${n}_${s}_${pos}`]) bopP++;
+        if (store[`b_${n}_${s}_${pos}`] === 'sang') bopP++;
         const v = parseInt(store[`p_${n}_${s}_${pos}`] || '');
         if (!isNaN(v) && v > 0) { pSum += v; pCnt++; if (v >= 4) d4++; if (v >= 6) d6++; }
       });
@@ -1642,6 +1894,7 @@ function unmarkAbsent() {
 function resetAll() {
   if (!confirm('Réinitialiser toute la charte?')) return;
   Object.keys(store).forEach(k => delete store[k]);
+  Object.keys(toothStore).forEach(k => delete toothStore[k]);
   absent.clear(); buildChart(); calcStats();
 }
 
