@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/info/Downloads/boite-suggestion.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boîte à suggestion — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.35rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:860px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:20px 30px;}
+  .doc-header h1{font-size:1.2rem;font-weight:700;margin-bottom:3px;}
+  .doc-header p{font-size:.8rem;opacity:.7;}
+  .main-tabs{display:flex;background:var(--dark);border-bottom:3px solid var(--accent);}
+  .mt{padding:12px 24px;background:none;border:none;border-bottom:4px solid transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:-3px;display:flex;align-items:center;gap:7px;}
+  .mt:hover{color:white;background:rgba(255,255,255,.08);}
+  .mt.active{color:white;border-bottom-color:var(--accent);}
+  .mt .badge{background:rgba(255,255,255,.15);border-radius:4px;padding:2px 7px;font-size:.68rem;}
+  .mt.active .badge{background:var(--accent);}
+  .mpane{display:none;} .mpane.active{display:block;}
+  /* EMPLOYEE FORM */
+  .form-wrap{padding:24px 30px;}
+  .clinic-bar{padding:10px 30px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .ci{border:1.5px solid var(--border);border-radius:6px;padding:7px 11px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
+  .ci:focus{outline:none;border-color:var(--accent);}
+  .anon{background:#f0fdf4;color:var(--green);border:1.5px solid rgba(26,158,90,.3);border-radius:20px;padding:4px 12px;font-size:.75rem;font-weight:700;margin-left:auto;}
+  .suggestion-box{background:white;border:2px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:18px;}
+  .sb-title{font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+  .sb-title::before{content:'💡';}
+  .ff{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+  .ff label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ff select,.ff input{border:1.5px solid var(--border);border-radius:7px;padding:8px 11px;font-size:.87rem;font-family:inherit;color:var(--text);background:var(--light);}
+  .ff select:focus,.ff input:focus{outline:none;border-color:var(--accent);background:white;}
+  .ff textarea{border:1.5px solid var(--border);border-radius:7px;padding:10px 12px;font-size:.87rem;font-family:inherit;resize:vertical;min-height:120px;background:var(--light);line-height:1.7;color:var(--text);}
+  .ff textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  .note-info{background:#fff8e1;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.82rem;color:#7a4400;line-height:1.7;margin-bottom:14px;}
+  .vote-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .vote-btn{padding:9px 16px;border-radius:8px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;transition:all .12s;color:#5a6a80;flex:1;min-width:80px;}
+  .vote-btn:hover{border-color:var(--accent);}
+  .vote-btn.selected{border-color:var(--blue);background:var(--blue);color:white;}
+  .btn-submit{width:100%;padding:13px;border-radius:9px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-submit:hover{background:#155a9e;}
+  .success-box{display:none;text-align:center;padding:32px;}
+  .sb-icon{font-size:2.5rem;margin-bottom:10px;}
+  .btn-new{margin-top:14px;padding:9px 22px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer;}
+  /* MANAGER */
+  .mgr-bar{padding:10px 28px;background:var(--light);border-bottom:1px solid var(--border);display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+  .btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .btn:hover{border-color:var(--accent);color:var(--blue);}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white;}
+  .stats-row{display:flex;gap:10px;flex-wrap:wrap;padding:12px 28px;border-bottom:1px solid var(--border);}
+  .sc{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:8px 14px;text-align:center;}
+  .sc-n{font-size:1.2rem;font-weight:700;} .sc-l{font-size:.7rem;color:#5a6a80;margin-top:2px;}
+  /* SUGGESTION CARDS */
+  .sugg-list{padding:14px 28px;}
+  .sugg-card{background:white;border:1.5px solid var(--border);border-radius:9px;padding:14px 16px;margin-bottom:10px;transition:all .15s;}
+  .sugg-card:hover{box-shadow:0 2px 10px rgba(26,106,191,.1);}
+  .sugg-card.traite{opacity:.6;}
+  .sugg-header{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+  .cat-badge{padding:3px 10px;border-radius:8px;font-size:.72rem;font-weight:700;}
+  .cat-amelio{background:#e3f2fd;color:var(--blue);}
+  .cat-prob{background:#fef2f2;color:var(--red);}
+  .cat-idee{background:#f0fdf4;color:var(--green);}
+  .cat-rh{background:#fff8e1;color:var(--orange);}
+  .cat-equip{background:#f3e8ff;color:var(--purple);}
+  .cat-autre{background:#f4f4f4;color:#5a6a80;}
+  .prio-chip{padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700;}
+  .p-elev{background:#fef2f2;color:var(--red);}
+  .p-mod{background:#fff8e1;color:var(--orange);}
+  .p-faib{background:#f4f4f4;color:#5a6a80;}
+  .sugg-date{font-size:.72rem;color:#8a9ab0;margin-left:auto;}
+  .sugg-text{font-size:.85rem;color:var(--text);line-height:1.7;margin-bottom:8px;}
+  .sugg-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .sugg-vote{font-size:.78rem;color:#5a6a80;display:flex;align-items:center;gap:4px;}
+  .vote-dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .status-select{border:1.5px solid var(--border);border-radius:5px;padding:3px 7px;font-size:.74rem;font-family:inherit;cursor:pointer;background:white;}
+  .btn-del-s{width:22px;height:22px;border-radius:4px;border:1px solid rgba(192,57,43,.25);background:#fef2f2;color:var(--red);cursor:pointer;font-size:.73rem;display:flex;align-items:center;justify-content:center;font-family:inherit;}
+  .mgr-note{flex:1;}
+  .mgr-note input{width:100%;border:1.5px solid var(--border);border-radius:5px;padding:4px 8px;font-size:.78rem;font-family:inherit;background:var(--light);}
+  .empty-state{text-align:center;padding:36px;color:#8a9ab0;}
+  .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
+  @media print{body{background:white;}.page-header,.main-tabs,.mgr-bar,.btn-submit,.btn-new,.btn,.btn-del-s,.stats-row,.vote-btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.mpane{display:block!important;}.cat-badge,.prio-chip,.vote-dot{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  @media(max-width:650px){.sugg-header{flex-wrap:wrap;}.vote-grid{flex-direction:column;}.form-wrap{padding:16px;}.sugg-list{padding:10px 14px;}}
+</style>
+<script type="text/javascript" src="./boîte-suggestions_files/email.min.js.téléchargement"></script>
+<script type="text/javascript">(function(){emailjs.init({publicKey:"uCmsRhlTKY1L0jRw8"});})();</script>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">RH — Engagement de l'équipe</div></div>
+<div class="container">
+  <div class="doc-header"><h1>💡 Boîte à suggestion</h1><p>Partagez vos idées, préoccupations et suggestions pour améliorer notre milieu de travail</p></div>
+  <div class="main-tabs">
+    <button class="mt active" onclick="showM(0,this)">💡 Soumettre une suggestion<span class="badge">Anonyme</span></button>
+    <button class="mt" onclick="showM(1,this)">📋 Tableau de bord<span class="badge" id="newBadge">0</span></button>
+  </div>
+
+  <!-- EMPLOYEE FORM -->
+  <div class="mpane active" id="mp0">
+    <div class="clinic-bar">
+      <input class="ci" type="text" placeholder="Clinique..." style="min-width:180px;">
+      <div class="anon">🔒 100% anonyme — Vos initiales sont optionnelles</div>
+    </div>
+    <div class="form-wrap">
+      <div class="note-info">📌 Votre suggestion est entièrement anonyme. Elle sera lue par la gestionnaire et recevra une réponse dans les 2 semaines. Toutes les idées sont bienvenues — petites ou grandes!</div>
+      <div id="formViewBS">
+        <div class="suggestion-box">
+          <div class="sb-title">Votre suggestion</div>
+          <div class="ff"><label>Catégorie</label>
+            <select id="bs_cat">
+              <option value="amelio">💡 Amélioration du milieu de travail</option>
+              <option value="idee">🌱 Nouvelle idée / initiative</option>
+              <option value="prob">⚠️ Problème à résoudre</option>
+              <option value="rh">👥 RH / Bien-être de l'équipe</option>
+              <option value="equip">🔧 Équipements / Fournitures</option>
+              <option value="autre">📌 Autre</option>
+            </select>
+          </div>
+          <div class="ff"><label>Priorité perçue</label>
+            <div class="vote-grid" id="prioBtns">
+              <button class="vote-btn" onclick="setPrio(&#39;faible&#39;,this)">🟢 Faible</button>
+              <button class="vote-btn selected" onclick="setPrio(&#39;modere&#39;,this)">🟡 Modérée</button>
+              <button class="vote-btn" onclick="setPrio(&#39;elevee&#39;,this)">🔴 Élevée</button>
+            </div>
+          </div>
+          <div class="ff"><label>Votre suggestion *</label><textarea id="bs_text" placeholder="Décrivez votre idée, suggestion ou préoccupation. Plus vous donnez de détails, plus il est facile d&#39;y donner suite..."></textarea></div>
+          <div class="ff"><label>Contexte ou exemple (optionnel)</label><textarea id="bs_ctx" placeholder="Un exemple concret, une situation vécue, un contexte particulier..." style="min-height:70px;"></textarea></div>
+          <div class="ff"><label>Vos initiales (optionnel — pour un suivi)</label><input type="text" id="bs_init" placeholder="Ex: MF" maxlength="4" style="max-width:100px;text-transform:uppercase;letter-spacing:3px;font-weight:700;text-align:center;"></div>
+        </div>
+        <button class="btn-submit" onclick="submitBS()">💡 Soumettre ma suggestion</button>
+      </div>
+      <div class="success-box" id="successBS">
+        <div class="sb-icon">🙏</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--blue);margin-bottom:8px;">Merci pour votre suggestion!</div>
+        <div style="font-size:.84rem;color:#5a6a80;line-height:1.7;">Elle a été transmise à la gestionnaire de façon confidentielle.<br>Les suggestions sont révisées régulièrement. Merci de contribuer à améliorer notre milieu de travail! 💙</div>
+        <button class="btn-new" onclick="newBS()">+ Soumettre une autre suggestion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MANAGER DASHBOARD -->
+  <div class="mpane" id="mp1">
+    <div class="mgr-bar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select id="filterCatBS" class="ci" style="font-size:.8rem;" onchange="drawBS()">
+          <option value="">Toutes les catégories</option>
+          <option value="amelio">💡 Amélioration</option>
+          <option value="idee">🌱 Idée</option>
+          <option value="prob">⚠️ Problème</option>
+          <option value="rh">👥 RH</option>
+          <option value="equip">🔧 Équipements</option>
+          <option value="autre">📌 Autre</option>
+        </select>
+        <select id="filterStatBS" class="ci" style="font-size:.8rem;" onchange="drawBS()">
+          <option value="">Tous les statuts</option>
+          <option value="new">🆕 Nouvelles</option>
+          <option value="analyse">🔍 En analyse</option>
+          <option value="implante">✅ Implantée</option>
+          <option value="non">❌ Non retenue</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <button class="btn" onclick="clearDoneBS()">🗑️ Archiver les traitées</button>
+        <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
+      </div>
+    </div>
+    <div class="stats-row" id="statsBS">
+    <div class="sc"><div class="sc-n">0</div><div class="sc-l">Total suggestions</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--blue);">0</div><div class="sc-l">🆕 Nouvelles</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--green);">0</div><div class="sc-l">✅ Implantées</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--red);">0</div><div class="sc-l">🔴 Priorité élevée</div></div></div>
+    <div class="sugg-list" id="suggList">
+      <div class="empty-state">💡 Aucune suggestion pour le moment.<br>Les idées soumises par l'équipe apparaîtront ici.</div>
+    </div>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+</div>
+
+<script>
+let suggestions=[], sid=1, currentPrio='modere';
+const CAT_INFO={amelio:{l:'💡 Amélioration',cls:'cat-amelio'},idee:{l:'🌱 Idée',cls:'cat-idee'},prob:{l:'⚠️ Problème',cls:'cat-prob'},rh:{l:'👥 RH',cls:'cat-rh'},equip:{l:'🔧 Équipements',cls:'cat-equip'},autre:{l:'📌 Autre',cls:'cat-autre'}};
+const PRIO_INFO={faible:{l:'🟢 Faible',cls:'p-faib',c:'#1a9e5a'},modere:{l:'🟡 Modérée',cls:'p-mod',c:'#e67e22'},elevee:{l:'🔴 Élevée',cls:'p-elev',c:'#c0392b'}};
+
+function setPrio(v,btn){currentPrio=v;document.querySelectorAll('#prioBtns .vote-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
+
+function submitBS(){
+  const text=document.getElementById('bs_text').value.trim();
+  if(!text){alert('Veuillez écrire votre suggestion avant de soumettre.');return;}
+  const cat=document.getElementById('bs_cat').value;
+  const ctx=document.getElementById('bs_ctx').value.trim();
+  const init=document.getElementById('bs_init').value.trim().toUpperCase();
+  const now=new Date();
+  const dateEnvoi=now.toLocaleDateString('fr-CA',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  const contenu="Initiales : "+(init||'Anonyme')+"\nCatégorie : "+cat+"\nPriorité : "+currentPrio+"\nSuggestion : "+text+(ctx?"\nContexte : "+ctx:"");
+  emailjs.send('service_97u9p5c','template_eips1jc',{
+    outil_nom:"Boîte à suggestion",
+    clinique_nom:"Gestion Mel",
+    date_envoi:dateEnvoi,
+    contenu:contenu
+  }).then(function(){
+    console.log('Suggestion envoyée par email');
+  },function(error){
+    console.error('EmailJS error:',error);
+  });
+  suggestions.push({
+    id:sid++,
+    cat:cat,
+    prio:currentPrio,
+    text,
+    ctx:ctx,
+    init:init,
+    date:now.toISOString(),
+    status:'new',
+    mgr_note:'',
+  });
+  document.getElementById('formViewBS').style.display='none';
+  document.getElementById('successBS').style.display='block';
+  updateBadge();drawBS();
+}
+
+function newBS(){
+  document.getElementById('bs_text').value='';
+  document.getElementById('bs_ctx').value='';
+  document.getElementById('bs_init').value='';
+  document.getElementById('bs_cat').value='amelio';
+  setPrio('modere',document.querySelector('#prioBtns .vote-btn:nth-child(2)'));
+  document.getElementById('formViewBS').style.display='block';
+  document.getElementById('successBS').style.display='none';
+}
+
+function drawBS(){
+  const catF=document.getElementById('filterCatBS').value;
+  const statF=document.getElementById('filterStatBS').value;
+  let data=[...suggestions];
+  if(catF)data=data.filter(s=>s.cat===catF);
+  if(statF)data=data.filter(s=>s.status===statF);
+  data.sort((a,b)=>{const o={elevee:0,modere:1,faible:2};return o[a.prio]-o[b.prio]||new Date(b.date)-new Date(a.date);});
+
+  const el=document.getElementById('suggList');
+  if(!data.length){el.innerHTML='<div class="empty-state">💡 Aucune suggestion dans cette catégorie.</div>';drawStats();return;}
+
+  el.innerHTML=data.map(s=>{
+    const ci=CAT_INFO[s.cat]||CAT_INFO.autre;
+    const pi=PRIO_INFO[s.prio]||PRIO_INFO.modere;
+    const d=new Date(s.date);
+    const statOpts=['new','analyse','implante','non'].map(v=>`<option value="${v}" ${s.status===v?'selected':''}>${v==='new'?'🆕 Nouvelle':v==='analyse'?'🔍 En analyse':v==='implante'?'✅ Implantée':'❌ Non retenue'}</option>`).join('');
+    return `<div class="sugg-card${s.status==='implante'||s.status==='non'?' traite':''}" id="sc_${s.id}">
+      <div class="sugg-header">
+        <span class="cat-badge ${ci.cls}">${ci.l}</span>
+        <span class="prio-chip ${pi.cls}">${pi.l}</span>
+        ${s.init?`<span style="font-size:.76rem;color:#5a6a80;font-weight:700;">${s.init}</span>`:'<span style="font-size:.74rem;color:#8a9ab0;">Anonyme</span>'}
+        <span class="sugg-date">${d.toLocaleDateString('fr-CA',{day:'numeric',month:'short'})}</span>
+      </div>
+      <div class="sugg-text">${s.text}</div>
+      ${s.ctx?`<div style="font-size:.79rem;color:#5a6a80;background:var(--light);border-radius:5px;padding:7px 10px;margin-bottom:8px;font-style:italic;">📌 Contexte : ${s.ctx}</div>`:''}
+      <div class="sugg-footer">
+        <select class="status-select" onchange="setStatus(${s.id},this.value)">${statOpts}</select>
+        <div class="mgr-note"><input type="text" value="${s.mgr_note}" placeholder="Note de la gestionnaire..." oninput="setNote(${s.id},this.value)"></div>
+        <button class="btn-del-s" onclick="delBS(${s.id})">×</button>
+      </div>
+    </div>`;
+  }).join('');
+  drawStats();
+}
+
+function setStatus(id,v){const s=suggestions.find(x=>x.id===id);if(s)s.status=v;updateBadge();drawStats();}
+function setNote(id,v){const s=suggestions.find(x=>x.id===id);if(s)s.mgr_note=v;}
+function delBS(id){suggestions=suggestions.filter(s=>s.id!==id);drawBS();}
+function clearDoneBS(){if(!confirm('Archiver les suggestions traitées?'))return;suggestions=suggestions.filter(s=>s.status!=='implante'&&s.status!=='non');drawBS();}
+
+function drawStats(){
+  const total=suggestions.length, newS=suggestions.filter(s=>s.status==='new').length, imp=suggestions.filter(s=>s.status==='implante').length;
+  document.getElementById('statsBS').innerHTML=`
+    <div class="sc"><div class="sc-n">${total}</div><div class="sc-l">Total suggestions</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--blue);">${newS}</div><div class="sc-l">🆕 Nouvelles</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--green);">${imp}</div><div class="sc-l">✅ Implantées</div></div>
+    <div class="sc"><div class="sc-n" style="color:var(--red);">${suggestions.filter(s=>s.prio==='elevee').length}</div><div class="sc-l">🔴 Priorité élevée</div></div>`;
+}
+
+function updateBadge(){document.getElementById('newBadge').textContent=suggestions.filter(s=>s.status==='new').length;}
+function showM(n,btn){document.querySelectorAll('.mpane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.mt').forEach((b,i)=>b.classList.toggle('active',i===n));if(n===1)drawBS();}
+drawStats();
+</script>
+
+
+</body></html>
