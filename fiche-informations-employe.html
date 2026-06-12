@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0062)file:///C:/Users/info/Downloads/Fiche-information-employe.html -->
+<!-- saved from url=(0068)file:///C:/Users/info/Downloads/Fiche-information-employe%20(2).html -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +55,7 @@
   .toast { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a9e5a; color: white; padding: 14px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 9999; }
   .toast.error { background: #c0392b; }
 </style>
-<script src="./Fiche-information-employe_files/email.min.js.téléchargement"></script>
+<script src="./fiche-informations-employe_files/email.min.js.téléchargement"></script>
 <script>emailjs.init('uCmsRhlTKY1L0jRw8');</script>
 </head>
 <body>
@@ -160,42 +160,52 @@ function afficherToast(msg, erreur) {
 }
 
 function soumettreFormulaire() {
-  const inputs = document.querySelectorAll('input, select, textarea');
-  const clinique = document.querySelector('input[placeholder="Numéro civique, rue, appartement"]');
-  
-  let contenu = '';
-  const labels = document.querySelectorAll('label');
-  labels.forEach(label => {
-    const field = label.closest('.field');
-    if (!field) return;
-    const input = field.querySelector('input, select, textarea');
-    if (!input) return;
-    const labelText = label.textContent.trim();
-    let valeur = '';
-    if (input.type === 'radio') {
-      const checked = field.querySelector('input[type="radio"]:checked');
-      valeur = checked ? checked.closest('label').textContent.trim() : '—';
-    } else {
-      valeur = input.value.trim() || '—';
-    }
-    contenu += labelText + ' : ' + valeur + '\n';
+  // Collecte simple de toutes les valeurs
+  let lignes = [];
+
+  document.querySelectorAll('.section').forEach(section => {
+    const titre = section.querySelector('.section-title');
+    if (titre) lignes.push('\n=== ' + titre.textContent.trim() + ' ===');
+
+    section.querySelectorAll('.field').forEach(field => {
+      const label = field.querySelector('label');
+      if (!label) return;
+      const labelText = label.textContent.trim();
+
+      // Radio buttons
+      const radios = field.querySelectorAll('input[type="radio"]');
+      if (radios.length > 0) {
+        const checked = field.querySelector('input[type="radio"]:checked');
+        lignes.push(labelText + ' : ' + (checked ? checked.value : '—'));
+        return;
+      }
+
+      const el = field.querySelector('input:not([type="radio"]), select, textarea');
+      if (!el) return;
+      lignes.push(labelText + ' : ' + (el.value.trim() || '—'));
+    });
   });
 
-  // Type d'emploi (radio group)
+  // Type d'emploi (radio hors .field standard)
   const typeEmploi = document.querySelector('input[name="type-emploi"]:checked');
-  contenu += 'Type d\'emploi : ' + (typeEmploi ? typeEmploi.value : '—') + '\n';
+  if (typeEmploi) lignes.push('Type d\'emploi : ' + typeEmploi.value);
 
+  const contenu = lignes.join('\n');
+  const ville = document.querySelector('input[placeholder="Ville"]');
   const now = new Date();
   const dateEnvoi = now.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
+  afficherToast('⏳ Envoi en cours...');
+
   emailjs.send('service_97u9p5c', 'template_eips1jc', {
-    outil_nom: 'Fiche d\'information employé',
-    clinique_nom: document.querySelector('input[placeholder="Ville"]')?.value || 'Non spécifiée',
+    outil_nom: "Fiche d'information employé",
+    clinique_nom: ville ? ville.value || 'Non spécifiée' : 'Non spécifiée',
     date_envoi: dateEnvoi,
     contenu: contenu
-  }).then(() => {
-    afficherToast('✅ Fiche envoyée avec succès à Gestion Mel!');
-  }).catch(() => {
+  }).then(function() {
+    afficherToast('✅ Fiche envoyée avec succès à info@gestionmel.com!');
+  }, function(error) {
+    console.error('EmailJS error:', error);
     afficherToast('❌ Erreur lors de l\'envoi. Veuillez réessayer.', true);
   });
 }
