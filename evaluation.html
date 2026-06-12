@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0071)file:///C:/Users/Portable02/Downloads/evaluation_performance_light.html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="fr" translate="no"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Évaluation de performance — Gestion Mel</title>
@@ -174,7 +174,14 @@
     .btn-imprimer { display: none; }
     .section { break-inside: avoid; }
   }
+
+  .btn-success { background: #1a9e5a; color: white; }
+  .btn-success:hover { background: #157a45; }
+  .toast { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a9e5a; color: white; padding: 14px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 9999; min-width: 320px; text-align: center; }
+  .toast.error { background: #c0392b; }
 </style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">(function(){emailjs.init({publicKey:"uCmsRhlTKY1L0jRw8"});})();</script>
 </head>
 <body>
 <div class="page-wrap">
@@ -637,4 +644,57 @@ rendreCriteres();
 </script>
 
 
+<div class="toast" id="toast"></div>
+
+<script>
+var toastTimer = null;
+function afficherToast(msg, erreur) {
+  var t = document.getElementById('toast');
+  if (toastTimer) clearTimeout(toastTimer);
+  t.textContent = msg;
+  t.className = 'toast' + (erreur ? ' error' : '');
+  t.style.display = 'block';
+  if (msg.indexOf('cours') === -1) {
+    toastTimer = setTimeout(function() { t.style.display = 'none'; }, 6000);
+  }
+}
+function soumettreFormulaire() {
+  var lignes = [];
+  var sections = document.querySelectorAll('.section');
+  for (var i = 0; i < sections.length; i++) {
+    var titre = sections[i].querySelector('.section-title');
+    if (titre) lignes.push('\n=== ' + titre.textContent.trim() + ' ===');
+    var fields = sections[i].querySelectorAll('.field');
+    for (var j = 0; j < fields.length; j++) {
+      var label = fields[j].querySelector('label');
+      if (!label) continue;
+      var labelText = label.textContent.trim();
+      var radios = fields[j].querySelectorAll('input[type="radio"]');
+      if (radios.length > 0) {
+        var checked = fields[j].querySelector('input[type="radio"]:checked');
+        lignes.push(labelText + ' : ' + (checked ? checked.value : '—'));
+        continue;
+      }
+      var el = fields[j].querySelector('input:not([type="radio"]), select, textarea');
+      if (!el) continue;
+      lignes.push(labelText + ' : ' + (el.value.trim() || '—'));
+    }
+  }
+  var contenu = lignes.join('\n');
+  var now = new Date();
+  var dateEnvoi = now.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  afficherToast('⏳ Envoi en cours...');
+  emailjs.send('service_97u9p5c', 'template_eips1jc', {
+    outil_nom: "Évaluation de performance",
+    clinique_nom: 'Gestion Mel',
+    date_envoi: dateEnvoi,
+    contenu: contenu
+  }).then(function() {
+    afficherToast('✅ Formulaire envoyé avec succès à info@gestionmel.com!');
+  }, function(error) {
+    console.error('EmailJS error:', error);
+    afficherToast('❌ Erreur lors de l\'envoi. Veuillez réessayer.', true);
+  });
+}
+</script>
 </body></html>
