@@ -457,7 +457,7 @@ function submitForm() {
   window._submissions.push(resp);
   // Send via EmailJS
   const lignes = [];
-  const labels = {1:'Comment vous sentez-vous au travail?',2:'Ambiance et climat d\'équipe',3:'Communication dans l'équipe',4:'Relations avec la gestionnaire',5:'Reconnaissance et valorisation',6:'Charge de travail'};
+  const labels = {1:'Comment vous sentez-vous au travail?',2:'Ambiance et climat d\\'equipe',3:'Communication dans l'équipe',4:'Relations avec la gestionnaire',5:'Reconnaissance et valorisation',6:'Charge de travail'};
   const emojis = {1:'😞 Très mal/Très tendu',2:'😕 Pas bien',3:'😐 Correct',4:'🙂 Bien',5:'😊 Très bien/Excellent'};
   Object.keys(answers).forEach(function(k) {
     if (parseInt(k) >= 1 && parseInt(k) <= 6) {
