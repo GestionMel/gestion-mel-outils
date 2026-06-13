@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facturation Hygiéniste Indépendante — Gestion Mel</title>
+<style>
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 860px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.75; }
+  .facture-no { text-align: right; }
+  .facture-no .no { font-size: 1.8rem; font-weight: 700; color: var(--accent); }
+  .facture-no .label { font-size: 0.75rem; opacity: 0.7; }
+  .parties { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-bottom: 1px solid var(--border); }
+  .partie { padding: 20px 36px; }
+  .partie:first-child { border-right: 1px solid var(--border); }
+  .partie-title { font-size: 0.75rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .partie input { border: 1.5px solid var(--border); border-radius: 5px; padding: 7px 10px; font-size: 0.88rem; color: var(--text); background: var(--light); width: 100%; margin-bottom: 6px; }
+  .section { padding: 20px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 0.75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.9rem; font-family: inherit; color: var(--text); background: var(--light); }
+  input:focus, select:focus { outline: none; border-color: var(--accent); background: white; }
+  .services-table { width: 100%; border-collapse: collapse; }
+  .services-table th { background: var(--dark); color: white; padding: 10px 12px; font-size: 0.78rem; text-align: left; }
+  .services-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .services-table td input { border: none; background: transparent; width: 100%; font-size: 0.88rem; padding: 4px; }
+  .services-table td input:focus { outline: 1px dashed var(--accent); border-radius: 3px; }
+  .services-table .add-row { color: var(--blue); cursor: pointer; font-size: 0.82rem; padding: 8px 12px; font-weight: 600; }
+  .totals { padding: 16px 36px; background: var(--light); }
+  .total-row { display: flex; justify-content: flex-end; gap: 20px; align-items: center; padding: 4px 0; font-size: 0.9rem; }
+  .total-row.final { font-size: 1.1rem; font-weight: 700; color: var(--blue); border-top: 2px solid var(--blue); padding-top: 8px; margin-top: 4px; }
+  .total-row input { border: 1.5px solid var(--border); border-radius: 5px; padding: 6px 10px; font-size: 0.9rem; width: 130px; text-align: right; background: white; }
+  .note-section { padding: 16px 36px; border-top: 1px solid var(--border); }
+  .note-section textarea { width: 100%; border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.88rem; font-family: inherit; color: var(--text); background: var(--light); resize: vertical; min-height: 60px; }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; }
+  .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
+  @media print { body { background: white; } .page-header, .actions { display: none; } .container { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Outil de facturation</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <div>
+      <h1>Facture — Hygiéniste dentaire indépendante</h1>
+      <p>Template de facturation pour travailleure autonome</p>
+    </div>
+    <div class="facture-no">
+      <div class="label">NUMÉRO DE FACTURE</div>
+      <div class="no"><input type="text" value="HI-2025-001" style="background:transparent;border:none;color:var(--accent);font-size:1.4rem;font-weight:700;width:160px;text-align:right;padding:0;"></div>
+    </div>
+  </div>
+
+  <div class="parties">
+    <div class="partie">
+      <div class="partie-title">Hygiéniste — Fournisseur de services</div>
+      <input type="text" placeholder="Nom complet ou raison sociale">
+      <input type="text" placeholder="Adresse">
+      <input type="text" placeholder="Ville, Province, Code postal">
+      <input type="text" placeholder="Téléphone">
+      <input type="text" placeholder="Courriel">
+      <input type="text" placeholder="No. de TPS (si applicable)">
+      <input type="text" placeholder="No. de TVQ (si applicable)">
+    </div>
+    <div class="partie">
+      <div class="partie-title">Clinique — Client</div>
+      <input type="text" placeholder="Nom de la clinique">
+      <input type="text" placeholder="Adresse">
+      <input type="text" placeholder="Ville, Province, Code postal">
+      <input type="text" placeholder="Téléphone">
+      <input type="text" placeholder="Courriel">
+      <input type="text" placeholder="No. de TPS de la clinique">
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Informations de facturation</div>
+    <div class="grid">
+      <div class="field"><label>Date de la facture</label><input type="date"></div>
+      <div class="field"><label>Période de services</label><input type="text" placeholder="Ex. : 1er au 15 avril 2025"></div>
+      <div class="field"><label>Date d'échéance</label><input type="date"></div>
+      <div class="field"><label>Mode de paiement accepté</label><input type="text" placeholder="Ex. : Virement, chèque"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Détail des services rendus</div>
+    <table class="services-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description des services</th>
+          <th>Nbr heures / patients</th>
+          <th>Taux</th>
+          <th>Montant</th>
+        </tr>
+      </thead>
+      <tbody id="services-tbody">
+        <tr><td><input type="date"></td><td><input type="text" placeholder="Ex. : Services d'hygiène dentaire"></td><td><input type="text" placeholder="Ex. : 8h ou 12 pts"></td><td><input type="text" placeholder="Ex. : 55 $/h"></td><td><input type="text" placeholder="Ex. : 440,00 $"></td></tr>
+        <tr><td><input type="date"></td><td><input type="text" placeholder="Services clinique"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+        <tr><td><input type="date"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+      </tbody>
+      <tr><td colspan="5" class="add-row" onclick="addRow()">+ Ajouter une ligne</td></tr>
+    </table>
+  </div>
+
+  <div class="totals">
+    <div class="total-row"><span>Sous-total :</span><input type="text" placeholder="0,00 $"></div>
+    <div class="total-row"><span>TPS (5%) :</span><input type="text" placeholder="0,00 $"></div>
+    <div class="total-row"><span>TVQ (9,975%) :</span><input type="text" placeholder="0,00 $"></div>
+    <div class="total-row final"><span>TOTAL DÛ :</span><input type="text" placeholder="0,00 $" style="font-size:1.1rem; font-weight:700; color:var(--blue);"></div>
+  </div>
+
+  <div class="note-section">
+    <label style="font-size:0.75rem; font-weight:600; color:#5a6a80; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">Notes / Instructions de paiement</label>
+    <textarea placeholder="Ex. : Virement Interac à email@exemple.com — Mot de passe : dentaire2025 / Merci pour votre collaboration !"></textarea>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Template de facturation pour usage professionnel</div>
+</div>
+<script>
+function addRow() {
+  const tbody = document.getElementById('services-tbody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = '<td><input type="date"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>';
+  tbody.appendChild(tr);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Évaluation mi-annuelle — Gestion Mel</title>
+<style>
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 860px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.75; }
+  .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 0.75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select, textarea { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.9rem; font-family: inherit; color: var(--text); background: var(--light); transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea { resize: vertical; min-height: 70px; }
+  .critere-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: start; padding: 12px 0; border-bottom: 1px dashed var(--border); }
+  .critere-row:last-child { border-bottom: none; }
+  .critere-label { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+  .critere-desc { font-size: 0.78rem; color: #6a7a90; margin-top: 2px; }
+  .stars { display: flex; gap: 4px; }
+  .stars input[type="radio"] { display: none; }
+  .stars label { font-size: 1.4rem; cursor: pointer; color: #ddd; transition: color 0.15s; }
+  .stars input[type="radio"]:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #f0b429; }
+  .stars { flex-direction: row-reverse; }
+  .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: #f0b429; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.75rem; color: #6a7a90; margin-top: 8px; }
+  .legend span { display: flex; align-items: center; gap: 4px; }
+  .score-display { background: var(--light); border-radius: 8px; padding: 14px 18px; text-align: center; }
+  .score-display .score { font-size: 2.5rem; font-weight: 700; color: var(--blue); }
+  .score-display .label { font-size: 0.8rem; color: #6a7a90; }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; }
+  .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
+  @media print { body { background: white; } .page-header, .actions { display: none; } .container { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire — Gestion RH</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Évaluation de performance — Mi-annuelle</h1>
+    <p>Formulaire d'évaluation à compléter deux fois par année avec chaque employé(e)</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Informations générales</div>
+    <div class="grid">
+      <div class="field"><label>Nom de l'employé(e)</label><input type="text"></div>
+      <div class="field"><label>Poste occupé</label><input type="text"></div>
+      <div class="field"><label>Période évaluée</label><input type="text" placeholder="Ex. : Janvier à Juin 2025"></div>
+      <div class="field"><label>Date de l'évaluation</label><input type="date"></div>
+      <div class="field"><label>Gestionnaire évaluateur</label><input type="text"></div>
+      <div class="field"><label>Ancienneté</label><input type="text" placeholder="Ex. : 1 an, 6 mois"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Grille d'évaluation</div>
+    <div class="legend"><span>⭐ Insatisfaisant</span><span>⭐⭐ À améliorer</span><span>⭐⭐⭐ Satisfaisant</span><span>⭐⭐⭐⭐ Très bien</span><span>⭐⭐⭐⭐⭐ Exceptionnel</span></div>
+    <div style="margin-top: 16px;">
+      <div class="critere-row">
+        <div><div class="critere-label">Qualité du travail</div><div class="critere-desc">Précision, soin, respect des procédures</div></div>
+        <div class="stars" id="stars-1">
+          <input type="radio" name="s1" id="s1-5" value="5"><label for="s1-5">★</label>
+          <input type="radio" name="s1" id="s1-4" value="4"><label for="s1-4">★</label>
+          <input type="radio" name="s1" id="s1-3" value="3"><label for="s1-3">★</label>
+          <input type="radio" name="s1" id="s1-2" value="2"><label for="s1-2">★</label>
+          <input type="radio" name="s1" id="s1-1" value="1"><label for="s1-1">★</label>
+        </div>
+      </div>
+      <div class="critere-row">
+        <div><div class="critere-label">Ponctualité et assiduité</div><div class="critere-desc">Présence, heures, gestion des absences</div></div>
+        <div class="stars">
+          <input type="radio" name="s2" id="s2-5" value="5"><label for="s2-5">★</label>
+          <input type="radio" name="s2" id="s2-4" value="4"><label for="s2-4">★</label>
+          <input type="radio" name="s2" id="s2-3" value="3"><label for="s2-3">★</label>
+          <input type="radio" name="s2" id="s2-2" value="2"><label for="s2-2">★</label>
+          <input type="radio" name="s2" id="s2-1" value="1"><label for="s2-1">★</label>
+        </div>
+      </div>
+      <div class="critere-row">
+        <div><div class="critere-label">Communication et travail d'équipe</div><div class="critere-desc">Collaboration, attitude, écoute</div></div>
+        <div class="stars">
+          <input type="radio" name="s3" id="s3-5" value="5"><label for="s3-5">★</label>
+          <input type="radio" name="s3" id="s3-4" value="4"><label for="s3-4">★</label>
+          <input type="radio" name="s3" id="s3-3" value="3"><label for="s3-3">★</label>
+          <input type="radio" name="s3" id="s3-2" value="2"><label for="s3-2">★</label>
+          <input type="radio" name="s3" id="s3-1" value="1"><label for="s3-1">★</label>
+        </div>
+      </div>
+      <div class="critere-row">
+        <div><div class="critere-label">Service aux patients</div><div class="critere-desc">Accueil, patience, professionnalisme</div></div>
+        <div class="stars">
+          <input type="radio" name="s4" id="s4-5" value="5"><label for="s4-5">★</label>
+          <input type="radio" name="s4" id="s4-4" value="4"><label for="s4-4">★</label>
+          <input type="radio" name="s4" id="s4-3" value="3"><label for="s4-3">★</label>
+          <input type="radio" name="s4" id="s4-2" value="2"><label for="s4-2">★</label>
+          <input type="radio" name="s4" id="s4-1" value="1"><label for="s4-1">★</label>
+        </div>
+      </div>
+      <div class="critere-row">
+        <div><div class="critere-label">Initiative et autonomie</div><div class="critere-desc">Prise en charge, résolution de problèmes</div></div>
+        <div class="stars">
+          <input type="radio" name="s5" id="s5-5" value="5"><label for="s5-5">★</label>
+          <input type="radio" name="s5" id="s5-4" value="4"><label for="s5-4">★</label>
+          <input type="radio" name="s5" id="s5-3" value="3"><label for="s5-3">★</label>
+          <input type="radio" name="s5" id="s5-2" value="2"><label for="s5-2">★</label>
+          <input type="radio" name="s5" id="s5-1" value="1"><label for="s5-1">★</label>
+        </div>
+      </div>
+      <div class="critere-row">
+        <div><div class="critere-label">Respect des politiques et protocoles</div><div class="critere-desc">Code de conduite, hygiène, sécurité</div></div>
+        <div class="stars">
+          <input type="radio" name="s6" id="s6-5" value="5"><label for="s6-5">★</label>
+          <input type="radio" name="s6" id="s6-4" value="4"><label for="s6-4">★</label>
+          <input type="radio" name="s6" id="s6-3" value="3"><label for="s6-3">★</label>
+          <input type="radio" name="s6" id="s6-2" value="2"><label for="s6-2">★</label>
+          <input type="radio" name="s6" id="s6-1" value="1"><label for="s6-1">★</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Forces et réalisations</div>
+    <div class="field"><textarea placeholder="Décrivez les principales forces de l'employé(e) et ses réalisations marquantes pendant la période évaluée..."></textarea></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Points à améliorer</div>
+    <div class="field"><textarea placeholder="Indiquez les axes d'amélioration prioritaires et les comportements à corriger..."></textarea></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Objectifs pour la prochaine période</div>
+    <div class="grid">
+      <div class="field full"><label>Objectif 1</label><input type="text" placeholder="Ex. : Maîtriser la facturation RAMQ d'ici 3 mois"></div>
+      <div class="field full"><label>Objectif 2</label><input type="text" placeholder="Ex. : Améliorer la gestion du stress aux heures de pointe"></div>
+      <div class="field full"><label>Objectif 3</label><input type="text" placeholder="Objectif supplémentaire si applicable"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Commentaires de l'employé(e)</div>
+    <div class="field"><textarea placeholder="L'employé(e) peut exprimer ses commentaires, ses aspirations, ses préoccupations..."></textarea></div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Signatures</div>
+    <div class="grid">
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Signature du gestionnaire</label><input type="text" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
+</div>
+</body>
+</html>
