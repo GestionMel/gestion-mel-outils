@@ -469,8 +469,7 @@ function submitForm() {
     outil_nom: 'Sondage Poulx',
     clinique_nom: 'Gestion Mel',
     date_envoi: dateEnvoi,
-    contenu: lignes.join('
-')
+  contenu: lignes.join('\n')
   }).then(function(){ console.log('OK'); }, function(e){ console.error(e); });
   document.getElementById('formView').style.display = 'none';
   document.getElementById('successView').style.display = 'block';
