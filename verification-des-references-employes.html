@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="fr" translate="no"><head><meta charset="UTF-8">
+<meta name="google" content="notranslate"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Vérification des références | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:820px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.85rem;opacity:0.75;}.section{padding:22px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}.field.full{grid-column:1/-1;}label{font-size:0.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:0.5px;}input[type=text],input[type=date]{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus{outline:none;border-color:var(--accent);background:white;}.ref-card{border:1.5px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:14px;background:#fafcff;}.ref-card-title{font-size:0.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}.tip-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:10px 14px;font-size:0.83rem;color:#0d3a6e;margin:10px 0;line-height:1.6;}.btn{padding:11px 28px;border-radius:7px;font-size:0.92rem;font-weight:600;cursor:pointer;border:none;}.btn-primary{background:var(--blue);color:white;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:0.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}}
+  .btn-success { background: #1a9e5a; color: white; }
+  .btn-success:hover { background: #157a45; }
+  .toast { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a9e5a; color: white; padding: 14px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 9999; min-width: 320px; text-align: center; }
+  .toast.error { background: #c0392b; }
+</style><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">(function(){emailjs.init({publicKey:"uCmsRhlTKY1L0jRw8"});})();</script>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Ressources humaines</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Consentement à la vérification des références</h1><p>Autorisation du (de la) candidat(e) — Ressources humaines</p></div>
+  <div class="section">
+    <div class="section-title">Identification du (de la) candidat(e)</div>
+    <div class="grid">
+      <div class="field"><label>Nom et prénom</label><input type="text" placeholder="Nom, Prénom"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field full"><label>Poste convoité</label><input type="text" placeholder="ex. : Secrétaire dentaire, Assistante dentaire..."></div>
+    </div>
+    <div class="tip-box" style="margin-top:12px;">Par la présente, j'autorise la clinique dentaire à communiquer avec les personnes nommées ci-dessous afin d'obtenir des données factuelles ainsi que des opinions sur mon travail à chacun de ces endroits.</div>
+  </div>
+  <div style="background:#e8f4fd;border-left:4px solid #1a6abf;border-radius:8px;padding:16px 24px;margin:20px 36px 0 36px;">
+    <div style="font-size:0.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">⚙️ Configuration — à remplir une seule fois</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:0.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;">Nom de la clinique</label>
+        <input type="text" id="clinique_nom" placeholder="Ex.: Clinique Dentaire Sourire" style="border:1.5px solid #d0dff0;border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:0.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;">Courriel de la gestionnaire</label>
+        <input type="email" id="gestionnaire_email" placeholder="gestionnaire@clinique.com" style="border:1.5px solid #d0dff0;border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;">
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Références</div>
+    <div id="refs-container">
+      <div class="ref-card"><div class="ref-card-title">📋 Référence 1</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div></div>
+      <div class="ref-card"><div class="ref-card-title">📋 Référence 2</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div></div>
+      <div class="ref-card"><div class="ref-card-title">📋 Référence 3</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div></div>
+    </div>
+    <button onclick="ajouterRef()" style="background:none;border:2px dashed var(--accent);border-radius:8px;padding:10px;width:100%;color:var(--blue);font-weight:700;cursor:pointer;font-size:0.88rem;margin-top:6px;">+ Ajouter une référence</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Signature du (de la) candidat(e)</div>
+    <div class="grid">
+      <div class="field"><label>Signature (manuscrite à l'impression)</label><input type="text"></div>
+      <div class="field"><label>Date</label><input type="date"></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">Imprimer / PDF</button>
+    <button class="btn btn-success" onclick="soumettreFormulaire()">Soumettre par courriel</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document RH</div>
+</div>
+<script>
+let n=3;
+function ajouterRef(){
+  n++;
+  const d=document.createElement('div');
+  d.className='ref-card';
+  d.innerHTML=`<div class="ref-card-title">📋 Référence ${n}</div><div class="grid"><div class="field"><label>Personne à contacter</label><input type="text"></div><div class="field"><label>Titre / Fonction</label><input type="text"></div><div class="field"><label>Téléphone</label><input type="text"></div><div class="field"><label>Poste occupé par le (la) candidat(e)</label><input type="text"></div><div class="field full"><label>Entreprise / Clinique</label><input type="text"></div></div>`;
+  document.getElementById('refs-container').appendChild(d);
+}
+</script>
+
+<div class="toast" id="toast"></div>
+<script>
+var toastTimer = null;
+function afficherToast(msg, erreur) {
+  var t = document.getElementById('toast');
+  if (toastTimer) clearTimeout(toastTimer);
+  t.textContent = msg;
+  t.className = 'toast' + (erreur ? ' error' : '');
+  t.style.display = 'block';
+  if (msg.indexOf('cours') === -1) {
+    toastTimer = setTimeout(function() { t.style.display = 'none'; }, 6000);
+  }
+}
+function soumettreFormulaire() {
+  var cliniqueNom = document.getElementById('clinique_nom') ? document.getElementById('clinique_nom').value.trim() : 'Non specifie';
+  var gestionnaireEmail = document.getElementById('gestionnaire_email') ? document.getElementById('gestionnaire_email').value.trim() : '';
+  if (!gestionnaireEmail) { alert('Veuillez entrer le courriel de la gestionnaire avant de soumettre.'); return; }
+  var lignes = [];
+  var sections = document.querySelectorAll('.section');
+  for (var i = 0; i < sections.length; i++) {
+    var titre = sections[i].querySelector('.section-title');
+    if (titre) lignes.push('\n=== ' + titre.textContent.trim() + ' ===');
+    var fields = sections[i].querySelectorAll('.field');
+    for (var j = 0; j < fields.length; j++) {
+      var label = fields[j].querySelector('label');
+      if (!label) continue;
+      var labelText = label.textContent.trim();
+      if (labelText === 'Nom de la clinique' || labelText === 'Courriel de la gestionnaire') continue;
+      var radios = fields[j].querySelectorAll('input[type="radio"]');
+      if (radios.length > 0) {
+        var checked = fields[j].querySelector('input[type="radio"]:checked');
+        lignes.push(labelText + ' : ' + (checked ? checked.value : '-'));
+        continue;
+      }
+      var el = fields[j].querySelector('input:not([type="radio"]), select, textarea');
+      if (!el) continue;
+      lignes.push(labelText + ' : ' + (el.value.trim() || '-'));
+    }
+  }
+  var contenu = lignes.join('\n');
+  var now = new Date();
+  var dateEnvoi = now.toLocaleDateString('fr-CA', {year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  afficherToast('Envoi en cours...');
+  emailjs.send('service_97u9p5c','template_eips1jc',{
+    outil_nom: "Verification des references",
+    clinique_nom: cliniqueNom,
+    date_envoi: dateEnvoi,
+    contenu: contenu,
+    reply_to: gestionnaireEmail
+  }).then(function() {
+    // Send copy to gestionnaire
+    emailjs.send('service_97u9p5c','template_eips1jc',{
+      outil_nom: "Verification des references",
+      clinique_nom: cliniqueNom,
+      date_envoi: dateEnvoi,
+      contenu: contenu,
+      reply_to: 'info@gestionmel.com'
+    });
+    afficherToast('Formaulaire envoye avec succes!');
+  }, function(error) {
+    console.error('EmailJS error:', error);
+    afficherToast('Erreur lors de l envoi. Veuillez reessayer.', true);
+  });
+}
+</script>
+</body></html>

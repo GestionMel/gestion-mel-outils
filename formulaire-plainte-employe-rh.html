@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="fr" translate="no"><head><meta charset="UTF-8">
+<meta name="google" content="notranslate"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Formulaire de plainte | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;--green:#1a9e5a;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:880px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,0.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:0.85rem;opacity:0.75;}.section{padding:22px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:0.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:16px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}.field.full{grid-column:1/-1;}label{font-size:0.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:0.5px;}input[type=text],input[type=date],select,textarea{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:0.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}textarea{resize:vertical;min-height:80px;}.types-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}.check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1.5px solid var(--border);border-radius:6px;font-size:0.87rem;cursor:pointer;background:var(--light);transition:all 0.15s;}.check-item:hover{border-color:var(--accent);background:white;}.check-item input{width:16px;height:16px;flex-shrink:0;margin-top:2px;}.check-item strong{display:block;margin-bottom:2px;}.check-item small{color:#666;font-size:0.8rem;}.oui-non{display:flex;gap:16px;margin-top:6px;}.oui-non label{display:flex;align-items:center;gap:6px;font-size:0.88rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text);}.tip-box{background:#e8f4fd;border-left:4px solid var(--blue);border-radius:4px;padding:10px 14px;font-size:0.83rem;color:#0d3a6e;margin:10px 0;line-height:1.6;}.btn{padding:11px 28px;border-radius:7px;font-size:0.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:0.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}}
+  .btn-success { background: #1a9e5a; color: white; }
+  .btn-success:hover { background: #157a45; }
+  .toast { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a9e5a; color: white; padding: 14px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 9999; min-width: 320px; text-align: center; }
+  .toast.error { background: #c0392b; }
+</style><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script type="text/javascript">(function(){emailjs.init({publicKey:"uCmsRhlTKY1L0jRw8"});})();</script>
+</head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Ressources humaines</div></div>
+<div class="container">
+  <div class="doc-header"><h1>Formulaire de plainte</h1><p>Document confidentiel — Protégé une fois rempli — Harcèlement / Discrimination</p></div>
+  <div class="section">
+    <div class="section-title">🔒 Confidentialité</div>
+    <div class="tip-box">Ce formulaire est strictement confidentiel. Il sera traité uniquement par les personnes autorisées dans le cadre du processus de gestion des plaintes et ne sera pas versé au dossier disciplinaire sans motif valable.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Je crois être victime de</div>
+    <div class="types-grid">
+      <label class="check-item"><input type="checkbox"><div><strong>Harcèlement discriminatoire</strong><small>Comportement fondé sur un motif de discrimination prohibé</small></div></label>
+      <label class="check-item"><input type="checkbox"><div><strong>Harcèlement psychologique</strong><small>Conduite vexatoire se manifestant de façon répétée</small></div></label>
+      <label class="check-item"><input type="checkbox"><div><strong>Discrimination</strong><small>Traitement différent basé sur des caractéristiques personnelles</small></div></label>
+      <label class="check-item"><input type="checkbox"><div><strong>Autre</strong><small><input type="text" placeholder="Précisez..." style="margin-top:4px;width:100%;font-size:0.82rem;padding:4px 6px;"></small></div></label>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Présumée victime</div>
+    <div class="grid">
+      <div class="field"><label>Nom</label><input type="text"></div>
+      <div class="field"><label>Prénom</label><input type="text"></div>
+      <div class="field full"><label>Poste occupé lors des événements</label><input type="text"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Personne contre qui la plainte est formulée</div>
+    <div class="grid">
+      <div class="field"><label>Nom</label><input type="text"></div>
+      <div class="field"><label>Prénom</label><input type="text"></div>
+      <div class="field full"><label>Poste occupé lors des événements</label><input type="text"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Témoin(s) identifié(s)</div>
+    <div class="grid">
+      <div class="field"><label>Témoin 1 — Nom complet</label><input type="text"></div>
+      <div class="field"><label>Témoin 2 — Nom complet</label><input type="text"></div>
+      <div class="field"><label>Témoin 3 — Nom complet</label><input type="text"></div>
+      <div class="field"><label>Témoin 4 — Nom complet</label><input type="text"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Solution(s) désirée(s)</div>
+    <div class="field"><textarea placeholder="Décrivez les solutions souhaitées..."></textarea></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Autres démarches entreprises</div>
+    <div style="font-size:0.88rem;margin-bottom:10px;">Avez-vous manifesté votre désapprobation à la personne mise en cause ?</div>
+    <div class="oui-non"><label><input type="radio" name="demarche"> Oui</label><label><input type="radio" name="demarche"> Non — Précisez pourquoi :</label></div>
+    <div class="field" style="margin-top:10px;"><textarea placeholder="Précisez pourquoi (si Non)..."></textarea></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Allégations — Faits / Gestes / Conduite (avec dates)</div>
+    <div class="field"><textarea style="min-height:140px;" placeholder="Décrivez les faits de façon chronologique, en précisant les dates, les lieux et les témoins présents..."></textarea></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Commentaires additionnels</div>
+    <div class="field"><textarea placeholder="Ajoutez tout autre élément pertinent..."></textarea></div>
+  </div>
+  <div class="section">
+    <div class="section-title">Déclaration</div>
+    <div style="font-size:0.88rem;margin-bottom:14px;">Les faits qui sont énoncés dans ce formulaire sont vrais, au meilleur de ma connaissance.</div>
+    <div class="grid">
+      <div class="field"><label>Signé à (ville), le</label><input type="date"></div>
+      <div class="field"><label>Signature</label><input type="text" placeholder="(signature manuscrite à l'impression)"></div>
+    </div>
+  </div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">Imprimer / PDF</button>
+    <button class="btn btn-success" onclick="soumettreFormulaire()">Soumettre par courriel</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Document RH confidentiel</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var toastTimer = null;
+function afficherToast(msg, erreur) {
+  var t = document.getElementById('toast');
+  if (toastTimer) clearTimeout(toastTimer);
+  t.textContent = msg;
+  t.className = 'toast' + (erreur ? ' error' : '');
+  t.style.display = 'block';
+  if (msg.indexOf('cours') === -1) {
+    toastTimer = setTimeout(function() { t.style.display = 'none'; }, 6000);
+  }
+}
+function soumettreFormulaire() {
+  var cliniqueNom = document.getElementById('clinique_nom') ? document.getElementById('clinique_nom').value.trim() : 'Non specifie';
+  var gestionnaireEmail = document.getElementById('gestionnaire_email') ? document.getElementById('gestionnaire_email').value.trim() : '';
+  if (!gestionnaireEmail) { alert('Veuillez entrer le courriel de la gestionnaire avant de soumettre.'); return; }
+  var lignes = [];
+  var sections = document.querySelectorAll('.section');
+  for (var i = 0; i < sections.length; i++) {
+    var titre = sections[i].querySelector('.section-title');
+    if (titre) lignes.push('\n=== ' + titre.textContent.trim() + ' ===');
+    var fields = sections[i].querySelectorAll('.field');
+    for (var j = 0; j < fields.length; j++) {
+      var label = fields[j].querySelector('label');
+      if (!label) continue;
+      var labelText = label.textContent.trim();
+      if (labelText === 'Nom de la clinique' || labelText === 'Courriel de la gestionnaire') continue;
+      var radios = fields[j].querySelectorAll('input[type="radio"]');
+      if (radios.length > 0) {
+        var checked = fields[j].querySelector('input[type="radio"]:checked');
+        lignes.push(labelText + ' : ' + (checked ? checked.value : '-'));
+        continue;
+      }
+      var el = fields[j].querySelector('input:not([type="radio"]), select, textarea');
+      if (!el) continue;
+      lignes.push(labelText + ' : ' + (el.value.trim() || '-'));
+    }
+  }
+  var contenu = lignes.join('\n');
+  var now = new Date();
+  var dateEnvoi = now.toLocaleDateString('fr-CA', {year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  afficherToast('Envoi en cours...');
+  emailjs.send('service_97u9p5c','template_eips1jc',{
+    outil_nom: "Formulaire de plainte RH",
+    clinique_nom: cliniqueNom,
+    date_envoi: dateEnvoi,
+    contenu: contenu,
+    reply_to: gestionnaireEmail
+  }).then(function() {
+    // Send copy to gestionnaire
+    emailjs.send('service_97u9p5c','template_eips1jc',{
+      outil_nom: "Formulaire de plainte RH",
+      clinique_nom: cliniqueNom,
+      date_envoi: dateEnvoi,
+      contenu: contenu,
+      reply_to: 'info@gestionmel.com'
+    });
+    afficherToast('Formaulaire envoye avec succes!');
+  }, function(error) {
+    console.error('EmailJS error:', error);
+    afficherToast('Erreur lors de l envoi. Veuillez reessayer.', true);
+  });
+}
+</script>
+</body></html>
