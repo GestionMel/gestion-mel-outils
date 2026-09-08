@@ -135,14 +135,34 @@
     .page-header{padding:12px 20px;}
     .doc-header{padding:14px 20px;}
   }
+
+  /* STATUT SYNC */
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;transition:all .2s;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  .btn-lien{padding:6px 14px;border-radius:20px;border:1.5px solid var(--accent);background:white;color:var(--blue);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;white-space:nowrap;}
+  .btn-lien:hover{background:var(--light);}
+
+  /* MESSAGE BIENVENUE */
+  .welcome-overlay{position:fixed;inset:0;background:rgba(13,27,42,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .welcome-box{background:white;border-radius:14px;padding:28px 32px;max-width:480px;box-shadow:0 10px 40px rgba(0,0,0,.25);}
+  .welcome-box h2{font-size:1.1rem;color:var(--dark);margin-bottom:10px;}
+  .welcome-box p{font-size:.86rem;color:#5a6a80;line-height:1.5;margin-bottom:14px;}
+  .welcome-box .btn-add-cat{margin:0;}
+  @media print{ .sync-status,.welcome-overlay{display:none!important;} }
 </style>
 </head>
 <body>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div>Clinique dentaire — Gestion des achats</div>
 </div>
+
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 
 <div class="container">
   <div class="doc-header">
@@ -152,9 +172,10 @@
 
   <div class="top-bar">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-      <input class="clinic-input" type="text" placeholder="Nom de la clinique...">
-      <input class="clinic-input" type="date" id="dateMAJ" style="min-width:unset;width:150px;">
+      <input class="clinic-input" type="text" id="nomClinique" placeholder="Nom de la clinique..." onchange="scheduleSave()">
+      <input class="clinic-input" type="date" id="dateMAJ" style="min-width:unset;width:150px;" onchange="scheduleSave()">
       <span style="font-size:.75rem;color:#8a9ab0;">Mise à jour</span>
+      <button class="btn-lien no-print" onclick="showLienPersonnel()">🔗 Mon lien personnel</button>
     </div>
     <div class="top-right no-print">
       <span style="font-size:.75rem;color:#5a6a80;font-weight:600;">Afficher :</span>
@@ -755,57 +776,178 @@
 
 <script>
 // ===================== DATA =====================
-let categories = [
+// Modèle de départ pour une nouvelle clinique — exemples de catégories/fournisseurs,
+// quantités à 0 pour que rien ne s'affiche comme urgent tant que la clinique n'a pas
+// entré ses vraies données.
+const STARTER_CATEGORIES = [
   {
     id: 'c1', name: 'Matériaux de restauration', color: '#1a6abf',
     items: [
-      { id:'i1', num:'MAT-001', name:'Composite universel A2', supplier:'Dentsply Sirona', store:'Henry Schein', price:'45.00', qtyBought:'2', qtyMin:'1', qtyStock:'2', lastBuy:'', expiry:'', notes:'' },
-      { id:'i2', num:'MAT-002', name:'Composite universel A3', supplier:'Dentsply Sirona', store:'Henry Schein', price:'45.00', qtyBought:'2', qtyMin:'1', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
-      { id:'i3', num:'MAT-003', name:'Ciment verre ionomère', supplier:'GC', store:'Sinclair Dental', price:'32.00', qtyBought:'1', qtyMin:'1', qtyStock:'1', lastBuy:'', expiry:'', notes:'' },
+      { id:'i1', num:'MAT-001', name:'Composite universel A2', supplier:'Dentsply Sirona', store:'Henry Schein', price:'45.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i2', num:'MAT-002', name:'Composite universel A3', supplier:'Dentsply Sirona', store:'Henry Schein', price:'45.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i3', num:'MAT-003', name:'Ciment verre ionomère', supplier:'GC', store:'Sinclair Dental', price:'32.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
     ]
   },
   {
     id: 'c2', name: 'Anesthésiques', color: '#c0392b',
     items: [
-      { id:'i4', num:'ANE-001', name:'Carpules lidocaïne 2% (boîte 100)', supplier:'Septodont', store:'Dentsply Canada', price:'68.00', qtyBought:'2', qtyMin:'1', qtyStock:'1', lastBuy:'', expiry:'', notes:'' },
-      { id:'i5', num:'ANE-002', name:'Aiguilles courtes 30G (boîte 100)', supplier:'Septodont', store:'Henry Schein', price:'22.00', qtyBought:'2', qtyMin:'1', qtyStock:'3', lastBuy:'', expiry:'', notes:'' },
+      { id:'i4', num:'ANE-001', name:'Carpules lidocaïne 2% (boîte 100)', supplier:'Septodont', store:'Dentsply Canada', price:'68.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i5', num:'ANE-002', name:'Aiguilles courtes 30G (boîte 100)', supplier:'Septodont', store:'Henry Schein', price:'22.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
     ]
   },
   {
     id: 'c3', name: 'Stérilisation et PCI', color: '#1a9e5a',
     items: [
-      { id:'i6', num:'STE-001', name:'Sachets de stérilisation 3.5x10" (boîte 200)', supplier:'Crosstex', store:'Sinclair Dental', price:'24.00', qtyBought:'3', qtyMin:'2', qtyStock:'1', lastBuy:'', expiry:'', notes:'' },
-      { id:'i7', num:'STE-002', name:'Indicateurs biologiques (boîte 50)', supplier:'3M', store:'Henry Schein', price:'85.00', qtyBought:'1', qtyMin:'1', qtyStock:'2', lastBuy:'', expiry:'2026-12', notes:'' },
-      { id:'i8', num:'STE-003', name:'Solution désinfectante surfaces', supplier:'Cavicide', store:'Sinclair Dental', price:'38.00', qtyBought:'2', qtyMin:'1', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i6', num:'STE-001', name:'Sachets de stérilisation 3.5x10" (boîte 200)', supplier:'Crosstex', store:'Sinclair Dental', price:'24.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i7', num:'STE-002', name:'Indicateurs biologiques (boîte 50)', supplier:'3M', store:'Henry Schein', price:'85.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i8', num:'STE-003', name:'Solution désinfectante surfaces', supplier:'Cavicide', store:'Sinclair Dental', price:'38.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
     ]
   },
   {
     id: 'c4', name: 'EPI — Protection individuelle', color: '#8e44ad',
     items: [
-      { id:'i9', num:'EPI-001', name:'Gants nitrile S (boîte 100)', supplier:'Sempermed', store:'Metro Medical', price:'18.00', qtyBought:'5', qtyMin:'3', qtyStock:'4', lastBuy:'', expiry:'', notes:'' },
-      { id:'i10', num:'EPI-002', name:'Gants nitrile M (boîte 100)', supplier:'Sempermed', store:'Metro Medical', price:'18.00', qtyBought:'5', qtyMin:'3', qtyStock:'2', lastBuy:'', expiry:'', notes:'' },
-      { id:'i11', num:'EPI-003', name:'Masques chirurgicaux (boîte 50)', supplier:'3M', store:'Metro Medical', price:'12.00', qtyBought:'4', qtyMin:'2', qtyStock:'5', lastBuy:'', expiry:'', notes:'' },
-      { id:'i12', num:'EPI-004', name:'Lunettes de protection', supplier:'Safety Works', store:'Home Depot', price:'8.00', qtyBought:'10', qtyMin:'5', qtyStock:'8', lastBuy:'', expiry:'', notes:'' },
+      { id:'i9', num:'EPI-001', name:'Gants nitrile S (boîte 100)', supplier:'Sempermed', store:'Metro Medical', price:'18.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i10', num:'EPI-002', name:'Gants nitrile M (boîte 100)', supplier:'Sempermed', store:'Metro Medical', price:'18.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i11', num:'EPI-003', name:'Masques chirurgicaux (boîte 50)', supplier:'3M', store:'Metro Medical', price:'12.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i12', num:'EPI-004', name:'Lunettes de protection', supplier:'Safety Works', store:'Home Depot', price:'8.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
     ]
   },
   {
     id: 'c5', name: 'Hygiène et prophylaxie', color: '#e67e22',
     items: [
-      { id:'i13', num:'HYG-001', name:'Pâte à polir (prophylaxie) – boîte 200', supplier:'Nupro', store:'Dentsply Canada', price:'35.00', qtyBought:'2', qtyMin:'1', qtyStock:'3', lastBuy:'', expiry:'', notes:'' },
-      { id:'i14', num:'HYG-002', name:'Fluorure vernis (boîte 200)', supplier:'VOCO', store:'Sinclair Dental', price:'78.00', qtyBought:'1', qtyMin:'1', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i13', num:'HYG-001', name:'Pâte à polir (prophylaxie) – boîte 200', supplier:'Nupro', store:'Dentsply Canada', price:'35.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i14', num:'HYG-002', name:'Fluorure vernis (boîte 200)', supplier:'VOCO', store:'Sinclair Dental', price:'78.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
     ]
   },
   {
     id: 'c6', name: 'Fournitures de bureau', color: '#2c3e50',
     items: [
-      { id:'i15', num:'BUR-001', name:'Papier imprimante (boîte 5)', supplier:'Staples', store:'Staples', price:'42.00', qtyBought:'1', qtyMin:'1', qtyStock:'2', lastBuy:'', expiry:'', notes:'' },
-      { id:'i16', num:'BUR-002', name:'Encre imprimante noire', supplier:'HP', store:'Staples', price:'28.00', qtyBought:'2', qtyMin:'1', qtyStock:'1', lastBuy:'', expiry:'', notes:'' },
+      { id:'i15', num:'BUR-001', name:'Papier imprimante (boîte 5)', supplier:'Staples', store:'Staples', price:'42.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
+      { id:'i16', num:'BUR-002', name:'Encre imprimante noire', supplier:'HP', store:'Staples', price:'28.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
     ]
   },
 ];
 
+let categories = [];
 let currentFilter = 'all';
 let idCounter = 100;
+
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let ownerToken = null;
+let saveTimer = null;
+let isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique');
+  if (!token) {
+    token = crypto.randomUUID();
+    params.set('clinique', token);
+    window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  }
+  return token;
+}
+
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+
+function showLienPersonnel() {
+  prompt("Voici votre lien personnel — conservez-le ou partagez-le pour retrouver votre registre plus tard, même sur un autre appareil :", window.location.href);
+}
+
+function computeIdCounter(cats) {
+  let max = 100;
+  (cats||[]).forEach(c => {
+    const cn = parseInt(String(c.id||'').replace('c_',''));
+    if (!isNaN(cn) && cn > max) max = cn;
+    (c.items||[]).forEach(i => {
+      const inum = parseInt(String(i.id||'').replace('i_',''));
+      if (!isNaN(inum) && inum > max) max = inum;
+    });
+  });
+  return max;
+}
+
+function showWelcome() {
+  const div = document.createElement('div');
+  div.className = 'welcome-overlay';
+  div.id = 'welcomeOverlay';
+  div.innerHTML = `<div class="welcome-box">
+    <h2>Bienvenue dans votre registre d'achats et d'inventaire 👋</h2>
+    <p>Ce registre vous appartient et se sauvegarde automatiquement au fur et à mesure. Des catégories et articles d'exemple ont été ajoutés (quantités à 0) pour vous montrer comment l'utiliser — modifiez-les ou supprimez-les selon vos besoins réels. Utilisez le bouton « 🔗 Mon lien personnel » pour le retrouver plus tard, même sur un autre appareil.</p>
+    <button class="btn-add-cat" onclick="document.getElementById('welcomeOverlay').remove()">Commencer</button>
+  </div>`;
+  document.body.appendChild(div);
+}
+
+async function initInventaire() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_inventaire', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      categories = (row.categories && row.categories.length) ? row.categories : [];
+      if (row.nom_clinique) document.getElementById('nomClinique').value = row.nom_clinique;
+      if (row.date_maj) document.getElementById('dateMAJ').value = row.date_maj;
+      idCounter = computeIdCounter(categories);
+    } else {
+      categories = JSON.parse(JSON.stringify(STARTER_CATEGORIES));
+      await sb.rpc('create_inventaire', { p_owner_token: ownerToken });
+      idCounter = computeIdCounter(categories);
+      await doSave();
+      showWelcome();
+    }
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+  isLoading = false;
+  if (!document.getElementById('dateMAJ').value) document.getElementById('dateMAJ').valueAsDate = new Date();
+  renderAll();
+}
+
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_inventaire', {
+      p_owner_token: ownerToken,
+      p_nom_clinique: document.getElementById('nomClinique').value || null,
+      p_date_maj: document.getElementById('dateMAJ').value || null,
+      p_categories: categories
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+}
+
+function renameCat(catId, val) {
+  const c = categories.find(x => x.id === catId);
+  if (!c) return;
+  c.name = val;
+  updateStats();
+  scheduleSave();
+}
 
 // ===================== HELPERS =====================
 function stockStatus(item) {
@@ -870,7 +1012,7 @@ function buildCatSection(cat) {
   section.innerHTML = `
     <div class="cat-header" onclick="toggleCat(this)">
       <span class="cat-toggle">▼</span>
-      <input class="cat-name-input" value="${cat.name}" onclick="event.stopPropagation()" onchange="cat.name=this.value;updateStats()">
+      <input class="cat-name-input" value="${cat.name}" onclick="event.stopPropagation()" onchange="renameCat('${cat.id}',this.value)">
       ${badgeHtml}
       <div class="no-print" style="display:flex;gap:6px;" onclick="event.stopPropagation()">
         <button class="cat-btn" onclick="addItem('${cat.id}')">+ Article</button>
@@ -1038,6 +1180,7 @@ function updateField(catId, itemId, field, value) {
   if (!item) return;
   item[field] = value;
   updateStats();
+  scheduleSave();
 }
 
 function addCategory() {
@@ -1047,6 +1190,7 @@ function addCategory() {
     id, name: 'Nouvelle catégorie', color: colors[idCounter % colors.length], items: []
   });
   renderAll();
+  scheduleSave();
   setTimeout(() => {
     const inp = document.querySelector('#cat_'+id+' .cat-name-input');
     if (inp) { inp.focus(); inp.select(); }
@@ -1057,6 +1201,7 @@ function deleteCat(catId) {
   if (!confirm('Supprimer cette catégorie et tous ses articles?')) return;
   categories = categories.filter(c => c.id !== catId);
   renderAll();
+  scheduleSave();
 }
 
 function addItem(catId) {
@@ -1066,6 +1211,7 @@ function addItem(catId) {
   const num = cat.name.substring(0,3).toUpperCase() + '-' + String(cat.items.length + 1).padStart(3,'0');
   cat.items.push({ id, num, name:'', supplier:'', store:'', price:'', qtyBought:'1', qtyMin:'1', qtyStock:'0', lastBuy:'', expiry:'', notes:'' });
   renderAll();
+  scheduleSave();
   setTimeout(() => {
     const row = document.getElementById('row_'+id);
     if (row) {
@@ -1081,6 +1227,7 @@ function deleteItem(catId, itemId) {
   if (!cat) return;
   cat.items = cat.items.filter(i => i.id !== itemId);
   renderAll();
+  scheduleSave();
 }
 
 function toggleCat(header) {
@@ -1104,8 +1251,7 @@ function showTab(n, btn) {
 }
 
 // Init
-document.getElementById('dateMAJ').valueAsDate = new Date();
-renderAll();
+initInventaire();
 </script>
 
 
