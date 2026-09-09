@@ -1,375 +1,97 @@
-<!DOCTYPE html>
-<!-- saved from url=(0060)file:///C:/Users/info/Downloads/liste-priorite-patients.html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liste de priorité — Patients en attente | Gestion Mel</title>
-<style>
-  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
-  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
-  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
-  .container{max-width:1100px;margin:22px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
-  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:18px 32px;}
-  .doc-header h1{font-size:1.25rem;font-weight:700;margin-bottom:3px;}
-  .doc-header p{font-size:.82rem;opacity:.7;}
-  /* TOP CONTROLS */
-  .top-controls{padding:12px 32px;background:var(--light);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;}
-  .tc-left{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
-  .ci{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;color:var(--text);background:white;}
-  .ci:focus{outline:none;border-color:var(--accent);}
-  .filter-btn{padding:5px 13px;border-radius:20px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;transition:all .15s;color:#5a6a80;}
-  .filter-btn:hover{border-color:var(--accent);color:var(--blue);}
-  .filter-btn.f-active{background:var(--blue);border-color:var(--blue);color:white;}
-  .filter-btn.f-urg.f-active{background:var(--red);border-color:var(--red);}
-  .filter-btn.f-imp.f-active{background:var(--orange);border-color:var(--orange);}
-  .filter-btn.f-rout.f-active{background:var(--green);border-color:var(--green);}
-  /* STATS */
-  .stats-bar{padding:8px 32px;background:white;border-bottom:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;}
-  .stat-chip{display:flex;align-items:center;gap:6px;font-size:.76rem;}
-  .stat-dot{width:9px;height:9px;border-radius:50%;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .stat-num{font-weight:700;color:var(--text);}
-  /* ADD FORM */
-  .add-form{padding:14px 32px;background:#f8fbff;border-bottom:2px solid var(--border);}
-  .form-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-  .form-title::before{content:'➕';}
-  .form-grid{display:flex;flex-wrap:wrap;gap:8px;align-items:end;}
-  .form-grid>.fg{flex:1 1 150px;min-width:120px;}
-  .form-grid>.fg-wide{flex:2.2 1 240px;min-width:200px;}
-  .form-grid>.fg-narrow{flex:0.7 1 110px;min-width:100px;}
-  .form-grid>.rv-toggle{flex:1 1 170px;min-width:150px;}
-  .row-break{flex-basis:100%;height:0;}
-  .fg{display:flex;flex-direction:column;gap:3px;}
-  .fg label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
-  .fg input,.fg select{border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
-  .fg input:focus,.fg select:focus{outline:none;border-color:var(--accent);}
-  .btn-ajouter{padding:8px 16px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex:0 0 auto;}
-  .btn-ajouter:hover{background:#155a9e;}
-  .rv-toggle{display:flex;flex-direction:column;gap:4px;}
-  .rv-toggle label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
-  .rv-toggle-btns{display:flex;gap:4px;}
-  .rv-tb{padding:6px 9px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.76rem;font-weight:600;cursor:pointer;color:#5a6a80;transition:all .12s;white-space:nowrap;}
-  .rv-tb.sel{background:var(--blue);border-color:var(--blue);color:white;}
-  /* TABLE */
-  .table-wrap{overflow-x:auto;padding:0 32px 16px;}
-  .patient-table{width:100%;border-collapse:collapse;font-size:.81rem;margin-top:12px;}
-  .patient-table th{background:var(--dark);color:white;padding:8px 10px;text-align:left;font-size:.71rem;font-weight:600;white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .patient-table th.th-c{text-align:center;}
-  .patient-table td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:middle;}
-  .patient-table tr:nth-child(even) td{background:#fafbfc;}
-  .patient-table tr:hover td{background:var(--light);}
-  /* URGENCY */
-  .urg-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:10px;font-size:.72rem;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact;white-space:nowrap;}
-  .urg-1{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.2);}
-  .urg-2{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.2);}
-  .urg-3{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.2);}
-  .urg-4{background:#f3e8ff;color:var(--purple);border:1px solid rgba(142,68,173,.2);}
-  /* RANK */
-  .rank-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .rank-1{background:var(--red);}
-  .rank-2{background:var(--orange);}
-  .rank-3{background:var(--green);}
-  .rank-other{background:#8a9ab0;}
-  /* RV STATUS */
-  .rv-status{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:8px;font-size:.73rem;font-weight:600;}
-  .rv-fixed{background:#f0fdf4;color:var(--green);}
-  .rv-unfixed{background:#fff8e1;color:var(--orange);}
-  .rv-past{background:#fef2f2;color:var(--red);}
-  /* BUTTONS */
-  .btn-remove{width:24px;height:24px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;}
-  .btn-remove:hover{background:#fef2f2;border-color:var(--red);}
-  .btn-note{width:24px;height:24px;border-radius:5px;border:1.5px solid var(--border);background:white;color:var(--blue);cursor:pointer;font-size:.8rem;display:inline-flex;align-items:center;justify-content:center;transition:all .12s;}
-  .btn-note:hover{background:var(--light);border-color:var(--blue);}
-  /* EMPTY */
-  .empty-state{text-align:center;padding:40px;color:#8a9ab0;}
-  .empty-state .es-icon{font-size:2.5rem;margin-bottom:10px;}
-  .empty-state .es-msg{font-size:.88rem;}
-  /* AUTO REMOVED NOTICE */
-  .notice{margin:10px 32px 0;background:#fff8e1;border-left:4px solid var(--orange);border-radius:0 6px 6px 0;padding:9px 14px;font-size:.8rem;color:#7a4400;}
-  .actions{padding:12px 32px;background:var(--light);display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);}
-  .btn{padding:7px 16px;border-radius:7px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
-  .btn-secondary{background:white;color:#5a6a80;border:1.5px solid var(--border);}
-  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
-  .row-removed{opacity:.5;background:#fafafa!important;}
-  @media print{
-    body{background:white;}
-    .page-header,.top-controls,.add-form,.actions,.btn-remove,.btn-note,.filter-btn{display:none!important;}
-    .container{box-shadow:none;margin:0;border-radius:0;}
-    .table-wrap{padding:0 12px;}
-    .patient-table th,.urg-badge,.rank-num{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  }
-  @media(max-width:900px){
-    .form-grid{grid-template-columns:1fr 1fr 1fr;}.table-wrap{padding:0 12px 12px;}
-    .top-controls{padding:10px 14px;}.stats-bar{padding:7px 14px;}.add-form{padding:12px 14px;}
-  }
-  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
-  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
-  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
-  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
-  @media print{ .sync-status{display:none!important;} }
-</style>
-</head>
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Registre des plaintes patients | Gestion Mel</title>
+<style>:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;--green:#1a9e5a;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}.container{max-width:1100px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.75;}.section{padding:18px 36px;border-bottom:1px solid var(--border);}.section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}.field{display:flex;flex-direction:column;gap:4px;}label{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}input[type=text]{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}input:focus{outline:none;border-color:var(--accent);background:white;}.registre-table{width:100%;border-collapse:collapse;font-size:.82rem;}.registre-table th{background:var(--dark);color:white;padding:9px 8px;font-size:.74rem;text-align:left;}.registre-table td{padding:7px 6px;border-bottom:1px solid var(--border);vertical-align:top;}.registre-table tr:nth-child(even) td{background:var(--light);}.registre-table td input[type=text]{border:none;background:transparent;width:100%;font-size:.81rem;font-family:inherit;padding:2px;}.registre-table td input:focus{outline:none;background:#fffde7;}.registre-table td select{border:none;background:transparent;font-size:.8rem;font-family:inherit;width:100%;}.statut-r{color:var(--orange);font-weight:700;}.statut-v{color:var(--green);font-weight:700;}.statut-b{color:var(--blue);font-weight:700;}.add-row-btn{background:none;border:2px dashed var(--accent);border-radius:6px;padding:8px;width:100%;color:var(--blue);font-weight:700;cursor:pointer;font-size:.83rem;margin-top:8px;}.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}.stat-card{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px;text-align:center;}.stat-card .num{font-size:2rem;font-weight:700;color:var(--blue);}.stat-card .lbl{font-size:.75rem;color:#888;margin-top:4px;}.btn{padding:11px 28px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;}.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;}.footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}@media print{body{background:white;}.page-header,.actions,.add-row-btn{display:none;}.container{box-shadow:none;margin:0;border-radius:0;}.registre-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+.sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+.sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+.sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+.sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+@media print{ .sync-status{display:none!important;} }
+</style></head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Gestion des patients</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Service à la clientèle</div></div>
 <div class="container">
-  <div class="doc-header"><h1>Liste de priorité d'attente — Patients</h1><p>Classement automatique par niveau d'urgence • Retrait automatique si la date de RV est passée</p></div>
-
-  <div class="top-controls">
-    <div class="tc-left">
-      <input class="ci" type="text" placeholder="🔍 Rechercher un patient..." id="searchInput" oninput="renderTable()" style="min-width:220px;">
-      <button class="filter-btn f-active" onclick="setFilter(&#39;all&#39;,this)">Tous</button>
-      <button class="filter-btn f-urg" onclick="setFilter(&#39;1&#39;,this)">🔴 Urgent</button>
-      <button class="filter-btn f-imp" onclick="setFilter(&#39;2&#39;,this)">🟠 Important</button>
-      <button class="filter-btn f-rout" onclick="setFilter(&#39;3&#39;,this)">🟢 Routine</button>
-      <button class="filter-btn" onclick="setFilter(&#39;4&#39;,this)" style="color:var(--purple);">🔵 Rappel</button>
-    </div>
-    <div style="display:flex;gap:7px;">
-      <button class="btn btn-secondary" onclick="autoRemoveExpired()" style="font-size:.76rem;">🗑️ Retirer RV passés</button>
-      <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+  <div class="doc-header"><h1>Registre des plaintes et insatisfactions — Patients</h1><p>Outil de suivi de direction — Document confidentiel</p></div>
+  <div class="section">
+    <div class="section-title">Informations de la clinique</div>
+    <div class="grid">
+      <div class="field"><label>Nom de la clinique</label><input type="text" id="rClinique" oninput="scheduleSave()" placeholder="Clinique dentaire ..."></div>
+      <div class="field"><label>Responsable du registre</label><input type="text" id="rResponsable" oninput="scheduleSave()"></div>
+      <div class="field"><label>Année</label><input type="text" id="yr_reg" oninput="scheduleSave()"></div>
     </div>
   </div>
-
-  <div class="stats-bar" id="statsBar"></div>
-
-  <div id="autoRemovedNotice" style="display:none;" class="notice">⏰ <strong id="removedCount">0</strong> patient(s) retiré(s) automatiquement car leur date de rendez-vous est passée.</div>
-
-  <!-- ADD FORM -->
-  <div class="add-form">
-    <div class="form-title">Ajouter un patient à la liste d'attente</div>
-    <div class="form-grid">
-      <div class="fg fg-wide"><label>Nom du patient</label><input type="text" id="f_nom" placeholder="Nom, Prénom"></div>
-      <div class="fg fg-narrow"><label>No dossier</label><input type="text" id="f_dossier" placeholder="00000"></div>
-      <div class="fg fg-narrow"><label>Téléphone</label><input type="tel" id="f_tel" placeholder="418-000-0000"></div>
-      <div class="row-break"></div>
-      <div class="fg fg-wide"><label>Traitement à faire</label><input type="text" id="f_traitement" placeholder="ex: Extraction #36, Couronne..."></div>
-      <div class="fg"><label>Durée RV</label>
-        <select id="f_duree">
-          <option value="30">30 min</option>
-          <option value="45">45 min</option>
-          <option value="60" selected="">60 min</option>
-          <option value="75">75 min</option>
-          <option value="90">90 min</option>
-          <option value="120">2 h</option>
-        </select>
-      </div>
-      <div class="fg">
-        <label>Niveau d'urgence</label>
-        <select id="f_urgence">
-          <option value="1">🔴 Urgent</option>
-          <option value="2" selected="">🟠 Important</option>
-          <option value="3">🟢 Routine</option>
-          <option value="4">🔵 Rappel</option>
-        </select>
-      </div>
-      <div class="rv-toggle">
-        <label>Date de RV</label>
-        <div class="rv-toggle-btns">
-          <button class="rv-tb sel" id="rvNonFixeBtn" onclick="toggleRvMode('nonfixe')">RV non fixé</button>
-          <button class="rv-tb" id="rvFixeBtn" onclick="toggleRvMode('fixe')">Date fixée</button>
-        </div>
-        <input type="date" id="f_dateRV" style="display:none;margin-top:4px;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;">
-      </div>
-      <button class="btn-ajouter" onclick="addPatient()">+ Ajouter</button>
+  <div class="section">
+    <div class="section-title">Tableau de bord — Statistiques</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num" id="total">0</div><div class="lbl">Total des plaintes</div></div>
+      <div class="stat-card"><div class="num" id="en_cours" style="color:var(--orange)">0</div><div class="lbl">En traitement</div></div>
+      <div class="stat-card"><div class="num" id="resolues" style="color:var(--green)">0</div><div class="lbl">Résolues</div></div>
+      <div class="stat-card"><div class="num" id="fermees" style="color:#888">0</div><div class="lbl">Fermées</div></div>
     </div>
   </div>
-
-  <!-- TABLE -->
-  <div class="table-wrap">
-    <table class="patient-table" id="patientTable">
-      <thead><tr>
-        <th class="th-c" style="width:40px;">#</th>
-        <th>Nom du patient</th>
-        <th class="th-c">No dossier</th>
-        <th>Traitement</th>
-        <th class="th-c">Durée RV</th>
-        <th>Niveau d'urgence</th>
-        <th>Date de RV</th>
-        <th>Téléphone</th>
-        <th>Notes</th>
-        <th class="th-c" style="width:50px;">Ajouté le</th>
-        <th class="th-c no-print" style="width:55px;">Actions</th>
-      </tr></thead>
-      <tbody id="patientTbody"></tbody>
+  <div class="section">
+    <div class="section-title">Registre de suivi</div>
+    <table class="registre-table">
+      <thead><tr><th>#</th><th>Date réception</th><th>Nom patient</th><th>Nature de la plainte</th><th>Intervenant(e) impliqué(e)</th><th>Responsable du suivi</th><th>Actions prises</th><th>Date réponse</th><th>Statut</th></tr></thead>
+      <tbody id="reg-tbody"></tbody>
     </table>
-    <div class="empty-state" id="emptyState" style="display:none;">
-      <div class="es-icon">📋</div>
-      <div class="es-msg">Aucun patient dans la liste d'attente pour le moment.</div>
-    </div>
+    <button class="add-row-btn" onclick="ajouterLigne()">+ Ajouter une plainte</button>
   </div>
-
-  <div class="actions">
-    <button class="btn btn-secondary" onclick="if(confirm('Vider toute la liste?')) { patients=[]; renderTable(); scheduleSave(); }">🗑️ Vider la liste</button>
-    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer la liste</button>
-  </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+  <div class="actions"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button></div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | Registre de direction — Outil de suivi de la qualité</div>
 </div>
-
 <script>
-let patients = [];
-let currentFilter = 'all';
+let plaintes = [];
 let idCounter = 1;
-let rvMode = 'nonfixe';
 
-function toggleRvMode(mode) {
-  rvMode = mode;
-  document.getElementById('rvNonFixeBtn').classList.toggle('sel', mode==='nonfixe');
-  document.getElementById('rvFixeBtn').classList.toggle('sel', mode==='fixe');
-  document.getElementById('f_dateRV').style.display = mode==='fixe' ? 'block' : 'none';
+function newPlainte(){
+  return { id: idCounter++, date:'', nom:'', nature:'', intervenant:'', responsable:'', actions:'', dateReponse:'', statut:'Reçue' };
 }
 
-function addPatient() {
-  const nom = document.getElementById('f_nom').value.trim();
-  if (!nom) { document.getElementById('f_nom').focus(); return; }
-  const dateRV = rvMode === 'fixe' ? document.getElementById('f_dateRV').value : '';
-  const p = {
-    id: idCounter++,
-    nom,
-    dossier: document.getElementById('f_dossier').value || '—',
-    traitement: document.getElementById('f_traitement').value || '—',
-    duree: parseInt(document.getElementById('f_duree').value),
-    urgence: parseInt(document.getElementById('f_urgence').value),
-    dateRV,
-    tel: document.getElementById('f_tel').value || '—',
-    notes: '',
-    added: new Date().toLocaleDateString('fr-CA'),
-  };
-  patients.push(p);
-  // Clear form
-  ['f_nom','f_dossier','f_traitement','f_tel'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f_dateRV').value = '';
-  toggleRvMode('nonfixe');
+function ajouterLigne(){
+  plaintes.push(newPlainte());
   renderTable();
   scheduleSave();
 }
 
-function removePatient(id) {
-  patients = patients.filter(p => p.id !== id);
-  renderTable();
+function updateField(id, field, value){
+  const p = plaintes.find(x=>x.id===id);
+  if (p) p[field] = value;
   scheduleSave();
 }
 
-function editNotes(id) {
-  const p = patients.find(x => x.id === id);
-  if (!p) return;
-  const note = prompt('Notes pour ' + p.nom + ' :', p.notes || '');
-  if (note !== null) { p.notes = note; renderTable(); scheduleSave(); }
+function renderTable(){
+  const tbody = document.getElementById('reg-tbody');
+  tbody.innerHTML = plaintes.map((p, idx) => `<tr>
+    <td style="text-align:center;font-weight:700;color:#aaa;">${idx+1}</td>
+    <td><input type="text" placeholder="JJ/MM/AA" value="${p.date}" oninput="updateField(${p.id},'date',this.value)"></td>
+    <td><input type="text" value="${p.nom}" oninput="updateField(${p.id},'nom',this.value)"></td>
+    <td><input type="text" value="${p.nature}" oninput="updateField(${p.id},'nature',this.value)"></td>
+    <td><input type="text" value="${p.intervenant}" oninput="updateField(${p.id},'intervenant',this.value)"></td>
+    <td><input type="text" value="${p.responsable}" oninput="updateField(${p.id},'responsable',this.value)"></td>
+    <td><input type="text" value="${p.actions}" oninput="updateField(${p.id},'actions',this.value)"></td>
+    <td><input type="text" value="${p.dateReponse}" oninput="updateField(${p.id},'dateReponse',this.value)"></td>
+    <td><select onchange="updateField(${p.id},'statut',this.value);majStats()">
+      <option${p.statut==='Reçue'?' selected':''}>Reçue</option>
+      <option${p.statut==='En traitement'?' selected':''}>En traitement</option>
+      <option${p.statut==='Résolue'?' selected':''}>Résolue</option>
+      <option${p.statut==='Fermée'?' selected':''}>Fermée</option>
+    </select></td>
+  </tr>`).join('');
+  majStats();
 }
 
-function autoRemoveExpired() {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const before = patients.length;
-  patients = patients.filter(p => {
-    if (!p.dateRV) return true;
-    const rv = new Date(p.dateRV + 'T00:00:00');
-    return rv >= today;
+function majStats(){
+  let enCours=0, resolues=0, fermees=0;
+  plaintes.forEach(p => {
+    if (p.statut === 'En traitement') enCours++;
+    if (p.statut === 'Résolue') resolues++;
+    if (p.statut === 'Fermée') fermees++;
   });
-  const removed = before - patients.length;
-  if (removed > 0) {
-    document.getElementById('autoRemovedNotice').style.display = 'block';
-    document.getElementById('removedCount').textContent = removed;
-    scheduleSave();
-  }
-  renderTable();
-}
-
-function setFilter(f, btn) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('f-active'));
-  btn.classList.add('f-active');
-  renderTable();
-}
-
-function urgLabel(u) {
-  const map = {1:'🔴 Urgent', 2:'🟠 Important', 3:'🟢 Routine', 4:'🔵 Rappel'};
-  return map[u] || '—';
-}
-function urgClass(u) {
-  return ['','urg-1','urg-2','urg-3','urg-4'][u] || '';
-}
-function rankClass(rank) {
-  if (rank === 1) return 'rank-1';
-  if (rank === 2) return 'rank-2';
-  if (rank === 3) return 'rank-3';
-  return 'rank-other';
-}
-function rvStatusHtml(p) {
-  if (!p.dateRV) return '<span class="rv-status rv-unfixed">RV non fixé</span>';
-  const today = new Date(); today.setHours(0,0,0,0);
-  const rv = new Date(p.dateRV + 'T00:00:00');
-  const cls = rv < today ? 'rv-past' : 'rv-fixed';
-  const icon = rv < today ? '⚠️ ' : '📅 ';
-  return `<span class="rv-status ${cls}">${icon}${rv.toLocaleDateString('fr-CA')}</span>`;
-}
-function dureeLabel(min) {
-  return min >= 60 ? (min/60 === 1 ? '1 h' : min/60 + ' h') : min + ' min';
-}
-
-function renderTable() {
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  const tbody = document.getElementById('patientTbody');
-  const empty = document.getElementById('emptyState');
-
-  // Sort: urgence asc, then dateRV asc (no date last), then added
-  const sorted = [...patients].sort((a,b) => {
-    if (a.urgence !== b.urgence) return a.urgence - b.urgence;
-    if (a.dateRV && b.dateRV) return new Date(a.dateRV) - new Date(b.dateRV);
-    if (a.dateRV) return -1;
-    if (b.dateRV) return 1;
-    return 0;
-  });
-
-  // Filter
-  const filtered = sorted.filter(p => {
-    const matchFilter = currentFilter === 'all' || p.urgence == currentFilter;
-    const matchSearch = !search || p.nom.toLowerCase().includes(search) || p.dossier.toLowerCase().includes(search) || p.traitement.toLowerCase().includes(search);
-    return matchFilter && matchSearch;
-  });
-
-  tbody.innerHTML = '';
-  if (filtered.length === 0) { empty.style.display = 'block'; } else { empty.style.display = 'none'; }
-
-  filtered.forEach((p, idx) => {
-    const rank = idx + 1;
-    const rankC = rankClass(rank);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="text-align:center;"><div class="rank-num ${rankC}">${rank}</div></td>
-      <td style="font-weight:700;">${p.nom}</td>
-      <td style="text-align:center;font-family:monospace;font-size:.8rem;">${p.dossier}</td>
-      <td>${p.traitement}</td>
-      <td style="text-align:center;font-size:.8rem;">${dureeLabel(p.duree)}</td>
-      <td><span class="urg-badge ${urgClass(p.urgence)}">${urgLabel(p.urgence)}</span></td>
-      <td>${rvStatusHtml(p)}</td>
-      <td style="font-size:.8rem;">${p.tel}</td>
-      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${p.notes}">${p.notes || '—'}</td>
-      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">${p.added}</td>
-      <td class="no-print" style="text-align:center;">
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button class="btn-note" onclick="editNotes(${p.id})" title="Modifier notes">📝</button>
-          <button class="btn-remove" onclick="removePatient(${p.id})" title="Retirer de la liste">×</button>
-        </div>
-      </td>`;
-    tbody.appendChild(tr);
-  });
-
-  updateStats();
-}
-
-function updateStats() {
-  const counts = {1:0, 2:0, 3:0, 4:0};
-  patients.forEach(p => counts[p.urgence]++);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const pastRV = patients.filter(p => p.dateRV && new Date(p.dateRV+'T00:00:00') < today).length;
-  document.getElementById('statsBar').innerHTML = `
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--blue)"></div><span class="stat-num">${patients.length}</span>&nbsp;patients en liste</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--red)"></div><span class="stat-num">${counts[1]}</span>&nbsp;urgent(s)</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--orange)"></div><span class="stat-num">${counts[2]}</span>&nbsp;important(s)</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--green)"></div><span class="stat-num">${counts[3]}</span>&nbsp;routine</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--purple)"></div><span class="stat-num">${counts[4]}</span>&nbsp;rappel(s)</div>
-    ${pastRV > 0 ? `<div class="stat-chip"><div class="stat-dot" style="background:var(--red)"></div><span class="stat-num" style="color:var(--red);">${pastRV}</span>&nbsp;<span style="color:var(--red);">RV passé(s) à retirer</span></div>` : ''}`;
+  document.getElementById('total').textContent = plaintes.length;
+  document.getElementById('en_cours').textContent = enCours;
+  document.getElementById('resolues').textContent = resolues;
+  document.getElementById('fermees').textContent = fermees;
 }
 
 // ===================== SUPABASE =====================
@@ -409,9 +131,12 @@ function scheduleSave() {
 
 async function doSave() {
   try {
-    const { error } = await sb.rpc('save_liste_prioritaire', {
+    const { error } = await sb.rpc('save_registre_plaintes', {
       p_owner_token: ownerToken,
-      p_patients: patients
+      p_nom_clinique: document.getElementById('rClinique').value || null,
+      p_responsable: document.getElementById('rResponsable').value || null,
+      p_annee: document.getElementById('yr_reg').value || null,
+      p_plaintes: plaintes
     });
     if (error) throw error;
     setStatus('ok');
@@ -421,17 +146,21 @@ async function doSave() {
   }
 }
 
-async function initListe() {
+async function initRegistre() {
   ownerToken = getOwnerToken();
   try {
-    const { data, error } = await sb.rpc('get_liste_prioritaire', { p_owner_token: ownerToken });
+    const { data, error } = await sb.rpc('get_registre_plaintes', { p_owner_token: ownerToken });
     if (error) throw error;
     if (data && data.length > 0) {
-      patients = data[0].patients || [];
-      idCounter = patients.reduce((m,p)=>Math.max(m,p.id+1), 1);
+      const row = data[0];
+      plaintes = row.plaintes && row.plaintes.length ? row.plaintes : [];
+      if (row.nom_clinique) document.getElementById('rClinique').value = row.nom_clinique;
+      if (row.responsable) document.getElementById('rResponsable').value = row.responsable;
+      if (row.annee) document.getElementById('yr_reg').value = row.annee;
+      idCounter = plaintes.reduce((m,p)=>Math.max(m,p.id+1), 1);
     } else {
-      await sb.rpc('create_liste_prioritaire', { p_owner_token: ownerToken });
-      patients = [];
+      await sb.rpc('create_registre_plaintes', { p_owner_token: ownerToken });
+      plaintes = [newPlainte(), newPlainte(), newPlainte()];
     }
     setStatus('ok');
   } catch (e) {
@@ -439,12 +168,10 @@ async function initListe() {
     setStatus('err');
   }
   isLoading = false;
-  autoRemoveExpired();
+  if (!document.getElementById('yr_reg').value) document.getElementById('yr_reg').value = new Date().getFullYear();
   renderTable();
 }
 
-initListe();
+initRegistre();
 </script>
-
-
 </body></html>
