@@ -5,13 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Avertissement disciplinaire — Gestion Mel</title>
 <style>
-  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --orange: #e67e22; --red: #c0392b; }
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --orange: #e67e22; --red: #c0392b; --green:#1a9e5a; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
   .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
   .page-header .brand { font-size: 1.5rem; font-weight: 700; }
   .page-header .brand span { color: var(--accent); }
   .container { max-width: 780px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-right:10px;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-niveau{font-size:.75rem;font-weight:700;padding:3px 9px;border-radius:10px;}
+  .sel-date{font-size:.78rem;color:#8a9ab0;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:12px 36px 0;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
   .niveau-selector { padding: 24px 36px; background: var(--light); border-bottom: 1px solid var(--border); }
   .niveau-selector h3 { font-size: 0.85rem; font-weight: 700; color: #5a6a80; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
   .niveau-btns { display: flex; gap: 12px; }
@@ -46,20 +64,34 @@
   .btn-primary { background: var(--blue); color: white; }
   .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
   .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
-  @media print { body { background: white; } .page-header, .actions, .niveau-selector { display: none; } .container { box-shadow: none; margin: 0; } }
+  @media print { body { background: white; } .page-header, .actions, .niveau-selector, .sync-status, .selector-screen, .btn-retour { display: none; } .container { box-shadow: none; margin: 0; } }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div>Clinique dentaire — Gestion RH</div>
 </div>
-<div class="container">
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Avertissements disciplinaires</h1>
+    <p>Choisissez un avertissement déjà créé, ou créez-en un nouveau. Le regroupement par employé facilite le suivi en cas de dossier CNESST.</p>
+    <button class="btn-new" onclick="creerNouveau()">+ Nouvel avertissement</button>
+    <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
+    <div class="selector-list" id="selectorList"><div class="selector-empty">Chargement...</div></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="niveau-selector">
     <h3>Sélectionner le niveau d'avertissement</h3>
     <div class="niveau-btns">
-      <button class="niveau-btn n1 active" onclick="setNiveau(1)">⚠️ 1er avertissement</button>
-      <button class="niveau-btn n2" onclick="setNiveau(2)">🚨 2e avertissement</button>
+      <button class="niveau-btn n1 active" id="btnN1" onclick="setNiveau(1)">⚠️ 1er avertissement</button>
+      <button class="niveau-btn n2" id="btnN2" onclick="setNiveau(2)">🚨 2e avertissement</button>
     </div>
   </div>
 
@@ -72,30 +104,30 @@
   <div class="section">
     <div class="section-title">Identification</div>
     <div class="grid">
-      <div class="field"><label>Nom de l'employé(e)</label><input type="text" placeholder="Nom et prénom"></div>
-      <div class="field"><label>Poste occupé</label><input type="text" placeholder="Titre du poste"></div>
-      <div class="field"><label>Date de l'incident / manquement</label><input type="date"></div>
-      <div class="field"><label>Date de l'avertissement</label><input type="date"></div>
+      <div class="field"><label>Nom de l'employé(e)</label><input type="text" id="f_nomEmploye" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Poste occupé</label><input type="text" id="f_poste" oninput="scheduleSave()" placeholder="Titre du poste"></div>
+      <div class="field"><label>Date de l'incident / manquement</label><input type="date" id="f_dateIncident" onchange="scheduleSave()"></div>
+      <div class="field"><label>Date de l'avertissement</label><input type="date" id="f_dateAvert" onchange="scheduleSave()"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Motif de l'avertissement</div>
     <div class="checkbox-group" style="margin-bottom: 14px;">
-      <label><input type="checkbox"> Retards répétés ou absences non justifiées</label>
-      <label><input type="checkbox"> Non-respect du code de conduite ou des politiques internes</label>
-      <label><input type="checkbox"> Comportement inapproprié envers un(e) collègue ou patient(e)</label>
-      <label><input type="checkbox"> Négligence dans l'exécution des tâches</label>
-      <label><input type="checkbox"> Non-respect des protocoles de santé et sécurité</label>
-      <label><input type="checkbox"> Utilisation inappropriée des équipements ou ressources</label>
-      <label><input type="checkbox"> Autre (préciser ci-dessous)</label>
+      <label><input type="checkbox" id="m_retards" onchange="scheduleSave()"> Retards répétés ou absences non justifiées</label>
+      <label><input type="checkbox" id="m_conduite" onchange="scheduleSave()"> Non-respect du code de conduite ou des politiques internes</label>
+      <label><input type="checkbox" id="m_comportement" onchange="scheduleSave()"> Comportement inapproprié envers un(e) collègue ou patient(e)</label>
+      <label><input type="checkbox" id="m_negligence" onchange="scheduleSave()"> Négligence dans l'exécution des tâches</label>
+      <label><input type="checkbox" id="m_sst" onchange="scheduleSave()"> Non-respect des protocoles de santé et sécurité</label>
+      <label><input type="checkbox" id="m_equipement" onchange="scheduleSave()"> Utilisation inappropriée des équipements ou ressources</label>
+      <label><input type="checkbox" id="m_autre" onchange="scheduleSave()"> Autre (préciser ci-dessous)</label>
     </div>
-    <div class="field"><label>Description détaillée des faits</label><textarea placeholder="Décrire avec précision les faits reprochés : date, heure, lieu, témoins, comportement observé..."></textarea></div>
+    <div class="field"><label>Description détaillée des faits</label><textarea id="f_description" oninput="scheduleSave()" placeholder="Décrire avec précision les faits reprochés : date, heure, lieu, témoins, comportement observé..."></textarea></div>
   </div>
 
   <div class="section">
     <div class="section-title">Mesures correctives demandées</div>
-    <div class="field"><textarea placeholder="Indiquer clairement les comportements attendus, les changements requis et le délai pour les mettre en œuvre..." style="min-height: 80px;"></textarea></div>
+    <div class="field"><textarea id="f_mesures" oninput="scheduleSave()" placeholder="Indiquer clairement les comportements attendus, les changements requis et le délai pour les mettre en œuvre..." style="min-height: 80px;"></textarea></div>
     <div class="warning-box n1" id="warning-box">
       ⚠️ <strong>1er avertissement :</strong> Cet avertissement est émis à titre de mise en garde formelle. Si la situation ne se corrige pas, un deuxième avertissement ou d'autres mesures disciplinaires pourront être envisagés, pouvant mener jusqu'au congédiement.
     </div>
@@ -103,22 +135,22 @@
 
   <div class="section">
     <div class="section-title">Commentaires de l'employé(e)</div>
-    <div class="field"><textarea placeholder="L'employé(e) peut inscrire ses commentaires, sa version des faits ou ses observations ici..."></textarea></div>
+    <div class="field"><textarea id="f_commentairesEmp" oninput="scheduleSave()" placeholder="L'employé(e) peut inscrire ses commentaires, sa version des faits ou ses observations ici..."></textarea></div>
     <div style="display:flex; align-items: center; gap: 8px; margin-top: 10px;">
-      <input type="checkbox" id="refuse-signer" style="width: 16px; height: 16px;">
-      <label for="refuse-signer" style="font-size: 0.85rem; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--text); cursor: pointer;">L'employé(e) refuse de signer ce document (sera noté au dossier)</label>
+      <input type="checkbox" id="f_refuseSigner" onchange="scheduleSave()" style="width: 16px; height: 16px;">
+      <label for="f_refuseSigner" style="font-size: 0.85rem; font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--text); cursor: pointer;">L'employé(e) refuse de signer ce document (sera noté au dossier)</label>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Signatures</div>
     <div class="grid">
-      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="Signature manuscrite"></div>
-      <div class="field"><label>Date</label><input type="date"></div>
-      <div class="field"><label>Nom du gestionnaire</label><input type="text" placeholder="Nom et prénom"></div>
-      <div class="field"><label>Signature du gestionnaire</label><input type="text" placeholder="Signature manuscrite"></div>
-      <div class="field"><label>Date</label><input type="date"></div>
-      <div class="field"><label>Témoin (si applicable)</label><input type="text" placeholder="Nom du témoin"></div>
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" id="f_sigEmp" oninput="scheduleSave()" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date" id="f_sigEmpDate" onchange="scheduleSave()"></div>
+      <div class="field"><label>Nom du gestionnaire</label><input type="text" id="f_gestNom" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Signature du gestionnaire</label><input type="text" id="f_gestSig" oninput="scheduleSave()" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date" id="f_gestDate" onchange="scheduleSave()"></div>
+      <div class="field"><label>Témoin (si applicable)</label><input type="text" id="f_temoin" oninput="scheduleSave()" placeholder="Nom du témoin"></div>
     </div>
   </div>
 
@@ -127,11 +159,16 @@
   </div>
   <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
 </div>
+
 <script>
+const FIELD_IDS = ['f_nomEmploye','f_poste','f_dateIncident','f_dateAvert','f_description','f_mesures','f_commentairesEmp','f_sigEmp','f_sigEmpDate','f_gestNom','f_gestSig','f_gestDate','f_temoin'];
+const CHECK_IDS = ['m_retards','m_conduite','m_comportement','m_negligence','m_sst','m_equipement','m_autre','f_refuseSigner'];
+let niveau = 1;
+
 function setNiveau(n) {
-  const btns = document.querySelectorAll('.niveau-btn');
-  btns.forEach(b => b.classList.remove('active'));
-  btns[n-1].classList.add('active');
+  niveau = n;
+  document.getElementById('btnN1').classList.toggle('active', n===1);
+  document.getElementById('btnN2').classList.toggle('active', n===2);
   const header = document.getElementById('doc-header');
   const title = document.getElementById('doc-title');
   const badge = document.getElementById('doc-badge');
@@ -149,7 +186,129 @@ function setNiveau(n) {
     wbox.className = 'warning-box n2';
     wbox.innerHTML = '🚨 <strong>2e avertissement — Avertissement final :</strong> Cet avertissement constitue un ultime avertissement formel. Tout manquement supplémentaire pourra entraîner une suspension ou un congédiement pour cause juste et suffisante, conformément à la Loi sur les normes du travail du Québec.';
   }
+  scheduleSave();
 }
+
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+
+async function afficherListe() {
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_avertissements', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucun avertissement pour le moment. Cliquez sur « + Nouvel avertissement » pour commencer.</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(row => {
+      const nom = row.nom_employe || '(Nom non précisé)';
+      const nv = row.niveau || 1;
+      const nvColor = nv === 2 ? '#fef2f2;color:#c0392b' : '#fff3e0;color:#e67e22';
+      return `<div class="selector-item" onclick="ouvrirAvert('${row.record_token}')">
+        <span class="sel-name">${nom}</span>
+        <span class="sel-niveau" style="background:${nvColor.split(';')[0]};color:${nvColor.split(';')[1].replace('color:','')}">Niveau ${nv}</span>
+        <span class="sel-date">${row.date_avert || ''}</span>
+      </div>`;
+    }).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+async function creerNouveau() {
+  try {
+    const { data, error } = await sb.rpc('create_avertissement', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirAvert(data);
+  } catch (e) { console.error(e); alert("Impossible de créer un nouvel avertissement pour le moment."); }
+}
+
+async function ouvrirAvert(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('avert', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+  try {
+    const { data, error } = await sb.rpc('get_avertissement', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      const d = row.details || {};
+      FIELD_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = d[id] || ''; });
+      CHECK_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).checked = !!d[id]; });
+      setNiveau(row.niveau || 1);
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('avert');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  recordToken = null;
+  afficherListe();
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  const details = {};
+  FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.value; });
+  CHECK_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.checked; });
+  try {
+    const { error } = await sb.rpc('save_avertissement', {
+      p_record_token: recordToken,
+      p_nom_employe: document.getElementById('f_nomEmploye').value || null,
+      p_niveau: niveau,
+      p_date_avert: document.getElementById('f_dateAvert').value || null,
+      p_details: details
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+
+async function initPage() {
+  ownerToken = getOwnerToken();
+  const params = new URLSearchParams(window.location.search);
+  const existing = params.get('avert');
+  if (existing) { await ouvrirAvert(existing); } else { await afficherListe(); }
+}
+initPage();
 </script>
 </body>
 </html>
