@@ -1,18 +1,35 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/info/Downloads/Fin-emploi-rh.html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fin d'emploi — Gestion Mel</title>
 <style>
-  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; }
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green:#1a9e5a; --orange:#e67e22; --red:#c0392b; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
   .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
   .page-header .brand { font-size: 1.5rem; font-weight: 700; }
   .page-header .brand span { color: var(--accent); }
   .container { max-width: 780px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
-  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-right:10px;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-date{font-size:.78rem;color:#8a9ab0;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:16px 36px 0;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  .doc-header { background: linear-gradient(135deg, #2c2c2c 0%, #4a4a4a 100%); color: white; padding: 28px 36px; }
   .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
   .doc-header p { font-size: 0.85rem; opacity: 0.75; }
   .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
@@ -37,15 +54,29 @@
   .btn-primary { background: var(--blue); color: white; }
   .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
   .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
-  @media print { body { background: white; } .page-header, .actions { display: none; } .container { box-shadow: none; margin: 0; } }
+  @media print { body { background: white; } .page-header, .actions, .sync-status, .selector-screen, .btn-retour { display: none; } .container { box-shadow: none; margin: 0; } }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div>Clinique dentaire — Gestion RH</div>
 </div>
-<div class="container">
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Documents de fin d'emploi</h1>
+    <p>Choisissez un document déjà créé, ou créez-en un nouveau pour un départ d'employé.</p>
+    <button class="btn-new" onclick="creerNouveau()">+ Nouveau document</button>
+    <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
+    <div class="selector-list" id="selectorList"><div class="selector-empty">Chargement...</div></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header">
     <h1>Document de fin d'emploi</h1>
     <p>À compléter lors de toute cessation d'emploi — conserver au dossier</p>
@@ -54,64 +85,64 @@
   <div class="section">
     <div class="section-title">Identification</div>
     <div class="grid">
-      <div class="field"><label>Nom de l'employé(e)</label><input type="text" placeholder="Nom et prénom"></div>
-      <div class="field"><label>Poste occupé</label><input type="text" placeholder="Titre du poste"></div>
-      <div class="field"><label>Date d'entrée en fonction</label><input type="date"></div>
-      <div class="field"><label>Date de fin d'emploi</label><input type="date"></div>
-      <div class="field"><label>Durée d'emploi totale</label><input type="text" placeholder="Ex. : 2 ans, 3 mois"></div>
-      <div class="field"><label>Dernier salaire</label><input type="text" placeholder="Ex. : 24,00 $/h"></div>
+      <div class="field"><label>Nom de l'employé(e)</label><input type="text" id="f_nomEmploye" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Poste occupé</label><input type="text" id="f_poste" oninput="scheduleSave()" placeholder="Titre du poste"></div>
+      <div class="field"><label>Date d'entrée en fonction</label><input type="date" id="f_dateEntree" onchange="scheduleSave()"></div>
+      <div class="field"><label>Date de fin d'emploi</label><input type="date" id="f_dateFin" onchange="scheduleSave()"></div>
+      <div class="field"><label>Durée d'emploi totale</label><input type="text" id="f_duree" oninput="scheduleSave()" placeholder="Ex. : 2 ans, 3 mois"></div>
+      <div class="field"><label>Dernier salaire</label><input type="text" id="f_salaire" oninput="scheduleSave()" placeholder="Ex. : 24,00 $/h"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Raison de la fin d'emploi</div>
-    <div class="radio-group">
-      <label><input type="radio" name="raison"> Démission volontaire</label>
-      <label><input type="radio" name="raison"> Congédiement pour cause</label>
-      <label><input type="radio" name="raison"> Mise à pied</label>
-      <label><input type="radio" name="raison"> Fin de contrat</label>
-      <label><input type="radio" name="raison"> Retraite</label>
-      <label><input type="radio" name="raison"> Autre</label>
+    <div class="radio-group" id="raisonGroup">
+      <label><input type="radio" name="raison" value="Démission volontaire" onchange="scheduleSave()"> Démission volontaire</label>
+      <label><input type="radio" name="raison" value="Congédiement pour cause" onchange="scheduleSave()"> Congédiement pour cause</label>
+      <label><input type="radio" name="raison" value="Mise à pied" onchange="scheduleSave()"> Mise à pied</label>
+      <label><input type="radio" name="raison" value="Fin de contrat" onchange="scheduleSave()"> Fin de contrat</label>
+      <label><input type="radio" name="raison" value="Retraite" onchange="scheduleSave()"> Retraite</label>
+      <label><input type="radio" name="raison" value="Autre" onchange="scheduleSave()"> Autre</label>
     </div>
-    <div class="field" style="margin-top: 14px;"><label>Précisions</label><textarea placeholder="Explication détaillée si nécessaire..."></textarea></div>
+    <div class="field" style="margin-top: 14px;"><label>Précisions</label><textarea id="f_precisions" oninput="scheduleSave()" placeholder="Explication détaillée si nécessaire..."></textarea></div>
   </div>
 
   <div class="section">
     <div class="section-title">Calcul des sommes dues</div>
     <div class="grid">
-      <div class="field"><label>Dernière journée travaillée</label><input type="date"></div>
-      <div class="field"><label>Jours de vacances accumulés non pris</label><input type="number" placeholder="Ex. : 5"></div>
-      <div class="field"><label>Valeur monétaire des vacances dues</label><input type="text" placeholder="Ex. : 960,00 $"></div>
-      <div class="field"><label>Indemnité de délai-congé (si applicable)</label><input type="text" placeholder="Ex. : 1 semaine de salaire"></div>
-      <div class="field full"><label>Autres sommes dues</label><textarea placeholder="Remboursements, bonus, etc."></textarea></div>
+      <div class="field"><label>Dernière journée travaillée</label><input type="date" id="f_derniereJournee" onchange="scheduleSave()"></div>
+      <div class="field"><label>Jours de vacances accumulés non pris</label><input type="number" id="f_joursVacances" oninput="scheduleSave()" placeholder="Ex. : 5"></div>
+      <div class="field"><label>Valeur monétaire des vacances dues</label><input type="text" id="f_valeurVacances" oninput="scheduleSave()" placeholder="Ex. : 960,00 $"></div>
+      <div class="field"><label>Indemnité de délai-congé (si applicable)</label><input type="text" id="f_indemnite" oninput="scheduleSave()" placeholder="Ex. : 1 semaine de salaire"></div>
+      <div class="field full"><label>Autres sommes dues</label><textarea id="f_autresSommes" oninput="scheduleSave()" placeholder="Remboursements, bonus, etc."></textarea></div>
     </div>
     <div class="info-box">ℹ️ Selon la <strong>Loi sur les normes du travail du Québec</strong>, l'employé(e) a droit à l'indemnité de vacances (minimum 4% ou 6% selon l'ancienneté) calculée sur l'ensemble de la rémunération brute incluant primes et avantages. Consultez un professionnel RH au besoin.</div>
   </div>
 
   <div class="section">
     <div class="section-title">Liste de vérification — Départ</div>
-    <div class="checklist-item"><input type="checkbox"><span>Clés, carte d'accès ou badge remis</span></div>
-    <div class="checklist-item"><input type="checkbox"><span>Équipement remis (tablette, téléphone, uniforme, etc.)</span></div>
-    <div class="checklist-item"><input type="checkbox"><span>Accès informatiques désactivés (logiciel dentaire, courriel, etc.)</span></div>
-    <div class="checklist-item"><input type="checkbox"><span>Dossiers et fichiers transférés / archivés</span></div>
-    <div class="checklist-item"><input type="checkbox"><span>Relevé d'emploi (RE) émis à Service Canada</span></div>
-    <div class="checklist-item"><input type="checkbox"><span>Dernier chèque de paie remis</span></div>
-    <div class="checklist-item"><input type="checkbox"><span>Entretien de départ complété</span></div>
-    <div class="checklist-item"><input type="checkbox"><span>Rappel de la clause de confidentialité (si applicable)</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_cles" onchange="scheduleSave()"><span>Clés, carte d'accès ou badge remis</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_equipement" onchange="scheduleSave()"><span>Équipement remis (tablette, téléphone, uniforme, etc.)</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_acces" onchange="scheduleSave()"><span>Accès informatiques désactivés (logiciel dentaire, courriel, etc.)</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_dossiers" onchange="scheduleSave()"><span>Dossiers et fichiers transférés / archivés</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_re" onchange="scheduleSave()"><span>Relevé d'emploi (RE) émis à Service Canada</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_cheque" onchange="scheduleSave()"><span>Dernier chèque de paie remis</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_entretien" onchange="scheduleSave()"><span>Entretien de départ complété</span></div>
+    <div class="checklist-item"><input type="checkbox" id="c_confidentialite" onchange="scheduleSave()"><span>Rappel de la clause de confidentialité (si applicable)</span></div>
   </div>
 
   <div class="section">
     <div class="section-title">Commentaires</div>
-    <div class="field"><textarea placeholder="Notes du gestionnaire, entente de départ, contexte particulier..."></textarea></div>
+    <div class="field"><textarea id="f_commentaires" oninput="scheduleSave()" placeholder="Notes du gestionnaire, entente de départ, contexte particulier..."></textarea></div>
   </div>
 
   <div class="section">
     <div class="section-title">Signatures</div>
     <div class="grid">
-      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="Signature manuscrite"></div>
-      <div class="field"><label>Date</label><input type="date"></div>
-      <div class="field"><label>Nom du gestionnaire</label><input type="text" placeholder="Nom et prénom"></div>
-      <div class="field"><label>Signature du gestionnaire</label><input type="text" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" id="f_sigEmp" oninput="scheduleSave()" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date" id="f_sigEmpDate" onchange="scheduleSave()"></div>
+      <div class="field"><label>Nom du gestionnaire</label><input type="text" id="f_gestNom" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Signature du gestionnaire</label><input type="text" id="f_gestSig" oninput="scheduleSave()" placeholder="Signature manuscrite"></div>
     </div>
   </div>
 
@@ -121,5 +152,130 @@
   <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
 </div>
 
+<script>
+const FIELD_IDS = ['f_nomEmploye','f_poste','f_dateEntree','f_dateFin','f_duree','f_salaire','f_precisions','f_derniereJournee','f_joursVacances','f_valeurVacances','f_indemnite','f_autresSommes','f_commentaires','f_sigEmp','f_sigEmpDate','f_gestNom','f_gestSig'];
+const CHECK_IDS = ['c_cles','c_equipement','c_acces','c_dossiers','c_re','c_cheque','c_entretien','c_confidentialite'];
 
-</body></html>
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+
+async function afficherListe() {
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_fins_emploi_doc', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucun document pour le moment. Cliquez sur « + Nouveau document » pour commencer.</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(row => {
+      const nom = row.nom_employe || '(Nom non précisé)';
+      return `<div class="selector-item" onclick="ouvrirDoc('${row.record_token}')">
+        <span class="sel-name">${nom}</span>
+        <span class="sel-date">${row.date_fin || ''}</span>
+      </div>`;
+    }).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+async function creerNouveau() {
+  try {
+    const { data, error } = await sb.rpc('create_fin_emploi_doc', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirDoc(data);
+  } catch (e) { console.error(e); alert("Impossible de créer un nouveau document pour le moment."); }
+}
+
+async function ouvrirDoc(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('doc', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+  try {
+    const { data, error } = await sb.rpc('get_fin_emploi_doc', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const d = data[0].details || {};
+      FIELD_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = d[id] || ''; });
+      CHECK_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).checked = !!d[id]; });
+      if (d.raison) {
+        const r = document.querySelector(`input[name="raison"][value="${d.raison}"]`);
+        if (r) r.checked = true;
+      }
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('doc');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  recordToken = null;
+  afficherListe();
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  const details = {};
+  FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.value; });
+  CHECK_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.checked; });
+  const raisonEl = document.querySelector('input[name="raison"]:checked');
+  details.raison = raisonEl ? raisonEl.value : '';
+  try {
+    const { error } = await sb.rpc('save_fin_emploi_doc', {
+      p_record_token: recordToken,
+      p_nom_employe: document.getElementById('f_nomEmploye').value || null,
+      p_date_fin: document.getElementById('f_dateFin').value || null,
+      p_details: details
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+
+async function initPage() {
+  ownerToken = getOwnerToken();
+  const params = new URLSearchParams(window.location.search);
+  const existing = params.get('doc');
+  if (existing) { await ouvrirDoc(existing); } else { await afficherListe(); }
+}
+initPage();
+</script>
+</body>
+</html>
