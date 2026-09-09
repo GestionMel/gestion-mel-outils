@@ -77,9 +77,16 @@
   .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
   @media print{body{background:white;}.page-header,.top-bar,.nav-tabs,.add-form,.actions,.tc-del,.mini-del,.q-add,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.tab-pane{display:block!important;}.quadrant{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
   @media(max-width:700px){.af-grid{grid-template-columns:1fr 1fr;}.matrix{grid-template-columns:1fr;}.stats-bar{gap:7px;}}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status{display:none!important;} }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Gestion — Liste de tâches</div></div>
 <div class="container">
   <div class="doc-header">
@@ -88,9 +95,9 @@
   </div>
   <div class="top-bar">
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-      <input class="ci" type="text" id="gNom" placeholder="Gestionnaire...">
-      <input class="ci" type="date" id="gDate">
-      <input class="ci" type="text" id="gClinique" placeholder="Clinique...">
+      <input class="ci" type="text" id="gNom" placeholder="Gestionnaire..." oninput="scheduleSave()">
+      <input class="ci" type="date" id="gDate" onchange="scheduleSave()">
+      <input class="ci" type="text" id="gClinique" placeholder="Clinique..." oninput="scheduleSave()">
     </div>
     <div style="display:flex;gap:7px;flex-wrap:wrap;">
       <button class="btn" onclick="clearDone()">🗑️ Retirer les complétées</button>
@@ -258,7 +265,6 @@ let tasks=[], tid=1, filterMode='all';
 const CAT={rh:{l:'👥 RH',c:'#8e44ad'},admin:{l:'📋 Admin',c:'#1a6abf'},finance:{l:'💰 Finance',c:'#1a9e5a'},clinique:{l:'🦷 Clinique',c:'#e67e22'},formation:{l:'📚 Formation',c:'#d4a017'},autre:{l:'📌 Autre',c:'#5a6a80'}};
 const PRI={1:{l:'🔴 Urgent+Imp.',c:'var(--red)',cls:'pri-1'},2:{l:'🟡 Important',c:'var(--orange)',cls:'pri-2'},3:{l:'🔵 Urgent',c:'var(--blue)',cls:'pri-3'},4:{l:'⚪ Reporter',c:'#8a9ab0',cls:'pri-4'}};
 const TODAY=new Date().toISOString().split('T')[0];
-document.getElementById('gDate').valueAsDate=new Date();
 
 function addTask(){
   const label=document.getElementById('in_task').value.trim();
@@ -266,6 +272,7 @@ function addTask(){
   tasks.push({id:tid++,label,pri:parseInt(document.getElementById('in_pri').value),cat:document.getElementById('in_cat').value,due:document.getElementById('in_due').value,done:false});
   document.getElementById('in_task').value='';
   draw();
+  scheduleSave();
 }
 
 function draw(){
@@ -300,16 +307,16 @@ function draw(){
           ${t.due?`<span class="due-badge${isOverdue?' due-urgent':''}">${isOverdue?'⚠️ Retard :':' 📅'} ${new Date(t.due+'T00:00:00').toLocaleDateString('fr-CA',{day:'numeric',month:'short'})}</span>`:''}
         </div>
       </div>
-      <button class="tc-del" onclick="tasks=tasks.filter(x=>x.id!==${t.id});draw()">×</button>
+      <button class="tc-del" onclick="tasks=tasks.filter(x=>x.id!==${t.id});draw();scheduleSave()">×</button>
     </div>`;
   }).join(''):'<div style="text-align:center;padding:24px;color:#8a9ab0;">Aucune tâche dans cette catégorie.</div>';
   drawMatrix();
 }
 
-function toggleTask(id,v){const t=tasks.find(x=>x.id===id);if(t)t.done=v;draw();}
+function toggleTask(id,v){const t=tasks.find(x=>x.id===id);if(t)t.done=v;draw();scheduleSave();}
 
 function setFilter(f,btn){filterMode=f;document.querySelectorAll('#taskListFilter .btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');draw();}
-function clearDone(){tasks=tasks.filter(t=>!t.done);draw();}
+function clearDone(){tasks=tasks.filter(t=>!t.done);draw();scheduleSave();}
 
 // MATRIX
 let mTasks={1:[],2:[],3:[],4:[]};
@@ -318,10 +325,10 @@ function addMatrix(q){
   const inp=document.getElementById(`mq${q}-in`);
   const v=inp.value.trim();if(!v)return;
   mTasks[q].push({id:mtid++,label:v,done:false});
-  inp.value='';drawMatrix();
+  inp.value='';drawMatrix();scheduleSave();
 }
-function toggleMatrix(q,id,v){const t=mTasks[q].find(x=>x.id===id);if(t)t.done=v;drawMatrix();}
-function delMatrix(q,id){mTasks[q]=mTasks[q].filter(x=>x.id!==id);drawMatrix();}
+function toggleMatrix(q,id,v){const t=mTasks[q].find(x=>x.id===id);if(t)t.done=v;drawMatrix();scheduleSave();}
+function delMatrix(q,id){mTasks[q]=mTasks[q].filter(x=>x.id!==id);drawMatrix();scheduleSave();}
 function drawMatrix(){
   [1,2,3,4].forEach(q=>{
     const el=document.getElementById(`mq${q}`);
@@ -333,20 +340,95 @@ function drawMatrix(){
 }
 function showTab(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
 
-// Init sample tasks
-const samples=[
-  {label:'Appeler la CNESST — dossier en attente',pri:1,cat:'rh',due:TODAY},
-  {label:'Préparer les évaluations de rendement — mois prochain',pri:2,cat:'rh',due:''},
-  {label:'Vérifier la balance de caisse de la semaine',pri:1,cat:'finance',due:TODAY},
-  {label:'Commander fournitures cliniques',pri:3,cat:'clinique',due:''},
-  {label:'Réviser le protocole de stérilisation',pri:2,cat:'clinique',due:''},
-  {label:'Planifier la réunion d\'équipe mensuelle',pri:2,cat:'admin',due:''},
-];
-samples.forEach(s=>{tasks.push({id:tid++,...s,done:false});});
-mTasks[1]=[{id:mtid++,label:'Répondre à la CNESST',done:false}];
-mTasks[2]=[{id:mtid++,label:'Préparer les évaluations',done:false},{id:mtid++,label:'Réviser le protocole',done:false}];
-mTasks[3]=[{id:mtid++,label:'Commander fournitures',done:false}];
-draw();
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let ownerToken = null;
+let saveTimer = null;
+let isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_todo_gestionnaire', {
+      p_owner_token: ownerToken,
+      p_nom_gestionnaire: document.getElementById('gNom').value || null,
+      p_date_maj: document.getElementById('gDate').value || null,
+      p_nom_clinique: document.getElementById('gClinique').value || null,
+      p_tasks: tasks,
+      p_mtasks: mTasks
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+}
+
+function computeIds() {
+  tid = tasks.reduce((m,t)=>Math.max(m,t.id+1), 1);
+  let maxM = 1;
+  [1,2,3,4].forEach(q => (mTasks[q]||[]).forEach(t => { if (t.id>=maxM) maxM = t.id+1; }));
+  mtid = maxM;
+}
+
+async function initTodo() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_todo_gestionnaire', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      tasks = row.tasks || [];
+      mTasks = row.mtasks || {1:[],2:[],3:[],4:[]};
+      if (row.nom_gestionnaire) document.getElementById('gNom').value = row.nom_gestionnaire;
+      if (row.date_maj) document.getElementById('gDate').value = row.date_maj;
+      if (row.nom_clinique) document.getElementById('gClinique').value = row.nom_clinique;
+      computeIds();
+    } else {
+      await sb.rpc('create_todo_gestionnaire', { p_owner_token: ownerToken });
+      tasks = [];
+      mTasks = {1:[],2:[],3:[],4:[]};
+    }
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+  isLoading = false;
+  if (!document.getElementById('gDate').value) document.getElementById('gDate').valueAsDate = new Date();
+  draw();
+}
+
+initTodo();
 </script>
 
 
