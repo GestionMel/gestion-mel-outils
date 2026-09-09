@@ -277,12 +277,13 @@ let isLoading = true;
 
 function getOwnerToken() {
   const params = new URLSearchParams(window.location.search);
-  let token = params.get('clinique');
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
   if (!token) {
     token = crypto.randomUUID();
-    params.set('clinique', token);
-    window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
   }
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
   return token;
 }
 
