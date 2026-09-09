@@ -107,6 +107,7 @@
     <h1>Checklist — Fin d'emploi</h1>
     <p>Choisissez une checklist déjà commencée, ou créez-en une nouvelle pour un départ d'employé.</p>
     <button class="btn-new-checklist" onclick="creerNouvelleChecklist()">+ Nouvelle checklist</button>
+    <button class="btn-lien" onclick="showLienPersonnel()" style="margin-left:10px;padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;">🔗 Mon lien personnel</button>
     <div id="selectorList" class="selector-list"><div class="selector-empty">Chargement...</div></div>
   </div>
 </div>
@@ -285,6 +286,10 @@ function getOwnerToken() {
   params.set('clinique', token);
   window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
   return token;
+}
+
+function showLienPersonnel() {
+  prompt("Voici votre lien personnel — enregistrez-le en favori pour toujours retrouver vos checklists, même sur un autre appareil ou navigateur :", window.location.href);
 }
 
 function setStatus(state) {
