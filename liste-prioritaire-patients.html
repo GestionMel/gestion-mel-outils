@@ -34,12 +34,14 @@
   .add-form{padding:14px 32px;background:#f8fbff;border-bottom:2px solid var(--border);}
   .form-title{font-size:.78rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
   .form-title::before{content:'➕';}
-  .form-grid{display:grid;grid-template-columns:1.5fr 1fr 2fr 90px 1fr 110px auto auto;gap:8px;align-items:end;}
+  .form-grid{display:flex;flex-wrap:wrap;gap:8px;align-items:end;}
+  .form-grid>.fg{flex:1 1 150px;min-width:120px;}
+  .form-grid>.rv-toggle{flex:1 1 170px;min-width:150px;}
   .fg{display:flex;flex-direction:column;gap:3px;}
   .fg label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
   .fg input,.fg select{border:1.5px solid var(--border);border-radius:6px;padding:6px 9px;font-size:.82rem;font-family:inherit;color:var(--text);background:white;}
   .fg input:focus,.fg select:focus{outline:none;border-color:var(--accent);}
-  .btn-ajouter{padding:8px 16px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;}
+  .btn-ajouter{padding:8px 16px;border-radius:7px;background:var(--blue);color:white;border:none;font-family:inherit;font-size:.83rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap;flex:0 0 auto;}
   .btn-ajouter:hover{background:#155a9e;}
   .rv-toggle{display:flex;flex-direction:column;gap:4px;}
   .rv-toggle label{font-size:.68rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.3px;}
