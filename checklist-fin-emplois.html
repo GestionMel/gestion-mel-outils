@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///C:/Users/info/Downloads/checklist-fin-emploi.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist fin d'emploi — Gestion Mel</title>
+<style>
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:1.4rem;font-weight:700;} .brand span{color:var(--accent);}
+  .container{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:22px 36px;}
+  .doc-header h1{font-size:1.35rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.83rem;opacity:.7;}
+  .info-bar{padding:14px 36px;background:var(--light);border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .ib-field{display:flex;flex-direction:column;gap:3px;}
+  .ib-field label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+  .ib-field input,.ib-field select{border:1.5px solid var(--border);border-radius:6px;padding:7px 10px;font-size:.84rem;font-family:inherit;color:var(--text);background:white;}
+  .ib-field input:focus,.ib-field select:focus{outline:none;border-color:var(--accent);}
+  .progress-bar-wrap{padding:10px 36px;background:white;border-bottom:1px solid var(--border);}
+  .prog-top{display:flex;justify-content:space-between;font-size:.75rem;margin-bottom:4px;}
+  .prog-lbl{font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  .prog-pct{font-weight:700;color:var(--blue);}
+  .prog-track{background:#e0e0e0;border-radius:8px;height:7px;overflow:hidden;}
+  .prog-fill{height:7px;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:8px;transition:width .4s;}
+  .section{margin:18px 36px;}
+  .sec-hd{display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:8px 8px 0 0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .sec-icon{font-size:1.2rem;}
+  .sec-title{font-size:.88rem;font-weight:700;color:white;flex:1;}
+  .sec-prog{font-size:.75rem;color:rgba(255,255,255,.75);}
+  .item-list{border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;overflow:hidden;}
+  .item-row{display:grid;grid-template-columns:36px 1fr auto auto;gap:8px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--border);transition:background .1s;}
+  .item-row:last-child{border-bottom:none;}
+  .item-row:hover{background:#fafbfc;}
+  .item-row.done{background:#f0fdf4;}
+  .item-row.done .item-label{text-decoration:line-through;color:#8a9ab0;}
+  .item-cb{width:22px;height:22px;cursor:pointer;accent-color:var(--green);flex-shrink:0;}
+  .item-label{font-size:.85rem;line-height:1.4;color:var(--text);flex:1;}
+  .item-note{border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.76rem;font-family:inherit;background:var(--light);width:160px;color:var(--text);}
+  .item-note:focus{outline:none;border-color:var(--accent);}
+  .item-date{font-size:.73rem;color:#8a9ab0;white-space:nowrap;}
+  .badge-required{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.2);padding:2px 7px;border-radius:8px;font-size:.68rem;font-weight:700;flex-shrink:0;}
+  .badge-info{background:#e8f4fe;color:var(--blue);border:1px solid rgba(33,150,243,.2);padding:2px 7px;border-radius:8px;font-size:.68rem;font-weight:700;flex-shrink:0;}
+  .sig-section{margin:18px 36px;background:var(--light);border:1.5px solid var(--border);border-radius:9px;padding:16px 20px;}
+  .sig-title{font-size:.76rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+  .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .sfield label{font-size:.71rem;font-weight:700;color:#5a6a80;text-transform:uppercase;display:block;margin-bottom:4px;}
+  .sfield input{border:1.5px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.83rem;font-family:inherit;width:100%;background:white;margin-bottom:12px;}
+  .sfield input:focus{outline:none;border-color:var(--accent);}
+  .sig-line{border-top:1.5px solid var(--border);padding-top:5px;font-size:.73rem;color:#8a9ab0;}
+  .notes-section{margin:0 36px 18px;}
+  .notes-section label{font-size:.74rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px;}
+  .notes-section textarea{width:100%;border:1.5px solid var(--border);border-radius:7px;padding:10px;font-size:.85rem;font-family:inherit;resize:vertical;min-height:70px;background:var(--light);}
+  .notes-section textarea:focus{outline:none;border-color:var(--accent);}
+  .actions{padding:14px 36px;background:var(--light);display:flex;justify-content:space-between;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px;}
+  .btn{padding:8px 18px;border-radius:7px;font-size:.84rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-secondary{background:white;color:#5a6a80;border:1.5px solid var(--border);}
+  .btn-reset{background:white;color:var(--red);border:1.5px solid var(--red);font-size:.78rem;}
+  .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.actions,.progress-bar-wrap,.item-note{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .section,.info-bar,.sig-section,.notes-section{margin:8px 12px!important;padding:8px!important;}
+    .sec-hd{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    input{border:none!important;background:transparent!important;}
+  }
+  @media(max-width:600px){
+    .info-bar{grid-template-columns:1fr 1fr;}
+    .item-note{width:100px;}
+    .section{margin:12px 14px;}
+  }
+
+  /* ÉCRAN DE SÉLECTION */
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new-checklist{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-bottom:20px;}
+  .btn-new-checklist:hover{background:#155a9e;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-poste{font-size:.78rem;color:#5a6a80;flex:1;}
+  .sel-date{font-size:.75rem;color:#8a9ab0;white-space:nowrap;}
+  .sel-pct{font-size:.75rem;font-weight:700;color:var(--blue);background:var(--light);border-radius:10px;padding:3px 9px;white-space:nowrap;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:4px 0;}
+
+  /* STATUT SYNC */
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status,.selector-screen,.btn-retour{display:none!important;} }
+</style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Ressources humaines — Fin d'emploi</div></div>
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Checklist — Fin d'emploi</h1>
+    <p>Choisissez une checklist déjà commencée, ou créez-en une nouvelle pour un départ d'employé.</p>
+    <button class="btn-new-checklist" onclick="creerNouvelleChecklist()">+ Nouvelle checklist</button>
+    <button class="btn-lien" onclick="showLienPersonnel()" style="margin-left:10px;padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;">🔗 Mon lien personnel</button>
+    <div id="selectorList" class="selector-list"><div class="selector-empty">Chargement...</div></div>
+  </div>
+</div>
+
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <div class="doc-header">
+    <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste des checklists</button>
+    <h1>Checklist — Fin d'emploi</h1><p>Procédure complète lors du départ d'un(e) employé(e) — Clinique dentaire</p></div>
+  <div class="info-bar">
+    <div class="ib-field"><label>Clinique</label><input type="text" id="fClinique" placeholder="Clinique Dentaire..." oninput="scheduleSave()"></div>
+    <div class="ib-field"><label>Nom de l'employé(e)</label><input type="text" id="nomEmp" placeholder="Prénom Nom" oninput="scheduleSave()"></div>
+    <div class="ib-field"><label>Poste</label><input type="text" id="fPoste" placeholder="Secrétaire dentaire..." oninput="scheduleSave()"></div>
+    <div class="ib-field"><label>Raison du départ</label>
+      <select id="fRaison" onchange="scheduleSave()">
+        <option>Démission volontaire</option>
+        <option>Fin de contrat</option>
+        <option>Fin de probation</option>
+        <option>Congédiement</option>
+        <option>Retraite</option>
+        <option>Autre</option>
+      </select>
+    </div>
+    <div class="ib-field"><label>Date d'annonce</label><input type="date" id="fDateAnnonce" onchange="scheduleSave()"></div>
+    <div class="ib-field"><label>Dernier jour de travail</label><input type="date" id="fDernierJour" onchange="scheduleSave()"></div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="prog-top"><span class="prog-lbl" id="progLabel">Progression — 0 tâche complétée</span><span class="prog-pct" id="progPct">0%</span></div>
+    <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+  <div id="checklistContainer"></div>
+  <div class="notes-section"><label>Notes et observations</label><textarea id="notesGenerales" oninput="scheduleSave()" placeholder="Observations particulières, circonstances du départ, informations complémentaires..."></textarea></div>
+  <div class="sig-section">
+    <div class="sig-title">Responsable de la procédure</div>
+    <div class="sig-grid">
+      <div class="sfield"><label>Gestionnaire responsable</label><input type="text" id="sigNom" oninput="scheduleSave()" placeholder="Nom et prénom"><input type="text" id="sigTitre" oninput="scheduleSave()" placeholder="Titre"><div class="sig-line">Signature ____________________ Date ________</div></div>
+      <div class="sfield"><label>Date de complétion de la checklist</label><input type="date" id="dateCompletion" onchange="scheduleSave()"><div style="margin-top:8px;font-size:.8rem;color:#5a6a80;">Toutes les étapes ci-dessus ont été complétées conformément à la procédure en vigueur.</div></div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="btn btn-reset" onclick="resetAll()">↺ Réinitialiser</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+<script>
+const SECTIONS = [
+  { title:"Annonce du départ", color:"#1a6abf", icon:"📣", items:[
+    { label:"Recevoir ou prendre note de la démission / raison du départ", required:true },
+    { label:"Demander une lettre de démission signée (si démission volontaire)", required:true },
+    { label:"Confirmer la date du dernier jour de travail", required:true },
+    { label:"Informer le (la) dentiste propriétaire du départ", required:true },
+    { label:"Planifier la rencontre de départ (questionnaire de fin d'emploi)", required:false },
+    { label:"Planifier le transfert des tâches et le chevauchement si possible", required:false },
+    { label:"Afficher le poste si remplacement nécessaire", required:false },
+  ]},
+  { title:"Biens de l'entreprise", color:"#8e44ad", icon:"🔑", items:[
+    { label:"Récupérer les clés de la clinique", required:true },
+    { label:"Récupérer les sarraus / uniformes fournis par la clinique", required:true },
+    { label:"Récupérer la carte de punch ou badge d'accès", required:true },
+    { label:"Faire vider et récupérer le contenu du casier", required:true },
+    { label:"Récupérer tout équipement informatique prêté (tablette, téléphone, etc.)", required:false },
+    { label:"Récupérer les codes d'accès, mots de passe ou codes sécurité", required:true },
+    { label:"Vérifier qu'aucun document confidentiel n'a été emporté", required:true },
+  ]},
+  { title:"Communications et systèmes", color:"#2c3e50", icon:"💻", items:[
+    { label:"Refaire et distribuer la liste du personnel mise à jour", required:true },
+    { label:"Enlever les tâches relatives à cette personne dans Outlook (agenda, rappels, délégations)", required:true },
+    { label:"Mettre à jour l'organigramme de la clinique", required:true },
+    { label:"Remettre et recueillir le questionnaire de fin d'emploi", required:false },
+    { label:"Retirer l'employé(e) du logiciel dentaire (Dentitek / Progident) — accès et rappels", required:true },
+    { label:"Désactiver l'accès au courriel professionnel", required:true },
+    { label:"Désactiver l'accès aux plateformes et logiciels (comptabilité, paie, RH, etc.)", required:true },
+    { label:"Retirer des groupes de communication (Teams, WhatsApp d'équipe, etc.)", required:false },
+    { label:"Mettre à jour le site web / réseaux sociaux si la personne y apparaissait", required:false },
+    { label:"Informer les fournisseurs concernés si la personne était un contact clé", required:false },
+  ]},
+  { title:"Paie et avantages sociaux", color:"#c0392b", icon:"💵", items:[
+    { label:"Calculer et payer le préavis dû selon la Loi sur les normes du travail", required:true },
+    { label:"Calculer et payer les vacances accumulées et non prises", required:true },
+    { label:"Calculer et payer les heures supplémentaires accumulées", required:true },
+    { label:"Calculer et payer le boni ou prime dû au prorata (si applicable)", required:false },
+    { label:"Vérifier et compléter le paiement des primes d'assurance collective", required:true },
+    { label:"Aviser l'assureur de la fin d'emploi (retrait du régime collectif)", required:true },
+    { label:"Informer l'employé(e) de ses droits de conversion d'assurances", required:false },
+    { label:"Vérifier et compléter le paiement du REER collectif (si applicable)", required:false },
+    { label:"Produire et remettre le Relevé d'emploi (RE) dans les délais prescrits", required:true },
+    { label:"Produire le relevé T4 à la fin de l'année fiscale", required:true },
+  ]},
+  { title:"Questionnaire et bilan", color:"#1a9e5a", icon:"📋", items:[
+    { label:"Faire remplir le questionnaire de fin d'emploi par l'employé(e)", required:false },
+    { label:"Tenir la rencontre de départ (entretien de sortie)", required:false },
+    { label:"Archiver le dossier complet de l'employé(e) (7 ans minimum)", required:true },
+    { label:"Documenter les raisons du départ pour les analyses de roulement", required:false },
+    { label:"Évaluer si des améliorations sont nécessaires suite au départ", required:false },
+  ]},
+];
+
+function buildChecklist() {
+  const cont = document.getElementById('checklistContainer');
+  cont.innerHTML = '';
+  SECTIONS.forEach((sec, si) => {
+    const div = document.createElement('div');
+    div.className = 'section';
+    let itemsHtml = sec.items.map((item, ii) => {
+      const id = `cb_${si}_${ii}`;
+      return `<div class="item-row" id="row_${si}_${ii}">
+        <input type="checkbox" class="item-cb" id="${id}" onchange="updateRow(${si},${ii},this)">
+        <label class="item-label" for="${id}">${item.label}</label>
+        ${item.required ? '<span class="badge-required">Obligatoire</span>' : '<span class="badge-info">Recommandé</span>'}
+        <input class="item-note no-print" type="text" id="note_${si}_${ii}" oninput="scheduleSave()" placeholder="Note..." title="Ajouter une note">
+      </div>`;
+    }).join('');
+    div.innerHTML = `
+      <div class="sec-hd" style="background:${sec.color};">
+        <span class="sec-icon">${sec.icon}</span>
+        <span class="sec-title">${sec.title}</span>
+        <span class="sec-prog" id="secprog_${si}">0/${sec.items.length}</span>
+      </div>
+      <div class="item-list">${itemsHtml}</div>`;
+    cont.appendChild(div);
+  });
+}
+
+function updateRow(si, ii, cb) {
+  const row = document.getElementById(`row_${si}_${ii}`);
+  row.classList.toggle('done', cb.checked);
+  updateProgress();
+  scheduleSave();
+}
+
+function updateProgress() {
+  let total = 0, done = 0;
+  SECTIONS.forEach((sec, si) => {
+    let secDone = 0;
+    sec.items.forEach((_, ii) => {
+      total++;
+      const cb = document.getElementById(`cb_${si}_${ii}`);
+      if (cb && cb.checked) { done++; secDone++; }
+    });
+    const sp = document.getElementById(`secprog_${si}`);
+    if (sp) sp.textContent = `${secDone}/${sec.items.length}`;
+  });
+  const pct = total > 0 ? Math.round(done/total*100) : 0;
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progLabel').textContent = `Progression — ${done}/${total} tâche(s) complétée(s)`;
+}
+
+function resetAll() {
+  if (!confirm('Réinitialiser toutes les cases?')) return;
+  document.querySelectorAll('.item-cb').forEach(cb => { cb.checked = false; });
+  document.querySelectorAll('.item-row').forEach(row => row.classList.remove('done'));
+  updateProgress();
+  scheduleSave();
+}
+
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let ownerToken = null;
+let recordToken = null;
+let saveTimer = null;
+let isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) {
+    token = crypto.randomUUID();
+  }
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+
+function showLienPersonnel() {
+  prompt("Voici votre lien personnel — enregistrez-le en favori pour toujours retrouver vos checklists, même sur un autre appareil ou navigateur :", window.location.href);
+}
+
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+
+async function initPage() {
+  ownerToken = getOwnerToken();
+  const params = new URLSearchParams(window.location.search);
+  const existingRecord = params.get('checklist');
+  if (existingRecord) {
+    await ouvrirChecklist(existingRecord);
+  } else {
+    await afficherListe();
+  }
+}
+
+async function afficherListe() {
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_checklists_fin_emploi', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucune checklist pour le moment. Cliquez sur « + Nouvelle checklist » pour commencer.</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(row => {
+      const nom = row.nom_employe || '(Nom non précisé)';
+      const poste = row.poste || '';
+      const date = row.date_annonce || row.dernier_jour || '';
+      return `<div class="selector-item" onclick="ouvrirChecklist('${row.record_token}')">
+        <span class="sel-name">${nom}</span>
+        <span class="sel-poste">${poste}</span>
+        <span class="sel-date">${date}</span>
+        <span class="sel-pct">${row.checked_count}/39</span>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.error(e);
+    listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement de la liste.</div>';
+  }
+}
+
+async function creerNouvelleChecklist() {
+  try {
+    const { data, error } = await sb.rpc('create_checklist_fin_emploi', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirChecklist(data);
+  } catch (e) {
+    console.error(e);
+    alert("Impossible de créer une nouvelle checklist pour le moment.");
+  }
+}
+
+async function ouvrirChecklist(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('checklist', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+
+  buildChecklist();
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+
+  try {
+    const { data, error } = await sb.rpc('get_checklist_fin_emploi', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      document.getElementById('fClinique').value = row.nom_clinique || '';
+      document.getElementById('nomEmp').value = row.nom_employe || '';
+      document.getElementById('fPoste').value = row.poste || '';
+      if (row.raison_depart) document.getElementById('fRaison').value = row.raison_depart;
+      document.getElementById('fDateAnnonce').value = row.date_annonce || '';
+      document.getElementById('fDernierJour').value = row.dernier_jour || '';
+      document.getElementById('notesGenerales').value = row.notes_generales || '';
+      document.getElementById('sigNom').value = row.gestionnaire_nom || '';
+      document.getElementById('sigTitre').value = row.gestionnaire_titre || '';
+      document.getElementById('dateCompletion').value = row.date_completion || '';
+      const checked = row.checked || {};
+      Object.keys(checked).forEach(key => {
+        if (!checked[key]) return;
+        const [si, ii] = key.split('_');
+        const cb = document.getElementById(`cb_${si}_${ii}`);
+        if (cb) { cb.checked = true; document.getElementById(`row_${si}_${ii}`).classList.add('done'); }
+      });
+      const notesItems = row.notes_items || {};
+      Object.keys(notesItems).forEach(key => {
+        const [si, ii] = key.split('_');
+        const inp = document.getElementById(`note_${si}_${ii}`);
+        if (inp) inp.value = notesItems[key];
+      });
+      updateProgress();
+    }
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('checklist');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  afficherListe();
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  const checked = {};
+  const notesItems = {};
+  SECTIONS.forEach((sec, si) => {
+    sec.items.forEach((_, ii) => {
+      const cb = document.getElementById(`cb_${si}_${ii}`);
+      if (cb && cb.checked) checked[`${si}_${ii}`] = true;
+      const note = document.getElementById(`note_${si}_${ii}`);
+      if (note && note.value) notesItems[`${si}_${ii}`] = note.value;
+    });
+  });
+  try {
+    const { error } = await sb.rpc('save_checklist_fin_emploi', {
+      p_record_token: recordToken,
+      p_nom_clinique: document.getElementById('fClinique').value || null,
+      p_nom_employe: document.getElementById('nomEmp').value || null,
+      p_poste: document.getElementById('fPoste').value || null,
+      p_raison_depart: document.getElementById('fRaison').value || null,
+      p_date_annonce: document.getElementById('fDateAnnonce').value || null,
+      p_dernier_jour: document.getElementById('fDernierJour').value || null,
+      p_checked: checked,
+      p_notes_items: notesItems,
+      p_notes_generales: document.getElementById('notesGenerales').value || null,
+      p_gestionnaire_nom: document.getElementById('sigNom').value || null,
+      p_gestionnaire_titre: document.getElementById('sigTitre').value || null,
+      p_date_completion: document.getElementById('dateCompletion').value || null
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+}
+
+initPage();
+</script>
+
+
+
+</body></html>
