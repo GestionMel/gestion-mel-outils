@@ -98,9 +98,16 @@
     .form-grid{grid-template-columns:1fr 1fr 1fr;}.table-wrap{padding:0 12px 12px;}
     .top-controls{padding:10px 14px;}.stats-bar{padding:7px 14px;}.add-form{padding:12px 14px;}
   }
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status{display:none!important;} }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Gestion des patients</div></div>
 <div class="container">
   <div class="doc-header"><h1>Liste de priorité d'attente — Patients</h1><p>Classement automatique par niveau d'urgence • Retrait automatique si la date de RV est passée</p></div>
@@ -120,13 +127,7 @@
     </div>
   </div>
 
-  <div class="stats-bar" id="statsBar">
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--blue)"></div><span class="stat-num">4</span>&nbsp;patients en liste</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--red)"></div><span class="stat-num">1</span>&nbsp;urgent(s)</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--orange)"></div><span class="stat-num">2</span>&nbsp;important(s)</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--green)"></div><span class="stat-num">1</span>&nbsp;routine</div>
-    <div class="stat-chip"><div class="stat-dot" style="background:var(--purple)"></div><span class="stat-num">0</span>&nbsp;rappel(s)</div>
-    </div>
+  <div class="stats-bar" id="statsBar"></div>
 
   <div id="autoRemovedNotice" style="display:none;" class="notice">⏰ <strong id="removedCount">0</strong> patient(s) retiré(s) automatiquement car leur date de rendez-vous est passée.</div>
 
@@ -185,71 +186,7 @@
         <th class="th-c" style="width:50px;">Ajouté le</th>
         <th class="th-c no-print" style="width:55px;">Actions</th>
       </tr></thead>
-      <tbody id="patientTbody"><tr>
-      <td style="text-align:center;"><div class="rank-num rank-1">1</div></td>
-      <td style="font-weight:700;">Tremblay, Jean</td>
-      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10234</td>
-      <td>Extraction urgente #36 + antibiotiques</td>
-      <td style="text-align:center;font-size:.8rem;">1 h</td>
-      <td><span class="urg-badge urg-1">🔴 Urgent</span></td>
-      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
-      <td style="font-size:.8rem;">418-555-0101</td>
-      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Douleur intense — a appelé 3x">Douleur intense — a appelé 3x</td>
-      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
-      <td class="no-print" style="text-align:center;">
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button class="btn-note" onclick="editNotes(1)" title="Modifier notes">📝</button>
-          <button class="btn-remove" onclick="removePatient(1)" title="Retirer de la liste">×</button>
-        </div>
-      </td></tr><tr>
-      <td style="text-align:center;"><div class="rank-num rank-2">2</div></td>
-      <td style="font-weight:700;">Gagnon, Marie</td>
-      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10456</td>
-      <td>Couronne céramique #24</td>
-      <td style="text-align:center;font-size:.8rem;">1.5 h</td>
-      <td><span class="urg-badge urg-2">🟠 Important</span></td>
-      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
-      <td style="font-size:.8rem;">418-555-0202</td>
-      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Préfère les matins">Préfère les matins</td>
-      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
-      <td class="no-print" style="text-align:center;">
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button class="btn-note" onclick="editNotes(2)" title="Modifier notes">📝</button>
-          <button class="btn-remove" onclick="removePatient(2)" title="Retirer de la liste">×</button>
-        </div>
-      </td></tr><tr>
-      <td style="text-align:center;"><div class="rank-num rank-3">3</div></td>
-      <td style="font-weight:700;">Fortin, Sophie</td>
-      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10112</td>
-      <td>Obturation composite #15</td>
-      <td style="text-align:center;font-size:.8rem;">45 min</td>
-      <td><span class="urg-badge urg-2">🟠 Important</span></td>
-      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
-      <td style="font-size:.8rem;">418-555-0404</td>
-      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="Allergie latex — noter au dossier">Allergie latex — noter au dossier</td>
-      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
-      <td class="no-print" style="text-align:center;">
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button class="btn-note" onclick="editNotes(4)" title="Modifier notes">📝</button>
-          <button class="btn-remove" onclick="removePatient(4)" title="Retirer de la liste">×</button>
-        </div>
-      </td></tr><tr>
-      <td style="text-align:center;"><div class="rank-num rank-other">4</div></td>
-      <td style="font-weight:700;">Bouchard, Luc</td>
-      <td style="text-align:center;font-family:monospace;font-size:.8rem;">10789</td>
-      <td>Nettoyage + radiographies</td>
-      <td style="text-align:center;font-size:.8rem;">1 h</td>
-      <td><span class="urg-badge urg-3">🟢 Routine</span></td>
-      <td><span class="rv-status rv-unfixed">RV non fixé</span></td>
-      <td style="font-size:.8rem;">418-555-0303</td>
-      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="">—</td>
-      <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">2026-05-17</td>
-      <td class="no-print" style="text-align:center;">
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button class="btn-note" onclick="editNotes(3)" title="Modifier notes">📝</button>
-          <button class="btn-remove" onclick="removePatient(3)" title="Retirer de la liste">×</button>
-        </div>
-      </td></tr></tbody>
+      <tbody id="patientTbody"></tbody>
     </table>
     <div class="empty-state" id="emptyState" style="display:none;">
       <div class="es-icon">📋</div>
@@ -258,7 +195,7 @@
   </div>
 
   <div class="actions">
-    <button class="btn btn-secondary" onclick="if(confirm(&#39;Vider toute la liste?&#39;)) { patients=[]; renderTable(); }">🗑️ Vider la liste</button>
+    <button class="btn btn-secondary" onclick="if(confirm('Vider toute la liste?')) { patients=[]; renderTable(); scheduleSave(); }">🗑️ Vider la liste</button>
     <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer la liste</button>
   </div>
   <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
@@ -269,15 +206,6 @@ let patients = [];
 let currentFilter = 'all';
 let idCounter = 1;
 let rvMode = 'nonfixe';
-
-// Sample data
-const SAMPLES = [
-  { nom:'Tremblay, Jean', dossier:'10234', traitement:'Extraction urgente #36 + antibiotiques', duree:60, urgence:1, dateRV:'', tel:'418-555-0101', notes:'Douleur intense — a appelé 3x', added: new Date().toLocaleDateString('fr-CA') },
-  { nom:'Gagnon, Marie', dossier:'10456', traitement:'Couronne céramique #24', duree:90, urgence:2, dateRV:'', tel:'418-555-0202', notes:'Préfère les matins', added: new Date().toLocaleDateString('fr-CA') },
-  { nom:'Bouchard, Luc', dossier:'10789', traitement:'Nettoyage + radiographies', duree:60, urgence:3, dateRV:'', tel:'418-555-0303', notes:'', added: new Date().toLocaleDateString('fr-CA') },
-  { nom:'Fortin, Sophie', dossier:'10112', traitement:'Obturation composite #15', duree:45, urgence:2, dateRV:'', tel:'418-555-0404', notes:'Allergie latex — noter au dossier', added: new Date().toLocaleDateString('fr-CA') },
-];
-SAMPLES.forEach(s => { s.id = idCounter++; patients.push(s); });
 
 function toggleRvMode(mode) {
   rvMode = mode;
@@ -308,18 +236,20 @@ function addPatient() {
   document.getElementById('f_dateRV').value = '';
   toggleRvMode('nonfixe');
   renderTable();
+  scheduleSave();
 }
 
 function removePatient(id) {
   patients = patients.filter(p => p.id !== id);
   renderTable();
+  scheduleSave();
 }
 
 function editNotes(id) {
   const p = patients.find(x => x.id === id);
   if (!p) return;
   const note = prompt('Notes pour ' + p.nom + ' :', p.notes || '');
-  if (note !== null) { p.notes = note; renderTable(); }
+  if (note !== null) { p.notes = note; renderTable(); scheduleSave(); }
 }
 
 function autoRemoveExpired() {
@@ -334,6 +264,7 @@ function autoRemoveExpired() {
   if (removed > 0) {
     document.getElementById('autoRemovedNotice').style.display = 'block';
     document.getElementById('removedCount').textContent = removed;
+    scheduleSave();
   }
   renderTable();
 }
@@ -435,9 +366,78 @@ function updateStats() {
     ${pastRV > 0 ? `<div class="stat-chip"><div class="stat-dot" style="background:var(--red)"></div><span class="stat-num" style="color:var(--red);">${pastRV}</span>&nbsp;<span style="color:var(--red);">RV passé(s) à retirer</span></div>` : ''}`;
 }
 
-// Auto-check expired on load
-autoRemoveExpired();
-renderTable();
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let ownerToken = null;
+let saveTimer = null;
+let isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_liste_prioritaire', {
+      p_owner_token: ownerToken,
+      p_patients: patients
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+}
+
+async function initListe() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_liste_prioritaire', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      patients = data[0].patients || [];
+      idCounter = patients.reduce((m,p)=>Math.max(m,p.id+1), 1);
+    } else {
+      await sb.rpc('create_liste_prioritaire', { p_owner_token: ownerToken });
+      patients = [];
+    }
+    setStatus('ok');
+  } catch (e) {
+    console.error(e);
+    setStatus('err');
+  }
+  isLoading = false;
+  autoRemoveExpired();
+  renderTable();
+}
+
+initListe();
 </script>
 
 
