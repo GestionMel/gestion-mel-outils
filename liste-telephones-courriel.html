@@ -96,10 +96,17 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text
   .card-detail{display:grid!important;}
   .contacts-wrap{padding:8px;}
 }
+.sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+.sync-status.ok{background:#f0fdf4;color:#1a9e5a;border:1px solid rgba(26,158,90,.25);}
+.sync-status.saving{background:#fff8f0;color:#e67e22;border:1px solid rgba(230,126,34,.25);}
+.sync-status.err{background:#fef2f2;color:#dc2626;border:1px solid rgba(192,57,43,.25);}
+@media print{ .sync-status{display:none!important;} }
 </style>
 </head>
 <body>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div style="font-size:0.82rem;opacity:0.65">Répertoire téléphonique et courriel</div>
@@ -197,22 +204,58 @@ let activeFilter = '';
 
 // Sample / default contacts
 const DEFAULTS = [
-  {id:1,prenom:'Dr.',nom:'Martin Leblanc',role:'Dentiste principal',cat:'Équipe clinique',tel:'514-555-0100',poste:'',cell:'514-555-0101',fax:'',email:'drlleblanc@clinique.com',email2:'',adresse:'',web:'',notes:'Urgences par cellulaire'},
-  {id:2,prenom:'Marie',nom:'Tremblay',role:'Hygiéniste dentaire',cat:'Équipe clinique',tel:'514-555-0100',poste:'102',cell:'514-555-0102',fax:'',email:'m.tremblay@clinique.com',email2:'',adresse:'',web:'',notes:''},
-  {id:3,prenom:'Sophie',nom:'Gagné',role:'Secrétaire / Réception',cat:'Administration',tel:'514-555-0100',poste:'100',cell:'',fax:'',email:'reception@clinique.com',email2:'',adresse:'',web:'',notes:'Poste principal de réception'},
-  {id:4,prenom:'Jean',nom:'Fortin',role:'Comptable',cat:'Administration',tel:'418-555-0200',poste:'',cell:'418-555-0201',fax:'418-555-0202',email:'j.fortin@comptable.com',email2:'',adresse:'456 rue du Commerce, Québec',web:'',notes:'Disponible lun–ven'},
-  {id:5,prenom:'Dentitek',nom:'Support technique',role:'Support logiciel dentaire',cat:'Fournisseurs',tel:'1-800-555-3688',poste:'',cell:'',fax:'',email:'support@dentitek.com',email2:'',adresse:'',web:'https://www.dentitek.com',notes:'Support: lun–ven 8h–17h'},
-  {id:6,prenom:'Henry Schein',nom:'Représentant',role:'Fournisseur de matériel dentaire',cat:'Fournisseurs',tel:'1-800-555-4229',poste:'',cell:'514-555-0300',fax:'',email:'rep@henryschein.com',email2:'',adresse:'',web:'https://www.henryschein.ca',notes:'Représentant local: Marc Dubois'},
-  {id:7,prenom:'Dr.',nom:'Caroline Roy',role:'Parodontiste',cat:'Spécialistes',tel:'514-555-0400',poste:'',cell:'',fax:'514-555-0401',email:'dr.roy@parodontie.com',email2:'',adresse:'789 av. des Spécialistes, Montréal',web:'',notes:'Référence paro, délai 2-3 sem'},
-  {id:8,prenom:'Labo',nom:'Dental Pro',role:'Prothèses et couronnes',cat:'Laboratoires',tel:'514-555-0500',poste:'',cell:'',fax:'514-555-0501',email:'commandes@dentalpro.ca',email2:'',adresse:'',web:'',notes:'Délai standard 10 jours ouvrables'},
-  {id:9,prenom:'URGENCE',nom:'Dentaire Montréal',role:'Clinique urgences dentaires',cat:'Urgences',tel:'514-555-0911',poste:'',cell:'',fax:'',email:'',email2:'',adresse:'1 rue Urgence, Montréal',web:'',notes:'Ouvert 7j/7 · Référer les cas complexes'},
+  {id:1,prenom:'Mélanie',nom:'Fortin',role:'Support et formation — Gestion Mel',cat:'Administration',tel:'581-849-7425',poste:'',cell:'',fax:'',email:'info@gestionmel.com',email2:'',adresse:'',web:'https://gestionmel.com',notes:'Questions sur vos outils ou votre formation Gestion Mel'},
 ];
 
-function load(){
-  const raw=localStorage.getItem('gm_contacts');
-  contacts = raw ? JSON.parse(raw) : [...DEFAULTS];
+let ownerToken = null, saveTimer = null, isLoading = true;
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
 }
-function save(){localStorage.setItem('gm_contacts',JSON.stringify(contacts));}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function save() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_liste_telephonique', { p_owner_token: ownerToken, p_contacts: contacts });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function load() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_liste_telephonique', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      contacts = data[0].contacts && data[0].contacts.length ? data[0].contacts : [];
+    } else {
+      await sb.rpc('create_liste_telephonique', { p_owner_token: ownerToken });
+      contacts = [...DEFAULTS];
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
 
 // ═══ RENDER ═══════════════════════════════════════════════════════════════════
 function initials(c){
@@ -399,9 +442,12 @@ document.getElementById('modalOverlay').addEventListener('click',function(e){
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
 // ═══ INIT ═════════════════════════════════════════════════════════════════════
-load();
-buildCatTabs();
-renderAll();
+async function initPage() {
+  await load();
+  buildCatTabs();
+  renderAll();
+}
+initPage();
 </script>
 </body>
 </html>
