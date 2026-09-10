@@ -6,13 +6,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Demande de congé — Gestion Mel</title>
 <style>
-  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green: #1a9e5a; --red: #c0392b; }
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green: #1a9e5a; --red: #c0392b; --orange:#e67e22; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
   .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
   .page-header .brand { font-size: 1.5rem; font-weight: 700; }
   .page-header .brand span { color: var(--accent); }
   .container { max-width: 780px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-right:10px;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-type{font-size:.78rem;color:#5a6a80;}
+  .sel-statut{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:10px;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:16px 36px 0;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
   .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
   .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
   .doc-header p { font-size: 0.85rem; opacity: 0.75; }
@@ -38,29 +56,38 @@
   .decision-section { display: flex; gap: 14px; }
   .decision-btn { flex: 1; padding: 14px; border-radius: 8px; border: 2px solid; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: white; }
   .decision-btn.approve { border-color: var(--green); color: var(--green); }
-  .decision-btn.approve:hover, .decision-btn.approve.selected { background: var(--green); color: white; }
+  .decision-btn.approve.selected { background: var(--green); color: white; }
   .decision-btn.refuse { border-color: var(--red); color: var(--red); }
-  .decision-btn.refuse:hover, .decision-btn.refuse.selected { background: var(--red); color: white; }
+  .decision-btn.refuse.selected { background: var(--red); color: white; }
   .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; }
   .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
   .btn-primary { background: var(--blue); color: white; }
-  .btn-primary:hover { background: #1558a0; }
   .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
   .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
-  @media print { body { background: white; } .page-header, .actions { display: none; } .container { box-shadow: none; margin: 0; } }
-
-  .btn-success { background: #1a9e5a; color: white; }
-  .btn-success:hover { background: #157a45; }
-  .toast { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a9e5a; color: white; padding: 14px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 9999; min-width: 320px; text-align: center; }
-  .toast.error { background: #c0392b; }
+  @media print { body { background: white; } .page-header, .actions, .sync-status, .selector-screen, .btn-retour { display: none; } .container { box-shadow: none; margin: 0; } }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div>Clinique dentaire — Gestion RH</div>
 </div>
-<div class="container">
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Demandes de congé</h1>
+    <p>Employé(e) : créez une nouvelle demande. Gestionnaire : consultez toutes les demandes avec votre mot de passe.</p>
+    <button class="btn-new" onclick="creerNouveau()">+ Nouvelle demande de congé</button>
+    <button class="btn-lien" onclick="voirMesDemandes()">🔍 Voir mes demandes</button>
+    <button class="btn-lien" onclick="voirToutesLesDemandes()">🔒 Voir toutes les demandes (gestionnaire)</button>
+    <div class="selector-list" id="selectorList"></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <button class="btn-retour no-print" onclick="retourListe()">← Retour</button>
   <div class="doc-header">
     <h1>Formulaire de demande de congé</h1>
     <p>À compléter par l'employé(e) et approuver par le gestionnaire</p>
@@ -69,83 +96,56 @@
   <div class="section">
     <div class="section-title">Informations de l'employé(e)</div>
     <div class="grid">
-      <div class="field"><label>Nom complet</label><input type="text" placeholder="Nom et prénom"></div>
-      <div class="field"><label>Poste occupé</label><input type="text" placeholder="Ex. : Secrétaire dentaire"></div>
-      <div class="field"><label>Date de la demande</label><input type="date" id="date-demande"></div>
-      <div class="field"><label>No. d'employé</label><input type="text" placeholder="Ex. : EMP-001"></div>
+      <div class="field"><label>Nom complet</label><input type="text" id="f_nomEmploye" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Poste occupé</label><input type="text" id="f_poste" oninput="scheduleSave()" placeholder="Ex. : Secrétaire dentaire"></div>
+      <div class="field"><label>Date de la demande</label><input type="date" id="f_dateDemande" onchange="scheduleSave()"></div>
+      <div class="field"><label>No. d'employé</label><input type="text" id="f_noEmploye" oninput="scheduleSave()" placeholder="Ex. : EMP-001"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Type de congé demandé</div>
-    <div class="type-grid">
-      <label class="type-card" onclick="selectType(this)">
-        <input type="radio" name="type-conge" value="vacances">
-        <div class="icon">🏖️</div>
-        <div class="name">Vacances</div>
-      </label>
-      <label class="type-card" onclick="selectType(this)">
-        <input type="radio" name="type-conge" value="maladie">
-        <div class="icon">🤒</div>
-        <div class="name">Maladie</div>
-      </label>
-      <label class="type-card" onclick="selectType(this)">
-        <input type="radio" name="type-conge" value="personnel">
-        <div class="icon">👤</div>
-        <div class="name">Congé personnel</div>
-      </label>
-      <label class="type-card" onclick="selectType(this)">
-        <input type="radio" name="type-conge" value="ferie">
-        <div class="icon">📅</div>
-        <div class="name">Férié reporté</div>
-      </label>
-      <label class="type-card" onclick="selectType(this)">
-        <input type="radio" name="type-conge" value="deuil">
-        <div class="icon">🕊️</div>
-        <div class="name">Deuil / Famille</div>
-      </label>
-      <label class="type-card" onclick="selectType(this)">
-        <input type="radio" name="type-conge" value="autre">
-        <div class="icon">📋</div>
-        <div class="name">Autre</div>
-      </label>
+    <div class="type-grid" id="typeGrid">
+      <label class="type-card" data-value="vacances" onclick="selectType(this)"><div class="icon">🏖️</div><div class="name">Vacances</div></label>
+      <label class="type-card" data-value="maladie" onclick="selectType(this)"><div class="icon">🤒</div><div class="name">Maladie</div></label>
+      <label class="type-card" data-value="personnel" onclick="selectType(this)"><div class="icon">👤</div><div class="name">Congé personnel</div></label>
+      <label class="type-card" data-value="ferie" onclick="selectType(this)"><div class="icon">📅</div><div class="name">Férié reporté</div></label>
+      <label class="type-card" data-value="deuil" onclick="selectType(this)"><div class="icon">🕊️</div><div class="name">Deuil / Famille</div></label>
+      <label class="type-card" data-value="autre" onclick="selectType(this)"><div class="icon">📋</div><div class="name">Autre</div></label>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Période de congé</div>
     <div class="grid">
-      <div class="field"><label>Date de début</label><input type="date" id="date-debut" onchange="calcJours()"></div>
-      <div class="field"><label>Date de fin</label><input type="date" id="date-fin" onchange="calcJours()"></div>
+      <div class="field"><label>Date de début</label><input type="date" id="f_dateDebut" onchange="calcJours();scheduleSave()"></div>
+      <div class="field"><label>Date de fin</label><input type="date" id="f_dateFin" onchange="calcJours();scheduleSave()"></div>
       <div class="field full">
-        <div class="nb-jours">
-          <span>Nombre de jours ouvrables demandés :</span>
-          <strong id="nb-jours">0</strong>
-        </div>
+        <div class="nb-jours"><span>Nombre de jours ouvrables demandés :</span><strong id="nb-jours">0</strong></div>
       </div>
-      <div class="field full"><label>Précisions ou motif (si applicable)</label><textarea placeholder="Informations supplémentaires au besoin..."></textarea></div>
+      <div class="field full"><label>Précisions ou motif (si applicable)</label><textarea id="f_precisions" oninput="scheduleSave()" placeholder="Informations supplémentaires au besoin..."></textarea></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Signature de l'employé(e)</div>
     <div class="grid">
-      <div class="field"><label>Signature</label><input type="text" placeholder="Signature manuscrite sur version imprimée"></div>
-      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Signature</label><input type="text" id="f_sigEmp" oninput="scheduleSave()" placeholder="Signature manuscrite sur version imprimée"></div>
+      <div class="field"><label>Date</label><input type="date" id="f_sigEmpDate" onchange="scheduleSave()"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Décision du gestionnaire</div>
     <div class="decision-section">
-      <button class="decision-btn approve" onclick="this.classList.toggle('selected')">✅ Approuvé</button>
-      <button class="decision-btn refuse" onclick="this.classList.toggle('selected')">❌ Refusé</button>
+      <button class="decision-btn approve" id="btnApprouve" onclick="setDecision('approuve')">✅ Approuvé</button>
+      <button class="decision-btn refuse" id="btnRefuse" onclick="setDecision('refuse')">❌ Refusé</button>
     </div>
     <div class="grid" style="margin-top:14px">
-      <div class="field full"><label>Commentaires du gestionnaire</label><textarea placeholder="Raison du refus ou notes importantes..."></textarea></div>
-      <div class="field"><label>Nom du gestionnaire</label><input type="text" placeholder="Nom et prénom"></div>
-      <div class="field"><label>Date de la décision</label><input type="date"></div>
-      <div class="field full"><label>Signature du gestionnaire</label><input type="text" placeholder="Signature manuscrite sur version imprimée"></div>
+      <div class="field full"><label>Commentaires du gestionnaire</label><textarea id="f_commentairesGest" oninput="scheduleSave()" placeholder="Raison du refus ou notes importantes..."></textarea></div>
+      <div class="field"><label>Nom du gestionnaire</label><input type="text" id="f_gestNom" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Date de la décision</label><input type="date" id="f_dateDecision" onchange="scheduleSave()"></div>
+      <div class="field full"><label>Signature du gestionnaire</label><input type="text" id="f_sigGest" oninput="scheduleSave()" placeholder="Signature manuscrite sur version imprimée"></div>
     </div>
   </div>
 
@@ -154,31 +154,209 @@
   </div>
   <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
 </div>
+
 <script>
-function selectType(el) { document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected')); el.classList.add('selected'); }
+const FIELD_IDS = ['f_nomEmploye','f_poste','f_dateDemande','f_noEmploye','f_dateDebut','f_dateFin','f_precisions','f_sigEmp','f_sigEmpDate','f_commentairesGest','f_gestNom','f_dateDecision','f_sigGest'];
+let typeConge = '';
+let decision = '';
+
+function selectType(el) {
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  typeConge = el.dataset.value;
+  scheduleSave();
+}
+function setDecision(v) {
+  decision = (decision === v) ? '' : v;
+  document.getElementById('btnApprouve').classList.toggle('selected', decision==='approuve');
+  document.getElementById('btnRefuse').classList.toggle('selected', decision==='refuse');
+  scheduleSave();
+}
 function calcJours() {
-  const d1 = new Date(document.getElementById('date-debut').value);
-  const d2 = new Date(document.getElementById('date-fin').value);
+  const d1 = new Date(document.getElementById('f_dateDebut').value);
+  const d2 = new Date(document.getElementById('f_dateFin').value);
   if (isNaN(d1) || isNaN(d2) || d2 < d1) { document.getElementById('nb-jours').textContent = '0'; return; }
   let count = 0, cur = new Date(d1);
   while (cur <= d2) { const day = cur.getDay(); if (day !== 0 && day !== 6) count++; cur.setDate(cur.getDate() + 1); }
   document.getElementById('nb-jours').textContent = count;
 }
-</script>
-<div class="toast" id="toast"></div>
 
-<script>
-var toastTimer = null;
-function afficherToast(msg, erreur) {
-  var t = document.getElementById('toast');
-  if (toastTimer) clearTimeout(toastTimer);
-  t.textContent = msg;
-  t.className = 'toast' + (erreur ? ' error' : '');
-  t.style.display = 'block';
-  if (msg.indexOf('cours') === -1) {
-    toastTimer = setTimeout(function() { t.style.display = 'none'; }, 6000);
-  }
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true, managerPin = null;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
 }
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+
+async function chargerPinClinique() {
+  try {
+    const { data, error } = await sb.rpc('get_conge_pin', { p_owner_token: ownerToken });
+    if (error) throw error;
+    managerPin = (data && data.length > 0) ? data[0].manager_pin : null;
+  } catch (e) { console.error(e); }
+}
+
+async function voirMesDemandes() {
+  const nom = prompt("Entrez votre nom complet tel qu'inscrit sur vos demandes :");
+  if (!nom || !nom.trim()) return;
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Recherche...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_mes_demandes_conge', { p_owner_token: ownerToken, p_nom: nom.trim() });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = `<div class="selector-empty">Aucune demande trouvée pour « ${nom.trim()} ». Vérifiez l'orthographe exacte utilisée lors de la création.</div>`;
+      return;
+    }
+    listEl.innerHTML = `<div style="font-weight:700;font-size:.85rem;color:var(--dark);padding:6px 0;border-bottom:2px solid var(--border);margin-bottom:6px;">Vos demandes</div>` + data.map(row => {
+      const type = row.type_conge || '';
+      const st = row.decision === 'approuve' ? 'background:#f0fdf4;color:#1a9e5a;' : row.decision === 'refuse' ? 'background:#fef2f2;color:#c0392b;' : 'background:#fff8e1;color:#e67e22;';
+      const stLabel = row.decision === 'approuve' ? '✅ Approuvé' : row.decision === 'refuse' ? '❌ Refusé' : '⏳ En attente';
+      return `<div class="selector-item" onclick="ouvrirDemande('${row.record_token}')">
+        <span class="sel-type" style="flex:1;">${type}</span>
+        <span class="sel-statut" style="${st}">${stLabel}</span>
+      </div>`;
+    }).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de recherche.</div>'; }
+}
+
+async function voirToutesLesDemandes() {
+  if (!managerPin) {
+    const nouveau = prompt("Première visite : créez un mot de passe pour protéger la liste des demandes (les employés qui créent une demande ne verront jamais cette liste) :");
+    if (!nouveau || !nouveau.trim()) return;
+    managerPin = nouveau.trim();
+    try { await sb.rpc('set_conge_pin', { p_owner_token: ownerToken, p_manager_pin: managerPin }); } catch (e) { console.error(e); }
+  } else {
+    const saisi = prompt("Mot de passe pour voir toutes les demandes :");
+    if (saisi !== managerPin) { if (saisi !== null) alert("Mot de passe incorrect."); return; }
+  }
+  afficherListe();
+}
+
+async function afficherListe() {
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_demandes_conge', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucune demande pour le moment.</div>';
+      return;
+    }
+    const groupes = {};
+    data.forEach(row => {
+      const nom = row.nom_employe || '(Nom non précisé)';
+      if (!groupes[nom]) groupes[nom] = [];
+      groupes[nom].push(row);
+    });
+    const nomsTries = Object.keys(groupes).sort((a,b) => a.localeCompare(b, 'fr'));
+    listEl.innerHTML = nomsTries.map(nom => {
+      const demandes = groupes[nom];
+      const items = demandes.map(row => {
+        const type = row.type_conge || '';
+        const st = row.decision === 'approuve' ? 'background:#f0fdf4;color:#1a9e5a;' : row.decision === 'refuse' ? 'background:#fef2f2;color:#c0392b;' : 'background:#fff8e1;color:#e67e22;';
+        const stLabel = row.decision === 'approuve' ? '✅ Approuvé' : row.decision === 'refuse' ? '❌ Refusé' : '⏳ En attente';
+        return `<div class="selector-item" style="margin-left:16px;" onclick="ouvrirDemande('${row.record_token}')">
+          <span class="sel-type" style="flex:1;">${type}</span>
+          <span class="sel-statut" style="${st}">${stLabel}</span>
+        </div>`;
+      }).join('');
+      return `<div style="margin-top:14px;"><div style="font-weight:700;font-size:.85rem;color:var(--dark);padding:6px 0;border-bottom:2px solid var(--border);margin-bottom:6px;">👤 ${nom} <span style="font-weight:400;color:#8a9ab0;font-size:.78rem;">(${demandes.length} demande${demandes.length>1?'s':''})</span></div>${items}</div>`;
+    }).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+async function creerNouveau() {
+  try {
+    const { data, error } = await sb.rpc('create_demande_conge', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirDemande(data);
+  } catch (e) { console.error(e); alert("Impossible de créer une nouvelle demande pour le moment."); }
+}
+
+async function ouvrirDemande(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('conge', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+  try {
+    const { data, error } = await sb.rpc('get_demande_conge', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const d = data[0].details || {};
+      FIELD_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = d[id] || ''; });
+      if (d.typeConge) { const c = document.querySelector(`.type-card[data-value="${d.typeConge}"]`); if (c) { c.classList.add('selected'); typeConge = d.typeConge; } }
+      if (d.decision) setDecision(d.decision);
+      calcJours();
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('conge');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  recordToken = null;
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  document.getElementById('selectorList').innerHTML = '';
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  const details = {};
+  FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.value; });
+  details.typeConge = typeConge;
+  details.decision = decision;
+  try {
+    const { error } = await sb.rpc('save_demande_conge', {
+      p_record_token: recordToken,
+      p_nom_employe: document.getElementById('f_nomEmploye').value || null,
+      p_type_conge: typeConge || null,
+      p_decision: decision || null,
+      p_details: details
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+
+async function initPage() {
+  ownerToken = getOwnerToken();
+  await chargerPinClinique();
+  const params = new URLSearchParams(window.location.search);
+  const existing = params.get('conge');
+  if (existing) { await ouvrirDemande(existing); }
+}
+initPage();
 </script>
 </body>
 </html>
