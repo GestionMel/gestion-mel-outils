@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- saved from url=(0061)file:///C:/Users/info/Downloads/programme-reconnaissance.html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Programme de reconnaissance — Gestion Mel</title>
 <style>
-  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;}
+  :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
   .page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;}
@@ -24,55 +24,41 @@
   input[type=text],input[type=date],textarea{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--light);}
   input:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}
   textarea{resize:vertical;min-height:70px;line-height:1.65;width:100%;}
-
-  /* ANCIENNETÉ TABLE */
   .anc-table{width:100%;border-collapse:collapse;font-size:.86rem;margin-bottom:12px;}
-  .anc-table th{background:var(--dark);color:white;padding:10px 14px;text-align:left;font-size:.76rem;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .anc-table th{background:var(--dark);color:white;padding:10px 14px;text-align:left;font-size:.76rem;}
   .anc-table td{border:1px solid var(--border);padding:8px 12px;vertical-align:middle;}
   .anc-table tr:nth-child(even) td{background:var(--light);}
   .anc-table input{border:none;background:transparent;width:100%;font-family:inherit;font-size:.86rem;padding:3px;}
   .anc-table input:focus{outline:none;background:#fffde7;}
-  .year-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--dark);color:white;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;min-width:60px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .btn-del{width:26px;height:26px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:#c0392b;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;}
-  .btn-del:hover{background:#fef2f2;border-color:#c0392b;}
+  .year-badge{display:inline-flex;align-items:center;justify-content:center;background:var(--dark);color:white;border-radius:8px;padding:4px 10px;font-size:.8rem;font-weight:700;min-width:60px;}
+  .btn-del{width:26px;height:26px;border-radius:5px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;}
+  .btn-del:hover{background:#fef2f2;border-color:var(--red);}
   .btn-add-row{margin-top:8px;padding:7px 14px;background:white;border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.81rem;font-weight:600;cursor:pointer;font-family:inherit;}
   .btn-add-row:hover{background:#e8f0fb;}
-
-  /* ACTIVITÉS */
   .activite-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
   .activite-row{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;background:var(--light);border:1.5px solid var(--border);border-radius:7px;padding:9px 12px;}
-
-  /* NOTE FISCALE */
   .note-fiscale{background:#fff8e1;border-left:4px solid var(--orange);border-radius:4px;padding:10px 14px;font-size:.82rem;color:#7a4400;margin-bottom:14px;line-height:1.7;}
-
-  /* STARS VISUAL */
-  .stars-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-  .star-card{background:var(--light);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;text-align:center;min-width:100px;flex:1;}
-  .star-card .star{font-size:1.5rem;margin-bottom:4px;}
-  .star-card .years{font-size:1.1rem;font-weight:700;color:var(--blue);}
-  .star-card .amount{font-size:.8rem;color:#5a6a80;margin-top:3px;}
-
   .actions{padding:20px 36px;background:var(--light);display:flex;gap:10px;justify-content:flex-end;}
   .btn{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
   .btn-print{background:white;color:#5a6a80;border:1.5px solid var(--border);}
   .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px;}
-
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
   @media print{
     body{background:white;}
-    .page-header,.actions,.btn-del,.btn-add-row{display:none!important;}
+    .page-header,.actions,.btn-del,.btn-add-row,.sync-status{display:none!important;}
     .container{box-shadow:none;margin:0;border-radius:0;}
     .doc-header,.anc-table th,.year-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     input{border:none!important;background:transparent!important;}
   }
-  @media(max-width:600px){
-    .section{padding:14px 16px;}
-    .grid{grid-template-columns:1fr;}
-    .activite-row{grid-template-columns:1fr auto;}
-    .stars-row{flex-direction:column;}
-  }
+  @media(max-width:600px){.section{padding:14px 16px;}.grid{grid-template-columns:1fr;}.activite-row{grid-template-columns:1fr auto;}}
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Ressources humaines</div></div>
 <div class="container">
   <div class="doc-header">
@@ -83,54 +69,37 @@
   <div class="section">
     <div class="section-title">Identification</div>
     <div class="grid">
-      <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
-      <div class="field"><label>Date de création / mise à jour</label><input type="date"></div>
-      <div class="field"><label>Approuvé par</label><input type="text" placeholder="Nom du gestionnaire / propriétaire"></div>
+      <div class="field"><label>Nom de la clinique</label><input type="text" id="f_clinique" oninput="scheduleSave()" placeholder="Clinique Dentaire..."></div>
+      <div class="field"><label>Date de création / mise à jour</label><input type="date" id="f_date" onchange="scheduleSave()"></div>
+      <div class="field"><label>Approuvé par</label><input type="text" id="f_approuve" oninput="scheduleSave()" placeholder="Nom du gestionnaire / propriétaire"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Objectifs du programme</div>
-    <textarea style="min-height:80px;">La direction a à cœur le bien-être de ses employés et désire conserver son personnel en le remerciant pour ses années de service continus. Ce programme a pour but de remercier son personnel dévoué pour sa loyauté et son bon service, et de contribuer à un sentiment d'appartenance fort au sein de l'équipe.</textarea>
+    <textarea id="f_objectifs" oninput="scheduleSave()" style="min-height:80px;">La direction a à cœur le bien-être de ses employés et désire conserver son personnel en le remerciant pour ses années de service continus. Ce programme a pour but de remercier son personnel dévoué pour sa loyauté et son bon service, et de contribuer à un sentiment d'appartenance fort au sein de l'équipe.</textarea>
   </div>
 
   <div class="section">
     <div class="section-title">Programme de reconnaissance — Ancienneté</div>
     <div class="note-fiscale">⚠️ <strong>Note fiscale importante :</strong> Les cadeaux sont considérés comme un avantage imposable au fédéral, peu importe le montant. Au provincial, ils ne sont pas imposables si le montant total ne dépasse pas 500 $ dans l'année. Consultez votre comptable pour plus de détails.</div>
-
     <table class="anc-table">
       <thead><tr><th style="width:15%">Ancienneté</th><th style="width:45%">Type de cadeau / reconnaissance</th><th style="width:20%">Valeur maximale</th><th style="width:15%">Notes</th><th style="width:5%"></th></tr></thead>
-      <tbody id="ancTable">
-        <tr><td><span class="year-badge">5 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
-        <tr><td><span class="year-badge">10 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
-        <tr><td><span class="year-badge">15 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
-        <tr><td><span class="year-badge">20 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
-        <tr><td><span class="year-badge">25 ans</span></td><td><input type="text" value="Carte cadeau au choix de l&#39;employeur"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()">×</button></td></tr>
-      </tbody>
+      <tbody id="ancTable"></tbody>
     </table>
     <button class="btn-add-row" onclick="addAncRow()">+ Ajouter une tranche d'ancienneté</button>
   </div>
 
   <div class="section">
     <div class="section-title">Activités sociales et de reconnaissance</div>
-    <textarea style="min-height:75px;margin-bottom:14px;">Des activités à caractère social et de reconnaissance sont organisées, au minimum, une fois par année. Ces activités permettent de souligner le début des vacances, la période des Fêtes, les départs à la retraite, les bons résultats et tous les efforts soutenus apportés par les membres de l'équipe.</textarea>
-
-    <div class="activite-list" id="activiteList"><div class="activite-row">
-    <input type="text" placeholder="Nom de l&#39;activité (ex : Dîner de Noël, 5 à 7...)">
-    <input type="text" placeholder="Période prévue (ex : Décembre)">
-    <button class="btn-del" onclick="this.closest(&#39;.activite-row&#39;).remove()">×</button></div><div class="activite-row">
-    <input type="text" placeholder="Nom de l&#39;activité (ex : Dîner de Noël, 5 à 7...)">
-    <input type="text" placeholder="Période prévue (ex : Décembre)">
-    <button class="btn-del" onclick="this.closest(&#39;.activite-row&#39;).remove()">×</button></div><div class="activite-row">
-    <input type="text" placeholder="Nom de l&#39;activité (ex : Dîner de Noël, 5 à 7...)">
-    <input type="text" placeholder="Période prévue (ex : Décembre)">
-    <button class="btn-del" onclick="this.closest(&#39;.activite-row&#39;).remove()">×</button></div></div>
+    <textarea id="f_activitesTexte" oninput="scheduleSave()" style="min-height:75px;margin-bottom:14px;">Des activités à caractère social et de reconnaissance sont organisées, au minimum, une fois par année. Ces activités permettent de souligner le début des vacances, la période des Fêtes, les départs à la retraite, les bons résultats et tous les efforts soutenus apportés par les membres de l'équipe.</textarea>
+    <div class="activite-list" id="activiteList"></div>
     <button class="btn-add-row" onclick="addActivite()">+ Ajouter une activité prévue</button>
   </div>
 
   <div class="section">
     <div class="section-title">Autres formes de reconnaissance</div>
-    <textarea style="min-height:90px;">La reconnaissance ne se limite pas aux cadeaux d'ancienneté. La clinique valorise également :
+    <textarea id="f_autres" oninput="scheduleSave()" style="min-height:90px;">La reconnaissance ne se limite pas aux cadeaux d'ancienneté. La clinique valorise également :
 • Les félicitations verbales et écrites pour le travail bien fait
 • La soulignement des semaines dédiées à chaque corps de métier (secrétaires, hygiénistes, assistantes)
 • Les petites attentions lors des fêtes et occasions spéciales
@@ -142,7 +111,7 @@
     <div class="section-title">Approbation</div>
     <div class="grid">
       <div>
-        <div class="field" style="margin-bottom:24px;"><label>Signature du (de la) gestionnaire</label><input type="text" placeholder="Nom et prénom"></div>
+        <div class="field" style="margin-bottom:24px;"><label>Signature du (de la) gestionnaire</label><input type="text" id="f_sigGest" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
         <div style="border-top:1.5px solid var(--border);padding-top:8px;font-size:.77rem;color:#5a6a80;">Signature ____________________________ Date ___________</div>
       </div>
     </div>
@@ -153,33 +122,126 @@
 </div>
 
 <script>
-function addAncRow() {
-  const tbody = document.getElementById('ancTable');
-  const tr = document.createElement('tr');
-  tr.innerHTML = `<td><input type="text" placeholder="Ex : 30 ans" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 8px;font-family:inherit;font-size:.85rem;background:var(--light);"></td><td><input type="text" placeholder="Type de cadeau"></td><td><input type="text" placeholder="Montant ($)"></td><td><input type="text" placeholder="Notes..."></td><td><button class="btn-del" onclick="this.closest('tr').remove()">×</button></td>`;
-  tbody.appendChild(tr);
+let ancRows = [];
+let ancIdCnt = 1;
+let activites = [];
+let actIdCnt = 1;
+
+function newAncRow(anciennete, cadeau){ return { id: ancIdCnt++, anciennete, cadeau, montant:'', notes:'' }; }
+function newActivite(nom, periode){ return { id: actIdCnt++, nom, periode }; }
+
+function renderAncFull(){
+  document.getElementById('ancTable').innerHTML = ancRows.map(r => `<tr>
+    <td><input type="text" value="${r.anciennete}" oninput="updateAnc(${r.id},'anciennete',this.value)" style="font-weight:700;color:var(--blue);"></td>
+    <td><input type="text" value="${r.cadeau}" oninput="updateAnc(${r.id},'cadeau',this.value)"></td>
+    <td><input type="text" placeholder="Montant ($)" value="${r.montant}" oninput="updateAnc(${r.id},'montant',this.value)"></td>
+    <td><input type="text" placeholder="Notes..." value="${r.notes}" oninput="updateAnc(${r.id},'notes',this.value)"></td>
+    <td><button class="btn-del" onclick="delAnc(${r.id})">×</button></td>
+  </tr>`).join('');
 }
 
-function addActivite() {
-  const list = document.getElementById('activiteList');
-  const row = document.createElement('div');
-  row.className = 'activite-row';
-  row.innerHTML = `
-    <input type="text" placeholder="Nom de l'activité (ex : Dîner de Noël, 5 à 7...)">
-    <input type="text" placeholder="Période prévue (ex : Décembre)">
-    <button class="btn-del" onclick="this.closest('.activite-row').remove()">×</button>`;
-  list.appendChild(row);
-}
+function updateAnc(id, field, val){ const r = ancRows.find(x=>x.id===id); if(r) r[field]=val; scheduleSave(); }
+function addAncRow(){ ancRows.push(newAncRow('Ex : 30 ans','Carte cadeau au choix de l\'employeur')); renderAncFull(); scheduleSave(); }
+function delAnc(id){ ancRows = ancRows.filter(r=>r.id!==id); renderAncFull(); scheduleSave(); }
 
-// Init 3 activités
-['Dîner ou 5 à 7 de fin d\'année', 'Activité estivale / début des vacances', 'Semaine de la gentillesse (novembre)'].forEach((act, i) => {
-  addActivite();
-  const rows = document.querySelectorAll('.activite-row');
-  const last = rows[rows.length-1];
-  last.querySelector('input:first-child').value = act;
-  last.querySelectorAll('input')[1].value = ['Décembre', 'Juin', 'Novembre'][i];
-});
+function renderActivites(){
+  document.getElementById('activiteList').innerHTML = activites.map(a => `<div class="activite-row">
+    <input type="text" placeholder="Nom de l'activité (ex : Dîner de Noël, 5 à 7...)" value="${a.nom}" oninput="updateActivite(${a.id},'nom',this.value)">
+    <input type="text" placeholder="Période prévue (ex : Décembre)" value="${a.periode}" oninput="updateActivite(${a.id},'periode',this.value)">
+    <button class="btn-del" onclick="delActivite(${a.id})">×</button>
+  </div>`).join('');
+}
+function updateActivite(id, field, val){ const a = activites.find(x=>x.id===id); if(a) a[field]=val; scheduleSave(); }
+function addActivite(){ activites.push(newActivite('','')); renderActivites(); scheduleSave(); }
+function delActivite(id){ activites = activites.filter(a=>a.id!==id); renderActivites(); scheduleSave(); }
+
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_programme_reconnaissance', {
+      p_owner_token: ownerToken,
+      p_clinique: document.getElementById('f_clinique').value || null,
+      p_date: document.getElementById('f_date').value || null,
+      p_approuve: document.getElementById('f_approuve').value || null,
+      p_objectifs: document.getElementById('f_objectifs').value || null,
+      p_activites_texte: document.getElementById('f_activitesTexte').value || null,
+      p_autres: document.getElementById('f_autres').value || null,
+      p_sig_gest: document.getElementById('f_sigGest').value || null,
+      p_anc_rows: ancRows,
+      p_activites: activites
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function initPage() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_programme_reconnaissance', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      if (row.clinique) document.getElementById('f_clinique').value = row.clinique;
+      if (row.date_maj) document.getElementById('f_date').value = row.date_maj;
+      if (row.approuve) document.getElementById('f_approuve').value = row.approuve;
+      if (row.objectifs) document.getElementById('f_objectifs').value = row.objectifs;
+      if (row.activites_texte) document.getElementById('f_activitesTexte').value = row.activites_texte;
+      if (row.autres) document.getElementById('f_autres').value = row.autres;
+      if (row.sig_gest) document.getElementById('f_sigGest').value = row.sig_gest;
+      ancRows = row.anc_rows && row.anc_rows.length ? row.anc_rows : [];
+      activites = row.activites && row.activites.length ? row.activites : [];
+      ancIdCnt = ancRows.reduce((m,r)=>Math.max(m,r.id+1), 1);
+      actIdCnt = activites.reduce((m,a)=>Math.max(m,a.id+1), 1);
+    } else {
+      await sb.rpc('create_programme_reconnaissance', { p_owner_token: ownerToken });
+      ancRows = [
+        newAncRow('5 ans','Carte cadeau au choix de l\'employeur'),
+        newAncRow('10 ans','Carte cadeau au choix de l\'employeur'),
+        newAncRow('15 ans','Carte cadeau au choix de l\'employeur'),
+        newAncRow('20 ans','Carte cadeau au choix de l\'employeur'),
+        newAncRow('25 ans','Carte cadeau au choix de l\'employeur'),
+      ];
+      activites = [
+        newActivite('Dîner ou 5 à 7 de fin d\'année','Décembre'),
+        newActivite('Activité estivale / début des vacances','Juin'),
+        newActivite('Semaine de la gentillesse','Novembre'),
+      ];
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+  if (!document.getElementById('f_date').value) document.getElementById('f_date').valueAsDate = new Date();
+  renderAncFull();
+  renderActivites();
+}
+initPage();
 </script>
-
-
-</body></html>
+</body>
+</html>
