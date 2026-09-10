@@ -135,8 +135,12 @@
     </div>
   </div>
 
-  <div class="section">
+  <div class="section" id="decisionSection">
     <div class="section-title">Décision du gestionnaire</div>
+    <div id="decisionLocked" style="display:none;background:var(--light);border:1.5px dashed var(--border);border-radius:8px;padding:14px 16px;margin-bottom:14px;font-size:.85rem;color:#5a6a80;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+      <span>🔒 Section réservée à la gestionnaire.</span>
+      <button class="btn btn-secondary" style="padding:7px 16px;font-size:.82rem;" onclick="deverrouillerDecision()">Déverrouiller</button>
+    </div>
     <div class="decision-section">
       <button class="decision-btn approve" id="btnApprouve" onclick="setDecision('approuve')">✅ Approuvé</button>
       <button class="decision-btn refuse" id="btnRefuse" onclick="setDecision('refuse')">❌ Refusé</button>
@@ -184,7 +188,7 @@ function calcJours() {
 const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true, managerPin = null;
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true, managerPin = null, dashboardUnlocked = false;
 
 function getOwnerToken() {
   const params = new URLSearchParams(window.location.search);
@@ -246,7 +250,31 @@ async function voirToutesLesDemandes() {
     const saisi = prompt("Mot de passe pour voir toutes les demandes :");
     if (saisi !== managerPin) { if (saisi !== null) alert("Mot de passe incorrect."); return; }
   }
+  dashboardUnlocked = true;
   afficherListe();
+}
+
+function deverrouillerDecision() {
+  if (!managerPin) { alert("Aucun mot de passe n'a encore été créé. Passez d'abord par « Voir toutes les demandes » pour en créer un."); return; }
+  const saisi = prompt("Mot de passe de la gestionnaire :");
+  if (saisi !== managerPin) { if (saisi !== null) alert("Mot de passe incorrect."); return; }
+  dashboardUnlocked = true;
+  refreshDecisionAccess();
+}
+
+function refreshDecisionAccess() {
+  const locked = !dashboardUnlocked;
+  document.getElementById('decisionLocked').style.display = locked ? 'flex' : 'none';
+  document.getElementById('btnApprouve').disabled = locked;
+  document.getElementById('btnRefuse').disabled = locked;
+  document.getElementById('btnApprouve').style.opacity = locked ? '.5' : '1';
+  document.getElementById('btnRefuse').style.opacity = locked ? '.5' : '1';
+  document.getElementById('btnApprouve').style.cursor = locked ? 'not-allowed' : 'pointer';
+  document.getElementById('btnRefuse').style.cursor = locked ? 'not-allowed' : 'pointer';
+  ['f_commentairesGest','f_gestNom','f_dateDecision','f_sigGest'].forEach(id => {
+    document.getElementById(id).readOnly = locked;
+    document.getElementById(id).style.background = locked ? '#f4f4f4' : '';
+  });
 }
 
 async function afficherListe() {
@@ -311,6 +339,7 @@ async function ouvrirDemande(token) {
     setStatus('ok');
   } catch (e) { console.error(e); setStatus('err'); }
   isLoading = false;
+  refreshDecisionAccess();
 }
 
 function retourListe() {
