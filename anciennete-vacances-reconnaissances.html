@@ -139,10 +139,17 @@
     .clinic-bar{padding:10px 14px;}
     .stats-grid{grid-template-columns:1fr 1fr;}
   }
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status{display:none!important;} }
 </style>
 </head>
 <body>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Ancienneté et vacances</div>
@@ -155,7 +162,7 @@
   </div>
 
   <div class="clinic-bar">
-    <input class="ci" type="text" id="nomClinique" placeholder="Nom de la clinique..." style="min-width:220px;">
+    <input class="ci" type="text" id="nomClinique" oninput="scheduleSave()" placeholder="Nom de la clinique..." style="min-width:220px;">
     <span style="font-size:.76rem;color:#8a9ab0;">Aujourd'hui : <strong id="todayDate">17 mai 2026</strong></span>
     <div style="margin-left:auto;display:flex;gap:7px;">
       <button class="btn-top" onclick="showTab(1,null)">⚙️ Politique de vacances</button>
@@ -484,7 +491,7 @@ let vacPolicy = [
   { from:10,  to:9999, weeks:5,   pct:10,  label:'10 ans et + — 5 semaines', color:'#d4a017' },
 ];
 
-// Sample employees
+// Sample employees (utilisé seulement pour une nouvelle clinique)
 const SAMPLES = [
   { nom:'Tremblay, Marie', poste:'Secrétaire dentaire', dateEmb:'2019-03-15', statut:'Temps plein' },
   { nom:'Gagnon, Sophie', poste:'Hygiéniste dentaire', dateEmb:'2021-09-01', statut:'Temps plein' },
@@ -492,7 +499,6 @@ const SAMPLES = [
   { nom:'Fortin, Anne', poste:'Secrétaire aux rappels', dateEmb:'2015-06-08', statut:'Temps plein' },
   { nom:'Côté, Josée', poste:'Gestionnaire', dateEmb:'2012-11-30', statut:'Temps plein' },
 ];
-SAMPLES.forEach(s => { s.id = idCnt++; employees.push(s); });
 
 // ===== HELPERS =====
 function getAge(dateEmb) {
@@ -703,11 +709,21 @@ function addEmployee() {
   document.getElementById('f_nom').value = '';
   document.getElementById('f_dateEmb').value = '';
   renderAll();
+  scheduleSave();
 }
 
 function removeEmp(id) {
   employees = employees.filter(e => e.id !== id);
   renderAll();
+  scheduleSave();
+}
+
+function toggleRecu(empId, milestoneLabel, checked) {
+  const emp = employees.find(e => e.id === empId);
+  if (!emp) return;
+  if (!emp.recuMilestones) emp.recuMilestones = {};
+  emp.recuMilestones[milestoneLabel] = checked;
+  scheduleSave();
 }
 
 // ===== POLICY TABLE =====
@@ -718,15 +734,15 @@ function renderPolicy() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><button class="btn-del" onclick="removePolicy(${i})">×</button></td>
-      <td><input type="number" min="0" step="0.5" value="${p.from}" onchange="vacPolicy[${i}].from=+this.value;renderAll()"></td>
-      <td><input type="number" min="0" step="0.5" value="${p.to === 9999 ? '' : p.to}" placeholder="Illimité" onchange="vacPolicy[${i}].to=this.value?+this.value:9999;renderAll()"></td>
-      <td><input type="number" min="0" step="0.5" value="${p.weeks}" onchange="vacPolicy[${i}].weeks=+this.value;renderAll()"></td>
-      <td><input type="number" min="0" step="0.5" value="${p.pct}" onchange="vacPolicy[${i}].pct=+this.value;renderAll()"></td>
-      <td><input type="text" value="${p.label}" onchange="vacPolicy[${i}].label=this.value;renderAll()"></td>
+      <td><input type="number" min="0" step="0.5" value="${p.from}" onchange="vacPolicy[${i}].from=+this.value;renderAll();scheduleSave()"></td>
+      <td><input type="number" min="0" step="0.5" value="${p.to === 9999 ? '' : p.to}" placeholder="Illimité" onchange="vacPolicy[${i}].to=this.value?+this.value:9999;renderAll();scheduleSave()"></td>
+      <td><input type="number" min="0" step="0.5" value="${p.weeks}" onchange="vacPolicy[${i}].weeks=+this.value;renderAll();scheduleSave()"></td>
+      <td><input type="number" min="0" step="0.5" value="${p.pct}" onchange="vacPolicy[${i}].pct=+this.value;renderAll();scheduleSave()"></td>
+      <td><input type="text" value="${p.label}" onchange="vacPolicy[${i}].label=this.value;renderAll();scheduleSave()"></td>
       <td style="text-align:center;">
         <div style="display:flex;align-items:center;gap:6px;">
           <div class="color-dot" style="background:${p.color};"></div>
-          <input type="color" value="${p.color}" onchange="vacPolicy[${i}].color=this.value;renderAll()" style="width:32px;height:24px;border:none;padding:0;cursor:pointer;border-radius:4px;">
+          <input type="color" value="${p.color}" onchange="vacPolicy[${i}].color=this.value;renderAll();scheduleSave()" style="width:32px;height:24px;border:none;padding:0;cursor:pointer;border-radius:4px;">
         </div>
       </td>`;
     tbody.appendChild(tr);
@@ -736,12 +752,14 @@ function renderPolicy() {
 function addPolicyRow() {
   vacPolicy.push({ from:0, to:9999, weeks:2, pct:4, label:'Nouveau palier', color:'#2196f3' });
   renderPolicy();
+  scheduleSave();
 }
 
 function removePolicy(i) {
   vacPolicy.splice(i, 1);
   renderPolicy();
   renderAll();
+  scheduleSave();
 }
 
 // ===== MILESTONES CONFIG =====
@@ -763,10 +781,10 @@ function renderMilestonesTable() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><span style="background:${colors[i%colors.length]}20;color:${colors[i%colors.length]};border:1px solid ${colors[i%colors.length]}40;padding:3px 10px;border-radius:8px;font-weight:700;font-size:.8rem;">🏅 ${m.label}</span></td>
-      <td><input class="policy-table input" type="text" value="${m.type}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;" onchange="milestones[${i}].type=this.value"></td>
-      <td><input type="text" value="${m.amount}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;text-align:right;" onchange="milestones[${i}].amount=this.value"></td>
-      <td><input type="text" value="${m.description}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;" onchange="milestones[${i}].description=this.value"></td>
-      <td class="no-print"><button class="btn-del" onclick="milestones.splice(${i},1);renderMilestonesTable();renderRecogTable()">×</button></td>`;
+      <td><input class="policy-table input" type="text" value="${m.type}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;" onchange="milestones[${i}].type=this.value;scheduleSave()"></td>
+      <td><input type="text" value="${m.amount}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;text-align:right;" onchange="milestones[${i}].amount=this.value;scheduleSave()"></td>
+      <td><input type="text" value="${m.description}" style="border:1.5px solid var(--border);border-radius:5px;padding:5px 8px;font-size:.82rem;font-family:inherit;width:100%;background:white;" onchange="milestones[${i}].description=this.value;scheduleSave()"></td>
+      <td class="no-print"><button class="btn-del" onclick="milestones.splice(${i},1);renderMilestonesTable();renderRecogTable();scheduleSave()">×</button></td>`;
     tbody.appendChild(tr);
   });
 }
@@ -776,6 +794,7 @@ function addMilestone() {
   milestones.sort((a,b)=>a.years-b.years);
   renderMilestonesTable();
   renderRecogTable();
+  scheduleSave();
 }
 
 function getCurrentMilestone(years) {
@@ -808,7 +827,7 @@ function renderRecogTable() {
       <td style="text-align:center;font-size:.78rem;">${cur ? `<strong>${cur.amount}</strong> — ${cur.description}` : '—'}</td>
       <td style="text-align:center;">${next ? `<span style="background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.2);padding:2px 9px;border-radius:8px;font-size:.75rem;font-weight:700;">🎯 ${next.label}</span>` : '<span style="color:#d4a017;font-size:.78rem;font-weight:700;">🏆 Max atteint!</span>'}</td>
       <td style="text-align:center;font-size:.78rem;${monthsUntil && monthsUntil<=6?'color:var(--orange);font-weight:700;':''}">${monthsUntil ? (monthsUntil <= 12 ? `⚡ ${monthsUntil} mois` : `${Math.ceil(yearsUntilNext)} an${Math.ceil(yearsUntilNext)>1?'s':''}`) : '—'}</td>
-      <td style="text-align:center;"><input type="checkbox" style="width:16px;height:16px;cursor:pointer;accent-color:var(--green);" title="Reconnaissance remise"></td>`;
+      <td style="text-align:center;">${cur ? `<input type="checkbox" ${(emp.recuMilestones&&emp.recuMilestones[cur.label])?'checked':''} onchange="toggleRecu(${emp.id},'${cur.label}',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--green);" title="Reconnaissance remise">` : '—'}</td>`;
     tbody.appendChild(tr);
   });
 
@@ -851,9 +870,72 @@ function showTab(n, btn) {
   if (n === 3) { renderMilestonesTable(); renderRecogTable(); }
 }
 
-// Init
-document.getElementById('todayDate').textContent = TODAY.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
-renderAll();
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_anciennete_vacances', {
+      p_owner_token: ownerToken,
+      p_nom_clinique: document.getElementById('nomClinique').value || null,
+      p_employees: employees,
+      p_vac_policy: vacPolicy,
+      p_milestones: milestones
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function initPage() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_anciennete_vacances', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      employees = row.employees && row.employees.length ? row.employees : [];
+      vacPolicy = row.vac_policy && row.vac_policy.length ? row.vac_policy : vacPolicy;
+      milestones = row.milestones && row.milestones.length ? row.milestones : milestones;
+      if (row.nom_clinique) document.getElementById('nomClinique').value = row.nom_clinique;
+      idCnt = employees.reduce((m,e)=>Math.max(m,e.id+1), 1);
+    } else {
+      await sb.rpc('create_anciennete_vacances', { p_owner_token: ownerToken });
+      employees = [];
+      SAMPLES.forEach(s => { employees.push({ ...s, id: idCnt++ }); });
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+  document.getElementById('todayDate').textContent = TODAY.toLocaleDateString('fr-CA', { year:'numeric', month:'long', day:'numeric' });
+  renderAll();
+  scheduleSave();
+}
+initPage();
 </script>
 
 
