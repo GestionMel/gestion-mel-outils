@@ -5,13 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Évaluation mi-annuelle — Gestion Mel</title>
 <style>
-  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; }
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green:#1a9e5a; --orange:#e67e22; --red:#c0392b; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
   .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
   .page-header .brand { font-size: 1.5rem; font-weight: 700; }
   .page-header .brand span { color: var(--accent); }
   .container { max-width: 860px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-right:10px;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-periode{font-size:.78rem;color:#5a6a80;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:16px 36px 0;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
   .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
   .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
   .doc-header p { font-size: 0.85rem; opacity: 0.75; }
@@ -29,31 +46,40 @@
   .critere-row:last-child { border-bottom: none; }
   .critere-label { font-size: 0.88rem; font-weight: 600; color: var(--text); }
   .critere-desc { font-size: 0.78rem; color: #6a7a90; margin-top: 2px; }
-  .stars { display: flex; gap: 4px; }
+  .stars { display: flex; gap: 4px; flex-direction: row-reverse; }
   .stars input[type="radio"] { display: none; }
   .stars label { font-size: 1.4rem; cursor: pointer; color: #ddd; transition: color 0.15s; }
-  .stars input[type="radio"]:checked ~ label, .stars label:hover, .stars label:hover ~ label { color: #f0b429; }
-  .stars { flex-direction: row-reverse; }
   .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: #f0b429; }
   .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.75rem; color: #6a7a90; margin-top: 8px; }
   .legend span { display: flex; align-items: center; gap: 4px; }
-  .score-display { background: var(--light); border-radius: 8px; padding: 14px 18px; text-align: center; }
-  .score-display .score { font-size: 2.5rem; font-weight: 700; color: var(--blue); }
-  .score-display .label { font-size: 0.8rem; color: #6a7a90; }
   .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; }
   .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
   .btn-primary { background: var(--blue); color: white; }
   .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
   .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
-  @media print { body { background: white; } .page-header, .actions { display: none; } .container { box-shadow: none; margin: 0; } }
+  @media print { body { background: white; } .page-header, .actions, .sync-status, .selector-screen, .btn-retour { display: none; } .container { box-shadow: none; margin: 0; } }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div>Clinique dentaire — Gestion RH</div>
 </div>
-<div class="container">
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Évaluations mi-annuelles</h1>
+    <p>Choisissez une évaluation déjà créée pour comparer d'une fois à l'autre, ou créez-en une nouvelle.</p>
+    <button class="btn-new" onclick="creerNouveau()">+ Nouvelle évaluation</button>
+    <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
+    <div class="selector-list" id="selectorList"><div class="selector-empty">Chargement...</div></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header">
     <h1>Évaluation de performance — Mi-annuelle</h1>
     <p>Formulaire d'évaluation à compléter deux fois par année avec chaque employé(e)</p>
@@ -62,113 +88,52 @@
   <div class="section">
     <div class="section-title">Informations générales</div>
     <div class="grid">
-      <div class="field"><label>Nom de l'employé(e)</label><input type="text"></div>
-      <div class="field"><label>Poste occupé</label><input type="text"></div>
-      <div class="field"><label>Période évaluée</label><input type="text" placeholder="Ex. : Janvier à Juin 2025"></div>
-      <div class="field"><label>Date de l'évaluation</label><input type="date"></div>
-      <div class="field"><label>Gestionnaire évaluateur</label><input type="text"></div>
-      <div class="field"><label>Ancienneté</label><input type="text" placeholder="Ex. : 1 an, 6 mois"></div>
+      <div class="field"><label>Nom de l'employé(e)</label><input type="text" id="f_nomEmploye" oninput="scheduleSave()"></div>
+      <div class="field"><label>Poste occupé</label><input type="text" id="f_poste" oninput="scheduleSave()"></div>
+      <div class="field"><label>Période évaluée</label><input type="text" id="f_periode" oninput="scheduleSave()" placeholder="Ex. : Janvier à Juin 2026"></div>
+      <div class="field"><label>Date de l'évaluation</label><input type="date" id="f_dateEval" onchange="scheduleSave()"></div>
+      <div class="field"><label>Gestionnaire évaluateur</label><input type="text" id="f_evaluateur" oninput="scheduleSave()"></div>
+      <div class="field"><label>Ancienneté</label><input type="text" id="f_anciennete" oninput="scheduleSave()" placeholder="Ex. : 1 an, 6 mois"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Grille d'évaluation</div>
     <div class="legend"><span>⭐ Insatisfaisant</span><span>⭐⭐ À améliorer</span><span>⭐⭐⭐ Satisfaisant</span><span>⭐⭐⭐⭐ Très bien</span><span>⭐⭐⭐⭐⭐ Exceptionnel</span></div>
-    <div style="margin-top: 16px;">
-      <div class="critere-row">
-        <div><div class="critere-label">Qualité du travail</div><div class="critere-desc">Précision, soin, respect des procédures</div></div>
-        <div class="stars" id="stars-1">
-          <input type="radio" name="s1" id="s1-5" value="5"><label for="s1-5">★</label>
-          <input type="radio" name="s1" id="s1-4" value="4"><label for="s1-4">★</label>
-          <input type="radio" name="s1" id="s1-3" value="3"><label for="s1-3">★</label>
-          <input type="radio" name="s1" id="s1-2" value="2"><label for="s1-2">★</label>
-          <input type="radio" name="s1" id="s1-1" value="1"><label for="s1-1">★</label>
-        </div>
-      </div>
-      <div class="critere-row">
-        <div><div class="critere-label">Ponctualité et assiduité</div><div class="critere-desc">Présence, heures, gestion des absences</div></div>
-        <div class="stars">
-          <input type="radio" name="s2" id="s2-5" value="5"><label for="s2-5">★</label>
-          <input type="radio" name="s2" id="s2-4" value="4"><label for="s2-4">★</label>
-          <input type="radio" name="s2" id="s2-3" value="3"><label for="s2-3">★</label>
-          <input type="radio" name="s2" id="s2-2" value="2"><label for="s2-2">★</label>
-          <input type="radio" name="s2" id="s2-1" value="1"><label for="s2-1">★</label>
-        </div>
-      </div>
-      <div class="critere-row">
-        <div><div class="critere-label">Communication et travail d'équipe</div><div class="critere-desc">Collaboration, attitude, écoute</div></div>
-        <div class="stars">
-          <input type="radio" name="s3" id="s3-5" value="5"><label for="s3-5">★</label>
-          <input type="radio" name="s3" id="s3-4" value="4"><label for="s3-4">★</label>
-          <input type="radio" name="s3" id="s3-3" value="3"><label for="s3-3">★</label>
-          <input type="radio" name="s3" id="s3-2" value="2"><label for="s3-2">★</label>
-          <input type="radio" name="s3" id="s3-1" value="1"><label for="s3-1">★</label>
-        </div>
-      </div>
-      <div class="critere-row">
-        <div><div class="critere-label">Service aux patients</div><div class="critere-desc">Accueil, patience, professionnalisme</div></div>
-        <div class="stars">
-          <input type="radio" name="s4" id="s4-5" value="5"><label for="s4-5">★</label>
-          <input type="radio" name="s4" id="s4-4" value="4"><label for="s4-4">★</label>
-          <input type="radio" name="s4" id="s4-3" value="3"><label for="s4-3">★</label>
-          <input type="radio" name="s4" id="s4-2" value="2"><label for="s4-2">★</label>
-          <input type="radio" name="s4" id="s4-1" value="1"><label for="s4-1">★</label>
-        </div>
-      </div>
-      <div class="critere-row">
-        <div><div class="critere-label">Initiative et autonomie</div><div class="critere-desc">Prise en charge, résolution de problèmes</div></div>
-        <div class="stars">
-          <input type="radio" name="s5" id="s5-5" value="5"><label for="s5-5">★</label>
-          <input type="radio" name="s5" id="s5-4" value="4"><label for="s5-4">★</label>
-          <input type="radio" name="s5" id="s5-3" value="3"><label for="s5-3">★</label>
-          <input type="radio" name="s5" id="s5-2" value="2"><label for="s5-2">★</label>
-          <input type="radio" name="s5" id="s5-1" value="1"><label for="s5-1">★</label>
-        </div>
-      </div>
-      <div class="critere-row">
-        <div><div class="critere-label">Respect des politiques et protocoles</div><div class="critere-desc">Code de conduite, hygiène, sécurité</div></div>
-        <div class="stars">
-          <input type="radio" name="s6" id="s6-5" value="5"><label for="s6-5">★</label>
-          <input type="radio" name="s6" id="s6-4" value="4"><label for="s6-4">★</label>
-          <input type="radio" name="s6" id="s6-3" value="3"><label for="s6-3">★</label>
-          <input type="radio" name="s6" id="s6-2" value="2"><label for="s6-2">★</label>
-          <input type="radio" name="s6" id="s6-1" value="1"><label for="s6-1">★</label>
-        </div>
-      </div>
-    </div>
+    <div style="margin-top: 16px;" id="criteresWrap"></div>
   </div>
 
   <div class="section">
     <div class="section-title">Forces et réalisations</div>
-    <div class="field"><textarea placeholder="Décrivez les principales forces de l'employé(e) et ses réalisations marquantes pendant la période évaluée..."></textarea></div>
+    <div class="field"><textarea id="f_forces" oninput="scheduleSave()" placeholder="Décrivez les principales forces de l'employé(e) et ses réalisations marquantes pendant la période évaluée..."></textarea></div>
   </div>
 
   <div class="section">
     <div class="section-title">Points à améliorer</div>
-    <div class="field"><textarea placeholder="Indiquez les axes d'amélioration prioritaires et les comportements à corriger..."></textarea></div>
+    <div class="field"><textarea id="f_ameliorer" oninput="scheduleSave()" placeholder="Indiquez les axes d'amélioration prioritaires et les comportements à corriger..."></textarea></div>
   </div>
 
   <div class="section">
     <div class="section-title">Objectifs pour la prochaine période</div>
     <div class="grid">
-      <div class="field full"><label>Objectif 1</label><input type="text" placeholder="Ex. : Maîtriser la facturation RAMQ d'ici 3 mois"></div>
-      <div class="field full"><label>Objectif 2</label><input type="text" placeholder="Ex. : Améliorer la gestion du stress aux heures de pointe"></div>
-      <div class="field full"><label>Objectif 3</label><input type="text" placeholder="Objectif supplémentaire si applicable"></div>
+      <div class="field full"><label>Objectif 1</label><input type="text" id="f_obj1" oninput="scheduleSave()" placeholder="Ex. : Maîtriser la facturation RAMQ d'ici 3 mois"></div>
+      <div class="field full"><label>Objectif 2</label><input type="text" id="f_obj2" oninput="scheduleSave()" placeholder="Ex. : Améliorer la gestion du stress aux heures de pointe"></div>
+      <div class="field full"><label>Objectif 3</label><input type="text" id="f_obj3" oninput="scheduleSave()" placeholder="Objectif supplémentaire si applicable"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Commentaires de l'employé(e)</div>
-    <div class="field"><textarea placeholder="L'employé(e) peut exprimer ses commentaires, ses aspirations, ses préoccupations..."></textarea></div>
+    <div class="field"><textarea id="f_commentairesEmp" oninput="scheduleSave()" placeholder="L'employé(e) peut exprimer ses commentaires, ses aspirations, ses préoccupations..."></textarea></div>
   </div>
 
   <div class="section">
     <div class="section-title">Signatures</div>
     <div class="grid">
-      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="Signature manuscrite"></div>
-      <div class="field"><label>Date</label><input type="date"></div>
-      <div class="field"><label>Signature du gestionnaire</label><input type="text" placeholder="Signature manuscrite"></div>
-      <div class="field"><label>Date</label><input type="date"></div>
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" id="f_sigEmp" oninput="scheduleSave()" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date" id="f_sigEmpDate" onchange="scheduleSave()"></div>
+      <div class="field"><label>Signature du gestionnaire</label><input type="text" id="f_sigGest" oninput="scheduleSave()" placeholder="Signature manuscrite"></div>
+      <div class="field"><label>Date</label><input type="date" id="f_sigGestDate" onchange="scheduleSave()"></div>
     </div>
   </div>
 
@@ -177,5 +142,156 @@
   </div>
   <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
 </div>
+
+<script>
+const CRITERES = [
+  {id:'s1', label:'Qualité du travail', desc:'Précision, soin, respect des procédures'},
+  {id:'s2', label:'Ponctualité et assiduité', desc:'Présence, heures, gestion des absences'},
+  {id:'s3', label:'Communication et travail d\'équipe', desc:'Collaboration, attitude, écoute'},
+  {id:'s4', label:'Service aux patients', desc:'Accueil, patience, professionnalisme'},
+  {id:'s5', label:'Initiative et autonomie', desc:'Prise en charge, résolution de problèmes'},
+  {id:'s6', label:'Respect des politiques et protocoles', desc:'Code de conduite, hygiène, sécurité'},
+];
+const FIELD_IDS = ['f_nomEmploye','f_poste','f_periode','f_dateEval','f_evaluateur','f_anciennete','f_forces','f_ameliorer','f_obj1','f_obj2','f_obj3','f_commentairesEmp','f_sigEmp','f_sigEmpDate','f_sigGest','f_sigGestDate'];
+
+function buildCriteres() {
+  const wrap = document.getElementById('criteresWrap');
+  wrap.innerHTML = CRITERES.map(c => `
+    <div class="critere-row">
+      <div><div class="critere-label">${c.label}</div><div class="critere-desc">${c.desc}</div></div>
+      <div class="stars" id="stars-${c.id}">
+        <input type="radio" name="${c.id}" id="${c.id}-5" value="5" onchange="scheduleSave()"><label for="${c.id}-5">★</label>
+        <input type="radio" name="${c.id}" id="${c.id}-4" value="4" onchange="scheduleSave()"><label for="${c.id}-4">★</label>
+        <input type="radio" name="${c.id}" id="${c.id}-3" value="3" onchange="scheduleSave()"><label for="${c.id}-3">★</label>
+        <input type="radio" name="${c.id}" id="${c.id}-2" value="2" onchange="scheduleSave()"><label for="${c.id}-2">★</label>
+        <input type="radio" name="${c.id}" id="${c.id}-1" value="1" onchange="scheduleSave()"><label for="${c.id}-1">★</label>
+      </div>
+    </div>`).join('');
+}
+
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+
+async function afficherListe() {
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_evaluations_mi_annuelles', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucune évaluation pour le moment. Cliquez sur « + Nouvelle évaluation » pour commencer.</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(row => {
+      const nom = row.nom_employe || '(Nom non précisé)';
+      return `<div class="selector-item" onclick="ouvrirEval('${row.record_token}')">
+        <span class="sel-name">${nom}</span>
+        <span class="sel-periode">${row.periode || ''}</span>
+      </div>`;
+    }).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+async function creerNouveau() {
+  try {
+    const { data, error } = await sb.rpc('create_evaluation_mi_annuelle', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirEval(data);
+  } catch (e) { console.error(e); alert("Impossible de créer une nouvelle évaluation pour le moment."); }
+}
+
+async function ouvrirEval(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('eval', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+  try {
+    const { data, error } = await sb.rpc('get_evaluation_mi_annuelle', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const d = data[0].details || {};
+      FIELD_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = d[id] || ''; });
+      CRITERES.forEach(c => {
+        if (d[c.id]) {
+          const r = document.getElementById(`${c.id}-${d[c.id]}`);
+          if (r) r.checked = true;
+        }
+      });
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('eval');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  recordToken = null;
+  afficherListe();
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  const details = {};
+  FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.value; });
+  CRITERES.forEach(c => {
+    const r = document.querySelector(`input[name="${c.id}"]:checked`);
+    details[c.id] = r ? r.value : '';
+  });
+  try {
+    const { error } = await sb.rpc('save_evaluation_mi_annuelle', {
+      p_record_token: recordToken,
+      p_nom_employe: document.getElementById('f_nomEmploye').value || null,
+      p_periode: document.getElementById('f_periode').value || null,
+      p_details: details
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+
+async function initPage() {
+  buildCriteres();
+  ownerToken = getOwnerToken();
+  const params = new URLSearchParams(window.location.search);
+  const existing = params.get('eval');
+  if (existing) { await ouvrirEval(existing); } else { await afficherListe(); }
+}
+initPage();
+</script>
 </body>
 </html>
