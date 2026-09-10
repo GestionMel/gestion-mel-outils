@@ -11,10 +11,14 @@
   .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
   .page-header .brand { font-size: 1.5rem; font-weight: 700; }
   .page-header .brand span { color: var(--accent); }
-  .container { max-width: 860px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .container { max-width: 900px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
   .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
   .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
   .doc-header p { font-size: 0.85rem; opacity: 0.75; }
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
   .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
   .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
   .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
@@ -46,10 +50,12 @@
   .btn-primary { background: var(--blue); color: white; }
   .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
   .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
-  @media print { body { background: white; } .page-header, .actions { display: none; } .container { box-shadow: none; margin: 0; } }
+  @media print { body { background: white; } .page-header, .actions, .sync-status { display: none; } .container { box-shadow: none; margin: 0; } }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div>Clinique dentaire — Gestion administrative</div>
@@ -63,10 +69,10 @@
   <div class="section">
     <div class="section-title">Informations de la clinique</div>
     <div class="grid">
-      <div class="field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire ..."></div>
-      <div class="field"><label>Responsable du suivi</label><input type="text" placeholder="Nom de la secrétaire / gestionnaire"></div>
-      <div class="field"><label>Date de mise à jour</label><input type="date"></div>
-      <div class="field"><label>Délai de grâce standard</label><input type="text" placeholder="Ex. : 30 jours"></div>
+      <div class="field"><label>Nom de la clinique</label><input type="text" id="f_clinique" oninput="scheduleSave()" placeholder="Clinique Dentaire ..."></div>
+      <div class="field"><label>Responsable du suivi</label><input type="text" id="f_responsable" oninput="scheduleSave()" placeholder="Nom de la secrétaire / gestionnaire"></div>
+      <div class="field"><label>Date de mise à jour</label><input type="date" id="f_dateMaj" onchange="scheduleSave()"></div>
+      <div class="field"><label>Délai de grâce standard</label><input type="text" id="f_delai" oninput="scheduleSave()" placeholder="Ex. : 30 jours"></div>
     </div>
   </div>
 
@@ -123,18 +129,14 @@
           <th>Notes</th>
         </tr>
       </thead>
-      <tbody id="tracker-tbody">
-        <tr><td><input type="text" placeholder="Nom, Prénom"></td><td><input type="text" placeholder="0,00 $"></td><td><input type="date"></td><td><input type="date"></td><td><select class="status-select"><option>En attente</option><option>1er rappel</option><option>2e avis</option><option>Appel effectué</option><option>Mise en demeure</option><option>Recouvrement</option><option>Payé ✓</option></select></td><td><input type="text" placeholder="Notes"></td></tr>
-        <tr><td><input type="text"></td><td><input type="text"></td><td><input type="date"></td><td><input type="date"></td><td><select class="status-select"><option>En attente</option><option>1er rappel</option><option>2e avis</option><option>Appel effectué</option><option>Mise en demeure</option><option>Recouvrement</option><option>Payé ✓</option></select></td><td><input type="text"></td></tr>
-        <tr><td><input type="text"></td><td><input type="text"></td><td><input type="date"></td><td><input type="date"></td><td><select class="status-select"><option>En attente</option><option>1er rappel</option><option>2e avis</option><option>Appel effectué</option><option>Mise en demeure</option><option>Recouvrement</option><option>Payé ✓</option></select></td><td><input type="text"></td></tr>
-      </tbody>
+      <tbody id="tracker-tbody"></tbody>
       <tr><td colspan="6" class="add-row" onclick="addRow()">+ Ajouter un compte</td></tr>
     </table>
   </div>
 
   <div class="section">
     <div class="section-title">Notes et commentaires</div>
-    <div class="field"><textarea placeholder="Observations générales, cas particuliers, ajustements à la procédure..."></textarea></div>
+    <div class="field"><textarea id="f_notes" oninput="scheduleSave()" placeholder="Observations générales, cas particuliers, ajustements à la procédure..."></textarea></div>
   </div>
 
   <div class="actions">
@@ -143,12 +145,101 @@
   <div class="footer-note">© Gestion Mel — gestionmel.com | Document de gestion administrative — usage interne</div>
 </div>
 <script>
-function addRow() {
+let comptes = [];
+let idCounter = 1;
+const STATUTS = ['En attente','1er rappel','2e avis','Appel effectué','Mise en demeure','Recouvrement','Payé ✓'];
+
+function newCompte(){ return { id: idCounter++, nom:'', montant:'', dateService:'', dernierContact:'', statut:'En attente', notes:'' }; }
+
+function renderTable(){
   const tbody = document.getElementById('tracker-tbody');
-  const tr = document.createElement('tr');
-  tr.innerHTML = '<td><input type="text"></td><td><input type="text"></td><td><input type="date"></td><td><input type="date"></td><td><select class="status-select"><option>En attente</option><option>1er rappel</option><option>2e avis</option><option>Appel effectué</option><option>Mise en demeure</option><option>Recouvrement</option><option>Payé ✓</option></select></td><td><input type="text"></td>';
-  tbody.appendChild(tr);
+  tbody.innerHTML = comptes.map(c => `<tr>
+    <td><input type="text" placeholder="Nom, Prénom" value="${c.nom}" oninput="updateCompte(${c.id},'nom',this.value)"></td>
+    <td><input type="text" placeholder="0,00 $" value="${c.montant}" oninput="updateCompte(${c.id},'montant',this.value)"></td>
+    <td><input type="date" value="${c.dateService}" onchange="updateCompte(${c.id},'dateService',this.value)"></td>
+    <td><input type="date" value="${c.dernierContact}" onchange="updateCompte(${c.id},'dernierContact',this.value)"></td>
+    <td><select class="status-select" onchange="updateCompte(${c.id},'statut',this.value)">
+      ${STATUTS.map(s=>`<option value="${s}"${c.statut===s?' selected':''}>${s}</option>`).join('')}
+    </select></td>
+    <td><input type="text" placeholder="Notes" value="${c.notes}" oninput="updateCompte(${c.id},'notes',this.value)"></td>
+  </tr>`).join('');
 }
+
+function updateCompte(id, field, val){
+  const c = comptes.find(x=>x.id===id);
+  if (c) c[field] = val;
+  scheduleSave();
+}
+
+function addRow(){ comptes.push(newCompte()); renderTable(); scheduleSave(); }
+
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_comptes_recevoir', {
+      p_owner_token: ownerToken,
+      p_clinique: document.getElementById('f_clinique').value || null,
+      p_responsable: document.getElementById('f_responsable').value || null,
+      p_date_maj: document.getElementById('f_dateMaj').value || null,
+      p_delai: document.getElementById('f_delai').value || null,
+      p_notes: document.getElementById('f_notes').value || null,
+      p_comptes: comptes
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function initPage() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_comptes_recevoir', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      comptes = row.comptes && row.comptes.length ? row.comptes : [];
+      if (row.clinique) document.getElementById('f_clinique').value = row.clinique;
+      if (row.responsable) document.getElementById('f_responsable').value = row.responsable;
+      if (row.date_maj) document.getElementById('f_dateMaj').value = row.date_maj;
+      if (row.delai) document.getElementById('f_delai').value = row.delai;
+      if (row.notes) document.getElementById('f_notes').value = row.notes;
+      idCounter = comptes.reduce((m,c)=>Math.max(m,c.id+1), 1);
+    } else {
+      await sb.rpc('create_comptes_recevoir', { p_owner_token: ownerToken });
+      comptes = [newCompte(), newCompte(), newCompte()];
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+  renderTable();
+}
+initPage();
 </script>
 </body>
 </html>
