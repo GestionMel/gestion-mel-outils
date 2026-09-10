@@ -84,9 +84,15 @@
   .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
   @media print{body{background:white;}.page-header,.main-tabs,.mgr-bar,.btn-submit,.btn-new,.btn,.btn-del-s,.stats-row,.vote-btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.mpane{display:block!important;}.cat-badge,.prio-chip,.vote-dot{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
   @media(max-width:650px){.sugg-header{flex-wrap:wrap;}.vote-grid{flex-direction:column;}.form-wrap{padding:16px;}.sugg-list{padding:10px 14px;}}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">RH — Engagement de l'équipe</div></div>
 <div class="container">
   <div class="doc-header"><h1>💡 Boîte à suggestion</h1><p>Partagez vos idées, préoccupations et suggestions pour améliorer notre milieu de travail</p></div>
@@ -98,7 +104,7 @@
   <!-- EMPLOYEE FORM -->
   <div class="mpane active" id="mp0">
     <div class="clinic-bar">
-      <input class="ci" type="text" placeholder="Clinique..." style="min-width:180px;">
+      <input class="ci" type="text" id="bs_clinique" oninput="scheduleSave()" placeholder="Clinique..." style="min-width:180px;">
       <div class="anon">🔒 100% anonyme — Vos initiales sont optionnelles</div>
     </div>
     <div class="form-wrap">
@@ -128,9 +134,18 @@
           <div class="ff"><label>Vos initiales (optionnel — pour un suivi)</label><input type="text" id="bs_init" placeholder="Ex: MF" maxlength="4" style="max-width:100px;text-transform:uppercase;letter-spacing:3px;font-weight:700;text-align:center;"></div>
         </div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
-          <button class="btn-submit" onclick="window.print()" style="flex:1;">🖨️ Imprimer / Sauvegarder en PDF</button>
-          <button class="btn-submit" onclick="resetBS()" style="flex:1;background:#5a6a80;">🔄 Nouvelle suggestion</button>
+          <button class="btn-submit" onclick="soumettreBS()" style="flex:1;">✅ Soumettre la suggestion</button>
         </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <button class="btn-submit" onclick="window.print()" style="flex:1;background:white;color:var(--blue);border:1.5px solid var(--blue);">🖨️ Imprimer / Sauvegarder en PDF</button>
+          <button class="btn-submit" onclick="resetBS()" style="flex:1;background:#5a6a80;">🔄 Effacer le formulaire</button>
+        </div>
+      </div>
+      <div class="success-box" id="successBoxBS">
+        <div class="sb-icon">🎉</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--green);margin-bottom:6px;">Merci ! Votre suggestion a été envoyée.</div>
+        <div style="font-size:.85rem;color:#5a6a80;">Elle sera lue par la gestionnaire sous peu.</div>
+        <button class="btn-new" onclick="nouvelleSuggestionBS()">💡 Soumettre une autre suggestion</button>
       </div>
     </div>
   </div>
@@ -188,6 +203,32 @@ function resetBS(){
   setPrio('modere',document.querySelector('#prioBtns .vote-btn:nth-child(2)'));
 }
 
+function soumettreBS(){
+  const text=document.getElementById('bs_text').value.trim();
+  if(!text){alert('Veuillez décrire votre suggestion avant de l\'envoyer.');return;}
+  suggestions.push({
+    id: sid++,
+    cat: document.getElementById('bs_cat').value,
+    prio: currentPrio,
+    text: text,
+    ctx: document.getElementById('bs_ctx').value.trim(),
+    init: document.getElementById('bs_init').value.trim().toUpperCase(),
+    date: new Date().toISOString(),
+    status: 'new',
+    mgr_note: ''
+  });
+  scheduleSave();
+  updateBadge();
+  document.getElementById('formViewBS').style.display='none';
+  document.getElementById('successBoxBS').style.display='block';
+}
+
+function nouvelleSuggestionBS(){
+  resetBS();
+  document.getElementById('successBoxBS').style.display='none';
+  document.getElementById('formViewBS').style.display='block';
+}
+
 function drawBS(){
   const catF=document.getElementById('filterCatBS').value;
   const statF=document.getElementById('filterStatBS').value;
@@ -223,10 +264,10 @@ function drawBS(){
   drawStats();
 }
 
-function setStatus(id,v){const s=suggestions.find(x=>x.id===id);if(s)s.status=v;updateBadge();drawStats();}
-function setNote(id,v){const s=suggestions.find(x=>x.id===id);if(s)s.mgr_note=v;}
-function delBS(id){suggestions=suggestions.filter(s=>s.id!==id);drawBS();}
-function clearDoneBS(){if(!confirm('Archiver les suggestions traitées?'))return;suggestions=suggestions.filter(s=>s.status!=='implante'&&s.status!=='non');drawBS();}
+function setStatus(id,v){const s=suggestions.find(x=>x.id===id);if(s)s.status=v;updateBadge();drawStats();scheduleSave();}
+function setNote(id,v){const s=suggestions.find(x=>x.id===id);if(s)s.mgr_note=v;scheduleSave();}
+function delBS(id){suggestions=suggestions.filter(s=>s.id!==id);drawBS();scheduleSave();}
+function clearDoneBS(){if(!confirm('Archiver les suggestions traitées?'))return;suggestions=suggestions.filter(s=>s.status!=='implante'&&s.status!=='non');drawBS();scheduleSave();}
 
 function drawStats(){
   const total=suggestions.length, newS=suggestions.filter(s=>s.status==='new').length, imp=suggestions.filter(s=>s.status==='implante').length;
@@ -239,7 +280,67 @@ function drawStats(){
 
 function updateBadge(){document.getElementById('newBadge').textContent=suggestions.filter(s=>s.status==='new').length;}
 function showM(n,btn){document.querySelectorAll('.mpane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.mt').forEach((b,i)=>b.classList.toggle('active',i===n));if(n===1)drawBS();}
-drawStats();
+
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_boite_suggestions', {
+      p_owner_token: ownerToken,
+      p_clinique: document.getElementById('bs_clinique').value || null,
+      p_suggestions: suggestions
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function initPage() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_boite_suggestions', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      suggestions = row.suggestions || [];
+      if (row.clinique) document.getElementById('bs_clinique').value = row.clinique;
+      sid = suggestions.reduce((m,s)=>Math.max(m,s.id+1), 1);
+    } else {
+      await sb.rpc('create_boite_suggestions', { p_owner_token: ownerToken });
+      suggestions = [];
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+  updateBadge();
+  drawStats();
+}
+initPage();
 </script>
 
 
