@@ -139,7 +139,12 @@
 
       <div id="formView">
         <div class="alert-card">
-          <div class="ac-title">Informations du produit</div>
+          <div class="ac-title">Vos initiales</div>
+          <div class="ff"><input class="initiales-input" type="text" id="f_init" placeholder="EX" maxlength="4"></div>
+        </div>
+
+        <div class="alert-card">
+          <div class="ac-title">Ajouter un produit à la liste</div>
           <div class="form-grid">
             <div class="ff" style="grid-column:1/-1;"><label>Nom du produit *</label><input class="big" type="text" id="f_nom" placeholder="Ex: Gants latex taille M, Bavettes bleues..."></div>
             <div class="ff"><label>Numéro / Code produit</label><input type="text" id="f_code" placeholder="Ex: GL-MED-100, DEN-4892..."></div>
@@ -161,18 +166,23 @@
             </div>
             <div class="ff"><label>Fournisseur habituel (optionnel)</label><input type="text" id="f_fourn" placeholder="Ex: Henry Schein, Patterson..."></div>
             <div class="ff"><label>Note (optionnel)</label><input type="text" id="f_note" placeholder="Quantité habituelle, référence..."></div>
-            <div class="ff"><label>Date</label><input type="date" id="f_date" readonly="" style="background:#f4f8ff;color:#5a6a80;font-style:italic;"></div>
-            <div class="ff"><label>Vos initiales *</label><input class="initiales-input" type="text" id="f_init" placeholder="EX" maxlength="4"></div>
           </div>
+          <button class="btn-new" style="width:100%;margin-top:12px;" onclick="ajouterAuPanier()">+ Ajouter ce produit à la liste</button>
         </div>
-        <button class="btn-submit" onclick="submitAlert()">📦 Signaler le dernier item →</button>
+
+        <div class="alert-card" id="panierCard" style="display:none;">
+          <div class="ac-title">Produits à signaler (<span id="panierCount">0</span>)</div>
+          <div id="panierList"></div>
+        </div>
+
+        <button class="btn-submit" onclick="envoyerPanier()">📦 Envoyer les signalements →</button>
       </div>
 
       <div class="success-flash" id="successView">
         <div class="sf-icon">✅</div>
-        <div class="sf-title">Alerte envoyée avec succès!</div>
+        <div class="sf-title">Alerte(s) envoyée(s) avec succès!</div>
         <div class="sf-sub" id="sf_detail"></div>
-        <button class="btn-new" onclick="newAlert()">+ Signaler un autre produit</button>
+        <button class="btn-new" onclick="newAlert()">+ Signaler d'autres produits</button>
       </div>
     </div>
   </div>
@@ -237,7 +247,6 @@
 <script>
 const TODAY = new Date(); TODAY.setHours(0,0,0,0);
 document.getElementById('todayLabel').textContent = 'Aujourd\'hui : ' + TODAY.toLocaleDateString('fr-CA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-document.getElementById('f_date').valueAsDate = TODAY;
 
 let alerts = [];
 let alertId = 1;
@@ -251,32 +260,79 @@ const CAT_INFO = {
   aut:{label:'📦 Autre',cls:'cb-aut'},
 };
 
-function submitAlert() {
-  const nom = document.getElementById('f_nom').value.trim();
-  const init = document.getElementById('f_init').value.trim();
-  if (!nom) { alert('Veuillez indiquer le nom du produit.'); document.getElementById('f_nom').focus(); return; }
-  if (!init) { alert('Veuillez entrer vos initiales.'); document.getElementById('f_init').focus(); return; }
+let panier = [];
+let panierIdCnt = 1;
 
-  const entry = {
-    id: alertId++,
-    date: document.getElementById('f_date').value,
+function ajouterAuPanier() {
+  const nom = document.getElementById('f_nom').value.trim();
+  if (!nom) { alert('Veuillez indiquer le nom du produit.'); document.getElementById('f_nom').focus(); return; }
+  panier.push({
+    pid: panierIdCnt++,
     nom,
     code: document.getElementById('f_code').value.trim(),
     cat: document.getElementById('f_cat').value,
     urg: document.getElementById('f_urg').value,
     fourn: document.getElementById('f_fourn').value.trim(),
     note: document.getElementById('f_note').value.trim(),
-    init: init.toUpperCase(),
-    done: false,
-    doneDate: null,
-  };
-  alerts.push(entry);
+  });
+  document.getElementById('f_nom').value='';
+  document.getElementById('f_code').value='';
+  document.getElementById('f_cat').value='clin';
+  document.getElementById('f_urg').value='norm';
+  document.getElementById('f_fourn').value='';
+  document.getElementById('f_note').value='';
+  document.getElementById('f_nom').focus();
+  drawPanier();
+}
+
+function retirerDuPanier(pid) {
+  panier = panier.filter(p => p.pid !== pid);
+  drawPanier();
+}
+
+function drawPanier() {
+  const card = document.getElementById('panierCard');
+  const count = document.getElementById('panierCount');
+  const list = document.getElementById('panierList');
+  count.textContent = panier.length;
+  card.style.display = panier.length ? 'block' : 'none';
+  list.innerHTML = panier.map(p => {
+    const ci = CAT_INFO[p.cat] || CAT_INFO.aut;
+    const urgLabel = p.urg === 'urg' ? '🔴 Urgent' : '🟡 Normal';
+    return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);font-size:.85rem;">
+      <span style="flex:1;font-weight:600;">${p.nom}${p.code?' <span style="color:#8a9ab0;font-weight:400;">('+p.code+')</span>':''}</span>
+      <span class="cat-badge ${ci.cls}" style="font-size:.68rem;">${ci.label}</span>
+      <span style="font-size:.75rem;color:#5a6a80;">${urgLabel}</span>
+      <button class="del-btn" onclick="retirerDuPanier(${p.pid})">×</button>
+    </div>`;
+  }).join('');
+}
+
+function envoyerPanier() {
+  const init = document.getElementById('f_init').value.trim();
+  if (!init) { alert('Veuillez entrer vos initiales.'); document.getElementById('f_init').focus(); return; }
+  // Si un produit est en cours de saisie dans le formulaire mais pas encore ajouté au panier, on l'ajoute automatiquement
+  if (document.getElementById('f_nom').value.trim()) ajouterAuPanier();
+  if (!panier.length) { alert('Veuillez ajouter au moins un produit à la liste.'); return; }
+
+  const dateStr = TODAY.toISOString().split('T')[0];
+  const noms = [];
+  panier.forEach(p => {
+    alerts.push({
+      id: alertId++,
+      date: dateStr,
+      nom: p.nom, code: p.code, cat: p.cat, urg: p.urg, fourn: p.fourn, note: p.note,
+      init: init.toUpperCase(), done: false, doneDate: null,
+    });
+    noms.push(p.nom);
+  });
 
   document.getElementById('formView').style.display = 'none';
   const sf = document.getElementById('successView');
   sf.style.display = 'block';
-  document.getElementById('sf_detail').innerHTML = `<strong>${nom}</strong>${entry.code?' ('+entry.code+')':''} a été ajouté à la liste de commande.<br>Initiales : <strong>${entry.init}</strong> · ${new Date(entry.date+'T00:00:00').toLocaleDateString('fr-CA',{day:'numeric',month:'long'})}`;
+  document.getElementById('sf_detail').innerHTML = `<strong>${noms.length} produit${noms.length>1?'s ont':' a'} été ajouté${noms.length>1?'s':''} à la liste de commande :</strong><br>${noms.join(', ')}<br>Initiales : <strong>${init.toUpperCase()}</strong>`;
 
+  panier = [];
   updatePendingBadge();
   drawManager();
   scheduleSave();
@@ -290,7 +346,8 @@ function newAlert() {
   document.getElementById('f_fourn').value='';
   document.getElementById('f_note').value='';
   document.getElementById('f_init').value='';
-  document.getElementById('f_date').valueAsDate=TODAY;
+  panier = [];
+  drawPanier();
   document.getElementById('formView').style.display='block';
   document.getElementById('successView').style.display='none';
 }
