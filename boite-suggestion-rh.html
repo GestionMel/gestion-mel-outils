@@ -279,7 +279,30 @@ function drawStats(){
 }
 
 function updateBadge(){document.getElementById('newBadge').textContent=suggestions.filter(s=>s.status==='new').length;}
-function showM(n,btn){document.querySelectorAll('.mpane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.mt').forEach((b,i)=>b.classList.toggle('active',i===n));if(n===1)drawBS();}
+function showM(n,btn){
+  if (n===1 && !dashboardUnlocked) {
+    if (!tentativeDeverrouillage()) return;
+  }
+  document.querySelectorAll('.mpane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.mt').forEach((b,i)=>b.classList.toggle('active',i===n));if(n===1)drawBS();
+}
+
+let dashboardUnlocked = false;
+let managerPin = null;
+
+function tentativeDeverrouillage() {
+  if (!managerPin) {
+    const nouveau = prompt("Première visite du tableau de bord : créez un mot de passe pour le protéger (les employés qui soumettent des suggestions ne verront jamais cet onglet) :");
+    if (!nouveau || !nouveau.trim()) return false;
+    managerPin = nouveau.trim();
+    dashboardUnlocked = true;
+    scheduleSave();
+    return true;
+  }
+  const saisi = prompt("Mot de passe du tableau de bord :");
+  if (saisi === managerPin) { dashboardUnlocked = true; return true; }
+  if (saisi !== null) alert("Mot de passe incorrect.");
+  return false;
+}
 
 // ===================== SUPABASE =====================
 const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
@@ -314,7 +337,8 @@ async function doSave() {
     const { error } = await sb.rpc('save_boite_suggestions', {
       p_owner_token: ownerToken,
       p_clinique: document.getElementById('bs_clinique').value || null,
-      p_suggestions: suggestions
+      p_suggestions: suggestions,
+      p_manager_pin: managerPin
     });
     if (error) throw error;
     setStatus('ok');
@@ -328,6 +352,7 @@ async function initPage() {
     if (data && data.length > 0) {
       const row = data[0];
       suggestions = row.suggestions || [];
+      managerPin = row.manager_pin || null;
       if (row.clinique) document.getElementById('bs_clinique').value = row.clinique;
       sid = suggestions.reduce((m,s)=>Math.max(m,s.id+1), 1);
     } else {
