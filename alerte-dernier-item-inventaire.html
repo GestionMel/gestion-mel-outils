@@ -101,9 +101,15 @@
     .cat-badge,.urgence-badge,.normal-badge,.check-badge{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   }
   @media(max-width:650px){.form-grid{grid-template-columns:1fr;}.stats-chips{padding:10px 14px;}.table-wrap{padding:10px 12px;}.form-wrap{padding:16px;}}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Gestion des stocks</div>
@@ -122,7 +128,7 @@
   <!-- PANE 0 : EMPLOYEE -->
   <div class="mpane active" id="mp0">
     <div class="clinic-bar">
-      <input class="ci" type="text" id="clinicName" placeholder="Clinique Dentaire..." style="min-width:200px;">
+      <input class="ci" type="text" id="clinicName" oninput="scheduleSave()" placeholder="Clinique Dentaire..." style="min-width:200px;">
       <span style="font-size:.78rem;color:#8a9ab0;" id="todayLabel">Aujourd'hui : dimanche 17 mai 2026</span>
     </div>
     <div class="form-wrap">
@@ -273,6 +279,7 @@ function submitAlert() {
 
   updatePendingBadge();
   drawManager();
+  scheduleSave();
 }
 
 function newAlert() {
@@ -346,22 +353,26 @@ function markDone(id) {
   const a=alerts.find(a=>a.id===id);
   if(a){a.done=true;a.doneDate=TODAY.toISOString().split('T')[0];}
   drawManager();
+  scheduleSave();
 }
 
 function markAllDone() {
   alerts.filter(a=>!a.done).forEach(a=>{a.done=true;a.doneDate=TODAY.toISOString().split('T')[0];});
   drawManager();
+  scheduleSave();
 }
 
 function delAlert(id) {
   alerts=alerts.filter(a=>a.id!==id);
   drawManager();
+  scheduleSave();
 }
 
 function clearDone() {
   if(!confirm('Retirer tous les articles déjà commandés de la liste?')) return;
   alerts=alerts.filter(a=>!a.done);
   drawManager();
+  scheduleSave();
 }
 
 function updatePendingBadge() {
@@ -374,7 +385,65 @@ function showMain(n,btn) {
   if(n===1) drawManager();
 }
 
-drawStats();
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_alerte_inventaire', {
+      p_owner_token: ownerToken,
+      p_clinique: document.getElementById('clinicName').value || null,
+      p_alerts: alerts
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function initPage() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_alerte_inventaire', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      alerts = row.alerts || [];
+      if (row.clinique) document.getElementById('clinicName').value = row.clinique;
+      alertId = alerts.reduce((m,a)=>Math.max(m,a.id+1), 1);
+    } else {
+      await sb.rpc('create_alerte_inventaire', { p_owner_token: ownerToken });
+      alerts = [];
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+  drawStats();
+}
+initPage();
 </script>
 
 
