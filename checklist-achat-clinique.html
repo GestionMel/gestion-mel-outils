@@ -65,17 +65,24 @@
   .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
   @media print{body{background:white;}.page-header,.top-bar,.actions,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.phase-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.prog-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.phase-body.collapsed{display:block!important;}input,select,textarea{border:none!important;background:transparent!important;}}
   @media(max-width:700px){.content{padding:12px 14px;}.score-grid{grid-template-columns:1fr 1fr;}}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status{display:none!important;} }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Consultation stratégique — Transactions</div></div>
 <div class="container">
   <div class="doc-header"><h1>🏥 Checklist — Achat d'une clinique dentaire</h1><p>Guide de vérification diligente complet pour un achat éclairé · Gestion Mel</p></div>
   <div class="top-bar">
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <input class="ci" type="text" id="clinicBuy" placeholder="Clinique à acquérir...">
-      <input class="ci" type="text" id="acheteur" placeholder="Nom de l&#39;acheteur...">
-      <input class="ci" type="date" id="dateAchat">
+      <input class="ci" type="text" id="clinicBuy" oninput="scheduleSave()" placeholder="Clinique à acquérir...">
+      <input class="ci" type="text" id="acheteur" oninput="scheduleSave()" placeholder="Nom de l&#39;acheteur...">
+      <input class="ci" type="date" id="dateAchat" onchange="scheduleSave()">
     </div>
     <div style="display:flex;gap:7px;flex-wrap:wrap;">
       <button class="btn" onclick="resetAll()">↺ Réinitialiser</button>
@@ -968,7 +975,7 @@ function drawPhases(){
           ${t.legal?'<span class="legal-badge">⚖️ Légal</span>':''}
           ${t.fin?'<span class="fin-badge">💰 Financier</span>':''}
         </div>`).join('')}
-        <textarea class="phase-note" placeholder="Notes, questions, observations pour cette phase..."></textarea>
+        <textarea class="phase-note" id="note_${p.id}" oninput="scheduleSave()" placeholder="Notes, questions, observations pour cette phase...">${notes[p.id]||''}</textarea>
       </div>
     </div>`;
   }).join('');
@@ -976,7 +983,7 @@ function drawPhases(){
 }
 
 function togglePhase(id,hdr){const b=document.getElementById(id);b.classList.toggle('collapsed');hdr.querySelector('.ph-arrow').textContent=b.classList.contains('collapsed')?'►':'▼';}
-function toggleTask(pid,idx,v){PHASES.find(p=>p.id===pid).tasks[idx]._done=v;const el=document.getElementById(`ti_${pid}_${idx}`);if(el){el.classList.toggle('done',v);if(v)el.classList.remove('alert-task');}updateProg();}
+function toggleTask(pid,idx,v){PHASES.find(p=>p.id===pid).tasks[idx]._done=v;const el=document.getElementById(`ti_${pid}_${idx}`);if(el){el.classList.toggle('done',v);if(v)el.classList.remove('alert-task');}updateProg();scheduleSave();}
 function updateProg(){
   const all=PHASES.flatMap(p=>p.tasks);
   const done=all.filter(t=>t._done).length,total=all.length,pct=total?Math.round(done/total*100):0;
@@ -994,9 +1001,85 @@ function updateProg(){
     <div class="score-card"><div class="sc-n" style="color:${legalPending===0?'var(--green)':'var(--purple)'};">${legalPending}</div><div class="sc-l">⚖️ Légales restantes</div></div>
     <div class="score-card"><div class="sc-n" style="color:${finPending===0?'var(--green)':'var(--blue)'};">${finPending}</div><div class="sc-l">💰 Financières restantes</div></div>`;
 }
-function resetAll(){if(!confirm('Réinitialiser toutes les cases?'))return;PHASES.forEach(p=>p.tasks.forEach(t=>t._done=false));drawPhases();}
+function resetAll(){if(!confirm('Réinitialiser toutes les cases?'))return;PHASES.forEach(p=>p.tasks.forEach(t=>t._done=false));drawPhases();scheduleSave();}
 
-drawPhases();
+let notes = {};
+
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+function collectProgress() {
+  const progress = {};
+  PHASES.forEach(p => p.tasks.forEach((t,i) => { progress[p.id+'_'+i] = !!t._done; }));
+  return progress;
+}
+function collectNotes() {
+  const n = {};
+  PHASES.forEach(p => { const el = document.getElementById('note_'+p.id); if (el) n[p.id] = el.value; });
+  return n;
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_checklist_achat_clinique', {
+      p_owner_token: ownerToken,
+      p_clinic_buy: document.getElementById('clinicBuy').value || null,
+      p_acheteur: document.getElementById('acheteur').value || null,
+      p_date_achat: document.getElementById('dateAchat').value || null,
+      p_progress: collectProgress(),
+      p_notes: collectNotes()
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function initPage() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_checklist_achat_clinique', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      const progress = row.progress || {};
+      notes = row.notes || {};
+      PHASES.forEach(p => p.tasks.forEach((t,i) => { t._done = !!progress[p.id+'_'+i]; }));
+      if (row.clinic_buy) document.getElementById('clinicBuy').value = row.clinic_buy;
+      if (row.acheteur) document.getElementById('acheteur').value = row.acheteur;
+      if (row.date_achat) document.getElementById('dateAchat').value = row.date_achat;
+    } else {
+      await sb.rpc('create_checklist_achat_clinique', { p_owner_token: ownerToken });
+      notes = {};
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+  drawPhases();
+}
+initPage();
 </script>
 
 
