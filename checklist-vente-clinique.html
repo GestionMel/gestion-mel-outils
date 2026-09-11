@@ -56,17 +56,24 @@
   .footer-note{text-align:center;font-size:.73rem;color:#8a9ab0;padding:8px;}
   @media print{body{background:white;}.page-header,.top-bar,.actions,.btn{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.phase-header{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.prog-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.phase-body.collapsed{display:block!important;}input,select,textarea{border:none!important;background:transparent!important;}}
   @media(max-width:700px){.content{padding:12px 14px;}}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status{display:none!important;} }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Consultation stratégique — Transactions</div></div>
 <div class="container">
   <div class="doc-header"><h1>🏦 Checklist — Vente d'une clinique dentaire</h1><p>Guide complet de préparation et de réalisation d'une transaction de vente · Gestion Mel</p></div>
   <div class="top-bar">
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <input class="ci" type="text" id="clinicSell" placeholder="Clinique à vendre...">
-      <input class="ci" type="text" id="vendeur" placeholder="Nom du vendeur...">
-      <input class="ci" type="date" id="dateVente">
+      <input class="ci" type="text" id="clinicSell" oninput="scheduleSave()" placeholder="Clinique à vendre...">
+      <input class="ci" type="text" id="vendeur" oninput="scheduleSave()" placeholder="Nom du vendeur...">
+      <input class="ci" type="date" id="dateVente" onchange="scheduleSave()">
     </div>
     <div style="display:flex;gap:7px;flex-wrap:wrap;">
       <button class="btn" onclick="resetAll()">↺ Réinitialiser</button>
@@ -729,7 +736,7 @@ function drawPhases(){
           ${t.crit?'<span class="crit-badge">Critique</span>':''}
           ${t.legal?'<span class="legal-badge">⚖️ Légal</span>':''}
         </div>`).join('')}
-        <textarea class="phase-note" placeholder="Notes pour cette phase..."></textarea>
+        <textarea class="phase-note" id="note_${p.id}" oninput="scheduleSave()" placeholder="Notes pour cette phase...">${notes[p.id]||''}</textarea>
       </div>
     </div>`;
   }).join('');
@@ -737,7 +744,7 @@ function drawPhases(){
 }
 
 function togglePhase(id,hdr){const b=document.getElementById(id);b.classList.toggle('collapsed');hdr.querySelector('.ph-arrow').textContent=b.classList.contains('collapsed')?'►':'▼';}
-function toggleTask(pid,idx,v){PHASES.find(p=>p.id===pid).tasks[idx]._done=v;const el=document.getElementById(`ti_${pid}_${idx}`);if(el)el.classList.toggle('done',v);updateProg();}
+function toggleTask(pid,idx,v){PHASES.find(p=>p.id===pid).tasks[idx]._done=v;const el=document.getElementById(`ti_${pid}_${idx}`);if(el)el.classList.toggle('done',v);updateProg();scheduleSave();}
 function updateProg(){
   const all=PHASES.flatMap(p=>p.tasks);
   const done=all.filter(t=>t._done).length,total=all.length;
@@ -746,9 +753,85 @@ function updateProg(){
   document.getElementById('progPct').textContent=pct+'%';
   document.getElementById('progLabel').textContent=`${done}/${total} étapes complétées`;
 }
-function resetAll(){if(!confirm('Réinitialiser toutes les cases?'))return;PHASES.forEach(p=>p.tasks.forEach(t=>t._done=false));drawPhases();}
+function resetAll(){if(!confirm('Réinitialiser toutes les cases?'))return;PHASES.forEach(p=>p.tasks.forEach(t=>t._done=false));drawPhases();scheduleSave();}
 
-drawPhases();
+let notes = {};
+
+// ===================== SUPABASE =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function scheduleSave() {
+  if (isLoading) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+function collectProgress() {
+  const progress = {};
+  PHASES.forEach(p => p.tasks.forEach((t,i) => { progress[p.id+'_'+i] = !!t._done; }));
+  return progress;
+}
+function collectNotes() {
+  const n = {};
+  PHASES.forEach(p => { const el = document.getElementById('note_'+p.id); if (el) n[p.id] = el.value; });
+  return n;
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_checklist_vente_clinique', {
+      p_owner_token: ownerToken,
+      p_clinic_sell: document.getElementById('clinicSell').value || null,
+      p_vendeur: document.getElementById('vendeur').value || null,
+      p_date_vente: document.getElementById('dateVente').value || null,
+      p_progress: collectProgress(),
+      p_notes: collectNotes()
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function initPage() {
+  ownerToken = getOwnerToken();
+  try {
+    const { data, error } = await sb.rpc('get_checklist_vente_clinique', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      const progress = row.progress || {};
+      notes = row.notes || {};
+      PHASES.forEach(p => p.tasks.forEach((t,i) => { t._done = !!progress[p.id+'_'+i]; }));
+      if (row.clinic_sell) document.getElementById('clinicSell').value = row.clinic_sell;
+      if (row.vendeur) document.getElementById('vendeur').value = row.vendeur;
+      if (row.date_vente) document.getElementById('dateVente').value = row.date_vente;
+    } else {
+      await sb.rpc('create_checklist_vente_clinique', { p_owner_token: ownerToken });
+      notes = {};
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+  drawPhases();
+}
+initPage();
 </script>
 
 
