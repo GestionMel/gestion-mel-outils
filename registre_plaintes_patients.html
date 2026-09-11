@@ -18,6 +18,7 @@
       <div class="field"><label>Nom de la clinique</label><input type="text" id="rClinique" oninput="scheduleSave()" placeholder="Clinique dentaire ..."></div>
       <div class="field"><label>Responsable du registre</label><input type="text" id="rResponsable" oninput="scheduleSave()"></div>
       <div class="field"><label>Année</label><input type="text" id="yr_reg" oninput="scheduleSave()"></div>
+      <div class="field"><label>📧 Courriel de notification</label><input type="text" id="notifEmail" oninput="scheduleSave()" placeholder="gestionnaire@cliniquexyz.com"></div>
     </div>
   </div>
   <div class="section">
@@ -136,7 +137,8 @@ async function doSave() {
       p_nom_clinique: document.getElementById('rClinique').value || null,
       p_responsable: document.getElementById('rResponsable').value || null,
       p_annee: document.getElementById('yr_reg').value || null,
-      p_plaintes: plaintes
+      p_plaintes: plaintes,
+      p_notification_email: document.getElementById('notifEmail').value || null
     });
     if (error) throw error;
     setStatus('ok');
@@ -157,6 +159,7 @@ async function initRegistre() {
       if (row.nom_clinique) document.getElementById('rClinique').value = row.nom_clinique;
       if (row.responsable) document.getElementById('rResponsable').value = row.responsable;
       if (row.annee) document.getElementById('yr_reg').value = row.annee;
+      if (row.notification_email) document.getElementById('notifEmail').value = row.notification_email;
       idCounter = plaintes.reduce((m,p)=>Math.max(m,p.id+1), 1);
     } else {
       await sb.rpc('create_registre_plaintes', { p_owner_token: ownerToken });
