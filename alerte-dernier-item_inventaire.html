@@ -189,6 +189,13 @@
 
   <!-- PANE 1 : MANAGER -->
   <div class="mpane" id="mp1">
+    <div class="mgr-bar" style="border-bottom:1.5px dashed var(--border);padding-bottom:12px;margin-bottom:12px;">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <label style="font-size:.78rem;font-weight:600;color:#5a6a80;">📧 Courriel de notification :</label>
+        <input type="email" id="notifEmail" class="ci" placeholder="gestionnaire@cliniquexyz.com" style="min-width:220px;" oninput="scheduleSave()">
+        <span style="font-size:.74rem;color:#8a9ab0;">Un courriel sera envoyé dès qu'un produit est signalé.</span>
+      </div>
+    </div>
     <div class="mgr-bar">
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
         <select id="filterCat" class="ci" style="font-size:.8rem;" onchange="drawManager()">
@@ -475,7 +482,8 @@ async function doSave() {
     const { error } = await sb.rpc('save_alerte_inventaire', {
       p_owner_token: ownerToken,
       p_clinique: document.getElementById('clinicName').value || null,
-      p_alerts: alerts
+      p_alerts: alerts,
+      p_notification_email: document.getElementById('notifEmail').value || null
     });
     if (error) throw error;
     setStatus('ok');
@@ -490,6 +498,7 @@ async function initPage() {
       const row = data[0];
       alerts = row.alerts || [];
       if (row.clinique) document.getElementById('clinicName').value = row.clinique;
+      if (row.notification_email) document.getElementById('notifEmail').value = row.notification_email;
       alertId = alerts.reduce((m,a)=>Math.max(m,a.id+1), 1);
     } else {
       await sb.rpc('create_alerte_inventaire', { p_owner_token: ownerToken });
