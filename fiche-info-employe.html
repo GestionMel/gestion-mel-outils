@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0064)file:///C:/Users/info/Downloads/fiche-informations-employes.html -->
-<html lang="fr" translate="no"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="fr" translate="no">
+<head>
+<meta charset="UTF-8">
 <meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fiche d'information employé — Gestion Mel</title>
 <style>
   :root {
@@ -13,6 +13,9 @@
     --light: #f4f8ff;
     --border: #d0dff0;
     --text: #1a2535;
+    --green: #1a9e5a;
+    --orange: #e67e22;
+    --red: #c0392b;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); min-height: 100vh; }
@@ -20,16 +23,32 @@
   .page-header .brand { font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
   .page-header .brand span { color: var(--accent); }
   .page-header .doc-title { font-size: 0.9rem; opacity: 0.7; }
-  .container { max-width: 860px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .container { max-width: 900px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
   .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
   .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
   .doc-header p { font-size: 0.85rem; opacity: 0.75; }
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-right:10px;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-poste{font-size:.78rem;color:#5a6a80;flex:1;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:4px 0;margin-bottom:10px;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
   .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
   .section:last-of-type { border-bottom: none; }
   .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
   .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
   .field { display: flex; flex-direction: column; gap: 4px; }
   .field.full { grid-column: 1 / -1; }
   label { font-size: 0.75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -46,26 +65,42 @@
   .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
   .btn-secondary:hover { background: var(--light); }
   .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
-  .btn-success { background: #1a9e5a; color: white; }
-  .btn-success:hover { background: #157a45; }
-  .toast { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a9e5a; color: white; padding: 14px 28px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; box-shadow: 0 4px 16px rgba(0,0,0,0.2); z-index: 9999; min-width: 320px; text-align: center; }
-  .toast.error { background: #c0392b; }
   @media print {
     body { background: white; }
-    .page-header, .actions { display: none; }
+    .page-header, .actions, .sync-status, .selector-screen, .btn-retour { display: none; }
     .container { box-shadow: none; margin: 0; border-radius: 0; }
   }
 </style>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">(function(){emailjs.init({publicKey:"uCmsRhlTKY1L0jRw8"});})();</script>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div class="doc-title">Clinique dentaire — outil de gestion RH</div>
 </div>
-<div class="container">
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Fiches d'information — Employés</h1>
+    <p>Créez votre fiche, retrouvez-la vous-même par la suite, ou (gestionnaire) consultez toutes les fiches avec le mot de passe.</p>
+    <button class="btn-new" onclick="creerNouveau()">+ Nouvelle fiche</button>
+    <button class="btn-lien" onclick="voirMaFiche()">🔍 Retrouver ma fiche</button>
+    <button class="btn-lien" onclick="voirToutesLesFiches()">🔒 Voir toutes les fiches (gestionnaire)</button>
+    <div id="notifEmailWrap" style="display:none;margin-top:16px;padding:14px 16px;background:var(--light,#f4f8ff);border-radius:8px;border:1.5px solid var(--border,#d0dff0);">
+      <label style="font-size:.78rem;font-weight:600;color:#5a6a80;display:block;margin-bottom:6px;">📧 Courriel de notification</label>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input type="email" id="notifEmail" oninput="scheduleSaveConfig()" placeholder="gestionnaire@cliniquexyz.com" style="flex:1;min-width:220px;border:1.5px solid var(--border,#d0dff0);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;">
+        <span style="font-size:.74rem;color:#8a9ab0;">Un courriel sera envoyé quand un employé signale une mise à jour.</span>
+      </div>
+    </div>
+    <div class="selector-list" id="selectorList"><div class="selector-empty">Chargement...</div></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
   <div class="doc-header">
+    <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
     <h1>Fiche d'information employé</h1>
     <p>À compléter lors de l'embauche et à mettre à jour au besoin</p>
   </div>
@@ -73,143 +108,271 @@
   <div class="section">
     <div class="section-title">Informations personnelles</div>
     <div class="grid">
-      <div class="field"><label>Nom de famille</label><input type="text" placeholder="Nom"></div>
-      <div class="field"><label>Prénom</label><input type="text" placeholder="Prénom"></div>
-      <div class="field"><label>Date de naissance</label><input type="date"></div>
-      <div class="field"><label>No. d'assurance sociale (NAS)</label><input type="text" placeholder="XXX XXX XXX"></div>
-      <div class="field full"><label>Adresse</label><input type="text" placeholder="Numéro civique, rue, appartement"></div>
-      <div class="field"><label>Ville</label><input type="text" placeholder="Ville"></div>
-      <div class="field"><label>Province</label><select><option>Québec</option><option>Ontario</option><option>Autre</option></select></div>
-      <div class="field"><label>Code postal</label><input type="text" placeholder="A1A 1A1"></div>
-      <div class="field"><label>Téléphone principal</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
-      <div class="field"><label>Téléphone secondaire</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
-      <div class="field full"><label>Adresse courriel personnelle</label><input type="email" placeholder="courriel@exemple.com"></div>
+      <div class="field"><label>Nom de famille</label><input type="text" id="f_nom" oninput="scheduleSave()" placeholder="Nom"></div>
+      <div class="field"><label>Prénom</label><input type="text" id="f_prenom" oninput="scheduleSave()" placeholder="Prénom"></div>
+      <div class="field"><label>Date de naissance</label><input type="date" id="f_dateNaissance" onchange="scheduleSave()"></div>
+      <div class="field"><label>No. d'assurance sociale (NAS)</label><input type="text" id="f_nas" oninput="scheduleSave()" placeholder="XXX XXX XXX"></div>
+      <div class="field full"><label>Adresse</label><input type="text" id="f_adresse" oninput="scheduleSave()" placeholder="Numéro civique, rue, appartement"></div>
+      <div class="field"><label>Ville</label><input type="text" id="f_ville" oninput="scheduleSave()" placeholder="Ville"></div>
+      <div class="field"><label>Province</label><select id="f_province" onchange="scheduleSave()"><option>Québec</option><option>Ontario</option><option>Autre</option></select></div>
+      <div class="field"><label>Code postal</label><input type="text" id="f_codePostal" oninput="scheduleSave()" placeholder="A1A 1A1"></div>
+      <div class="field"><label>Téléphone principal</label><input type="tel" id="f_telPrincipal" oninput="scheduleSave()" placeholder="(xxx) xxx-xxxx"></div>
+      <div class="field"><label>Téléphone secondaire</label><input type="tel" id="f_telSecondaire" oninput="scheduleSave()" placeholder="(xxx) xxx-xxxx"></div>
+      <div class="field full"><label>Adresse courriel personnelle</label><input type="email" id="f_courriel" oninput="scheduleSave()" placeholder="courriel@exemple.com"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Informations sur le poste</div>
     <div class="grid">
-      <div class="field"><label>Titre du poste</label><input type="text" placeholder="Ex. : Secrétaire dentaire"></div>
-      <div class="field"><label>Date d'entrée en fonction</label><input type="date"></div>
+      <div class="field"><label>Titre du poste</label><input type="text" id="f_titrePoste" oninput="scheduleSave()" placeholder="Ex. : Secrétaire dentaire"></div>
+      <div class="field"><label>Date d'entrée en fonction</label><input type="date" id="f_dateEntree" onchange="scheduleSave()"></div>
       <div class="field"><label>Type d'emploi</label>
         <div class="radio-group">
-          <label><input type="radio" name="type-emploi" value="temps-plein"> Temps plein</label>
-          <label><input type="radio" name="type-emploi" value="temps-partiel"> Temps partiel</label>
-          <label><input type="radio" name="type-emploi" value="occasionnel"> Occasionnel</label>
+          <label><input type="radio" name="type-emploi" value="temps-plein" onchange="scheduleSave()"> Temps plein</label>
+          <label><input type="radio" name="type-emploi" value="temps-partiel" onchange="scheduleSave()"> Temps partiel</label>
+          <label><input type="radio" name="type-emploi" value="occasionnel" onchange="scheduleSave()"> Occasionnel</label>
         </div>
       </div>
-      <div class="field"><label>Taux horaire / Salaire</label><input type="text" placeholder="Ex. : 22,00 $/h"></div>
-      <div class="field"><label>No. d'employé</label><input type="text" placeholder="Ex. : EMP-001"></div>
-      <div class="field"><label>Département / Équipe</label><input type="text" placeholder="Ex. : Accueil"></div>
+      <div class="field"><label>Taux horaire / Salaire</label><input type="text" id="f_taux" oninput="scheduleSave()" placeholder="Ex. : 22,00 $/h"></div>
+      <div class="field"><label>No. d'employé</label><input type="text" id="f_noEmploye" oninput="scheduleSave()" placeholder="Ex. : EMP-001"></div>
+      <div class="field"><label>Département / Équipe</label><input type="text" id="f_departement" oninput="scheduleSave()" placeholder="Ex. : Accueil"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Personne à contacter en cas d'urgence</div>
     <div class="grid">
-      <div class="field"><label>Nom complet</label><input type="text" placeholder="Nom et prénom"></div>
-      <div class="field"><label>Lien avec l'employé</label><input type="text" placeholder="Ex. : Conjoint(e), parent"></div>
-      <div class="field"><label>Téléphone</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
-      <div class="field"><label>Téléphone alternatif</label><input type="tel" placeholder="(xxx) xxx-xxxx"></div>
+      <div class="field"><label>Nom complet</label><input type="text" id="f_urgenceNom" oninput="scheduleSave()" placeholder="Nom et prénom"></div>
+      <div class="field"><label>Lien avec l'employé</label><input type="text" id="f_urgenceLien" oninput="scheduleSave()" placeholder="Ex. : Conjoint(e), parent"></div>
+      <div class="field"><label>Téléphone</label><input type="tel" id="f_urgenceTel" oninput="scheduleSave()" placeholder="(xxx) xxx-xxxx"></div>
+      <div class="field"><label>Téléphone alternatif</label><input type="tel" id="f_urgenceTelAlt" oninput="scheduleSave()" placeholder="(xxx) xxx-xxxx"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Santé et allergies</div>
     <div class="grid">
-      <div class="field full"><label>Allergies connues (médicaments, latex, aliments, etc.)</label><textarea placeholder="Indiquer toute allergie ou intolérance connue. Écrire AUCUNE si applicable."></textarea></div>
-      <div class="field full"><label>Conditions médicales importantes à signaler (facultatif)</label><textarea placeholder="Information pertinente pour la sécurité au travail uniquement."></textarea></div>
-      <div class="field full"><label>Groupe sanguin (facultatif)</label><input type="text" placeholder="Ex. : O+"></div>
+      <div class="field full"><label>Allergies connues (médicaments, latex, aliments, etc.)</label><textarea id="f_allergies" oninput="scheduleSave()" placeholder="Indiquer toute allergie ou intolérance connue. Écrire AUCUNE si applicable."></textarea></div>
+      <div class="field full"><label>Conditions médicales importantes à signaler (facultatif)</label><textarea id="f_conditions" oninput="scheduleSave()" placeholder="Information pertinente pour la sécurité au travail uniquement."></textarea></div>
+      <div class="field full"><label>Groupe sanguin (facultatif)</label><input type="text" id="f_groupeSanguin" oninput="scheduleSave()" placeholder="Ex. : O+"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Informations bancaires (paie par dépôt direct)</div>
     <div class="grid">
-      <div class="field"><label>Nom de l'institution financière</label><input type="text" placeholder="Ex. : Desjardins, TD"></div>
-      <div class="field"><label>No. de transit</label><input type="text" placeholder="5 chiffres"></div>
-      <div class="field"><label>No. d'institution</label><input type="text" placeholder="3 chiffres"></div>
-      <div class="field"><label>No. de compte</label><input type="text" placeholder="7 chiffres"></div>
+      <div class="field"><label>Nom de l'institution financière</label><input type="text" id="f_institution" oninput="scheduleSave()" placeholder="Ex. : Desjardins, TD"></div>
+      <div class="field"><label>No. de transit</label><input type="text" id="f_transit" oninput="scheduleSave()" placeholder="5 chiffres"></div>
+      <div class="field"><label>No. d'institution</label><input type="text" id="f_noInstitution" oninput="scheduleSave()" placeholder="3 chiffres"></div>
+      <div class="field"><label>No. de compte</label><input type="text" id="f_compte" oninput="scheduleSave()" placeholder="7 chiffres"></div>
     </div>
   </div>
 
   <div class="section">
     <div class="section-title">Signature</div>
     <div class="grid">
-      <div class="field"><label>Date</label><input type="date"></div>
-      <div class="field"><label>Signature de l'employé(e)</label><input type="text" placeholder="Signature manuscrite sur version imprimée"></div>
+      <div class="field"><label>Date</label><input type="date" id="f_sigDate" onchange="scheduleSave()"></div>
+      <div class="field"><label>Signature de l'employé(e)</label><input type="text" id="f_sigNom" oninput="scheduleSave()" placeholder="Signature manuscrite sur version imprimée"></div>
     </div>
   </div>
 
   <div class="actions">
-    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer / PDF</button>
-    <button class="btn btn-success" onclick="soumettreFormulaire()">📧 Soumettre par courriel</button>
+    <button class="btn" style="background:var(--green,#1a9e5a);color:white;" onclick="aviserGestionnaire()">📤 Aviser la gestionnaire de cette mise à jour</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
   </div>
   <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <script>
-var toastTimer = null;
-function afficherToast(msg, erreur) {
-  var t = document.getElementById('toast');
-  if (toastTimer) clearTimeout(toastTimer);
-  t.textContent = msg;
-  t.className = 'toast' + (erreur ? ' error' : '');
-  t.style.display = 'block';
-  if (msg.indexOf('cours') === -1) {
-    toastTimer = setTimeout(function() { t.style.display = 'none'; }, 6000);
-  }
+const FIELD_IDS = ['f_nom','f_prenom','f_dateNaissance','f_nas','f_adresse','f_ville','f_province','f_codePostal','f_telPrincipal','f_telSecondaire','f_courriel','f_titrePoste','f_dateEntree','f_taux','f_noEmploye','f_departement','f_urgenceNom','f_urgenceLien','f_urgenceTel','f_urgenceTelAlt','f_allergies','f_conditions','f_groupeSanguin','f_institution','f_transit','f_noInstitution','f_compte','f_sigDate','f_sigNom'];
+
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function showLien() {
+  prompt("Voici votre lien personnel — enregistrez-le en favori pour retrouver vos fiches, même sur un autre appareil :", window.location.href);
 }
 
-function soumettreFormulaire() {
-  var lignes = [];
-  var sections = document.querySelectorAll('.section');
-  for (var i = 0; i < sections.length; i++) {
-    var titre = sections[i].querySelector('.section-title');
-    if (titre) lignes.push('\n=== ' + titre.textContent.trim() + ' ===');
-    var fields = sections[i].querySelectorAll('.field');
-    for (var j = 0; j < fields.length; j++) {
-      var label = fields[j].querySelector('label');
-      if (!label) continue;
-      var labelText = label.textContent.trim();
-      var radios = fields[j].querySelectorAll('input[type="radio"]');
-      if (radios.length > 0) {
-        var checked = fields[j].querySelector('input[type="radio"]:checked');
-        lignes.push(labelText + ' : ' + (checked ? checked.value : '—'));
-        continue;
-      }
-      var el = fields[j].querySelector('input:not([type="radio"]), select, textarea');
-      if (!el) continue;
-      lignes.push(labelText + ' : ' + (el.value.trim() || '—'));
+let managerPin = null, notifEmailValue = null;
+
+async function chargerConfig() {
+  try {
+    const { data } = await sb.rpc('get_fiches_config', { p_owner_token: ownerToken });
+    if (data && data.length > 0) {
+      managerPin = data[0].manager_pin || null;
+      notifEmailValue = data[0].notification_email || null;
     }
-  }
-  var typeEmploi = document.querySelector('input[name="type-emploi"]:checked');
-  if (typeEmploi) lignes.push("Type d'emploi : " + typeEmploi.value);
-
-  var contenu = lignes.join('\n');
-  var villeEl = document.querySelector('input[placeholder="Ville"]');
-  var ville = villeEl ? (villeEl.value || 'Non spécifiée') : 'Non spécifiée';
-  var now = new Date();
-  var dateEnvoi = now.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-  afficherToast('⏳ Envoi en cours...');
-
-  emailjs.send('service_97u9p5c', 'template_eips1jc', {
-    outil_nom: "Fiche d'information employe",
-    clinique_nom: ville,
-    date_envoi: dateEnvoi,
-    contenu: contenu
-  }).then(function() {
-    afficherToast('✅ Fiche envoyée avec succès à info@gestionmel.com!');
-  }, function(error) {
-    console.error('EmailJS error:', JSON.stringify(error));
-    afficherToast('❌ Erreur lors de l\'envoi. Veuillez réessayer.', true);
-  });
+  } catch (e) { console.error(e); }
 }
+
+function scheduleSaveConfig() {
+  clearTimeout(window._notifSaveTimer);
+  window._notifSaveTimer = setTimeout(async () => {
+    try {
+      await sb.rpc('set_fiches_config', { p_owner_token: ownerToken, p_manager_pin: managerPin, p_notification_email: document.getElementById('notifEmail').value || null });
+    } catch (e) { console.error(e); }
+  }, 800);
+}
+
+async function voirToutesLesFiches() {
+  if (!managerPin) {
+    const nouveau = prompt("Première visite : créez un mot de passe pour protéger la liste des fiches (les employés qui créent/mettent à jour leur fiche ne verront jamais cette liste) :");
+    if (!nouveau || !nouveau.trim()) return;
+    managerPin = nouveau.trim();
+    try { await sb.rpc('set_fiches_config', { p_owner_token: ownerToken, p_manager_pin: managerPin, p_notification_email: notifEmailValue }); } catch (e) { console.error(e); }
+  } else {
+    const saisi = prompt("Mot de passe pour voir toutes les fiches :");
+    if (saisi !== managerPin) { if (saisi !== null) alert("Mot de passe incorrect."); return; }
+  }
+  document.getElementById('notifEmailWrap').style.display = 'block';
+  if (notifEmailValue) document.getElementById('notifEmail').value = notifEmailValue;
+  afficherListe();
+}
+
+async function voirMaFiche() {
+  const nom = prompt("Entrez votre nom complet tel qu'inscrit sur votre fiche :");
+  if (!nom || !nom.trim()) return;
+  try {
+    const { data, error } = await sb.rpc('trouver_ma_fiche', { p_owner_token: ownerToken, p_nom: nom.trim() });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      alert(`Aucune fiche trouvée pour « ${nom.trim()} ». Vérifiez l'orthographe exacte utilisée à la création, ou créez-en une nouvelle.`);
+      return;
+    }
+    await ouvrirFiche(data[0].record_token);
+  } catch (e) { console.error(e); alert("Erreur de recherche."); }
+}
+
+async function aviserGestionnaire() {
+  if (!confirm("Aviser la gestionnaire qu'une mise à jour a été faite sur cette fiche ?")) return;
+  try {
+    await sb.rpc('notifier_maj_fiche', { p_record_token: recordToken });
+    alert("La gestionnaire a été avisée.");
+  } catch (e) { console.error(e); alert("Impossible d'envoyer l'avis pour le moment."); }
+}
+
+async function afficherListe() {
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_fiches_employes', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucune fiche pour le moment. Cliquez sur « + Nouvelle fiche » pour commencer.</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(row => {
+      const nom = row.nom_complet || '(Nom non précisé)';
+      const poste = row.poste || '';
+      return `<div class="selector-item" onclick="ouvrirFiche('${row.record_token}')">
+        <span class="sel-name">${nom}</span>
+        <span class="sel-poste">${poste}</span>
+      </div>`;
+    }).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+async function creerNouveau() {
+  try {
+    const { data, error } = await sb.rpc('create_fiche_employe', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirFiche(data);
+  } catch (e) { console.error(e); alert("Impossible de créer une nouvelle fiche pour le moment."); }
+}
+
+async function ouvrirFiche(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('fiche', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+  try {
+    const { data, error } = await sb.rpc('get_fiche_employe', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const d = data[0].details || {};
+      FIELD_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = d[id] || ''; });
+      if (d.typeEmploi) {
+        const r = document.querySelector(`input[name="type-emploi"][value="${d.typeEmploi}"]`);
+        if (r) r.checked = true;
+      }
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('fiche');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  recordToken = null;
+  afficherListe();
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+
+async function doSave() {
+  const details = {};
+  FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.value; });
+  const typeEmploiEl = document.querySelector('input[name="type-emploi"]:checked');
+  details.typeEmploi = typeEmploiEl ? typeEmploiEl.value : '';
+  const nomComplet = ((document.getElementById('f_prenom').value || '') + ' ' + (document.getElementById('f_nom').value || '')).trim();
+  try {
+    const { error } = await sb.rpc('save_fiche_employe', {
+      p_record_token: recordToken,
+      p_nom_complet: nomComplet || null,
+      p_poste: document.getElementById('f_titrePoste').value || null,
+      p_details: details
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+
+async function initPage() {
+  ownerToken = getOwnerToken();
+  await chargerConfig();
+  const params = new URLSearchParams(window.location.search);
+  const existing = params.get('fiche');
+  if (existing) {
+    await ouvrirFiche(existing);
+  } else {
+    document.getElementById('selectorList').innerHTML = '';
+  }
+}
+initPage();
 </script>
-
-
-</body></html>
+</body>
+</html>
