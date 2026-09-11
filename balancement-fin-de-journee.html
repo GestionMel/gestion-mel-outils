@@ -600,9 +600,18 @@ async function initPage() {
     if (rows && rows.length > 0) {
       const row = rows[0];
       if (row.data_json && Object.keys(row.data_json).length) {
-        dataByYear = row.data_json;
-        const years = Object.keys(dataByYear).map(Number);
-        currentYear = row.annee ? parseInt(row.annee) : Math.max(...years);
+        const keys = Object.keys(row.data_json).map(Number);
+        const formatAncien = keys.every(k => k >= 0 && k <= 11);
+        if (formatAncien) {
+          const y = row.annee ? parseInt(row.annee) : currentYear;
+          dataByYear = {};
+          dataByYear[y] = row.data_json;
+          currentYear = y;
+        } else {
+          dataByYear = row.data_json;
+          const years = Object.keys(dataByYear).map(Number);
+          currentYear = row.annee ? parseInt(row.annee) : Math.max(...years);
+        }
         if (!dataByYear[currentYear]) dataByYear[currentYear] = buildEmptyYearData();
         data = dataByYear[currentYear];
       }
