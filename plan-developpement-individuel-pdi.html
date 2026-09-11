@@ -79,22 +79,54 @@
   .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
   @media print{body{background:white;}.page-header,.actions{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.doc-header,.sw-card,.obj-card,.form-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}input,select,textarea{border:none!important;background:transparent!important;}.prog-fill{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
   @media(max-width:700px){.grid,.grid3,.sw-grid,.sig-grid,.obj-fields{grid-template-columns:1fr;}.section{padding:14px 16px;}}
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-right:10px;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-periode{font-size:.78rem;color:#5a6a80;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:16px 32px 0;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status,.selector-screen,.btn-retour{display:none!important;} }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">RH — Développement professionnel</div></div>
-<div class="container">
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Plans de développement individuel</h1>
+    <p>Choisissez un PDI déjà créé pour comparer d'une période à l'autre, ou créez-en un nouveau.</p>
+    <button class="btn-new" onclick="creerNouveau()">+ Nouveau PDI</button>
+    <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
+    <div class="selector-list" id="selectorList"><div class="selector-empty">Chargement...</div></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header"><h1>🌱 Plan de développement individuel (PDI)</h1><p>Objectifs de développement · Formation · Suivi de la progression</p></div>
 
   <div class="section">
     <div class="sec-title">Identification</div>
     <div class="grid3">
-      <div class="ff"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
-      <div class="ff"><label>Nom de l'employé(e)</label><input type="text" placeholder="Prénom et nom"></div>
-      <div class="ff"><label>Poste occupé</label><input type="text" placeholder="Titre du poste"></div>
+      <div class="ff"><label>Nom de la clinique</label><input type="text" id="f_clinique" placeholder="Clinique Dentaire..."></div>
+      <div class="ff"><label>Nom de l'employé(e)</label><input type="text" id="f_employe" placeholder="Prénom et nom"></div>
+      <div class="ff"><label>Poste occupé</label><input type="text" id="f_poste" placeholder="Titre du poste"></div>
       <div class="ff"><label>Date de l'évaluation</label><input type="date" id="dateEval"></div>
-      <div class="ff"><label>Période couverte</label><input type="text" placeholder="Ex: Janvier 2025 — Décembre 2025"></div>
-      <div class="ff"><label>Gestionnaire responsable</label><input type="text" placeholder="Nom et prénom"></div>
+      <div class="ff"><label>Période couverte</label><input type="text" id="f_periode" placeholder="Ex: Janvier 2025 — Décembre 2025"></div>
+      <div class="ff"><label>Gestionnaire responsable</label><input type="text" id="f_gestionnaire" placeholder="Nom et prénom"></div>
     </div>
   </div>
 
@@ -118,7 +150,7 @@
 
   <div class="section">
     <div class="sec-title">Objectifs de développement</div>
-    <div class="obj-card">
+    <div class="obj-card" id="objCard1">
       <div class="obj-num">Objectif 1 — Court terme (0-3 mois)</div>
       <div class="obj-fields">
         <div class="ff obj-full"><label>Description de l'objectif</label><textarea placeholder="Décrivez l&#39;objectif de façon spécifique et mesurable..."></textarea></div>
@@ -139,7 +171,7 @@
         </div>
       </div>
     </div>
-    <div class="obj-card orange">
+    <div class="obj-card orange" id="objCard2">
       <div class="obj-num orange">Objectif 2 — Moyen terme (3-6 mois)</div>
       <div class="obj-fields">
         <div class="ff obj-full"><label>Description de l'objectif</label><textarea placeholder="Décrivez l&#39;objectif..."></textarea></div>
@@ -160,7 +192,7 @@
         </div>
       </div>
     </div>
-    <div class="obj-card purple">
+    <div class="obj-card purple" id="objCard3">
       <div class="obj-num purple">Objectif 3 — Long terme (6-12 mois)</div>
       <div class="obj-fields">
         <div class="ff obj-full"><label>Description de l'objectif</label><textarea placeholder="Décrivez l&#39;objectif..."></textarea></div>
@@ -187,25 +219,7 @@
     <div class="sec-title">Plan de formation</div>
     <table class="form-table">
       <thead><tr><th>Formation / Activité</th><th>Type</th><th>Fournisseur</th><th>Date prévue</th><th>Coût estimé</th><th>Statut</th></tr></thead>
-      <tbody id="formBody"><tr>
-    <td><input type="text" placeholder="Ex: Formation Dentitek avancé..."></td>
-    <td><select><option>En ligne</option><option>Présentiel</option><option>Coaching interne</option><option>Conférence</option><option>Lecture / Auto-formation</option></select></td>
-    <td><input type="text" placeholder="Fournisseur..."></td>
-    <td><input type="date"></td>
-    <td><input type="text" placeholder="0 $" style="text-align:right;"></td>
-    <td><select><option>Planifiée</option><option>En cours</option><option>Complétée</option><option>Annulée</option></select></td></tr><tr>
-    <td><input type="text" placeholder="Ex: Formation Dentitek avancé..."></td>
-    <td><select><option>En ligne</option><option>Présentiel</option><option>Coaching interne</option><option>Conférence</option><option>Lecture / Auto-formation</option></select></td>
-    <td><input type="text" placeholder="Fournisseur..."></td>
-    <td><input type="date"></td>
-    <td><input type="text" placeholder="0 $" style="text-align:right;"></td>
-    <td><select><option>Planifiée</option><option>En cours</option><option>Complétée</option><option>Annulée</option></select></td></tr><tr>
-    <td><input type="text" placeholder="Ex: Formation Dentitek avancé..."></td>
-    <td><select><option>En ligne</option><option>Présentiel</option><option>Coaching interne</option><option>Conférence</option><option>Lecture / Auto-formation</option></select></td>
-    <td><input type="text" placeholder="Fournisseur..."></td>
-    <td><input type="date"></td>
-    <td><input type="text" placeholder="0 $" style="text-align:right;"></td>
-    <td><select><option>Planifiée</option><option>En cours</option><option>Complétée</option><option>Annulée</option></select></td></tr></tbody>
+      <tbody id="formBody"></tbody>
     </table>
     <button style="display:flex;align-items:center;gap:5px;padding:6px 12px;background:var(--light);border:1.5px dashed var(--accent);border-radius:6px;color:var(--blue);font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px;width:fit-content;" onclick="addFormRow()">+ Ajouter une formation</button>
   </div>
@@ -231,25 +245,193 @@
   <div class="footer-note">© Gestion Mel — gestionmel.com</div>
 </div>
 <script>
-document.getElementById('dateEval').valueAsDate = new Date();
 function setStatus(btn, cls) {
   const wrap = btn.parentElement;
   wrap.querySelectorAll('.status-btn').forEach(b => b.className = 'status-btn');
   btn.classList.add(cls);
+  const card = btn.closest('.obj-card');
+  if (card) card.dataset.status = cls;
+  scheduleSave();
 }
-function addFormRow() {
-  const tbody = document.getElementById('formBody');
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td><input type="text" placeholder="Ex: Formation Dentitek avancé..."></td>
-    <td><select><option>En ligne</option><option>Présentiel</option><option>Coaching interne</option><option>Conférence</option><option>Lecture / Auto-formation</option></select></td>
-    <td><input type="text" placeholder="Fournisseur..."></td>
-    <td><input type="date"></td>
-    <td><input type="text" placeholder="0 $" style="text-align:right;"></td>
-    <td><select><option>Planifiée</option><option>En cours</option><option>Complétée</option><option>Annulée</option></select></td>`;
-  tbody.appendChild(tr);
+
+// ===== TABLEAU DE FORMATION (modèle de données) =====
+let formations = [];
+let formIdCnt = 1;
+const TYPES_FORM = ['En ligne','Présentiel','Coaching interne','Conférence','Lecture / Auto-formation'];
+const STATUTS_FORM = ['Planifiée','En cours','Complétée','Annulée'];
+
+function newFormation(){ return { id: formIdCnt++, nom:'', type:TYPES_FORM[0], fournisseur:'', date:'', cout:'', statut:STATUTS_FORM[0] }; }
+
+function renderFormations(){
+  document.getElementById('formBody').innerHTML = formations.map(f => `<tr>
+    <td><input type="text" placeholder="Ex: Formation Dentitek avancé..." value="${f.nom}" oninput="updateForm(${f.id},'nom',this.value)"></td>
+    <td><select onchange="updateForm(${f.id},'type',this.value)">${TYPES_FORM.map(t=>`<option ${t===f.type?'selected':''}>${t}</option>`).join('')}</select></td>
+    <td><input type="text" placeholder="Fournisseur..." value="${f.fournisseur}" oninput="updateForm(${f.id},'fournisseur',this.value)"></td>
+    <td><input type="date" value="${f.date}" onchange="updateForm(${f.id},'date',this.value)"></td>
+    <td><input type="text" placeholder="0 $" style="text-align:right;" value="${f.cout}" oninput="updateForm(${f.id},'cout',this.value)"></td>
+    <td><select onchange="updateForm(${f.id},'statut',this.value)">${STATUTS_FORM.map(s=>`<option ${s===f.statut?'selected':''}>${s}</option>`).join('')}</select></td>
+  </tr>`).join('');
 }
-for(let i=0;i<3;i++) addFormRow();
+function updateForm(id, field, val){ const f = formations.find(x=>x.id===id); if(f) f[field]=val; scheduleSave(); }
+function addFormRow() { formations.push(newFormation()); renderFormations(); scheduleSave(); }
+
+// ===== CAPTURE GÉNÉRIQUE (identification, forces/axes, objectifs, sliders, commentaires, signatures) =====
+let dynamicFields = [];
+function initDynamicFields() {
+  const els = document.querySelectorAll('.section input, .section select, .section textarea, .sig-section input');
+  dynamicFields = Array.from(els).filter(el => !el.closest('#formBody'));
+  dynamicFields.forEach((el, i) => {
+    el.dataset.dynId = 'dyn_' + i;
+    el.addEventListener('input', scheduleSave);
+    el.addEventListener('change', scheduleSave);
+  });
+}
+function collectDetails() {
+  const details = {};
+  dynamicFields.forEach(el => { details[el.dataset.dynId] = el.value; });
+  ['objCard1','objCard2','objCard3'].forEach(id => { details['status_'+id] = document.getElementById(id).dataset.status || ''; });
+  return details;
+}
+function applyDetails(details) {
+  dynamicFields.forEach(el => { if (details[el.dataset.dynId] !== undefined) el.value = details[el.dataset.dynId]; });
+  // Re-synchroniser l'affichage des curseurs de progression
+  document.querySelectorAll('.section input[type=range]').forEach(r => {
+    r.nextElementSibling.textContent = r.value + '%';
+    r.nextElementSibling.nextElementSibling.style.width = r.value + '%';
+  });
+  // Restaurer les statuts des 3 objectifs
+  ['objCard1','objCard2','objCard3'].forEach(id => {
+    const cls = details['status_'+id];
+    const card = document.getElementById(id);
+    if (cls) {
+      card.dataset.status = cls;
+      card.querySelectorAll('.status-btn').forEach(b => b.className = 'status-btn');
+      const map = { 's-encours':0, 's-atteint':1, 's-report':2 };
+      const idx = map[cls];
+      if (idx !== undefined) card.querySelectorAll('.status-btn')[idx].classList.add(cls);
+    }
+  });
+}
+
+// ===================== SUPABASE (modèle B — un PDI par employé/période) =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatusSync(state) {
+  const el = document.getElementById('syncStatus');
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+
+async function afficherListe() {
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_pdi', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucun PDI pour le moment. Cliquez sur « + Nouveau PDI » pour commencer.</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(row => {
+      const nom = row.nom_employe || '(Nom non précisé)';
+      return `<div class="selector-item" onclick="ouvrirPdi('${row.record_token}')">
+        <span class="sel-name">${nom}</span>
+        <span class="sel-periode">${row.periode || ''}</span>
+      </div>`;
+    }).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+async function creerNouveau() {
+  try {
+    const { data, error } = await sb.rpc('create_pdi', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirPdi(data);
+  } catch (e) { console.error(e); alert("Impossible de créer un nouveau PDI pour le moment."); }
+}
+
+async function ouvrirPdi(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('pdi', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+  try {
+    const { data, error } = await sb.rpc('get_pdi', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const row = data[0];
+      formations = row.formations && row.formations.length ? row.formations : [];
+      formIdCnt = formations.reduce((m,f)=>Math.max(m,f.id+1), 1);
+      renderFormations();
+      if (row.details) applyDetails(row.details);
+    } else {
+      formations = [newFormation(), newFormation(), newFormation()];
+      renderFormations();
+      document.getElementById('dateEval').valueAsDate = new Date();
+    }
+    setStatusSync('ok');
+  } catch (e) { console.error(e); setStatusSync('err'); }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('pdi');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  recordToken = null;
+  afficherListe();
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatusSync('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  try {
+    const { error } = await sb.rpc('save_pdi', {
+      p_record_token: recordToken,
+      p_nom_employe: document.getElementById('f_employe').value || null,
+      p_periode: document.getElementById('f_periode').value || null,
+      p_details: collectDetails(),
+      p_formations: formations
+    });
+    if (error) throw error;
+    setStatusSync('ok');
+  } catch (e) { console.error(e); setStatusSync('err'); }
+}
+
+async function initPage() {
+  initDynamicFields();
+  ownerToken = getOwnerToken();
+  const params = new URLSearchParams(window.location.search);
+  const existing = params.get('pdi');
+  if (existing) { await ouvrirPdi(existing); } else { await afficherListe(); }
+}
+initPage();
 </script>
 
 
