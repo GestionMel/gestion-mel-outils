@@ -131,27 +131,58 @@
     .actions{padding:12px 16px;}
     .items-table th.th-date,.items-table td:nth-child(3){display:none;}
   }
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-family:inherit;font-size:.86rem;font-weight:600;cursor:pointer;margin-right:10px;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-name{font-weight:700;font-size:.88rem;color:var(--text);flex:1;}
+  .sel-pct{font-size:.78rem;color:#5a6a80;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:16px 36px 0;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:flex;align-items:center;gap:6px;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media print{ .sync-status,.selector-screen,.btn-retour{display:none!important;} }
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
   <div>Clinique dentaire — Ressources humaines</div>
 </div>
 
-<div class="container">
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Suivi d'apprentissage — Intégration</h1>
+    <p>Choisissez un suivi déjà créé pour un(e) employé(e), ou créez-en un nouveau.</p>
+    <button class="btn-new" onclick="creerNouveau()">+ Nouveau suivi</button>
+    <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
+    <div class="selector-list" id="selectorList"><div class="selector-empty">Chargement...</div></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header">
     <h1>Suivi de l'apprentissage en intégration</h1>
     <p>Évaluation des éléments d'apprentissage par poste — Clinique dentaire</p>
   </div>
 
   <div class="identity-bar">
-    <div class="id-field"><label>Nom de la clinique</label><input type="text" placeholder="Clinique Dentaire..."></div>
-    <div class="id-field"><label>Nom de l'employé(e)</label><input type="text" placeholder="Prénom et nom"></div>
-    <div class="id-field"><label>Date d'entrée en fonction</label><input type="date"></div>
-    <div class="id-field"><label>Évaluatrice principale</label><input type="text" placeholder="Nom et titre"></div>
-    <div class="id-field"><label>Évaluateurs participants</label><input type="text" placeholder="Autres noms..."></div>
+    <div class="id-field"><label>Nom de la clinique</label><input type="text" id="f_clinique" oninput="scheduleSave()" placeholder="Clinique Dentaire..."></div>
+    <div class="id-field"><label>Nom de l'employé(e)</label><input type="text" id="f_employe" oninput="scheduleSave()" placeholder="Prénom et nom"></div>
+    <div class="id-field"><label>Date d'entrée en fonction</label><input type="date" id="f_dateEntree" onchange="scheduleSave()"></div>
+    <div class="id-field"><label>Évaluatrice principale</label><input type="text" id="f_evaluatrice" oninput="scheduleSave()" placeholder="Nom et titre"></div>
+    <div class="id-field"><label>Évaluateurs participants</label><input type="text" id="f_evaluateursAutres" oninput="scheduleSave()" placeholder="Autres noms..."></div>
   </div>
 
   <div class="poste-bar">
@@ -179,2183 +210,15 @@
   <!-- ======================================================= -->
   <!-- SECRÉTAIRE DENTAIRE -->
   <!-- ======================================================= -->
-  <div class="poste-content active" id="poste-0">
-    <div id="cats-0"><div class="cat-wrap">
-      <div class="cat-header cat-init">
-        <span class="cat-icon">🚀</span>
-        <span class="cat-title">Initiative</span>
-        <span class="cat-count">6 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Optimise l'horaire des patients, comble les ouvertures et élimine les pertes de temps</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c0_i0" onchange="updateAtteinte(this,&#39;p0_c0_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c0_i0"></td>
-        <td><textarea class="comment-input" id="com-p0_c0_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Apporte des solutions aux problèmes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c0_i1" onchange="updateAtteinte(this,&#39;p0_c0_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c0_i1"></td>
-        <td><textarea class="comment-input" id="com-p0_c0_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Apporte son soutien aux collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c0_i2" onchange="updateAtteinte(this,&#39;p0_c0_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c0_i2"></td>
-        <td><textarea class="comment-input" id="com-p0_c0_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Favorise les échanges constructifs</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c0_i3" onchange="updateAtteinte(this,&#39;p0_c0_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c0_i3"></td>
-        <td><textarea class="comment-input" id="com-p0_c0_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>S'adapte aux nouvelles façons de faire et accepte le changement</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c0_i4" onchange="updateAtteinte(this,&#39;p0_c0_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c0_i4"></td>
-        <td><textarea class="comment-input" id="com-p0_c0_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Sollicite de l'aide lorsque requis</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c0_i5" onchange="updateAtteinte(this,&#39;p0_c0_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c0_i5"></td>
-        <td><textarea class="comment-input" id="com-p0_c0_i5" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-prof">
-        <span class="cat-icon">🎓</span>
-        <span class="cat-title">Professionnalisme</span>
-        <span class="cat-count">11 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Assure un suivi rigoureux de la liste des rappels</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i0" onchange="updateAtteinte(this,&#39;p0_c1_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i0"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Prend les messages (boîte vocale et courriel) et en assure le suivi dans un court délai</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i1" onchange="updateAtteinte(this,&#39;p0_c1_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i1"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>S'assure que les rendez-vous sont confirmés 48 heures à l'avance</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i2" onchange="updateAtteinte(this,&#39;p0_c1_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i2"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Balance sa fin de journée avec les dépôts effectués</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i3" onchange="updateAtteinte(this,&#39;p0_c1_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i3"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Assume ses responsabilités</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i4" onchange="updateAtteinte(this,&#39;p0_c1_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i4"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre la volonté d'apprendre</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i5" onchange="updateAtteinte(this,&#39;p0_c1_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i5"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Écoute les directives et se met en action</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i6" onchange="updateAtteinte(this,&#39;p0_c1_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i6"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i6" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se présente dans un état de santé mentale et physique adéquat</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i7" onchange="updateAtteinte(this,&#39;p0_c1_i7&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i7"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i7" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les patients de 18 ans et plus</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i8" onchange="updateAtteinte(this,&#39;p0_c1_i8&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i8"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i8" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les dentistes en présence de patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i9" onchange="updateAtteinte(this,&#39;p0_c1_i9&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i9"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i9" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Est consciente de la présence des patients dans la salle d'attente et s'abstient d'avoir des discussions de nature personnelle au secrétariat</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c1_i10" onchange="updateAtteinte(this,&#39;p0_c1_i10&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c1_i10"></td>
-        <td><textarea class="comment-input" id="com-p0_c1_i10" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-resp">
-        <span class="cat-icon">🤝</span>
-        <span class="cat-title">Respect</span>
-        <span class="cat-count">4 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Respecte les différences et les opinions de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c2_i0" onchange="updateAtteinte(this,&#39;p0_c2_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c2_i0"></td>
-        <td><textarea class="comment-input" id="com-p0_c2_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les directives formulées par sa supérieure, les patients ou les demandes de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c2_i1" onchange="updateAtteinte(this,&#39;p0_c2_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c2_i1"></td>
-        <td><textarea class="comment-input" id="com-p0_c2_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les règles, normes et protocoles de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c2_i2" onchange="updateAtteinte(this,&#39;p0_c2_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c2_i2"></td>
-        <td><textarea class="comment-input" id="com-p0_c2_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte ses horaires</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c2_i3" onchange="updateAtteinte(this,&#39;p0_c2_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c2_i3"></td>
-        <td><textarea class="comment-input" id="com-p0_c2_i3" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-serv">
-        <span class="cat-icon">⭐</span>
-        <span class="cat-title">Service à la clientèle</span>
-        <span class="cat-count">8 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Accueille le patient qui entre dans la clinique, assure un contact visuel et une réponse immédiate</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i0" onchange="updateAtteinte(this,&#39;p0_c3_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i0"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Identifie les besoins, désirs et attentes du patient et s'assure d'y répondre</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i1" onchange="updateAtteinte(this,&#39;p0_c3_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i1"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Dans la limite de ses fonctions, apporte un soutien au patient concernant sa réclamation aux assurances</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i2" onchange="updateAtteinte(this,&#39;p0_c3_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i2"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Planifie les traitements et rendez-vous du patient et s'assure d'inscrire le rappel si le rendez-vous ne peut être inscrit</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i3" onchange="updateAtteinte(this,&#39;p0_c3_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i3"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Informe de façon proactive le patient de changement d'horaire (ouverture, retard, déplacement)</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i4" onchange="updateAtteinte(this,&#39;p0_c3_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i4"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Assure un suivi serré des rappels de plans de traitement</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i5" onchange="updateAtteinte(this,&#39;p0_c3_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i5"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Effectue la facturation exacte des traitements</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i6" onchange="updateAtteinte(this,&#39;p0_c3_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i6"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i6" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre de l'entregent, une écoute active et des capacités de communication</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c3_i7" onchange="updateAtteinte(this,&#39;p0_c3_i7&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c3_i7"></td>
-        <td><textarea class="comment-input" id="com-p0_c3_i7" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-equip">
-        <span class="cat-icon">👥</span>
-        <span class="cat-title">Travail d'équipe</span>
-        <span class="cat-count">5 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Présente une attitude positive, notamment dans les situations stressantes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c4_i0" onchange="updateAtteinte(this,&#39;p0_c4_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c4_i0"></td>
-        <td><textarea class="comment-input" id="com-p0_c4_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Communique les informations nécessaires à ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c4_i1" onchange="updateAtteinte(this,&#39;p0_c4_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c4_i1"></td>
-        <td><textarea class="comment-input" id="com-p0_c4_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à l'effort collectif afin d'accomplir les tâches</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c4_i2" onchange="updateAtteinte(this,&#39;p0_c4_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c4_i2"></td>
-        <td><textarea class="comment-input" id="com-p0_c4_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Collabore et coopère</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c4_i3" onchange="updateAtteinte(this,&#39;p0_c4_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c4_i3"></td>
-        <td><textarea class="comment-input" id="com-p0_c4_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Partage ses compétences et ses connaissances</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c4_i4" onchange="updateAtteinte(this,&#39;p0_c4_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c4_i4"></td>
-        <td><textarea class="comment-input" id="com-p0_c4_i4" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-appart">
-        <span class="cat-icon">🏠</span>
-        <span class="cat-title">Appartenance</span>
-        <span class="cat-count">6 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Contribue à la propreté des lieux et effectue méticuleusement ses tâches quotidiennes, hebdomadaires ou mensuelles</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c5_i0" onchange="updateAtteinte(this,&#39;p0_c5_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c5_i0"></td>
-        <td><textarea class="comment-input" id="com-p0_c5_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à la réussite et à la réalisation des projets</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c5_i1" onchange="updateAtteinte(this,&#39;p0_c5_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c5_i1"></td>
-        <td><textarea class="comment-input" id="com-p0_c5_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Contribue à maintenir un climat de travail sain et agréable</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c5_i2" onchange="updateAtteinte(this,&#39;p0_c5_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c5_i2"></td>
-        <td><textarea class="comment-input" id="com-p0_c5_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Adhère à la vision de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c5_i3" onchange="updateAtteinte(this,&#39;p0_c5_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c5_i3"></td>
-        <td><textarea class="comment-input" id="com-p0_c5_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se montre disponible pour le bon roulement de l'entreprise (remplacements, participation à des projets, situation d'urgence)</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c5_i4" onchange="updateAtteinte(this,&#39;p0_c5_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c5_i4"></td>
-        <td><textarea class="comment-input" id="com-p0_c5_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Est loyale et dévouée envers l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p0_c5_i5" onchange="updateAtteinte(this,&#39;p0_c5_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p0_c5_i5"></td>
-        <td><textarea class="comment-input" id="com-p0_c5_i5" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div></div>
-  </div>
-
-  <!-- ======================================================= -->
-  <!-- HYGIÉNISTE DENTAIRE -->
-  <!-- ======================================================= -->
-  <div class="poste-content" id="poste-1">
-    <div id="cats-1"><div class="cat-wrap">
-      <div class="cat-header cat-init">
-        <span class="cat-icon">🚀</span>
-        <span class="cat-title">Initiative</span>
-        <span class="cat-count">6 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Apporte des solutions aux problèmes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c0_i0" onchange="updateAtteinte(this,&#39;p1_c0_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c0_i0"></td>
-        <td><textarea class="comment-input" id="com-p1_c0_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Apporte son soutien aux collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c0_i1" onchange="updateAtteinte(this,&#39;p1_c0_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c0_i1"></td>
-        <td><textarea class="comment-input" id="com-p1_c0_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Favorise les échanges constructifs</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c0_i2" onchange="updateAtteinte(this,&#39;p1_c0_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c0_i2"></td>
-        <td><textarea class="comment-input" id="com-p1_c0_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>S'adapte aux nouvelles façons de faire et accepte le changement</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c0_i3" onchange="updateAtteinte(this,&#39;p1_c0_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c0_i3"></td>
-        <td><textarea class="comment-input" id="com-p1_c0_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Sollicite de l'aide lorsque requis</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c0_i4" onchange="updateAtteinte(this,&#39;p1_c0_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c0_i4"></td>
-        <td><textarea class="comment-input" id="com-p1_c0_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Met en place les éléments nécessaires pour offrir un service complet au patient et optimiser sa visite</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c0_i5" onchange="updateAtteinte(this,&#39;p1_c0_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c0_i5"></td>
-        <td><textarea class="comment-input" id="com-p1_c0_i5" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-prof">
-        <span class="cat-icon">🎓</span>
-        <span class="cat-title">Professionnalisme</span>
-        <span class="cat-count">8 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Complète les dossiers patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i0" onchange="updateAtteinte(this,&#39;p1_c1_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i0"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Nettoie sa salle après chaque patient et respecte les normes d'hygiène</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i1" onchange="updateAtteinte(this,&#39;p1_c1_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i1"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Assume ses responsabilités</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i2" onchange="updateAtteinte(this,&#39;p1_c1_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i2"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre la volonté d'apprendre</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i3" onchange="updateAtteinte(this,&#39;p1_c1_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i3"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Écoute les directives et se met en action</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i4" onchange="updateAtteinte(this,&#39;p1_c1_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i4"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se présente dans un état de santé mentale et physique adéquat</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i5" onchange="updateAtteinte(this,&#39;p1_c1_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i5"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les patients de 18 ans et plus</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i6" onchange="updateAtteinte(this,&#39;p1_c1_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i6"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i6" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les dentistes en présence de patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c1_i7" onchange="updateAtteinte(this,&#39;p1_c1_i7&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c1_i7"></td>
-        <td><textarea class="comment-input" id="com-p1_c1_i7" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-resp">
-        <span class="cat-icon">🤝</span>
-        <span class="cat-title">Respect</span>
-        <span class="cat-count">4 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Respecte les différences et les opinions de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c2_i0" onchange="updateAtteinte(this,&#39;p1_c2_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c2_i0"></td>
-        <td><textarea class="comment-input" id="com-p1_c2_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les directives formulées par sa supérieure, les patients ou les demandes de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c2_i1" onchange="updateAtteinte(this,&#39;p1_c2_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c2_i1"></td>
-        <td><textarea class="comment-input" id="com-p1_c2_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les règles, normes et protocoles de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c2_i2" onchange="updateAtteinte(this,&#39;p1_c2_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c2_i2"></td>
-        <td><textarea class="comment-input" id="com-p1_c2_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte ses horaires</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c2_i3" onchange="updateAtteinte(this,&#39;p1_c2_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c2_i3"></td>
-        <td><textarea class="comment-input" id="com-p1_c2_i3" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-serv">
-        <span class="cat-icon">⭐</span>
-        <span class="cat-title">Service à la clientèle</span>
-        <span class="cat-count">5 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Répond aux besoins des patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c3_i0" onchange="updateAtteinte(this,&#39;p1_c3_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c3_i0"></td>
-        <td><textarea class="comment-input" id="com-p1_c3_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Explique les mesures d'hygiène et fait des recommandations en lien avec la santé dentaire</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c3_i1" onchange="updateAtteinte(this,&#39;p1_c3_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c3_i1"></td>
-        <td><textarea class="comment-input" id="com-p1_c3_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Élabore les plans de traitements</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c3_i2" onchange="updateAtteinte(this,&#39;p1_c3_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c3_i2"></td>
-        <td><textarea class="comment-input" id="com-p1_c3_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Explique les plans de traitements aux patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c3_i3" onchange="updateAtteinte(this,&#39;p1_c3_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c3_i3"></td>
-        <td><textarea class="comment-input" id="com-p1_c3_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre de l'entregent, une écoute active et des capacités de communication</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c3_i4" onchange="updateAtteinte(this,&#39;p1_c3_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c3_i4"></td>
-        <td><textarea class="comment-input" id="com-p1_c3_i4" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-equip">
-        <span class="cat-icon">👥</span>
-        <span class="cat-title">Travail d'équipe</span>
-        <span class="cat-count">7 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Explique aux secrétaires les frais encourus</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c4_i0" onchange="updateAtteinte(this,&#39;p1_c4_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c4_i0"></td>
-        <td><textarea class="comment-input" id="com-p1_c4_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à la stérilisation des instruments</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c4_i1" onchange="updateAtteinte(this,&#39;p1_c4_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c4_i1"></td>
-        <td><textarea class="comment-input" id="com-p1_c4_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Présente une attitude positive, notamment dans les situations stressantes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c4_i2" onchange="updateAtteinte(this,&#39;p1_c4_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c4_i2"></td>
-        <td><textarea class="comment-input" id="com-p1_c4_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Communique les informations nécessaires à ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c4_i3" onchange="updateAtteinte(this,&#39;p1_c4_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c4_i3"></td>
-        <td><textarea class="comment-input" id="com-p1_c4_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à l'effort collectif afin d'accomplir les tâches</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c4_i4" onchange="updateAtteinte(this,&#39;p1_c4_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c4_i4"></td>
-        <td><textarea class="comment-input" id="com-p1_c4_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Collabore et coopère</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c4_i5" onchange="updateAtteinte(this,&#39;p1_c4_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c4_i5"></td>
-        <td><textarea class="comment-input" id="com-p1_c4_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Partage ses compétences et ses connaissances</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c4_i6" onchange="updateAtteinte(this,&#39;p1_c4_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c4_i6"></td>
-        <td><textarea class="comment-input" id="com-p1_c4_i6" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-appart">
-        <span class="cat-icon">🏠</span>
-        <span class="cat-title">Appartenance</span>
-        <span class="cat-count">6 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Contribue à la propreté des lieux et effectue méticuleusement ses tâches quotidiennes, hebdomadaires ou mensuelles</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c5_i0" onchange="updateAtteinte(this,&#39;p1_c5_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c5_i0"></td>
-        <td><textarea class="comment-input" id="com-p1_c5_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à la réussite et à la réalisation des projets</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c5_i1" onchange="updateAtteinte(this,&#39;p1_c5_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c5_i1"></td>
-        <td><textarea class="comment-input" id="com-p1_c5_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Contribue à maintenir un climat de travail sain et agréable</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c5_i2" onchange="updateAtteinte(this,&#39;p1_c5_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c5_i2"></td>
-        <td><textarea class="comment-input" id="com-p1_c5_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Adhère à la vision de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c5_i3" onchange="updateAtteinte(this,&#39;p1_c5_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c5_i3"></td>
-        <td><textarea class="comment-input" id="com-p1_c5_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se montre disponible pour le bon roulement de l'entreprise (remplacements, participation à des projets, situation d'urgence)</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c5_i4" onchange="updateAtteinte(this,&#39;p1_c5_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c5_i4"></td>
-        <td><textarea class="comment-input" id="com-p1_c5_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Est loyale et dévouée envers l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p1_c5_i5" onchange="updateAtteinte(this,&#39;p1_c5_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p1_c5_i5"></td>
-        <td><textarea class="comment-input" id="com-p1_c5_i5" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div></div>
-  </div>
-
-  <!-- ======================================================= -->
-  <!-- ASSISTANTE DENTAIRE -->
-  <!-- ======================================================= -->
-  <div class="poste-content" id="poste-2">
-    <div id="cats-2"><div class="cat-wrap">
-      <div class="cat-header cat-init">
-        <span class="cat-icon">🚀</span>
-        <span class="cat-title">Initiative</span>
-        <span class="cat-count">7 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Fait le suivi des horaires et ajuste, en cas de besoin, les temps de rendez-vous, en collaboration avec la secrétaire</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c0_i0" onchange="updateAtteinte(this,&#39;p2_c0_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c0_i0"></td>
-        <td><textarea class="comment-input" id="com-p2_c0_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Apporte des solutions aux problèmes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c0_i1" onchange="updateAtteinte(this,&#39;p2_c0_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c0_i1"></td>
-        <td><textarea class="comment-input" id="com-p2_c0_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Apporte son soutien aux collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c0_i2" onchange="updateAtteinte(this,&#39;p2_c0_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c0_i2"></td>
-        <td><textarea class="comment-input" id="com-p2_c0_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Favorise les échanges constructifs</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c0_i3" onchange="updateAtteinte(this,&#39;p2_c0_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c0_i3"></td>
-        <td><textarea class="comment-input" id="com-p2_c0_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>S'adapte aux nouvelles façons de faire et accepte le changement</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c0_i4" onchange="updateAtteinte(this,&#39;p2_c0_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c0_i4"></td>
-        <td><textarea class="comment-input" id="com-p2_c0_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Sollicite de l'aide lorsque requis</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c0_i5" onchange="updateAtteinte(this,&#39;p2_c0_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c0_i5"></td>
-        <td><textarea class="comment-input" id="com-p2_c0_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Met en place les éléments nécessaires pour offrir un service complet au patient et optimiser sa visite</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c0_i6" onchange="updateAtteinte(this,&#39;p2_c0_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c0_i6"></td>
-        <td><textarea class="comment-input" id="com-p2_c0_i6" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-prof">
-        <span class="cat-icon">🎓</span>
-        <span class="cat-title">Professionnalisme</span>
-        <span class="cat-count">9 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Prépare les instruments et le matériel nécessaire avant chaque rendez-vous</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i0" onchange="updateAtteinte(this,&#39;p2_c1_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i0"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Complète les dossiers patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i1" onchange="updateAtteinte(this,&#39;p2_c1_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i1"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Nettoie sa salle après chaque patient et respecte les normes d'hygiène</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i2" onchange="updateAtteinte(this,&#39;p2_c1_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i2"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Assume ses responsabilités</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i3" onchange="updateAtteinte(this,&#39;p2_c1_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i3"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre la volonté d'apprendre</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i4" onchange="updateAtteinte(this,&#39;p2_c1_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i4"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Écoute les directives et se met en action</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i5" onchange="updateAtteinte(this,&#39;p2_c1_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i5"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se présente dans un état de santé mentale et physique adéquat</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i6" onchange="updateAtteinte(this,&#39;p2_c1_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i6"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i6" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les patients de 18 ans et plus</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i7" onchange="updateAtteinte(this,&#39;p2_c1_i7&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i7"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i7" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les dentistes en présence de patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c1_i8" onchange="updateAtteinte(this,&#39;p2_c1_i8&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c1_i8"></td>
-        <td><textarea class="comment-input" id="com-p2_c1_i8" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-resp">
-        <span class="cat-icon">🤝</span>
-        <span class="cat-title">Respect</span>
-        <span class="cat-count">4 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Respecte les différences et les opinions de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c2_i0" onchange="updateAtteinte(this,&#39;p2_c2_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c2_i0"></td>
-        <td><textarea class="comment-input" id="com-p2_c2_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les directives formulées par sa supérieure, les patients ou les demandes de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c2_i1" onchange="updateAtteinte(this,&#39;p2_c2_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c2_i1"></td>
-        <td><textarea class="comment-input" id="com-p2_c2_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les règles, normes et protocoles de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c2_i2" onchange="updateAtteinte(this,&#39;p2_c2_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c2_i2"></td>
-        <td><textarea class="comment-input" id="com-p2_c2_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte ses horaires</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c2_i3" onchange="updateAtteinte(this,&#39;p2_c2_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c2_i3"></td>
-        <td><textarea class="comment-input" id="com-p2_c2_i3" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-serv">
-        <span class="cat-icon">⭐</span>
-        <span class="cat-title">Service à la clientèle</span>
-        <span class="cat-count">5 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Répond aux besoins des patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c3_i0" onchange="updateAtteinte(this,&#39;p2_c3_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c3_i0"></td>
-        <td><textarea class="comment-input" id="com-p2_c3_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Fait des recommandations en lien avec la santé dentaire</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c3_i1" onchange="updateAtteinte(this,&#39;p2_c3_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c3_i1"></td>
-        <td><textarea class="comment-input" id="com-p2_c3_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Élabore les plans de traitements</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c3_i2" onchange="updateAtteinte(this,&#39;p2_c3_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c3_i2"></td>
-        <td><textarea class="comment-input" id="com-p2_c3_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Explique les plans de traitements aux patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c3_i3" onchange="updateAtteinte(this,&#39;p2_c3_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c3_i3"></td>
-        <td><textarea class="comment-input" id="com-p2_c3_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre de l'entregent, une écoute active et des capacités de communication</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c3_i4" onchange="updateAtteinte(this,&#39;p2_c3_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c3_i4"></td>
-        <td><textarea class="comment-input" id="com-p2_c3_i4" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-equip">
-        <span class="cat-icon">👥</span>
-        <span class="cat-title">Travail d'équipe</span>
-        <span class="cat-count">7 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Explique aux secrétaires les frais encourus</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c4_i0" onchange="updateAtteinte(this,&#39;p2_c4_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c4_i0"></td>
-        <td><textarea class="comment-input" id="com-p2_c4_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à la stérilisation des instruments</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c4_i1" onchange="updateAtteinte(this,&#39;p2_c4_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c4_i1"></td>
-        <td><textarea class="comment-input" id="com-p2_c4_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Présente une attitude positive, notamment dans les situations stressantes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c4_i2" onchange="updateAtteinte(this,&#39;p2_c4_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c4_i2"></td>
-        <td><textarea class="comment-input" id="com-p2_c4_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Communique les informations nécessaires à ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c4_i3" onchange="updateAtteinte(this,&#39;p2_c4_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c4_i3"></td>
-        <td><textarea class="comment-input" id="com-p2_c4_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à l'effort collectif afin d'accomplir les tâches</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c4_i4" onchange="updateAtteinte(this,&#39;p2_c4_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c4_i4"></td>
-        <td><textarea class="comment-input" id="com-p2_c4_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Collabore et coopère</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c4_i5" onchange="updateAtteinte(this,&#39;p2_c4_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c4_i5"></td>
-        <td><textarea class="comment-input" id="com-p2_c4_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Partage ses compétences et ses connaissances</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c4_i6" onchange="updateAtteinte(this,&#39;p2_c4_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c4_i6"></td>
-        <td><textarea class="comment-input" id="com-p2_c4_i6" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-appart">
-        <span class="cat-icon">🏠</span>
-        <span class="cat-title">Appartenance</span>
-        <span class="cat-count">6 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Contribue à la propreté des lieux et effectue méticuleusement ses tâches quotidiennes, hebdomadaires ou mensuelles</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c5_i0" onchange="updateAtteinte(this,&#39;p2_c5_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c5_i0"></td>
-        <td><textarea class="comment-input" id="com-p2_c5_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à la réussite et à la réalisation des projets</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c5_i1" onchange="updateAtteinte(this,&#39;p2_c5_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c5_i1"></td>
-        <td><textarea class="comment-input" id="com-p2_c5_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Contribue à maintenir un climat de travail sain et agréable</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c5_i2" onchange="updateAtteinte(this,&#39;p2_c5_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c5_i2"></td>
-        <td><textarea class="comment-input" id="com-p2_c5_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Adhère à la vision de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c5_i3" onchange="updateAtteinte(this,&#39;p2_c5_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c5_i3"></td>
-        <td><textarea class="comment-input" id="com-p2_c5_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se montre disponible pour le bon roulement de l'entreprise (remplacements, participation à des projets, situation d'urgence)</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c5_i4" onchange="updateAtteinte(this,&#39;p2_c5_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c5_i4"></td>
-        <td><textarea class="comment-input" id="com-p2_c5_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Est loyale et dévouée envers l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p2_c5_i5" onchange="updateAtteinte(this,&#39;p2_c5_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p2_c5_i5"></td>
-        <td><textarea class="comment-input" id="com-p2_c5_i5" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div></div>
-  </div>
-
-  <!-- ======================================================= -->
-  <!-- AIDE À LA STÉRILISATION -->
-  <!-- ======================================================= -->
-  <div class="poste-content" id="poste-3">
-    <div id="cats-3"><div class="cat-wrap">
-      <div class="cat-header cat-init">
-        <span class="cat-icon">🚀</span>
-        <span class="cat-title">Initiative</span>
-        <span class="cat-count">6 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Anticipe les besoins en instruments stériles et s'assure que la réserve est toujours suffisante</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c0_i0" onchange="updateAtteinte(this,&#39;p3_c0_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c0_i0"></td>
-        <td><textarea class="comment-input" id="com-p3_c0_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Apporte des solutions aux problèmes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c0_i1" onchange="updateAtteinte(this,&#39;p3_c0_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c0_i1"></td>
-        <td><textarea class="comment-input" id="com-p3_c0_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Apporte son soutien aux collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c0_i2" onchange="updateAtteinte(this,&#39;p3_c0_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c0_i2"></td>
-        <td><textarea class="comment-input" id="com-p3_c0_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Favorise les échanges constructifs</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c0_i3" onchange="updateAtteinte(this,&#39;p3_c0_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c0_i3"></td>
-        <td><textarea class="comment-input" id="com-p3_c0_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>S'adapte aux nouvelles façons de faire et accepte le changement</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c0_i4" onchange="updateAtteinte(this,&#39;p3_c0_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c0_i4"></td>
-        <td><textarea class="comment-input" id="com-p3_c0_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Sollicite de l'aide lorsque requis</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c0_i5" onchange="updateAtteinte(this,&#39;p3_c0_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c0_i5"></td>
-        <td><textarea class="comment-input" id="com-p3_c0_i5" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-prof">
-        <span class="cat-icon">🎓</span>
-        <span class="cat-title">Professionnalisme</span>
-        <span class="cat-count">11 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Effectue le cycle complet de stérilisation selon le protocole établi (collecte, nettoyage, emballage, autoclave, rangement)</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i0" onchange="updateAtteinte(this,&#39;p3_c1_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i0"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vérifie et documente les indicateurs biologiques et chimiques à chaque cycle</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i1" onchange="updateAtteinte(this,&#39;p3_c1_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i1"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Remplit le registre de stérilisation correctement et de façon systématique</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i2" onchange="updateAtteinte(this,&#39;p3_c1_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i2"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Nettoie et désinfecte les salles de traitement entre chaque patient selon les protocoles PCI</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i3" onchange="updateAtteinte(this,&#39;p3_c1_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i3"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Gère correctement les déchets cliniques et biomédicaux</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i4" onchange="updateAtteinte(this,&#39;p3_c1_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i4"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Assume ses responsabilités</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i5" onchange="updateAtteinte(this,&#39;p3_c1_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i5"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre la volonté d'apprendre</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i6" onchange="updateAtteinte(this,&#39;p3_c1_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i6"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i6" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Écoute les directives et se met en action</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i7" onchange="updateAtteinte(this,&#39;p3_c1_i7&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i7"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i7" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se présente dans un état de santé mentale et physique adéquat</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i8" onchange="updateAtteinte(this,&#39;p3_c1_i8&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i8"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i8" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les patients de 18 ans et plus</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i9" onchange="updateAtteinte(this,&#39;p3_c1_i9&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i9"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i9" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Vouvoie les dentistes en présence de patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c1_i10" onchange="updateAtteinte(this,&#39;p3_c1_i10&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c1_i10"></td>
-        <td><textarea class="comment-input" id="com-p3_c1_i10" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-resp">
-        <span class="cat-icon">🤝</span>
-        <span class="cat-title">Respect</span>
-        <span class="cat-count">4 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Respecte les différences et les opinions de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c2_i0" onchange="updateAtteinte(this,&#39;p3_c2_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c2_i0"></td>
-        <td><textarea class="comment-input" id="com-p3_c2_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les directives formulées par sa supérieure, les patients ou les demandes de ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c2_i1" onchange="updateAtteinte(this,&#39;p3_c2_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c2_i1"></td>
-        <td><textarea class="comment-input" id="com-p3_c2_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte les règles, normes et protocoles de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c2_i2" onchange="updateAtteinte(this,&#39;p3_c2_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c2_i2"></td>
-        <td><textarea class="comment-input" id="com-p3_c2_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Respecte ses horaires</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c2_i3" onchange="updateAtteinte(this,&#39;p3_c2_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c2_i3"></td>
-        <td><textarea class="comment-input" id="com-p3_c2_i3" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-serv">
-        <span class="cat-icon">⭐</span>
-        <span class="cat-title">Service à la clientèle</span>
-        <span class="cat-count">5 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>S'assure que les instruments stériles sont disponibles avant chaque rendez-vous</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c3_i0" onchange="updateAtteinte(this,&#39;p3_c3_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c3_i0"></td>
-        <td><textarea class="comment-input" id="com-p3_c3_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Signale immédiatement tout problème lié à la stérilisation à sa supérieure</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c3_i1" onchange="updateAtteinte(this,&#39;p3_c3_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c3_i1"></td>
-        <td><textarea class="comment-input" id="com-p3_c3_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Contribue à offrir un environnement propre et sécuritaire aux patients</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c3_i2" onchange="updateAtteinte(this,&#39;p3_c3_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c3_i2"></td>
-        <td><textarea class="comment-input" id="com-p3_c3_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Répond rapidement aux demandes urgentes d'instruments ou de matériel</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c3_i3" onchange="updateAtteinte(this,&#39;p3_c3_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c3_i3"></td>
-        <td><textarea class="comment-input" id="com-p3_c3_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Démontre de la discrétion et du respect envers les patients et leur vie privée</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c3_i4" onchange="updateAtteinte(this,&#39;p3_c3_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c3_i4"></td>
-        <td><textarea class="comment-input" id="com-p3_c3_i4" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-equip">
-        <span class="cat-icon">👥</span>
-        <span class="cat-title">Travail d'équipe</span>
-        <span class="cat-count">7 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Communique proactivement les besoins en fournitures de stérilisation</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c4_i0" onchange="updateAtteinte(this,&#39;p3_c4_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c4_i0"></td>
-        <td><textarea class="comment-input" id="com-p3_c4_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Soutient les hygiénistes et assistantes en gérant les instruments dans les délais requis</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c4_i1" onchange="updateAtteinte(this,&#39;p3_c4_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c4_i1"></td>
-        <td><textarea class="comment-input" id="com-p3_c4_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Présente une attitude positive, notamment dans les situations stressantes</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c4_i2" onchange="updateAtteinte(this,&#39;p3_c4_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c4_i2"></td>
-        <td><textarea class="comment-input" id="com-p3_c4_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Communique les informations nécessaires à ses collègues</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c4_i3" onchange="updateAtteinte(this,&#39;p3_c4_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c4_i3"></td>
-        <td><textarea class="comment-input" id="com-p3_c4_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à l'effort collectif afin d'accomplir les tâches</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c4_i4" onchange="updateAtteinte(this,&#39;p3_c4_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c4_i4"></td>
-        <td><textarea class="comment-input" id="com-p3_c4_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Collabore et coopère</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c4_i5" onchange="updateAtteinte(this,&#39;p3_c4_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c4_i5"></td>
-        <td><textarea class="comment-input" id="com-p3_c4_i5" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Partage ses compétences et ses connaissances</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c4_i6" onchange="updateAtteinte(this,&#39;p3_c4_i6&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c4_i6"></td>
-        <td><textarea class="comment-input" id="com-p3_c4_i6" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div><div class="cat-wrap">
-      <div class="cat-header cat-appart">
-        <span class="cat-icon">🏠</span>
-        <span class="cat-title">Appartenance</span>
-        <span class="cat-count">6 élément(s)</span>
-      </div>
-      <table class="items-table">
-        <thead><tr>
-          <th class="th-elem">Élément d'apprentissage</th>
-          <th class="th-atteinte">Niveau d'atteinte</th>
-          <th class="th-date">Date</th>
-          <th class="th-comment">Moyens et commentaires</th>
-        </tr></thead>
-        <tbody><tr>
-        <td>Contribue à la propreté des lieux et effectue méticuleusement ses tâches quotidiennes, hebdomadaires ou mensuelles</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c5_i0" onchange="updateAtteinte(this,&#39;p3_c5_i0&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c5_i0"></td>
-        <td><textarea class="comment-input" id="com-p3_c5_i0" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Participe à la réussite et à la réalisation des projets</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c5_i1" onchange="updateAtteinte(this,&#39;p3_c5_i1&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c5_i1"></td>
-        <td><textarea class="comment-input" id="com-p3_c5_i1" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Contribue à maintenir un climat de travail sain et agréable</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c5_i2" onchange="updateAtteinte(this,&#39;p3_c5_i2&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c5_i2"></td>
-        <td><textarea class="comment-input" id="com-p3_c5_i2" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Adhère à la vision de l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c5_i3" onchange="updateAtteinte(this,&#39;p3_c5_i3&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c5_i3"></td>
-        <td><textarea class="comment-input" id="com-p3_c5_i3" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Se montre disponible pour le bon roulement de l'entreprise (remplacements, participation à des projets, situation d'urgence)</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c5_i4" onchange="updateAtteinte(this,&#39;p3_c5_i4&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c5_i4"></td>
-        <td><textarea class="comment-input" id="com-p3_c5_i4" placeholder="Commentaires..."></textarea></td>
-      </tr><tr>
-        <td>Est loyale et dévouée envers l'entreprise</td>
-        <td>
-          <select class="atteinte-select a-nd" id="sel-p3_c5_i5" onchange="updateAtteinte(this,&#39;p3_c5_i5&#39;)">
-            <option value="nd">⬜ Non débuté</option>
-            <option value="ea">🔄 En apprentissage</option>
-            <option value="att">✅ Atteint</option>
-            <option value="dep">⭐ Dépasse les attentes</option>
-          </select>
-        </td>
-        <td><input type="date" class="date-input" id="date-p3_c5_i5"></td>
-        <td><textarea class="comment-input" id="com-p3_c5_i5" placeholder="Commentaires..."></textarea></td>
-      </tr></tbody></table></div></div>
-  </div>
+  <div class="poste-content active" id="poste-0"><div id="cats-0"></div></div>
+  <div class="poste-content" id="poste-1"><div id="cats-1"></div></div>
+  <div class="poste-content" id="poste-2"><div id="cats-2"></div></div>
+  <div class="poste-content" id="poste-3"><div id="cats-3"></div></div>
 
   <!-- NOTES GÉNÉRALES -->
   <div class="notes-section">
     <label>Notes générales et observations</label>
-    <textarea placeholder="Observations globales sur le parcours d&#39;intégration, points forts, axes d&#39;amélioration, contexte particulier..."></textarea>
+    <textarea id="f_notes" oninput="scheduleSave()" placeholder="Observations globales sur le parcours d&#39;intégration, points forts, axes d&#39;amélioration, contexte particulier..."></textarea>
   </div>
 
   <!-- SIGNATURES -->
@@ -2364,14 +227,14 @@
     <div class="sig-grid">
       <div class="sig-field">
         <label>Évaluatrice principale</label>
-        <input type="text" placeholder="Nom et titre">
-        <input type="date">
+        <input type="text" id="f_sigEvalNom" oninput="scheduleSave()" placeholder="Nom et titre">
+        <input type="date" id="f_sigEvalDate" onchange="scheduleSave()">
         <div class="sig-line">Signature ____________________________</div>
       </div>
       <div class="sig-field">
         <label>Employé(e) évalué(e)</label>
-        <input type="text" placeholder="Nom et prénom">
-        <input type="date">
+        <input type="text" id="f_sigEmpNom" oninput="scheduleSave()" placeholder="Nom et prénom">
+        <input type="date" id="f_sigEmpDate" onchange="scheduleSave()">
         <div class="sig-line">Signature ____________________________</div>
       </div>
     </div>
@@ -2583,8 +446,8 @@ function buildPoste(posteIdx) {
             <option value="dep">⭐ Dépasse les attentes</option>
           </select>
         </td>
-        <td><input type="date" class="date-input" id="date-${uid}"></td>
-        <td><textarea class="comment-input" id="com-${uid}" placeholder="Commentaires..."></textarea></td>
+        <td><input type="date" class="date-input" id="date-${uid}" onchange="scheduleSave()"></td>
+        <td><textarea class="comment-input" id="com-${uid}" placeholder="Commentaires..." oninput="scheduleSave()"></textarea></td>
       </tr>`;
     });
 
@@ -2597,6 +460,7 @@ function buildPoste(posteIdx) {
 function updateAtteinte(sel, uid) {
   sel.className = 'atteinte-select a-' + sel.value;
   updateProgress();
+  scheduleSave();
 }
 
 function updateProgress() {
@@ -2623,6 +487,154 @@ function showPoste(n, btn) {
 // BUILD ALL POSTES
 for (let i = 0; i < 4; i++) buildPoste(i);
 updateProgress();
+
+// ===== CAPTURE GÉNÉRIQUE DE TOUS LES ÉLÉMENTS D'APPRENTISSAGE (4 postes) =====
+const SIMPLE_FIELD_IDS = ['f_clinique','f_employe','f_dateEntree','f_evaluatrice','f_evaluateursAutres','f_notes','f_sigEvalNom','f_sigEvalDate','f_sigEmpNom','f_sigEmpDate'];
+
+function collectItems() {
+  const items = {};
+  for (let p = 0; p < 4; p++) {
+    POSTES[p] && CATS.forEach((cat, ci) => {
+      const arr = POSTES[p][cat.id] || [];
+      arr.forEach((item, ii) => {
+        const uid = `p${p}_c${ci}_i${ii}`;
+        const sel = document.getElementById('sel-'+uid);
+        const date = document.getElementById('date-'+uid);
+        const com = document.getElementById('com-'+uid);
+        if (sel) items[uid] = { a: sel.value, d: date ? date.value : '', c: com ? com.value : '' };
+      });
+    });
+  }
+  return items;
+}
+function applyItems(items) {
+  Object.keys(items).forEach(uid => {
+    const sel = document.getElementById('sel-'+uid);
+    const date = document.getElementById('date-'+uid);
+    const com = document.getElementById('com-'+uid);
+    const it = items[uid];
+    if (sel && it.a) { sel.value = it.a; sel.className = 'atteinte-select a-' + it.a; }
+    if (date && it.d) date.value = it.d;
+    if (com && it.c) com.value = it.c;
+  });
+  updateProgress();
+}
+
+// ===================== SUPABASE (modèle B — un suivi par employé) =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, recordToken = null, saveTimer = null, isLoading = true;
+
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(state) {
+  const el = document.getElementById('syncStatus');
+  el.style.display = 'flex';
+  el.className = 'sync-status ' + state;
+  if (state === 'ok') el.textContent = '✅ Sauvegardé';
+  else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
+  else el.textContent = '⚠️ Erreur de connexion';
+}
+function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+
+async function afficherListe() {
+  document.getElementById('mainContainer').style.display = 'none';
+  document.getElementById('syncStatus').style.display = 'none';
+  document.getElementById('selectorScreen').style.display = 'block';
+  const listEl = document.getElementById('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const { data, error } = await sb.rpc('list_suivi_apprentissage', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      listEl.innerHTML = '<div class="selector-empty">Aucun suivi pour le moment. Cliquez sur « + Nouveau suivi » pour commencer.</div>';
+      return;
+    }
+    listEl.innerHTML = data.map(row => `<div class="selector-item" onclick="ouvrirSuivi('${row.record_token}')">
+        <span class="sel-name">${row.nom_employe || '(Nom non précisé)'}</span>
+        <span class="sel-pct">${row.progression || 0}% complété</span>
+      </div>`).join('');
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+async function creerNouveau() {
+  try {
+    const { data, error } = await sb.rpc('create_suivi_apprentissage', { p_owner_token: ownerToken });
+    if (error) throw error;
+    await ouvrirSuivi(data);
+  } catch (e) { console.error(e); alert("Impossible de créer un nouveau suivi pour le moment."); }
+}
+
+async function ouvrirSuivi(token) {
+  isLoading = true;
+  recordToken = token;
+  const params = new URLSearchParams(window.location.search);
+  params.set('suivi', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('mainContainer').style.display = 'block';
+  try {
+    const { data, error } = await sb.rpc('get_suivi_apprentissage', { p_record_token: token });
+    if (error) throw error;
+    if (data && data.length > 0) {
+      const d = data[0].details || {};
+      SIMPLE_FIELD_IDS.forEach(id => { if (document.getElementById(id)) document.getElementById(id).value = d[id] || ''; });
+      applyItems(data[0].items || {});
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+
+function retourListe() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete('suivi');
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  recordToken = null;
+  afficherListe();
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  const details = {};
+  SIMPLE_FIELD_IDS.forEach(id => { const el = document.getElementById(id); if (el) details[id] = el.value; });
+  const active = document.querySelector('.poste-content.active');
+  const allSel = active ? active.querySelectorAll('.atteinte-select').length : 0;
+  const done = active ? Array.from(active.querySelectorAll('.atteinte-select')).filter(s=>s.value==='att'||s.value==='dep').length : 0;
+  const pct = allSel > 0 ? Math.round(done/allSel*100) : 0;
+  try {
+    const { error } = await sb.rpc('save_suivi_apprentissage', {
+      p_record_token: recordToken,
+      p_nom_employe: document.getElementById('f_employe').value || null,
+      p_progression: pct,
+      p_details: details,
+      p_items: collectItems()
+    });
+    if (error) throw error;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+
+async function initPage() {
+  ownerToken = getOwnerToken();
+  const params = new URLSearchParams(window.location.search);
+  const existing = params.get('suivi');
+  if (existing) { await ouvrirSuivi(existing); } else { await afficherListe(); }
+}
+initPage();
 </script>
 
 
