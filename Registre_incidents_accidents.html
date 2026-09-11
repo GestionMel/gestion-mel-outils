@@ -183,10 +183,12 @@
   <div class="tab-pane" id="tp1">
     <div class="info-box"><strong>Conservation obligatoire :</strong> Ce registre doit être conservé pendant au moins 5 ans et être accessible aux travailleurs et aux représentants de la CNESST sur demande.</div>
     <div class="ff" style="max-width:420px;margin-bottom:14px;"><label>📧 Courriel de notification</label><input type="text" id="notifEmail" oninput="scheduleSaveReg()" placeholder="gestionnaire@cliniquexyz.com"></div>
+    <div style="overflow-x:auto;">
     <table class="reg-table">
-      <thead><tr><th>Date</th><th>Employé(e)</th><th>Poste</th><th>Type</th><th>Gravité</th><th>Partie du corps</th><th>Jours d'absence</th><th>CNESST avisée</th><th>Statut suivi</th></tr></thead>
+      <thead><tr><th>Date</th><th>Employé(e)</th><th>Poste</th><th>Type</th><th>Gravité</th><th>Partie du corps</th><th>Jours d'absence</th><th>CNESST avisée</th><th>Statut suivi</th><th></th></tr></thead>
       <tbody id="regBody"></tbody>
     </table>
+    </div>
     <button class="btn-add" onclick="addRegRow()">+ Ajouter un événement au registre</button>
   </div>
 
@@ -267,12 +269,19 @@ function applySevFromValue(val){
 let evenements = [];
 let evIdCounter = 1;
 
-function newEvenement(){
-  return { id: evIdCounter++, date:'', nomEmp:'', poste:'', type:'Accident', gravite:'Presque-accident', partieCorps:'', joursAbsence:'', cnesstAvisee:false, statut:'En cours' };
+function newEvenement(rapportToken){
+  return { id: evIdCounter++, rapportToken: rapportToken || null, date:'', nomEmp:'', poste:'', type:'Accident', gravite:'Presque-accident', partieCorps:'', joursAbsence:'', cnesstAvisee:false, statut:'En cours' };
 }
 
 function addRegRow(){
   evenements.push(newEvenement());
+  renderRegistre();
+  scheduleSaveReg();
+}
+
+function delEvenement(id){
+  if(!confirm('Retirer cette ligne du registre?')) return;
+  evenements = evenements.filter(e=>e.id!==id);
   renderRegistre();
   scheduleSaveReg();
 }
@@ -301,6 +310,7 @@ function renderRegistre(){
     <td><select onchange="updateEvenement(${e.id},'statut',this.value)" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;">
       <option${e.statut==='En cours'?' selected':''}>En cours</option><option${e.statut==='Complété'?' selected':''}>Complété</option><option${e.statut==='Fermé'?' selected':''}>Fermé</option>
     </select></td>
+    <td style="text-align:center;">${e.rapportToken?`<span title="Lié à un rapport détaillé" style="color:var(--blue);font-size:.85rem;">🔗</span>`:''} <button onclick="delEvenement(${e.id})" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.85rem;">×</button></td>
   </tr>`).join('');
 }
 
@@ -414,6 +424,8 @@ async function creerNouveauRapport() {
   try {
     const { data, error } = await sb.rpc('create_rapport_incident', { p_owner_token: ownerToken });
     if (error) throw error;
+    evenements.push(newEvenement(data));
+    scheduleSaveReg();
     await ouvrirRapport(data);
   } catch (e) {
     console.error(e);
@@ -540,6 +552,16 @@ async function doSaveR() {
       p_details: details
     });
     if (error) throw error;
+    const lie = evenements.find(e => e.rapportToken === recordToken);
+    if (lie) {
+      lie.date = document.getElementById('dateEv').value || '';
+      lie.nomEmp = document.getElementById('rNomEmploye').value || '';
+      lie.poste = document.getElementById('rPoste').value || '';
+      const graviteMap = { mineur:'Mineur', modere:'Mineur', grave:'Grave', critique:'Grave' };
+      if (rGravite) lie.gravite = graviteMap[rGravite] || lie.gravite;
+      renderRegistre();
+      scheduleSaveReg();
+    }
     setStatus('ok');
   } catch (e) {
     console.error(e);
