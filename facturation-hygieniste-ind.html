@@ -81,6 +81,13 @@
     <p>Regroupées par hygiéniste pour suivre facilement les passages et les montants facturés dans le temps.</p>
     <button class="btn-new" onclick="creerNouveau()">+ Nouvelle facture</button>
     <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
+    <div style="margin-top:16px;padding:14px 16px;background:var(--light);border-radius:8px;border:1.5px solid var(--border);">
+      <label style="font-size:.78rem;font-weight:600;color:#5a6a80;display:block;margin-bottom:6px;">📧 Courriel de notification (gestionnaire)</label>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input type="email" id="notifEmail" oninput="scheduleSaveConfig()" placeholder="gestionnaire@cliniquexyz.com" style="flex:1;min-width:220px;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;">
+        <span style="font-size:.74rem;color:#8a9ab0;">Un courriel sera envoyé dès qu'une nouvelle facture est soumise.</span>
+      </div>
+    </div>
     <div class="selector-list" id="selectorList"><div class="selector-empty">Chargement...</div></div>
   </div>
 </div>
@@ -328,12 +335,28 @@ async function doSave() {
   } catch (e) { console.error(e); setStatus('err'); }
 }
 
+let notifSaveTimer = null;
+function scheduleSaveConfig() {
+  clearTimeout(notifSaveTimer);
+  notifSaveTimer = setTimeout(async () => {
+    try {
+      await sb.rpc('set_facturation_config', { p_owner_token: ownerToken, p_notification_email: document.getElementById('notifEmail').value || null });
+    } catch (e) { console.error(e); }
+  }, 800);
+}
+
 async function initPage() {
   FIELD_IDS.forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.addEventListener('input', scheduleSave); el.addEventListener('change', scheduleSave); }
   });
   ownerToken = getOwnerToken();
+  try {
+    const { data } = await sb.rpc('get_facturation_config', { p_owner_token: ownerToken });
+    if (data && data.length > 0 && data[0].notification_email) {
+      document.getElementById('notifEmail').value = data[0].notification_email;
+    }
+  } catch (e) { console.error(e); }
   const params = new URLSearchParams(window.location.search);
   const existing = params.get('facture');
   if (existing) { await ouvrirFacture(existing); } else { await afficherListe(); }
