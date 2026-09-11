@@ -194,7 +194,7 @@ function renderServices(){
     <td><input type="text" placeholder="Ex. : Services d'hygiène dentaire" value="${s.desc}" oninput="updateService(${s.id},'desc',this.value)"></td>
     <td><input type="text" placeholder="Ex. : 8" value="${s.nb}" oninput="updateService(${s.id},'nb',this.value)"></td>
     <td><input type="text" placeholder="Ex. : 55 $/h" value="${s.taux}" oninput="updateService(${s.id},'taux',this.value)"></td>
-    <td><input type="text" placeholder="Calculé auto" value="${s.montant}" oninput="updateService(${s.id},'montant',this.value,true)" style="font-weight:600;"></td>
+    <td><input type="text" id="montant_${s.id}" placeholder="Calculé auto" value="${s.montant}" oninput="updateService(${s.id},'montant',this.value,true)" style="font-weight:600;"></td>
     <td><button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.9rem;" onclick="delService(${s.id})">×</button></td>
   </tr>`).join('');
 }
@@ -204,8 +204,11 @@ function updateService(id, field, val, manuel){
   s[field]=val;
   if ((field==='nb' || field==='taux') && !manuel) {
     const calc = parseNum(s.nb) * parseNum(s.taux);
-    if (calc > 0) s.montant = fmtMoney(calc);
-    renderServices();
+    if (calc > 0) {
+      s.montant = fmtMoney(calc);
+      const montantEl = document.getElementById('montant_'+id);
+      if (montantEl) montantEl.value = s.montant;
+    }
   }
   recalcTotals();
   scheduleSave();
