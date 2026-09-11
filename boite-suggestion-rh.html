@@ -152,6 +152,13 @@
 
   <!-- MANAGER DASHBOARD -->
   <div class="mpane" id="mp1">
+    <div class="mgr-bar" style="border-bottom:1.5px dashed var(--border);padding-bottom:12px;margin-bottom:12px;">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <label style="font-size:.78rem;font-weight:600;color:#5a6a80;">📧 Courriel de notification :</label>
+        <input type="email" id="notifEmail" class="ci" placeholder="gestionnaire@cliniquexyz.com" style="min-width:220px;" oninput="scheduleSave()">
+        <span style="font-size:.74rem;color:#8a9ab0;">Un courriel sera envoyé à cette adresse dès qu'une nouvelle suggestion est soumise.</span>
+      </div>
+    </div>
     <div class="mgr-bar">
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
         <select id="filterCatBS" class="ci" style="font-size:.8rem;" onchange="drawBS()">
@@ -338,7 +345,8 @@ async function doSave() {
       p_owner_token: ownerToken,
       p_clinique: document.getElementById('bs_clinique').value || null,
       p_suggestions: suggestions,
-      p_manager_pin: managerPin
+      p_manager_pin: managerPin,
+      p_notification_email: document.getElementById('notifEmail').value || null
     });
     if (error) throw error;
     setStatus('ok');
@@ -354,6 +362,7 @@ async function initPage() {
       suggestions = row.suggestions || [];
       managerPin = row.manager_pin || null;
       if (row.clinique) document.getElementById('bs_clinique').value = row.clinique;
+      if (row.notification_email) document.getElementById('notifEmail').value = row.notification_email;
       sid = suggestions.reduce((m,s)=>Math.max(m,s.id+1), 1);
     } else {
       await sb.rpc('create_boite_suggestions', { p_owner_token: ownerToken });
