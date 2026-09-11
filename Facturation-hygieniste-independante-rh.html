@@ -140,10 +140,10 @@
   </div>
 
   <div class="totals">
-    <div class="total-row"><span>Sous-total :</span><input type="text" id="f_sousTotal" placeholder="0,00 $"></div>
-    <div class="total-row"><span>TPS (5%) :</span><input type="text" id="f_tps" placeholder="0,00 $"></div>
-    <div class="total-row"><span>TVQ (9,975%) :</span><input type="text" id="f_tvq" placeholder="0,00 $"></div>
-    <div class="total-row final"><span>TOTAL DÛ :</span><input type="text" id="f_total" placeholder="0,00 $" style="font-size:1.1rem; font-weight:700; color:var(--blue);"></div>
+    <div class="total-row"><span>Sous-total :</span><input type="text" id="f_sousTotal" readonly style="background:#f4f4f4;"></div>
+    <div class="total-row"><span>TPS (5%) :</span><input type="text" id="f_tps" readonly style="background:#f4f4f4;"></div>
+    <div class="total-row"><span>TVQ (9,975%) :</span><input type="text" id="f_tvq" readonly style="background:#f4f4f4;"></div>
+    <div class="total-row final"><span>TOTAL DÛ :</span><input type="text" id="f_total" readonly style="font-size:1.1rem; font-weight:700; color:var(--blue);background:#f4f4f4;"></div>
   </div>
 
   <div class="note-section">
@@ -160,6 +160,24 @@
 <script>
 const FIELD_IDS = ['f_noFacture','f_hygNom','f_hygAdresse','f_hygVille','f_hygTel','f_hygCourriel','f_hygTps','f_hygTvq','f_cliNom','f_cliAdresse','f_cliVille','f_cliTel','f_cliCourriel','f_cliTps','f_dateFacture','f_periode','f_dateEcheance','f_modePaiement','f_sousTotal','f_tps','f_tvq','f_total','f_notes'];
 
+function parseNum(str) {
+  if (!str) return 0;
+  const m = String(str).replace(',', '.').match(/-?\d+(\.\d+)?/);
+  return m ? parseFloat(m[0]) : 0;
+}
+function fmtMoney(n) { return n.toLocaleString('fr-CA', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' $'; }
+
+function recalcTotals() {
+  const sousTotal = services.reduce((sum, s) => sum + parseNum(s.montant), 0);
+  const tps = sousTotal * 0.05;
+  const tvq = sousTotal * 0.09975;
+  const total = sousTotal + tps + tvq;
+  document.getElementById('f_sousTotal').value = fmtMoney(sousTotal);
+  document.getElementById('f_tps').value = fmtMoney(tps);
+  document.getElementById('f_tvq').value = fmtMoney(tvq);
+  document.getElementById('f_total').value = fmtMoney(total);
+}
+
 let services = [];
 let serviceIdCnt = 1;
 function newService(){ return { id: serviceIdCnt++, date:'', desc:'', nb:'', taux:'', montant:'' }; }
@@ -167,15 +185,26 @@ function renderServices(){
   document.getElementById('services-tbody').innerHTML = services.map(s => `<tr>
     <td><input type="date" value="${s.date}" onchange="updateService(${s.id},'date',this.value)"></td>
     <td><input type="text" placeholder="Ex. : Services d'hygiène dentaire" value="${s.desc}" oninput="updateService(${s.id},'desc',this.value)"></td>
-    <td><input type="text" placeholder="Ex. : 8h ou 12 pts" value="${s.nb}" oninput="updateService(${s.id},'nb',this.value)"></td>
+    <td><input type="text" placeholder="Ex. : 8" value="${s.nb}" oninput="updateService(${s.id},'nb',this.value)"></td>
     <td><input type="text" placeholder="Ex. : 55 $/h" value="${s.taux}" oninput="updateService(${s.id},'taux',this.value)"></td>
-    <td><input type="text" placeholder="Ex. : 440,00 $" value="${s.montant}" oninput="updateService(${s.id},'montant',this.value)"></td>
+    <td><input type="text" placeholder="Calculé auto" value="${s.montant}" oninput="updateService(${s.id},'montant',this.value,true)" style="font-weight:600;"></td>
     <td><button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.9rem;" onclick="delService(${s.id})">×</button></td>
   </tr>`).join('');
 }
-function updateService(id, field, val){ const s = services.find(x=>x.id===id); if(s) s[field]=val; scheduleSave(); }
-function addService(){ services.push(newService()); renderServices(); scheduleSave(); }
-function delService(id){ services = services.filter(s=>s.id!==id); renderServices(); scheduleSave(); }
+function updateService(id, field, val, manuel){
+  const s = services.find(x=>x.id===id);
+  if(!s) return;
+  s[field]=val;
+  if ((field==='nb' || field==='taux') && !manuel) {
+    const calc = parseNum(s.nb) * parseNum(s.taux);
+    if (calc > 0) s.montant = fmtMoney(calc);
+    renderServices();
+  }
+  recalcTotals();
+  scheduleSave();
+}
+function addService(){ services.push(newService()); renderServices(); recalcTotals(); scheduleSave(); }
+function delService(id){ services = services.filter(s=>s.id!==id); renderServices(); recalcTotals(); scheduleSave(); }
 
 const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
@@ -256,9 +285,11 @@ async function ouvrirFacture(token) {
       services = data[0].services && data[0].services.length ? data[0].services : [];
       serviceIdCnt = services.reduce((m,s)=>Math.max(m,s.id+1), 1);
       renderServices();
+      recalcTotals();
     } else {
       services = [newService(), newService(), newService()];
       renderServices();
+      recalcTotals();
       document.getElementById('f_dateFacture').valueAsDate = new Date();
     }
     setStatus('ok');
