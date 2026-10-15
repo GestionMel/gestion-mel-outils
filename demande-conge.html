@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demande de congé · Gestion Mel</title>
+<style>
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green: #1a9e5a; --red: #c0392b; --orange:#e67e22; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  button { font-family: inherit; }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 780px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .selector-screen{max-width:820px;margin:28px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .selector-box{padding:32px 36px;}
+  .selector-box h1{font-size:1.3rem;color:var(--dark);margin-bottom:6px;}
+  .selector-box>p{font-size:.85rem;color:#5a6a80;margin-bottom:20px;line-height:1.6;}
+  .btn-new{padding:10px 20px;border-radius:7px;border:none;background:var(--blue);color:white;font-size:.86rem;font-weight:600;cursor:pointer;margin:0 10px 8px 0;}
+  .btn-lien{padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-size:.85rem;font-weight:600;cursor:pointer;margin:0 10px 8px 0;}
+  .selector-list{display:flex;flex-direction:column;gap:8px;margin-top:20px;}
+  .selector-item{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+  .selector-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-type{font-size:.82rem;color:#5a6a80;flex:1;}
+  .sel-date{font-size:.74rem;color:#8a9ab0;}
+  .sel-statut{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:10px;}
+  .selector-empty{font-size:.82rem;color:#8a9ab0;padding:10px 0;line-height:1.6;}
+  .btn-retour{background:none;border:none;color:var(--blue);font-size:.82rem;font-weight:600;cursor:pointer;padding:16px 36px 0;display:block;}
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:none;align-items:center;gap:6px;}
+  .sync-status.show{display:flex;}
+  .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.75; }
+  .bandeau { margin: 16px 36px 0; border-radius: 8px; padding: 12px 14px; font-size: .84rem; line-height: 1.6; display: none; }
+  .bandeau.show { display: block; }
+  .bandeau.info { background: #e3f2fd; color: #0f3d6e; }
+  .bandeau.gest { background: #f0fdf4; color: var(--green); display: none; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .bandeau.gest.show { display: flex; }
+  .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field.full { grid-column: 1 / -1; }
+  label { font-size: 0.75rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select, textarea { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 16px; font-family: inherit; color: var(--text); background: var(--light); transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  input[readonly], textarea[readonly] { background: #f4f4f4; color: #5a6a80; }
+  .type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .type-card { border: 1.5px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; transition: all 0.2s; text-align: center; }
+  .type-card:hover { border-color: var(--accent); background: var(--light); }
+  .type-card.selected { border-color: var(--blue); background: #e8f0fb; }
+  .type-card .icon { font-size: 1.6rem; margin-bottom: 4px; }
+  .type-card .name { font-size: 0.82rem; font-weight: 600; color: var(--text); text-transform: none; letter-spacing: 0; }
+  .verrou .type-card { cursor: not-allowed; opacity: .7; }
+  .nb-jours { background: var(--light); border-radius: 8px; padding: 16px; margin-top: 14px; display: flex; align-items: center; justify-content: space-between; }
+  .nb-jours span { font-size: 0.85rem; color: #5a6a80; font-weight: 600; }
+  .nb-jours strong { font-size: 1.6rem; color: var(--blue); }
+  .decision-section { display: flex; gap: 14px; }
+  .decision-btn { flex: 1; padding: 14px; border-radius: 8px; border: 2px solid; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; background: white; }
+  .decision-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .decision-btn.approve { border-color: var(--green); color: var(--green); }
+  .decision-btn.approve.selected { background: var(--green); color: white; opacity: 1; }
+  .decision-btn.refuse { border-color: var(--red); color: var(--red); }
+  .decision-btn.refuse.selected { background: var(--red); color: white; opacity: 1; }
+  .decision-locked { background: var(--light); border: 1.5px dashed var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; font-size: .85rem; color: #5a6a80; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+  .btn { padding: 11px 28px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-petit { padding: 7px 14px; font-size: .8rem; }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
+  .gest-panel { margin-top: 16px; padding: 14px 16px; background: var(--light); border-radius: 8px; border: 1.5px solid var(--border); display: none; }
+  .gest-panel.show { display: block; }
+  .gest-panel .ligne { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+  .gest-panel input { flex: 1; min-width: 200px; padding: 8px 11px; font-size: .88rem; }
+  .msg { font-size: .8rem; margin-top: 6px; display: none; }
+  .msg.show { display: block; }
+  .msg.ok { color: var(--green); } .msg.err { color: var(--red); }
+  /* FENETRE */
+  .modal-fond { position: fixed; inset: 0; background: rgba(13,27,42,.55); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+  .modal-fond.show { display: flex; }
+  .modal { background: white; border-radius: 12px; width: 100%; max-width: 400px; padding: 22px; box-shadow: 0 10px 40px rgba(0,0,0,.25); }
+  .modal h2 { font-size: 1.05rem; color: var(--dark); margin-bottom: 6px; }
+  .modal p { font-size: .84rem; color: #5a6a80; line-height: 1.6; margin-bottom: 14px; }
+  .modal .field { margin-bottom: 12px; }
+  .modal .erreur { background: #fef2f2; color: var(--red); border-radius: 7px; padding: 8px 11px; font-size: .82rem; margin-bottom: 12px; display: none; }
+  .modal .erreur.show { display: block; }
+  .modal .boutons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+  .modal .boutons .btn { padding: 10px 18px; font-size: .88rem; }
+  @media (max-width: 650px) { .page-header { padding: 14px 18px; } .selector-box, .section, .actions { padding-left: 18px; padding-right: 18px; } .btn-retour { padding-left: 18px; } .bandeau { margin-left: 18px; margin-right: 18px; } .grid { grid-template-columns: 1fr; } .type-grid { grid-template-columns: 1fr 1fr; } .doc-header { padding: 22px 18px; } }
+  @media print { body { background: white; } .page-header, .actions, .sync-status, .selector-screen, .btn-retour, .bandeau, .decision-locked, .modal-fond { display: none !important; } .container { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status" id="syncStatus"></div>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Clinique dentaire · Gestion RH</div>
+</div>
+
+<div class="selector-screen" id="selectorScreen">
+  <div class="selector-box">
+    <h1>Demandes de congé</h1>
+    <p>Employé(e) : créez une nouvelle demande ou retrouvez les vôtres avec votre nom et votre code personnel. Gestionnaire : consultez toutes les demandes avec votre mot de passe.</p>
+    <button class="btn-new" id="btnNouvelle">+ Nouvelle demande de congé</button>
+    <button class="btn-lien" id="btnMesDemandes">🔍 Voir mes demandes</button>
+    <button class="btn-lien" id="btnToutes">🔒 Voir toutes les demandes (gestionnaire)</button>
+    <div class="gest-panel" id="gestPanel">
+      <div class="ligne">
+        <label for="notifEmail" style="min-width:100%;">📧 Courriel de notification (gestionnaire)</label>
+        <input type="email" id="notifEmail" placeholder="gestionnaire@cliniquexyz.com">
+        <button class="btn btn-secondary btn-petit" id="btnSauverCourriel">Enregistrer</button>
+        <button class="btn btn-secondary btn-petit" id="btnChangerPin">🔑 Changer le mot de passe</button>
+        <button class="btn btn-secondary btn-petit" id="btnVerrouiller">🔒 Verrouiller</button>
+      </div>
+      <span style="font-size:.74rem;color:#8a9ab0;">Un courriel est envoyé à cette adresse quand une nouvelle demande est soumise.</span>
+      <div class="msg" id="gestMsg"></div>
+    </div>
+    <div class="selector-list" id="selectorList"></div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer" style="display:none;">
+  <button class="btn-retour" id="btnRetour">← Retour</button>
+  <div class="doc-header">
+    <h1>Formulaire de demande de congé</h1>
+    <p>À compléter par l'employé(e) et à approuver par la gestionnaire</p>
+  </div>
+  <div class="bandeau info" id="bandeauDecidee">🔒 Une décision a été rendue pour cette demande : elle ne peut plus être modifiée. Pour un changement, adressez-vous à votre gestionnaire.</div>
+  <div class="bandeau gest" id="bandeauGest">
+    <span>🔓 Mode gestionnaire</span>
+    <button class="btn btn-secondary btn-petit" id="btnCodeEmploye">🔑 Donner un nouveau code à l'employé(e)</button>
+  </div>
+
+  <div id="zoneEmploye">
+    <div class="section">
+      <div class="section-title">Informations de l'employé(e)</div>
+      <div class="grid">
+        <div class="field"><label for="f_nomEmploye">Nom complet</label><input type="text" id="f_nomEmploye" maxlength="200" placeholder="Prénom et nom"></div>
+        <div class="field"><label for="f_poste">Poste occupé</label><input type="text" id="f_poste" placeholder="Ex. : Secrétaire dentaire"></div>
+        <div class="field"><label for="f_dateDemande">Date de la demande</label><input type="date" id="f_dateDemande"></div>
+        <div class="field"><label for="f_noEmploye">No d'employé</label><input type="text" id="f_noEmploye" placeholder="Ex. : EMP-001"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Type de congé demandé</div>
+      <div class="type-grid" id="typeGrid">
+        <div class="type-card" data-value="vacances"><div class="icon">🏖️</div><div class="name">Vacances</div></div>
+        <div class="type-card" data-value="maladie"><div class="icon">🤒</div><div class="name">Maladie</div></div>
+        <div class="type-card" data-value="personnel"><div class="icon">👤</div><div class="name">Congé personnel</div></div>
+        <div class="type-card" data-value="ferie"><div class="icon">📅</div><div class="name">Férié reporté</div></div>
+        <div class="type-card" data-value="deuil"><div class="icon">🕊️</div><div class="name">Deuil / Famille</div></div>
+        <div class="type-card" data-value="autre"><div class="icon">📋</div><div class="name">Autre</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Période de congé</div>
+      <div class="grid">
+        <div class="field"><label for="f_dateDebut">Date de début</label><input type="date" id="f_dateDebut"></div>
+        <div class="field"><label for="f_dateFin">Date de fin</label><input type="date" id="f_dateFin"></div>
+        <div class="field full">
+          <div class="nb-jours"><span>Nombre de jours ouvrables demandés :</span><strong id="nb-jours">0</strong></div>
+        </div>
+        <div class="field full"><label for="f_precisions">Précisions ou motif (si applicable)</label><textarea id="f_precisions" placeholder="Informations supplémentaires au besoin..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Signature de l'employé(e)</div>
+      <div class="grid">
+        <div class="field"><label for="f_sigEmp">Signature</label><input type="text" id="f_sigEmp" placeholder="Signature manuscrite sur version imprimée"></div>
+        <div class="field"><label for="f_sigEmpDate">Date</label><input type="date" id="f_sigEmpDate"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="decisionSection">
+    <div class="section-title">Décision de la gestionnaire</div>
+    <div class="decision-locked" id="decisionLocked">
+      <span>🔒 Section réservée à la gestionnaire.</span>
+      <button class="btn btn-secondary btn-petit" id="btnDeverrouiller">Déverrouiller</button>
+    </div>
+    <div class="decision-section">
+      <button class="decision-btn approve" id="btnApprouve">✅ Approuvé</button>
+      <button class="decision-btn refuse" id="btnRefuse">❌ Refusé</button>
+    </div>
+    <div class="grid" style="margin-top:14px">
+      <div class="field full"><label for="f_commentairesGest">Commentaires de la gestionnaire</label><textarea id="f_commentairesGest" placeholder="Raison du refus ou notes importantes..."></textarea></div>
+      <div class="field"><label for="f_gestNom">Nom de la gestionnaire</label><input type="text" id="f_gestNom" placeholder="Prénom et nom"></div>
+      <div class="field"><label for="f_dateDecision">Date de la décision</label><input type="date" id="f_dateDecision"></div>
+      <div class="field full"><label for="f_sigGest">Signature de la gestionnaire</label><input type="text" id="f_sigGest" placeholder="Signature manuscrite sur version imprimée"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel · gestionmel.com | Document confidentiel, usage interne uniquement</div>
+</div>
+
+<!-- FENETRE DE SAISIE -->
+<div class="modal-fond" id="modalFond">
+  <div class="modal" role="dialog" aria-modal="true">
+    <h2 id="modalTitre"></h2>
+    <p id="modalTexte"></p>
+    <div class="erreur" id="modalErreur"></div>
+    <div id="modalChamps"></div>
+    <div class="boutons">
+      <button class="btn btn-secondary" id="modalAnnuler">Annuler</button>
+      <button class="btn btn-primary" id="modalOk">OK</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== CONFIGURATION =====================
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const CHAMPS_EMP = ['f_nomEmploye','f_poste','f_dateDemande','f_noEmploye','f_dateDebut','f_dateFin','f_precisions','f_sigEmp','f_sigEmpDate'];
+const CHAMPS_GEST = ['f_commentairesGest','f_gestNom','f_dateDecision','f_sigGest'];
+const FIELD_IDS = [...CHAMPS_EMP, ...CHAMPS_GEST];
+const TYPES = { vacances:'🏖️ Vacances', maladie:'🤒 Maladie', personnel:'👤 Congé personnel', ferie:'📅 Férié reporté', deuil:'🕊️ Deuil / Famille', autre:'📋 Autre' };
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+let ownerToken = null, configure = false, pin = null;
+let recordToken = null, code = null, estGest = false, decisionEnBase = null;
+let typeConge = '', decision = '', saveTimer = null, isLoading = true;
+
+// ===================== OUTILS =====================
+async function appel(nom, args) {
+  const { data, error } = await sb.rpc(nom, args);
+  if (error) throw error;
+  return data;
+}
+function setStatus(etat, texte) {
+  const el = $('syncStatus');
+  el.className = 'sync-status show ' + etat;
+  el.textContent = texte || (etat === 'ok' ? '✅ Sauvegardé' : etat === 'saving' ? '⏳ Sauvegarde...' : '⚠️ Erreur de connexion');
+}
+function messageErreur(r) {
+  switch (r && r.erreur) {
+    case 'mot_de_passe': return 'Mot de passe incorrect.';
+    case 'code': return 'Nom ou code personnel incorrect.';
+    case 'aucune': return 'Aucune demande trouvée à ce nom. Vérifiez l\'orthographe exacte utilisée lors de la création.';
+    case 'bloque': return `Trop d'essais. Réessayez dans ${r.minutes} minute${r.minutes > 1 ? 's' : ''}.`;
+    case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 4 caractères.';
+    case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+    case 'courriel': return 'Veuillez entrer une adresse courriel valide.';
+    case 'decidee': return 'Une décision a été rendue : cette demande ne peut plus être modifiée.';
+    case 'sans_code': return 'Cette demande n\'a pas de code personnel. Demandez à votre gestionnaire de vous en donner un.';
+    case 'limite': return 'Beaucoup de demandes ont été créées dans la dernière heure. Réessayez un peu plus tard.';
+    case 'deja_defini': return 'Un mot de passe existe déjà pour cet outil.';
+    default: return 'Une erreur est survenue. Vérifiez votre connexion Internet et réessayez.';
+  }
+}
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique');
+  try { if (!token) token = localStorage.getItem('gestionmel_clinique_token'); } catch (e) {}
+  if (!token || !/^[0-9a-f-]{36}$/i.test(token)) token = crypto.randomUUID();
+  try { localStorage.setItem('gestionmel_clinique_token', token); } catch (e) {}
+  params.delete('conge');
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+
+// Fenêtre de saisie : champs = [{id, label, type, placeholder}] ; valider(valeurs) renvoie un message d'erreur ou null
+function demander({ titre, texte, champs, bouton = 'OK', valider }) {
+  return new Promise(resolve => {
+    $('modalTitre').textContent = titre;
+    $('modalTexte').textContent = texte || '';
+    $('modalTexte').style.display = texte ? 'block' : 'none';
+    $('modalErreur').className = 'erreur';
+    $('modalChamps').innerHTML = champs.map(c => `<div class="field"><label for="m_${c.id}">${c.label}</label><input id="m_${c.id}" type="${c.type || 'text'}" placeholder="${c.placeholder || ''}" autocomplete="off"></div>`).join('');
+    $('modalOk').textContent = bouton;
+    $('modalFond').classList.add('show');
+    setTimeout(() => $('m_' + champs[0].id).focus(), 50);
+    const lire = () => Object.fromEntries(champs.map(c => [c.id, $('m_' + c.id).value]));
+    const fermer = v => { $('modalFond').classList.remove('show'); $('modalOk').onclick = $('modalAnnuler').onclick = null; $('modalChamps').onkeydown = null; resolve(v); };
+    const ok = async () => {
+      const v = lire();
+      const err = valider ? await valider(v) : null;
+      if (err) { $('modalErreur').textContent = err; $('modalErreur').className = 'erreur show'; return; }
+      fermer(v);
+    };
+    $('modalOk').onclick = ok;
+    $('modalAnnuler').onclick = () => fermer(null);
+    $('modalChamps').onkeydown = e => { if (e.key === 'Enter') ok(); };
+  });
+}
+function afficherErreurModal(texte) { $('modalErreur').textContent = texte; $('modalErreur').className = 'erreur show'; }
+
+// ===================== ECRAN DE SELECTION =====================
+async function creerNouveau() {
+  let token = null, codeChoisi = null;
+  const v = await demander({
+    titre: '🔑 Choisissez votre code personnel',
+    texte: 'Ce code vous permettra de retrouver vos demandes. Utilisez toujours le même code pour toutes vos demandes, et ne le partagez pas.',
+    champs: [{ id:'c1', label:'Code personnel', type:'password', placeholder:'4 caractères minimum' }, { id:'c2', label:'Confirmer le code', type:'password' }],
+    bouton: 'Créer ma demande',
+    valider: async x => {
+      if (x.c1.length < 4) return messageErreur({ erreur:'code_court' });
+      if (x.c1 !== x.c2) return 'Les deux codes ne sont pas identiques.';
+      try {
+        const r = await appel('conge_creer', { p_owner_token: ownerToken, p_code: x.c1 });
+        if (!r || !r.ok) return messageErreur(r);
+        token = r.record_token; codeChoisi = x.c1; return null;
+      } catch (e) { console.error(e); return messageErreur(); }
+    }
+  });
+  if (!v) return;
+  pin = null;
+  await ouvrirDemande(token, codeChoisi, null);
+}
+
+async function voirMesDemandes() {
+  let resultat = null, codeSaisi = null;
+  const v = await demander({
+    titre: '🔍 Voir mes demandes',
+    texte: 'Entrez votre nom complet tel qu\'inscrit sur vos demandes, et votre code personnel.',
+    champs: [{ id:'nom', label:'Nom complet', placeholder:'Prénom et nom' }, { id:'code', label:'Code personnel', type:'password' }],
+    bouton: 'Rechercher',
+    valider: async x => {
+      if (!x.nom.trim() || !x.code) return 'Veuillez remplir les deux champs.';
+      try {
+        const r = await appel('conge_mes_demandes', { p_owner_token: ownerToken, p_nom: x.nom.trim(), p_code: x.code });
+        if (!r || !r.ok) return messageErreur(r);
+        resultat = r.demandes; codeSaisi = x.code; return null;
+      } catch (e) { console.error(e); return messageErreur(); }
+    }
+  });
+  if (!v) return;
+  pin = null; $('gestPanel').classList.remove('show');
+  $('selectorList').innerHTML = `<div style="font-weight:700;font-size:.85rem;color:var(--dark);padding:6px 0;border-bottom:2px solid var(--border);margin-bottom:6px;">Vos demandes</div>` + resultat.map(ligneDemande).join('');
+  brancherListe(codeSaisi);
+}
+
+function ligneDemande(row, retrait) {
+  const st = row.decision === 'approuve' ? 'background:#f0fdf4;color:#1a9e5a;' : row.decision === 'refuse' ? 'background:#fef2f2;color:#c0392b;' : 'background:#fff8e1;color:#e67e22;';
+  const stLabel = row.decision === 'approuve' ? '✅ Approuvé' : row.decision === 'refuse' ? '❌ Refusé' : '⏳ En attente';
+  const d = row.updated_at ? new Date(row.updated_at).toLocaleDateString('fr-CA', { day:'numeric', month:'short', year:'numeric' }) : '';
+  return `<div class="selector-item" ${retrait ? 'style="margin-left:16px;"' : ''} data-token="${esc(row.record_token)}">
+    <span class="sel-type">${TYPES[row.type_conge] || 'Type non précisé'}</span>
+    <span class="sel-date">${d}</span>
+    <span class="sel-statut" style="${st}">${stLabel}</span>
+  </div>`;
+}
+function brancherListe(codeEmploye) {
+  document.querySelectorAll('#selectorList .selector-item').forEach(el =>
+    el.addEventListener('click', () => ouvrirDemande(el.dataset.token, codeEmploye, codeEmploye ? null : pin)));
+}
+
+async function entrerPin() {
+  if (pin) return true;
+  if (!configure) {
+    const v = await demander({
+      titre: '🔐 Créez votre mot de passe',
+      texte: 'Première visite : créez un mot de passe pour protéger la liste des demandes et la section Décision. Les employés n\'y auront jamais accès.',
+      champs: [{ id:'p1', label:'Mot de passe', type:'password', placeholder:'4 caractères minimum' }, { id:'p2', label:'Confirmer le mot de passe', type:'password' }],
+      bouton: 'Créer',
+      valider: async x => {
+        if (x.p1.length < 4) return messageErreur({ erreur:'mot_de_passe_court' });
+        if (x.p1 !== x.p2) return 'Les deux mots de passe ne sont pas identiques.';
+        try {
+          const r = await appel('conge_definir_pin', { p_owner_token: ownerToken, p_pin: x.p1 });
+          if (!r || !r.ok) return messageErreur(r);
+          return null;
+        } catch (e) { console.error(e); return messageErreur(); }
+      }
+    });
+    if (!v) return false;
+    configure = true; pin = v.p1; return true;
+  }
+  const v = await demander({
+    titre: '🔐 Mot de passe de la gestionnaire',
+    champs: [{ id:'p', label:'Mot de passe', type:'password' }],
+    bouton: 'Ouvrir',
+    valider: async x => {
+      try {
+        const r = await appel('conge_liste', { p_owner_token: ownerToken, p_pin: x.p });
+        if (!r || !r.ok) return messageErreur(r);
+        return null;
+      } catch (e) { console.error(e); return messageErreur(); }
+    }
+  });
+  if (!v) return false;
+  pin = v.p; return true;
+}
+
+async function voirToutesLesDemandes() {
+  if (!(await entrerPin())) return;
+  await afficherListe();
+}
+
+async function afficherListe() {
+  const listEl = $('selectorList');
+  listEl.innerHTML = '<div class="selector-empty">Chargement...</div>';
+  try {
+    const r = await appel('conge_liste', { p_owner_token: ownerToken, p_pin: pin });
+    if (!r || !r.ok) { pin = null; listEl.innerHTML = `<div class="selector-empty">${esc(messageErreur(r))}</div>`; return; }
+    $('gestPanel').classList.add('show');
+    $('notifEmail').value = r.notification_email || '';
+    const data = r.demandes || [];
+    if (!data.length) { listEl.innerHTML = '<div class="selector-empty">Aucune demande pour le moment.</div>'; return; }
+    const groupes = {};
+    data.forEach(row => { const nom = row.nom_employe || '(Nom non précisé)'; (groupes[nom] = groupes[nom] || []).push(row); });
+    listEl.innerHTML = Object.keys(groupes).sort((a, b) => a.localeCompare(b, 'fr')).map(nom => {
+      const dem = groupes[nom];
+      return `<div style="margin-top:14px;"><div style="font-weight:700;font-size:.85rem;color:var(--dark);padding:6px 0;border-bottom:2px solid var(--border);margin-bottom:6px;">👤 ${esc(nom)} <span style="font-weight:400;color:#8a9ab0;font-size:.78rem;">(${dem.length} demande${dem.length > 1 ? 's' : ''})</span></div>${dem.map(x => ligneDemande(x, true)).join('')}</div>`;
+    }).join('');
+    brancherListe(null);
+  } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
+}
+
+function msgGest(texte, type) { const el = $('gestMsg'); el.className = 'msg show ' + type; el.textContent = texte; }
+async function sauverCourriel(nouveauPin) {
+  try {
+    const r = await appel('conge_parametres', { p_owner_token: ownerToken, p_pin: pin, p_email: $('notifEmail').value.trim(), p_nouveau_pin: nouveauPin || null });
+    if (!r || !r.ok) return msgGest(messageErreur(r), 'err');
+    if (nouveauPin) pin = nouveauPin;
+    msgGest(nouveauPin ? '✅ Mot de passe modifié.' : '✅ Courriel enregistré.', 'ok');
+  } catch (e) { console.error(e); msgGest(messageErreur(), 'err'); }
+}
+async function changerPin() {
+  const v = await demander({
+    titre: '🔑 Nouveau mot de passe',
+    champs: [{ id:'p1', label:'Nouveau mot de passe', type:'password', placeholder:'4 caractères minimum' }, { id:'p2', label:'Confirmer', type:'password' }],
+    bouton: 'Enregistrer',
+    valider: x => x.p1.length < 4 ? messageErreur({ erreur:'mot_de_passe_court' }) : x.p1 !== x.p2 ? 'Les deux mots de passe ne sont pas identiques.' : null
+  });
+  if (v) sauverCourriel(v.p1);
+}
+function verrouiller() {
+  pin = null;
+  $('gestPanel').classList.remove('show');
+  $('selectorList').innerHTML = '';
+}
+
+// ===================== FORMULAIRE =====================
+function selectType(el) {
+  if (!peutModifierEmploye()) return;
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  typeConge = el.dataset.value;
+  scheduleSave();
+}
+function afficherDecision() {
+  $('btnApprouve').classList.toggle('selected', decision === 'approuve');
+  $('btnRefuse').classList.toggle('selected', decision === 'refuse');
+}
+function setDecision(v) {
+  if (!estGest) return;
+  decision = (decision === v) ? '' : v;
+  afficherDecision();
+  scheduleSave();
+}
+function calcJours() {
+  const d1 = new Date($('f_dateDebut').value), d2 = new Date($('f_dateFin').value);
+  if (isNaN(d1) || isNaN(d2) || d2 < d1) { $('nb-jours').textContent = '0'; return; }
+  let count = 0, cur = new Date(d1);
+  while (cur <= d2) { const day = cur.getUTCDay(); if (day !== 0 && day !== 6) count++; cur.setUTCDate(cur.getUTCDate() + 1); }
+  $('nb-jours').textContent = count;
+}
+function peutModifierEmploye() { return estGest || !decisionEnBase; }
+
+function appliquerDroits() {
+  const empOk = peutModifierEmploye();
+  CHAMPS_EMP.forEach(id => $(id).readOnly = !empOk);
+  $('zoneEmploye').classList.toggle('verrou', !empOk);
+  CHAMPS_GEST.forEach(id => $(id).readOnly = !estGest);
+  $('btnApprouve').disabled = !estGest;
+  $('btnRefuse').disabled = !estGest;
+  $('decisionLocked').style.display = estGest ? 'none' : 'flex';
+  $('bandeauDecidee').classList.toggle('show', !empOk);
+  $('bandeauGest').classList.toggle('show', estGest);
+}
+
+async function ouvrirDemande(token, codeEmploye, pinGest) {
+  isLoading = true;
+  try {
+    const r = await appel('conge_lire', { p_record_token: token, p_code: codeEmploye, p_pin: pinGest });
+    if (!r || !r.ok) { alert(messageErreur(r)); isLoading = false; return; }
+    recordToken = token; code = codeEmploye; estGest = !!r.gest; decisionEnBase = r.decision || null;
+    const d = r.details || {};
+    FIELD_IDS.forEach(id => $(id).value = d[id] || '');
+    typeConge = d.typeConge || '';
+    document.querySelectorAll('.type-card').forEach(c => c.classList.toggle('selected', c.dataset.value === typeConge));
+    decision = d.decision || r.decision || '';
+    afficherDecision();
+    calcJours();
+    appliquerDroits();
+    $('selectorScreen').style.display = 'none';
+    $('mainContainer').style.display = 'block';
+    window.scrollTo(0, 0);
+    setStatus('ok', '✅ Demande ouverte');
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+
+async function deverrouillerDecision() {
+  if (!(await entrerPin())) return;
+  await ouvrirDemande(recordToken, null, pin);
+}
+
+async function donnerCode() {
+  const v = await demander({
+    titre: '🔑 Nouveau code pour l\'employé(e)',
+    texte: 'Communiquez ce code à l\'employé(e) en personne. Il remplace l\'ancien code de cette demande.',
+    champs: [{ id:'c1', label:'Nouveau code', type:'text', placeholder:'4 caractères minimum' }],
+    bouton: 'Enregistrer',
+    valider: async x => {
+      if (x.c1.length < 4) return messageErreur({ erreur:'code_court' });
+      try {
+        const r = await appel('conge_definir_code', { p_record_token: recordToken, p_pin: pin, p_code: x.c1 });
+        return (!r || !r.ok) ? messageErreur(r) : null;
+      } catch (e) { console.error(e); return messageErreur(); }
+    }
+  });
+  if (v) setStatus('ok', '✅ Code enregistré');
+}
+
+function retourListe() {
+  clearTimeout(saveTimer);
+  if (saveTimer) doSave();
+  recordToken = null; code = null; estGest = false;
+  $('mainContainer').style.display = 'none';
+  $('syncStatus').className = 'sync-status';
+  $('selectorScreen').style.display = 'block';
+  if (pin) afficherListe(); else $('selectorList').innerHTML = '';
+}
+
+function scheduleSave() {
+  if (isLoading || !recordToken) return;
+  setStatus('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 800);
+}
+async function doSave() {
+  saveTimer = null;
+  const details = {};
+  FIELD_IDS.forEach(id => details[id] = $(id).value);
+  details.typeConge = typeConge;
+  details.decision = decision;
+  try {
+    const r = await appel('conge_sauver', {
+      p_record_token: recordToken, p_code: estGest ? null : code, p_pin: estGest ? pin : null,
+      p_nom_employe: $('f_nomEmploye').value.trim() || null, p_type_conge: typeConge || null,
+      p_decision: decision || null, p_details: details
+    });
+    if (!r || !r.ok) { setStatus('err', '⚠️ ' + messageErreur(r)); return; }
+    if (estGest) decisionEnBase = decision || null;
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+
+// ===================== DEMARRAGE =====================
+function brancher() {
+  $('btnNouvelle').addEventListener('click', creerNouveau);
+  $('btnMesDemandes').addEventListener('click', voirMesDemandes);
+  $('btnToutes').addEventListener('click', voirToutesLesDemandes);
+  $('btnSauverCourriel').addEventListener('click', () => sauverCourriel(null));
+  $('btnChangerPin').addEventListener('click', changerPin);
+  $('btnVerrouiller').addEventListener('click', verrouiller);
+  $('btnRetour').addEventListener('click', retourListe);
+  $('btnDeverrouiller').addEventListener('click', deverrouillerDecision);
+  $('btnCodeEmploye').addEventListener('click', donnerCode);
+  $('btnApprouve').addEventListener('click', () => setDecision('approuve'));
+  $('btnRefuse').addEventListener('click', () => setDecision('refuse'));
+  document.querySelectorAll('.type-card').forEach(c => c.addEventListener('click', () => selectType(c)));
+  FIELD_IDS.forEach(id => {
+    const el = $(id);
+    el.addEventListener(el.type === 'date' ? 'change' : 'input', () => { if (!el.readOnly) { if (id === 'f_dateDebut' || id === 'f_dateFin') calcJours(); scheduleSave(); } });
+  });
+}
+async function initPage() {
+  brancher();
+  ownerToken = getOwnerToken();
+  try {
+    const r = await appel('conge_etat', { p_owner_token: ownerToken });
+    if (r && r.ok) configure = !!r.configure;
+  } catch (e) { console.error(e); setStatus('err'); }
+  isLoading = false;
+}
+initPage();
+</script>
+</body>
+</html>
