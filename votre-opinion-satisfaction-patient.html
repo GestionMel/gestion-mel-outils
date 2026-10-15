@@ -91,7 +91,8 @@
   .msg.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
   .note{background:#fff8e1;border-left:4px solid var(--orange);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.82rem;color:#7a4400;line-height:1.7;margin-bottom:14px;}
   .note.bleue{background:#e3f2fd;border-left-color:var(--blue);color:#0f3d6e;}
-  .tabs{display:flex;background:var(--dark);border-bottom:3px solid var(--accent);overflow-x:auto;}
+  .tabs{display:flex;background:var(--dark);border-bottom:3px solid var(--accent);overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
   .tab{padding:12px 20px;background:none;border:none;border-bottom:4px solid transparent;color:rgba(255,255,255,.65);font-size:.84rem;font-weight:700;cursor:pointer;margin-bottom:-3px;white-space:nowrap;}
   .tab.active{color:white;border-bottom-color:var(--accent);}
   .pane{display:none;padding:20px 24px;}
