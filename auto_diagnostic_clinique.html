@@ -748,6 +748,7 @@ textarea.open-field{resize:vertical;min-height:44px;}
   <div class="pri-sec" id="ynSummary"></div>
   <div class="rec-section" id="recSection">
     <div class="rec-title">🎓 Ressources recommandées selon vos résultats</div>
+    <div style="font-size:.78rem;color:#475569;margin:-6px 0 10px;">🔔 Webinaires et formations en production : préinscrivez-vous gratuitement pour être avisé du lancement et obtenir 15 % de rabais.</div>
     <div id="recList"></div>
   </div>
   <div class="narea"><label>📋 Notes et observations</label>
@@ -765,38 +766,39 @@ textarea.open-field{resize:vertical;min-height:44px;}
 </div></div>
 <script>
 const PRODUITS = {
-  'a': {nom:'Webinaire — Clarifier les rôles et responsabilités', url:'https://academie.gestionmel.com/products/courses/new-course-83', type:'webinaire'},
-  'b': {nom:'Webinaire — Communication d\'équipe', url:'https://academie.gestionmel.com/products/courses/new-course-79', type:'webinaire'},
-  'c': {nom:'Webinaire — Conflits d\'équipe', url:'https://academie.gestionmel.com/products/courses/new-course-1', type:'webinaire'},
-  'd': {nom:'Webinaire — Gestion des changements', url:'https://academie.gestionmel.com/products/courses/new-course-84', type:'webinaire'},
-  'e': {nom:'Webinaire — Gestion des horaires', url:'https://academie.gestionmel.com/products/courses/new-course-78', type:'webinaire'},
-  'f': {nom:'Webinaire — Gestion des stocks', url:'https://academie.gestionmel.com/products/courses/new-course-85', type:'webinaire'},
-  'g': {nom:'Webinaire — Mobilisation d\'équipe', url:'https://academie.gestionmel.com/products/courses/new-course-82', type:'webinaire'},
-  'h': {nom:'Webinaire — Normes de stérilisation', url:'https://academie.gestionmel.com/products/courses/new-course-87', type:'webinaire'},
-  'i': {nom:'Webinaire — Nouveau gestionnaire', url:'https://academie.gestionmel.com/products/courses/new-course-81', type:'webinaire'},
-  'j': {nom:'Webinaire — Roulement du personnel', url:'https://academie.gestionmel.com/products/courses/new-course-2', type:'webinaire'},
-  'k': {nom:'Webinaire — Santé et sécurité', url:'https://academie.gestionmel.com/products/courses/new-course-86', type:'webinaire'},
-  'l': {nom:'Webinaire — Structure de gestion', url:'https://academie.gestionmel.com/products/courses/new-course-80', type:'webinaire'},
-  'm': {nom:'Formation secrétaire Avancée', url:'https://academie.gestionmel.com/products/courses/formation-secretaire-avancee', type:'formation'},
-  'n': {nom:'Formation secrétaire Débutante', url:'https://academie.gestionmel.com/products/courses/formation-secretaire-dentaire', type:'formation'},
-  'o': {nom:'Boîte à outils', url:'https://academie.gestionmel.com/products/courses/new-course-74', type:'outil'},
-  'p': {nom:'Kit RH', url:'https://academie.gestionmel.com/products/courses/new-course-71', type:'outil'},
-  'q': {nom:'Kit Admin', url:'https://academie.gestionmel.com/products/courses/new-course-73', type:'outil'},
-  'r': {nom:'Kit Clinique', url:'https://academie.gestionmel.com/products/courses/new-course-72', type:'outil'}
+  'a': {nom:'🔔 Webinaire : Clarifier les rôles et responsabilités', url:'https://academie.gestionmel.com/courses/preinscription-clarifier-roles-responsabilites', type:'webinaire'},
+  'b': {nom:'🔔 Webinaire : Améliorer la communication d\'équipe', url:'https://academie.gestionmel.com/courses/preinscription-ameliorer-communication-equipe', type:'webinaire'},
+  'c': {nom:'🔔 Webinaire : Gérer les conflits d\'équipe', url:'https://academie.gestionmel.com/courses/preinscription-gerer-conflits-equipe', type:'webinaire'},
+  'd': {nom:'🔔 Webinaire : Gérer les changements', url:'https://academie.gestionmel.com/courses/preinscription-gerer-changements', type:'webinaire'},
+  'e': {nom:'🔔 Webinaire : Optimiser la gestion des horaires', url:'https://academie.gestionmel.com/courses/preinscription-optimiser-gestion-horaires', type:'webinaire'},
+  'f': {nom:'🔔 Webinaire : Optimiser la gestion des stocks', url:'https://academie.gestionmel.com/courses/preinscription-optimiser-gestion-stocks', type:'webinaire'},
+  'g': {nom:'🔔 Webinaire : Mobiliser votre équipe', url:'https://academie.gestionmel.com/courses/preinscription-mobiliser-equipe', type:'webinaire'},
+  'h': {nom:'🔔 Webinaire : Maîtriser les normes de stérilisation', url:'https://academie.gestionmel.com/courses/preinscription-maitriser-normes-sterilisation', type:'webinaire'},
+  'i': {nom:'🔔 Webinaire : Devenir gestionnaire efficace', url:'https://academie.gestionmel.com/courses/preinscription-devenir-gestionnaire-efficace', type:'webinaire'},
+  'j': {nom:'🔔 Webinaire : Réduire le roulement du personnel', url:'https://academie.gestionmel.com/courses/preinscription-reduire-roulement-personnel', type:'webinaire'},
+  'k': {nom:'🔔 Webinaire : Santé et sécurité', url:'https://academie.gestionmel.com/courses/preinscription-sante-securite', type:'webinaire'},
+  'l': {nom:'🔔 Webinaire : Structurer la gestion de la clinique', url:'https://academie.gestionmel.com/courses/preinscription-structurer-gestion-clinique', type:'webinaire'},
+  'm': {nom:'🔔 Formation secrétaire dentaire (Avancée)', url:'https://academie.gestionmel.com/courses/preinscription-secretaire-dentaire-avancee', type:'formation'},
+  'n': {nom:'🔔 Formation secrétaire dentaire (Débutante)', url:'https://academie.gestionmel.com/courses/preinscription-secretaire-dentaire-debutante', type:'formation'},
+  'o': {nom:'Kit d\'outils complet : Tous les outils', url:'https://academie.gestionmel.com/products/courses/new-course-74', type:'outil'},
+  'p': {nom:'Kit d\'outils complet : Gestion et RH', url:'https://academie.gestionmel.com/products/courses/new-course-71', type:'outil'},
+  'q': {nom:'Kit d\'outils complet : Administration et secrétariat', url:'https://academie.gestionmel.com/products/courses/new-course-73', type:'outil'},
+  'r': {nom:'Kit d\'outils complet : Clinique et soins', url:'https://academie.gestionmel.com/products/courses/new-course-72', type:'outil'},
+  's': {nom:'Kit d\'outils complet : Embauche', url:'https://academie.gestionmel.com/courses/kit-d-outils-complet-d-embauche', type:'outil'}
 };
 
 const SEC_PRODUITS = [
-  ['a','b','d','j','g','l','o'],
-  ['a','b','c','d','g','i','j','k','l','p'],
+  ['l','a','d','p'],
+  ['j','i','s','p'],
+  ['m','q'],
   ['e','m','q'],
-  ['e','q','m'],
-  ['q','n','e'],
-  ['a','j','g'],
-  ['b','c','g','j','d','a','p'],
-  ['m','i','f','h','k','o'],
-  ['m','e','o'],
-  ['o','e','g'],
-  ['k','h','f','o','e','a'],
+  ['n','m','q'],
+  ['a','l','p'],
+  ['b','c','g'],
+  ['n','m','i','p'],
+  ['m'],
+  ['e','f','p','q'],
+  ['h','k','r'],
   ['o']
 ];
 
