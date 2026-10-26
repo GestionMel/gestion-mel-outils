@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Protocole no-shows — Gestion Mel</title>
+<title>Protocole no-shows | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -70,13 +70,398 @@
   .actions{padding:14px 32px;background:var(--light);display:flex;justify-content:flex-end;border-top:1px solid var(--border);}
   .btn-print{padding:8px 18px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.83rem;font-weight:600;cursor:pointer;color:#5a6a80;}
   .footer-note{text-align:center;font-size:.74rem;color:#8a9ab0;padding:10px;}
+  .periode-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;font-size:.8rem;}
+  .periode-bar select{border:1.5px solid var(--border);border-radius:6px;padding:5px 9px;font-family:inherit;font-size:.8rem;background:white;}
+  .periode-info{color:#8a9ab0;font-size:.74rem;}
+  .table-scroll{overflow-x:auto;}
+  .recid{display:inline-block;margin-top:3px;border-radius:8px;padding:1px 7px;font-size:.68rem;font-weight:700;white-space:nowrap;}
+  .recid-2{background:#fff5eb;color:#e67e22;}
+  .recid-3{background:#fef2f2;color:#c0392b;}
+  .btn-x{width:26px;height:26px;border-radius:6px;border:1.5px solid #e0e0e0;background:white;color:#c0392b;cursor:pointer;font-family:inherit;}
+  .btn-x:hover{background:#fef2f2;border-color:#c0392b;}
+  @media print{.no-print{display:none!important;}}
   @media print{body{background:white;}.page-header,.nav-tabs,.actions,.btn-add,.btn-del{display:none!important;}.tab-pane{display:block!important;}.container{box-shadow:none;margin:0;border-radius:0;}.step-num{-webkit-print-color-adjust:exact;print-color-adjust:exact;}input,select{border:none!important;background:transparent!important;}}
 </style>
+<script>
+/* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
+window.gmAcces = (function () {
+  const DUREE = 8 * 60 * 60 * 1000;
+  const CACHE = 'gm_acces_v1';
+  const ORIGINES = { fiche: "Fiche d'information employé", conge: 'Demande de congé', boite: 'Boîte à suggestions' };
+  const OUBLI = 'Mot de passe oublié? Écrivez à <strong>info@gestionmel.com</strong> en indiquant le nom de votre clinique.';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function css() {
+    if (document.getElementById('gmAccesCss')) return;
+    const s = document.createElement('style');
+    s.id = 'gmAccesCss';
+    s.textContent = `
+      html.gma-ouvert body > *:not(#gmAccesOverlay){visibility:hidden!important;}
+      #gmAccesOverlay{position:fixed;inset:0;z-index:100000;background:#eef4fb;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:40px 16px;font-family:'Segoe UI',Arial,sans-serif;color:#1a2535;}
+      #gmAccesOverlay *{box-sizing:border-box;}
+      .gma-carte{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(13,27,42,.12);overflow:hidden;}
+      .gma-tete{background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);color:#fff;padding:18px 24px;}
+      .gma-tete .gma-marque{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.5px;margin-bottom:6px;}
+      .gma-tete .gma-marque span{color:#2196f3;}
+      .gma-tete h2{font-size:1.1rem;font-weight:700;margin:0;}
+      .gma-corps{padding:20px 24px 22px;}
+      .gma-texte{font-size:.86rem;line-height:1.6;color:#3a4a60;margin:0 0 14px;}
+      .gma-champ{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+      .gma-champ label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+      .gma-champ input{border:1.5px solid #d0dff0;border-radius:7px;padding:10px 12px;font-size:.95rem;font-family:inherit;background:#f4f8ff;color:#1a2535;width:100%;}
+      .gma-champ input:focus{outline:none;border-color:#2196f3;background:#fff;}
+      .gma-btn{display:block;width:100%;padding:11px 16px;border-radius:8px;border:none;background:#1a6abf;color:#fff;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;}
+      .gma-btn:hover{background:#155a9e;}
+      .gma-btn:disabled{opacity:.6;cursor:wait;}
+      .gma-btn2{display:block;width:100%;padding:10px 16px;border-radius:8px;border:1.5px solid #1a6abf;background:#fff;color:#1a6abf;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;margin-top:10px;}
+      .gma-lien{background:none;border:none;color:#1a6abf;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 0;margin-top:6px;text-decoration:underline;}
+      .gma-err{display:none;background:#fef2f2;border:1px solid rgba(192,57,43,.25);color:#c0392b;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-ok{display:none;background:#f0fdf4;border:1px solid rgba(26,158,90,.25);color:#1a9e5a;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-astuce{background:#e8f4fd;border-left:3px solid #1a6abf;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#0d3a6e;margin-bottom:14px;line-height:1.55;}
+      .gma-avert{background:#fff8e1;border-left:3px solid #e67e22;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-bottom:14px;line-height:1.55;}
+      .gma-pied{font-size:.74rem;color:#8a9ab0;text-align:center;margin-top:14px;line-height:1.6;}
+      .gma-sep{border:none;border-top:1px solid #d0dff0;margin:18px 0;}
+      .gma-sous{font-size:.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;}
+      #gmAccesBarre{position:fixed;left:16px;bottom:16px;z-index:9990;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0dff0;border-radius:22px;padding:5px 6px 5px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:'Segoe UI',Arial,sans-serif;font-size:.74rem;font-weight:600;color:#1a6abf;}
+      #gmAccesBarre button{border:1px solid #d0dff0;background:#f4f8ff;color:#1a2535;border-radius:16px;padding:4px 10px;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+      #gmAccesBarre button:hover{border-color:#2196f3;color:#1a6abf;}
+      @media(max-width:600px){#gmAccesBarre>span{display:none;}#gmAccesBarre{padding:4px;left:8px;bottom:12px;}}
+      @media print{#gmAccesBarre,#gmAccesOverlay{display:none!important;}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function lire() { try { return JSON.parse(sessionStorage.getItem(CACHE) || '{}') || {}; } catch (e) { return {}; } }
+  function ecrire(c) { try { sessionStorage.setItem(CACHE, JSON.stringify(c)); } catch (e) { } }
+  function enCache(owner) { const c = lire()[owner]; return (c && c.exp > Date.now()) ? c : null; }
+  function memoriser(owner, r) {
+    const c = lire(); const prev = (c[owner] && c[owner].exp > Date.now()) ? c[owner] : {};
+    const gest = r.cle_gest || prev.gest || null;
+    c[owner] = { gest, secr: r.cle_secr || prev.secr || null, estGest: !!gest, exp: Date.now() + DUREE };
+    ecrire(c);
+    return c[owner];
+  }
+  function oublier(owner) { const c = lire(); delete c[owner]; ecrire(c); }
+  function fixerOwner(owner) {
+    try { localStorage.setItem('gestionmel_clinique_token', owner); } catch (e) { }
+    const p = new URLSearchParams(location.search); p.set('clinique', owner);
+    history.replaceState({}, '', location.pathname + '?' + p.toString());
+  }
+
+  function ecran(html) {
+    css();
+    let o = document.getElementById('gmAccesOverlay');
+    if (!o) { o = document.createElement('div'); o.id = 'gmAccesOverlay'; document.body.appendChild(o); }
+    o.innerHTML = '<div class="gma-carte">' + html + '</div>';
+    document.documentElement.classList.add('gma-ouvert');
+    o.scrollTop = 0;
+    const premier = o.querySelector('input'); if (premier) setTimeout(() => premier.focus(), 50);
+    return o;
+  }
+  function fermer() {
+    const o = document.getElementById('gmAccesOverlay'); if (o) o.remove();
+    document.documentElement.classList.remove('gma-ouvert');
+  }
+  function tete(titre) {
+    return '<div class="gma-tete"><div class="gma-marque">Gestion<span>Mel</span></div><h2>' + titre + '</h2></div>';
+  }
+  function message(r) {
+    if (!r) return 'Une erreur est survenue. Vérifiez votre connexion et réessayez.';
+    switch (r.erreur) {
+      case 'mot_de_passe': return 'Mot de passe incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'code': return 'Code incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'bloque': return 'Trop d\'essais. Réessayez dans ' + (r.minutes || 15) + ' minute(s).';
+      case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 6 caractères.';
+      case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+      case 'code_identique': return 'Le code du secrétariat doit être différent du mot de passe gestionnaire.';
+      case 'pas_de_mot_de_passe': return 'Aucun mot de passe gestionnaire n\'est encore créé pour cette clinique.';
+      case 'limite': return 'Limite atteinte. Réessayez un peu plus tard.';
+      default: return 'Une erreur est survenue. Réessayez.';
+    }
+  }
+  async function appel(sb, nom, args) {
+    try { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+    catch (e) { console.error(e); return null; }
+  }
+
+  // Formulaire generique : valider(valeurs) retourne {erreur} ou {resultat}
+  function formulaire({ titre, texte, astuce, avert, champs, bouton, alternative, pied, valider }) {
+    return new Promise(resolve => {
+      const html = tete(titre) + '<form class="gma-corps" autocomplete="off">' +
+        (texte ? '<p class="gma-texte">' + texte + '</p>' : '') +
+        (avert ? '<div class="gma-avert">' + avert + '</div>' : '') +
+        (astuce ? '<div class="gma-astuce">' + astuce + '</div>' : '') +
+        '<div class="gma-err"></div>' +
+        champs.map(c => '<div class="gma-champ"><label>' + c.label + '</label><input name="' + c.nom + '" type="' + (c.type || 'password') + '"' +
+          (c.type === 'text' ? ' autocomplete="off"' : ' autocomplete="new-password"') + (c.max ? ' maxlength="' + c.max + '"' : '') + '></div>').join('') +
+        '<button type="submit" class="gma-btn">' + bouton + '</button>' +
+        (alternative ? '<p class="gma-texte" style="margin:16px 0 0;">' + alternative.texte + '</p><button type="button" class="gma-btn2" data-alt="1">' + alternative.bouton + '</button>' : '') +
+        (pied ? '<div class="gma-pied">' + pied + '</div>' : '') +
+        '</form>';
+      const o = ecran(html);
+      const f = o.querySelector('form'), err = o.querySelector('.gma-err'), btn = o.querySelector('.gma-btn');
+      const alt = o.querySelector('[data-alt]');
+      if (alt) alt.onclick = () => resolve({ alt: true });
+      f.onsubmit = async ev => {
+        ev.preventDefault();
+        const v = {}; champs.forEach(c => { v[c.nom] = f.elements[c.nom].value; });
+        err.style.display = 'none'; btn.disabled = true;
+        const r = await valider(v);
+        btn.disabled = false;
+        if (r && r.erreur) { err.textContent = r.erreur; err.style.display = 'block'; const i = f.querySelector('input'); if (i) { i.select(); i.focus(); } return; }
+        resolve(r.resultat);
+      };
+    });
+  }
+
+  function maintenance() {
+    ecran(tete('⏳ Mise à jour en cours') + '<div class="gma-corps"><p class="gma-texte">Cet outil est en cours de mise à jour pour mieux protéger vos données. Revenez dans quelques minutes, puis rafraîchissez la page.</p><div class="gma-pied">Le problème persiste? Écrivez à <strong>info@gestionmel.com</strong>.</div></div>');
+  }
+
+  function formDefinir(sb, owner, niveau) {
+    return formulaire({
+      titre: '🔐 Créez votre mot de passe gestionnaire',
+      texte: 'Cet outil contient des informations confidentielles. Choisissez un mot de passe que vous seule connaîtrez (au moins 6 caractères). Il servira pour tous les outils réservés à la gestion.',
+      avert: '<strong>Réservé à la gestionnaire.</strong> Si vous n\'êtes pas la gestionnaire de la clinique, ne créez pas de mot de passe : demandez-lui d\'ouvrir cet outil une première fois.',
+      astuce: niveau === 'secr' ? 'Vous pourrez ensuite créer un code pour vos secrétaires avec le bouton <strong>🔑 Accès</strong> en bas à gauche.' : '',
+      champs: [{ nom: 'p1', label: 'Nouveau mot de passe' }, { nom: 'p2', label: 'Confirmer le mot de passe' }],
+      bouton: 'Créer le mot de passe et ouvrir',
+      pied: 'Notez-le dans un endroit sûr.',
+      valider: async v => {
+        if (v.p1.length < 6) return { erreur: message({ erreur: 'mot_de_passe_court' }) };
+        if (v.p1 !== v.p2) return { erreur: 'Les deux mots de passe ne sont pas identiques.' };
+        const r = await appel(sb, 'acces_definir', { p_owner_token: owner, p_pin: v.p1 });
+        if (r && r.erreur === 'deja_defini') { location.reload(); return { erreur: 'Un mot de passe existe déjà. Rechargement...' }; }
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function formOuvrir(sb, owner, niveau, etat, opts) {
+    const secr = niveau === 'secr';
+    let astuce = '';
+    if (etat.origine && ORIGINES[etat.origine]) astuce = 'Le mot de passe gestionnaire est le même que celui de l\'outil <strong>' + ORIGINES[etat.origine] + '</strong>.';
+    if (secr && !etat.code_secr) astuce += (astuce ? '<br>' : '') + 'Le code du secrétariat n\'est pas encore créé. La gestionnaire peut le créer avec le bouton <strong>🔑 Accès</strong>, une fois l\'outil ouvert.';
+    return formulaire({
+      titre: secr ? '🔒 Outil réservé au secrétariat' : '🔒 Outil réservé à la gestion',
+      texte: secr ? 'Entrez le code du secrétariat ou le mot de passe de la gestionnaire.' : 'Entrez le mot de passe gestionnaire pour ouvrir cet outil.',
+      astuce,
+      champs: [{ nom: 'p', label: secr ? 'Code ou mot de passe' : 'Mot de passe gestionnaire' }],
+      bouton: 'Ouvrir',
+      alternative: opts.alternative,
+      pied: OUBLI,
+      valider: async v => {
+        if (!v.p) return { erreur: secr ? 'Entrez votre code.' : 'Entrez votre mot de passe.' };
+        const r = await appel(sb, 'acces_ouvrir', { p_owner_token: owner, p_niveau: niveau, p_pin: v.p });
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function barre(sb, owner, niveau) {
+    css();
+    const c = enCache(owner) || {};
+    let b = document.getElementById('gmAccesBarre');
+    if (!b) { b = document.createElement('div'); b.id = 'gmAccesBarre'; document.body.appendChild(b); }
+    b.innerHTML = '<span>' + (c.estGest ? '🔓 Gestion' : '🔓 Secrétariat') + '</span>' +
+      (c.estGest ? '<button type="button" data-a="acces" title="Mot de passe et code du secrétariat">🔑 Accès</button>' : '') +
+      '<button type="button" data-a="lock" title="Fermer la session sur cet appareil">🔒 Verrouiller</button>';
+    b.querySelector('[data-a="lock"]').onclick = () => { oublier(owner); location.reload(); };
+    const a = b.querySelector('[data-a="acces"]'); if (a) a.onclick = () => panneau(sb, owner);
+  }
+
+  async function panneau(sb, owner) {
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner }) || {};
+    const o = ecran(tete('🔑 Gérer les accès') + '<div class="gma-corps">' +
+      '<div class="gma-ok" id="gmaOk"></div><div class="gma-err" id="gmaErr"></div>' +
+      '<p class="gma-sous">Code du secrétariat</p>' +
+      '<p class="gma-texte">Les secrétaires entrent ce code pour ouvrir le Balancement de fin de journée, la Liste prioritaire, la Petite caisse et les Comptes à recevoir. Votre mot de passe gestionnaire fonctionne aussi dans ces outils.</p>' +
+      '<div class="gma-astuce" id="gmaEtatCode">' + (etat.code_secr ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.') + '</div>' +
+      '<div class="gma-champ"><label>Nouveau code du secrétariat (4 caractères et plus)</label><input id="gmaCode" type="text" autocomplete="off" maxlength="30"></div>' +
+      '<div class="gma-champ"><label>Votre mot de passe gestionnaire</label><input id="gmaPinC" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnCode">Enregistrer le code</button>' +
+      (etat.code_secr ? '<button type="button" class="gma-lien" id="gmaBtnRetirer">Retirer le code du secrétariat</button>' : '') +
+      '<hr class="gma-sep">' +
+      '<p class="gma-sous">Changer le mot de passe gestionnaire</p>' +
+      '<div class="gma-champ"><label>Mot de passe actuel</label><input id="gmaPinA" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Nouveau mot de passe (6 caractères et plus)</label><input id="gmaPinN" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Confirmer le nouveau mot de passe</label><input id="gmaPinN2" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnPin">Changer le mot de passe</button>' +
+      '<button type="button" class="gma-btn2" id="gmaFermer">Fermer</button>' +
+      '<div class="gma-pied">Le nouveau mot de passe s\'applique à tous les outils réservés à la gestion.</div>' +
+      '</div>');
+    const okEl = o.querySelector('#gmaOk'), errEl = o.querySelector('#gmaErr');
+    const montrer = (ok, txt) => { okEl.style.display = ok ? 'block' : 'none'; errEl.style.display = ok ? 'none' : 'block'; (ok ? okEl : errEl).textContent = txt; o.scrollTop = 0; };
+    o.querySelector('#gmaFermer').onclick = fermer;
+    const envoyerCode = async code => {
+      const pin = o.querySelector('#gmaPinC').value;
+      if (!pin) return montrer(false, 'Entrez votre mot de passe gestionnaire.');
+      if (code && code.trim().length < 4) return montrer(false, message({ erreur: 'code_court' }));
+      const r = await appel(sb, 'acces_code_secr', { p_owner_token: owner, p_pin: pin, p_code: code });
+      if (!r || !r.ok) return montrer(false, message(r));
+      memoriser(owner, r);
+      o.querySelector('#gmaCode').value = ''; o.querySelector('#gmaPinC').value = '';
+      o.querySelector('#gmaEtatCode').textContent = code ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.';
+      montrer(true, code ? 'Code du secrétariat enregistré. Transmettez-le à vos secrétaires.' : 'Code du secrétariat retiré.');
+    };
+    o.querySelector('#gmaBtnCode').onclick = () => {
+      const code = o.querySelector('#gmaCode').value.trim();
+      if (!code) return montrer(false, 'Entrez le nouveau code du secrétariat.');
+      envoyerCode(code);
+    };
+    const ret = o.querySelector('#gmaBtnRetirer');
+    if (ret) ret.onclick = () => { if (confirm('Retirer le code? Les secrétaires ne pourront plus ouvrir les outils du secrétariat.')) envoyerCode(''); };
+    o.querySelector('#gmaBtnPin').onclick = async () => {
+      const a = o.querySelector('#gmaPinA').value, n = o.querySelector('#gmaPinN').value, n2 = o.querySelector('#gmaPinN2').value;
+      if (!a) return montrer(false, 'Entrez votre mot de passe actuel.');
+      if (n.length < 6) return montrer(false, message({ erreur: 'mot_de_passe_court' }));
+      if (n !== n2) return montrer(false, 'Les deux nouveaux mots de passe ne sont pas identiques.');
+      const r = await appel(sb, 'acces_changer_pin', { p_owner_token: owner, p_pin: a, p_nouveau: n });
+      if (!r || !r.ok) return montrer(false, r && r.erreur === 'code_identique' ? 'Le nouveau mot de passe doit être différent du code du secrétariat.' : message(r));
+      memoriser(owner, r);
+      ['#gmaPinA', '#gmaPinN', '#gmaPinN2'].forEach(s => { o.querySelector(s).value = ''; });
+      montrer(true, 'Mot de passe gestionnaire modifié.');
+    };
+  }
+
+  // Point d'entree : retourne la cle de l'outil (ou null si "alternative" choisie)
+  async function ouvrir(sb, owner, niveau, opts) {
+    opts = opts || {};
+    let c = enCache(owner);
+    if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner });
+    if (!etat || !etat.ok) { maintenance(); return new Promise(() => { }); }
+    if (etat.owner_token && etat.owner_token !== owner) {
+      owner = etat.owner_token; fixerOwner(owner);
+      c = enCache(owner);
+      if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    }
+    const r = etat.configure ? await formOuvrir(sb, owner, niveau, etat, opts) : await formDefinir(sb, owner, niveau);
+    if (r && r.alt) { fermer(); return null; }
+    const m = memoriser(owner, r);
+    fermer();
+    barre(sb, owner, niveau);
+    return m[niveau];
+  }
+
+  function cle(owner, niveau) { const c = enCache(owner); return c ? c[niveau] || null : null; }
+
+  return { ouvrir, cle, esc, ecran, fermer, tete, message, appel, formulaire, oublier, maintenance, OUBLI };
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  #gmStockEtat{position:fixed;top:12px;right:14px;z-index:9000;padding:7px 14px;border-radius:20px;font:700 12.5px 'Segoe UI',Arial,sans-serif;display:none;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  #gmStockEtat.on{display:block;}
+  #gmStockEtat.attente{background:#f4f8ff;color:#5a6a80;border:1.5px solid #d0dff0;}
+  #gmStockEtat.ok{background:#f0fdf4;color:#1a9e5a;border:1.5px solid rgba(26,158,90,.3);}
+  #gmStockEtat.err{background:#fef2f2;color:#c0392b;border:1.5px solid rgba(192,57,43,.3);}
+  #gmStockVoile{position:fixed;inset:0;background:#eef4fb;z-index:8000;display:flex;align-items:center;justify-content:center;font:600 15px 'Segoe UI',Arial,sans-serif;color:#5a6a80;}
+  @media print{#gmStockEtat,#gmStockVoile{display:none!important;}}
+</style>
+<script>
+/* Gestion Mel : sauvegarde automatique des outils de gestion (Supabase) */
+window.gmStock = (function () {
+  const URL_SB = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+  const CLE_SB = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+  let sb = null, cle = null, outil = null, version = 0, obtenir = null;
+  let minuterie = null, chaine = Promise.resolve(), pret = false, bloque = false;
+
+  function etat(type, texte) {
+    let el = document.getElementById('gmStockEtat');
+    if (!el) { el = document.createElement('div'); el.id = 'gmStockEtat'; document.body.appendChild(el); }
+    el.className = 'on ' + type; el.textContent = texte;
+    clearTimeout(el._t);
+    if (type === 'ok') el._t = setTimeout(() => el.classList.remove('on'), 2500);
+  }
+  function voile(afficher) {
+    let v = document.getElementById('gmStockVoile');
+    if (afficher && !v) { v = document.createElement('div'); v.id = 'gmStockVoile'; v.textContent = '⏳ Chargement de vos données...'; document.body.appendChild(v); }
+    if (!afficher && v) v.remove();
+  }
+  function jetonClinique() {
+    const p = new URLSearchParams(location.search);
+    let t = p.get('clinique');
+    try { if (!t) t = localStorage.getItem('gestionmel_clinique_token'); } catch (e) {}
+    if (!t || !/^[0-9a-f-]{36}$/i.test(t)) t = crypto.randomUUID();
+    try { localStorage.setItem('gestionmel_clinique_token', t); } catch (e) {}
+    p.set('clinique', t);
+    history.replaceState({}, '', location.pathname + '?' + p.toString() + location.hash);
+    return t;
+  }
+
+  // Ouvre l'outil : mot de passe gestionnaire, puis lecture des données.
+  // Retourne les données sauvegardées (ou null la première fois).
+  async function ouvrir(nomOutil, fonctionObtenir) {
+    outil = nomOutil; obtenir = fonctionObtenir;
+    sb = window.supabase.createClient(URL_SB, CLE_SB);
+    voile(true);
+    cle = await gmAcces.ouvrir(sb, jetonClinique(), 'gest');
+    for (let essai = 0; ; essai++) {
+      try {
+        const { data, error } = await sb.rpc('outil_get', { p_owner_token: cle, p_outil: outil });
+        if (error || !data || !data.ok) throw error || new Error('lecture');
+        version = data.version || 0;
+        pret = true; voile(false);
+        window.addEventListener('beforeunload', ev => { if (minuterie) { sauver(); ev.preventDefault(); ev.returnValue = ''; } });
+        return data.donnees;
+      } catch (e) {
+        console.error(e);
+        if (essai >= 2) {
+          document.getElementById('gmStockVoile').innerHTML = '⚠️ Connexion impossible. Vérifiez votre connexion Internet, puis rechargez la page.';
+          throw e;
+        }
+        await new Promise(r => setTimeout(r, 1500));
+      }
+    }
+  }
+
+  // À appeler après chaque modification : sauvegarde 0,8 s plus tard
+  function planifier() {
+    if (!pret || bloque) return;
+    etat('attente', '⏳ Sauvegarde...');
+    clearTimeout(minuterie);
+    minuterie = setTimeout(sauver, 800);
+  }
+
+  function sauver() {
+    clearTimeout(minuterie); minuterie = null;
+    if (!pret || bloque) return chaine;
+    chaine = chaine.then(async () => {
+      try {
+        const { data, error } = await sb.rpc('outil_sauver', { p_owner_token: cle, p_outil: outil, p_donnees: obtenir(), p_version: version });
+        if (error) throw error;
+        if (data && data.ok) { version = data.version; etat('ok', '✅ Sauvegardé'); return; }
+        if (data && data.erreur === 'conflit') {
+          bloque = true;
+          etat('err', '⚠️ Modifié sur un autre appareil');
+          if (confirm('Ces données ont été modifiées sur un autre appareil ou dans un autre onglet.\n\nRechargez la page pour voir la version la plus récente. Vos derniers changements faits ici ne seront pas sauvegardés.\n\nRecharger maintenant?')) location.reload();
+          return;
+        }
+        throw new Error(data && data.erreur);
+      } catch (e) {
+        console.error(e);
+        etat('err', '⚠️ Erreur de connexion : changements non sauvegardés');
+        clearTimeout(minuterie); minuterie = setTimeout(sauver, 5000);
+      }
+    });
+    return chaine;
+  }
+
+  return { ouvrir, planifier, sauver };
+})();
+</script>
+
 </head>
 <body>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Clinique dentaire — Administration</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Clinique dentaire : administration</div></div>
 <div class="container">
-  <div class="doc-header"><h1>📅 Protocole — No-shows et annulations</h1><p>Procédures, scripts téléphoniques, frais et suivi des patients</p></div>
+  <div class="doc-header"><h1>📅 Protocole : no-shows et annulations</h1><p>Procédures, scripts téléphoniques, frais et suivi des patients</p></div>
   <div class="nav-tabs">
     <button class="tab-btn active" onclick="show(0,this)">📋 Protocole</button>
     <button class="tab-btn" onclick="show(1,this)">💬 Scripts</button>
@@ -86,16 +471,16 @@
 
   <!-- PROTOCOLE -->
   <div class="tab-pane active" id="tp0">
-    <div class="sec-title">Protocole — Absence (no-show)</div>
+    <div class="sec-title">Protocole : Absence (no-show)</div>
     <div class="step-list">
       <div class="step"><div class="step-num" style="background:var(--red);">1</div><div class="step-line"></div><div class="step-body"><div class="step-title">Constatation de l'absence</div><div class="step-desc">Le patient ne s'est pas présenté au rendez-vous et n'a pas contacté la clinique. Attendre <strong>15 minutes</strong> après l'heure du rendez-vous avant d'appliquer la procédure de no-show.</div><div class="step-time">⏱️ T+15 minutes</div></div></div>
       <div class="step"><div class="step-num" style="background:var(--orange);">2</div><div class="step-line"></div><div class="step-body"><div class="step-title">Tentative de contact</div><div class="step-desc">Contacter immédiatement le patient par téléphone. Utiliser le script no-show (onglet Scripts). Si pas de réponse, laisser un message vocal professionnel. Tenter une 2e fois si pas de retour dans l'heure.</div><div class="step-time">⏱️ T+15 à T+45 minutes</div></div></div>
       <div class="step"><div class="step-num" style="background:var(--blue);">3</div><div class="step-line"></div><div class="step-body"><div class="step-title">Documentation au dossier</div><div class="step-desc">Inscrire dans le dossier du patient : date, heure, type de no-show, tentatives de contact effectuées, résultat. Cette documentation est essentielle pour l'application des frais et le suivi du comportement.</div><div class="step-time">⏱️ Immédiatement</div></div></div>
-      <div class="step"><div class="step-num" style="background:var(--purple);">4</div><div class="step-line"></div><div class="step-body"><div class="step-title">Offrir l'horaire disponible / liste d'attente</div><div class="step-desc">Proposer immédiatement ce créneau libéré aux patients sur la liste de priorité d'attente. Contacter 3 à 5 patients avant de laisser le créneau vide.</div><div class="step-time">⏱️ T+20 minutes — Dès constatation</div></div></div>
+      <div class="step"><div class="step-num" style="background:var(--purple);">4</div><div class="step-line"></div><div class="step-body"><div class="step-title">Offrir l'horaire disponible / liste d'attente</div><div class="step-desc">Proposer immédiatement ce créneau libéré aux patients sur la liste de priorité d'attente. Contacter 3 à 5 patients avant de laisser le créneau vide.</div><div class="step-time">⏱️ T+20 minutes, dès la constatation</div></div></div>
       <div class="step"><div class="step-num" style="background:var(--green);">5</div><div class="step-line"></div><div class="step-body"><div class="step-title">Suivi et frais</div><div class="step-desc">Lors du prochain contact avec le patient : exprimer que son absence a causé une perte de temps pour l'équipe et les autres patients. Informer des frais applicables si la politique le prévoit. Inscrire l'incident dans le registre de suivi.</div><div class="step-time">⏱️ Lors du prochain contact</div></div></div>
     </div>
 
-    <div class="sec-title" style="margin-top:22px;">Protocole — Annulation de dernière minute</div>
+    <div class="sec-title" style="margin-top:22px;">Protocole : Annulation de dernière minute</div>
     <div class="step-list">
       <div class="step"><div class="step-num" style="background:var(--orange);">1</div><div class="step-line"></div><div class="step-body"><div class="step-title">Réception de l'annulation</div><div class="step-desc">Définir clairement le préavis requis : <strong>idéalement 24-48 heures</strong>. Toute annulation avec moins de 24h de préavis est considérée tardive. Remercier le patient d'avoir contacté la clinique, même tardivement.</div></div></div>
       <div class="step"><div class="step-num" style="background:var(--blue);">2</div><div class="step-line"></div><div class="step-body"><div class="step-title">Replanification immédiate</div><div class="step-desc">Proposer immédiatement 2 ou 3 dates de remplacement. Viser à replanifier dans les 2 à 4 semaines selon l'urgence du traitement. Ne pas laisser le patient raccrocher sans une nouvelle date.</div></div></div>
@@ -107,15 +492,15 @@
   <div class="tab-pane" id="tp1">
     <div class="sec-title">Scripts téléphoniques</div>
     <div class="script-card">
-      <div class="sc-title">📞 Script no-show — Appel au patient absent</div>
+      <div class="sc-title">📞 Script no-show : Appel au patient absent</div>
       <div class="sc-text">« Bonjour, puis-je parler à <span class="placeholder">[Prénom + Nom du patient]</span>? … Bonjour <span class="placeholder">[Prénom]</span>, ici <span class="placeholder">[Votre prénom]</span> de la Clinique dentaire <span class="placeholder">[Nom de la clinique]</span>. Nous vous attendions aujourd'hui à <span class="placeholder">[heure du RV]</span> pour <span class="placeholder">[type de traitement]</span>. Je voulais simplement m'assurer que tout allait bien de votre côté. … Je comprends. Nous devons replanifier votre rendez-vous le plus tôt possible car votre traitement est important. Auriez-vous de la disponibilité <span class="placeholder">[proposer 2 dates]</span>? »</div>
     </div>
     <div class="script-card">
-      <div class="sc-title">📞 Script no-show — Message vocal</div>
+      <div class="sc-title">📞 Script no-show : Message vocal</div>
       <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, ici <span class="placeholder">[Prénom]</span> de la Clinique <span class="placeholder">[Nom]</span>. Nous vous attendions aujourd'hui à <span class="placeholder">[heure]</span> et nous n'avons pas eu de vos nouvelles. J'espère que tout va bien. Veuillez nous rappeler au <span class="placeholder">[numéro de téléphone]</span> dès que possible afin de replanifier votre rendez-vous. Merci et bonne journée. »</div>
     </div>
     <div class="script-card">
-      <div class="sc-title">📞 Script annulation tardive — Réponse à une annulation</div>
+      <div class="sc-title">📞 Script annulation tardive : Réponse à une annulation</div>
       <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, pas de problème, je comprends que des imprévus arrivent. Je vais tout de même vous mentionner que nous appliquons une politique de préavis de <span class="placeholder">[24h / 48h]</span>. Pour cette fois, nous allons replanifier votre rendez-vous sans frais, mais je vous rappelle l'importance d'un préavis pour permettre à d'autres patients de prendre votre place. Aurais-tu de la disponibilité le <span class="placeholder">[proposer 2 dates]</span>? »</div>
     </div>
     <div class="script-card" style="border-left-color:var(--red);">
@@ -123,7 +508,7 @@
       <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, c'est <span class="placeholder">[Prénom]</span> de la Clinique <span class="placeholder">[Nom]</span>. Je vous contacte suite à votre absence du <span class="placeholder">[date]</span>. Je dois vous informer que c'est la <span class="placeholder">[2e / 3e]</span> fois que vous vous absentez sans nous prévenir. Notre politique prévoit des frais de <span class="placeholder">[montant]</span> $ pour les no-shows répétés. Ces frais couvrent le temps réservé pour vous. Je souhaite tout de même vous proposer de replanifier, mais je dois m'assurer que vous serez présent(e). Avez-vous des questions? »</div>
     </div>
     <div class="script-card" style="border-left-color:var(--green);">
-      <div class="sc-title" style="color:var(--green);">📞 Script liste d'attente — Créneau disponible</div>
+      <div class="sc-title" style="color:var(--green);">📞 Script liste d'attente : Créneau disponible</div>
       <div class="sc-text">« Bonjour <span class="placeholder">[Prénom]</span>, ici <span class="placeholder">[Prénom]</span> de la Clinique <span class="placeholder">[Nom]</span>. Nous venons d'avoir une ouverture dans notre horaire pour <span class="placeholder">[traitement / nettoyage / etc.]</span> aujourd'hui à <span class="placeholder">[heure]</span> / demain le <span class="placeholder">[date]</span>. Est-ce que vous seriez disponible? »</div>
     </div>
   </div>
@@ -134,24 +519,24 @@
     <div class="frais-card">
       <div class="fc-title">⚠️ Politique de votre clinique</div>
       <div class="grid" style="margin-bottom:12px;">
-        <div class="ff"><label>Préavis requis (heures)</label><input type="number" value="24" placeholder="24"> h</div>
-        <div class="ff"><label>Frais no-show — 1er incident</label>
-          <select><option>Aucun frais — avertissement verbal</option><option>25 $</option><option>50 $</option><option>75 $</option><option>100 $</option><option>Montant du RV manqué</option></select>
+        <div class="ff"><label>Préavis requis (heures)</label><input type="number" value="24" placeholder="24" data-f="preavis"> h</div>
+        <div class="ff"><label>Frais no-show : 1er incident</label>
+          <select data-f="frais1"><option>Aucun frais (avertissement verbal)</option><option>25 $</option><option>50 $</option><option>75 $</option><option>100 $</option><option>Montant du RV manqué</option></select>
         </div>
-        <div class="ff"><label>Frais no-show — 2e incident</label>
-          <select><option>Aucun frais</option><option>25 $</option><option>50 $</option><option>75 $</option><option selected="">100 $</option><option>Montant du RV manqué</option></select>
+        <div class="ff"><label>Frais no-show : 2e incident</label>
+          <select data-f="frais2"><option>Aucun frais</option><option>25 $</option><option>50 $</option><option>75 $</option><option selected="">100 $</option><option>Montant du RV manqué</option></select>
         </div>
-        <div class="ff"><label>Frais no-show — 3e incident et +</label>
-          <select><option>Aucun frais</option><option>50 $</option><option>100 $</option><option selected="">150 $</option><option>Retrait du fichier patient</option></select>
+        <div class="ff"><label>Frais no-show : 3e incident et +</label>
+          <select data-f="frais3"><option>Aucun frais</option><option>50 $</option><option>100 $</option><option selected="">150 $</option><option>Retrait du fichier patient</option></select>
         </div>
         <div class="ff"><label>Frais annulation tardive (- de 24h)</label>
-          <select><option selected="">Aucun frais — 1re fois</option><option>25 $</option><option>50 $</option><option>75 $</option></select>
+          <select data-f="frais4"><option selected="">Aucun frais la 1re fois</option><option>25 $</option><option>50 $</option><option>75 $</option></select>
         </div>
         <div class="ff"><label>Seuil de retrait du fichier patient</label>
-          <select><option>Jamais</option><option>Après 3 no-shows</option><option selected="">Après 4 no-shows</option><option>Après 5 no-shows</option></select>
+          <select data-f="frais5"><option>Jamais</option><option>Après 3 no-shows</option><option selected="">Après 4 no-shows</option><option>Après 5 no-shows</option></select>
         </div>
       </div>
-      <div class="ff"><label>Note à inclure dans le guide de l'employé</label><textarea style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:.84rem;font-family:inherit;resize:vertical;min-height:70px;background:white;line-height:1.6;" placeholder="Ex: La clinique applique une politique de frais pour les absences sans préavis. Ces frais couvrent le temps réservé..."></textarea></div>
+      <div class="ff"><label>Note à inclure dans le guide de l'employé</label><textarea data-f="note_guide" style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:.84rem;font-family:inherit;resize:vertical;min-height:70px;background:white;line-height:1.6;" placeholder="Ex: La clinique applique une politique de frais pour les absences sans préavis. Ces frais couvrent le temps réservé..."></textarea></div>
     </div>
 
     <div style="background:var(--light);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;font-size:.83rem;color:#2a3a4a;line-height:1.7;">
@@ -162,97 +547,134 @@
   <!-- SUIVI -->
   <div class="tab-pane" id="tp3">
     <div class="sec-title">Registre de suivi des no-shows et annulations</div>
-    <table class="suivi-table">
-      <thead><tr><th>Date</th><th>Patient</th><th>No dossier</th><th>Type</th><th>Traitement manqué</th><th>Contact effectué</th><th>Replanifié</th><th>Frais</th><th>Notes</th></tr></thead>
-      <tbody id="suiviBody"><tr>
-    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
-      <option value="noshow">❌ No-show</option>
-      <option value="annul">⚠️ Annulation tardive</option>
-      <option value="tardif">🕐 Annulation courte notice</option>
-    </select></td>
-    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
-    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
-    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td></tr><tr>
-    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
-      <option value="noshow">❌ No-show</option>
-      <option value="annul">⚠️ Annulation tardive</option>
-      <option value="tardif">🕐 Annulation courte notice</option>
-    </select></td>
-    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
-    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
-    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td></tr><tr>
-    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
-      <option value="noshow">❌ No-show</option>
-      <option value="annul">⚠️ Annulation tardive</option>
-      <option value="tardif">🕐 Annulation courte notice</option>
-    </select></td>
-    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
-    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
-    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td></tr></tbody>
-    </table>
+    <div class="periode-bar"><label for="filtrePeriode">Afficher :</label><select id="filtrePeriode"></select>
+      <span class="periode-info">Le nombre d'incidents de chaque patient est calculé automatiquement (selon le numéro de dossier, ou le nom).</span></div>
+    <div class="table-scroll"><table class="suivi-table">
+      <thead><tr><th>Date</th><th>Patient</th><th>No dossier</th><th>Type</th><th>Traitement manqué</th><th>Contact effectué</th><th>Replanifié</th><th>Frais</th><th>Notes</th><th class="no-print"></th></tr></thead>
+      <tbody id="suiviBody"></tbody>
+    </table></div>
     <button class="btn-add" onclick="addSuiviRow()">+ Ajouter un incident</button>
     <div class="stats-row" id="statsRow">
-      <div class="stat-chip"><span style="color:var(--red);font-size:.9rem;">❌</span><span class="stat-num" id="st-ns">3</span><span style="color:#5a6a80;font-size:.78rem;">no-shows</span></div>
+      <div class="stat-chip"><span style="color:var(--red);font-size:.9rem;">❌</span><span class="stat-num" id="st-ns">0</span><span style="color:#5a6a80;font-size:.78rem;">no-shows</span></div>
       <div class="stat-chip"><span style="color:var(--orange);font-size:.9rem;">⚠️</span><span class="stat-num" id="st-an">0</span><span style="color:#5a6a80;font-size:.78rem;">annulations</span></div>
       <div class="stat-chip"><span style="color:var(--green);font-size:.9rem;">✅</span><span class="stat-num" id="st-rep">0</span><span style="color:#5a6a80;font-size:.78rem;">replanifiés</span></div>
+      <div class="stat-chip"><span style="font-size:.9rem;">💰</span><span class="stat-num" id="st-frais">0 $</span><span style="color:#5a6a80;font-size:.78rem;">frais facturés</span></div>
+      <div class="stat-chip"><span style="font-size:.9rem;">🔁</span><span class="stat-num" id="st-recid">0</span><span style="color:#5a6a80;font-size:.78rem;">patient(s) récidiviste(s)</span></div>
     </div>
   </div>
 
   <div class="actions"><button class="btn-print" onclick="window.print()">🖨️ Imprimer</button></div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel 2026. Tous droits réservés. · gestionmel.com</div>
 </div>
 <script>
 function show(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
-function addSuiviRow(){
-  const tbody=document.getElementById('suiviBody');
-  const tr=document.createElement('tr');
-  tr.innerHTML=`
-    <td><input type="date" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="Nom du patient" style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><input type="text" placeholder="No" style="width:70px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td><select style="border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.76rem;font-family:inherit;" onchange="updateStats()">
-      <option value="noshow">❌ No-show</option>
-      <option value="annul">⚠️ Annulation tardive</option>
-      <option value="tardif">🕐 Annulation courte notice</option>
-    </select></td>
-    <td><input type="text" placeholder="Traitement..." style="width:120px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);" onchange="updateStats()"></td>
-    <td style="text-align:center;"><input type="checkbox" style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);" onchange="updateStats()"></td>
-    <td><input type="text" placeholder="0 $" style="width:65px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;text-align:right;background:white;"></td>
-    <td><input type="text" placeholder="Notes..." style="width:110px;border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;"></td>`;
-  tbody.appendChild(tr);
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const TYPES = [['noshow','❌ No-show'],['annul','⚠️ Annulation tardive'],['tardif','🕐 Annulation courte notice']];
+let incidents = [], prochainId = 1;
+
+function nouvelIncident() { return { id: prochainId++, date: new Date().toISOString().slice(0, 10), patient:'', dossier:'', type:'noshow', traitement:'', contact:false, replanifie:false, frais:'', notes:'' }; }
+function clePatient(x) { return (x.dossier || '').trim().toLowerCase() || (x.patient || '').trim().toLowerCase(); }
+function rang(x) {
+  // Nombre d'incidents de ce patient jusqu'à cette date (inclusivement)
+  const k = clePatient(x); if (!k) return 0;
+  return incidents.filter(y => clePatient(y) === k && ((y.date || '') < (x.date || '') || ((y.date || '') === (x.date || '') && y.id <= x.id))).length;
+}
+function visibles() {
+  const p = $('filtrePeriode').value;
+  return incidents.filter(x => !p || (x.date || '').startsWith(p)).sort((a, b) => (b.date || '').localeCompare(a.date || '') || b.id - a.id);
+}
+function remplirPeriodes() {
+  const sel = $('filtrePeriode'), choisi = sel.value;
+  const mois = [...new Set(incidents.map(x => (x.date || '').slice(0, 7)).filter(Boolean))].sort().reverse();
+  sel.innerHTML = '<option value="">Tous les incidents</option>' + mois.map(m => `<option value="${m}">${MOIS[+m.slice(5) - 1]} ${m.slice(0, 4)}</option>`).join('');
+  if (mois.includes(choisi)) sel.value = choisi;
+}
+function dessiner() {
+  remplirPeriodes();
+  const liste = visibles();
+  const st = 'border:1.5px solid var(--border);border-radius:5px;padding:3px 6px;font-size:.78rem;font-family:inherit;background:white;';
+  $('suiviBody').innerHTML = liste.length ? liste.map(x => {
+    const r = rang(x);
+    const badge = r >= 2 ? `<div class="recid ${r >= 3 ? 'recid-3' : 'recid-2'}">${r}e incident</div>` : '';
+    return `<tr data-id="${x.id}">
+    <td><input type="date" data-c="date" value="${esc(x.date)}" style="width:125px;${st}"></td>
+    <td><input type="text" data-c="patient" value="${esc(x.patient)}" placeholder="Nom du patient" style="width:130px;${st}">${badge}</td>
+    <td><input type="text" data-c="dossier" value="${esc(x.dossier)}" placeholder="No" style="width:70px;${st}"></td>
+    <td><select data-c="type" style="width:150px;${st}">${TYPES.map(([v, l]) => `<option value="${v}" ${x.type === v ? 'selected' : ''}>${l}</option>`).join('')}</select></td>
+    <td><input type="text" data-c="traitement" value="${esc(x.traitement)}" placeholder="Traitement..." style="width:120px;${st}"></td>
+    <td style="text-align:center;"><input type="checkbox" data-c="contact" ${x.contact ? 'checked' : ''} style="width:15px;height:15px;cursor:pointer;accent-color:var(--blue);"></td>
+    <td style="text-align:center;"><input type="checkbox" data-c="replanifie" ${x.replanifie ? 'checked' : ''} style="width:15px;height:15px;cursor:pointer;accent-color:var(--green);"></td>
+    <td><input type="text" data-c="frais" value="${esc(x.frais)}" placeholder="0 $" style="width:65px;${st}text-align:right;"></td>
+    <td><input type="text" data-c="notes" value="${esc(x.notes)}" placeholder="Notes..." style="width:130px;${st}"></td>
+    <td class="no-print"><button class="btn-x" title="Supprimer cet incident">×</button></td></tr>`;
+  }).join('') : '<tr><td colspan="10" style="text-align:center;color:#8a9ab0;padding:18px;">Aucun incident pour cette période. Cliquez sur « + Ajouter un incident ».</td></tr>';
   updateStats();
 }
-function updateStats(){
-  const rows=document.querySelectorAll('#suiviBody tr');
-  let ns=0,an=0,rep=0;
-  rows.forEach(r=>{
-    const sel=r.querySelector('select');
-    if(sel&&sel.value==='noshow')ns++;
-    else an++;
-    const repCb=r.querySelectorAll('input[type=checkbox]')[1];
-    if(repCb&&repCb.checked)rep++;
-  });
-  document.getElementById('st-ns').textContent=ns;
-  document.getElementById('st-an').textContent=an;
-  document.getElementById('st-rep').textContent=rep;
+function montant(s) { const n = parseFloat(String(s || '').replace(/\s/g, '').replace(',', '.').replace(/[^0-9.]/g, '')); return isNaN(n) ? 0 : n; }
+function updateStats() {
+  const liste = visibles();
+  $('st-ns').textContent = liste.filter(x => x.type === 'noshow').length;
+  $('st-an').textContent = liste.filter(x => x.type !== 'noshow').length;
+  $('st-rep').textContent = liste.filter(x => x.replanifie).length;
+  $('st-frais').textContent = Math.round(liste.reduce((s, x) => s + montant(x.frais), 0)).toLocaleString('fr-CA') + ' $';
+  const parPatient = {};
+  incidents.forEach(x => { const k = clePatient(x); if (k) parPatient[k] = (parPatient[k] || 0) + 1; });
+  $('st-recid').textContent = Object.values(parPatient).filter(n => n >= 2).length;
 }
-for(let i=0;i<3;i++)addSuiviRow();
+function addSuiviRow() {
+  incidents.push(nouvelIncident());
+  $('filtrePeriode').value = '';
+  dessiner(); gmStock.planifier();
+  const premier = document.querySelector('#suiviBody input[data-c="patient"]'); if (premier) premier.focus();
+}
+
+$('suiviBody').addEventListener('input', ev => {
+  const tr = ev.target.closest('tr[data-id]'), c = ev.target.dataset.c; if (!tr || !c) return;
+  const x = incidents.find(y => y.id === +tr.dataset.id); if (!x) return;
+  x[c] = ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value;
+  updateStats(); gmStock.planifier();
+});
+$('suiviBody').addEventListener('change', ev => {
+  const c = ev.target.dataset.c;
+  if (c === 'date' || c === 'patient' || c === 'dossier') {
+    // Recalcule les récidives sans perdre le champ où l'on se trouve
+    setTimeout(() => {
+      const a = document.activeElement, tr = a && a.closest ? a.closest('tr[data-id]') : null, cc = a && a.dataset ? a.dataset.c : null;
+      dessiner();
+      if (tr && cc) { const n = document.querySelector(`tr[data-id="${tr.dataset.id}"] [data-c="${cc}"]`); if (n) n.focus(); }
+    }, 0);
+  }
+  if (ev.target.type === 'checkbox' || ev.target.tagName === 'SELECT') {
+    const tr = ev.target.closest('tr[data-id]'); const x = tr && incidents.find(y => y.id === +tr.dataset.id);
+    if (x) { x[c] = ev.target.type === 'checkbox' ? ev.target.checked : ev.target.value; updateStats(); gmStock.planifier(); }
+  }
+});
+$('suiviBody').addEventListener('click', ev => {
+  if (!ev.target.closest('.btn-x')) return;
+  const tr = ev.target.closest('tr[data-id]'); const x = incidents.find(y => y.id === +tr.dataset.id);
+  if ((x.patient || x.dossier || x.notes) && !confirm('Supprimer cet incident?')) return;
+  incidents = incidents.filter(y => y !== x); dessiner(); gmStock.planifier();
+});
+$('filtrePeriode').addEventListener('change', dessiner);
+
+// Politique des frais
+const champsFrais = () => document.querySelectorAll('[data-f]');
+champsFrais().forEach(el => ['input', 'change'].forEach(e => el.addEventListener(e, () => gmStock.planifier())));
+
+(async () => {
+  const d = await gmStock.ouvrir('protocole-no-shows', () => {
+    const politique = {}; champsFrais().forEach(el => politique[el.dataset.f] = el.value);
+    return { politique, incidents, prochainId };
+  });
+  if (d) {
+    if (d.politique) champsFrais().forEach(el => { if (d.politique[el.dataset.f] !== undefined) el.value = d.politique[el.dataset.f]; });
+    if (Array.isArray(d.incidents)) incidents = d.incidents;
+    prochainId = Math.max(d.prochainId || 1, ...incidents.map(x => x.id + 1));
+  }
+  dessiner();
+})();
 </script>
 
 

@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Productivité par fauteuil — Gestion Mel</title>
+<title>Productivité par fauteuil | Gestion Mel</title>
 <style>
   :root{
     --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
@@ -122,6 +122,381 @@
     .abar-row{grid-template-columns:70px 1fr 80px;}
   }
 </style>
+<script>
+/* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
+window.gmAcces = (function () {
+  const DUREE = 8 * 60 * 60 * 1000;
+  const CACHE = 'gm_acces_v1';
+  const ORIGINES = { fiche: "Fiche d'information employé", conge: 'Demande de congé', boite: 'Boîte à suggestions' };
+  const OUBLI = 'Mot de passe oublié? Écrivez à <strong>info@gestionmel.com</strong> en indiquant le nom de votre clinique.';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function css() {
+    if (document.getElementById('gmAccesCss')) return;
+    const s = document.createElement('style');
+    s.id = 'gmAccesCss';
+    s.textContent = `
+      html.gma-ouvert body > *:not(#gmAccesOverlay){visibility:hidden!important;}
+      #gmAccesOverlay{position:fixed;inset:0;z-index:100000;background:#eef4fb;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:40px 16px;font-family:'Segoe UI',Arial,sans-serif;color:#1a2535;}
+      #gmAccesOverlay *{box-sizing:border-box;}
+      .gma-carte{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(13,27,42,.12);overflow:hidden;}
+      .gma-tete{background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);color:#fff;padding:18px 24px;}
+      .gma-tete .gma-marque{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.5px;margin-bottom:6px;}
+      .gma-tete .gma-marque span{color:#2196f3;}
+      .gma-tete h2{font-size:1.1rem;font-weight:700;margin:0;}
+      .gma-corps{padding:20px 24px 22px;}
+      .gma-texte{font-size:.86rem;line-height:1.6;color:#3a4a60;margin:0 0 14px;}
+      .gma-champ{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+      .gma-champ label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+      .gma-champ input{border:1.5px solid #d0dff0;border-radius:7px;padding:10px 12px;font-size:.95rem;font-family:inherit;background:#f4f8ff;color:#1a2535;width:100%;}
+      .gma-champ input:focus{outline:none;border-color:#2196f3;background:#fff;}
+      .gma-btn{display:block;width:100%;padding:11px 16px;border-radius:8px;border:none;background:#1a6abf;color:#fff;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;}
+      .gma-btn:hover{background:#155a9e;}
+      .gma-btn:disabled{opacity:.6;cursor:wait;}
+      .gma-btn2{display:block;width:100%;padding:10px 16px;border-radius:8px;border:1.5px solid #1a6abf;background:#fff;color:#1a6abf;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;margin-top:10px;}
+      .gma-lien{background:none;border:none;color:#1a6abf;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 0;margin-top:6px;text-decoration:underline;}
+      .gma-err{display:none;background:#fef2f2;border:1px solid rgba(192,57,43,.25);color:#c0392b;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-ok{display:none;background:#f0fdf4;border:1px solid rgba(26,158,90,.25);color:#1a9e5a;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-astuce{background:#e8f4fd;border-left:3px solid #1a6abf;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#0d3a6e;margin-bottom:14px;line-height:1.55;}
+      .gma-avert{background:#fff8e1;border-left:3px solid #e67e22;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-bottom:14px;line-height:1.55;}
+      .gma-pied{font-size:.74rem;color:#8a9ab0;text-align:center;margin-top:14px;line-height:1.6;}
+      .gma-sep{border:none;border-top:1px solid #d0dff0;margin:18px 0;}
+      .gma-sous{font-size:.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;}
+      #gmAccesBarre{position:fixed;left:16px;bottom:16px;z-index:9990;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0dff0;border-radius:22px;padding:5px 6px 5px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:'Segoe UI',Arial,sans-serif;font-size:.74rem;font-weight:600;color:#1a6abf;}
+      #gmAccesBarre button{border:1px solid #d0dff0;background:#f4f8ff;color:#1a2535;border-radius:16px;padding:4px 10px;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+      #gmAccesBarre button:hover{border-color:#2196f3;color:#1a6abf;}
+      @media(max-width:600px){#gmAccesBarre>span{display:none;}#gmAccesBarre{padding:4px;left:8px;bottom:12px;}}
+      @media print{#gmAccesBarre,#gmAccesOverlay{display:none!important;}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function lire() { try { return JSON.parse(sessionStorage.getItem(CACHE) || '{}') || {}; } catch (e) { return {}; } }
+  function ecrire(c) { try { sessionStorage.setItem(CACHE, JSON.stringify(c)); } catch (e) { } }
+  function enCache(owner) { const c = lire()[owner]; return (c && c.exp > Date.now()) ? c : null; }
+  function memoriser(owner, r) {
+    const c = lire(); const prev = (c[owner] && c[owner].exp > Date.now()) ? c[owner] : {};
+    const gest = r.cle_gest || prev.gest || null;
+    c[owner] = { gest, secr: r.cle_secr || prev.secr || null, estGest: !!gest, exp: Date.now() + DUREE };
+    ecrire(c);
+    return c[owner];
+  }
+  function oublier(owner) { const c = lire(); delete c[owner]; ecrire(c); }
+  function fixerOwner(owner) {
+    try { localStorage.setItem('gestionmel_clinique_token', owner); } catch (e) { }
+    const p = new URLSearchParams(location.search); p.set('clinique', owner);
+    history.replaceState({}, '', location.pathname + '?' + p.toString());
+  }
+
+  function ecran(html) {
+    css();
+    let o = document.getElementById('gmAccesOverlay');
+    if (!o) { o = document.createElement('div'); o.id = 'gmAccesOverlay'; document.body.appendChild(o); }
+    o.innerHTML = '<div class="gma-carte">' + html + '</div>';
+    document.documentElement.classList.add('gma-ouvert');
+    o.scrollTop = 0;
+    const premier = o.querySelector('input'); if (premier) setTimeout(() => premier.focus(), 50);
+    return o;
+  }
+  function fermer() {
+    const o = document.getElementById('gmAccesOverlay'); if (o) o.remove();
+    document.documentElement.classList.remove('gma-ouvert');
+  }
+  function tete(titre) {
+    return '<div class="gma-tete"><div class="gma-marque">Gestion<span>Mel</span></div><h2>' + titre + '</h2></div>';
+  }
+  function message(r) {
+    if (!r) return 'Une erreur est survenue. Vérifiez votre connexion et réessayez.';
+    switch (r.erreur) {
+      case 'mot_de_passe': return 'Mot de passe incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'code': return 'Code incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'bloque': return 'Trop d\'essais. Réessayez dans ' + (r.minutes || 15) + ' minute(s).';
+      case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 6 caractères.';
+      case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+      case 'code_identique': return 'Le code du secrétariat doit être différent du mot de passe gestionnaire.';
+      case 'pas_de_mot_de_passe': return 'Aucun mot de passe gestionnaire n\'est encore créé pour cette clinique.';
+      case 'limite': return 'Limite atteinte. Réessayez un peu plus tard.';
+      default: return 'Une erreur est survenue. Réessayez.';
+    }
+  }
+  async function appel(sb, nom, args) {
+    try { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+    catch (e) { console.error(e); return null; }
+  }
+
+  // Formulaire generique : valider(valeurs) retourne {erreur} ou {resultat}
+  function formulaire({ titre, texte, astuce, avert, champs, bouton, alternative, pied, valider }) {
+    return new Promise(resolve => {
+      const html = tete(titre) + '<form class="gma-corps" autocomplete="off">' +
+        (texte ? '<p class="gma-texte">' + texte + '</p>' : '') +
+        (avert ? '<div class="gma-avert">' + avert + '</div>' : '') +
+        (astuce ? '<div class="gma-astuce">' + astuce + '</div>' : '') +
+        '<div class="gma-err"></div>' +
+        champs.map(c => '<div class="gma-champ"><label>' + c.label + '</label><input name="' + c.nom + '" type="' + (c.type || 'password') + '"' +
+          (c.type === 'text' ? ' autocomplete="off"' : ' autocomplete="new-password"') + (c.max ? ' maxlength="' + c.max + '"' : '') + '></div>').join('') +
+        '<button type="submit" class="gma-btn">' + bouton + '</button>' +
+        (alternative ? '<p class="gma-texte" style="margin:16px 0 0;">' + alternative.texte + '</p><button type="button" class="gma-btn2" data-alt="1">' + alternative.bouton + '</button>' : '') +
+        (pied ? '<div class="gma-pied">' + pied + '</div>' : '') +
+        '</form>';
+      const o = ecran(html);
+      const f = o.querySelector('form'), err = o.querySelector('.gma-err'), btn = o.querySelector('.gma-btn');
+      const alt = o.querySelector('[data-alt]');
+      if (alt) alt.onclick = () => resolve({ alt: true });
+      f.onsubmit = async ev => {
+        ev.preventDefault();
+        const v = {}; champs.forEach(c => { v[c.nom] = f.elements[c.nom].value; });
+        err.style.display = 'none'; btn.disabled = true;
+        const r = await valider(v);
+        btn.disabled = false;
+        if (r && r.erreur) { err.textContent = r.erreur; err.style.display = 'block'; const i = f.querySelector('input'); if (i) { i.select(); i.focus(); } return; }
+        resolve(r.resultat);
+      };
+    });
+  }
+
+  function maintenance() {
+    ecran(tete('⏳ Mise à jour en cours') + '<div class="gma-corps"><p class="gma-texte">Cet outil est en cours de mise à jour pour mieux protéger vos données. Revenez dans quelques minutes, puis rafraîchissez la page.</p><div class="gma-pied">Le problème persiste? Écrivez à <strong>info@gestionmel.com</strong>.</div></div>');
+  }
+
+  function formDefinir(sb, owner, niveau) {
+    return formulaire({
+      titre: '🔐 Créez votre mot de passe gestionnaire',
+      texte: 'Cet outil contient des informations confidentielles. Choisissez un mot de passe que vous seule connaîtrez (au moins 6 caractères). Il servira pour tous les outils réservés à la gestion.',
+      avert: '<strong>Réservé à la gestionnaire.</strong> Si vous n\'êtes pas la gestionnaire de la clinique, ne créez pas de mot de passe : demandez-lui d\'ouvrir cet outil une première fois.',
+      astuce: niveau === 'secr' ? 'Vous pourrez ensuite créer un code pour vos secrétaires avec le bouton <strong>🔑 Accès</strong> en bas à gauche.' : '',
+      champs: [{ nom: 'p1', label: 'Nouveau mot de passe' }, { nom: 'p2', label: 'Confirmer le mot de passe' }],
+      bouton: 'Créer le mot de passe et ouvrir',
+      pied: 'Notez-le dans un endroit sûr.',
+      valider: async v => {
+        if (v.p1.length < 6) return { erreur: message({ erreur: 'mot_de_passe_court' }) };
+        if (v.p1 !== v.p2) return { erreur: 'Les deux mots de passe ne sont pas identiques.' };
+        const r = await appel(sb, 'acces_definir', { p_owner_token: owner, p_pin: v.p1 });
+        if (r && r.erreur === 'deja_defini') { location.reload(); return { erreur: 'Un mot de passe existe déjà. Rechargement...' }; }
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function formOuvrir(sb, owner, niveau, etat, opts) {
+    const secr = niveau === 'secr';
+    let astuce = '';
+    if (etat.origine && ORIGINES[etat.origine]) astuce = 'Le mot de passe gestionnaire est le même que celui de l\'outil <strong>' + ORIGINES[etat.origine] + '</strong>.';
+    if (secr && !etat.code_secr) astuce += (astuce ? '<br>' : '') + 'Le code du secrétariat n\'est pas encore créé. La gestionnaire peut le créer avec le bouton <strong>🔑 Accès</strong>, une fois l\'outil ouvert.';
+    return formulaire({
+      titre: secr ? '🔒 Outil réservé au secrétariat' : '🔒 Outil réservé à la gestion',
+      texte: secr ? 'Entrez le code du secrétariat ou le mot de passe de la gestionnaire.' : 'Entrez le mot de passe gestionnaire pour ouvrir cet outil.',
+      astuce,
+      champs: [{ nom: 'p', label: secr ? 'Code ou mot de passe' : 'Mot de passe gestionnaire' }],
+      bouton: 'Ouvrir',
+      alternative: opts.alternative,
+      pied: OUBLI,
+      valider: async v => {
+        if (!v.p) return { erreur: secr ? 'Entrez votre code.' : 'Entrez votre mot de passe.' };
+        const r = await appel(sb, 'acces_ouvrir', { p_owner_token: owner, p_niveau: niveau, p_pin: v.p });
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function barre(sb, owner, niveau) {
+    css();
+    const c = enCache(owner) || {};
+    let b = document.getElementById('gmAccesBarre');
+    if (!b) { b = document.createElement('div'); b.id = 'gmAccesBarre'; document.body.appendChild(b); }
+    b.innerHTML = '<span>' + (c.estGest ? '🔓 Gestion' : '🔓 Secrétariat') + '</span>' +
+      (c.estGest ? '<button type="button" data-a="acces" title="Mot de passe et code du secrétariat">🔑 Accès</button>' : '') +
+      '<button type="button" data-a="lock" title="Fermer la session sur cet appareil">🔒 Verrouiller</button>';
+    b.querySelector('[data-a="lock"]').onclick = () => { oublier(owner); location.reload(); };
+    const a = b.querySelector('[data-a="acces"]'); if (a) a.onclick = () => panneau(sb, owner);
+  }
+
+  async function panneau(sb, owner) {
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner }) || {};
+    const o = ecran(tete('🔑 Gérer les accès') + '<div class="gma-corps">' +
+      '<div class="gma-ok" id="gmaOk"></div><div class="gma-err" id="gmaErr"></div>' +
+      '<p class="gma-sous">Code du secrétariat</p>' +
+      '<p class="gma-texte">Les secrétaires entrent ce code pour ouvrir le Balancement de fin de journée, la Liste prioritaire, la Petite caisse et les Comptes à recevoir. Votre mot de passe gestionnaire fonctionne aussi dans ces outils.</p>' +
+      '<div class="gma-astuce" id="gmaEtatCode">' + (etat.code_secr ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.') + '</div>' +
+      '<div class="gma-champ"><label>Nouveau code du secrétariat (4 caractères et plus)</label><input id="gmaCode" type="text" autocomplete="off" maxlength="30"></div>' +
+      '<div class="gma-champ"><label>Votre mot de passe gestionnaire</label><input id="gmaPinC" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnCode">Enregistrer le code</button>' +
+      (etat.code_secr ? '<button type="button" class="gma-lien" id="gmaBtnRetirer">Retirer le code du secrétariat</button>' : '') +
+      '<hr class="gma-sep">' +
+      '<p class="gma-sous">Changer le mot de passe gestionnaire</p>' +
+      '<div class="gma-champ"><label>Mot de passe actuel</label><input id="gmaPinA" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Nouveau mot de passe (6 caractères et plus)</label><input id="gmaPinN" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Confirmer le nouveau mot de passe</label><input id="gmaPinN2" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnPin">Changer le mot de passe</button>' +
+      '<button type="button" class="gma-btn2" id="gmaFermer">Fermer</button>' +
+      '<div class="gma-pied">Le nouveau mot de passe s\'applique à tous les outils réservés à la gestion.</div>' +
+      '</div>');
+    const okEl = o.querySelector('#gmaOk'), errEl = o.querySelector('#gmaErr');
+    const montrer = (ok, txt) => { okEl.style.display = ok ? 'block' : 'none'; errEl.style.display = ok ? 'none' : 'block'; (ok ? okEl : errEl).textContent = txt; o.scrollTop = 0; };
+    o.querySelector('#gmaFermer').onclick = fermer;
+    const envoyerCode = async code => {
+      const pin = o.querySelector('#gmaPinC').value;
+      if (!pin) return montrer(false, 'Entrez votre mot de passe gestionnaire.');
+      if (code && code.trim().length < 4) return montrer(false, message({ erreur: 'code_court' }));
+      const r = await appel(sb, 'acces_code_secr', { p_owner_token: owner, p_pin: pin, p_code: code });
+      if (!r || !r.ok) return montrer(false, message(r));
+      memoriser(owner, r);
+      o.querySelector('#gmaCode').value = ''; o.querySelector('#gmaPinC').value = '';
+      o.querySelector('#gmaEtatCode').textContent = code ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.';
+      montrer(true, code ? 'Code du secrétariat enregistré. Transmettez-le à vos secrétaires.' : 'Code du secrétariat retiré.');
+    };
+    o.querySelector('#gmaBtnCode').onclick = () => {
+      const code = o.querySelector('#gmaCode').value.trim();
+      if (!code) return montrer(false, 'Entrez le nouveau code du secrétariat.');
+      envoyerCode(code);
+    };
+    const ret = o.querySelector('#gmaBtnRetirer');
+    if (ret) ret.onclick = () => { if (confirm('Retirer le code? Les secrétaires ne pourront plus ouvrir les outils du secrétariat.')) envoyerCode(''); };
+    o.querySelector('#gmaBtnPin').onclick = async () => {
+      const a = o.querySelector('#gmaPinA').value, n = o.querySelector('#gmaPinN').value, n2 = o.querySelector('#gmaPinN2').value;
+      if (!a) return montrer(false, 'Entrez votre mot de passe actuel.');
+      if (n.length < 6) return montrer(false, message({ erreur: 'mot_de_passe_court' }));
+      if (n !== n2) return montrer(false, 'Les deux nouveaux mots de passe ne sont pas identiques.');
+      const r = await appel(sb, 'acces_changer_pin', { p_owner_token: owner, p_pin: a, p_nouveau: n });
+      if (!r || !r.ok) return montrer(false, r && r.erreur === 'code_identique' ? 'Le nouveau mot de passe doit être différent du code du secrétariat.' : message(r));
+      memoriser(owner, r);
+      ['#gmaPinA', '#gmaPinN', '#gmaPinN2'].forEach(s => { o.querySelector(s).value = ''; });
+      montrer(true, 'Mot de passe gestionnaire modifié.');
+    };
+  }
+
+  // Point d'entree : retourne la cle de l'outil (ou null si "alternative" choisie)
+  async function ouvrir(sb, owner, niveau, opts) {
+    opts = opts || {};
+    let c = enCache(owner);
+    if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner });
+    if (!etat || !etat.ok) { maintenance(); return new Promise(() => { }); }
+    if (etat.owner_token && etat.owner_token !== owner) {
+      owner = etat.owner_token; fixerOwner(owner);
+      c = enCache(owner);
+      if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    }
+    const r = etat.configure ? await formOuvrir(sb, owner, niveau, etat, opts) : await formDefinir(sb, owner, niveau);
+    if (r && r.alt) { fermer(); return null; }
+    const m = memoriser(owner, r);
+    fermer();
+    barre(sb, owner, niveau);
+    return m[niveau];
+  }
+
+  function cle(owner, niveau) { const c = enCache(owner); return c ? c[niveau] || null : null; }
+
+  return { ouvrir, cle, esc, ecran, fermer, tete, message, appel, formulaire, oublier, maintenance, OUBLI };
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  #gmStockEtat{position:fixed;top:12px;right:14px;z-index:9000;padding:7px 14px;border-radius:20px;font:700 12.5px 'Segoe UI',Arial,sans-serif;display:none;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+  #gmStockEtat.on{display:block;}
+  #gmStockEtat.attente{background:#f4f8ff;color:#5a6a80;border:1.5px solid #d0dff0;}
+  #gmStockEtat.ok{background:#f0fdf4;color:#1a9e5a;border:1.5px solid rgba(26,158,90,.3);}
+  #gmStockEtat.err{background:#fef2f2;color:#c0392b;border:1.5px solid rgba(192,57,43,.3);}
+  #gmStockVoile{position:fixed;inset:0;background:#eef4fb;z-index:8000;display:flex;align-items:center;justify-content:center;font:600 15px 'Segoe UI',Arial,sans-serif;color:#5a6a80;}
+  @media print{#gmStockEtat,#gmStockVoile{display:none!important;}}
+</style>
+<script>
+/* Gestion Mel : sauvegarde automatique des outils de gestion (Supabase) */
+window.gmStock = (function () {
+  const URL_SB = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+  const CLE_SB = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+  let sb = null, cle = null, outil = null, version = 0, obtenir = null;
+  let minuterie = null, chaine = Promise.resolve(), pret = false, bloque = false;
+
+  function etat(type, texte) {
+    let el = document.getElementById('gmStockEtat');
+    if (!el) { el = document.createElement('div'); el.id = 'gmStockEtat'; document.body.appendChild(el); }
+    el.className = 'on ' + type; el.textContent = texte;
+    clearTimeout(el._t);
+    if (type === 'ok') el._t = setTimeout(() => el.classList.remove('on'), 2500);
+  }
+  function voile(afficher) {
+    let v = document.getElementById('gmStockVoile');
+    if (afficher && !v) { v = document.createElement('div'); v.id = 'gmStockVoile'; v.textContent = '⏳ Chargement de vos données...'; document.body.appendChild(v); }
+    if (!afficher && v) v.remove();
+  }
+  function jetonClinique() {
+    const p = new URLSearchParams(location.search);
+    let t = p.get('clinique');
+    try { if (!t) t = localStorage.getItem('gestionmel_clinique_token'); } catch (e) {}
+    if (!t || !/^[0-9a-f-]{36}$/i.test(t)) t = crypto.randomUUID();
+    try { localStorage.setItem('gestionmel_clinique_token', t); } catch (e) {}
+    p.set('clinique', t);
+    history.replaceState({}, '', location.pathname + '?' + p.toString() + location.hash);
+    return t;
+  }
+
+  // Ouvre l'outil : mot de passe gestionnaire, puis lecture des données.
+  // Retourne les données sauvegardées (ou null la première fois).
+  async function ouvrir(nomOutil, fonctionObtenir) {
+    outil = nomOutil; obtenir = fonctionObtenir;
+    sb = window.supabase.createClient(URL_SB, CLE_SB);
+    voile(true);
+    cle = await gmAcces.ouvrir(sb, jetonClinique(), 'gest');
+    for (let essai = 0; ; essai++) {
+      try {
+        const { data, error } = await sb.rpc('outil_get', { p_owner_token: cle, p_outil: outil });
+        if (error || !data || !data.ok) throw error || new Error('lecture');
+        version = data.version || 0;
+        pret = true; voile(false);
+        window.addEventListener('beforeunload', ev => { if (minuterie) { sauver(); ev.preventDefault(); ev.returnValue = ''; } });
+        return data.donnees;
+      } catch (e) {
+        console.error(e);
+        if (essai >= 2) {
+          document.getElementById('gmStockVoile').innerHTML = '⚠️ Connexion impossible. Vérifiez votre connexion Internet, puis rechargez la page.';
+          throw e;
+        }
+        await new Promise(r => setTimeout(r, 1500));
+      }
+    }
+  }
+
+  // À appeler après chaque modification : sauvegarde 0,8 s plus tard
+  function planifier() {
+    if (!pret || bloque) return;
+    etat('attente', '⏳ Sauvegarde...');
+    clearTimeout(minuterie);
+    minuterie = setTimeout(sauver, 800);
+  }
+
+  function sauver() {
+    clearTimeout(minuterie); minuterie = null;
+    if (!pret || bloque) return chaine;
+    chaine = chaine.then(async () => {
+      try {
+        const { data, error } = await sb.rpc('outil_sauver', { p_owner_token: cle, p_outil: outil, p_donnees: obtenir(), p_version: version });
+        if (error) throw error;
+        if (data && data.ok) { version = data.version; etat('ok', '✅ Sauvegardé'); return; }
+        if (data && data.erreur === 'conflit') {
+          bloque = true;
+          etat('err', '⚠️ Modifié sur un autre appareil');
+          if (confirm('Ces données ont été modifiées sur un autre appareil ou dans un autre onglet.\n\nRechargez la page pour voir la version la plus récente. Vos derniers changements faits ici ne seront pas sauvegardés.\n\nRecharger maintenant?')) location.reload();
+          return;
+        }
+        throw new Error(data && data.erreur);
+      } catch (e) {
+        console.error(e);
+        etat('err', '⚠️ Erreur de connexion : changements non sauvegardés');
+        clearTimeout(minuterie); minuterie = setTimeout(sauver, 5000);
+      }
+    });
+    return chaine;
+  }
+
+  return { ouvrir, planifier, sauver };
+})();
+</script>
+
 </head>
 <body>
 
@@ -129,7 +504,7 @@
 
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div style="font-size:.79rem;opacity:.7;">Administration — Productivité clinique</div>
+  <div style="font-size:.79rem;opacity:.7;">Administration : productivité clinique</div>
 </div>
 
 <div class="container">
@@ -158,11 +533,11 @@
     </div>
 
     <div class="sec-title">Fauteuils et praticien(ne)s</div>
-    <div class="info-box">Configurez vos fauteuils ici — ils apparaîtront automatiquement dans la saisie quotidienne.</div>
+    <div class="info-box">Configurez vos fauteuils ici : ils apparaîtront automatiquement dans la saisie quotidienne.</div>
     <div id="chairList">
     <div class="chair-config-row" style="border-left:3px solid #1a6abf;">
       <div class="ff"><label>Nom du fauteuil</label>
-        <input type="text" value="Fauteuil 1 — Dentiste" placeholder="Fauteuil..." oninput="chairs[0].name=this.value">
+        <input type="text" value="Fauteuil 1 (dentiste)" placeholder="Fauteuil..." oninput="chairs[0].name=this.value">
       </div>
       <div class="ff"><label>Praticien(ne)</label>
         <input type="text" value="" placeholder="Nom ou titre..." oninput="chairs[0].praticien=this.value">
@@ -175,7 +550,7 @@
     </div>
     <div class="chair-config-row" style="border-left:3px solid #1a9e5a;">
       <div class="ff"><label>Nom du fauteuil</label>
-        <input type="text" value="Fauteuil 2 — Hygiène" placeholder="Fauteuil..." oninput="chairs[1].name=this.value">
+        <input type="text" value="Fauteuil 2 (hygiène)" placeholder="Fauteuil..." oninput="chairs[1].name=this.value">
       </div>
       <div class="ff"><label>Praticien(ne)</label>
         <input type="text" value="" placeholder="Nom ou titre..." oninput="chairs[1].praticien=this.value">
@@ -188,7 +563,7 @@
     </div>
     <div class="chair-config-row" style="border-left:3px solid #8e44ad;">
       <div class="ff"><label>Nom du fauteuil</label>
-        <input type="text" value="Fauteuil 3 — Hygiène" placeholder="Fauteuil..." oninput="chairs[2].name=this.value">
+        <input type="text" value="Fauteuil 3 (hygiène)" placeholder="Fauteuil..." oninput="chairs[2].name=this.value">
       </div>
       <div class="ff"><label>Praticien(ne)</label>
         <input type="text" value="" placeholder="Nom ou titre..." oninput="chairs[2].praticien=this.value">
@@ -203,7 +578,7 @@
 
     <div class="bench-box">
       <strong>📊 Repères du secteur dentaire (Québec) :</strong><br>
-      🔴 Moins de 150 $/h — Sous-productif &nbsp;·&nbsp; 🟡 150–200 $/h — En développement &nbsp;·&nbsp; 🔵 200–300 $/h — Dans la moyenne &nbsp;·&nbsp; 🟢 300 $/h et + — Très performant<br>
+      🔴 Moins de 150 $/h : sous-productif &nbsp;·&nbsp; 🟡 150 à 200 $/h : en développement &nbsp;·&nbsp; 🔵 200 à 300 $/h : dans la moyenne &nbsp;·&nbsp; 🟢 300 $/h et plus : très performant<br>
       <strong>Taux d'occupation idéal :</strong> 85 % à 95 % du temps disponible
     </div>
     <div class="actions"><button class="btn-primary" onclick="go(1,null);buildDayForm()">Aller à la saisie →</button></div>
@@ -228,7 +603,7 @@
     <div class="chair-entry-row" style="border-left-color:#1a6abf;">
       <div class="chair-entry-name">
         <div style="width:10px;height:10px;border-radius:2px;background:#1a6abf;"></div>
-        Fauteuil 1 — Dentiste
+        Fauteuil 1 (dentiste)
       </div>
       <div class="chair-entry-fields">
         <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_c1" min="0" placeholder="0"></div>
@@ -238,7 +613,7 @@
     <div class="chair-entry-row" style="border-left-color:#1a9e5a;">
       <div class="chair-entry-name">
         <div style="width:10px;height:10px;border-radius:2px;background:#1a9e5a;"></div>
-        Fauteuil 2 — Hygiène
+        Fauteuil 2 (hygiène)
       </div>
       <div class="chair-entry-fields">
         <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_c2" min="0" placeholder="0"></div>
@@ -248,7 +623,7 @@
     <div class="chair-entry-row" style="border-left-color:#8e44ad;">
       <div class="chair-entry-name">
         <div style="width:10px;height:10px;border-radius:2px;background:#8e44ad;"></div>
-        Fauteuil 3 — Hygiène
+        Fauteuil 3 (hygiène)
       </div>
       <div class="chair-entry-fields">
         <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_c3" min="0" placeholder="0"></div>
@@ -303,7 +678,7 @@
     <div class="empty-state" id="yEmpty" style="display:none;"><div style="font-size:2rem;margin-bottom:8px;">📈</div>Aucune donnée pour cette année.</div>
   </div>
 
-  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel 2026. Tous droits réservés. · gestionmel.com</div>
 </div>
 
 <script>
@@ -313,9 +688,9 @@ const MN = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','
 const COLORS = ['#1a6abf','#1a9e5a','#8e44ad','#e67e22','#c0392b','#d4a017','#2c3e50','#00897b'];
 
 let chairs = [
-  {id:'c1',name:'Fauteuil 1 — Dentiste',praticien:'',color:'#1a6abf'},
-  {id:'c2',name:'Fauteuil 2 — Hygiène',praticien:'',color:'#1a9e5a'},
-  {id:'c3',name:'Fauteuil 3 — Hygiène',praticien:'',color:'#8e44ad'},
+  {id:'c1',name:'Fauteuil 1 (dentiste)',praticien:'',color:'#1a6abf'},
+  {id:'c2',name:'Fauteuil 2 (hygiène)',praticien:'',color:'#1a9e5a'},
+  {id:'c3',name:'Fauteuil 3 (hygiène)',praticien:'',color:'#8e44ad'},
 ];
 let cid = 4;
 let entries = []; // {date,type,note,data:{cid:{prod,h}}}
@@ -323,8 +698,9 @@ let vm = TODAY.getMonth(), vy = TODAY.getFullYear(), vay = TODAY.getFullYear();
 
 // ===== UTILS =====
 const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt = n => n ? Math.round(n).toLocaleString('fr-CA')+' $' : '0 $';
-const fh = h => h ? parseFloat(h).toFixed(1)+'h' : '—';
+const fh = h => h ? parseFloat(h).toFixed(1)+'h' : '-';
 const cfg = () => ({
   objH: parseFloat($('cfg_obj')?.value)||250,
   hjour: parseFloat($('cfg_hjour')?.value)||9,
@@ -349,22 +725,29 @@ function drawChairList() {
   $('chairList').innerHTML = chairs.map((c,i)=>`
     <div class="chair-config-row" style="border-left:3px solid ${c.color};">
       <div class="ff"><label>Nom du fauteuil</label>
-        <input type="text" value="${c.name}" placeholder="Fauteuil..." oninput="chairs[${i}].name=this.value">
+        <input type="text" value="${esc(c.name)}" placeholder="Fauteuil..." oninput="chairs[${i}].name=this.value;gmStock.planifier()">
       </div>
       <div class="ff"><label>Praticien(ne)</label>
-        <input type="text" value="${c.praticien}" placeholder="Nom ou titre..." oninput="chairs[${i}].praticien=this.value">
+        <input type="text" value="${esc(c.praticien)}" placeholder="Nom ou titre..." oninput="chairs[${i}].praticien=this.value;gmStock.planifier()">
       </div>
       <div style="display:flex;align-items:flex-end;gap:6px;">
         <div style="width:28px;height:28px;border-radius:5px;background:${c.color};flex-shrink:0;"></div>
-        <input type="color" value="${c.color}" onchange="chairs[${i}].color=this.value;this.previousElementSibling.style.background=this.value" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
+        <input type="color" value="${c.color}" onchange="chairs[${i}].color=this.value;this.previousElementSibling.style.background=this.value;gmStock.planifier()" style="width:36px;height:28px;border:none;cursor:pointer;border-radius:4px;">
       </div>
-      <button class="btn-danger" onclick="chairs.splice(${i},1);drawChairList();buildDayForm()">× Retirer</button>
+      <button class="btn-danger" onclick="retirerChair(${i})">× Retirer</button>
     </div>`).join('');
 }
 
 function addChair() {
   chairs.push({id:'c'+cid++,name:'Fauteuil '+(chairs.length+1),praticien:'',color:COLORS[chairs.length%COLORS.length]});
-  drawChairList(); buildDayForm();
+  drawChairList(); buildDayForm(); gmStock.planifier();
+}
+
+function retirerChair(i) {
+  const c = chairs[i];
+  const avecDonnees = entries.some(e => e.data[c.id] && (e.data[c.id].prod || e.data[c.id].h));
+  if (!confirm(avecDonnees ? `Retirer « ${c.name} »? Ses données déjà saisies ne seront plus affichées dans les rapports.` : `Retirer « ${c.name} »?`)) return;
+  chairs.splice(i, 1); drawChairList(); buildDayForm(); gmStock.planifier();
 }
 
 // ===== DAY FORM =====
@@ -376,7 +759,7 @@ function buildDayForm() {
     <div class="chair-entry-row" style="border-left-color:${c.color};">
       <div class="chair-entry-name">
         <div style="width:10px;height:10px;border-radius:2px;background:${c.color};"></div>
-        ${c.name}${c.praticien?`<span style="font-size:.73rem;color:#8a9ab0;font-weight:400;">— ${c.praticien}</span>`:''}
+        ${c.name}${c.praticien?`<span style="font-size:.73rem;color:#8a9ab0;font-weight:400;"> · ${esc(c.praticien)}</span>`:''}
       </div>
       <div class="chair-entry-fields">
         <div class="ff"><label>💰 Production ($)</label><input class="mini-in" type="number" id="d_prod_${c.id}" min="0" placeholder="0"></div>
@@ -402,6 +785,7 @@ function saveDay() {
     entries[idx] = entry;
   } else { entries.push(entry); }
   clearDay(); refreshMonthFilter(); drawJournal();
+  gmStock.planifier();
   notif('✅ Journée enregistrée!');
 }
 
@@ -418,7 +802,7 @@ function clearDay() {
 function delEntry(date) {
   if (!confirm('Supprimer cette journée?')) return;
   entries = entries.filter(e=>e.date!==date);
-  refreshMonthFilter(); drawJournal();
+  refreshMonthFilter(); drawJournal(); gmStock.planifier();
 }
 
 // ===== JOURNAL =====
@@ -441,7 +825,7 @@ function drawJournal() {
 
   // Build header row
   $('jHead').innerHTML = `<th>Date</th><th>Type</th>`+
-    chairs.map(c=>`<th colspan="2" class="c" style="background:#1a3a5c;">${c.name.split('—')[0].trim()}</th>`).join('')+
+    chairs.map(c=>`<th colspan="2" class="c" style="background:#1a3a5c;">${c.name.split(/\s*[(\u2014]/)[0].trim()}</th>`).join('')+
     `<th class="c">Total prod.</th><th class="c">H. totales</th><th class="c">Prod./h</th><th class="c no-print"></th>`;
 
   // Sub row
@@ -462,11 +846,11 @@ function drawJournal() {
     const tl = e.type==='ferme'?`<span style="font-size:.7rem;background:#fef2f2;color:var(--red);padding:1px 7px;border-radius:6px;font-weight:700;">Fermée</span>`:e.type==='partiel'?`<span style="font-size:.7rem;background:#fff8e1;color:var(--orange);padding:1px 7px;border-radius:6px;font-weight:700;">Partielle</span>`:'';
     return `<tr>
       <td style="font-weight:700;font-size:.82rem;">${d.toLocaleDateString('fr-CA',{weekday:'short',day:'numeric',month:'short'})}</td>
-      <td>${tl}${e.note?`<span style="font-size:.72rem;color:#8a9ab0;"> ${e.note}</span>`:''}</td>
-      ${chairs.map(c=>`<td style="text-align:right;font-size:.8rem;">${eChairProd(e,c.id)?eChairProd(e,c.id).toLocaleString('fr-CA')+' $':'—'}</td><td style="text-align:right;font-size:.8rem;color:#5a6a80;">${eChairH(e,c.id)?eChairH(e,c.id)+'h':'—'}</td>`).join('')}
+      <td>${tl}${e.note?`<span style="font-size:.72rem;color:#8a9ab0;"> ${esc(e.note)}</span>`:''}</td>
+      ${chairs.map(c=>`<td style="text-align:right;font-size:.8rem;">${eChairProd(e,c.id)?eChairProd(e,c.id).toLocaleString('fr-CA')+' $':'-'}</td><td style="text-align:right;font-size:.8rem;color:#5a6a80;">${eChairH(e,c.id)?eChairH(e,c.id)+'h':'-'}</td>`).join('')}
       <td style="text-align:center;font-weight:700;">${fmt(dP)}</td>
       <td style="text-align:center;color:#5a6a80;">${fh(dH)}</td>
-      <td style="text-align:center;font-weight:700;color:${bcolor(ph,cfg().objH)};">${ph?Math.round(ph)+' $/h':'—'}</td>
+      <td style="text-align:center;font-weight:700;color:${bcolor(ph,cfg().objH)};">${ph?Math.round(ph)+' $/h':'-'}</td>
       <td class="no-print" style="text-align:center;"><button class="btn-danger" onclick="delEntry('${e.date}')">×</button></td>
     </tr>`;
   }).join('');
@@ -477,7 +861,7 @@ function drawJournal() {
     ${chairs.map(c=>`<td style="text-align:right;">${fmt(cTot[c.id].prod)}</td><td style="text-align:right;">${fh(cTot[c.id].h)}</td>`).join('')}
     <td style="text-align:center;">${fmt(tP)}</td>
     <td style="text-align:center;">${fh(tH)}</td>
-    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'—'}</td>
+    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'-'}</td>
     <td class="no-print"></td>
   </tr>`;
 }
@@ -496,7 +880,7 @@ function drawMonthly() {
     chairs.forEach(ch=>{cd[ch.id].prod+=eChairProd(e,ch.id);cd[ch.id].h+=eChairH(e,ch.id);});
     tP+=eTotalProd(e); tH+=eTotalH(e);
   });
-  const avPH=tH>0?tP/tH:0, heuresDispo=c.jours*c.hjour*chairs.length;
+  const avPH=tH>0?tP/tH:0, joursOuverts=me.filter(e=>e.type!=='ferme').length, heuresDispo=joursOuverts*c.hjour*chairs.length;
   const tauxOcc=heuresDispo>0?tH/heuresDispo*100:0;
   const avgJour=me.length>0?tP/me.length:0;
   const objM=c.objH*c.hjour*c.jours*chairs.length;
@@ -504,10 +888,10 @@ function drawMonthly() {
   // KPIs
   $('mKpis').innerHTML=[
     {icon:'💰',label:'Production totale',val:fmt(tP),sub:'Obj. : '+fmt(objM),col:bcolor(tP,objM),pct:Math.min(100,tP/objM*100),st:stcls(tP,objM)},
-    {icon:'⚡',label:'Prod. / heure moy.',val:avPH?Math.round(avPH)+' $/h':'—',sub:'Objectif : '+c.objH+' $/h',col:bcolor(avPH,c.objH),pct:Math.min(100,avPH/c.objH*100),st:stcls(avPH,c.objH)},
+    {icon:'⚡',label:'Prod. / heure moy.',val:avPH?Math.round(avPH)+' $/h':'-',sub:'Objectif : '+c.objH+' $/h',col:bcolor(avPH,c.objH),pct:Math.min(100,avPH/c.objH*100),st:stcls(avPH,c.objH)},
     {icon:'📅',label:'Moyenne journalière',val:fmt(avgJour),sub:me.length+' jours saisis',col:'var(--blue)',pct:0,st:''},
     {icon:'🪑',label:'Taux d\'occupation',val:Math.round(tauxOcc)+'%',sub:'Cible : 85–95%',col:tauxOcc>=85?'var(--green)':tauxOcc>=70?'var(--orange)':'var(--red)',pct:Math.min(100,tauxOcc),st:tauxOcc>=85?'st-ok':tauxOcc>=70?'st-warn':'st-bad'},
-    {icon:'🔢',label:'Fauteuils',val:chairs.length,sub:heuresDispo+'h dispo. au total',col:'var(--dark)',pct:0,st:''},
+    {icon:'🔢',label:'Fauteuils',val:chairs.length,sub:heuresDispo+' h dispo. (jours saisis)',col:'var(--dark)',pct:0,st:''},
     {icon:'📈',label:'Opportunité',val:fmt(Math.max(0,objM-tP)),sub:'Production additionnelle possible',col:'var(--orange)',pct:0,st:''},
   ].map(k=>`<div class="kpi-card" style="border-top-color:${k.col};">
     <div class="kc-icon">${k.icon}</div><div class="kc-label">${k.label}</div>
@@ -529,32 +913,32 @@ function drawMonthly() {
       <td><div style="display:flex;align-items:center;gap:7px;"><div style="width:10px;height:10px;border-radius:2px;background:${ch.color};"></div><strong>${ch.name}</strong></div></td>
       <td style="text-align:center;font-weight:700;">${fmt(d.prod)}</td><td style="text-align:center;">${pct}%</td>
       <td style="text-align:center;color:#5a6a80;">${fh(d.h)}</td>
-      <td style="text-align:center;font-weight:700;color:${bc};">${ph?Math.round(ph)+' $/h':'—'}</td>
-      <td style="text-align:center;font-weight:700;color:${bc};">${vsObj?vsObj+'%':'—'}</td>
+      <td style="text-align:center;font-weight:700;color:${bc};">${ph?Math.round(ph)+' $/h':'-'}</td>
+      <td style="text-align:center;font-weight:700;color:${bc};">${vsObj?vsObj+'%':'-'}</td>
       <td><div class="bar-w"><div class="bar-f" style="width:${Math.min(100,vsObj)}%;background:${bc};"></div></div></td>
     </tr>`;
   }).join('')}</tbody>
   <tfoot><tr>
     <td>TOTAL MOIS</td><td style="text-align:center;">${fmt(tP)}</td><td style="text-align:center;">100%</td>
     <td style="text-align:center;">${fh(tH)}</td>
-    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'—'}</td>
-    <td style="text-align:center;">${c.objH>0?Math.round(avPH/c.objH*100)+'%':'—'}</td><td></td>
+    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'-'}</td>
+    <td style="text-align:center;">${c.objH>0?Math.round(avPH/c.objH*100)+'%':'-'}</td><td></td>
   </tr></tfoot>`;
 
   // Daily table
-  $('mDHead').innerHTML=`<th>Date</th>`+chairs.map(ch=>`<th class="c" style="background:#1a3a5c;">${ch.name.split('—')[0].trim()}<br><span style="font-size:.64rem;opacity:.7;font-weight:400;">Prod. / H.</span></th>`).join('')+`<th class="c">Total</th><th class="c">$/h</th>`;
+  $('mDHead').innerHTML=`<th>Date</th>`+chairs.map(ch=>`<th class="c" style="background:#1a3a5c;">${ch.name.split(/\s*[(\u2014]/)[0].trim()}<br><span style="font-size:.64rem;opacity:.7;font-weight:400;">Prod. / H.</span></th>`).join('')+`<th class="c">Total</th><th class="c">$/h</th>`;
   $('mDBody').innerHTML=me.map(e=>{
     const d=new Date(e.date+'T00:00:00');
     const dP=eTotalProd(e),dH=eTotalH(e),ph=dH>0?Math.round(dP/dH):0;
     return `<tr>
       <td style="font-weight:600;font-size:.81rem;">${d.toLocaleDateString('fr-CA',{weekday:'short',day:'numeric',month:'short'})}</td>
-      ${chairs.map(ch=>`<td style="text-align:center;font-size:.79rem;"><b>${eChairProd(e,ch.id)?eChairProd(e,ch.id).toLocaleString('fr-CA')+' $':'—'}</b> <span style="color:#8a9ab0;">/ ${eChairH(e,ch.id)?eChairH(e,ch.id)+'h':'—'}</span></td>`).join('')}
+      ${chairs.map(ch=>`<td style="text-align:center;font-size:.79rem;"><b>${eChairProd(e,ch.id)?eChairProd(e,ch.id).toLocaleString('fr-CA')+' $':'-'}</b> <span style="color:#8a9ab0;">/ ${eChairH(e,ch.id)?eChairH(e,ch.id)+'h':'-'}</span></td>`).join('')}
       <td style="text-align:center;font-weight:700;">${fmt(dP)}</td>
-      <td style="text-align:center;font-weight:700;color:${bcolor(ph,c.objH)};">${ph?ph+' $/h':'—'}</td>
+      <td style="text-align:center;font-weight:700;color:${bcolor(ph,c.objH)};">${ph?ph+' $/h':'-'}</td>
     </tr>`;
   }).join('');
   const avPH2=tH>0?Math.round(tP/tH):0;
-  $('mDFoot').innerHTML=`<tr><td>TOTAL MOIS</td>${chairs.map(ch=>`<td style="text-align:center;">${fmt(cd[ch.id].prod)} / ${fh(cd[ch.id].h)}</td>`).join('')}<td style="text-align:center;">${fmt(tP)}</td><td style="text-align:center;color:${bcolor(avPH2,c.objH)};">${avPH2?avPH2+' $/h':'—'}</td></tr>`;
+  $('mDFoot').innerHTML=`<tr><td>TOTAL MOIS</td>${chairs.map(ch=>`<td style="text-align:center;">${fmt(cd[ch.id].prod)} / ${fh(cd[ch.id].h)}</td>`).join('')}<td style="text-align:center;">${fmt(tP)}</td><td style="text-align:center;color:${bcolor(avPH2,c.objH)};">${avPH2?avPH2+' $/h':'-'}</td></tr>`;
 }
 
 // ===== ANNUAL =====
@@ -577,7 +961,7 @@ function drawAnnual() {
 
   $('yKpis').innerHTML=[
     {icon:'💰',label:'Production annuelle',val:fmt(tP),sub:'Obj. : '+fmt(objAnn),col:bcolor(tP,objAnn),pct:Math.min(100,tP/objAnn*100)},
-    {icon:'⚡',label:'Prod. / heure moy.',val:avPH?Math.round(avPH)+' $/h':'—',sub:'Objectif : '+c.objH+' $/h',col:bcolor(avPH,c.objH),pct:Math.min(100,avPH/c.objH*100)},
+    {icon:'⚡',label:'Prod. / heure moy.',val:avPH?Math.round(avPH)+' $/h':'-',sub:'Objectif : '+c.objH+' $/h',col:bcolor(avPH,c.objH),pct:Math.min(100,avPH/c.objH*100)},
     {icon:'🏆',label:'Meilleur mois',val:MN[best.m].slice(0,3)+'.',sub:fmt(best.prod),col:'var(--gold)',pct:0},
     {icon:'📋',label:'Mois enregistrés',val:moisActifs+'/12',sub:ye.length+' journées au total',col:'var(--blue)',pct:0},
   ].map(k=>`<div class="kpi-card" style="border-top-color:${k.col};">
@@ -594,7 +978,7 @@ function drawAnnual() {
       <div class="abar-month">${MN[m.m]}</div>
       <div><div class="abar-track"><div class="abar-fill" style="width:${pct}%;background:${bc};"></div></div></div>
       <div class="abar-val" style="color:${bc};">${fmt(m.prod)}</div>
-      <div class="abar-ph" style="color:${bc};">${ph?ph+' $/h':'—'}<br><span style="color:#8a9ab0;font-weight:400;font-size:.7rem;">${m.days}j</span></div>
+      <div class="abar-ph" style="color:${bc};">${ph?ph+' $/h':'-'}<br><span style="color:#8a9ab0;font-weight:400;font-size:.7rem;">${m.days}j</span></div>
     </div>`;
   }).join('');
 
@@ -614,14 +998,14 @@ function drawAnnual() {
       <td style="text-align:center;font-weight:700;">${fmt(d.prod)}</td>
       <td style="text-align:center;">${pct}%</td>
       <td style="text-align:center;color:#5a6a80;">${fh(d.h)}</td>
-      <td style="text-align:center;font-weight:700;color:${bc};">${ph?ph+' $/h':'—'}</td>
+      <td style="text-align:center;font-weight:700;color:${bc};">${ph?ph+' $/h':'-'}</td>
       <td style="text-align:center;">${fmt(Math.round(d.prod/moisActifs))}</td>
     </tr>`;
   }).join('')}</tbody>
   <tfoot><tr>
     <td>TOTAL ANNUEL</td><td style="text-align:center;">${fmt(tP)}</td><td style="text-align:center;">100%</td>
     <td style="text-align:center;">${fh(tH)}</td>
-    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'—'}</td>
+    <td style="text-align:center;">${avPH?Math.round(avPH)+' $/h':'-'}</td>
     <td style="text-align:center;">${fmt(Math.round(tP/moisActifs))}</td>
   </tr></tfoot>`;
 }
@@ -640,27 +1024,25 @@ function moveYear(d){vay+=d;drawAnnual();}
 function gotoYear(){vay=TODAY.getFullYear();drawAnnual();}
 
 // ===== INIT =====
-drawChairList();
-buildDayForm();
-refreshMonthFilter();
-
-// Inject realistic demo data for current month
-(()=>{
-  const base=new Date(TODAY.getFullYear(),TODAY.getMonth(),1);
-  for(let d=0;d<Math.min(TODAY.getDate()-1,18);d++){
-    const dt=new Date(base); dt.setDate(d+1);
-    if(dt.getDay()===0||dt.getDay()===6) continue;
-    const ds=dt.toISOString().split('T')[0];
-    const data={};
-    chairs.forEach((c,i)=>{
-      data[c.id]={
-        prod:i===0?2000+Math.round(Math.random()*800):1400+Math.round(Math.random()*500),
-        h:i===0?9:8.5
-      };
-    });
-    entries.push({date:ds,type:'normal',note:'',data});
+const CFG_IDS = ['cfg_clinic', 'cfg_obj', 'cfg_hjour', 'cfg_jours'];
+function obtenirDonnees() {
+  const config = {}; CFG_IDS.forEach(id => config[id] = $(id).value);
+  return { config, chairs, cid, entries };
+}
+(async () => {
+  const d = await gmStock.ouvrir('productivite-fauteuil', obtenirDonnees);
+  if (d) {
+    if (d.config) CFG_IDS.forEach(id => { if (d.config[id] !== undefined) $(id).value = d.config[id]; });
+    if (Array.isArray(d.chairs)) chairs = d.chairs;
+    if (d.cid) cid = d.cid;
+    if (Array.isArray(d.entries)) entries = d.entries;
   }
+  CFG_IDS.forEach(id => $(id).addEventListener('input', () => gmStock.planifier()));
+  drawChairList();
+  buildDayForm();
   refreshMonthFilter();
+  drawJournal();
+  if (entries.length) go(1, null);
 })();
 </script>
 

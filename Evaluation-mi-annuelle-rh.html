@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Évaluation mi-annuelle — Gestion Mel</title>
+<title>Évaluation mi-annuelle | Gestion Mel</title>
 <style>
   :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green:#1a9e5a; --orange:#e67e22; --red:#c0392b; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -58,6 +58,24 @@
   .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
   .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
   @media print { body { background: white; } .page-header, .actions, .sync-status, .selector-screen, .btn-retour { display: none; } .container { box-shadow: none; margin: 0; } }
+  .bandeau { border-radius: 9px; padding: 14px 18px; font-size: .86rem; line-height: 1.6; border: 1.5px solid; margin-bottom: 10px; }
+  .bandeau-bleu { background: #e8f3fb; border-color: #b9d8ef; } .bandeau-orange { background: #fff8f0; border-color: #f2cf9f; } .bandeau-vert { background: #f0fdf4; border-color: #a9dcc6; }
+  .bandeau .rangee { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .bandeau input[readonly] { flex: 1; min-width: 0; font-size: .8rem; padding: 7px 10px; background: white; }
+  .btn-sm { padding: 7px 14px; font-size: .8rem; }
+  .btn-danger { background: white; color: var(--red); border: 1.5px solid var(--red); }
+  .btn-vert { background: var(--green); color: white; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; }
+  .tag { font-size: .72rem; font-weight: 600; border-radius: 10px; padding: 1px 9px; background: var(--light); border: 1px solid var(--border); color: #5a6a80; }
+  .tag.auto { background: #fff8e6; border-color: #f0d58c; color: #8a6d00; }
+  .tag b { color: #f0b429; letter-spacing: 1px; }
+  .comparaison { border: 1.5px dashed var(--accent); border-radius: 9px; padding: 12px 16px; font-size: .86rem; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .auto-bloc { background: var(--light); border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; font-size: .86rem; line-height: 1.6; white-space: pre-wrap; }
+  .auto-bloc b { display: block; font-size: .74rem; text-transform: uppercase; letter-spacing: .5px; color: #5a6a80; margin-bottom: 2px; white-space: normal; }
+  .critere-row.manque { background: #fff8f0; }
+  #secEmp:empty, #secEmp:has(#bandeauEmp:empty):has(#comparaison:empty) { display: none; }
+  @media print { #secEmp, .bandeau { display: none !important; } }
+  @media (max-width:600px) { .grid { grid-template-columns: 1fr; } .section, .selector-box { padding-left: 16px; padding-right: 16px; } .critere-row { grid-template-columns: 1fr; } }
 </style>
 <script>
 /* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
@@ -336,7 +354,7 @@ window.gmAcces = (function () {
 <div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Gestion RH</div>
+  <div>Clinique dentaire : gestion RH</div>
 </div>
 
 <div class="selector-screen" id="selectorScreen">
@@ -349,20 +367,31 @@ window.gmAcces = (function () {
   </div>
 </div>
 
+<div class="container" id="empContainer" style="display:none;">
+  <div class="doc-header">
+    <h1>Mon autoévaluation mi-annuelle</h1>
+    <p>À remplir avant votre rencontre d'évaluation</p>
+  </div>
+  <div id="empContenu"></div>
+  <div class="footer-note">© Gestion Mel 2026. Tous droits réservés. · gestionmel.com</div>
+</div>
+
 <div class="container" id="mainContainer" style="display:none;">
   <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header">
-    <h1>Évaluation de performance — Mi-annuelle</h1>
+    <h1>Évaluation de performance mi-annuelle</h1>
     <p>Formulaire d'évaluation à compléter deux fois par année avec chaque employé(e)</p>
   </div>
+
+  <div class="section" id="secEmp"><div id="bandeauEmp"></div><div id="comparaison"></div></div>
 
   <div class="section">
     <div class="section-title">Informations générales</div>
     <div class="grid">
-      <div class="field"><label>Nom de l'employé(e)</label><input type="text" id="f_nomEmploye" oninput="scheduleSave()"></div>
+      <div class="field"><label>Nom de l'employé(e)</label><input type="text" id="f_nomEmploye" oninput="scheduleSave()" onchange="comparer()"></div>
       <div class="field"><label>Poste occupé</label><input type="text" id="f_poste" oninput="scheduleSave()"></div>
       <div class="field"><label>Période évaluée</label><input type="text" id="f_periode" oninput="scheduleSave()" placeholder="Ex. : Janvier à Juin 2026"></div>
-      <div class="field"><label>Date de l'évaluation</label><input type="date" id="f_dateEval" onchange="scheduleSave()"></div>
+      <div class="field"><label>Date de l'évaluation</label><input type="date" id="f_dateEval" onchange="scheduleSave();comparer()"></div>
       <div class="field"><label>Gestionnaire évaluateur</label><input type="text" id="f_evaluateur" oninput="scheduleSave()"></div>
       <div class="field"><label>Ancienneté</label><input type="text" id="f_anciennete" oninput="scheduleSave()" placeholder="Ex. : 1 an, 6 mois"></div>
     </div>
@@ -398,6 +427,11 @@ window.gmAcces = (function () {
     <div class="field"><textarea id="f_commentairesEmp" oninput="scheduleSave()" placeholder="L'employé(e) peut exprimer ses commentaires, ses aspirations, ses préoccupations..."></textarea></div>
   </div>
 
+  <div class="section" id="secAuto" style="display:none;">
+    <div class="section-title">Autoévaluation transmise par l'employé(e)</div>
+    <div id="autoEval"></div>
+  </div>
+
   <div class="section">
     <div class="section-title">Signatures</div>
     <div class="grid">
@@ -411,7 +445,7 @@ window.gmAcces = (function () {
   <div class="actions">
     <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
+  <div class="footer-note">© Gestion Mel 2026. Tous droits réservés. · gestionmel.com | Document confidentiel, usage interne seulement</div>
 </div>
 
 <script>
@@ -429,7 +463,7 @@ function buildCriteres() {
   const wrap = document.getElementById('criteresWrap');
   wrap.innerHTML = CRITERES.map(c => `
     <div class="critere-row">
-      <div><div class="critere-label">${c.label}</div><div class="critere-desc">${c.desc}</div></div>
+      <div><div class="critere-label">${c.label}</div><div class="critere-desc">${c.desc}</div><div class="tags" id="tags-${c.id}"></div></div>
       <div class="stars" id="stars-${c.id}">
         <input type="radio" name="${c.id}" id="${c.id}-5" value="5" onchange="scheduleSave()"><label for="${c.id}-5">★</label>
         <input type="radio" name="${c.id}" id="${c.id}-4" value="4" onchange="scheduleSave()"><label for="${c.id}-4">★</label>
@@ -462,7 +496,7 @@ function setStatus(state) {
   else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
   else el.textContent = '⚠️ Erreur de connexion';
 }
-function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+function showLien() { prompt("Voici votre lien personnel. Enregistrez-le dans vos favoris :", window.location.href); }
 
 async function afficherListe() {
   document.getElementById('mainContainer').style.display = 'none';
@@ -478,10 +512,10 @@ async function afficherListe() {
       return;
     }
     listEl.innerHTML = data.map(row => {
-      const nom = row.nom_employe || '(Nom non précisé)';
+      const nom = esc(row.nom_employe) || '(Nom non précisé)';
       return `<div class="selector-item" onclick="ouvrirEval('${row.record_token}')">
         <span class="sel-name">${nom}</span>
-        <span class="sel-periode">${row.periode || ''}</span>
+        <span class="sel-periode">${esc(row.periode)}</span>
       </div>`;
     }).join('');
   } catch (e) { console.error(e); listEl.innerHTML = '<div class="selector-empty">⚠️ Erreur de chargement.</div>'; }
@@ -497,6 +531,8 @@ async function creerNouveau() {
 
 async function ouvrirEval(token) {
   isLoading = true;
+  partieAuto = null; precedente = null; document.getElementById('comparaison').innerHTML = ''; document.getElementById('bandeauEmp').innerHTML = ''; document.getElementById('secAuto').style.display = 'none';
+  document.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
   recordToken = token;
   const params = new URLSearchParams(window.location.search);
   params.set('eval', token);
@@ -519,6 +555,8 @@ async function ouvrirEval(token) {
     setStatus('ok');
   } catch (e) { console.error(e); setStatus('err'); }
   isLoading = false;
+  await chargerEmp();
+  comparer();
 }
 
 function retourListe() {
@@ -555,8 +593,163 @@ async function doSave() {
   } catch (e) { console.error(e); setStatus('err'); }
 }
 
+// =====================================================================
+// AUTOÉVALUATION DE L'EMPLOYÉ(E) ET COMPARAISON
+// =====================================================================
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+function dateLongue(d) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? (+m[3]) + ' ' + MOIS[+m[2] - 1] + ' ' + m[1] : ''; }
+const etoiles = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+const normNom = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+const fmt = n => n.toFixed(1).replace('.', ',');
+const AUTO_TEXTES = [['forces', 'Mes forces et réalisations'], ['ameliorer', 'Ce que je veux améliorer'], ['objectifs', 'Les objectifs que je propose'], ['besoins', 'Ce dont j\'ai besoin de ma gestionnaire'], ['commentaires', 'Autres commentaires']];
+async function rpc(nom, args) { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+let empEtat = null, partieAuto = null;
+
+function moyenneDetails(d) { const v = CRITERES.map(c => +d[c.id]).filter(x => x >= 1 && x <= 5); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; }
+
+async function chargerEmp() {
+  const b = document.getElementById('bandeauEmp');
+  partieAuto = null;
+  try { empEtat = await rpc('evmi_etat', { p_owner_token: ownerToken, p_record_token: recordToken }); }
+  catch (e) { console.error(e); b.innerHTML = ''; return; }
+  const lien = empEtat.existe && empEtat.lien ? location.origin + location.pathname + '?e=' + empEtat.lien : '';
+  if (empEtat.existe && empEtat.statut === 'termine') {
+    partieAuto = empEtat.partie || {};
+    b.innerHTML = `<div class="bandeau bandeau-vert"><strong>✅ Autoévaluation reçue${empEtat.termine_le ? ' le ' + dateLongue(String(empEtat.termine_le).slice(0, 10)) : ''}.</strong> La note de l'employé(e) est affichée à côté de chaque critère, et ses réponses plus bas.
+      <div class="rangee"><button class="btn btn-secondary btn-sm" id="btnRouvrir">Rouvrir pour l'employé(e)</button></div></div>`;
+  } else if (lien) {
+    b.innerHTML = `<div class="bandeau bandeau-orange"><strong>📨 Autoévaluation envoyée, en attente de l'employé(e).</strong> Envoyez ce lien par courriel ou par texto. Vous verrez ses réponses dès qu'il ou elle les aura transmises.
+      <div class="rangee"><input type="text" readonly id="lienEmp" value="${esc(lien)}"><button class="btn btn-primary btn-sm" id="btnCopier">📋 Copier</button></div>
+      <div class="rangee"><button class="btn btn-secondary btn-sm" id="btnCourriel">✉️ Préparer un courriel</button><button class="btn btn-secondary btn-sm" id="btnVerifier">🔄 Vérifier si c'est reçu</button><button class="btn btn-danger btn-sm" id="btnRetirer">Désactiver le lien</button></div></div>`;
+  } else {
+    b.innerHTML = `<div class="bandeau bandeau-bleu"><strong>Autoévaluation de l'employé(e) (facultatif)</strong><br>Envoyez un lien à l'employé(e) pour qu'il ou elle s'évalue sur les mêmes critères avant la rencontre. Vous pourrez comparer sa perception avec la vôtre. Le lien ne donne accès qu'à son autoévaluation.
+      <div class="rangee"><button class="btn btn-primary btn-sm" id="btnLienEmp">📨 Créer le lien pour l'employé(e)</button></div></div>`;
+  }
+  const on = (id, f) => { const el = document.getElementById(id); if (el) el.addEventListener('click', f); };
+  on('btnLienEmp', creerLienEmp); on('btnVerifier', async () => { await chargerEmp(); marquerTags(); });
+  on('btnRetirer', async () => { if (!confirm('Désactiver ce lien? L\'employé(e) ne pourra plus l\'ouvrir.')) return; await rpc('evmi_retirer', { p_owner_token: ownerToken, p_record_token: recordToken }); await chargerEmp(); });
+  on('btnRouvrir', async () => { if (!confirm('Rouvrir l\'autoévaluation? L\'employé(e) pourra la modifier avec son lien, puis devra la transmettre de nouveau.')) return; await rpc('evmi_rouvrir', { p_owner_token: ownerToken, p_record_token: recordToken }); await chargerEmp(); marquerTags(); });
+  on('btnCopier', async () => { const c = document.getElementById('lienEmp'); try { await navigator.clipboard.writeText(c.value); } catch (e) { c.select(); document.execCommand('copy'); } document.getElementById('btnCopier').textContent = '✅ Copié'; });
+  on('btnCourriel', () => {
+    const prenom = (document.getElementById('f_nomEmploye').value || '').trim().split(/\s+/)[0] || '';
+    const corps = `Bonjour ${prenom},\n\nEn prévision de notre rencontre d'évaluation mi-annuelle, voici le lien pour faire votre autoévaluation :\n${document.getElementById('lienEmp').value}\n\nVos réponses sont sauvegardées automatiquement. Quand vous avez terminé, cliquez sur « Transmettre ».\n\nMerci!`;
+    location.href = 'mailto:?subject=' + encodeURIComponent('Votre autoévaluation mi-annuelle') + '&body=' + encodeURIComponent(corps);
+  });
+  dessinerAuto();
+}
+async function creerLienEmp() {
+  if (saveTimer) { clearTimeout(saveTimer); await doSave(); }
+  try {
+    const infos = { nom: document.getElementById('f_nomEmploye').value, poste: document.getElementById('f_poste').value, periode: document.getElementById('f_periode').value };
+    const r = await rpc('evmi_lien', { p_owner_token: ownerToken, p_record_token: recordToken, p_infos: infos });
+    if (!r || !r.ok) throw new Error('lien');
+    await chargerEmp();
+  } catch (e) { console.error(e); alert('Impossible de créer le lien pour le moment.'); }
+}
+function dessinerAuto() {
+  const sec = document.getElementById('secAuto');
+  if (!partieAuto) { sec.style.display = 'none'; return; }
+  const textes = AUTO_TEXTES.filter(([k]) => (partieAuto[k] || '').trim()).map(([k, l]) => `<div class="auto-bloc"><b>${l}</b>${esc(partieAuto[k])}</div>`).join('');
+  const m = moyenneDetails(partieAuto.notes || {});
+  sec.style.display = '';
+  document.getElementById('autoEval').innerHTML = (m !== null ? `<div class="auto-bloc"><b>Moyenne de l'autoévaluation</b>${fmt(m)} / 5</div>` : '') + (textes || '<div style="font-size:.84rem;color:#8a9ab0;">Aucun commentaire écrit.</div>');
+}
+
+let precedente = null;
+async function comparer() {
+  precedente = null;
+  document.getElementById('comparaison').innerHTML = '';
+  const nom = normNom(document.getElementById('f_nomEmploye').value);
+  if (!nom) { marquerTags(); return; }
+  try {
+    const liste = await rpc('list_evaluations_mi_annuelles', { p_owner_token: ownerToken });
+    const memes = (liste || []).filter(r => r.record_token !== recordToken && normNom(r.nom_employe) === nom);
+    const details = await Promise.all(memes.map(async r => { const d = await rpc('get_evaluation_mi_annuelle', { p_record_token: r.record_token }); return { token: r.record_token, periode: r.periode, d: (d && d[0] && d[0].details) || {} }; }));
+    const date = document.getElementById('f_dateEval').value || '9999-12-31';
+    precedente = details.filter(x => x.d.f_dateEval && x.d.f_dateEval < date).sort((a, b) => b.d.f_dateEval.localeCompare(a.d.f_dateEval))[0] || null;
+  } catch (e) { console.error(e); }
+  if (precedente) {
+    const mp = moyenneDetails(precedente.d), ma = moyenneDetails(lireNotes());
+    let txt = `<div><strong>Évaluation précédente : ${dateLongue(precedente.d.f_dateEval)}${precedente.periode ? ' (' + esc(precedente.periode) + ')' : ''}</strong>`;
+    if (mp !== null) txt += ` · moyenne ${fmt(mp)} / 5`;
+    if (mp !== null && ma !== null) { const d = ma - mp; txt += ` <span style="font-weight:700;color:${d > 0.05 ? 'var(--green)' : d < -0.05 ? 'var(--red)' : '#5a6a80'}">(${d > 0.05 ? '+' : ''}${fmt(Math.abs(d) < 0.05 ? 0 : d)} maintenant)</span>`; }
+    txt += `<div style="font-size:.76rem;color:#5a6a80;">La note précédente est indiquée sous chaque critère.</div></div><button class="btn btn-secondary btn-sm" id="btnOuvrirPrec">Ouvrir l'évaluation précédente</button>`;
+    document.getElementById('comparaison').innerHTML = `<div class="comparaison">${txt}</div>`;
+    document.getElementById('btnOuvrirPrec').addEventListener('click', async () => { if (saveTimer) { clearTimeout(saveTimer); await doSave(); } ouvrirEval(precedente.token); });
+  }
+  marquerTags();
+}
+function lireNotes() { const o = {}; CRITERES.forEach(c => { const r = document.querySelector(`input[name="${c.id}"]:checked`); o[c.id] = r ? r.value : ''; }); return o; }
+function marquerTags() {
+  CRITERES.forEach(c => {
+    const el = document.getElementById('tags-' + c.id); if (!el) return;
+    let h = '';
+    const a = partieAuto && partieAuto.notes ? +partieAuto.notes[c.id] : 0;
+    if (a) h += `<span class="tag auto">Autoévaluation : <b>${etoiles(a)}</b></span>`;
+    const p = precedente ? +precedente.d[c.id] : 0;
+    if (p) h += `<span class="tag">Précédente : <b>${etoiles(p)}</b></span>`;
+    el.innerHTML = h;
+  });
+}
+
+// ---------- Page de l'employé(e) (?e=...) ----------
+const lienEmp = new URLSearchParams(location.search).get('e');
+let empPartie = { notes: {} }, empMinuterie = null, empActif = false;
+function empEtatSync(type) { setStatus(type); }
+async function empSauver(terminer) {
+  clearTimeout(empMinuterie); empMinuterie = null;
+  try {
+    const r = await rpc('evmi_emp_sauver', { p_lien: lienEmp, p_partie: empPartie, p_terminer: !!terminer });
+    if (!r || !r.ok) { if (r && r.erreur === 'termine') { alert('Votre autoévaluation a déjà été transmise.'); return false; } if (r && r.erreur === 'introuvable') { alert('Ce lien a été désactivé. Communiquez avec votre gestionnaire.'); return false; } throw new Error(r && r.erreur); }
+    setStatus('ok'); return true;
+  } catch (e) { console.error(e); setStatus('err'); return false; }
+}
+function empPlanifier() { if (!empActif) return; setStatus('saving'); clearTimeout(empMinuterie); empMinuterie = setTimeout(empSauver, 800); }
+async function initEmploye() {
+  document.getElementById('selectorScreen').style.display = 'none';
+  document.getElementById('empContainer').style.display = 'block';
+  document.title = 'Mon autoévaluation | Gestion Mel';
+  const zone = document.getElementById('empContenu');
+  let r;
+  try { r = await rpc('evmi_emp_get', { p_lien: lienEmp }); }
+  catch (e) { console.error(e); zone.innerHTML = '<div class="section" style="text-align:center;">⚠️ Connexion impossible. Vérifiez votre connexion Internet, puis rechargez la page.</div>'; return; }
+  if (!r || !r.ok) { zone.innerHTML = '<div class="section" style="text-align:center;padding:50px 30px;"><div style="font-size:2.4rem;">🔒</div><div style="font-weight:700;font-size:1.1rem;margin:8px 0;">Ce lien n\'est plus actif</div><div style="color:#5a6a80;">Demandez un nouveau lien à votre gestionnaire.</div></div>'; return; }
+  const i = r.infos || {}; empPartie = Object.assign({ notes: {} }, r.partie || {}); empPartie.notes = Object.assign({}, empPartie.notes);
+  const prenom = (i.nom || '').trim().split(/\s+/)[0];
+  const termine = r.statut === 'termine';
+  zone.innerHTML = `
+    <div class="section"><div class="bandeau ${termine ? 'bandeau-vert' : 'bandeau-bleu'}" id="empBandeau">${termine ? '<strong>✅ Votre autoévaluation a été transmise.</strong> Elle n\'est plus modifiable. Si vous devez y apporter un changement, demandez à votre gestionnaire de la rouvrir.' : `<strong>Bonjour${prenom ? ' ' + esc(prenom) : ''}!</strong> Évaluez-vous honnêtement sur chaque critère. Vos réponses sont sauvegardées automatiquement : vous pouvez revenir plus tard avec le même lien. Seule votre gestionnaire verra vos réponses, une fois transmises.`}</div>
+      <div class="grid"><div class="field"><label>Nom</label><input type="text" readonly value="${esc(i.nom)}"></div><div class="field"><label>Poste</label><input type="text" readonly value="${esc(i.poste)}"></div><div class="field full"><label>Période évaluée</label><input type="text" readonly value="${esc(i.periode)}"></div></div></div>
+    <div class="section"><div class="section-title">Mon autoévaluation</div>
+      <div class="legend"><span>⭐ Insatisfaisant</span><span>⭐⭐ À améliorer</span><span>⭐⭐⭐ Satisfaisant</span><span>⭐⭐⭐⭐ Très bien</span><span>⭐⭐⭐⭐⭐ Exceptionnel</span></div>
+      <div style="margin-top:16px;">${CRITERES.map(c => `<div class="critere-row" id="ec-${c.id}"><div><div class="critere-label">${c.label}</div><div class="critere-desc">${c.desc}</div></div>
+        <div class="stars">${[5, 4, 3, 2, 1].map(n => `<input type="radio" name="e_${c.id}" id="e_${c.id}-${n}" value="${n}" ${+empPartie.notes[c.id] === n ? 'checked' : ''}><label for="e_${c.id}-${n}">★</label>`).join('')}</div></div>`).join('')}</div></div>
+    <div class="section"><div class="section-title">Mes réflexions</div>
+      ${AUTO_TEXTES.map(([k, l]) => `<div class="field" style="margin-bottom:12px;"><label>${l}</label><textarea data-p="${k}">${esc(empPartie[k])}</textarea></div>`).join('')}</div>
+    ${termine ? '' : '<div class="actions" style="justify-content:center;"><button class="btn btn-vert" id="btnTransmettre">✅ J\'ai terminé : transmettre mon autoévaluation</button></div>'}`;
+  if (termine) { zone.querySelectorAll('input, textarea').forEach(el => el.disabled = true); return; }
+  zone.querySelectorAll('.stars input').forEach(el => el.addEventListener('change', () => { empPartie.notes[el.name.slice(2)] = el.value; document.getElementById('ec-' + el.name.slice(2)).classList.remove('manque'); empPlanifier(); }));
+  zone.querySelectorAll('textarea[data-p]').forEach(el => el.addEventListener('input', () => { empPartie[el.dataset.p] = el.value; empPlanifier(); }));
+  document.getElementById('btnTransmettre').addEventListener('click', async () => {
+    const manquants = CRITERES.filter(c => !empPartie.notes[c.id]);
+    if (manquants.length) { manquants.forEach(c => document.getElementById('ec-' + c.id).classList.add('manque')); if (!confirm(`Il reste ${manquants.length} critère(s) sans note. Transmettre quand même?`)) return; }
+    if (!confirm('Transmettre votre autoévaluation à votre gestionnaire? Vous ne pourrez plus la modifier ensuite.')) return;
+    if (await empSauver(true)) {
+      empActif = false;
+      zone.querySelectorAll('input, textarea, #btnTransmettre').forEach(el => el.disabled = true);
+      document.getElementById('empBandeau').className = 'bandeau bandeau-vert';
+      document.getElementById('empBandeau').innerHTML = '<strong>✅ Merci, votre autoévaluation est transmise!</strong> Votre gestionnaire pourra en prendre connaissance pour préparer votre rencontre.';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+  empActif = true;
+  window.addEventListener('beforeunload', () => { if (empMinuterie) empSauver(); });
+}
+
 async function initPage() {
   buildCriteres();
+  if (lienEmp) return initEmploye();
   ownerToken = await gmAcces.ouvrir(sb, getOwnerToken(), 'gest');
   const params = new URLSearchParams(window.location.search);
   const existing = params.get('eval');

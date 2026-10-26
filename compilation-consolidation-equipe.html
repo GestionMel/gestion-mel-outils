@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compilation consolidation d'équipe — Gestion Mel</title>
+<title>Compilation : consolidation d'équipe | Gestion Mel</title>
 <style>
   :root {
     --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3;
@@ -183,24 +183,337 @@
     .actions { padding: 14px 16px; }
     .emp-row { grid-template-columns: 1fr auto; }
   }
+  .vue { display: none; } .vue.active { display: block; }
+  .sel-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 20px 36px; border-bottom: 1px solid var(--border); }
+  .sel-top h2 { font-size: 1rem; color: var(--dark); }
+  .sel-list { padding: 16px 36px 26px; display: flex; flex-direction: column; gap: 9px; }
+  .sel-item { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center; border: 1.5px solid var(--border); border-radius: 9px; padding: 13px 16px; cursor: pointer; background: white; }
+  .sel-item:hover { border-color: var(--accent); background: var(--light); }
+  .sel-titre { font-weight: 700; font-size: .92rem; } .sel-date { font-size: .78rem; color: #5a6a80; margin-top: 3px; }
+  .chip { display: inline-block; border-radius: 12px; padding: 3px 10px; font-size: .74rem; font-weight: 700; white-space: nowrap; }
+  .edit-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 36px; background: var(--light); border-bottom: 1px solid var(--border); }
+  .sync { font-size: .78rem; font-weight: 700; color: #5a6a80; } .sync.ok { color: var(--green); } .sync.err { color: var(--red); }
+  .btn-danger { background: white; color: var(--red); border: 1.5px solid var(--red); }
+  .btn-sm { padding: 6px 13px; font-size: .8rem; }
+  .lien-box { border: 1.5px solid var(--border); border-radius: 9px; padding: 14px 16px; background: white; margin-bottom: 14px; font-size: .85rem; line-height: 1.6; }
+  .lien-box.ouvert { border-color: var(--green); background: #f6fdf9; }
+  .lien-row { display: flex; gap: 8px; margin: 10px 0; }
+  .lien-row input { flex: 1; min-width: 0; border: 1.5px solid var(--border); border-radius: 6px; padding: 7px 10px; font-family: inherit; font-size: .8rem; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sous-titre { font-size: .8rem; font-weight: 700; color: var(--dark); margin: 6px 0 8px; }
+  .recu { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; padding: 9px 12px; margin-bottom: 7px; font-size: .84rem; }
+  .recu.ok { border-color: var(--green); background: var(--green-bg); }
+  .rep-emp { margin-bottom: 10px; }
+  .rep-emp details { background: white; border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; }
+  .rep-emp summary { cursor: pointer; font-size: .8rem; font-weight: 700; color: var(--blue); }
+  .rep-ligne { font-size: .82rem; line-height: 1.6; padding: 6px 0; border-top: 1px solid #edf2f8; white-space: pre-wrap; }
+  .rep-ligne b { color: var(--dark); }
+  .eng-emp { border: 1.5px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; font-size: .84rem; line-height: 1.6; }
+  .eng-emp h5 { font-size: .86rem; margin-bottom: 6px; color: var(--dark); }
+  @media print { .edit-bar, .lien-box, #vListe, .rep-emp details:not([open]) { display: none !important; } }
+  @media (max-width:600px) { .sel-top, .sel-list, .edit-bar { padding-left: 16px; padding-right: 16px; } .sel-item, .recu { grid-template-columns: 1fr; } }
 </style>
+<script>
+/* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
+window.gmAcces = (function () {
+  const DUREE = 8 * 60 * 60 * 1000;
+  const CACHE = 'gm_acces_v1';
+  const ORIGINES = { fiche: "Fiche d'information employé", conge: 'Demande de congé', boite: 'Boîte à suggestions' };
+  const OUBLI = 'Mot de passe oublié? Écrivez à <strong>info@gestionmel.com</strong> en indiquant le nom de votre clinique.';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function css() {
+    if (document.getElementById('gmAccesCss')) return;
+    const s = document.createElement('style');
+    s.id = 'gmAccesCss';
+    s.textContent = `
+      html.gma-ouvert body > *:not(#gmAccesOverlay){visibility:hidden!important;}
+      #gmAccesOverlay{position:fixed;inset:0;z-index:100000;background:#eef4fb;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:40px 16px;font-family:'Segoe UI',Arial,sans-serif;color:#1a2535;}
+      #gmAccesOverlay *{box-sizing:border-box;}
+      .gma-carte{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(13,27,42,.12);overflow:hidden;}
+      .gma-tete{background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);color:#fff;padding:18px 24px;}
+      .gma-tete .gma-marque{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.5px;margin-bottom:6px;}
+      .gma-tete .gma-marque span{color:#2196f3;}
+      .gma-tete h2{font-size:1.1rem;font-weight:700;margin:0;}
+      .gma-corps{padding:20px 24px 22px;}
+      .gma-texte{font-size:.86rem;line-height:1.6;color:#3a4a60;margin:0 0 14px;}
+      .gma-champ{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+      .gma-champ label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+      .gma-champ input{border:1.5px solid #d0dff0;border-radius:7px;padding:10px 12px;font-size:.95rem;font-family:inherit;background:#f4f8ff;color:#1a2535;width:100%;}
+      .gma-champ input:focus{outline:none;border-color:#2196f3;background:#fff;}
+      .gma-btn{display:block;width:100%;padding:11px 16px;border-radius:8px;border:none;background:#1a6abf;color:#fff;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;}
+      .gma-btn:hover{background:#155a9e;}
+      .gma-btn:disabled{opacity:.6;cursor:wait;}
+      .gma-btn2{display:block;width:100%;padding:10px 16px;border-radius:8px;border:1.5px solid #1a6abf;background:#fff;color:#1a6abf;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;margin-top:10px;}
+      .gma-lien{background:none;border:none;color:#1a6abf;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 0;margin-top:6px;text-decoration:underline;}
+      .gma-err{display:none;background:#fef2f2;border:1px solid rgba(192,57,43,.25);color:#c0392b;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-ok{display:none;background:#f0fdf4;border:1px solid rgba(26,158,90,.25);color:#1a9e5a;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-astuce{background:#e8f4fd;border-left:3px solid #1a6abf;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#0d3a6e;margin-bottom:14px;line-height:1.55;}
+      .gma-avert{background:#fff8e1;border-left:3px solid #e67e22;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-bottom:14px;line-height:1.55;}
+      .gma-pied{font-size:.74rem;color:#8a9ab0;text-align:center;margin-top:14px;line-height:1.6;}
+      .gma-sep{border:none;border-top:1px solid #d0dff0;margin:18px 0;}
+      .gma-sous{font-size:.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;}
+      #gmAccesBarre{position:fixed;left:16px;bottom:16px;z-index:9990;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0dff0;border-radius:22px;padding:5px 6px 5px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:'Segoe UI',Arial,sans-serif;font-size:.74rem;font-weight:600;color:#1a6abf;}
+      #gmAccesBarre button{border:1px solid #d0dff0;background:#f4f8ff;color:#1a2535;border-radius:16px;padding:4px 10px;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+      #gmAccesBarre button:hover{border-color:#2196f3;color:#1a6abf;}
+      @media(max-width:600px){#gmAccesBarre>span{display:none;}#gmAccesBarre{padding:4px;left:8px;bottom:12px;}}
+      @media print{#gmAccesBarre,#gmAccesOverlay{display:none!important;}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function lire() { try { return JSON.parse(sessionStorage.getItem(CACHE) || '{}') || {}; } catch (e) { return {}; } }
+  function ecrire(c) { try { sessionStorage.setItem(CACHE, JSON.stringify(c)); } catch (e) { } }
+  function enCache(owner) { const c = lire()[owner]; return (c && c.exp > Date.now()) ? c : null; }
+  function memoriser(owner, r) {
+    const c = lire(); const prev = (c[owner] && c[owner].exp > Date.now()) ? c[owner] : {};
+    const gest = r.cle_gest || prev.gest || null;
+    c[owner] = { gest, secr: r.cle_secr || prev.secr || null, estGest: !!gest, exp: Date.now() + DUREE };
+    ecrire(c);
+    return c[owner];
+  }
+  function oublier(owner) { const c = lire(); delete c[owner]; ecrire(c); }
+  function fixerOwner(owner) {
+    try { localStorage.setItem('gestionmel_clinique_token', owner); } catch (e) { }
+    const p = new URLSearchParams(location.search); p.set('clinique', owner);
+    history.replaceState({}, '', location.pathname + '?' + p.toString());
+  }
+
+  function ecran(html) {
+    css();
+    let o = document.getElementById('gmAccesOverlay');
+    if (!o) { o = document.createElement('div'); o.id = 'gmAccesOverlay'; document.body.appendChild(o); }
+    o.innerHTML = '<div class="gma-carte">' + html + '</div>';
+    document.documentElement.classList.add('gma-ouvert');
+    o.scrollTop = 0;
+    const premier = o.querySelector('input'); if (premier) setTimeout(() => premier.focus(), 50);
+    return o;
+  }
+  function fermer() {
+    const o = document.getElementById('gmAccesOverlay'); if (o) o.remove();
+    document.documentElement.classList.remove('gma-ouvert');
+  }
+  function tete(titre) {
+    return '<div class="gma-tete"><div class="gma-marque">Gestion<span>Mel</span></div><h2>' + titre + '</h2></div>';
+  }
+  function message(r) {
+    if (!r) return 'Une erreur est survenue. Vérifiez votre connexion et réessayez.';
+    switch (r.erreur) {
+      case 'mot_de_passe': return 'Mot de passe incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'code': return 'Code incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'bloque': return 'Trop d\'essais. Réessayez dans ' + (r.minutes || 15) + ' minute(s).';
+      case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 6 caractères.';
+      case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+      case 'code_identique': return 'Le code du secrétariat doit être différent du mot de passe gestionnaire.';
+      case 'pas_de_mot_de_passe': return 'Aucun mot de passe gestionnaire n\'est encore créé pour cette clinique.';
+      case 'limite': return 'Limite atteinte. Réessayez un peu plus tard.';
+      default: return 'Une erreur est survenue. Réessayez.';
+    }
+  }
+  async function appel(sb, nom, args) {
+    try { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+    catch (e) { console.error(e); return null; }
+  }
+
+  // Formulaire generique : valider(valeurs) retourne {erreur} ou {resultat}
+  function formulaire({ titre, texte, astuce, avert, champs, bouton, alternative, pied, valider }) {
+    return new Promise(resolve => {
+      const html = tete(titre) + '<form class="gma-corps" autocomplete="off">' +
+        (texte ? '<p class="gma-texte">' + texte + '</p>' : '') +
+        (avert ? '<div class="gma-avert">' + avert + '</div>' : '') +
+        (astuce ? '<div class="gma-astuce">' + astuce + '</div>' : '') +
+        '<div class="gma-err"></div>' +
+        champs.map(c => '<div class="gma-champ"><label>' + c.label + '</label><input name="' + c.nom + '" type="' + (c.type || 'password') + '"' +
+          (c.type === 'text' ? ' autocomplete="off"' : ' autocomplete="new-password"') + (c.max ? ' maxlength="' + c.max + '"' : '') + '></div>').join('') +
+        '<button type="submit" class="gma-btn">' + bouton + '</button>' +
+        (alternative ? '<p class="gma-texte" style="margin:16px 0 0;">' + alternative.texte + '</p><button type="button" class="gma-btn2" data-alt="1">' + alternative.bouton + '</button>' : '') +
+        (pied ? '<div class="gma-pied">' + pied + '</div>' : '') +
+        '</form>';
+      const o = ecran(html);
+      const f = o.querySelector('form'), err = o.querySelector('.gma-err'), btn = o.querySelector('.gma-btn');
+      const alt = o.querySelector('[data-alt]');
+      if (alt) alt.onclick = () => resolve({ alt: true });
+      f.onsubmit = async ev => {
+        ev.preventDefault();
+        const v = {}; champs.forEach(c => { v[c.nom] = f.elements[c.nom].value; });
+        err.style.display = 'none'; btn.disabled = true;
+        const r = await valider(v);
+        btn.disabled = false;
+        if (r && r.erreur) { err.textContent = r.erreur; err.style.display = 'block'; const i = f.querySelector('input'); if (i) { i.select(); i.focus(); } return; }
+        resolve(r.resultat);
+      };
+    });
+  }
+
+  function maintenance() {
+    ecran(tete('⏳ Mise à jour en cours') + '<div class="gma-corps"><p class="gma-texte">Cet outil est en cours de mise à jour pour mieux protéger vos données. Revenez dans quelques minutes, puis rafraîchissez la page.</p><div class="gma-pied">Le problème persiste? Écrivez à <strong>info@gestionmel.com</strong>.</div></div>');
+  }
+
+  function formDefinir(sb, owner, niveau) {
+    return formulaire({
+      titre: '🔐 Créez votre mot de passe gestionnaire',
+      texte: 'Cet outil contient des informations confidentielles. Choisissez un mot de passe que vous seule connaîtrez (au moins 6 caractères). Il servira pour tous les outils réservés à la gestion.',
+      avert: '<strong>Réservé à la gestionnaire.</strong> Si vous n\'êtes pas la gestionnaire de la clinique, ne créez pas de mot de passe : demandez-lui d\'ouvrir cet outil une première fois.',
+      astuce: niveau === 'secr' ? 'Vous pourrez ensuite créer un code pour vos secrétaires avec le bouton <strong>🔑 Accès</strong> en bas à gauche.' : '',
+      champs: [{ nom: 'p1', label: 'Nouveau mot de passe' }, { nom: 'p2', label: 'Confirmer le mot de passe' }],
+      bouton: 'Créer le mot de passe et ouvrir',
+      pied: 'Notez-le dans un endroit sûr.',
+      valider: async v => {
+        if (v.p1.length < 6) return { erreur: message({ erreur: 'mot_de_passe_court' }) };
+        if (v.p1 !== v.p2) return { erreur: 'Les deux mots de passe ne sont pas identiques.' };
+        const r = await appel(sb, 'acces_definir', { p_owner_token: owner, p_pin: v.p1 });
+        if (r && r.erreur === 'deja_defini') { location.reload(); return { erreur: 'Un mot de passe existe déjà. Rechargement...' }; }
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function formOuvrir(sb, owner, niveau, etat, opts) {
+    const secr = niveau === 'secr';
+    let astuce = '';
+    if (etat.origine && ORIGINES[etat.origine]) astuce = 'Le mot de passe gestionnaire est le même que celui de l\'outil <strong>' + ORIGINES[etat.origine] + '</strong>.';
+    if (secr && !etat.code_secr) astuce += (astuce ? '<br>' : '') + 'Le code du secrétariat n\'est pas encore créé. La gestionnaire peut le créer avec le bouton <strong>🔑 Accès</strong>, une fois l\'outil ouvert.';
+    return formulaire({
+      titre: secr ? '🔒 Outil réservé au secrétariat' : '🔒 Outil réservé à la gestion',
+      texte: secr ? 'Entrez le code du secrétariat ou le mot de passe de la gestionnaire.' : 'Entrez le mot de passe gestionnaire pour ouvrir cet outil.',
+      astuce,
+      champs: [{ nom: 'p', label: secr ? 'Code ou mot de passe' : 'Mot de passe gestionnaire' }],
+      bouton: 'Ouvrir',
+      alternative: opts.alternative,
+      pied: OUBLI,
+      valider: async v => {
+        if (!v.p) return { erreur: secr ? 'Entrez votre code.' : 'Entrez votre mot de passe.' };
+        const r = await appel(sb, 'acces_ouvrir', { p_owner_token: owner, p_niveau: niveau, p_pin: v.p });
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function barre(sb, owner, niveau) {
+    css();
+    const c = enCache(owner) || {};
+    let b = document.getElementById('gmAccesBarre');
+    if (!b) { b = document.createElement('div'); b.id = 'gmAccesBarre'; document.body.appendChild(b); }
+    b.innerHTML = '<span>' + (c.estGest ? '🔓 Gestion' : '🔓 Secrétariat') + '</span>' +
+      (c.estGest ? '<button type="button" data-a="acces" title="Mot de passe et code du secrétariat">🔑 Accès</button>' : '') +
+      '<button type="button" data-a="lock" title="Fermer la session sur cet appareil">🔒 Verrouiller</button>';
+    b.querySelector('[data-a="lock"]').onclick = () => { oublier(owner); location.reload(); };
+    const a = b.querySelector('[data-a="acces"]'); if (a) a.onclick = () => panneau(sb, owner);
+  }
+
+  async function panneau(sb, owner) {
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner }) || {};
+    const o = ecran(tete('🔑 Gérer les accès') + '<div class="gma-corps">' +
+      '<div class="gma-ok" id="gmaOk"></div><div class="gma-err" id="gmaErr"></div>' +
+      '<p class="gma-sous">Code du secrétariat</p>' +
+      '<p class="gma-texte">Les secrétaires entrent ce code pour ouvrir le Balancement de fin de journée, la Liste prioritaire, la Petite caisse et les Comptes à recevoir. Votre mot de passe gestionnaire fonctionne aussi dans ces outils.</p>' +
+      '<div class="gma-astuce" id="gmaEtatCode">' + (etat.code_secr ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.') + '</div>' +
+      '<div class="gma-champ"><label>Nouveau code du secrétariat (4 caractères et plus)</label><input id="gmaCode" type="text" autocomplete="off" maxlength="30"></div>' +
+      '<div class="gma-champ"><label>Votre mot de passe gestionnaire</label><input id="gmaPinC" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnCode">Enregistrer le code</button>' +
+      (etat.code_secr ? '<button type="button" class="gma-lien" id="gmaBtnRetirer">Retirer le code du secrétariat</button>' : '') +
+      '<hr class="gma-sep">' +
+      '<p class="gma-sous">Changer le mot de passe gestionnaire</p>' +
+      '<div class="gma-champ"><label>Mot de passe actuel</label><input id="gmaPinA" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Nouveau mot de passe (6 caractères et plus)</label><input id="gmaPinN" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Confirmer le nouveau mot de passe</label><input id="gmaPinN2" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnPin">Changer le mot de passe</button>' +
+      '<button type="button" class="gma-btn2" id="gmaFermer">Fermer</button>' +
+      '<div class="gma-pied">Le nouveau mot de passe s\'applique à tous les outils réservés à la gestion.</div>' +
+      '</div>');
+    const okEl = o.querySelector('#gmaOk'), errEl = o.querySelector('#gmaErr');
+    const montrer = (ok, txt) => { okEl.style.display = ok ? 'block' : 'none'; errEl.style.display = ok ? 'none' : 'block'; (ok ? okEl : errEl).textContent = txt; o.scrollTop = 0; };
+    o.querySelector('#gmaFermer').onclick = fermer;
+    const envoyerCode = async code => {
+      const pin = o.querySelector('#gmaPinC').value;
+      if (!pin) return montrer(false, 'Entrez votre mot de passe gestionnaire.');
+      if (code && code.trim().length < 4) return montrer(false, message({ erreur: 'code_court' }));
+      const r = await appel(sb, 'acces_code_secr', { p_owner_token: owner, p_pin: pin, p_code: code });
+      if (!r || !r.ok) return montrer(false, message(r));
+      memoriser(owner, r);
+      o.querySelector('#gmaCode').value = ''; o.querySelector('#gmaPinC').value = '';
+      o.querySelector('#gmaEtatCode').textContent = code ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.';
+      montrer(true, code ? 'Code du secrétariat enregistré. Transmettez-le à vos secrétaires.' : 'Code du secrétariat retiré.');
+    };
+    o.querySelector('#gmaBtnCode').onclick = () => {
+      const code = o.querySelector('#gmaCode').value.trim();
+      if (!code) return montrer(false, 'Entrez le nouveau code du secrétariat.');
+      envoyerCode(code);
+    };
+    const ret = o.querySelector('#gmaBtnRetirer');
+    if (ret) ret.onclick = () => { if (confirm('Retirer le code? Les secrétaires ne pourront plus ouvrir les outils du secrétariat.')) envoyerCode(''); };
+    o.querySelector('#gmaBtnPin').onclick = async () => {
+      const a = o.querySelector('#gmaPinA').value, n = o.querySelector('#gmaPinN').value, n2 = o.querySelector('#gmaPinN2').value;
+      if (!a) return montrer(false, 'Entrez votre mot de passe actuel.');
+      if (n.length < 6) return montrer(false, message({ erreur: 'mot_de_passe_court' }));
+      if (n !== n2) return montrer(false, 'Les deux nouveaux mots de passe ne sont pas identiques.');
+      const r = await appel(sb, 'acces_changer_pin', { p_owner_token: owner, p_pin: a, p_nouveau: n });
+      if (!r || !r.ok) return montrer(false, r && r.erreur === 'code_identique' ? 'Le nouveau mot de passe doit être différent du code du secrétariat.' : message(r));
+      memoriser(owner, r);
+      ['#gmaPinA', '#gmaPinN', '#gmaPinN2'].forEach(s => { o.querySelector(s).value = ''; });
+      montrer(true, 'Mot de passe gestionnaire modifié.');
+    };
+  }
+
+  // Point d'entree : retourne la cle de l'outil (ou null si "alternative" choisie)
+  async function ouvrir(sb, owner, niveau, opts) {
+    opts = opts || {};
+    let c = enCache(owner);
+    if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner });
+    if (!etat || !etat.ok) { maintenance(); return new Promise(() => { }); }
+    if (etat.owner_token && etat.owner_token !== owner) {
+      owner = etat.owner_token; fixerOwner(owner);
+      c = enCache(owner);
+      if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    }
+    const r = etat.configure ? await formOuvrir(sb, owner, niveau, etat, opts) : await formDefinir(sb, owner, niveau);
+    if (r && r.alt) { fermer(); return null; }
+    const m = memoriser(owner, r);
+    fermer();
+    barre(sb, owner, niveau);
+    return m[niveau];
+  }
+
+  function cle(owner, niveau) { const c = enCache(owner); return c ? c[niveau] || null : null; }
+
+  return { ouvrir, cle, esc, ecran, fermer, tete, message, appel, formulaire, oublier, maintenance, OUBLI };
+})();
+</script>
+
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div class="subtitle">Outil gestionnaire — Compilation consolidation d'équipe</div>
+  <div class="subtitle">Outil de gestion : compilation de la consolidation d'équipe</div>
 </div>
 
 <div class="container">
   <div class="doc-header">
-    <h1>Compilation — Consolidation d'équipe</h1>
-    <p>Outil d'analyse et de synthèse des questionnaires — Réservé au gestionnaire</p>
+    <h1>Compilation : consolidation d'équipe</h1>
+    <p>Analyse et synthèse des questionnaires, réservée à la gestionnaire</p>
   </div>
 
+  <div class="vue active" id="vChargement"><div class="no-data-msg" style="padding:70px 20px;">⏳ Chargement...</div></div>
+  <div class="vue" id="vListe">
+    <div class="sel-top"><h2>📁 Mes démarches de consolidation</h2><button class="btn btn-primary" id="btnNouvelle">+ Nouvelle démarche</button></div>
+    <div class="sel-list" id="liste"></div>
+  </div>
+  <div class="vue" id="vEdition">
+  <div class="edit-bar">
+    <button class="btn btn-secondary btn-sm" id="btnRetour">← Mes démarches</button>
+    <span class="sync" id="sync"></span>
+    <button class="btn btn-danger btn-sm" id="btnSupprimer">🗑️ Supprimer</button>
+  </div>
   <div class="nav-tabs">
     <button class="tab-btn active" onclick="showTab(0)">⚙️ Configuration</button>
-    <button class="tab-btn" onclick="showTab(1)">📥 Saisie des scores</button>
+    <button class="tab-btn" onclick="showTab(1)">📥 Scores papier</button>
     <button class="tab-btn" onclick="showTab(2)">📊 Tableau de bord</button>
     <button class="tab-btn" onclick="showTab(3)">💬 Thèmes qualitatifs</button>
     <button class="tab-btn" onclick="showTab(4)">✅ Plan d'action</button>
@@ -219,8 +532,14 @@
     </div>
 
     <div class="section">
-      <div class="section-title">Liste des participants (4 à 25)</div>
-      <div class="info-box">Ajoutez le nom et le poste de chaque employé ayant complété le questionnaire. Vous pourrez ensuite saisir leurs scores individuellement.</div>
+      <div class="section-title">Questionnaire en ligne pour l'équipe</div>
+      <div class="lien-box" id="lienBox"></div>
+      <div class="sous-titre">Questionnaires reçus en ligne</div>
+      <div id="recus"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Questionnaires remplis sur papier (facultatif)</div>
+      <div class="info-box">Si certains employés ont rempli le questionnaire sur papier, ajoutez-les ici. Vous pourrez ensuite saisir leurs scores. Le total des participants (en ligne et papier) est de 4 à 25.</div>
       <div class="emp-list" id="empList"></div>
       <button class="btn-add" onclick="addEmp()" id="btnAdd">+ Ajouter un(e) participant(e)</button>
       <div style="margin-top:12px;">
@@ -234,7 +553,7 @@
 
     <div class="actions">
       <span></span>
-      <button class="btn btn-primary" onclick="showTab(1)">Continuer — Saisie des scores →</button>
+      <button class="btn btn-primary" onclick="showTab(2);buildDashboard()">Voir le tableau de bord →</button>
     </div>
   </div>
 
@@ -242,7 +561,7 @@
   <div class="tab-content" id="tab-1">
     <div class="section">
       <div class="section-title">Saisie des scores par participant</div>
-      <div class="info-box">Sélectionnez un(e) participant(e) et saisissez ses scores tels qu'indiqués sur son questionnaire. Répétez pour chaque participant.</div>
+      <div class="info-box">Pour les questionnaires remplis <strong>sur papier</strong> seulement : sélectionnez un(e) participant(e) et saisissez ses scores tels qu'indiqués sur son questionnaire. Les questionnaires remplis en ligne sont compilés automatiquement.</div>
       <div class="emp-selector" id="empSelector"></div>
       <div id="scoreEntry"></div>
     </div>
@@ -286,36 +605,44 @@
       <div class="info-box">Après lecture des questionnaires individuels, notez ici les thèmes récurrents identifiés dans chaque question ouverte.</div>
 
       <div class="theme-block">
-        <h4>Q1-Q2 — Valeurs personnelles récurrentes</h4>
-        <textarea placeholder="Quelles valeurs reviennent le plus souvent? Ex : respect, travail d&#39;équipe, communication..."></textarea>
+        <h4>Q1-Q2 : Valeurs personnelles récurrentes</h4>
+        <div class="rep-emp" data-q="1"></div>
+        <textarea data-t="t1" placeholder="Quelles valeurs reviennent le plus souvent? Ex : respect, travail d&#39;équipe, communication..."></textarea>
       </div>
       <div class="theme-block">
-        <h4>Q3 — Définitions des valeurs de la clinique</h4>
-        <textarea placeholder="Comment l&#39;équipe définit-elle les valeurs de la clinique? Y a-t-il des divergences?"></textarea>
+        <h4>Q3 : Définitions des valeurs de la clinique</h4>
+        <div class="rep-emp" data-q="2"></div>
+        <textarea data-t="t2" placeholder="Comment l&#39;équipe définit-elle les valeurs de la clinique? Y a-t-il des divergences?"></textarea>
       </div>
       <div class="theme-block">
-        <h4>Q4 — Valeur prioritaire collective</h4>
-        <textarea placeholder="Quelle valeur est la plus citée comme prioritaire? Qu&#39;est-ce que ça révèle?"></textarea>
+        <h4>Q4 : Valeur prioritaire collective</h4>
+        <div class="rep-emp" data-q="3"></div>
+        <textarea data-t="t3" placeholder="Quelle valeur est la plus citée comme prioritaire? Qu&#39;est-ce que ça révèle?"></textarea>
       </div>
       <div class="theme-block">
-        <h4>Q5 — Valeurs non respectées — situations récurrentes</h4>
-        <textarea placeholder="Quelles valeurs sont les plus souvent citées comme non respectées? Quels types de situations?"></textarea>
+        <h4>Q5 : valeurs non respectées, situations récurrentes</h4>
+        <div class="rep-emp" data-q="4"></div>
+        <textarea data-t="t4" placeholder="Quelles valeurs sont les plus souvent citées comme non respectées? Quels types de situations?"></textarea>
       </div>
       <div class="theme-block">
-        <h4>Q6 — Besoins communs de l'équipe</h4>
-        <textarea placeholder="Quels besoins reviennent le plus souvent? Ex : communication, reconnaissance, soutien..."></textarea>
+        <h4>Q6 : Besoins communs de l'équipe</h4>
+        <div class="rep-emp" data-q="5"></div>
+        <textarea data-t="t5" placeholder="Quels besoins reviennent le plus souvent? Ex : communication, reconnaissance, soutien..."></textarea>
       </div>
       <div class="theme-block">
-        <h4>Q7 — Situations d'inconfort fréquentes</h4>
-        <textarea placeholder="Quelles situations d&#39;inconfort sont les plus mentionnées?"></textarea>
+        <h4>Q7 : Situations d'inconfort fréquentes</h4>
+        <div class="rep-emp" data-q="6"></div>
+        <textarea data-t="t6" placeholder="Quelles situations d&#39;inconfort sont les plus mentionnées?"></textarea>
       </div>
       <div class="theme-block">
-        <h4>Q8 — Attentes envers les collègues</h4>
-        <textarea placeholder="Quelles attentes reviennent le plus souvent?"></textarea>
+        <h4>Q8 : Attentes envers les collègues</h4>
+        <div class="rep-emp" data-q="7"></div>
+        <textarea data-t="t7" placeholder="Quelles attentes reviennent le plus souvent?"></textarea>
       </div>
       <div class="theme-block" style="border-color:var(--green);border-width:1.5px;">
         <h4 style="color:var(--green);">Apprentissages clés de cette consolidation</h4>
-        <textarea placeholder="Qu&#39;est-ce que cette consolidation a révélé? Points positifs surprenants, consensus inattendu, tension principale..."></textarea>
+        <div class="rep-emp" data-q="8"></div>
+        <textarea data-t="t8" placeholder="Qu&#39;est-ce que cette consolidation a révélé? Points positifs surprenants, consensus inattendu, tension principale..."></textarea>
       </div>
     </div>
     <div class="actions">
@@ -327,7 +654,7 @@
   <!-- ===== ONGLET 5 : PLAN D'ACTION ===== -->
   <div class="tab-content" id="tab-4">
     <div class="section">
-      <div class="section-title">Plan d'action — Suites de la consolidation</div>
+      <div class="section-title">Plan d'action : Suites de la consolidation</div>
       <div class="info-box">Basé sur l'analyse des scores et des thèmes qualitatifs, définissez les actions prioritaires à mettre en place avec l'équipe.</div>
       <table class="action-table" id="actionTable">
         <thead>
@@ -340,53 +667,22 @@
             <th style="width:5%"></th>
           </tr>
         </thead>
-        <tbody id="actionBody"><tr>
-    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
-    <td><input type="text" placeholder="Objectif visé..."></td>
-    <td><input type="text" placeholder="Responsable..."></td>
-    <td><input type="date"></td>
-    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
-    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
-    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
-    <td><input type="text" placeholder="Objectif visé..."></td>
-    <td><input type="text" placeholder="Responsable..."></td>
-    <td><input type="date"></td>
-    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
-    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
-    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
-    <td><input type="text" placeholder="Objectif visé..."></td>
-    <td><input type="text" placeholder="Responsable..."></td>
-    <td><input type="date"></td>
-    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
-    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
-    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
-    <td><input type="text" placeholder="Objectif visé..."></td>
-    <td><input type="text" placeholder="Responsable..."></td>
-    <td><input type="date"></td>
-    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
-    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
-    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
-    <td><input type="text" placeholder="Objectif visé..."></td>
-    <td><input type="text" placeholder="Responsable..."></td>
-    <td><input type="date"></td>
-    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
-    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr><tr>
-    <td><input type="text" placeholder="Décrivez l&#39;action..."></td>
-    <td><input type="text" placeholder="Objectif visé..."></td>
-    <td><input type="text" placeholder="Responsable..."></td>
-    <td><input type="date"></td>
-    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
-    <td><button class="btn-del" onclick="this.closest(&#39;tr&#39;).remove()" style="margin:auto;">×</button></td></tr></tbody>
+        <tbody id="actionBody"></tbody>
       </table>
       <button class="btn-add-row" onclick="addAction()">+ Ajouter une action</button>
+    </div>
+    <div class="section">
+      <div class="section-title">Engagements des employés</div>
+      <div class="info-box">Les engagements personnels (section 3) transmis en ligne par les employés après la rencontre s'affichent ici.</div>
+      <div id="engagementsEmp"></div>
     </div>
 
     <div class="section">
       <div class="section-title">Prochaines étapes</div>
       <div class="grid">
-        <div class="field"><label>Date de la prochaine rencontre de suivi</label><input type="date"></div>
-        <div class="field"><label>Format du suivi prévu</label><input type="text" placeholder="Ex : Réunion d&#39;équipe, rencontres individuelles..."></div>
-        <div class="field full"><label>Notes additionnelles</label><textarea placeholder="Observations importantes, contexte particulier, points à surveiller..."></textarea></div>
+        <div class="field"><label>Date de la prochaine rencontre de suivi</label><input type="date" data-n="prochaine"></div>
+        <div class="field"><label>Format du suivi prévu</label><input type="text" data-n="format" placeholder="Ex : Réunion d&#39;équipe, rencontres individuelles..."></div>
+        <div class="field full"><label>Notes additionnelles</label><textarea data-n="notes" placeholder="Observations importantes, contexte particulier, points à surveiller..."></textarea></div>
       </div>
     </div>
 
@@ -396,7 +692,8 @@
     </div>
   </div>
 
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Outil confidentiel — usage gestionnaire uniquement</div>
+  </div>
+  <div class="footer-note">© Gestion Mel 2026. Tous droits réservés. · gestionmel.com | Outil confidentiel, réservé à la gestionnaire</div>
 </div>
 
 <script>
@@ -404,8 +701,8 @@
 const CATS = {
   pos: { label: 'Comportements positifs', neg: false },
   neg: { label: 'Comportements négatifs', neg: true },
-  sat: { label: 'Satisfaction — Clinique', neg: false },
-  eq:  { label: 'Satisfaction — Équipe', neg: false }
+  sat: { label: 'Satisfaction : Clinique', neg: false },
+  eq:  { label: 'Satisfaction : Équipe', neg: false }
 };
 
 const QS = {
@@ -446,12 +743,12 @@ function renderEmpList() {
     row.innerHTML = `
       <div>
         <div class="emp-num">Participant ${i+1} ${hasScores ? '<span class="emp-status">✓ Scores saisis</span>' : ''}</div>
-        <input type="text" placeholder="Nom et prénom" value="${emp.name}"
+        <input type="text" placeholder="Nom et prénom" value="${esc(emp.name)}"
           oninput="employees[${i}].name=this.value;renderEmpSelector()" style="margin-top:4px;width:100%;">
       </div>
       <div>
         <div class="emp-num" style="visibility:hidden">_</div>
-        <input type="text" placeholder="Poste occupé" value="${emp.role}"
+        <input type="text" placeholder="Poste occupé" value="${esc(emp.role)}"
           oninput="employees[${i}].role=this.value;renderEmpSelector()" style="margin-top:4px;width:100%;">
       </div>
       <button class="btn-del" onclick="removeEmp(${emp.id})">×</button>`;
@@ -509,7 +806,7 @@ function renderScoreEntry() {
   if (!scores[currentEmp]) scores[currentEmp] = {};
 
   let html = `<div style="background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:16px;">
-    <strong>${emp.name || 'Participant sans nom'}</strong> — ${emp.role || 'Poste non défini'}
+    <strong>${esc(emp.name) || 'Participant sans nom'}</strong> · ${esc(emp.role) || 'Poste non défini'}
     <div style="font-size:.78rem;color:#5a6a80;margin-top:3px;">Saisissez les scores tels qu'indiqués sur le questionnaire de cette personne.</div>
   </div>`;
 
@@ -571,6 +868,7 @@ function chipClass(v, isNeg) {
 }
 
 function buildDashboard() {
+  const employees = tousParticipants(), scores = tousScores();
   const scored = employees.filter(e => scores[e.id] && Object.keys(scores[e.id]).length > 0);
   if (scored.length === 0) {
     document.getElementById('dashSummary').innerHTML = '<div class="no-data-msg"><span>📊</span>Aucun score saisi. Retournez à la saisie des scores.</div>';
@@ -583,7 +881,7 @@ function buildDashboard() {
   // Summary cards
   document.getElementById('dashSummary').innerHTML = `
     <div class="summary-cards">
-      <div class="sum-card"><div class="val">${employees.length}</div><div class="lbl">Participants configurés</div></div>
+      <div class="sum-card"><div class="val">${employees.length}</div><div class="lbl">Participants (en ligne et papier)</div></div>
       <div class="sum-card"><div class="val">${scored.length}</div><div class="lbl">Questionnaires saisis</div></div>
       <div class="sum-card"><div class="val">${Object.keys(QS).reduce((a,c)=>a+QS[c].length,0)}</div><div class="lbl">Questions au total</div></div>
       <div class="sum-card"><div class="val">${Math.round(scored.length/employees.length*100)}%</div><div class="lbl">Taux de complétion</div></div>
@@ -604,7 +902,7 @@ function buildDashboard() {
     catHtml += `<div class="cat-card">
       <h4>${CATS[cat].label}</h4>
       <div class="cat-score">
-        <span class="cat-score-val ${cls}">${moyenne ? moyenne.toFixed(1) : '—'}/7</span>
+        <span class="cat-score-val ${cls}">${moyenne ? moyenne.toFixed(1).replace('.', ',') : '-'}/7</span>
         <div class="bar-wrap"><div class="bar-fill ${bCls}" style="width:${barW}%"></div></div>
       </div>
       <div style="font-size:.75rem;color:#5a6a80;">${isNeg ? (cls==='low'?'✅ Peu de comportements négatifs':cls==='mid'?'⚠️ Quelques comportements à adresser':'🔴 Comportements négatifs fréquents') : (cls==='high'?'✅ Très satisfaisant':cls==='mid'?'⚠️ Satisfaction modérée':'🔴 À améliorer en priorité')}</div>
@@ -638,16 +936,16 @@ function buildDashboard() {
 
   let topHtml = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">';
 
-  topHtml += '<div><div style="font-size:.8rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border);">✅ Top 5 — Forces de l\'équipe</div><ul class="top-list">';
+  topHtml += '<div><div style="font-size:.8rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border);">✅ Top 5 : Forces de l\'équipe</div><ul class="top-list">';
   forces.forEach((item, i) => {
     const displayScore = item.isNeg ? (8-item.avg).toFixed(1) : item.avg.toFixed(1);
-    topHtml += `<li class="top-item"><span class="top-badge badge-force">${i+1}</span><span>${item.q}</span><span class="top-score" style="color:var(--green)">${item.avg.toFixed(1)}/7</span></li>`;
+    topHtml += `<li class="top-item"><span class="top-badge badge-force">${i+1}</span><span>${item.q}</span><span class="top-score" style="color:var(--green)">${item.avg.toFixed(1).replace('.', ',')}/7</span></li>`;
   });
   topHtml += '</ul></div>';
 
-  topHtml += '<div><div style="font-size:.8rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border);">🔴 Top 5 — Défis prioritaires</div><ul class="top-list">';
+  topHtml += '<div><div style="font-size:.8rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--border);">🔴 Top 5 : Défis prioritaires</div><ul class="top-list">';
   defis.forEach((item, i) => {
-    topHtml += `<li class="top-item"><span class="top-badge badge-defi">${i+1}</span><span>${item.q} <span style="font-size:.72rem;color:#8a9ab0;">(${CATS[item.cat].label})</span></span><span class="top-score" style="color:var(--red)">${item.avg.toFixed(1)}/7</span></li>`;
+    topHtml += `<li class="top-item"><span class="top-badge badge-defi">${i+1}</span><span>${item.q} <span style="font-size:.72rem;color:#8a9ab0;">(${CATS[item.cat].label})</span></span><span class="top-score" style="color:var(--red)">${item.avg.toFixed(1).replace('.', ',')}/7</span></li>`;
   });
   topHtml += '</ul></div></div>';
   document.getElementById('dashTopBottom').innerHTML = topHtml;
@@ -661,14 +959,14 @@ function buildDashboard() {
   Object.keys(QS).forEach(cat => { compHtml += `<th>${CATS[cat].label}</th>`; });
   compHtml += '</tr></thead><tbody>';
   scored.forEach(emp => {
-    compHtml += `<tr><td><strong>${emp.name || 'Sans nom'}</strong></td><td>${emp.role || '—'}</td>`;
+    compHtml += `<tr><td><strong>${esc(emp.name) || 'Sans nom'}</strong>${emp.enLigne ? ' <span class="chip" style="background:#e8f0fb;color:var(--blue);">en ligne</span>' : ''}</td><td>${esc(emp.role) || '-'}</td>`;
     Object.keys(QS).forEach(cat => {
       const isNeg = CATS[cat].neg;
       const vals = scores[emp.id][cat] ? scores[emp.id][cat].filter(v=>v) : [];
       const a = avg(vals);
-      if (a === null) { compHtml += '<td>—</td>'; return; }
+      if (a === null) { compHtml += '<td>-</td>'; return; }
       const cc = chipClass(a, isNeg);
-      compHtml += `<td><span class="score-chip ${cc}">${a.toFixed(1)}/7</span></td>`;
+      compHtml += `<td><span class="score-chip ${cc}">${a.toFixed(1).replace('.', ',')}/7</span></td>`;
     });
     compHtml += '</tr>';
   });
@@ -677,21 +975,17 @@ function buildDashboard() {
 }
 
 // ===== ACTION PLAN =====
-function addAction() {
-  const tbody = document.getElementById('actionBody');
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td><input type="text" placeholder="Décrivez l'action..."></td>
-    <td><input type="text" placeholder="Objectif visé..."></td>
-    <td><input type="text" placeholder="Responsable..."></td>
-    <td><input type="date"></td>
-    <td><select><option>À faire</option><option>En cours</option><option>Complété</option></select></td>
-    <td><button class="btn-del" onclick="this.closest('tr').remove()" style="margin:auto;">×</button></td>`;
-  tbody.appendChild(tr);
+let actions = [];
+function dessinerActions() {
+  document.getElementById('actionBody').innerHTML = actions.map((a, i) => `<tr data-i="${i}">
+    <td><input type="text" data-a="action" value="${esc(a.action)}" placeholder="Décrivez l'action..."></td>
+    <td><input type="text" data-a="objectif" value="${esc(a.objectif)}" placeholder="Objectif visé..."></td>
+    <td><input type="text" data-a="resp" value="${esc(a.resp)}" placeholder="Responsable..."></td>
+    <td><input type="date" data-a="date" value="${esc(a.date)}"></td>
+    <td><select data-a="statut">${['À faire', 'En cours', 'Complété'].map(s => `<option ${a.statut === s ? 'selected' : ''}>${s}</option>`).join('')}</select></td>
+    <td><button class="btn-del" style="margin:auto;" title="Retirer">×</button></td></tr>`).join('');
 }
-
-// Add 3 default action rows
-for(let i=0;i<3;i++) addAction();
+function addAction() { actions.push({ action: '', objectif: '', resp: '', date: '', statut: 'À faire' }); dessinerActions(); planifier(); }
 
 // ===== TABS =====
 function showTab(n) {
@@ -700,6 +994,232 @@ function showTab(n) {
   window.scrollTo({top:0,behavior:'smooth'});
   if (n===1) renderEmpSelector();
 }
+
+// =====================================================================
+// SAUVEGARDE ET QUESTIONNAIRES EN LIGNE
+// =====================================================================
+const sb = window.supabase.createClient('https://ytantrrkhmnyvurhxkqr.supabase.co', 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc');
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+function dateLongue(d) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? (+m[3]) + ' ' + MOIS[+m[2] - 1] + ' ' + m[1] : ''; }
+async function appel(nom, args) { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+function montrer(id) { document.querySelectorAll('.vue').forEach(v => v.classList.toggle('active', v.id === id)); window.scrollTo(0, 0); }
+function statut(type, texte) { const el = $('sync'); el.className = 'sync ' + type; el.textContent = texte; }
+const params = new URLSearchParams(location.search);
+function majUrl() { history.replaceState({}, '', location.pathname + '?' + params.toString()); }
+const CFG = ['clinique', 'dateConso', 'animateur', 'dept'];
+let cle = null, record = null, reponses = [], lien = null, ouvert = false, minuterie = null, chargement = true;
+
+// Participants en ligne (sections 1-2 transmises) convertis au format de la compilation
+function enLigne() { return reponses.filter(r => r.sections); }
+function tousParticipants() { return employees.concat(enLigne().map(r => ({ id: 'r' + r.id, name: r.nom, role: r.poste || '', enLigne: true }))); }
+function tousScores() {
+  const s = Object.assign({}, scores);
+  enLigne().forEach(r => { const l = r.sections.likert || {}; s['r' + r.id] = { pos: l.pos || [], neg: l.neg || [], sat: l.sat || [], eq: l.eq || [] }; });
+  return s;
+}
+
+function lienQuestionnaire() { return location.origin + location.pathname.replace(/[^/]*$/, '') + 'consolidation-equipe-rh.html?e=' + lien; }
+function dessinerLien() {
+  const box = $('lienBox');
+  box.className = 'lien-box' + (ouvert ? ' ouvert' : '');
+  if (!ouvert) {
+    box.innerHTML = `<strong>📲 Questionnaire en ligne</strong><br>Chaque employé(e) remplit son questionnaire sur son téléphone ou son ordinateur, sans mot de passe, avec son nom. Ses réponses s'ajoutent ici automatiquement dès qu'il ou elle les transmet.${lien ? '<br><strong>Le lien est présentement fermé.</strong>' : ''}
+      <div class="btn-row" style="margin-top:10px;"><button class="btn btn-primary btn-sm" id="btnOuvrirLien">${lien ? '🔓 Rouvrir le questionnaire' : '📲 Créer le lien pour l\'équipe'}</button></div>`;
+  } else {
+    box.innerHTML = `<strong style="color:var(--green);">🟢 Le questionnaire est ouvert</strong><br>Envoyez ce lien à l'équipe. Chaque personne recevra ensuite son lien personnel pour revenir compléter ses engagements après la rencontre.
+      <div class="lien-row"><input type="text" id="lienEquipe" readonly value="${esc(lienQuestionnaire())}"><button class="btn btn-primary btn-sm" id="btnCopier">📋 Copier</button></div>
+      <div class="btn-row"><button class="btn btn-secondary btn-sm" id="btnCourriel">✉️ Préparer un courriel</button><a class="btn btn-secondary btn-sm" href="${esc(lienQuestionnaire())}" target="_blank" rel="noopener" style="text-decoration:none;">👁️ Voir le questionnaire</a><button class="btn btn-danger btn-sm" id="btnFermerLien">🔒 Fermer le questionnaire</button></div>`;
+  }
+  const on = (id, f) => { const el = $(id); if (el) el.addEventListener('click', f); };
+  on('btnOuvrirLien', () => changerLien(true)); on('btnFermerLien', () => changerLien(false));
+  on('btnCopier', async () => { try { await navigator.clipboard.writeText($('lienEquipe').value); } catch (e) { $('lienEquipe').select(); document.execCommand('copy'); } $('btnCopier').textContent = '✅ Copié'; });
+  on('btnCourriel', () => {
+    const corps = `Bonjour à toutes et à tous,\n\nEn préparation de notre rencontre de consolidation d'équipe${$('dateConso').value ? ' du ' + dateLongue($('dateConso').value) : ''}, je vous invite à remplir le questionnaire en ligne :\n${$('lienEquipe').value}\n\nRemplissez les sections 1 et 2 avant la rencontre. Après la rencontre, vous pourrez revenir avec votre lien personnel pour inscrire vos engagements.\n\nVos réponses seront traitées avec respect et ne feront l'objet d'aucune représaille.\n\nMerci!`;
+    location.href = 'mailto:?subject=' + encodeURIComponent('Questionnaire : consolidation d\'équipe') + '&body=' + encodeURIComponent(corps);
+  });
+}
+async function changerLien(o) {
+  if (!o && !confirm('Fermer le questionnaire? Les employés ne pourront plus le remplir ni le modifier. Les réponses reçues sont conservées.')) return;
+  if (minuterie) await sauvegarder();
+  try {
+    const r = await appel('conso_ouvrir', { p_owner_token: cle, p_record_token: record, p_ouvert: o });
+    if (!r || !r.ok) throw new Error('lien');
+    lien = r.lien; ouvert = r.ouvert; dessinerLien();
+  } catch (e) { console.error(e); alert('L\'opération a échoué. Réessayez.'); }
+}
+
+function dessinerRecus() {
+  const el = $('recus');
+  if (!reponses.length) { el.innerHTML = '<div style="font-size:.82rem;color:#8a9ab0;margin-bottom:6px;">Aucun questionnaire en ligne pour le moment. <button class="btn btn-secondary btn-sm" id="btnActualiser">🔄 Actualiser</button></div>'; }
+  else el.innerHTML = reponses.map(r => `<div class="recu ${r.sections ? 'ok' : ''}" data-id="${r.id}">
+      <div><strong>${esc(r.nom)}</strong>${r.poste ? ' · ' + esc(r.poste) : ''}</div>
+      <div style="font-size:.76rem;color:#5a6a80;">${r.sections ? '✅ Sections 1-2 reçues' : '⏳ En cours de rédaction'}${r.engagements ? ' · ✅ Engagements reçus' : ''}</div>
+      <button class="btn-del" title="Supprimer ce questionnaire">×</button></div>`).join('') + '<button class="btn btn-secondary btn-sm" id="btnActualiser" style="margin-top:4px;">🔄 Actualiser</button>';
+  $('btnActualiser').addEventListener('click', actualiser);
+  el.querySelectorAll('.recu .btn-del').forEach(b => b.addEventListener('click', async () => {
+    const id = +b.closest('.recu').dataset.id;
+    if (!confirm('Supprimer ce questionnaire en ligne? (ex. : en double ou rempli par erreur)')) return;
+    try { const r = await appel('conso_supprimer_reponse', { p_owner_token: cle, p_record_token: record, p_id: id }); if (!r || !r.ok) throw new Error('supp'); reponses = reponses.filter(x => x.id !== id); toutDessiner(); }
+    catch (e) { console.error(e); alert('La suppression a échoué. Réessayez.'); }
+  }));
+  updateEmpCount();
+}
+
+// Réponses des employés sous chaque thème qualitatif
+const VALEURS_CLINIQUE = [['q3_initiative', 'Initiative'], ['q3_respect', 'Respect'], ['q3_pro', 'Professionnalisme'], ['q3_equipe', 'Travail d\'équipe'], ['q3_service', 'Service client'], ['q3_appart', 'Appartenance']];
+function textesTheme(n, c) {
+  const v = k => (c[k] || '').trim();
+  if (n === 1) return [v('q1'), ...[1, 2, 3, 4].map(i => v(`q2_${i}_val`) ? `${v(`q2_${i}_val`)} : ${v(`q2_${i}_def`)}${v(`q2_${i}_ex`) ? ' (ex. : ' + v(`q2_${i}_ex`) + ')' : ''}` : '')].filter(Boolean).join('\n');
+  if (n === 2) return VALEURS_CLINIQUE.filter(([k]) => v(k)).map(([k, l]) => l + ' : ' + v(k)).join('\n');
+  if (n === 3) return v('q4');
+  if (n === 4) return [1, 2, 3].filter(i => v(`q5_${i}_sit`)).map(i => (v(`q5_${i}_val`) ? v(`q5_${i}_val`) + ' : ' : '') + v(`q5_${i}_sit`)).join('\n');
+  if (n === 5) return v('q6'); if (n === 6) return v('q7'); if (n === 7) return v('q8');
+  return '';
+}
+function dessinerQualitatif() {
+  const liste = enLigne();
+  document.querySelectorAll('.rep-emp').forEach(div => {
+    const n = +div.dataset.q;
+    if (n >= 8 || !liste.length) { div.innerHTML = ''; return; }
+    const lignes = liste.map(r => [r.nom, textesTheme(n, (r.sections && r.sections.champs) || {})]).filter(x => x[1]);
+    div.innerHTML = lignes.length ? `<details><summary>Voir les réponses des employés (${lignes.length})</summary>${lignes.map(([nom, tx]) => `<div class="rep-ligne"><b>${esc(nom)}</b>\n${esc(tx)}</div>`).join('')}</details>` : '';
+  });
+  const eng = reponses.filter(r => r.engagements);
+  $('engagementsEmp').innerHTML = eng.length ? eng.map(r => {
+    const c = r.engagements.champs || {};
+    const items = [1, 2, 3].filter(i => (c[`e${i}_quoi`] || '').trim()).map(i => `<div style="margin-top:6px;"><b>Engagement ${i} :</b> ${esc(c[`e${i}_quoi`])}${c[`e${i}_comment`] ? '<br><span style="color:#5a6a80;">Comment : ' + esc(c[`e${i}_comment`]) + '</span>' : ''}${c[`e${i}_date`] ? '<br><span style="color:#5a6a80;">Date limite : ' + dateLongue(c[`e${i}_date`]) + '</span>' : ''}</div>`).join('');
+    return `<div class="eng-emp"><h5>${esc(r.nom)}${r.poste ? ' · ' + esc(r.poste) : ''}</h5>${items || '<span style="color:#8a9ab0;">Aucun engagement inscrit.</span>'}</div>`;
+  }).join('') : '<div style="font-size:.83rem;color:#8a9ab0;">Aucun engagement reçu pour le moment.</div>';
+}
+
+function toutDessiner() { renderEmpList(); renderEmpSelector(); dessinerRecus(); dessinerQualitatif(); if ($('tab-2').classList.contains('active')) buildDashboard(); }
+
+// Compte des questionnaires : papier + en ligne
+const _updateEmpCount = updateEmpCount;
+updateEmpCount = function () {
+  const total = employees.length + reponses.length;
+  const complets = employees.filter(e => hasAllScores(e.id)).length + enLigne().length;
+  $('empCount').textContent = `${total} participant(s) (${reponses.length} en ligne, ${employees.length} papier)`;
+  $('empScored').textContent = `${complets} questionnaire(s) complet(s) ou transmis`;
+  $('empProgress').style.width = total > 0 ? (complets / total * 100) + '%' : '0%';
+};
+
+// ---------- Liste des démarches ----------
+async function afficherListe() {
+  params.delete('demarche'); majUrl(); record = null;
+  montrer('vListe');
+  const el = $('liste'); el.innerHTML = '<div class="no-data-msg">Chargement...</div>';
+  try {
+    const r = await appel('conso_liste', { p_owner_token: cle });
+    if (!r || !r.ok) throw new Error('liste');
+    if (!r.demarches.length) { el.innerHTML = '<div class="no-data-msg">Aucune démarche pour le moment.<br>Cliquez sur « + Nouvelle démarche » pour préparer une consolidation d\'équipe.</div>'; return; }
+    el.innerHTML = r.demarches.map(d => `<div class="sel-item" data-r="${esc(d.record_token)}"><div><div class="sel-titre">${esc(d.clinique || 'Consolidation d\'équipe')}${d.dept ? ' · ' + esc(d.dept) : ''}</div>
+      <div class="sel-date">${d.date ? 'Rencontre du ' + dateLongue(d.date) : 'Modifiée le ' + dateLongue(String(d.updated_at).slice(0, 10))}</div></div>
+      <span class="sel-date">${d.recues} questionnaire(s) en ligne</span>${d.ouvert ? '<span class="chip" style="background:#f0fdf4;color:#1a9e5a;">🟢 Questionnaire ouvert</span>' : '<span class="chip" style="background:#eef2f7;color:#5a6a80;">Questionnaire fermé</span>'}</div>`).join('');
+    el.querySelectorAll('.sel-item').forEach(x => x.addEventListener('click', () => ouvrir(x.dataset.r)));
+  } catch (e) { console.error(e); el.innerHTML = '<div class="no-data-msg">⚠️ Erreur de connexion. Rechargez la page.</div>'; }
+}
+async function nouvelle() {
+  try {
+    const r = await appel('conso_creer', { p_owner_token: cle });
+    if (!r || !r.ok) return alert('Impossible de créer une démarche pour le moment.');
+    await ouvrir(r.record_token, true);
+  } catch (e) { console.error(e); alert('Impossible de créer une démarche pour le moment.'); }
+}
+
+async function ouvrir(token, nouvelleDemarche) {
+  chargement = true;
+  try {
+    const r = await appel('conso_get', { p_owner_token: cle, p_record_token: token });
+    if (!r || !r.ok) { alert('Cette démarche est introuvable.'); chargement = false; return afficherListe(); }
+    record = token; params.set('demarche', token); majUrl();
+    const d = r.donnees || {};
+    CFG.forEach(k => $(k).value = (d.config || {})[k] || '');
+    if (!$('dateConso').value && nouvelleDemarche) $('dateConso').value = '';
+    employees = Array.isArray(d.employees) ? d.employees : [];
+    scores = d.scores || {};
+    currentEmp = null;
+    actions = Array.isArray(d.actions) && d.actions.length ? d.actions : [{ action: '', objectif: '', resp: '', date: '', statut: 'À faire' }, { action: '', objectif: '', resp: '', date: '', statut: 'À faire' }, { action: '', objectif: '', resp: '', date: '', statut: 'À faire' }];
+    document.querySelectorAll('[data-t]').forEach(el => el.value = (d.themes || {})[el.dataset.t] || '');
+    document.querySelectorAll('[data-n]').forEach(el => el.value = (d.suite || {})[el.dataset.n] || '');
+    reponses = r.reponses || []; lien = r.lien; ouvert = r.ouvert;
+    dessinerActions(); dessinerLien(); toutDessiner();
+    showTab(0);
+    montrer('vEdition');
+    statut('ok', '✅ Sauvegardé');
+    chargement = false;
+    if (nouvelleDemarche) { sauvegarder(); setTimeout(() => $('clinique').focus(), 50); }
+  } catch (e) { console.error(e); alert('Erreur de connexion. Réessayez.'); chargement = false; }
+}
+async function actualiser() {
+  try {
+    const r = await appel('conso_get', { p_owner_token: cle, p_record_token: record });
+    if (!r || !r.ok) throw new Error('get');
+    reponses = r.reponses || []; lien = r.lien; ouvert = r.ouvert;
+    dessinerLien(); toutDessiner(); statut('ok', '✅ Questionnaires à jour');
+  } catch (e) { console.error(e); statut('err', '⚠️ Erreur de connexion'); }
+}
+
+function donneesCompilation() {
+  const config = {}; CFG.forEach(k => config[k] = $(k).value);
+  const themes = {}; document.querySelectorAll('[data-t]').forEach(el => themes[el.dataset.t] = el.value);
+  const suite = {}; document.querySelectorAll('[data-n]').forEach(el => suite[el.dataset.n] = el.value);
+  return { config, employees, scores, themes, actions, suite };
+}
+function planifier() {
+  if (chargement || !record) return;
+  statut('', '⏳ Sauvegarde...');
+  clearTimeout(minuterie); minuterie = setTimeout(sauvegarder, 800);
+}
+async function sauvegarder() {
+  if (!record) return;
+  clearTimeout(minuterie); minuterie = null;
+  try {
+    const r = await appel('conso_sauver', { p_owner_token: cle, p_record_token: record, p_donnees: donneesCompilation() });
+    if (!r || !r.ok) throw new Error(r && r.erreur);
+    statut('ok', '✅ Sauvegardé');
+  } catch (e) { console.error(e); statut('err', '⚠️ Erreur de connexion : vos dernières modifications ne sont pas sauvegardées'); }
+}
+async function supprimerDemarche() {
+  if (!confirm('Supprimer définitivement cette démarche, sa compilation et tous les questionnaires reçus en ligne?')) return;
+  try {
+    clearTimeout(minuterie); minuterie = null;
+    const r = await appel('conso_supprimer', { p_owner_token: cle, p_record_token: record });
+    if (!r || !r.ok) throw new Error('supp');
+    afficherListe();
+  } catch (e) { console.error(e); alert('La suppression a échoué. Réessayez.'); }
+}
+
+// Chaque modification déclenche une sauvegarde
+['addEmp', 'removeEmp', 'saveScore'].forEach(nom => { const f = window[nom]; window[nom] = function (...a) { const r = f.apply(this, a); planifier(); return r; }; });
+$('empList').addEventListener('input', planifier);
+CFG.forEach(k => $(k).addEventListener('input', planifier));
+document.querySelectorAll('[data-t], [data-n]').forEach(el => el.addEventListener('input', planifier));
+$('actionBody').addEventListener('input', ev => { const tr = ev.target.closest('tr[data-i]'); if (!tr || !ev.target.dataset.a) return; actions[+tr.dataset.i][ev.target.dataset.a] = ev.target.value; planifier(); });
+$('actionBody').addEventListener('change', ev => { const tr = ev.target.closest('tr[data-i]'); if (!tr || !ev.target.dataset.a) return; actions[+tr.dataset.i][ev.target.dataset.a] = ev.target.value; planifier(); });
+$('actionBody').addEventListener('click', ev => {
+  if (!ev.target.closest('.btn-del')) return;
+  const i = +ev.target.closest('tr').dataset.i, a = actions[i];
+  if ((a.action || a.objectif || a.resp) && !confirm('Retirer cette action?')) return;
+  actions.splice(i, 1); dessinerActions(); planifier();
+});
+$('btnNouvelle').addEventListener('click', nouvelle);
+$('btnRetour').addEventListener('click', async () => { if (minuterie) await sauvegarder(); afficherListe(); });
+$('btnSupprimer').addEventListener('click', supprimerDemarche);
+window.addEventListener('beforeunload', () => { if (minuterie) sauvegarder(); });
+
+(async () => {
+  let t = params.get('clinique');
+  try { if (!t) t = localStorage.getItem('gestionmel_clinique_token'); } catch (e) {}
+  if (!t || !/^[0-9a-f-]{36}$/i.test(t)) t = crypto.randomUUID();
+  try { localStorage.setItem('gestionmel_clinique_token', t); } catch (e) {}
+  params.set('clinique', t); majUrl();
+  cle = await gmAcces.ouvrir(sb, t, 'gest');
+  const existant = params.get('demarche');
+  if (existant && /^[0-9a-f-]{36}$/i.test(existant)) await ouvrir(existant); else await afficherListe();
+})();
 </script>
 
 
