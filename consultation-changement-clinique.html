@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultation sur un changement | Gestion Mel</title>
+<style>
+  :root{
+    --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
+    --light:#f4f8ff;--border:#d0dff0;--text:#1a2535;
+    --green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+  .page-header{background:var(--dark);color:white;padding:16px 36px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .page-header .brand{font-size:1.4rem;font-weight:700;}
+  .page-header .brand span{color:var(--accent);}
+  .page-header .sub{font-size:.85rem;opacity:.85;}
+  .container{max-width:940px;margin:26px auto 70px;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+  .doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:22px 36px;}
+  .doc-header h1{font-size:1.35rem;font-weight:700;margin-bottom:4px;}
+  .doc-header p{font-size:.84rem;opacity:.75;}
+  .vue{display:none;}
+  .vue.active{display:block;}
+
+  /* SÉLECTEUR */
+  .sel-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:20px 36px;border-bottom:1px solid var(--border);}
+  .sel-top h2{font-size:1rem;color:var(--dark);}
+  .sel-list{padding:16px 36px 26px;display:flex;flex-direction:column;gap:9px;}
+  .sel-item{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:center;border:1.5px solid var(--border);border-radius:9px;padding:13px 16px;cursor:pointer;transition:all .15s;background:white;}
+  .sel-item:hover{border-color:var(--accent);background:var(--light);}
+  .sel-titre{font-weight:700;font-size:.92rem;}
+  .sel-date{font-size:.78rem;color:#5a6a80;margin-top:3px;}
+  .sel-etape{font-size:.76rem;color:#5a6a80;white-space:nowrap;}
+  .chip{display:inline-block;border-radius:12px;padding:3px 10px;font-size:.74rem;font-weight:700;white-space:nowrap;}
+  .vide-etat{text-align:center;color:#5a6a80;font-size:.9rem;line-height:1.8;padding:34px 10px;}
+
+  /* BARRE DE L'ÉDITEUR */
+  .edit-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 36px;background:var(--light);border-bottom:1px solid var(--border);}
+  .sync{font-size:.78rem;font-weight:700;color:#5a6a80;}
+  .sync.ok{color:var(--green);}
+  .sync.err{color:var(--red);}
+
+  /* ÉTAPES */
+  .phase-bar{display:flex;background:#f0f5fb;border-bottom:2px solid var(--border);overflow-x:auto;}
+  .phase-step{padding:12px 18px;font-size:.8rem;font-weight:600;color:#5a6a80;display:flex;align-items:center;gap:7px;white-space:nowrap;border:none;background:none;font-family:inherit;border-bottom:3px solid transparent;cursor:pointer;}
+  .phase-step:hover{color:var(--blue);background:#e8f0fb;}
+  .phase-step.active{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+  .phase-num{width:20px;height:20px;border-radius:50%;background:#ccc;color:white;font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .phase-step.active .phase-num{background:var(--accent);}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
+
+  .section{padding:20px 36px;border-bottom:1px solid var(--border);}
+  .section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .field{display:flex;flex-direction:column;gap:4px;}
+  .field.full{grid-column:1 / -1;}
+  label{font-size:.74rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+  input[type=text],input[type=date],select{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.88rem;font-family:inherit;color:var(--text);background:var(--light);}
+  input:focus,select:focus{outline:none;border-color:var(--accent);background:white;}
+  textarea{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-size:.86rem;font-family:inherit;color:var(--text);background:var(--light);resize:vertical;line-height:1.65;min-height:60px;}
+  textarea:focus{outline:none;border-color:var(--accent);background:white;}
+  .titre-box{background:var(--light);border:2px solid var(--accent);border-radius:8px;padding:14px 18px;margin-bottom:16px;}
+  .titre-box input{width:100%;border:none;background:transparent;font-size:1.1rem;font-weight:700;color:var(--dark);font-family:inherit;padding:0;}
+  .titre-box input:focus{outline:none;background:transparent;}
+  .titre-box input::placeholder{color:#b0bec5;font-weight:400;}
+  .ctx-grid{display:flex;flex-direction:column;gap:10px;}
+  .ctx-row{display:grid;grid-template-columns:140px 1fr;gap:10px;align-items:start;}
+  .ctx-tag{padding:10px 12px;border-radius:7px;font-size:.78rem;font-weight:700;color:white;text-align:center;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:4px;padding:10px 14px;font-size:.84rem;color:#2a3a4a;margin-bottom:14px;line-height:1.7;}
+
+  /* EMPLOYÉS ET GRILLE */
+  .emp-list{display:flex;flex-direction:column;gap:7px;margin-bottom:10px;}
+  .emp-row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;}
+  .emp-num{width:26px;height:26px;border-radius:6px;background:#2c3e50;color:white;font-size:.76rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .btn-del{width:28px;height:28px;border-radius:6px;border:1.5px solid #e0e0e0;background:white;color:var(--red);cursor:pointer;font-size:.95rem;font-family:inherit;}
+  .btn-del:hover{background:#fef2f2;border-color:var(--red);}
+  .btn-add{display:flex;align-items:center;gap:7px;padding:7px 14px;background:var(--light);border:1.5px dashed var(--accent);border-radius:7px;color:var(--blue);font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;width:fit-content;}
+  .btn-add:hover{background:#e8f0fb;}
+  .table-wrap{overflow-x:auto;}
+  .react-table{width:100%;border-collapse:collapse;font-size:.84rem;}
+  .react-table th{padding:9px 10px;font-size:.74rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .react-table th.th-emp{background:var(--dark);text-align:left;min-width:140px;}
+  .react-table th.th-fav{background:var(--green);width:74px;}
+  .react-table th.th-neut{background:#7f8c8d;width:74px;}
+  .react-table th.th-def{background:var(--red);width:74px;}
+  .react-table th.th-quest{background:var(--blue);text-align:left;min-width:180px;}
+  .react-table th.th-sugg{background:var(--purple);text-align:left;min-width:180px;}
+  .react-table td{border:1px solid var(--border);padding:6px 8px;vertical-align:top;}
+  .react-table td:first-child{font-weight:600;vertical-align:middle;}
+  .react-table td.choice-cell{text-align:center;vertical-align:middle;}
+  .react-table td textarea{border:none;background:transparent;min-height:40px;padding:2px;font-size:.82rem;}
+  .react-table td textarea:focus{background:#fffde7;}
+  .cbtn{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:white;font-size:.9rem;cursor:pointer;font-family:inherit;}
+  .cbtn:hover{border-color:var(--accent);}
+  .cbtn.c-fav{background:var(--green);border-color:var(--green);}
+  .cbtn.c-neut{background:#7f8c8d;border-color:#7f8c8d;}
+  .cbtn.c-def{background:var(--red);border-color:var(--red);}
+
+  /* RÉSULTATS */
+  .results-box{background:var(--light);border:1.5px solid var(--border);border-radius:8px;padding:14px 18px;}
+  .res-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .res-lbl{font-size:.82rem;font-weight:700;min-width:120px;}
+  .res-bar-wrap{flex:1;background:#e0e0e0;border-radius:4px;height:10px;overflow:hidden;}
+  .res-bar{height:10px;border-radius:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .res-count{font-size:.84rem;font-weight:700;min-width:70px;text-align:right;}
+  .thermo-bar{height:24px;border-radius:8px;display:flex;overflow:hidden;border:1px solid var(--border);margin-top:12px;}
+  .thermo-bar div{display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .climat{display:inline-block;padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:700;margin-top:10px;}
+
+  /* CHOIX (décision, satisfaction) */
+  .choix{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px;}
+  .choix button{padding:8px 15px;border-radius:7px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:#5a6a80;}
+  .choix button:hover{border-color:var(--accent);}
+  .choix button.sel{color:white;}
+  .decision-block{background:#fff8e1;border-left:4px solid var(--orange);border-radius:6px;padding:14px 16px;}
+  .suivi-block{background:#f0fdf4;border:1.5px solid rgba(26,158,90,.2);border-radius:8px;padding:16px 18px;}
+  .suivi-title{font-size:.8rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+
+  .actions{padding:16px 36px;background:var(--light);display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap;}
+  .btn{padding:9px 20px;border-radius:7px;font-size:.87rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .2s;}
+  .btn-primary{background:var(--blue);color:white;}
+  .btn-primary:hover{background:#155a9e;}
+  .btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+  .btn-secondary:hover{background:#e8f0fb;}
+  .btn-danger{background:white;color:var(--red);border:1.5px solid var(--red);}
+  .btn-sm{padding:6px 13px;font-size:.8rem;}
+  .footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:14px;}
+
+  @media print{
+    body{background:white;font-size:11px;}
+    .page-header,.phase-bar,.actions,.btn-add,.btn-del,.btn,.edit-bar{display:none!important;}
+    .container{box-shadow:none;margin:0;border-radius:0;}
+    .tab-content{display:block!important;}
+    input,textarea,select{border:none!important;background:transparent!important;}
+    .section{page-break-inside:avoid;}
+    .choix button:not(.sel){display:none;}
+  }
+  @media(max-width:640px){
+    .section,.sel-top,.sel-list,.edit-bar,.actions{padding-left:16px;padding-right:16px;}
+    .grid,.grid3{grid-template-columns:1fr;}
+    .ctx-row{grid-template-columns:1fr;}
+    .page-header{padding:14px 16px;}
+    .sel-item{grid-template-columns:1fr;gap:6px;}
+  }
+</style>
+<script>
+/* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
+window.gmAcces = (function () {
+  const DUREE = 8 * 60 * 60 * 1000;
+  const CACHE = 'gm_acces_v1';
+  const ORIGINES = { fiche: "Fiche d'information employé", conge: 'Demande de congé', boite: 'Boîte à suggestions' };
+  const OUBLI = 'Mot de passe oublié? Écrivez à <strong>info@gestionmel.com</strong> en indiquant le nom de votre clinique.';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function css() {
+    if (document.getElementById('gmAccesCss')) return;
+    const s = document.createElement('style');
+    s.id = 'gmAccesCss';
+    s.textContent = `
+      html.gma-ouvert body > *:not(#gmAccesOverlay){visibility:hidden!important;}
+      #gmAccesOverlay{position:fixed;inset:0;z-index:100000;background:#eef4fb;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:40px 16px;font-family:'Segoe UI',Arial,sans-serif;color:#1a2535;}
+      #gmAccesOverlay *{box-sizing:border-box;}
+      .gma-carte{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(13,27,42,.12);overflow:hidden;}
+      .gma-tete{background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);color:#fff;padding:18px 24px;}
+      .gma-tete .gma-marque{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.5px;margin-bottom:6px;}
+      .gma-tete .gma-marque span{color:#2196f3;}
+      .gma-tete h2{font-size:1.1rem;font-weight:700;margin:0;}
+      .gma-corps{padding:20px 24px 22px;}
+      .gma-texte{font-size:.86rem;line-height:1.6;color:#3a4a60;margin:0 0 14px;}
+      .gma-champ{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+      .gma-champ label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+      .gma-champ input{border:1.5px solid #d0dff0;border-radius:7px;padding:10px 12px;font-size:.95rem;font-family:inherit;background:#f4f8ff;color:#1a2535;width:100%;}
+      .gma-champ input:focus{outline:none;border-color:#2196f3;background:#fff;}
+      .gma-btn{display:block;width:100%;padding:11px 16px;border-radius:8px;border:none;background:#1a6abf;color:#fff;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;}
+      .gma-btn:hover{background:#155a9e;}
+      .gma-btn:disabled{opacity:.6;cursor:wait;}
+      .gma-btn2{display:block;width:100%;padding:10px 16px;border-radius:8px;border:1.5px solid #1a6abf;background:#fff;color:#1a6abf;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;margin-top:10px;}
+      .gma-lien{background:none;border:none;color:#1a6abf;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 0;margin-top:6px;text-decoration:underline;}
+      .gma-err{display:none;background:#fef2f2;border:1px solid rgba(192,57,43,.25);color:#c0392b;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-ok{display:none;background:#f0fdf4;border:1px solid rgba(26,158,90,.25);color:#1a9e5a;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-astuce{background:#e8f4fd;border-left:3px solid #1a6abf;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#0d3a6e;margin-bottom:14px;line-height:1.55;}
+      .gma-avert{background:#fff8e1;border-left:3px solid #e67e22;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-bottom:14px;line-height:1.55;}
+      .gma-pied{font-size:.74rem;color:#8a9ab0;text-align:center;margin-top:14px;line-height:1.6;}
+      .gma-sep{border:none;border-top:1px solid #d0dff0;margin:18px 0;}
+      .gma-sous{font-size:.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;}
+      #gmAccesBarre{position:fixed;left:16px;bottom:16px;z-index:9990;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0dff0;border-radius:22px;padding:5px 6px 5px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:'Segoe UI',Arial,sans-serif;font-size:.74rem;font-weight:600;color:#1a6abf;}
+      #gmAccesBarre button{border:1px solid #d0dff0;background:#f4f8ff;color:#1a2535;border-radius:16px;padding:4px 10px;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+      #gmAccesBarre button:hover{border-color:#2196f3;color:#1a6abf;}
+      @media(max-width:600px){#gmAccesBarre>span{display:none;}#gmAccesBarre{padding:4px;left:8px;bottom:12px;}}
+      @media print{#gmAccesBarre,#gmAccesOverlay{display:none!important;}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function lire() { try { return JSON.parse(sessionStorage.getItem(CACHE) || '{}') || {}; } catch (e) { return {}; } }
+  function ecrire(c) { try { sessionStorage.setItem(CACHE, JSON.stringify(c)); } catch (e) { } }
+  function enCache(owner) { const c = lire()[owner]; return (c && c.exp > Date.now()) ? c : null; }
+  function memoriser(owner, r) {
+    const c = lire(); const prev = (c[owner] && c[owner].exp > Date.now()) ? c[owner] : {};
+    const gest = r.cle_gest || prev.gest || null;
+    c[owner] = { gest, secr: r.cle_secr || prev.secr || null, estGest: !!gest, exp: Date.now() + DUREE };
+    ecrire(c);
+    return c[owner];
+  }
+  function oublier(owner) { const c = lire(); delete c[owner]; ecrire(c); }
+  function fixerOwner(owner) {
+    try { localStorage.setItem('gestionmel_clinique_token', owner); } catch (e) { }
+    const p = new URLSearchParams(location.search); p.set('clinique', owner);
+    history.replaceState({}, '', location.pathname + '?' + p.toString());
+  }
+
+  function ecran(html) {
+    css();
+    let o = document.getElementById('gmAccesOverlay');
+    if (!o) { o = document.createElement('div'); o.id = 'gmAccesOverlay'; document.body.appendChild(o); }
+    o.innerHTML = '<div class="gma-carte">' + html + '</div>';
+    document.documentElement.classList.add('gma-ouvert');
+    o.scrollTop = 0;
+    const premier = o.querySelector('input'); if (premier) setTimeout(() => premier.focus(), 50);
+    return o;
+  }
+  function fermer() {
+    const o = document.getElementById('gmAccesOverlay'); if (o) o.remove();
+    document.documentElement.classList.remove('gma-ouvert');
+  }
+  function tete(titre) {
+    return '<div class="gma-tete"><div class="gma-marque">Gestion<span>Mel</span></div><h2>' + titre + '</h2></div>';
+  }
+  function message(r) {
+    if (!r) return 'Une erreur est survenue. Vérifiez votre connexion et réessayez.';
+    switch (r.erreur) {
+      case 'mot_de_passe': return 'Mot de passe incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'code': return 'Code incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'bloque': return 'Trop d\'essais. Réessayez dans ' + (r.minutes || 15) + ' minute(s).';
+      case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 6 caractères.';
+      case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+      case 'code_identique': return 'Le code du secrétariat doit être différent du mot de passe gestionnaire.';
+      case 'pas_de_mot_de_passe': return 'Aucun mot de passe gestionnaire n\'est encore créé pour cette clinique.';
+      case 'limite': return 'Limite atteinte. Réessayez un peu plus tard.';
+      default: return 'Une erreur est survenue. Réessayez.';
+    }
+  }
+  async function appel(sb, nom, args) {
+    try { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+    catch (e) { console.error(e); return null; }
+  }
+
+  // Formulaire generique : valider(valeurs) retourne {erreur} ou {resultat}
+  function formulaire({ titre, texte, astuce, avert, champs, bouton, alternative, pied, valider }) {
+    return new Promise(resolve => {
+      const html = tete(titre) + '<form class="gma-corps" autocomplete="off">' +
+        (texte ? '<p class="gma-texte">' + texte + '</p>' : '') +
+        (avert ? '<div class="gma-avert">' + avert + '</div>' : '') +
+        (astuce ? '<div class="gma-astuce">' + astuce + '</div>' : '') +
+        '<div class="gma-err"></div>' +
+        champs.map(c => '<div class="gma-champ"><label>' + c.label + '</label><input name="' + c.nom + '" type="' + (c.type || 'password') + '"' +
+          (c.type === 'text' ? ' autocomplete="off"' : ' autocomplete="new-password"') + (c.max ? ' maxlength="' + c.max + '"' : '') + '></div>').join('') +
+        '<button type="submit" class="gma-btn">' + bouton + '</button>' +
+        (alternative ? '<p class="gma-texte" style="margin:16px 0 0;">' + alternative.texte + '</p><button type="button" class="gma-btn2" data-alt="1">' + alternative.bouton + '</button>' : '') +
+        (pied ? '<div class="gma-pied">' + pied + '</div>' : '') +
+        '</form>';
+      const o = ecran(html);
+      const f = o.querySelector('form'), err = o.querySelector('.gma-err'), btn = o.querySelector('.gma-btn');
+      const alt = o.querySelector('[data-alt]');
+      if (alt) alt.onclick = () => resolve({ alt: true });
+      f.onsubmit = async ev => {
+        ev.preventDefault();
+        const v = {}; champs.forEach(c => { v[c.nom] = f.elements[c.nom].value; });
+        err.style.display = 'none'; btn.disabled = true;
+        const r = await valider(v);
+        btn.disabled = false;
+        if (r && r.erreur) { err.textContent = r.erreur; err.style.display = 'block'; const i = f.querySelector('input'); if (i) { i.select(); i.focus(); } return; }
+        resolve(r.resultat);
+      };
+    });
+  }
+
+  function maintenance() {
+    ecran(tete('⏳ Mise à jour en cours') + '<div class="gma-corps"><p class="gma-texte">Cet outil est en cours de mise à jour pour mieux protéger vos données. Revenez dans quelques minutes, puis rafraîchissez la page.</p><div class="gma-pied">Le problème persiste? Écrivez à <strong>info@gestionmel.com</strong>.</div></div>');
+  }
+
+  function formDefinir(sb, owner, niveau) {
+    return formulaire({
+      titre: '🔐 Créez votre mot de passe gestionnaire',
+      texte: 'Cet outil contient des informations confidentielles. Choisissez un mot de passe que vous seule connaîtrez (au moins 6 caractères). Il servira pour tous les outils réservés à la gestion.',
+      avert: '<strong>Réservé à la gestionnaire.</strong> Si vous n\'êtes pas la gestionnaire de la clinique, ne créez pas de mot de passe : demandez-lui d\'ouvrir cet outil une première fois.',
+      astuce: niveau === 'secr' ? 'Vous pourrez ensuite créer un code pour vos secrétaires avec le bouton <strong>🔑 Accès</strong> en bas à gauche.' : '',
+      champs: [{ nom: 'p1', label: 'Nouveau mot de passe' }, { nom: 'p2', label: 'Confirmer le mot de passe' }],
+      bouton: 'Créer le mot de passe et ouvrir',
+      pied: 'Notez-le dans un endroit sûr.',
+      valider: async v => {
+        if (v.p1.length < 6) return { erreur: message({ erreur: 'mot_de_passe_court' }) };
+        if (v.p1 !== v.p2) return { erreur: 'Les deux mots de passe ne sont pas identiques.' };
+        const r = await appel(sb, 'acces_definir', { p_owner_token: owner, p_pin: v.p1 });
+        if (r && r.erreur === 'deja_defini') { location.reload(); return { erreur: 'Un mot de passe existe déjà. Rechargement...' }; }
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function formOuvrir(sb, owner, niveau, etat, opts) {
+    const secr = niveau === 'secr';
+    let astuce = '';
+    if (etat.origine && ORIGINES[etat.origine]) astuce = 'Le mot de passe gestionnaire est le même que celui de l\'outil <strong>' + ORIGINES[etat.origine] + '</strong>.';
+    if (secr && !etat.code_secr) astuce += (astuce ? '<br>' : '') + 'Le code du secrétariat n\'est pas encore créé. La gestionnaire peut le créer avec le bouton <strong>🔑 Accès</strong>, une fois l\'outil ouvert.';
+    return formulaire({
+      titre: secr ? '🔒 Outil réservé au secrétariat' : '🔒 Outil réservé à la gestion',
+      texte: secr ? 'Entrez le code du secrétariat ou le mot de passe de la gestionnaire.' : 'Entrez le mot de passe gestionnaire pour ouvrir cet outil.',
+      astuce,
+      champs: [{ nom: 'p', label: secr ? 'Code ou mot de passe' : 'Mot de passe gestionnaire' }],
+      bouton: 'Ouvrir',
+      alternative: opts.alternative,
+      pied: OUBLI,
+      valider: async v => {
+        if (!v.p) return { erreur: secr ? 'Entrez votre code.' : 'Entrez votre mot de passe.' };
+        const r = await appel(sb, 'acces_ouvrir', { p_owner_token: owner, p_niveau: niveau, p_pin: v.p });
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function barre(sb, owner, niveau) {
+    css();
+    const c = enCache(owner) || {};
+    let b = document.getElementById('gmAccesBarre');
+    if (!b) { b = document.createElement('div'); b.id = 'gmAccesBarre'; document.body.appendChild(b); }
+    b.innerHTML = '<span>' + (c.estGest ? '🔓 Gestion' : '🔓 Secrétariat') + '</span>' +
+      (c.estGest ? '<button type="button" data-a="acces" title="Mot de passe et code du secrétariat">🔑 Accès</button>' : '') +
+      '<button type="button" data-a="lock" title="Fermer la session sur cet appareil">🔒 Verrouiller</button>';
+    b.querySelector('[data-a="lock"]').onclick = () => { oublier(owner); location.reload(); };
+    const a = b.querySelector('[data-a="acces"]'); if (a) a.onclick = () => panneau(sb, owner);
+  }
+
+  async function panneau(sb, owner) {
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner }) || {};
+    const o = ecran(tete('🔑 Gérer les accès') + '<div class="gma-corps">' +
+      '<div class="gma-ok" id="gmaOk"></div><div class="gma-err" id="gmaErr"></div>' +
+      '<p class="gma-sous">Code du secrétariat</p>' +
+      '<p class="gma-texte">Les secrétaires entrent ce code pour ouvrir le Balancement de fin de journée, la Liste prioritaire, la Petite caisse et les Comptes à recevoir. Votre mot de passe gestionnaire fonctionne aussi dans ces outils.</p>' +
+      '<div class="gma-astuce" id="gmaEtatCode">' + (etat.code_secr ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.') + '</div>' +
+      '<div class="gma-champ"><label>Nouveau code du secrétariat (4 caractères et plus)</label><input id="gmaCode" type="text" autocomplete="off" maxlength="30"></div>' +
+      '<div class="gma-champ"><label>Votre mot de passe gestionnaire</label><input id="gmaPinC" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnCode">Enregistrer le code</button>' +
+      (etat.code_secr ? '<button type="button" class="gma-lien" id="gmaBtnRetirer">Retirer le code du secrétariat</button>' : '') +
+      '<hr class="gma-sep">' +
+      '<p class="gma-sous">Changer le mot de passe gestionnaire</p>' +
+      '<div class="gma-champ"><label>Mot de passe actuel</label><input id="gmaPinA" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Nouveau mot de passe (6 caractères et plus)</label><input id="gmaPinN" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Confirmer le nouveau mot de passe</label><input id="gmaPinN2" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnPin">Changer le mot de passe</button>' +
+      '<button type="button" class="gma-btn2" id="gmaFermer">Fermer</button>' +
+      '<div class="gma-pied">Le nouveau mot de passe s\'applique à tous les outils réservés à la gestion.</div>' +
+      '</div>');
+    const okEl = o.querySelector('#gmaOk'), errEl = o.querySelector('#gmaErr');
+    const montrer = (ok, txt) => { okEl.style.display = ok ? 'block' : 'none'; errEl.style.display = ok ? 'none' : 'block'; (ok ? okEl : errEl).textContent = txt; o.scrollTop = 0; };
+    o.querySelector('#gmaFermer').onclick = fermer;
+    const envoyerCode = async code => {
+      const pin = o.querySelector('#gmaPinC').value;
+      if (!pin) return montrer(false, 'Entrez votre mot de passe gestionnaire.');
+      if (code && code.trim().length < 4) return montrer(false, message({ erreur: 'code_court' }));
+      const r = await appel(sb, 'acces_code_secr', { p_owner_token: owner, p_pin: pin, p_code: code });
+      if (!r || !r.ok) return montrer(false, message(r));
+      memoriser(owner, r);
+      o.querySelector('#gmaCode').value = ''; o.querySelector('#gmaPinC').value = '';
+      o.querySelector('#gmaEtatCode').textContent = code ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.';
+      montrer(true, code ? 'Code du secrétariat enregistré. Transmettez-le à vos secrétaires.' : 'Code du secrétariat retiré.');
+    };
+    o.querySelector('#gmaBtnCode').onclick = () => {
+      const code = o.querySelector('#gmaCode').value.trim();
+      if (!code) return montrer(false, 'Entrez le nouveau code du secrétariat.');
+      envoyerCode(code);
+    };
+    const ret = o.querySelector('#gmaBtnRetirer');
+    if (ret) ret.onclick = () => { if (confirm('Retirer le code? Les secrétaires ne pourront plus ouvrir les outils du secrétariat.')) envoyerCode(''); };
+    o.querySelector('#gmaBtnPin').onclick = async () => {
+      const a = o.querySelector('#gmaPinA').value, n = o.querySelector('#gmaPinN').value, n2 = o.querySelector('#gmaPinN2').value;
+      if (!a) return montrer(false, 'Entrez votre mot de passe actuel.');
+      if (n.length < 6) return montrer(false, message({ erreur: 'mot_de_passe_court' }));
+      if (n !== n2) return montrer(false, 'Les deux nouveaux mots de passe ne sont pas identiques.');
+      const r = await appel(sb, 'acces_changer_pin', { p_owner_token: owner, p_pin: a, p_nouveau: n });
+      if (!r || !r.ok) return montrer(false, r && r.erreur === 'code_identique' ? 'Le nouveau mot de passe doit être différent du code du secrétariat.' : message(r));
+      memoriser(owner, r);
+      ['#gmaPinA', '#gmaPinN', '#gmaPinN2'].forEach(s => { o.querySelector(s).value = ''; });
+      montrer(true, 'Mot de passe gestionnaire modifié.');
+    };
+  }
+
+  // Point d'entree : retourne la cle de l'outil (ou null si "alternative" choisie)
+  async function ouvrir(sb, owner, niveau, opts) {
+    opts = opts || {};
+    let c = enCache(owner);
+    if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner });
+    if (!etat || !etat.ok) { maintenance(); return new Promise(() => { }); }
+    if (etat.owner_token && etat.owner_token !== owner) {
+      owner = etat.owner_token; fixerOwner(owner);
+      c = enCache(owner);
+      if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    }
+    const r = etat.configure ? await formOuvrir(sb, owner, niveau, etat, opts) : await formDefinir(sb, owner, niveau);
+    if (r && r.alt) { fermer(); return null; }
+    const m = memoriser(owner, r);
+    fermer();
+    barre(sb, owner, niveau);
+    return m[niveau];
+  }
+
+  function cle(owner, niveau) { const c = enCache(owner); return c ? c[niveau] || null : null; }
+
+  return { ouvrir, cle, esc, ecran, fermer, tete, message, appel, formulaire, oublier, maintenance, OUBLI };
+})();
+</script>
+
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div class="sub">Clinique dentaire : gestion du changement</div></div>
+
+<div class="container">
+  <div class="doc-header">
+    <h1>Consultation sur un changement</h1>
+    <p>Présentation, consultation de l'équipe, décision, puis suivi de l'implantation</p>
+  </div>
+
+  <div class="vue active" id="vChargement"><div class="vide-etat" style="padding:70px 20px;">⏳ Chargement...</div></div>
+
+  <!-- ===== LISTE DES CONSULTATIONS ===== -->
+  <div class="vue" id="vListe">
+    <div class="sel-top">
+      <h2>📁 Mes consultations</h2>
+      <button class="btn btn-primary" id="btnNouvelle">+ Nouvelle consultation</button>
+    </div>
+    <div class="sel-list" id="liste"></div>
+  </div>
+
+  <!-- ===== UNE CONSULTATION ===== -->
+  <div class="vue" id="vEdition">
+    <div class="edit-bar">
+      <button class="btn btn-secondary btn-sm" id="btnRetour">← Mes consultations</button>
+      <span class="sync" id="sync"></span>
+      <button class="btn btn-danger btn-sm" id="btnSupprimer">🗑️ Supprimer</button>
+    </div>
+    <div class="phase-bar">
+      <button class="phase-step active" data-etape="0"><span class="phase-num">1</span> Présentation du changement</button>
+      <button class="phase-step" data-etape="1"><span class="phase-num">2</span> Consultation de l'équipe</button>
+      <button class="phase-step" data-etape="2"><span class="phase-num">3</span> Résultats et décision</button>
+      <button class="phase-step" data-etape="3"><span class="phase-num">4</span> Suivi de l'implantation</button>
+    </div>
+
+    <!-- ÉTAPE 1 -->
+    <div class="tab-content active" id="tab-0">
+      <div class="section">
+        <div class="section-title">Identification</div>
+        <div class="grid3">
+          <div class="field"><label>Nom de la clinique</label><input type="text" data-k="clinique" placeholder="Clinique dentaire..."></div>
+          <div class="field"><label>Date de la consultation</label><input type="date" data-k="date_consult"></div>
+          <div class="field"><label>Date limite de réponse</label><input type="date" data-k="date_limite"></div>
+          <div class="field"><label>Présenté par</label><input type="text" data-k="presente_par" placeholder="Nom du gestionnaire"></div>
+          <div class="field"><label>Personnes concernées</label><input type="text" data-k="concernees" placeholder="Ex. : toute l'équipe, hygiénistes..."></div>
+          <div class="field"><label>Priorité</label>
+            <select data-k="priorite"><option>🟡 Normale</option><option>🔴 Urgente</option><option>🟢 Planifiée</option></select>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Description du changement</div>
+        <div class="titre-box"><input type="text" data-k="titre" maxlength="200" placeholder="✏️ Titre du changement proposé..."></div>
+        <div class="ctx-grid">
+          <div class="ctx-row"><div class="ctx-tag" style="background:#1a6abf;">📋 Qu'est-ce qui change?</div><textarea data-k="quoi" style="min-height:70px;" placeholder="Décrivez précisément ce qui va changer : procédure, horaire, outil, politique, rôle, équipement..."></textarea></div>
+          <div class="ctx-row"><div class="ctx-tag" style="background:#1a9e5a;">💡 Pourquoi ce changement?</div><textarea data-k="pourquoi" style="min-height:70px;" placeholder="Expliquez les raisons, les problèmes que ça résout, les bénéfices attendus pour l'équipe et la clinique..."></textarea></div>
+          <div class="ctx-row"><div class="ctx-tag" style="background:#e67e22;">📅 Quand?</div><textarea data-k="quand" placeholder="Date d'entrée en vigueur, délai de transition, phases de mise en œuvre..."></textarea></div>
+          <div class="ctx-row"><div class="ctx-tag" style="background:#8e44ad;">⚙️ Comment?</div><textarea data-k="comment" placeholder="Modalités d'implantation, formations prévues, ressources disponibles, étapes concrètes..."></textarea></div>
+          <div class="ctx-row"><div class="ctx-tag" style="background:#2c3e50;">👥 Qui est concerné?</div><textarea data-k="qui" placeholder="Postes, personnes ou départements directement touchés par ce changement..."></textarea></div>
+          <div class="ctx-row"><div class="ctx-tag" style="background:#c0392b;">🔒 Ce qui ne change PAS</div><textarea data-k="inchange" placeholder="Précisez ce qui reste inchangé, pour rassurer l'équipe sur les éléments stables..."></textarea></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Bénéfices attendus pour l'équipe</div>
+        <div class="info-box">💡 Présentez les bénéfices concrets pour l'équipe, pas seulement pour la clinique. Cela favorise l'adhésion.</div>
+        <textarea data-k="benefices" style="min-height:80px;" placeholder="Ex. : moins de confusion, gain de temps, meilleure communication, conditions de travail améliorées, réduction du stress..."></textarea>
+      </div>
+      <div class="actions"><span></span><button class="btn btn-primary" data-aller="1">Étape 2 : consultation →</button></div>
+    </div>
+
+    <!-- ÉTAPE 2 -->
+    <div class="tab-content" id="tab-1">
+      <div class="section">
+        <div class="section-title">Employés consultés et leurs réactions</div>
+        <div class="info-box">Inscrivez les employés consultés, puis notez la réaction de chacun, ses questions et ses suggestions. Tout est sauvegardé automatiquement.</div>
+        <div class="table-wrap">
+          <table class="react-table">
+            <thead><tr><th class="th-emp">Employé(e)</th><th class="th-fav">👍 Favorable</th><th class="th-neut">😐 Neutre</th><th class="th-def">👎 Défavorable</th><th class="th-quest">❓ Questions et préoccupations</th><th class="th-sugg">💡 Suggestions</th><th style="background:var(--dark);width:40px;"></th></tr></thead>
+            <tbody id="grille"></tbody>
+          </table>
+        </div>
+        <button class="btn-add" id="btnAjouterEmp" style="margin-top:10px;">+ Ajouter un(e) employé(e)</button>
+      </div>
+      <div class="actions"><button class="btn btn-secondary" data-aller="0">← Retour</button><button class="btn btn-primary" data-aller="2">Étape 3 : résultats →</button></div>
+    </div>
+
+    <!-- ÉTAPE 3 -->
+    <div class="tab-content" id="tab-2">
+      <div class="section">
+        <div class="section-title">Résultats de la consultation</div>
+        <div id="resultats"></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Synthèse des questions et préoccupations</div>
+        <div class="grid">
+          <div class="field"><label>Questions soulevées par l'équipe</label><textarea data-k="syn_questions" style="min-height:80px;" placeholder="Résumez les principales questions posées lors de la consultation..."></textarea></div>
+          <div class="field"><label>Préoccupations principales</label><textarea data-k="syn_preoccupations" style="min-height:80px;" placeholder="Quelles résistances ou craintes ont été identifiées? Qu'est-ce qui inquiète l'équipe?"></textarea></div>
+          <div class="field"><label>Suggestions retenues</label><textarea data-k="syn_suggestions" style="min-height:80px;" placeholder="Quelles suggestions de l'équipe seront intégrées dans l'implantation?"></textarea></div>
+          <div class="field"><label>Points à clarifier avant l'implantation</label><textarea data-k="syn_clarifier" style="min-height:80px;" placeholder="Qu'est-ce qui doit être clarifié, ajusté ou communiqué avant d'aller de l'avant?"></textarea></div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Décision finale</div>
+        <div class="decision-block">
+          <label>Suite donnée au changement proposé :</label>
+          <div class="choix" data-choix="decision">
+            <button data-v="approuve" data-c="#1a9e5a">✅ Approuvé tel quel</button>
+            <button data-v="modifie" data-c="#e67e22">🔄 Approuvé avec modifications</button>
+            <button data-v="reporte" data-c="#7f8c8d">⏳ Reporté temporairement</button>
+            <button data-v="abandonne" data-c="#c0392b">❌ Abandonné</button>
+          </div>
+          <div class="grid">
+            <div class="field"><label>Justification de la décision</label><textarea data-k="justification" placeholder="Expliquez pourquoi cette décision a été prise et comment les préoccupations ont été prises en compte..."></textarea></div>
+            <div class="field"><label>Modifications apportées (s'il y a lieu)</label><textarea data-k="modifications" placeholder="Détaillez les ajustements au plan original à la suite des commentaires de l'équipe..."></textarea></div>
+            <div class="field"><label>Date d'implantation confirmée</label><input type="date" data-k="date_implantation"></div>
+            <div class="field"><label>Décidé par</label><input type="text" data-k="decide_par" placeholder="Nom et titre"></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Plan de communication à l'équipe</div>
+        <div class="grid">
+          <div class="field"><label>Comment la décision sera-t-elle communiquée?</label>
+            <select data-k="moyen_comm"><option>Réunion d'équipe</option><option>Courriel</option><option>Rencontres individuelles</option><option>Affichage en clinique</option><option>Combinaison de moyens</option></select>
+          </div>
+          <div class="field"><label>Date de communication prévue</label><input type="date" data-k="date_comm"></div>
+          <div class="field full"><label>Message clé à communiquer</label><textarea data-k="message_cle" placeholder="Résumez le message principal qui sera communiqué à toute l'équipe..."></textarea></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-secondary" data-aller="1">← Retour</button>
+        <div style="display:flex;gap:10px;"><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button><button class="btn btn-primary" data-aller="3">Étape 4 : suivi →</button></div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 -->
+    <div class="tab-content" id="tab-3">
+      <div class="section">
+        <div class="info-box">Un changement sans suivi revient souvent aux anciennes habitudes. Prévoyez <strong>un point de suivi 2 semaines</strong> après l'implantation, puis <strong>un bilan après 1 mois</strong>.</div>
+        <div class="suivi-block" style="background:var(--light);border-color:var(--border);margin-bottom:16px;">
+          <div class="suivi-title" style="color:var(--blue);">🗓️ Point de suivi à 2 semaines</div>
+          <div class="grid">
+            <div class="field"><label>Date du suivi</label><input type="date" data-k="s2_date"></div>
+            <div class="field"><label>Fait par</label><input type="text" data-k="s2_par" placeholder="Nom du gestionnaire"></div>
+            <div class="field"><label>Comment ça se passe?</label><textarea data-k="s2_observations" placeholder="Ce que vous observez sur le plancher, ce que l'équipe vous dit..."></textarea></div>
+            <div class="field"><label>Ajustements ou soutien à apporter</label><textarea data-k="s2_ajustements" placeholder="Formation d'appoint, rappel, précision à faire..."></textarea></div>
+          </div>
+        </div>
+        <div class="suivi-block">
+          <div class="suivi-title">✅ Bilan à 1 mois</div>
+          <div class="grid" style="margin-bottom:12px;">
+            <div class="field"><label>Date du bilan</label><input type="date" data-k="bilan_date"></div>
+            <div class="field"><label>Complété par</label><input type="text" data-k="bilan_par" placeholder="Nom du gestionnaire"></div>
+          </div>
+          <label>Le changement a-t-il été implanté tel que prévu?</label>
+          <div class="choix" data-choix="implante">
+            <button data-v="oui" data-c="#1a9e5a">✅ Oui, complètement</button>
+            <button data-v="partiel" data-c="#e67e22">🔄 Partiellement</button>
+            <button data-v="non" data-c="#c0392b">❌ Non</button>
+          </div>
+          <label>Satisfaction globale de l'équipe face au changement</label>
+          <div class="choix" data-choix="satisfaction">
+            <button data-v="tres-bien" data-c="#1a9e5a">😊 Très bien accepté</button>
+            <button data-v="bien" data-c="#2196f3">🙂 Bien accepté</button>
+            <button data-v="moyen" data-c="#e67e22">😐 Acceptation mitigée</button>
+            <button data-v="difficile" data-c="#c0392b">😟 Résistance persistante</button>
+          </div>
+          <div class="grid">
+            <div class="field"><label>Ce qui a bien fonctionné</label><textarea data-k="bien_fonctionne" style="min-height:75px;"></textarea></div>
+            <div class="field"><label>Ce qui a posé des défis</label><textarea data-k="defis" style="min-height:75px;"></textarea></div>
+            <div class="field"><label>Ajustements effectués</label><textarea data-k="ajustements" style="min-height:75px;"></textarea></div>
+            <div class="field"><label>Actions de suivi nécessaires</label><textarea data-k="actions_suivi" style="min-height:75px;" placeholder="Formation complémentaire, soutien additionnel, révision prévue?"></textarea></div>
+            <div class="field full"><label>Apprentissages pour les prochains changements</label><textarea data-k="apprentissages" placeholder="Que retenez-vous de ce processus? Que feriez-vous différemment la prochaine fois?"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">Signatures : approbation du bilan</div>
+        <div class="grid">
+          <div><div class="field" style="margin-bottom:20px;"><label>Gestionnaire</label><input type="text" data-k="sig_gest" placeholder="Nom et prénom"></div>
+            <div style="border-top:1.5px solid var(--border);padding-top:8px;font-size:.77rem;color:#5a6a80;">Signature ____________________________ Date ___________</div></div>
+          <div><div class="field" style="margin-bottom:20px;"><label>Propriétaire ou dentiste</label><input type="text" data-k="sig_proprio" placeholder="Nom et prénom"></div>
+            <div style="border-top:1.5px solid var(--border);padding-top:8px;font-size:.77rem;color:#5a6a80;">Signature ____________________________ Date ___________</div></div>
+        </div>
+      </div>
+      <div class="actions"><button class="btn btn-secondary" data-aller="2">← Retour</button><button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer le dossier complet</button></div>
+    </div>
+  </div>
+
+  <div class="footer-note">© Gestion Mel 2026. Tous droits réservés. · gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const DECISIONS = { approuve:['Approuvé','#1a9e5a'], modifie:['Approuvé avec modifications','#e67e22'], reporte:['Reporté','#7f8c8d'], abandonne:['Abandonné','#c0392b'] };
+const ETAPES = ['Présentation', 'Consultation', 'Décision', 'Suivi'];
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+function dateLongue(d) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? (+m[3]) + ' ' + MOIS[+m[2] - 1] + ' ' + m[1] : esc(d); }
+async function appel(nom, args) { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+function montrer(id) { document.querySelectorAll('.vue').forEach(v => v.classList.toggle('active', v.id === id)); window.scrollTo(0, 0); }
+
+let cle = null, record = null, etat = null, minuterie = null, chargement = true;
+const params = new URLSearchParams(window.location.search);
+
+function obtenirOwnerToken() {
+  let t = params.get('clinique');
+  try { if (!t) t = localStorage.getItem('gestionmel_clinique_token'); } catch (e) {}
+  if (!t || !/^[0-9a-f-]{36}$/i.test(t)) t = crypto.randomUUID();
+  try { localStorage.setItem('gestionmel_clinique_token', t); } catch (e) {}
+  params.set('clinique', t);
+  majUrl();
+  return t;
+}
+function majUrl() { window.history.replaceState({}, '', window.location.pathname + '?' + params.toString()); }
+function statut(type, texte) { const el = $('sync'); el.className = 'sync ' + type; el.textContent = texte; }
+
+// ---------------- LISTE ----------------
+async function afficherListe() {
+  params.delete('consultation'); majUrl(); record = null;
+  montrer('vListe');
+  const el = $('liste');
+  el.innerHTML = '<div class="vide-etat">Chargement...</div>';
+  try {
+    const r = await appel('consultation_liste', { p_owner_token: cle });
+    if (!r || !r.ok) throw new Error('liste');
+    if (!r.consultations.length) {
+      el.innerHTML = '<div class="vide-etat">Aucune consultation pour le moment.<br>Cliquez sur « + Nouvelle consultation » pour présenter un changement à votre équipe.</div>';
+      return;
+    }
+    el.innerHTML = r.consultations.map(c => {
+      const d = DECISIONS[c.decision];
+      const chip = d ? `<span class="chip" style="background:${d[1]}20;color:${d[1]};">${d[0]}</span>` : '<span class="chip" style="background:#eef2f7;color:#5a6a80;">En consultation</span>';
+      const etape = c.etape ? 'Étape ' + c.etape + ' : ' + ETAPES[+c.etape - 1] : '';
+      return `<div class="sel-item" data-r="${esc(c.record_token)}"><div><div class="sel-titre">${esc(c.titre || '(Changement sans titre)')}</div>
+        <div class="sel-date">${c.date ? 'Consultation du ' + dateLongue(c.date) : 'Modifiée le ' + dateLongue(String(c.updated_at).slice(0, 10))}</div></div>
+        <div class="sel-etape">${esc(etape)}</div>${chip}</div>`;
+    }).join('');
+    el.querySelectorAll('.sel-item').forEach(x => x.addEventListener('click', () => ouvrir(x.dataset.r)));
+  } catch (e) { console.error(e); el.innerHTML = '<div class="vide-etat">⚠️ Erreur de connexion. Rechargez la page.</div>'; }
+}
+
+async function nouvelle() {
+  try {
+    const r = await appel('consultation_creer', { p_owner_token: cle });
+    if (!r || !r.ok) { alert(r && r.erreur === 'limite' ? 'Vous avez atteint 100 consultations. Supprimez-en une pour en créer une nouvelle.' : 'Impossible de créer une consultation pour le moment.'); return; }
+    await ouvrir(r.record_token, true);
+  } catch (e) { console.error(e); alert('Impossible de créer une consultation pour le moment.'); }
+}
+
+// ---------------- ÉDITION ----------------
+function etatVide() {
+  return { champs: { date_consult: new Date().toISOString().slice(0, 10) }, employes: [{ nom:'' }, { nom:'' }, { nom:'' }], decision:null, implante:null, satisfaction:null, etape:'1' };
+}
+
+async function ouvrir(token, nouvelleFiche) {
+  chargement = true;
+  try {
+    const r = await appel('consultation_get', { p_owner_token: cle, p_record_token: token });
+    if (!r || !r.ok) { alert('Cette consultation est introuvable.'); return afficherListe(); }
+    record = token; params.set('consultation', token); majUrl();
+    const d = r.donnees && Object.keys(r.donnees).length ? r.donnees : etatVide();
+    etat = Object.assign(etatVide(), d);
+    etat.champs = Object.assign({}, d.champs || etatVide().champs);
+    remplir();
+    allerEtape(nouvelleFiche ? 0 : Math.max(0, (+etat.etape || 1) - 1), true);
+    montrer('vEdition');
+    statut('ok', r.updated_at ? '✅ Sauvegardé' : '');
+    if (nouvelleFiche) { sauvegarder(); setTimeout(() => document.querySelector('[data-k="titre"]').focus(), 50); }
+  } catch (e) { console.error(e); alert('Erreur de connexion. Réessayez.'); }
+  chargement = false;
+}
+
+function remplir() {
+  document.querySelectorAll('#vEdition [data-k]').forEach(el => {
+    const v = etat.champs[el.dataset.k];
+    if (el.tagName === 'SELECT') { if (v) el.value = v; else el.selectedIndex = 0; }
+    else el.value = v || '';
+  });
+  document.querySelectorAll('.choix').forEach(g => marquerChoix(g, etat[g.dataset.choix]));
+  dessinerGrille();
+  dessinerResultats();
+}
+
+function marquerChoix(groupe, valeur) {
+  groupe.querySelectorAll('button').forEach(b => {
+    const sel = b.dataset.v === valeur;
+    b.classList.toggle('sel', sel);
+    b.style.background = sel ? b.dataset.c : '';
+    b.style.borderColor = sel ? b.dataset.c : '';
+  });
+}
+
+function dessinerGrille() {
+  $('grille').innerHTML = etat.employes.map((e, i) => `<tr data-i="${i}">
+    <td><input type="text" data-e="nom" value="${esc(e.nom)}" placeholder="Prénom et nom" style="width:100%;"></td>
+    ${[['fav','👍'],['neut','😐'],['def','👎']].map(([v, ic]) => `<td class="choice-cell"><button type="button" class="cbtn ${e.reaction === v ? 'c-' + v : ''}" data-r="${v}">${ic}</button></td>`).join('')}
+    <td><textarea data-e="questions" placeholder="Questions, inquiétudes, besoins de clarification...">${esc(e.questions)}</textarea></td>
+    <td><textarea data-e="suggestions" placeholder="Idées, propositions d'amélioration...">${esc(e.suggestions)}</textarea></td>
+    <td class="choice-cell"><button type="button" class="btn-del" title="Retirer">×</button></td></tr>`).join('');
+}
+
+function dessinerResultats() {
+  const avec = etat.employes.filter(e => e.reaction);
+  const total = etat.employes.filter(e => e.nom || e.reaction || e.questions || e.suggestions).length;
+  const n = k => avec.filter(e => e.reaction === k).length;
+  const pct = k => total ? Math.round(n(k) / total * 100) : 0;
+  if (!avec.length) { $('resultats').innerHTML = '<div class="info-box">Notez les réactions des employés à l\'étape 2 pour voir les résultats ici.</div>'; return; }
+  let climat;
+  if (n('fav') > total / 2) climat = ['✅ Changement bien reçu : majorité favorable', '#1a9e5a'];
+  else if (n('def') > total / 2) climat = ['⚠️ Résistance importante : revoir la communication', '#c0392b'];
+  else climat = ['🤔 Opinion partagée : clarifications nécessaires', '#e67e22'];
+  const ligne = (lbl, k, c) => `<div class="res-row"><span class="res-lbl">${lbl}</span><div class="res-bar-wrap"><div class="res-bar" style="width:${pct(k)}%;background:${c};"></div></div><span class="res-count">${n(k)} (${pct(k)} %)</span></div>`;
+  $('resultats').innerHTML = `<div class="results-box">
+    ${ligne('👍 Favorable', 'fav', '#1a9e5a')}${ligne('😐 Neutre', 'neut', '#7f8c8d')}${ligne('👎 Défavorable', 'def', '#c0392b')}
+    <div style="font-size:.78rem;color:#5a6a80;margin-top:8px;">${total} personne(s) consultée(s)</div>
+    <div class="thermo-bar">
+      <div style="width:${pct('fav')}%;background:#1a9e5a;">${pct('fav') > 8 ? pct('fav') + ' %' : ''}</div>
+      <div style="width:${pct('neut')}%;background:#7f8c8d;">${pct('neut') > 8 ? pct('neut') + ' %' : ''}</div>
+      <div style="width:${pct('def')}%;background:#c0392b;">${pct('def') > 8 ? pct('def') + ' %' : ''}</div>
+      <div style="flex:1;background:#e0e0e0;"></div>
+    </div>
+    <span class="climat" style="background:${climat[1]}18;color:${climat[1]};border:1.5px solid ${climat[1]};">${climat[0]}</span></div>`;
+}
+
+function allerEtape(i, sansSauver) {
+  document.querySelectorAll('.tab-content').forEach((t, k) => t.classList.toggle('active', k === i));
+  document.querySelectorAll('.phase-step').forEach((b, k) => b.classList.toggle('active', k === i));
+  if (i === 2) dessinerResultats();
+  etat.etape = String(i + 1);
+  if (!sansSauver) planifier();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function planifier() {
+  if (chargement || !record) return;
+  statut('', '⏳ Sauvegarde...');
+  clearTimeout(minuterie);
+  minuterie = setTimeout(sauvegarder, 800);
+}
+async function sauvegarder() {
+  if (!record) return;
+  clearTimeout(minuterie); minuterie = null;
+  try {
+    const r = await appel('consultation_sauver', { p_owner_token: cle, p_record_token: record, p_titre: etat.champs.titre || '', p_donnees: etat });
+    if (!r || !r.ok) throw new Error(r && r.erreur);
+    statut('ok', '✅ Sauvegardé');
+  } catch (e) { console.error(e); statut('err', '⚠️ Erreur de connexion : vos dernières modifications ne sont pas sauvegardées'); }
+}
+
+async function supprimer() {
+  if (!confirm('Supprimer définitivement cette consultation?')) return;
+  try {
+    clearTimeout(minuterie);
+    const r = await appel('consultation_supprimer', { p_owner_token: cle, p_record_token: record });
+    if (!r || !r.ok) throw new Error('supprimer');
+    afficherListe();
+  } catch (e) { console.error(e); alert('La suppression a échoué. Réessayez.'); }
+}
+
+// ---------------- ÉVÉNEMENTS ----------------
+function brancher() {
+  $('btnNouvelle').addEventListener('click', nouvelle);
+  $('btnRetour').addEventListener('click', async () => { if (minuterie) await sauvegarder(); afficherListe(); });
+  $('btnSupprimer').addEventListener('click', supprimer);
+  document.querySelectorAll('.phase-step').forEach(b => b.addEventListener('click', () => allerEtape(+b.dataset.etape)));
+  document.querySelectorAll('[data-aller]').forEach(b => b.addEventListener('click', () => allerEtape(+b.dataset.aller)));
+  document.querySelectorAll('#vEdition [data-k]').forEach(el => {
+    const maj = () => { etat.champs[el.dataset.k] = el.value; planifier(); };
+    el.addEventListener('input', maj); el.addEventListener('change', maj);
+  });
+  document.querySelectorAll('.choix').forEach(g => g.addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if (!b) return;
+    const cleChoix = g.dataset.choix;
+    etat[cleChoix] = etat[cleChoix] === b.dataset.v ? null : b.dataset.v;
+    marquerChoix(g, etat[cleChoix]); planifier();
+  }));
+  const grille = $('grille');
+  grille.addEventListener('input', ev => {
+    const tr = ev.target.closest('tr'), champ = ev.target.dataset.e; if (!tr || !champ) return;
+    etat.employes[+tr.dataset.i][champ] = ev.target.value; planifier();
+  });
+  grille.addEventListener('click', ev => {
+    const tr = ev.target.closest('tr'); if (!tr) return;
+    const i = +tr.dataset.i;
+    const r = ev.target.closest('[data-r]');
+    if (r) {
+      etat.employes[i].reaction = etat.employes[i].reaction === r.dataset.r ? null : r.dataset.r;
+      tr.querySelectorAll('.cbtn').forEach(b => b.className = 'cbtn' + (b.dataset.r === etat.employes[i].reaction ? ' c-' + b.dataset.r : ''));
+      planifier(); return;
+    }
+    if (ev.target.closest('.btn-del')) {
+      const e = etat.employes[i];
+      if ((e.nom || e.questions || e.suggestions || e.reaction) && !confirm('Retirer cette personne et ses réponses?')) return;
+      etat.employes.splice(i, 1); dessinerGrille(); planifier();
+    }
+  });
+  $('btnAjouterEmp').addEventListener('click', () => {
+    etat.employes.push({ nom:'' }); dessinerGrille(); planifier();
+    const champs = grille.querySelectorAll('input[data-e="nom"]'); champs[champs.length - 1].focus();
+  });
+  window.addEventListener('beforeunload', () => { if (minuterie) sauvegarder(); });
+}
+
+async function init() {
+  cle = await gmAcces.ouvrir(sb, obtenirOwnerToken(), 'gest');
+  brancher();
+  const existant = params.get('consultation');
+  if (existant && /^[0-9a-f-]{36}$/i.test(existant)) await ouvrir(existant); else await afficherListe();
+}
+init();
+</script>
+</body>
+</html>
