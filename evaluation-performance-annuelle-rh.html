@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0071)file:///C:/Users/Portable02/Downloads/evaluation_performance_light.html -->
-<html lang="fr" translate="no"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="fr" translate="no">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Évaluation de performance — Gestion Mel</title>
+<title>Évaluation de performance | Gestion Mel</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
 
@@ -20,6 +20,8 @@
     --vert-clair: #e6f7f1;
     --rouge: #c0392b;
     --rouge-clair: #fdf0ee;
+    --orange: #d9822b;
+    --orange-clair: #fff4e6;
     --or: #c9a227;
   }
 
@@ -37,90 +39,126 @@
 
   /* En-tête */
   .entete {
-    background: var(--noir);
-    border-radius: 16px;
-    padding: 32px 40px;
-    margin-bottom: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background: var(--noir); border-radius: 16px; padding: 32px 40px; margin-bottom: 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
-  .entete-logo { font-family: 'Playfair Display', serif; color: white; font-size: 26px; font-weight: 600; }
-  .entete-logo span { color: var(--bleu-accent); }
   .entete-titre { text-align: right; }
   .entete-titre h1 { color: white; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; }
   .entete-titre p { color: #8899bb; font-size: 13px; margin-top: 4px; }
+
+  .vue { display: none; }
+  .vue.active { display: block; }
+
+  /* Boutons */
+  .btn {
+    border-radius: 8px; padding: 9px 18px; font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif; transition: all .2s; border: 1.5px solid var(--bleu);
+  }
+  .btn-primaire { background: var(--bleu); color: white; }
+  .btn-primaire:hover { background: var(--bleu-accent); border-color: var(--bleu-accent); }
+  .btn-second { background: white; color: var(--bleu); }
+  .btn-second:hover { background: var(--bleu-clair); }
+  .btn-danger { background: white; color: var(--rouge); border-color: var(--rouge); }
+  .btn-danger:hover { background: var(--rouge-clair); }
+  .btn-vert { background: var(--vert); border-color: var(--vert); color: white; }
+  .btn-vert:hover { filter: brightness(1.08); }
+  .btn-sm { padding: 6px 13px; font-size: 13px; }
+  .btn:disabled { opacity: .55; cursor: default; }
+
+  /* Liste des évaluations */
+  .liste-tete { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .liste-tete h2 { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 500; }
+  .recherche { width: 100%; padding: 10px 14px; border: 1px solid var(--gris-bord); border-radius: 8px; font-family: inherit; font-size: 14px; margin-bottom: 12px; background: white; }
+  .recherche:focus { outline: none; border-color: var(--bleu); }
+  .eval-item {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: center;
+    background: white; border: 1.5px solid var(--gris-bord); border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 9px; cursor: pointer; transition: all .15s;
+  }
+  .eval-item:hover { border-color: var(--bleu-accent); background: #fafcff; }
+  .eval-nom { font-weight: 600; font-size: 15px; }
+  .eval-sous { font-size: 13px; color: var(--texte-sec); }
+  .chip { display: inline-block; border-radius: 12px; padding: 3px 11px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .chip-moy { background: var(--bleu-clair); color: var(--bleu); }
+  .tendance { font-size: 12px; font-weight: 600; margin-left: 6px; }
+  .vide-etat { text-align: center; color: var(--texte-sec); font-size: 14px; line-height: 1.8; padding: 40px 12px; background: white; border-radius: 12px; border: 1px solid var(--gris-bord); }
+
+  /* Barre de l'éditeur */
+  .edit-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .sync { font-size: 13px; font-weight: 600; color: var(--texte-sec); }
+  .sync.ok { color: var(--vert); }
+  .sync.err { color: var(--rouge); }
 
   /* Onglets */
   .onglets { display: flex; gap: 8px; margin-bottom: 24px; }
   .onglet {
     flex: 1; padding: 12px; border-radius: 10px; border: 1.5px solid var(--gris-bord);
     background: white; cursor: pointer; font-family: 'Source Sans 3', sans-serif;
-    font-size: 14px; font-weight: 500; color: var(--texte-sec); transition: all .2s;
-    text-align: center;
+    font-size: 14px; font-weight: 600; color: var(--texte-sec); transition: all .2s; text-align: center;
   }
   .onglet:hover { border-color: var(--bleu); color: var(--bleu); }
   .onglet.actif { background: var(--bleu); border-color: var(--bleu); color: white; }
   .onglet .tag { display: block; font-size: 11px; font-weight: 300; margin-top: 2px; opacity: .8; }
 
-  /* Panneau */
   .panneau { display: none; }
   .panneau.actif { display: block; }
 
+  /* Bandeaux */
+  .bandeau { border-radius: 12px; padding: 18px 22px; margin-bottom: 16px; font-size: 14px; line-height: 1.6; border: 1.5px solid; }
+  .bandeau-bleu { background: var(--bleu-clair); border-color: #b9d8ef; }
+  .bandeau-orange { background: var(--orange-clair); border-color: #f2cf9f; }
+  .bandeau-vert { background: var(--vert-clair); border-color: #a9dcc6; }
+  .bandeau strong { font-weight: 600; }
+  .bandeau .actions-b { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .lien-box { display: flex; gap: 8px; margin-top: 10px; }
+  .lien-box input { flex: 1; min-width: 0; padding: 8px 11px; border: 1px solid var(--gris-bord); border-radius: 8px; font-family: inherit; font-size: 13px; background: white; color: var(--texte); }
+
   /* Section */
-  .section {
-    background: white; border-radius: 12px; padding: 28px 32px;
-    margin-bottom: 16px; border: 1px solid var(--gris-bord);
-  }
-  .section-titre {
-    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
-    padding-bottom: 14px; border-bottom: 1.5px solid var(--gris);
-  }
+  .section { background: white; border-radius: 12px; padding: 28px 32px; margin-bottom: 16px; border: 1px solid var(--gris-bord); }
+  .section-titre { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1.5px solid var(--gris); }
   .section-num {
-    width: 30px; height: 30px; border-radius: 50%; background: var(--bleu);
-    color: white; font-size: 13px; font-weight: 600; display: flex;
-    align-items: center; justify-content: center; flex-shrink: 0;
+    width: 30px; height: 30px; border-radius: 50%; background: var(--bleu); color: white; font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
   .section-titre h2 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 500; }
   .section-desc { font-size: 13px; color: var(--texte-sec); margin-bottom: 20px; font-style: italic; }
+  .attente .sec-emp { display: none; }
 
   /* Champs */
   .champ { margin-bottom: 16px; }
   .champ label { display: block; font-size: 12px; font-weight: 600; color: var(--texte-sec); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 5px; }
-  .champ input[type=text], .champ input[type=date], .champ textarea, .champ input[type=number] {
-    width: 100%; padding: 9px 12px; border: 1px solid var(--gris-bord);
-    border-radius: 8px; font-family: 'Source Sans 3', sans-serif; font-size: 14px;
-    color: var(--texte); background: white; transition: border-color .2s;
+  .champ input[type=text], .champ input[type=date], .champ textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--gris-bord); border-radius: 8px;
+    font-family: 'Source Sans 3', sans-serif; font-size: 14px; color: var(--texte); background: white; transition: border-color .2s;
   }
   .champ input:focus, .champ textarea:focus { outline: none; border-color: var(--bleu); }
   .champ textarea { resize: vertical; min-height: 80px; }
+  .champ input:disabled, .champ textarea:disabled, .champ input[readonly] { background: var(--gris); color: var(--texte); }
   .grille2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .grille3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 
   /* Échelle */
   .echelle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
-  .echelle-item {
-    background: var(--gris); border-radius: 8px; padding: 10px 14px;
-    border-left: 3px solid var(--bleu);
-  }
+  .echelle-item { background: var(--gris); border-radius: 8px; padding: 10px 14px; border-left: 3px solid var(--bleu); }
   .echelle-item .niveau { font-weight: 600; font-size: 13px; color: var(--bleu); }
   .echelle-item .desc { font-size: 12px; color: var(--texte-sec); margin-top: 2px; }
 
   /* Critères */
-  .critere {
-    padding: 14px 16px; border-radius: 10px; background: var(--gris);
-    margin-bottom: 10px; border: 1px solid transparent; transition: border-color .2s;
-  }
+  .critere { padding: 14px 16px; border-radius: 10px; background: var(--gris); margin-bottom: 10px; border: 1px solid transparent; transition: border-color .2s; }
   .critere:hover { border-color: var(--bleu-accent); }
-  .critere-nom { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+  .critere.manque { border-color: var(--orange); }
+  .critere-nom { font-weight: 600; font-size: 14px; margin-bottom: 4px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .prec { font-size: 12px; font-weight: 500; color: var(--texte-sec); background: white; border: 1px solid var(--gris-bord); border-radius: 10px; padding: 0 9px; }
   .critere-def { font-size: 12px; color: var(--texte-sec); margin-bottom: 10px; line-height: 1.5; }
   .critere-notes { display: flex; gap: 8px; flex-wrap: wrap; }
   .note-btn {
-    width: 44px; height: 36px; border-radius: 8px; border: 1.5px solid var(--gris-bord);
-    background: white; cursor: pointer; font-size: 13px; font-weight: 600;
-    color: var(--texte-sec); transition: all .15s;
+    width: 44px; height: 36px; border-radius: 8px; border: 1.5px solid var(--gris-bord); background: white; cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--texte-sec); transition: all .15s; font-family: inherit;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
-  .note-btn:hover { border-color: var(--bleu); color: var(--bleu); }
+  .note-btn.na { width: 52px; }
+  .note-btn:hover:not(:disabled) { border-color: var(--bleu); color: var(--bleu); }
+  .note-btn:disabled { cursor: default; }
   .note-btn.sel-1 { background: var(--rouge-clair); border-color: var(--rouge); color: var(--rouge); }
   .note-btn.sel-2 { background: #fff8e6; border-color: var(--or); color: var(--or); }
   .note-btn.sel-3 { background: var(--vert-clair); border-color: var(--vert); color: var(--vert); }
@@ -129,447 +167,597 @@
 
   /* Moyenne */
   .moyenne-box {
-    background: linear-gradient(135deg, var(--bleu-clair), #f0f8ff);
-    border: 1.5px solid var(--bleu-accent); border-radius: 12px;
-    padding: 20px 24px; margin-top: 16px; display: flex;
-    align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, var(--bleu-clair), #f0f8ff); border: 1.5px solid var(--bleu-accent); border-radius: 12px;
+    padding: 20px 24px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
   }
   .moyenne-label { font-weight: 600; font-size: 14px; color: var(--bleu); }
-  .moyenne-val { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 600; color: var(--bleu); }
+  .moyenne-val { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 600; color: var(--bleu); white-space: nowrap; }
   .moyenne-sub { font-size: 12px; color: var(--texte-sec); }
+  .comparaison { margin-top: 12px; background: white; border: 1.5px dashed var(--bleu-accent); border-radius: 12px; padding: 14px 18px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 
-  /* Évaluation employeur — sections commentaires */
-  .eval-section { margin-bottom: 20px; }
   .eval-section-titre { font-weight: 600; font-size: 14px; color: var(--texte); margin-bottom: 8px; border-left: 3px solid var(--bleu); padding-left: 10px; }
 
-  /* Radio oui/non */
+  /* Oui / Non */
   .radio-group { display: flex; gap: 16px; margin-top: 6px; }
-  .radio-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; }
+  .radio-opt { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 14px; text-transform: none !important; letter-spacing: 0 !important; color: var(--texte) !important; font-weight: 400 !important; }
   .radio-opt input { accent-color: var(--bleu); width: 16px; height: 16px; }
 
-  /* Signature */
   .sig-bloc { border-top: 1.5px solid var(--texte); margin-top: 8px; padding-top: 6px; font-size: 12px; color: var(--texte-sec); }
 
-  /* Bas de page */
-  .bas-page {
-    background: var(--noir); border-radius: 12px; padding: 16px 24px;
-    display: flex; justify-content: space-between; align-items: center; margin-top: 24px;
-  }
-  .bas-copy { font-size: 12px; color: #5a6a88; }
-  .bas-logo { font-family: 'Playfair Display', serif; color: white; font-size: 16px; }
-  .bas-logo span { color: var(--bleu-accent); }
+  .transmettre { text-align: center; background: white; border: 1.5px solid var(--vert); border-radius: 12px; padding: 22px; margin-bottom: 16px; }
+  .transmettre p { font-size: 14px; color: var(--texte-sec); margin-bottom: 12px; }
 
-  .btn-imprimer {
-    background: var(--bleu); color: white; border: none; border-radius: 8px;
-    padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer;
-    font-family: 'Source Sans 3', sans-serif; transition: background .2s;
-  }
-  .btn-imprimer:hover { background: var(--bleu-accent); }
+  .merci { text-align: center; background: white; border-radius: 12px; border: 1px solid var(--gris-bord); padding: 50px 24px; }
+  .merci .gros { font-size: 46px; }
+  .merci h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; margin: 8px 0; }
+  .merci p { color: var(--texte-sec); font-size: 14px; max-width: 520px; margin: 0 auto 6px; }
+
+  /* Bas de page */
+  .bas-page { background: var(--noir); border-radius: 12px; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .bas-copy { font-size: 12px; color: #8899bb; }
+
+  /* Mode employé(e) : seulement sa partie */
+  .mode-employe .onglets, .mode-employe #panneau-employeur, .mode-employe .gestion-seul { display: none !important; }
+  .employe-seul { display: none; }
+  .mode-employe .employe-seul { display: block; }
 
   @media print {
     body { background: white; }
     .page-wrap { padding: 0; max-width: 100%; }
-    .onglets { display: none; }
+    .onglets, .edit-bar, .bandeau, .btn, .comparaison, .transmettre, .no-print, #vListe { display: none !important; }
     .panneau { display: block !important; }
-    .btn-imprimer { display: none; }
+    .mode-employe #panneau-employeur { display: none !important; }
     .section { break-inside: avoid; }
+    .note-btn:not([class*="sel-"]) { opacity: .45; }
+  }
+  @media (max-width: 640px) {
+    .page-wrap { padding: 16px 12px 40px; }
+    .entete { padding: 22px 20px; flex-direction: column; align-items: flex-start; }
+    .entete-titre { text-align: left; }
+    .section { padding: 20px 16px; }
+    .grille2, .echelle { grid-template-columns: 1fr; }
+    .eval-item { grid-template-columns: 1fr; gap: 6px; }
+    .onglets { flex-direction: column; }
+    .moyenne-val { font-size: 30px; }
   }
 </style>
+<script>
+/* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
+window.gmAcces = (function () {
+  const DUREE = 8 * 60 * 60 * 1000;
+  const CACHE = 'gm_acces_v1';
+  const ORIGINES = { fiche: "Fiche d'information employé", conge: 'Demande de congé', boite: 'Boîte à suggestions' };
+  const OUBLI = 'Mot de passe oublié? Écrivez à <strong>info@gestionmel.com</strong> en indiquant le nom de votre clinique.';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function css() {
+    if (document.getElementById('gmAccesCss')) return;
+    const s = document.createElement('style');
+    s.id = 'gmAccesCss';
+    s.textContent = `
+      html.gma-ouvert body > *:not(#gmAccesOverlay){visibility:hidden!important;}
+      #gmAccesOverlay{position:fixed;inset:0;z-index:100000;background:#eef4fb;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:40px 16px;font-family:'Segoe UI',Arial,sans-serif;color:#1a2535;}
+      #gmAccesOverlay *{box-sizing:border-box;}
+      .gma-carte{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(13,27,42,.12);overflow:hidden;}
+      .gma-tete{background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);color:#fff;padding:18px 24px;}
+      .gma-tete .gma-marque{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.5px;margin-bottom:6px;}
+      .gma-tete .gma-marque span{color:#2196f3;}
+      .gma-tete h2{font-size:1.1rem;font-weight:700;margin:0;}
+      .gma-corps{padding:20px 24px 22px;}
+      .gma-texte{font-size:.86rem;line-height:1.6;color:#3a4a60;margin:0 0 14px;}
+      .gma-champ{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+      .gma-champ label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+      .gma-champ input{border:1.5px solid #d0dff0;border-radius:7px;padding:10px 12px;font-size:.95rem;font-family:inherit;background:#f4f8ff;color:#1a2535;width:100%;}
+      .gma-champ input:focus{outline:none;border-color:#2196f3;background:#fff;}
+      .gma-btn{display:block;width:100%;padding:11px 16px;border-radius:8px;border:none;background:#1a6abf;color:#fff;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;}
+      .gma-btn:hover{background:#155a9e;}
+      .gma-btn:disabled{opacity:.6;cursor:wait;}
+      .gma-btn2{display:block;width:100%;padding:10px 16px;border-radius:8px;border:1.5px solid #1a6abf;background:#fff;color:#1a6abf;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;margin-top:10px;}
+      .gma-lien{background:none;border:none;color:#1a6abf;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 0;margin-top:6px;text-decoration:underline;}
+      .gma-err{display:none;background:#fef2f2;border:1px solid rgba(192,57,43,.25);color:#c0392b;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-ok{display:none;background:#f0fdf4;border:1px solid rgba(26,158,90,.25);color:#1a9e5a;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-astuce{background:#e8f4fd;border-left:3px solid #1a6abf;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#0d3a6e;margin-bottom:14px;line-height:1.55;}
+      .gma-avert{background:#fff8e1;border-left:3px solid #e67e22;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-bottom:14px;line-height:1.55;}
+      .gma-pied{font-size:.74rem;color:#8a9ab0;text-align:center;margin-top:14px;line-height:1.6;}
+      .gma-sep{border:none;border-top:1px solid #d0dff0;margin:18px 0;}
+      .gma-sous{font-size:.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;}
+      #gmAccesBarre{position:fixed;left:16px;bottom:16px;z-index:9990;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0dff0;border-radius:22px;padding:5px 6px 5px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:'Segoe UI',Arial,sans-serif;font-size:.74rem;font-weight:600;color:#1a6abf;}
+      #gmAccesBarre button{border:1px solid #d0dff0;background:#f4f8ff;color:#1a2535;border-radius:16px;padding:4px 10px;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+      #gmAccesBarre button:hover{border-color:#2196f3;color:#1a6abf;}
+      @media(max-width:600px){#gmAccesBarre>span{display:none;}#gmAccesBarre{padding:4px;left:8px;bottom:12px;}}
+      @media print{#gmAccesBarre,#gmAccesOverlay{display:none!important;}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function lire() { try { return JSON.parse(sessionStorage.getItem(CACHE) || '{}') || {}; } catch (e) { return {}; } }
+  function ecrire(c) { try { sessionStorage.setItem(CACHE, JSON.stringify(c)); } catch (e) { } }
+  function enCache(owner) { const c = lire()[owner]; return (c && c.exp > Date.now()) ? c : null; }
+  function memoriser(owner, r) {
+    const c = lire(); const prev = (c[owner] && c[owner].exp > Date.now()) ? c[owner] : {};
+    const gest = r.cle_gest || prev.gest || null;
+    c[owner] = { gest, secr: r.cle_secr || prev.secr || null, estGest: !!gest, exp: Date.now() + DUREE };
+    ecrire(c);
+    return c[owner];
+  }
+  function oublier(owner) { const c = lire(); delete c[owner]; ecrire(c); }
+  function fixerOwner(owner) {
+    try { localStorage.setItem('gestionmel_clinique_token', owner); } catch (e) { }
+    const p = new URLSearchParams(location.search); p.set('clinique', owner);
+    history.replaceState({}, '', location.pathname + '?' + p.toString());
+  }
+
+  function ecran(html) {
+    css();
+    let o = document.getElementById('gmAccesOverlay');
+    if (!o) { o = document.createElement('div'); o.id = 'gmAccesOverlay'; document.body.appendChild(o); }
+    o.innerHTML = '<div class="gma-carte">' + html + '</div>';
+    document.documentElement.classList.add('gma-ouvert');
+    o.scrollTop = 0;
+    const premier = o.querySelector('input'); if (premier) setTimeout(() => premier.focus(), 50);
+    return o;
+  }
+  function fermer() {
+    const o = document.getElementById('gmAccesOverlay'); if (o) o.remove();
+    document.documentElement.classList.remove('gma-ouvert');
+  }
+  function tete(titre) {
+    return '<div class="gma-tete"><div class="gma-marque">Gestion<span>Mel</span></div><h2>' + titre + '</h2></div>';
+  }
+  function message(r) {
+    if (!r) return 'Une erreur est survenue. Vérifiez votre connexion et réessayez.';
+    switch (r.erreur) {
+      case 'mot_de_passe': return 'Mot de passe incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'code': return 'Code incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'bloque': return 'Trop d\'essais. Réessayez dans ' + (r.minutes || 15) + ' minute(s).';
+      case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 6 caractères.';
+      case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+      case 'code_identique': return 'Le code du secrétariat doit être différent du mot de passe gestionnaire.';
+      case 'pas_de_mot_de_passe': return 'Aucun mot de passe gestionnaire n\'est encore créé pour cette clinique.';
+      case 'limite': return 'Limite atteinte. Réessayez un peu plus tard.';
+      default: return 'Une erreur est survenue. Réessayez.';
+    }
+  }
+  async function appel(sb, nom, args) {
+    try { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+    catch (e) { console.error(e); return null; }
+  }
+
+  // Formulaire generique : valider(valeurs) retourne {erreur} ou {resultat}
+  function formulaire({ titre, texte, astuce, avert, champs, bouton, alternative, pied, valider }) {
+    return new Promise(resolve => {
+      const html = tete(titre) + '<form class="gma-corps" autocomplete="off">' +
+        (texte ? '<p class="gma-texte">' + texte + '</p>' : '') +
+        (avert ? '<div class="gma-avert">' + avert + '</div>' : '') +
+        (astuce ? '<div class="gma-astuce">' + astuce + '</div>' : '') +
+        '<div class="gma-err"></div>' +
+        champs.map(c => '<div class="gma-champ"><label>' + c.label + '</label><input name="' + c.nom + '" type="' + (c.type || 'password') + '"' +
+          (c.type === 'text' ? ' autocomplete="off"' : ' autocomplete="new-password"') + (c.max ? ' maxlength="' + c.max + '"' : '') + '></div>').join('') +
+        '<button type="submit" class="gma-btn">' + bouton + '</button>' +
+        (alternative ? '<p class="gma-texte" style="margin:16px 0 0;">' + alternative.texte + '</p><button type="button" class="gma-btn2" data-alt="1">' + alternative.bouton + '</button>' : '') +
+        (pied ? '<div class="gma-pied">' + pied + '</div>' : '') +
+        '</form>';
+      const o = ecran(html);
+      const f = o.querySelector('form'), err = o.querySelector('.gma-err'), btn = o.querySelector('.gma-btn');
+      const alt = o.querySelector('[data-alt]');
+      if (alt) alt.onclick = () => resolve({ alt: true });
+      f.onsubmit = async ev => {
+        ev.preventDefault();
+        const v = {}; champs.forEach(c => { v[c.nom] = f.elements[c.nom].value; });
+        err.style.display = 'none'; btn.disabled = true;
+        const r = await valider(v);
+        btn.disabled = false;
+        if (r && r.erreur) { err.textContent = r.erreur; err.style.display = 'block'; const i = f.querySelector('input'); if (i) { i.select(); i.focus(); } return; }
+        resolve(r.resultat);
+      };
+    });
+  }
+
+  function maintenance() {
+    ecran(tete('⏳ Mise à jour en cours') + '<div class="gma-corps"><p class="gma-texte">Cet outil est en cours de mise à jour pour mieux protéger vos données. Revenez dans quelques minutes, puis rafraîchissez la page.</p><div class="gma-pied">Le problème persiste? Écrivez à <strong>info@gestionmel.com</strong>.</div></div>');
+  }
+
+  function formDefinir(sb, owner, niveau) {
+    return formulaire({
+      titre: '🔐 Créez votre mot de passe gestionnaire',
+      texte: 'Cet outil contient des informations confidentielles. Choisissez un mot de passe que vous seule connaîtrez (au moins 6 caractères). Il servira pour tous les outils réservés à la gestion.',
+      avert: '<strong>Réservé à la gestionnaire.</strong> Si vous n\'êtes pas la gestionnaire de la clinique, ne créez pas de mot de passe : demandez-lui d\'ouvrir cet outil une première fois.',
+      astuce: niveau === 'secr' ? 'Vous pourrez ensuite créer un code pour vos secrétaires avec le bouton <strong>🔑 Accès</strong> en bas à gauche.' : '',
+      champs: [{ nom: 'p1', label: 'Nouveau mot de passe' }, { nom: 'p2', label: 'Confirmer le mot de passe' }],
+      bouton: 'Créer le mot de passe et ouvrir',
+      pied: 'Notez-le dans un endroit sûr.',
+      valider: async v => {
+        if (v.p1.length < 6) return { erreur: message({ erreur: 'mot_de_passe_court' }) };
+        if (v.p1 !== v.p2) return { erreur: 'Les deux mots de passe ne sont pas identiques.' };
+        const r = await appel(sb, 'acces_definir', { p_owner_token: owner, p_pin: v.p1 });
+        if (r && r.erreur === 'deja_defini') { location.reload(); return { erreur: 'Un mot de passe existe déjà. Rechargement...' }; }
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function formOuvrir(sb, owner, niveau, etat, opts) {
+    const secr = niveau === 'secr';
+    let astuce = '';
+    if (etat.origine && ORIGINES[etat.origine]) astuce = 'Le mot de passe gestionnaire est le même que celui de l\'outil <strong>' + ORIGINES[etat.origine] + '</strong>.';
+    if (secr && !etat.code_secr) astuce += (astuce ? '<br>' : '') + 'Le code du secrétariat n\'est pas encore créé. La gestionnaire peut le créer avec le bouton <strong>🔑 Accès</strong>, une fois l\'outil ouvert.';
+    return formulaire({
+      titre: secr ? '🔒 Outil réservé au secrétariat' : '🔒 Outil réservé à la gestion',
+      texte: secr ? 'Entrez le code du secrétariat ou le mot de passe de la gestionnaire.' : 'Entrez le mot de passe gestionnaire pour ouvrir cet outil.',
+      astuce,
+      champs: [{ nom: 'p', label: secr ? 'Code ou mot de passe' : 'Mot de passe gestionnaire' }],
+      bouton: 'Ouvrir',
+      alternative: opts.alternative,
+      pied: OUBLI,
+      valider: async v => {
+        if (!v.p) return { erreur: secr ? 'Entrez votre code.' : 'Entrez votre mot de passe.' };
+        const r = await appel(sb, 'acces_ouvrir', { p_owner_token: owner, p_niveau: niveau, p_pin: v.p });
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function barre(sb, owner, niveau) {
+    css();
+    const c = enCache(owner) || {};
+    let b = document.getElementById('gmAccesBarre');
+    if (!b) { b = document.createElement('div'); b.id = 'gmAccesBarre'; document.body.appendChild(b); }
+    b.innerHTML = '<span>' + (c.estGest ? '🔓 Gestion' : '🔓 Secrétariat') + '</span>' +
+      (c.estGest ? '<button type="button" data-a="acces" title="Mot de passe et code du secrétariat">🔑 Accès</button>' : '') +
+      '<button type="button" data-a="lock" title="Fermer la session sur cet appareil">🔒 Verrouiller</button>';
+    b.querySelector('[data-a="lock"]').onclick = () => { oublier(owner); location.reload(); };
+    const a = b.querySelector('[data-a="acces"]'); if (a) a.onclick = () => panneau(sb, owner);
+  }
+
+  async function panneau(sb, owner) {
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner }) || {};
+    const o = ecran(tete('🔑 Gérer les accès') + '<div class="gma-corps">' +
+      '<div class="gma-ok" id="gmaOk"></div><div class="gma-err" id="gmaErr"></div>' +
+      '<p class="gma-sous">Code du secrétariat</p>' +
+      '<p class="gma-texte">Les secrétaires entrent ce code pour ouvrir le Balancement de fin de journée, la Liste prioritaire, la Petite caisse et les Comptes à recevoir. Votre mot de passe gestionnaire fonctionne aussi dans ces outils.</p>' +
+      '<div class="gma-astuce" id="gmaEtatCode">' + (etat.code_secr ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.') + '</div>' +
+      '<div class="gma-champ"><label>Nouveau code du secrétariat (4 caractères et plus)</label><input id="gmaCode" type="text" autocomplete="off" maxlength="30"></div>' +
+      '<div class="gma-champ"><label>Votre mot de passe gestionnaire</label><input id="gmaPinC" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnCode">Enregistrer le code</button>' +
+      (etat.code_secr ? '<button type="button" class="gma-lien" id="gmaBtnRetirer">Retirer le code du secrétariat</button>' : '') +
+      '<hr class="gma-sep">' +
+      '<p class="gma-sous">Changer le mot de passe gestionnaire</p>' +
+      '<div class="gma-champ"><label>Mot de passe actuel</label><input id="gmaPinA" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Nouveau mot de passe (6 caractères et plus)</label><input id="gmaPinN" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Confirmer le nouveau mot de passe</label><input id="gmaPinN2" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnPin">Changer le mot de passe</button>' +
+      '<button type="button" class="gma-btn2" id="gmaFermer">Fermer</button>' +
+      '<div class="gma-pied">Le nouveau mot de passe s\'applique à tous les outils réservés à la gestion.</div>' +
+      '</div>');
+    const okEl = o.querySelector('#gmaOk'), errEl = o.querySelector('#gmaErr');
+    const montrer = (ok, txt) => { okEl.style.display = ok ? 'block' : 'none'; errEl.style.display = ok ? 'none' : 'block'; (ok ? okEl : errEl).textContent = txt; o.scrollTop = 0; };
+    o.querySelector('#gmaFermer').onclick = fermer;
+    const envoyerCode = async code => {
+      const pin = o.querySelector('#gmaPinC').value;
+      if (!pin) return montrer(false, 'Entrez votre mot de passe gestionnaire.');
+      if (code && code.trim().length < 4) return montrer(false, message({ erreur: 'code_court' }));
+      const r = await appel(sb, 'acces_code_secr', { p_owner_token: owner, p_pin: pin, p_code: code });
+      if (!r || !r.ok) return montrer(false, message(r));
+      memoriser(owner, r);
+      o.querySelector('#gmaCode').value = ''; o.querySelector('#gmaPinC').value = '';
+      o.querySelector('#gmaEtatCode').textContent = code ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.';
+      montrer(true, code ? 'Code du secrétariat enregistré. Transmettez-le à vos secrétaires.' : 'Code du secrétariat retiré.');
+    };
+    o.querySelector('#gmaBtnCode').onclick = () => {
+      const code = o.querySelector('#gmaCode').value.trim();
+      if (!code) return montrer(false, 'Entrez le nouveau code du secrétariat.');
+      envoyerCode(code);
+    };
+    const ret = o.querySelector('#gmaBtnRetirer');
+    if (ret) ret.onclick = () => { if (confirm('Retirer le code? Les secrétaires ne pourront plus ouvrir les outils du secrétariat.')) envoyerCode(''); };
+    o.querySelector('#gmaBtnPin').onclick = async () => {
+      const a = o.querySelector('#gmaPinA').value, n = o.querySelector('#gmaPinN').value, n2 = o.querySelector('#gmaPinN2').value;
+      if (!a) return montrer(false, 'Entrez votre mot de passe actuel.');
+      if (n.length < 6) return montrer(false, message({ erreur: 'mot_de_passe_court' }));
+      if (n !== n2) return montrer(false, 'Les deux nouveaux mots de passe ne sont pas identiques.');
+      const r = await appel(sb, 'acces_changer_pin', { p_owner_token: owner, p_pin: a, p_nouveau: n });
+      if (!r || !r.ok) return montrer(false, r && r.erreur === 'code_identique' ? 'Le nouveau mot de passe doit être différent du code du secrétariat.' : message(r));
+      memoriser(owner, r);
+      ['#gmaPinA', '#gmaPinN', '#gmaPinN2'].forEach(s => { o.querySelector(s).value = ''; });
+      montrer(true, 'Mot de passe gestionnaire modifié.');
+    };
+  }
+
+  // Point d'entree : retourne la cle de l'outil (ou null si "alternative" choisie)
+  async function ouvrir(sb, owner, niveau, opts) {
+    opts = opts || {};
+    let c = enCache(owner);
+    if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner });
+    if (!etat || !etat.ok) { maintenance(); return new Promise(() => { }); }
+    if (etat.owner_token && etat.owner_token !== owner) {
+      owner = etat.owner_token; fixerOwner(owner);
+      c = enCache(owner);
+      if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    }
+    const r = etat.configure ? await formOuvrir(sb, owner, niveau, etat, opts) : await formDefinir(sb, owner, niveau);
+    if (r && r.alt) { fermer(); return null; }
+    const m = memoriser(owner, r);
+    fermer();
+    barre(sb, owner, niveau);
+    return m[niveau];
+  }
+
+  function cle(owner, niveau) { const c = enCache(owner); return c ? c[niveau] || null : null; }
+
+  return { ouvrir, cle, esc, ecran, fermer, tete, message, appel, formulaire, oublier, maintenance, OUBLI };
+})();
+</script>
+
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div class="page-wrap">
 
   <div class="entete">
     <span style="font-family:Georgia,serif;font-size:26px;font-weight:600;color:white">Gestion<span style="color:#2d8fcf">Mel</span></span>
     <div class="entete-titre">
       <h1>Évaluation de performance</h1>
-      <p>Revue salariale annuelle</p>
+      <p id="sousTitre">Revue salariale annuelle</p>
     </div>
   </div>
 
-  <div class="onglets">
-    <div class="onglet actif" onclick="switchTab(&#39;employe&#39;,this)">
-      Partie employé
-      <span class="tag">À compléter par l'employé(e)</span>
+  <div class="vue active" id="vChargement"><div class="vide-etat">⏳ Chargement...</div></div>
+
+  <!-- ===== LISTE DES ÉVALUATIONS (gestionnaire) ===== -->
+  <div class="vue" id="vListe">
+    <div class="liste-tete">
+      <h2>📁 Mes évaluations</h2>
+      <button class="btn btn-primaire" id="btnNouvelle">+ Nouvelle évaluation</button>
     </div>
-    <div class="onglet" onclick="switchTab(&#39;employeur&#39;,this)">
-      Partie employeur
-      <span class="tag">À compléter par le gestionnaire</span>
+    <input type="text" class="recherche" id="recherche" placeholder="🔍 Rechercher un employé ou un poste..." autocomplete="off">
+    <div id="liste"></div>
+  </div>
+
+  <!-- ===== LIEN INVALIDE (employé) ===== -->
+  <div class="vue" id="vInvalide">
+    <div class="merci"><div class="gros">🔒</div><h2 id="invTitre">Ce lien n'est plus actif</h2><p id="invTexte">Demandez un nouveau lien à votre gestionnaire.</p></div>
+  </div>
+
+  <!-- ===== MERCI (employé) ===== -->
+  <div class="vue" id="vMerci">
+    <div class="merci"><div class="gros">✅</div><h2>Merci, votre autoévaluation est transmise!</h2>
+      <p>Votre gestionnaire pourra maintenant en prendre connaissance pour préparer votre rencontre d'évaluation.</p>
+      <p>Vous pouvez fermer cette page.</p>
+      <div style="margin-top:18px"><button class="btn btn-second btn-sm" id="btnRevoir">Revoir mes réponses</button></div>
     </div>
   </div>
 
-  <!-- ===== PARTIE EMPLOYÉ ===== -->
-  <div id="panneau-employe" class="panneau actif">
+  <!-- ===== UNE ÉVALUATION ===== -->
+  <div class="vue" id="vEdition">
+    <div class="edit-bar">
+      <button class="btn btn-second btn-sm gestion-seul" id="btnRetour">← Mes évaluations</button>
+      <span class="sync" id="sync"></span>
+      <button class="btn btn-danger btn-sm gestion-seul" id="btnSupprimer">🗑️ Supprimer</button>
+    </div>
 
-    <!-- P1 Infos -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">1</div>
-        <h2>Informations de l'employé</h2>
+    <div class="onglets">
+      <div class="onglet actif" data-onglet="employe">
+        Partie employé
+        <span class="tag">À compléter par l'employé(e)</span>
       </div>
-      <div class="grille2">
-        <div class="champ"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
-        <div class="champ"><label>Poste occupé</label><input type="text" placeholder="ex : Secrétaire dentaire"></div>
-        <div class="champ"><label>Date de l'évaluation</label><input type="date"></div>
+      <div class="onglet" data-onglet="employeur">
+        Partie employeur
+        <span class="tag">À compléter par la direction</span>
       </div>
     </div>
 
-    <!-- P2 Échelle -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">2</div>
-        <h2>Échelle d'évaluation</h2>
-      </div>
-      <div class="echelle">
-        <div class="echelle-item"><div class="niveau">4 — Supérieur</div><div class="desc">Les performances dépassent largement les attentes.</div></div>
-        <div class="echelle-item"><div class="niveau">3 — Très bien</div><div class="desc">Les performances dépassent les attentes.</div></div>
-        <div class="echelle-item"><div class="niveau">2 — Satisfaisant</div><div class="desc">Les performances répondent aux attentes.</div></div>
-        <div class="echelle-item"><div class="niveau">1 — Insatisfaisant</div><div class="desc">Les performances ne répondent pas aux attentes.</div></div>
-      </div>
-    </div>
+    <!-- ===== PARTIE EMPLOYÉ ===== -->
+    <div id="panneau-employe" class="panneau actif">
 
-    <!-- P3 Questionnaire -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">3</div>
-        <h2>Questionnaire d'autoévaluation</h2>
-      </div>
-      <p class="section-desc">Sélectionnez la note qui correspond le mieux à votre performance pour chaque critère.</p>
-      <div id="criteres-employe"><div class="critere">
-      <div class="critere-nom">Motivation</div>
-      <div class="critere-def">L'employé est désireux d'entreprendre de nouvelles tâches, fait preuve d'une attitude positive et travaille pour atteindre des résultats dépassant les attentes.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-0-1" onclick="setNote(0,1)">1</button><button class="note-btn" id="btn-0-2" onclick="setNote(0,2)">2</button><button class="note-btn" id="btn-0-3" onclick="setNote(0,3)">3</button><button class="note-btn" id="btn-0-4" onclick="setNote(0,4)">4</button>
-        <button class="note-btn" id="btn-0-na" onclick="setNote(0,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Organisation du travail</div>
-      <div class="critere-def">L'employé utilise son temps de manière efficace et fait preuve de solides compétences en matière d'organisation.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-1-1" onclick="setNote(1,1)">1</button><button class="note-btn" id="btn-1-2" onclick="setNote(1,2)">2</button><button class="note-btn" id="btn-1-3" onclick="setNote(1,3)">3</button><button class="note-btn" id="btn-1-4" onclick="setNote(1,4)">4</button>
-        <button class="note-btn" id="btn-1-na" onclick="setNote(1,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Rendement professionnel</div>
-      <div class="critere-def">L'employé termine les tâches complètement et efficacement tout en offrant un service de qualité aux clients.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-2-1" onclick="setNote(2,1)">1</button><button class="note-btn" id="btn-2-2" onclick="setNote(2,2)">2</button><button class="note-btn" id="btn-2-3" onclick="setNote(2,3)">3</button><button class="note-btn" id="btn-2-4" onclick="setNote(2,4)">4</button>
-        <button class="note-btn" id="btn-2-na" onclick="setNote(2,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Relations avec les pairs</div>
-      <div class="critere-def">L'employé entretient de solides relations avec ses coéquipiers, demande de l'aide en cas de besoin et est soucieux du développement de l'équipe.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-3-1" onclick="setNote(3,1)">1</button><button class="note-btn" id="btn-3-2" onclick="setNote(3,2)">2</button><button class="note-btn" id="btn-3-3" onclick="setNote(3,3)">3</button><button class="note-btn" id="btn-3-4" onclick="setNote(3,4)">4</button>
-        <button class="note-btn" id="btn-3-na" onclick="setNote(3,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Service à la clientèle</div>
-      <div class="critere-def">L'employé écoute attentivement les clients, donne des réponses complètes et claires à leurs questions et se montre poli et respectueux.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-4-1" onclick="setNote(4,1)">1</button><button class="note-btn" id="btn-4-2" onclick="setNote(4,2)">2</button><button class="note-btn" id="btn-4-3" onclick="setNote(4,3)">3</button><button class="note-btn" id="btn-4-4" onclick="setNote(4,4)">4</button>
-        <button class="note-btn" id="btn-4-na" onclick="setNote(4,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Initiative et autonomie</div>
-      <div class="critere-def">L'employé est capable de travailler sans supervision et de prendre des décisions efficaces de manière indépendante dans des situations complexes.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-5-1" onclick="setNote(5,1)">1</button><button class="note-btn" id="btn-5-2" onclick="setNote(5,2)">2</button><button class="note-btn" id="btn-5-3" onclick="setNote(5,3)">3</button><button class="note-btn" id="btn-5-4" onclick="setNote(5,4)">4</button>
-        <button class="note-btn" id="btn-5-na" onclick="setNote(5,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Ponctualité</div>
-      <div class="critere-def">L'employé fait preuve d'une bonne gestion du temps et est rarement en retard au travail.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-6-1" onclick="setNote(6,1)">1</button><button class="note-btn" id="btn-6-2" onclick="setNote(6,2)">2</button><button class="note-btn" id="btn-6-3" onclick="setNote(6,3)">3</button><button class="note-btn" id="btn-6-4" onclick="setNote(6,4)">4</button>
-        <button class="note-btn" id="btn-6-na" onclick="setNote(6,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Communication écrite</div>
-      <div class="critere-def">L'employé transmet de l'information claire, structurée et professionnelle à l'écrit en utilisant un langage approprié et sans erreurs majeures.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-7-1" onclick="setNote(7,1)">1</button><button class="note-btn" id="btn-7-2" onclick="setNote(7,2)">2</button><button class="note-btn" id="btn-7-3" onclick="setNote(7,3)">3</button><button class="note-btn" id="btn-7-4" onclick="setNote(7,4)">4</button>
-        <button class="note-btn" id="btn-7-na" onclick="setNote(7,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Communication orale</div>
-      <div class="critere-def">L'employé s'exprime clairement et efficacement à l'oral, adapte son discours à son interlocuteur et favorise une communication professionnelle respectueuse.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-8-1" onclick="setNote(8,1)">1</button><button class="note-btn" id="btn-8-2" onclick="setNote(8,2)">2</button><button class="note-btn" id="btn-8-3" onclick="setNote(8,3)">3</button><button class="note-btn" id="btn-8-4" onclick="setNote(8,4)">4</button>
-        <button class="note-btn" id="btn-8-na" onclick="setNote(8,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Jugement</div>
-      <div class="critere-def">L'employé analyse les situations, prend des décisions appropriées et agit de façon réfléchie en tenant compte du contexte, des priorités et des impacts.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-9-1" onclick="setNote(9,1)">1</button><button class="note-btn" id="btn-9-2" onclick="setNote(9,2)">2</button><button class="note-btn" id="btn-9-3" onclick="setNote(9,3)">3</button><button class="note-btn" id="btn-9-4" onclick="setNote(9,4)">4</button>
-        <button class="note-btn" id="btn-9-na" onclick="setNote(9,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Résolution de problème</div>
-      <div class="critere-def">L'employé trouve des solutions aux problèmes de façon efficace et autonome.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-10-1" onclick="setNote(10,1)">1</button><button class="note-btn" id="btn-10-2" onclick="setNote(10,2)">2</button><button class="note-btn" id="btn-10-3" onclick="setNote(10,3)">3</button><button class="note-btn" id="btn-10-4" onclick="setNote(10,4)">4</button>
-        <button class="note-btn" id="btn-10-na" onclick="setNote(10,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Prise de décisions</div>
-      <div class="critere-def">L'employé prend des décisions efficaces au travail, demande des éclaircissements si nécessaire et respecte la confidentialité des informations.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-11-1" onclick="setNote(11,1)">1</button><button class="note-btn" id="btn-11-2" onclick="setNote(11,2)">2</button><button class="note-btn" id="btn-11-3" onclick="setNote(11,3)">3</button><button class="note-btn" id="btn-11-4" onclick="setNote(11,4)">4</button>
-        <button class="note-btn" id="btn-11-na" onclick="setNote(11,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Qualité du travail</div>
-      <div class="critere-def">L'employé accomplit les tâches avec efficacité et précision et respecte le niveau de qualité requis pour le poste.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-12-1" onclick="setNote(12,1)">1</button><button class="note-btn" id="btn-12-2" onclick="setNote(12,2)">2</button><button class="note-btn" id="btn-12-3" onclick="setNote(12,3)">3</button><button class="note-btn" id="btn-12-4" onclick="setNote(12,4)">4</button>
-        <button class="note-btn" id="btn-12-na" onclick="setNote(12,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Planification et organisation</div>
-      <div class="critere-def">L'employé est bien organisé dans ses activités quotidiennes et sait structurer ses tâches et son environnement de travail.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-13-1" onclick="setNote(13,1)">1</button><button class="note-btn" id="btn-13-2" onclick="setNote(13,2)">2</button><button class="note-btn" id="btn-13-3" onclick="setNote(13,3)">3</button><button class="note-btn" id="btn-13-4" onclick="setNote(13,4)">4</button>
-        <button class="note-btn" id="btn-13-na" onclick="setNote(13,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div><div class="critere">
-      <div class="critere-nom">Innovation</div>
-      <div class="critere-def">L'employé donne son avis sur la façon dont l'environnement de travail peut être amélioré.</div>
-      <div class="critere-notes">
-        <button class="note-btn" id="btn-14-1" onclick="setNote(14,1)">1</button><button class="note-btn" id="btn-14-2" onclick="setNote(14,2)">2</button><button class="note-btn" id="btn-14-3" onclick="setNote(14,3)">3</button><button class="note-btn" id="btn-14-4" onclick="setNote(14,4)">4</button>
-        <button class="note-btn" id="btn-14-na" onclick="setNote(14,&#39;na&#39;)" style="width:52px">N/A</button>
-      </div>
-    </div></div>
-      <div class="moyenne-box">
-        <div>
-          <div class="moyenne-label">Moyenne de l'évaluation</div>
-          <div class="moyenne-sub">Calculée automatiquement</div>
-        </div>
-        <div class="moyenne-val" id="moy-employe">—</div>
-      </div>
-    </div>
+      <div id="bandeauEmp"></div>
 
-    <!-- P4 Sommaire -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">4</div>
-        <h2>Sommaire de l'évaluation</h2>
-      </div>
-      <div class="champ"><label>Points forts</label><textarea placeholder="Décrivez vos points forts..."></textarea></div>
-      <div class="champ"><label>Points à améliorer</label><textarea placeholder="Identifiez les aspects à travailler..."></textarea></div>
-    </div>
-
-    <!-- P5 Recommandations -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">5</div>
-        <h2>Recommandations et commentaires</h2>
-      </div>
-      <div class="champ"><label>De quelle façon puis-je améliorer mes performances ?</label><textarea placeholder="Vos réflexions..."></textarea></div>
-      <div class="champ"><label>Que peut faire l'équipe de gestion pour m'aider à réussir ?</label><textarea placeholder="Vos suggestions..."></textarea></div>
-    </div>
-
-    <!-- P6 Plan d'action -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">6</div>
-        <h2>Plan d'action</h2>
-      </div>
-      <p class="section-desc">Identifiez trois objectifs à atteindre avant la prochaine évaluation de performance.</p>
-      <div class="champ"><label>Objectif 1</label><textarea placeholder="Décrivez votre premier objectif..."></textarea></div>
-      <div class="champ"><label>Objectif 2</label><textarea placeholder="Décrivez votre deuxième objectif..."></textarea></div>
-      <div class="champ"><label>Objectif 3</label><textarea placeholder="Décrivez votre troisième objectif..."></textarea></div>
-      <div class="champ"><label>Comment travaillerons-nous ensemble pour réaliser ces objectifs ?</label><textarea placeholder="Stratégie de collaboration..."></textarea></div>
-    </div>
-
-    <!-- P7 Développement -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">7</div>
-        <h2>Plan de développement</h2>
-      </div>
-      <div class="champ"><label>Qu'est-ce qui est nécessaire pour m'aider à me développer ?</label><textarea placeholder="Formation, mentorat, nouvelles responsabilités..."></textarea></div>
-      <div class="champ"><label>Suis-je satisfait(e) de mon poste actuel ?</label><textarea placeholder="Expliquez votre niveau de satisfaction..."></textarea></div>
-      <div class="champ"><label>Quel poste aimerais-je occuper dans le futur ?</label><textarea placeholder="Vos aspirations professionnelles..."></textarea></div>
-      <div class="champ"><label>Ai-je le potentiel pour atteindre ce poste ? Comment puis-je continuer à me développer ?</label><textarea placeholder="Votre analyse..."></textarea></div>
-    </div>
-
-    <!-- P8 Requêtes -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">8</div>
-        <h2>Requêtes</h2>
-      </div>
-      <div class="eval-section-titre">Rémunération</div>
-      <div class="grille2">
-        <div class="champ"><label>Salaire demandé (taux horaire ou annuel)</label><input type="text" placeholder="ex : 22$/h ou 45 000$/an"></div>
-      </div>
-      <div class="champ"><label>De quelle façon justifiez-vous cette demande salariale ?</label><textarea placeholder="Vos arguments..."></textarea></div>
-      <div class="eval-section-titre" style="margin-top:16px">Autres avantages</div>
-      <div class="champ"><label>Avez-vous une demande particulière ?</label><input type="text" placeholder="ex : horaire flexible, formation..."></div>
-      <div class="champ"><label>Justification de cette demande</label><textarea placeholder="Vos arguments..."></textarea></div>
-    </div>
-
-  </div>
-
-  <!-- ===== PARTIE EMPLOYEUR ===== -->
-  <div id="panneau-employeur" class="panneau">
-
-    <!-- P1 Infos -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">1</div>
-        <h2>Informations de l'employé</h2>
-      </div>
-      <div class="grille2">
-        <div class="champ"><label>Nom complet</label><input type="text" placeholder="Prénom Nom"></div>
-        <div class="champ"><label>Poste occupé</label><input type="text" placeholder="ex : Secrétaire dentaire"></div>
-        <div class="champ"><label>Date de l'évaluation</label><input type="date"></div>
-        <div class="champ"><label>Date d'embauche</label><input type="date"></div>
-        <div class="champ"><label>Salaire actuel</label><input type="text" placeholder="ex : 20$/h"></div>
-        <div class="champ"><label>% de vacances</label><input type="text" placeholder="ex : 4%"></div>
-        <div class="champ"><label>Moyenne d'heures hebdomadaires</label><input type="text" placeholder="ex : 35h"></div>
-      </div>
-      <div class="champ"><label>Notes particulières</label><textarea placeholder="Observations importantes..."></textarea></div>
-    </div>
-
-    <!-- P2 Attitude -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">2</div>
-        <h2>Attitude et comportement</h2>
-      </div>
-      <p class="section-desc">Une attitude positive est indispensable pour bâtir une bonne dynamique de travail.</p>
-      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez l&#39;attitude et le comportement de l&#39;employé(e)..."></textarea></div>
-    </div>
-
-    <!-- P3 Flexibilité -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">3</div>
-        <h2>Flexibilité et fiabilité</h2>
-      </div>
-      <p class="section-desc">La flexibilité et la fiabilité vont très souvent de pair.</p>
-      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la flexibilité et la fiabilité de l&#39;employé(e)..."></textarea></div>
-    </div>
-
-    <!-- P4 Performance -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">4</div>
-        <h2>Performance et réussite</h2>
-      </div>
-      <p class="section-desc">Concentrez-vous sur les réussites de vos employés.</p>
-      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la performance et les réussites de l&#39;employé(e)..."></textarea></div>
-    </div>
-
-    <!-- P5 Travail d'équipe -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">5</div>
-        <h2>Travail d'équipe et communication</h2>
-      </div>
-      <p class="section-desc">La collaboration et le travail d'équipe doivent figurer au premier plan.</p>
-      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la collaboration et les habiletés de communication..."></textarea></div>
-    </div>
-
-    <!-- P6 Gestion du temps -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">6</div>
-        <h2>Gestion du temps et ponctualité</h2>
-      </div>
-      <p class="section-desc">Ces compétences représentent des atouts essentiels pour l'équilibre organisationnel.</p>
-      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez la gestion du temps et la ponctualité..."></textarea></div>
-    </div>
-
-    <!-- P7 Progrès -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">7</div>
-        <h2>Progrès et potentiel</h2>
-      </div>
-      <p class="section-desc">Prenez le temps de vous concentrer sur les progrès et le potentiel de l'employé(e).</p>
-      <div class="champ"><label>Commentaires</label><textarea rows="5" placeholder="Évaluez les progrès réalisés et le potentiel futur..."></textarea></div>
-    </div>
-
-    <!-- P8 Révision conditions -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">8</div>
-        <h2>Révision des conditions de travail</h2>
-      </div>
-      <div class="grille2">
-        <div class="champ"><label>Salaire actuel</label><input type="text" placeholder="ex : 20$/h"></div>
-        <div class="champ"><label>Salaire demandé par l'employé(e)</label><input type="text" placeholder="ex : 22$/h"></div>
-        <div class="champ"><label>Salaire offert</label><input type="text" placeholder="ex : 21$/h"></div>
-        <div class="champ"><label>% vacances actuel</label><input type="text" placeholder="ex : 4%"></div>
-        <div class="champ"><label>% vacances demandé</label><input type="text" placeholder="ex : 6%"></div>
-        <div class="champ"><label>% vacances offert</label><input type="text" placeholder="ex : 5%"></div>
-      </div>
-      <div class="champ"><label>Autres demandes de l'employé(e)</label><textarea placeholder="Avantages ou conditions demandés..."></textarea></div>
-      <div class="champ"><label>Autres avantages offerts</label><textarea placeholder="Ce qui est offert en réponse..."></textarea></div>
-      <div class="champ"><label>Notes particulières</label><textarea placeholder="À noter : tous les avantages sociaux offerts (stationnement, assurances, uniformes, etc.) doivent être considérés dans l&#39;évaluation de l&#39;offre."></textarea></div>
-    </div>
-
-    <!-- P9 Entente -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">9</div>
-        <h2>Entente</h2>
-      </div>
-      <div class="champ">
-        <label>L'employé(e) est satisfait(e) des résultats de cette évaluation</label>
-        <div class="radio-group">
-          <label class="radio-opt"><input type="radio" name="sat1"> Oui</label>
-          <label class="radio-opt"><input type="radio" name="sat1"> Non</label>
+      <div class="section">
+        <div class="section-titre"><div class="section-num">1</div><h2>Informations de l'employé</h2></div>
+        <div class="grille2">
+          <div class="champ"><label>Nom complet</label><input type="text" data-i="nom" placeholder="Prénom Nom"></div>
+          <div class="champ"><label>Poste occupé</label><input type="text" data-i="poste" placeholder="ex. : Secrétaire dentaire"></div>
+          <div class="champ"><label>Date de l'évaluation</label><input type="date" data-i="date"></div>
         </div>
       </div>
-      <div class="champ">
-        <label>L'employé(e) est satisfait(e) de son plan de développement professionnel</label>
-        <div class="radio-group">
-          <label class="radio-opt"><input type="radio" name="sat2"> Oui</label>
-          <label class="radio-opt"><input type="radio" name="sat2"> Non</label>
+
+      <div class="section sec-emp">
+        <div class="section-titre"><div class="section-num">2</div><h2>Échelle d'évaluation</h2></div>
+        <div class="echelle">
+          <div class="echelle-item"><div class="niveau">4 · Supérieur</div><div class="desc">Les performances dépassent largement les attentes.</div></div>
+          <div class="echelle-item"><div class="niveau">3 · Très bien</div><div class="desc">Les performances dépassent les attentes.</div></div>
+          <div class="echelle-item"><div class="niveau">2 · Satisfaisant</div><div class="desc">Les performances répondent aux attentes.</div></div>
+          <div class="echelle-item"><div class="niveau">1 · Insatisfaisant</div><div class="desc">Les performances ne répondent pas aux attentes.</div></div>
         </div>
       </div>
-      <div class="champ"><label>Autres commentaires</label><textarea placeholder="Commentaires finaux..."></textarea></div>
+
+      <div class="section sec-emp">
+        <div class="section-titre"><div class="section-num">3</div><h2>Questionnaire d'autoévaluation</h2></div>
+        <p class="section-desc">Sélectionnez la note qui correspond le mieux à votre performance pour chaque critère.</p>
+        <div id="criteres-employe"></div>
+        <div class="moyenne-box">
+          <div>
+            <div class="moyenne-label">Moyenne de l'évaluation</div>
+            <div class="moyenne-sub">Calculée automatiquement</div>
+          </div>
+          <div class="moyenne-val" id="moy-employe">-</div>
+        </div>
+        <div id="comparaison" class="gestion-seul"></div>
+      </div>
+
+      <div class="section sec-emp">
+        <div class="section-titre"><div class="section-num">4</div><h2>Sommaire de l'évaluation</h2></div>
+        <div class="champ"><label>Points forts</label><textarea data-p="forts" placeholder="Décrivez vos points forts..."></textarea></div>
+        <div class="champ"><label>Points à améliorer</label><textarea data-p="ameliorer" placeholder="Identifiez les aspects à travailler..."></textarea></div>
+      </div>
+
+      <div class="section sec-emp">
+        <div class="section-titre"><div class="section-num">5</div><h2>Recommandations et commentaires</h2></div>
+        <div class="champ"><label>De quelle façon puis-je améliorer mes performances?</label><textarea data-p="comment_ameliorer" placeholder="Vos réflexions..."></textarea></div>
+        <div class="champ"><label>Que peut faire l'équipe de gestion pour m'aider à réussir?</label><textarea data-p="aide_gestion" placeholder="Vos suggestions..."></textarea></div>
+      </div>
+
+      <div class="section sec-emp">
+        <div class="section-titre"><div class="section-num">6</div><h2>Plan d'action</h2></div>
+        <p class="section-desc">Identifiez trois objectifs à atteindre avant la prochaine évaluation de performance.</p>
+        <div class="champ"><label>Objectif 1</label><textarea data-p="obj1" placeholder="Décrivez votre premier objectif..."></textarea></div>
+        <div class="champ"><label>Objectif 2</label><textarea data-p="obj2" placeholder="Décrivez votre deuxième objectif..."></textarea></div>
+        <div class="champ"><label>Objectif 3</label><textarea data-p="obj3" placeholder="Décrivez votre troisième objectif..."></textarea></div>
+        <div class="champ"><label>Comment travaillerons-nous ensemble pour réaliser ces objectifs?</label><textarea data-p="collaboration" placeholder="Stratégie de collaboration..."></textarea></div>
+      </div>
+
+      <div class="section sec-emp">
+        <div class="section-titre"><div class="section-num">7</div><h2>Plan de développement</h2></div>
+        <div class="champ"><label>Qu'est-ce qui est nécessaire pour m'aider à me développer?</label><textarea data-p="besoin_dev" placeholder="Formation, mentorat, nouvelles responsabilités..."></textarea></div>
+        <div class="champ"><label>Suis-je satisfait(e) de mon poste actuel?</label><textarea data-p="satisfait_poste" placeholder="Expliquez votre niveau de satisfaction..."></textarea></div>
+        <div class="champ"><label>Quel poste aimerais-je occuper dans le futur?</label><textarea data-p="poste_futur" placeholder="Vos aspirations professionnelles..."></textarea></div>
+        <div class="champ"><label>Ai-je le potentiel pour atteindre ce poste? Comment puis-je continuer à me développer?</label><textarea data-p="potentiel" placeholder="Votre analyse..."></textarea></div>
+      </div>
+
+      <div class="section sec-emp">
+        <div class="section-titre"><div class="section-num">8</div><h2>Requêtes</h2></div>
+        <div class="eval-section-titre">Rémunération</div>
+        <div class="grille2">
+          <div class="champ"><label>Salaire demandé (taux horaire ou annuel)</label><input type="text" data-p="salaire_demande" placeholder="ex. : 22 $/h ou 45 000 $/an"></div>
+        </div>
+        <div class="champ"><label>De quelle façon justifiez-vous cette demande salariale?</label><textarea data-p="justif_salaire" placeholder="Vos arguments..."></textarea></div>
+        <div class="eval-section-titre" style="margin-top:16px">Autres avantages</div>
+        <div class="champ"><label>Avez-vous une demande particulière?</label><input type="text" data-p="demande_avantage" placeholder="ex. : horaire flexible, formation..."></div>
+        <div class="champ"><label>Justification de cette demande</label><textarea data-p="justif_avantage" placeholder="Vos arguments..."></textarea></div>
+      </div>
+
+      <div class="transmettre employe-seul" id="blocTransmettre">
+        <p>Quand vous avez terminé, transmettez votre partie à votre gestionnaire. Vous ne pourrez plus la modifier ensuite.</p>
+        <button class="btn btn-vert" id="btnTransmettre">✅ J'ai terminé : transmettre ma partie</button>
+      </div>
     </div>
 
-    <!-- P10 Signatures -->
-    <div class="section">
-      <div class="section-titre">
-        <div class="section-num">10</div>
-        <h2>Signatures</h2>
-      </div>
-      <div class="grille2" style="margin-top:8px">
-        <div>
-          <div class="champ"><label>Signature de l'employé(e)</label><input type="text" placeholder="Nom complet"></div>
-          <div class="champ"><label>Date</label><input type="date"></div>
-          <div class="sig-bloc">Signature</div>
+    <!-- ===== PARTIE EMPLOYEUR ===== -->
+    <div id="panneau-employeur" class="panneau">
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">1</div><h2>Informations de l'employé</h2></div>
+        <div class="grille2">
+          <div class="champ"><label>Nom complet</label><input type="text" data-i="nom" placeholder="Prénom Nom"></div>
+          <div class="champ"><label>Poste occupé</label><input type="text" data-i="poste" placeholder="ex. : Secrétaire dentaire"></div>
+          <div class="champ"><label>Date de l'évaluation</label><input type="date" data-i="date"></div>
+          <div class="champ"><label>Date d'embauche</label><input type="date" data-k="date_embauche"></div>
+          <div class="champ"><label>Salaire actuel</label><input type="text" data-k="salaire_actuel" placeholder="ex. : 20 $/h"></div>
+          <div class="champ"><label>% de vacances</label><input type="text" data-k="vacances" placeholder="ex. : 4 %"></div>
+          <div class="champ"><label>Moyenne d'heures hebdomadaires</label><input type="text" data-k="heures" placeholder="ex. : 35 h"></div>
         </div>
-        <div>
-          <div class="champ"><label>Signature de l'employeur / gestionnaire</label><input type="text" placeholder="Nom complet"></div>
-          <div class="champ"><label>Date</label><input type="date"></div>
-          <div class="sig-bloc">Signature</div>
+        <div class="champ"><label>Notes particulières</label><textarea data-k="notes_info" placeholder="Observations importantes..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">2</div><h2>Attitude et comportement</h2></div>
+        <p class="section-desc">Une attitude positive est indispensable pour bâtir une bonne dynamique de travail.</p>
+        <div class="champ"><label>Commentaires</label><textarea rows="5" data-k="attitude" placeholder="Évaluez l'attitude et le comportement de l'employé(e)..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">3</div><h2>Flexibilité et fiabilité</h2></div>
+        <p class="section-desc">La flexibilité et la fiabilité vont très souvent de pair.</p>
+        <div class="champ"><label>Commentaires</label><textarea rows="5" data-k="flexibilite" placeholder="Évaluez la flexibilité et la fiabilité de l'employé(e)..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">4</div><h2>Performance et réussite</h2></div>
+        <p class="section-desc">Concentrez-vous sur les réussites de vos employés.</p>
+        <div class="champ"><label>Commentaires</label><textarea rows="5" data-k="performance" placeholder="Évaluez la performance et les réussites de l'employé(e)..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">5</div><h2>Travail d'équipe et communication</h2></div>
+        <p class="section-desc">La collaboration et le travail d'équipe doivent figurer au premier plan.</p>
+        <div class="champ"><label>Commentaires</label><textarea rows="5" data-k="equipe" placeholder="Évaluez la collaboration et les habiletés de communication..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">6</div><h2>Gestion du temps et ponctualité</h2></div>
+        <p class="section-desc">Ces compétences représentent des atouts essentiels pour l'équilibre organisationnel.</p>
+        <div class="champ"><label>Commentaires</label><textarea rows="5" data-k="temps" placeholder="Évaluez la gestion du temps et la ponctualité..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">7</div><h2>Progrès et potentiel</h2></div>
+        <p class="section-desc">Prenez le temps de vous concentrer sur les progrès et le potentiel de l'employé(e).</p>
+        <div class="champ"><label>Commentaires</label><textarea rows="5" data-k="progres" placeholder="Évaluez les progrès réalisés et le potentiel futur..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">8</div><h2>Révision des conditions de travail</h2></div>
+        <div class="grille2">
+          <div class="champ"><label>Salaire actuel</label><input type="text" data-k="rev_salaire_actuel" placeholder="ex. : 20 $/h"></div>
+          <div class="champ"><label>Salaire demandé par l'employé(e)</label><input type="text" data-k="rev_salaire_demande" placeholder="ex. : 22 $/h"></div>
+          <div class="champ"><label>Salaire offert</label><input type="text" data-k="rev_salaire_offert" placeholder="ex. : 21 $/h"></div>
+          <div class="champ"><label>% vacances actuel</label><input type="text" data-k="rev_vac_actuel" placeholder="ex. : 4 %"></div>
+          <div class="champ"><label>% vacances demandé</label><input type="text" data-k="rev_vac_demande" placeholder="ex. : 6 %"></div>
+          <div class="champ"><label>% vacances offert</label><input type="text" data-k="rev_vac_offert" placeholder="ex. : 5 %"></div>
+        </div>
+        <div class="champ"><label>Autres demandes de l'employé(e)</label><textarea data-k="autres_demandes" placeholder="Avantages ou conditions demandés..."></textarea></div>
+        <div class="champ"><label>Autres avantages offerts</label><textarea data-k="autres_offerts" placeholder="Ce qui est offert en réponse..."></textarea></div>
+        <div class="champ"><label>Notes particulières</label><textarea data-k="notes_rev" placeholder="À noter : tous les avantages sociaux offerts (stationnement, assurances, uniformes, etc.) doivent être considérés dans l'évaluation de l'offre."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">9</div><h2>Entente</h2></div>
+        <div class="champ">
+          <label>L'employé(e) est satisfait(e) des résultats de cette évaluation</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="sat1" value="oui"> Oui</label>
+            <label class="radio-opt"><input type="radio" name="sat1" value="non"> Non</label>
+          </div>
+        </div>
+        <div class="champ">
+          <label>L'employé(e) est satisfait(e) de son plan de développement professionnel</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="sat2" value="oui"> Oui</label>
+            <label class="radio-opt"><input type="radio" name="sat2" value="non"> Non</label>
+          </div>
+        </div>
+        <div class="champ"><label>Autres commentaires</label><textarea data-k="autres_commentaires" placeholder="Commentaires finaux..."></textarea></div>
+      </div>
+
+      <div class="section">
+        <div class="section-titre"><div class="section-num">10</div><h2>Signatures</h2></div>
+        <div class="grille2" style="margin-top:8px">
+          <div>
+            <div class="champ"><label>Signature de l'employé(e)</label><input type="text" data-k="sig_employe" placeholder="Nom complet"></div>
+            <div class="champ"><label>Date</label><input type="date" data-k="sig_employe_date"></div>
+            <div class="sig-bloc">Signature</div>
+          </div>
+          <div>
+            <div class="champ"><label>Signature de l'employeur ou du gestionnaire</label><input type="text" data-k="sig_employeur" placeholder="Nom complet"></div>
+            <div class="champ"><label>Date</label><input type="date" data-k="sig_employeur_date"></div>
+            <div class="sig-bloc">Signature</div>
+          </div>
         </div>
       </div>
     </div>
 
-  </div>
-
-  <div style="text-align:center;margin-top:20px">
-    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+    <div style="text-align:center;margin-top:20px" class="no-print">
+      <button class="btn btn-primaire" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+    </div>
   </div>
 
   <div class="bas-page">
-    <div class="bas-copy">© 2026 Gestion Mel — Tous droits réservés</div>
+    <div class="bas-copy">© Gestion Mel 2026. Tous droits réservés.</div>
     <span style="font-family:Georgia,serif;font-size:18px;font-weight:600;color:white">Gestion<span style="color:#2d8fcf">Mel</span></span>
   </div>
 
 </div>
 
 <script>
+const SUPABASE_URL = 'https://ytantrrkhmnyvurhxkqr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_w7wR2-suVAyNNakH_ckwZg_9as0dqGc';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const BASE_URL = window.location.origin + window.location.pathname;
+
 const criteres = [
   { nom: "Motivation", def: "L'employé est désireux d'entreprendre de nouvelles tâches, fait preuve d'une attitude positive et travaille pour atteindre des résultats dépassant les attentes." },
   { nom: "Organisation du travail", def: "L'employé utilise son temps de manière efficace et fait preuve de solides compétences en matière d'organisation." },
@@ -588,53 +776,418 @@ const criteres = [
   { nom: "Innovation", def: "L'employé donne son avis sur la façon dont l'environnement de travail peut être amélioré." }
 ];
 
-const notes = {};
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MOIS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+function dateLongue(d) { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? (+m[3]) + ' ' + MOIS[+m[2] - 1] + ' ' + m[1] : esc(d); }
+const fmt = n => (n === null || n === undefined || n === '' || isNaN(n)) ? '' : Number(n).toFixed(2).replace('.', ',');
+const normNom = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+async function appel(nom, args) { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+function montrer(id) { document.querySelectorAll('.vue').forEach(v => v.classList.toggle('active', v.id === id)); window.scrollTo(0, 0); }
+function statut(type, texte) { const el = $('sync'); el.className = 'sync ' + type; el.textContent = texte; }
 
+const params = new URLSearchParams(window.location.search);
+const lienEmp = params.get('e');
+const modeEmploye = !!lienEmp;
+
+// État de l'évaluation ouverte
+let cle = null, record = null, chargement = true, minuterie = null;
+let infos = {}, champs = {}, partie = { champs: {}, notes: {} };
+let empStatut = 'aucun', empLien = null, empTermineLe = null, partieVisible = true;
+let liste = [];
+
+// ---------------- CRITÈRES ET NOTES ----------------
 function rendreCriteres() {
-  const cont = document.getElementById('criteres-employe');
-  cont.innerHTML = '';
-  criteres.forEach((c, i) => {
-    const div = document.createElement('div');
-    div.className = 'critere';
-    div.innerHTML = `
-      <div class="critere-nom">${c.nom}</div>
+  $('criteres-employe').innerHTML = criteres.map((c, i) => `
+    <div class="critere" id="crit-${i}">
+      <div class="critere-nom"><span>${c.nom}</span><span class="prec" id="prec-${i}" hidden></span></div>
       <div class="critere-def">${c.def}</div>
       <div class="critere-notes">
-        ${[1,2,3,4].map(n => `<button class="note-btn" id="btn-${i}-${n}" onclick="setNote(${i},${n})">${n}</button>`).join('')}
-        <button class="note-btn" id="btn-${i}-na" onclick="setNote(${i},'na')" style="width:52px">N/A</button>
+        ${[1,2,3,4].map(n => `<button type="button" class="note-btn" id="btn-${i}-${n}" data-i="${i}" data-n="${n}">${n}</button>`).join('')}
+        <button type="button" class="note-btn na" id="btn-${i}-na" data-i="${i}" data-n="na">N/A</button>
       </div>
-    `;
-    cont.appendChild(div);
-  });
+    </div>`).join('');
+}
+
+function marquerNote(idx) {
+  const val = partie.notes[idx];
+  [1,2,3,4,'na'].forEach(n => { const b = $(`btn-${idx}-${n}`); if (b) b.className = 'note-btn' + (n === 'na' ? ' na' : ''); });
+  const sel = $(`btn-${idx}-${val}`);
+  if (sel) sel.classList.add('sel-' + val);
+  if (val !== undefined) $('crit-' + idx).classList.remove('manque');
 }
 
 function setNote(idx, val) {
-  notes[idx] = val;
-  [1,2,3,4,'na'].forEach(n => {
-    const btn = document.getElementById(`btn-${idx}-${n}`);
-    if(btn) { btn.className = 'note-btn'; }
-  });
-  const sel = document.getElementById(`btn-${idx}-${val}`);
-  if(sel) sel.className = `note-btn sel-${val}`;
+  if (partie.notes[idx] === val) delete partie.notes[idx]; else partie.notes[idx] = val;
+  marquerNote(idx);
+  calculerMoyenne();
+  planifier();
+}
+
+function moyenneDe(notes) {
+  const vals = Object.values(notes || {}).filter(v => v !== 'na').map(Number).filter(v => v >= 1 && v <= 4);
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+}
+function calculerMoyenne() {
+  const m = moyenneDe(partie.notes);
+  $('moy-employe').textContent = m === null ? '-' : fmt(m) + ' / 4';
+  return m;
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.panneau').forEach(p => p.classList.toggle('actif', p.id === 'panneau-' + id));
+  document.querySelectorAll('.onglet').forEach(o => o.classList.toggle('actif', o.dataset.onglet === id));
+}
+
+// ---------------- REMPLIR LE FORMULAIRE ----------------
+function remplir() {
+  document.querySelectorAll('[data-i]').forEach(el => { if (el.tagName === 'INPUT') el.value = infos[el.dataset.i] || ''; });
+  document.querySelectorAll('[data-k]').forEach(el => el.value = champs[el.dataset.k] || '');
+  document.querySelectorAll('[data-p]').forEach(el => el.value = partie.champs[el.dataset.p] || '');
+  ['sat1', 'sat2'].forEach(n => document.querySelectorAll(`input[name="${n}"]`).forEach(r => r.checked = r.value === champs[n]));
+  criteres.forEach((c, i) => marquerNote(i));
   calculerMoyenne();
 }
 
-function calculerMoyenne() {
-  const vals = Object.values(notes).filter(v => v !== 'na').map(Number);
-  if(vals.length === 0) { document.getElementById('moy-employe').textContent = '—'; return; }
-  const moy = vals.reduce((a,b) => a+b, 0) / vals.length;
-  document.getElementById('moy-employe').textContent = moy.toFixed(2) + ' / 4';
+function verrouillerEmploye(verrou) {
+  document.querySelectorAll('#panneau-employe [data-p], #criteres-employe .note-btn').forEach(el => el.disabled = verrou);
 }
 
-function switchTab(id, el) {
-  document.querySelectorAll('.panneau').forEach(p => p.classList.remove('actif'));
-  document.querySelectorAll('.onglet').forEach(o => o.classList.remove('actif'));
-  document.getElementById('panneau-' + id).classList.add('actif');
-  el.classList.add('actif');
+// ---------------- LISTE (gestionnaire) ----------------
+async function chargerListe() {
+  const r = await appel('eval_annuelle_liste', { p_owner_token: cle });
+  if (!r || !r.ok) throw new Error('liste');
+  liste = r.evaluations || [];
+  return liste;
 }
 
-rendreCriteres();
+function precedente(ev, tout) {
+  const n = normNom(ev.nom); if (!n) return null;
+  const d = ev.date || '9999-12-31';
+  return tout.filter(x => x.record_token !== ev.record_token && normNom(x.nom) === n && x.date && x.date < d)
+             .sort((a, b) => b.date.localeCompare(a.date))[0] || null;
+}
+
+function dessinerListe() {
+  const q = normNom($('recherche').value);
+  const el = $('liste');
+  if (!liste.length) {
+    el.innerHTML = '<div class="vide-etat">Aucune évaluation pour le moment.<br>Cliquez sur « + Nouvelle évaluation » pour commencer.<br><br>Astuce : vous pourrez envoyer un lien à l\'employé(e) pour qu\'il ou elle remplisse son autoévaluation de son côté.</div>';
+    return;
+  }
+  const filtre = liste.filter(e => !q || normNom(e.nom).includes(q) || normNom(e.poste).includes(q));
+  if (!filtre.length) { el.innerHTML = '<div class="vide-etat">Aucune évaluation ne correspond à votre recherche.</div>'; return; }
+  el.innerHTML = filtre.map(e => {
+    let moy = '';
+    if (e.moyenne !== null && e.moyenne !== undefined) {
+      moy = `<span class="chip chip-moy">${fmt(e.moyenne)} / 4</span>`;
+      const p = precedente(e, liste);
+      if (p && p.moyenne !== null && p.moyenne !== undefined) {
+        const diff = e.moyenne - p.moyenne;
+        const coul = diff > 0.004 ? 'var(--vert)' : diff < -0.004 ? 'var(--rouge)' : 'var(--texte-sec)';
+        moy += `<span class="tendance" style="color:${coul}" title="Par rapport au ${dateLongue(p.date)}">${diff > 0.004 ? '▲ +' : diff < -0.004 ? '▼ ' : '= '}${fmt(Math.abs(diff) < 0.005 ? 0 : diff)}</span>`;
+      }
+    }
+    const st = e.statut === 'envoye' ? '<span class="chip" style="background:var(--orange-clair);color:var(--orange)">📨 Envoyée à l\'employé(e)</span>'
+             : e.statut === 'termine' ? '<span class="chip" style="background:var(--vert-clair);color:var(--vert)">✅ Autoévaluation reçue</span>' : '<span></span>';
+    const sous = [e.poste, e.date ? dateLongue(e.date) : ''].filter(Boolean).map(esc).join(' · ') || 'Modifiée le ' + dateLongue(String(e.updated_at).slice(0, 10));
+    return `<div class="eval-item" data-r="${esc(e.record_token)}"><div><div class="eval-nom">${esc(e.nom || '(Employé sans nom)')}</div><div class="eval-sous">${sous}</div></div>${st}<div>${moy}</div></div>`;
+  }).join('');
+  el.querySelectorAll('.eval-item').forEach(x => x.addEventListener('click', () => ouvrir(x.dataset.r)));
+}
+
+async function afficherListe() {
+  params.delete('evaluation'); majUrl(); record = null;
+  montrer('vListe');
+  $('liste').innerHTML = '<div class="vide-etat">Chargement...</div>';
+  try { await chargerListe(); dessinerListe(); }
+  catch (e) { console.error(e); $('liste').innerHTML = '<div class="vide-etat">⚠️ Erreur de connexion. Rechargez la page.</div>'; }
+}
+
+async function nouvelle() {
+  try {
+    const r = await appel('eval_annuelle_creer', { p_owner_token: cle, p_donnees: { infos: { date: new Date().toISOString().slice(0, 10) }, champs: {} } });
+    if (!r || !r.ok) { alert(r && r.erreur === 'limite' ? 'Vous avez atteint 500 évaluations. Supprimez-en une pour en créer une nouvelle.' : 'Impossible de créer une évaluation pour le moment.'); return; }
+    await ouvrir(r.record_token, true);
+  } catch (e) { console.error(e); alert('Impossible de créer une évaluation pour le moment.'); }
+}
+
+// ---------------- OUVRIR UNE ÉVALUATION (gestionnaire) ----------------
+async function ouvrir(token, nouvelleFiche) {
+  chargement = true;
+  try {
+    const r = await appel('eval_annuelle_get', { p_owner_token: cle, p_record_token: token });
+    if (!r || !r.ok) { alert('Cette évaluation est introuvable.'); chargement = false; return afficherListe(); }
+    record = token; params.set('evaluation', token); majUrl();
+    const d = r.donnees || {};
+    infos = Object.assign({}, d.infos || {});
+    champs = Object.assign({}, d.champs || {});
+    partieVisible = r.partie_employe !== null && r.partie_employe !== undefined;
+    const p = r.partie_employe || {};
+    partie = { champs: Object.assign({}, p.champs || {}), notes: Object.assign({}, p.notes || {}) };
+    empStatut = r.statut || 'aucun'; empLien = r.lien_employe || null; empTermineLe = r.termine_le || null;
+    // Le salaire demandé par l'employé(e) se reporte dans la révision des conditions
+    let reporte = false;
+    if (!champs.rev_salaire_demande && partie.champs.salaire_demande) { champs.rev_salaire_demande = partie.champs.salaire_demande; reporte = true; }
+    if (!champs.rev_salaire_actuel && champs.salaire_actuel) { champs.rev_salaire_actuel = champs.salaire_actuel; reporte = true; }
+    remplir();
+    dessinerBandeau();
+    switchTab('employe');
+    montrer('vEdition');
+    statut('ok', '✅ Sauvegardé');
+    chargement = false;
+    if (reporte) planifier();
+    if (nouvelleFiche) setTimeout(() => document.querySelector('#panneau-employe [data-i="nom"]').focus(), 50);
+    if (!liste.length) { try { await chargerListe(); } catch (e) {} }
+    comparer();
+  } catch (e) { console.error(e); alert('Erreur de connexion. Réessayez.'); chargement = false; }
+}
+
+function dessinerBandeau() {
+  const b = $('bandeauEmp'), panneau = $('panneau-employe');
+  panneau.classList.toggle('attente', empStatut === 'envoye');
+  verrouillerEmploye(empStatut !== 'aucun');
+  const lien = empLien ? BASE_URL + '?e=' + empLien : '';
+  const boiteLien = lien ? `<div class="lien-box"><input type="text" id="lienEmp" readonly value="${esc(lien)}"><button class="btn btn-primaire btn-sm" id="btnCopier">📋 Copier</button></div>` : '';
+  if (empStatut === 'aucun') {
+    b.innerHTML = `<div class="bandeau bandeau-bleu"><strong>Qui remplit la partie employé?</strong><br>
+      Vous pouvez la remplir ici avec l'employé(e) pendant la rencontre, ou lui envoyer un lien pour qu'il ou elle fasse son autoévaluation de son côté, avant la rencontre. Le lien donne accès seulement à sa partie, jamais à la partie employeur.
+      <div class="actions-b"><button class="btn btn-primaire btn-sm" id="btnLien">📨 Créer le lien pour l'employé(e)</button></div></div>`;
+  } else if (empStatut === 'envoye') {
+    b.innerHTML = `<div class="bandeau bandeau-orange"><strong>📨 En attente de l'employé(e)</strong><br>
+      Envoyez ce lien à l'employé(e) par courriel ou par texto. Ses réponses sont sauvegardées au fur et à mesure; vous les verrez ici dès qu'il ou elle aura cliqué sur « Transmettre ».
+      ${boiteLien}
+      <div class="actions-b"><button class="btn btn-second btn-sm" id="btnCourriel">✉️ Préparer un courriel</button><button class="btn btn-second btn-sm" id="btnVerifier">🔄 Vérifier si c'est reçu</button><button class="btn btn-danger btn-sm" id="btnRetirer">Désactiver le lien</button></div></div>`;
+  } else {
+    b.innerHTML = `<div class="bandeau bandeau-vert"><strong>✅ Autoévaluation reçue${empTermineLe ? ' le ' + dateLongue(String(empTermineLe).slice(0, 10)) : ''}</strong><br>
+      Voici les réponses de l'employé(e). Elles ne sont plus modifiables. Si l'employé(e) doit y apporter un changement, vous pouvez rouvrir sa partie.
+      <div class="actions-b"><button class="btn btn-second btn-sm" id="btnRouvrir">Rouvrir pour l'employé(e)</button></div></div>`;
+  }
+  const on = (id, f) => { const el = $(id); if (el) el.addEventListener('click', f); };
+  on('btnLien', creerLien); on('btnCopier', copierLien); on('btnCourriel', courriel);
+  on('btnVerifier', () => ouvrir(record)); on('btnRetirer', retirerLien); on('btnRouvrir', rouvrir);
+}
+
+async function creerLien() {
+  if (minuterie) await sauvegarder();
+  try {
+    const r = await appel('eval_annuelle_lien', { p_owner_token: cle, p_record_token: record });
+    if (!r || !r.ok) throw new Error('lien');
+    await ouvrir(record);
+    statut('ok', '✅ Lien créé');
+  } catch (e) { console.error(e); alert('Impossible de créer le lien pour le moment.'); }
+}
+async function retirerLien() {
+  if (!confirm('Désactiver ce lien? L\'employé(e) ne pourra plus l\'ouvrir. Ce qu\'il ou elle a déjà rempli est conservé et vous pourrez le voir et le compléter.')) return;
+  try { const r = await appel('eval_annuelle_retirer_lien', { p_owner_token: cle, p_record_token: record }); if (!r || !r.ok) throw new Error('retirer'); await ouvrir(record); }
+  catch (e) { console.error(e); alert('L\'opération a échoué. Réessayez.'); }
+}
+async function rouvrir() {
+  if (!confirm('Rouvrir la partie employé? L\'employé(e) pourra de nouveau la modifier avec son lien, puis devra la transmettre de nouveau.')) return;
+  try { const r = await appel('eval_annuelle_rouvrir', { p_owner_token: cle, p_record_token: record }); if (!r || !r.ok) throw new Error('rouvrir'); await ouvrir(record); }
+  catch (e) { console.error(e); alert('L\'opération a échoué. Réessayez.'); }
+}
+async function copierLien() {
+  const champ = $('lienEmp');
+  try { await navigator.clipboard.writeText(champ.value); } catch (e) { champ.select(); document.execCommand('copy'); }
+  $('btnCopier').textContent = '✅ Copié';
+  setTimeout(() => { const b = $('btnCopier'); if (b) b.textContent = '📋 Copier'; }, 2000);
+}
+function courriel() {
+  const prenom = (infos.nom || '').trim().split(/\s+/)[0] || '';
+  const sujet = 'Votre autoévaluation annuelle';
+  const corps = `Bonjour ${prenom},\n\nEn prévision de notre rencontre d'évaluation, voici le lien pour remplir votre autoévaluation :\n${$('lienEmp').value}\n\nVos réponses sont sauvegardées automatiquement : vous pouvez revenir plus tard avec le même lien. Quand vous avez terminé, cliquez sur « Transmettre ma partie ».\n\nMerci!`;
+  window.location.href = 'mailto:?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
+}
+
+// Comparaison avec l'évaluation précédente du même employé
+let jetonComparaison = 0;
+async function comparer() {
+  const boite = $('comparaison'), moi = jetonComparaison = jetonComparaison + 1;
+  criteres.forEach((c, i) => { $('prec-' + i).hidden = true; });
+  boite.innerHTML = '';
+  if (modeEmploye || !record) return;
+  const p = precedente({ record_token: record, nom: infos.nom, date: infos.date }, liste);
+  if (!p) return;
+  let texte = `<div><strong>Évaluation précédente : ${dateLongue(p.date)}</strong>`;
+  const actuelle = moyenneDe(partie.notes);
+  if (p.moyenne !== null && p.moyenne !== undefined) {
+    texte += ` · moyenne ${fmt(p.moyenne)} / 4`;
+    if (actuelle !== null && partieVisible) {
+      const diff = actuelle - p.moyenne;
+      texte += ` <span style="font-weight:600;color:${diff > 0.004 ? 'var(--vert)' : diff < -0.004 ? 'var(--rouge)' : 'var(--texte-sec)'}">(${diff > 0.004 ? '+' : ''}${fmt(Math.abs(diff) < 0.005 ? 0 : diff)} cette année)</span>`;
+    }
+  }
+  texte += `<div class="moyenne-sub">La note précédente est indiquée à côté de chaque critère.</div></div><button class="btn btn-second btn-sm" id="btnOuvrirPrec">Ouvrir l'évaluation précédente</button>`;
+  boite.innerHTML = `<div class="comparaison">${texte}</div>`;
+  $('btnOuvrirPrec').addEventListener('click', async () => { if (minuterie) await sauvegarder(); ouvrir(p.record_token); });
+  try {
+    const r = await appel('eval_annuelle_get', { p_owner_token: cle, p_record_token: p.record_token });
+    if (moi !== jetonComparaison || !r || !r.ok || !r.partie_employe) return;
+    const notes = r.partie_employe.notes || {};
+    criteres.forEach((c, i) => {
+      const v = notes[i];
+      if (v === undefined) return;
+      const el = $('prec-' + i);
+      el.textContent = 'Précédente : ' + (v === 'na' ? 'N/A' : v);
+      el.hidden = false;
+    });
+  } catch (e) { console.error(e); }
+}
+
+// ---------------- SAUVEGARDE ----------------
+function planifier() {
+  if (chargement) return;
+  if (!modeEmploye && !record) return;
+  statut('', '⏳ Sauvegarde...');
+  clearTimeout(minuterie);
+  minuterie = setTimeout(sauvegarder, 800);
+}
+async function sauvegarder() {
+  clearTimeout(minuterie); minuterie = null;
+  try {
+    let r;
+    if (modeEmploye) r = await appel('eval_annuelle_emp_sauver', { p_lien: lienEmp, p_partie_employe: partie, p_terminer: false });
+    else r = await appel('eval_annuelle_sauver', { p_owner_token: cle, p_record_token: record, p_donnees: { infos, champs }, p_partie_employe: empStatut === 'aucun' ? partie : null });
+    if (!r || !r.ok) throw new Error(r && r.erreur);
+    statut('ok', '✅ Sauvegardé');
+  } catch (e) {
+    console.error(e);
+    if (modeEmploye && String(e.message) === 'termine') { statut('err', 'Votre partie a déjà été transmise.'); return; }
+    if (modeEmploye && String(e.message) === 'introuvable') { statut('err', '⚠️ Ce lien a été désactivé par votre gestionnaire.'); return; }
+    statut('err', '⚠️ Erreur de connexion : vos dernières modifications ne sont pas sauvegardées');
+  }
+}
+
+async function supprimer() {
+  if (!confirm('Supprimer définitivement cette évaluation?')) return;
+  try {
+    clearTimeout(minuterie); minuterie = null;
+    const r = await appel('eval_annuelle_supprimer', { p_owner_token: cle, p_record_token: record });
+    if (!r || !r.ok) throw new Error('supprimer');
+    afficherListe();
+  } catch (e) { console.error(e); alert('La suppression a échoué. Réessayez.'); }
+}
+
+// ---------------- MODE EMPLOYÉ(E) ----------------
+async function transmettre() {
+  const manquants = criteres.map((c, i) => i).filter(i => partie.notes[i] === undefined);
+  if (manquants.length) {
+    manquants.forEach(i => $('crit-' + i).classList.add('manque'));
+    if (!confirm(`Il reste ${manquants.length} critère(s) sans note (encadrés en orange). Transmettre quand même?`)) {
+      $('crit-' + manquants[0]).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+  }
+  if (!confirm('Transmettre votre autoévaluation à votre gestionnaire? Vous ne pourrez plus la modifier ensuite.')) return;
+  const btn = $('btnTransmettre'); btn.disabled = true;
+  try {
+    clearTimeout(minuterie); minuterie = null;
+    const r = await appel('eval_annuelle_emp_sauver', { p_lien: lienEmp, p_partie_employe: partie, p_terminer: true });
+    if (!r || !r.ok) {
+      alert(r && r.erreur === 'termine' ? 'Votre partie a déjà été transmise.' : r && r.erreur === 'introuvable' ? 'Ce lien a été désactivé. Communiquez avec votre gestionnaire.' : 'La transmission a échoué. Réessayez.');
+      return;
+    }
+    termineEmploye();
+    montrer('vMerci');
+  } catch (e) { console.error(e); alert('La transmission a échoué. Vérifiez votre connexion Internet et réessayez.'); }
+  finally { btn.disabled = false; }
+}
+
+function termineEmploye() {
+  verrouillerEmploye(true);
+  $('blocTransmettre').style.display = 'none';
+  $('bandeauEmp').innerHTML = '<div class="bandeau bandeau-vert"><strong>✅ Votre autoévaluation a été transmise.</strong><br>Elle n\'est plus modifiable. Si vous devez y apporter un changement, demandez à votre gestionnaire de la rouvrir.</div>';
+  statut('ok', '');
+}
+
+async function initEmploye() {
+  document.body.classList.add('mode-employe');
+  $('sousTitre').textContent = 'Autoévaluation annuelle';
+  document.title = 'Mon autoévaluation | Gestion Mel';
+  rendreCriteres();
+  brancherFormulaire();
+  $('btnTransmettre').addEventListener('click', transmettre);
+  $('btnRevoir').addEventListener('click', () => montrer('vEdition'));
+  try {
+    const r = await appel('eval_annuelle_emp_get', { p_lien: lienEmp });
+    if (!r || !r.ok) { montrer('vInvalide'); return; }
+    infos = r.infos || {};
+    const p = r.partie_employe || {};
+    partie = { champs: Object.assign({}, p.champs || {}), notes: Object.assign({}, p.notes || {}) };
+    remplir();
+    document.querySelectorAll('[data-i]').forEach(el => el.readOnly = true);
+    const prenom = (infos.nom || '').trim().split(/\s+/)[0];
+    $('bandeauEmp').innerHTML = `<div class="bandeau bandeau-bleu"><strong>Bonjour${prenom ? ' ' + esc(prenom) : ''}!</strong><br>
+      Prenez le temps de remplir votre autoévaluation avant votre rencontre. Vos réponses sont sauvegardées automatiquement : vous pouvez fermer la page et revenir plus tard avec le même lien. Seule votre gestionnaire pourra voir vos réponses, une fois que vous les aurez transmises.</div>`;
+    switchTab('employe');
+    if (r.statut === 'termine') { termineEmploye(); montrer('vMerci'); }
+    else { montrer('vEdition'); statut('', ''); }
+    chargement = false;
+  } catch (e) {
+    console.error(e);
+    $('invTitre').textContent = 'Connexion impossible';
+    $('invTexte').textContent = 'Vérifiez votre connexion Internet, puis rechargez la page.';
+    montrer('vInvalide');
+  }
+}
+
+// ---------------- ÉVÉNEMENTS ----------------
+function brancherFormulaire() {
+  $('criteres-employe').addEventListener('click', ev => {
+    const b = ev.target.closest('.note-btn'); if (!b || b.disabled) return;
+    setNote(+b.dataset.i, b.dataset.n === 'na' ? 'na' : +b.dataset.n);
+  });
+  document.querySelectorAll('[data-p]').forEach(el => {
+    const maj = () => { partie.champs[el.dataset.p] = el.value; planifier(); };
+    el.addEventListener('input', maj); el.addEventListener('change', maj);
+  });
+  window.addEventListener('beforeunload', () => { if (minuterie) sauvegarder(); });
+}
+
+function brancherGestion() {
+  brancherFormulaire();
+  $('btnNouvelle').addEventListener('click', nouvelle);
+  $('recherche').addEventListener('input', dessinerListe);
+  $('btnRetour').addEventListener('click', async () => { if (minuterie) await sauvegarder(); afficherListe(); });
+  $('btnSupprimer').addEventListener('click', supprimer);
+  document.querySelectorAll('.onglet').forEach(o => o.addEventListener('click', () => switchTab(o.dataset.onglet)));
+  document.querySelectorAll('input[data-i]').forEach(el => {
+    const maj = () => {
+      infos[el.dataset.i] = el.value;
+      document.querySelectorAll(`input[data-i="${el.dataset.i}"]`).forEach(x => { if (x !== el) x.value = el.value; });
+      planifier();
+    };
+    el.addEventListener('input', maj);
+    el.addEventListener('change', () => { maj(); comparer(); });
+  });
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const maj = () => { champs[el.dataset.k] = el.value; planifier(); };
+    el.addEventListener('input', maj); el.addEventListener('change', maj);
+  });
+  document.querySelectorAll('input[type="radio"]').forEach(r => r.addEventListener('change', () => { champs[r.name] = r.value; planifier(); }));
+}
+
+function majUrl() { window.history.replaceState({}, '', window.location.pathname + '?' + params.toString()); }
+function obtenirOwnerToken() {
+  let t = params.get('clinique');
+  try { if (!t) t = localStorage.getItem('gestionmel_clinique_token'); } catch (e) {}
+  if (!t || !/^[0-9a-f-]{36}$/i.test(t)) t = crypto.randomUUID();
+  try { localStorage.setItem('gestionmel_clinique_token', t); } catch (e) {}
+  params.set('clinique', t);
+  majUrl();
+  return t;
+}
+
+async function initGestion() {
+  cle = await gmAcces.ouvrir(sb, obtenirOwnerToken(), 'gest');
+  rendreCriteres();
+  brancherGestion();
+  const existant = params.get('evaluation');
+  if (existant && /^[0-9a-f-]{36}$/i.test(existant)) await ouvrir(existant); else await afficherListe();
+}
+
+if (modeEmploye) initEmploye(); else initGestion();
 </script>
-
-
-</body></html>
+</body>
+</html>
