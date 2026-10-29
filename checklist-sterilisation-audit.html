@@ -1,0 +1,362 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Checklist de stérilisation et audit de conformité | Gestion Mel</title>
+<style>
+:root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--green:#1a9e5a;--red:#c0392b;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text);}
+.page-header{background:var(--dark);color:white;padding:18px 40px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.page-header .brand{font-size:1.5rem;font-weight:700;}.page-header .brand span{color:var(--accent);}
+.container{max-width:920px;margin:30px auto;background:white;border-radius:10px;box-shadow:0 4px 24px rgba(26,106,191,.10);overflow:hidden;}
+.doc-header{background:linear-gradient(135deg,var(--dark) 0%,#1a3a5c 100%);color:white;padding:28px 36px;}
+.doc-header h1{font-size:1.4rem;font-weight:700;margin-bottom:4px;}.doc-header p{font-size:.85rem;opacity:.8;line-height:1.5;}
+.tabs{display:flex;background:var(--light);border-bottom:1px solid var(--border);}
+.tab{flex:1;padding:14px 10px;border:none;background:transparent;font-family:inherit;font-size:.92rem;font-weight:600;color:#5a6a80;cursor:pointer;border-bottom:3px solid transparent;}
+.tab.on{color:var(--blue);border-bottom-color:var(--accent);background:white;}
+.panel{display:none;}.panel.on{display:block;}
+.section{padding:18px 36px;border-bottom:1px solid var(--border);}
+.section-title{font-size:.8rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.section-title::before{content:'';display:block;width:3px;height:14px;background:var(--accent);border-radius:2px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;}
+.field{display:flex;flex-direction:column;gap:4px;}
+label.lab{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+input[type=text],input[type=date],select,textarea{border:1.5px solid var(--border);border-radius:6px;padding:9px 12px;font-size:.9rem;font-family:inherit;color:var(--text);background:var(--light);}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);background:white;}
+.opt{display:flex;align-items:center;gap:8px;font-size:.86rem;margin-top:10px;cursor:pointer;}
+.opt input{width:17px;height:17px;}
+.check-section{margin-bottom:16px;}
+.check-section h4{font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;background:var(--light);padding:6px 12px;border-radius:4px;display:flex;justify-content:space-between;gap:8px;}
+.check-section h4 small{font-weight:600;color:#8a9ab0;letter-spacing:0;text-transform:none;}
+.check-row{display:flex;align-items:center;gap:12px;padding:7px 12px;border-bottom:1px solid #f0f0f0;font-size:.86rem;line-height:1.45;}
+.check-row:last-child{border-bottom:none;}
+.check-row input[type=checkbox]{width:17px;height:17px;flex-shrink:0;cursor:pointer;}
+.check-row span{flex:1;}
+.check-row.fait span{color:#7a8a9e;}
+.check-row input.ini{border:none;border-bottom:1.5px solid var(--border);background:transparent;width:70px;font-size:.82rem;padding:2px 4px;flex-shrink:0;border-radius:0;}
+.tag{font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0;}
+.tag.oblig{background:#fde8e6;color:var(--red);}.tag.recom{background:#e8f1fc;color:var(--blue);}
+.avert-box{background:#fff8e1;border-left:4px solid var(--orange);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#7a4400;margin:10px 0;line-height:1.6;}
+.info-box{background:var(--light);border-left:4px solid var(--accent);border-radius:4px;padding:10px 14px;font-size:.83rem;color:#1a3a5c;margin:10px 0;line-height:1.6;}
+.progress{height:10px;background:#e3ecf7;border-radius:6px;overflow:hidden;margin-top:6px;}
+.progress div{height:100%;background:var(--green);width:0;transition:width .3s;}
+.prog-txt{font-size:.85rem;font-weight:600;color:#5a6a80;}
+.audit-row{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;padding:9px 12px;border-bottom:1px solid #f0f0f0;font-size:.86rem;line-height:1.45;}
+.audit-row:last-child{border-bottom:none;}
+.audit-row .txt{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap;}
+.audit-row .txt .q{flex:1 1 300px;}
+.audit-row .ref{font-size:.72rem;color:#8a9ab0;}
+.choix{display:flex;gap:4px;}
+.choix button{border:1.5px solid var(--border);background:white;border-radius:6px;padding:6px 10px;font-size:.78rem;font-weight:600;font-family:inherit;color:#5a6a80;cursor:pointer;white-space:nowrap;}
+.choix button.c.on{background:var(--green);border-color:var(--green);color:white;}
+.choix button.n.on{background:var(--red);border-color:var(--red);color:white;}
+.choix button.s.on{background:#8a9ab0;border-color:#8a9ab0;color:white;}
+.audit-row.nc{background:#fff6f5;}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px;}
+.score div{background:var(--light);border-radius:8px;padding:14px;text-align:center;}
+.score b{display:block;font-size:1.6rem;color:var(--dark);}
+.score span{font-size:.75rem;font-weight:600;color:#5a6a80;text-transform:uppercase;letter-spacing:.5px;}
+.score .big b{color:var(--green);}
+table.plan{width:100%;border-collapse:collapse;font-size:.84rem;}
+table.plan th{background:var(--dark);color:white;text-align:left;padding:8px 10px;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;}
+table.plan td{border-bottom:1px solid var(--border);padding:8px 10px;vertical-align:top;line-height:1.45;}
+table.plan td input{width:100%;padding:6px 8px;font-size:.82rem;}
+.vide{font-size:.86rem;color:#5a6a80;padding:10px 0;}
+.btn{padding:11px 22px;border-radius:7px;font-size:.92rem;font-weight:600;cursor:pointer;border:none;font-family:inherit;}
+.btn-secondary{background:white;color:var(--blue);border:1.5px solid var(--blue);}
+.btn-ghost{background:transparent;color:#8a9ab0;border:1.5px solid var(--border);}
+.btn-ghost.arme{color:white;background:var(--red);border-color:var(--red);}
+.actions{padding:24px 36px;background:var(--light);display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap;}
+.footer-note{text-align:center;font-size:.75rem;color:#8a9ab0;padding:12px 20px;line-height:1.6;}
+.only-print{display:none;}
+@media (max-width:640px){.section,.doc-header,.actions{padding-left:16px;padding-right:16px;}.page-header{padding:14px 16px;}.audit-row{grid-template-columns:1fr;}.container{margin:12px auto;}}
+@media print{body{background:white;}.page-header,.actions,.tabs{display:none;}.container{box-shadow:none;margin:0;border-radius:0;max-width:none;}.panel{display:none!important;}.panel.on{display:block!important;}.only-print{display:block;}.choix button:not(.on){display:none;}.check-section,.audit-row,tr{break-inside:avoid;}}
+</style></head>
+<body>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire · Contrôle des infections</div></div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Checklist de stérilisation et audit de conformité</h1>
+    <p>Retraitement des dispositifs médicaux (DM) selon les lignes directrices de l’Ordre des dentistes du Québec et de l’Ordre des hygiénistes dentaires du Québec</p>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-p="quot">🧼 Retraitement quotidien</button>
+    <button class="tab" data-p="audit">🔍 Audit de conformité</button>
+  </div>
+
+  <!-- ===================== RETRAITEMENT QUOTIDIEN ===================== -->
+  <div class="panel on" id="p-quot">
+    <div class="section">
+      <div class="section-title">Identification</div>
+      <div class="grid">
+        <div class="field"><label class="lab" for="q_date">Date</label><input type="date" id="q_date" data-k="q_date"></div>
+        <div class="field"><label class="lab" for="q_ster">Stérilisateur</label><input type="text" id="q_ster" data-k="q_ster" placeholder="No ou nom"></div>
+        <div class="field"><label class="lab" for="q_classe">Classe du stérilisateur</label>
+          <select id="q_classe" data-k="q_classe"><option value="B">Classe B</option><option value="N">Classe N</option><option value="S">Classe S</option></select></div>
+        <div class="field"><label class="lab" for="q_resp">Responsable du retraitement</label><input type="text" id="q_resp" data-k="q_resp" placeholder="Nom"></div>
+      </div>
+      <label class="opt"><input type="checkbox" id="q_hebdo" data-k="q_hebdo"> Journée du test hebdomadaire (indicateur biologique)</label>
+      <label class="opt"><input type="checkbox" id="q_impl" data-k="q_impl"> Une charge contient du matériel implantable non stérile</label>
+      <div style="margin-top:14px"><div class="prog-txt" id="q_prog_txt">0 étape sur 0</div><div class="progress"><div id="q_prog"></div></div></div>
+    </div>
+    <div class="section" id="q_liste"></div>
+    <div class="section">
+      <div class="section-title">En cas d’échec de stérilisation</div>
+      <div class="avert-box">
+        <b>1.</b> Retirez immédiatement le stérilisateur du service et examinez les paramètres du cycle.<br>
+        <b>2.</b> Si l’échec vient d’une erreur de manipulation corrigée, retraitez le matériel douteux avant de remettre l’appareil en service.<br>
+        <b>3.</b> Sinon, refaites un test avec indicateur biologique dans une charge complète. L’appareil reste hors service jusqu’au résultat.<br>
+        <b>4.</b> Si le deuxième test est encore positif sans cause trouvée, l’appareil reste hors service jusqu’à son inspection, sa réparation et trois cycles consécutifs négatifs.<br>
+        <b>5.</b> Notez tout au registre de stérilisation.
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Signature</div>
+      <div class="grid">
+        <div class="field"><label class="lab" for="q_par">Effectué par</label><input type="text" id="q_par" data-k="q_par"></div>
+        <div class="field"><label class="lab" for="q_verif">Vérifié par</label><input type="text" id="q_verif" data-k="q_verif"></div>
+        <div class="field"><label class="lab" for="q_notes">Notes</label><input type="text" id="q_notes" data-k="q_notes" placeholder="Anomalie, entretien, etc."></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== AUDIT ===================== -->
+  <div class="panel" id="p-audit">
+    <div class="section">
+      <div class="section-title">Identification de l’audit</div>
+      <div class="grid">
+        <div class="field"><label class="lab" for="a_date">Date de l’audit</label><input type="date" id="a_date" data-k="a_date"></div>
+        <div class="field"><label class="lab" for="a_par">Réalisé par</label><input type="text" id="a_par" data-k="a_par"></div>
+        <div class="field"><label class="lab" for="a_proch">Prochain audit prévu</label><input type="date" id="a_proch" data-k="a_proch"></div>
+      </div>
+      <div class="info-box">Pour chaque point, choisissez <b>Conforme</b>, <b>À corriger</b> ou <b>S. O.</b> (sans objet). Les points <span class="tag oblig">Obligatoire</span> correspondent à un « doit » des lignes directrices; les points <span class="tag recom">Recommandé</span>, à un « devrait ». Les pages renvoient à la version d’octobre 2024 du document.</div>
+    </div>
+    <div class="section" id="a_liste"></div>
+    <div class="section" id="a_resultat">
+      <div class="section-title">Résultat de l’audit</div>
+      <div class="score">
+        <div class="big"><b id="s_pct">-</b><span>Conformité des obligatoires</span></div>
+        <div><b id="s_c">0</b><span>Conformes</span></div>
+        <div><b id="s_n">0</b><span>À corriger</span></div>
+        <div><b id="s_r">0</b><span>Points non évalués</span></div>
+      </div>
+      <div class="section-title" style="margin-top:18px">Plan de correction</div>
+      <div id="a_plan"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-ghost" id="btnReset">Effacer cet onglet</button>
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
+  </div>
+  <div class="footer-note">Source : Ordre des dentistes du Québec et Ordre des hygiénistes dentaires du Québec, <i>Prévention et contrôle des infections et retraitement des dispositifs médicaux</i>, octobre 2024 (mis à jour en octobre 2025). Cet outil soutient la conformité, mais ne remplace pas le document officiel ni les instructions des fabricants.<br>© Gestion Mel 2026. Tous droits réservés. · gestionmel.com</div>
+</div>
+
+<script>
+/* ---------- Contenu : retraitement quotidien (flux de l’aire souillée vers l’aire propre) ---------- */
+const QUOT = [
+ {t:'🌅 Début de journée', z:'', items:[
+  {id:'d1', x:'Enfiler un sarrau ou une blouse propre, réservé à l’unité de retraitement'},
+  {id:'d2', x:'Test d’élimination de l’air (Bowie-Dick) fait et noté au registre, de préférence au premier cycle', classe:'B'},
+  {id:'d3', x:'Test hebdomadaire : dispositif d’essai avec indicateur biologique et indicateur chimique de type 5, pour chaque stérilisateur et chaque cycle utilisé (cycle distinct du Bowie-Dick)', hebdo:true},
+  {id:'d4', x:'Douche oculaire accessible et fonctionnelle'},
+  {id:'d5', x:'Solution de l’appareil à ultrasons fraîche (selon le fabricant)'} ]},
+ {t:'🧤 Zone 1 · Réception et nettoyage manuel', z:'Aire souillée', items:[
+  {id:'r1', x:'EPI portés : gants tout usage résistants aux perforations, masque, lunettes de protection et sarrau'},
+  {id:'r2', x:'DM reçus dans un contenant rigide et fermé (désinfecté ensuite)'},
+  {id:'r3', x:'DM défectueux mis à part'},
+  {id:'r4', x:'DM non retraités immédiatement mis à tremper dans un détergent ou un nettoyant enzymatique (jamais de glutaraldéhyde ni d’orthophtalaldéhyde)'},
+  {id:'r5', x:'Surfaces externes et internes brossées (brosse à long manche), puis rincées'} ]},
+ {t:'🫧 Zone 2 · Nettoyage mécanique', z:'Aire souillée', items:[
+  {id:'m1', x:'Petites pièces placées dans un panier en treillis métallique'},
+  {id:'m2', x:'Couvercle de l’appareil à ultrasons fermé pendant le lavage'},
+  {id:'m3', x:'Solution des ultrasons changée selon le fabricant, ou plus tôt si elle est visiblement souillée'},
+  {id:'m4', x:'Laveur : plateaux non empilés, surfaces exposées à l’action mécanique'} ]},
+ {t:'📦 Zone 3 · Préparation, emballage et étiquetage', z:'Aire souillée', items:[
+  {id:'e1', x:'DM séchés avec un linge propre, doux et non pelucheux'},
+  {id:'e2', x:'DM inspectés : propres, intacts et fonctionnels'},
+  {id:'e3', x:'DM à charnières ou à pièces mobiles lubrifiés avec un lubrifiant compatible'},
+  {id:'e4', x:'Indicateur chimique de type 1 à l’extérieur et de type 4 à l’intérieur de chaque paquet'},
+  {id:'e5', x:'Chaque paquet étiqueté : no du stérilisateur, no de la charge et date'},
+  {id:'e6', x:'Aucun emballage à usage unique réutilisé'} ]},
+ {t:'♨️ Zone 4 · Stérilisation', z:'Aire propre', items:[
+  {id:'s1', x:'Paquets ni comprimés ni empilés, sans contact avec la paroi de la chambre'},
+  {id:'s2', x:'Charge avec matériel implantable non stérile : dispositif d’essai avec indicateur biologique et indicateur chimique de type 5', impl:true},
+  {id:'s3', x:'Paramètres physiques vérifiés à la fin de chaque cycle, pour chaque charge'},
+  {id:'s4', x:'Séchage complet avant le déchargement'},
+  {id:'s5', x:'Hygiène des mains faite avant de manipuler les paquets stériles'},
+  {id:'s6', x:'Paquets inspectés au déchargement : secs, intacts, scellés, indicateurs virés'},
+  {id:'s7', x:'Paramètres physiques et indicateurs chimiques (types 1, 4 et 5) notés au registre, avec les initiales de la personne qui décharge'} ]},
+ {t:'🗄️ Zone 5 · Rangement des DM stériles', z:'Aire propre', items:[
+  {id:'g1', x:'Rangement dans un endroit fermé, propre et sec'},
+  {id:'g2', x:'Principe du premier entré, premier sorti respecté'},
+  {id:'g3', x:'Intégrité des paquets entreposés depuis plus de trois mois vérifiée'},
+  {id:'g4', x:'Paquet compromis : nettoyé, emballé et stérilisé à nouveau'} ]},
+ {t:'🌙 Fin de journée', z:'', items:[
+  {id:'f1', x:'Gants tout usage nettoyés après utilisation'},
+  {id:'f2', x:'Sarrau retiré avant de quitter l’unité et déposé au panier à lessive'},
+  {id:'f3', x:'Registre de stérilisation complet pour la journée'} ]}
+];
+
+/* ---------- Contenu : audit de conformité ---------- */
+const AUDIT = [
+ {t:'🏗️ Aménagement de l’unité de retraitement', items:[
+  {id:'a1', o:1, p:'p. 33', x:'Le retraitement se fait de façon unidirectionnelle, du plus souillé au plus propre'},
+  {id:'a2', o:1, p:'p. 33', x:'L’aire souillée et l’aire propre sont physiquement séparées (cloison, distance suffisante, configuration circulaire ou deux pans de mur)'},
+  {id:'a3', o:1, p:'p. 33', x:'Les 5 zones sont identifiées : réception et nettoyage manuel, nettoyage mécanique, emballage (aire souillée), stérilisation, rangement (aire propre)'},
+  {id:'a4', o:1, p:'p. 33', x:'L’unité sert uniquement au retraitement : aucun travail de laboratoire, aucun nettoyage de prothèses aux ultrasons, aucune pause repas'},
+  {id:'a5', o:1, p:'p. 31', x:'Personne ne mange ni ne boit dans l’unité de retraitement'},
+  {id:'a6', o:1, p:'p. 43', x:'Aucun DM stérile ni matériel à usage unique n’est rangé dans l’aire souillée'},
+  {id:'a7', o:0, p:'p. 41', x:'La zone de stérilisation offre assez d’espace pour le déchargement et le refroidissement'} ]},
+ {t:'⚙️ Équipements', items:[
+  {id:'b1', o:1, p:'p. 41', x:'Tous les stérilisateurs sont homologués par Santé Canada'},
+  {id:'b2', o:1, p:'p. 41', x:'La stérilisation se fait à la vapeur par élimination dynamique de l’air (classe N, B ou S). Aucun chemiclave, stérilisateur à chaleur sèche, à billes ni stérilisation à froid'},
+  {id:'b3', o:0, p:'p. 34', x:'Au remplacement d’un stérilisateur, un appareil de classe B est privilégié (fortement recommandé)'},
+  {id:'b4', o:1, p:'p. 39', x:'Le laveur automatique est un appareil dentaire homologué par Santé Canada (aucun lave-vaisselle domestique ou commercial)'},
+  {id:'b5', o:1, p:'p. 38', x:'Une douche oculaire homologuée, permettant un rinçage de 15 minutes, est accessible dans un endroit central'},
+  {id:'b6', o:1, p:'p. 38', x:'Un contenant pour déchets biorisque rigide, hermétique et identifié est en place'},
+  {id:'b7', o:1, p:'p. 16', x:'Les distributeurs de savon et de solution hydroalcoolique fonctionnent avec une pompe ou un détecteur de mouvement'},
+  {id:'b8', o:1, p:'p. 41', x:'Les instructions du fabricant sont respectées : cycles, qualité de l’eau, entretiens et indicateurs'} ]},
+ {t:'🧤 Protection du personnel', items:[
+  {id:'c1', o:1, p:'p. 38', x:'Le personnel porte des gants tout usage résistants aux perforations, un masque, des lunettes de protection et un sarrau pendant la manipulation et le nettoyage'},
+  {id:'c2', o:1, p:'p. 24', x:'Les gants tout usage résistent aux produits chimiques et sont nettoyés après chaque utilisation'},
+  {id:'c3', o:1, p:'p. 27', x:'Un sarrau propre et personnel est enfilé à l’entrée de l’unité, y reste, et est retiré avant d’en sortir'} ]},
+ {t:'🧽 Prénettoyage, transport et nettoyage', items:[
+  {id:'d1', o:1, p:'p. 37-38', x:'Un contenant pour objets piquants ou tranchants est installé dans chaque salle'},
+  {id:'d2', o:1, p:'p. 38', x:'Les DM contaminés sont transportés dans un contenant rigide et fermé, désinfecté ensuite'},
+  {id:'d3', o:0, p:'p. 38', x:'Les DM non retraités immédiatement trempent dans un détergent ou un nettoyant enzymatique'},
+  {id:'d4', o:1, p:'p. 38', x:'Le glutaraldéhyde et l’orthophtalaldéhyde ne servent jamais de solution de trempage'},
+  {id:'d5', o:1, p:'p. 39', x:'Le nettoyage mécanique se fait dans une zone distincte de la réception'},
+  {id:'d6', o:1, p:'p. 39', x:'La solution des ultrasons est changée selon le fabricant et le couvercle reste fermé pendant le lavage'} ]},
+ {t:'📦 Emballage et étiquetage', items:[
+  {id:'e1', o:1, p:'p. 40', x:'Les DM à charnières ou à pièces mobiles sont lubrifiés avec un produit compatible'},
+  {id:'e2', o:1, p:'p. 40-41', x:'Les emballages à usage unique ne sont jamais réutilisés'},
+  {id:'e3', o:1, p:'p. 41', x:'La clinique possède la preuve écrite du fabricant validant les matériaux d’emballage'},
+  {id:'e4', o:1, p:'p. 37', x:'Chaque paquet porte un indicateur chimique de type 1 à l’extérieur et de type 4 à l’intérieur'},
+  {id:'e5', o:1, p:'p. 41', x:'Chaque paquet porte le no du stérilisateur, le no de la charge et la date'} ]},
+ {t:'🧪 Surveillance de la stérilisation', items:[
+  {id:'f1', o:1, p:'p. 36', x:'Stérilisateur de classe B : test de Bowie-Dick fait chaque jour et noté au registre'},
+  {id:'f2', o:1, p:'p. 36-37', x:'Chaque semaine, pour chaque stérilisateur et chaque cycle utilisé : dispositif d’essai avec indicateur biologique et indicateur chimique de type 5, dans un cycle distinct du Bowie-Dick'},
+  {id:'f3', o:1, p:'p. 37', x:'Chaque charge contenant du matériel implantable non stérile inclut ce dispositif d’essai'},
+  {id:'f4', o:1, p:'p. 34', x:'Les paramètres physiques sont vérifiés à la fin de chaque cycle, pour chaque charge'},
+  {id:'f5', o:1, p:'p. 42', x:'Au déchargement, les paramètres et les indicateurs chimiques sont notés au registre, avec les initiales de la personne qui décharge'},
+  {id:'f6', o:1, p:'p. 37', x:'Un indicateur caché dans une cassette est vérifié à l’ouverture en salle et noté au dossier du patient'},
+  {id:'f7', o:0, p:'p. 42', x:'La traçabilité jusqu’au patient est assurée'},
+  {id:'f8', o:1, p:'p. 43-44', x:'Un protocole écrit en cas d’échec de stérilisation est connu de l’équipe'} ]},
+ {t:'🗄️ Entreposage des DM stériles', items:[
+  {id:'g1', o:1, p:'p. 43', x:'Les DM stériles sont rangés dans un endroit fermé, propre et sec'},
+  {id:'g2', o:1, p:'p. 43', x:'Le principe du premier entré, premier sorti est appliqué'},
+  {id:'g3', o:1, p:'p. 43', x:'L’intégrité des paquets entreposés depuis plus de trois mois est vérifiée'},
+  {id:'g4', o:1, p:'p. 43', x:'Tout paquet compromis est nettoyé, emballé et stérilisé à nouveau'} ]},
+ {t:'🎓 Formation et documentation', items:[
+  {id:'h1', o:0, p:'p. 19', x:'Le personnel reçoit une formation en prévention et contrôle des infections à l’embauche, mise à jour à chaque nouvelle tâche ou nouvel équipement, et révisée au moins une fois par année'},
+  {id:'h2', o:0, p:'p. 19', x:'Les protocoles de retraitement et les instructions des fabricants sont réunis dans le manuel de la clinique'} ]}
+];
+
+/* ---------- Sauvegarde locale (sur cet appareil seulement) ---------- */
+const CLE = 'gm_sterilisation_audit_v1';
+let etat = {};
+try { etat = JSON.parse(localStorage.getItem(CLE) || '{}') || {}; } catch (e) { etat = {}; }
+function sauver() { try { localStorage.setItem(CLE, JSON.stringify(etat)); } catch (e) {} }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- Rendu : retraitement quotidien ---------- */
+function rendreQuot() {
+  const classe = etat.q_classe || 'B', hebdo = !!etat.q_hebdo, impl = !!etat.q_impl;
+  let h = '<div class="section-title">Étapes du retraitement</div>';
+  for (const s of QUOT) {
+    const items = s.items.filter(i => (!i.classe || i.classe === classe) && (!i.hebdo || hebdo) && (!i.impl || impl));
+    if (!items.length) continue;
+    h += `<div class="check-section"><h4>${s.t}${s.z ? `<small>${s.z}</small>` : ''}</h4>`;
+    for (const i of items) {
+      const k = 'qc_' + i.id, fait = !!etat[k];
+      h += `<div class="check-row${fait ? ' fait' : ''}"><input type="checkbox" id="${k}" data-k="${k}"${fait ? ' checked' : ''}><span><label for="${k}">${esc(i.x)}</label></span><input class="ini" type="text" data-k="qi_${i.id}" placeholder="Initiales" value="${esc(etat['qi_' + i.id] || '')}"></div>`;
+    }
+    h += '</div>';
+  }
+  document.getElementById('q_liste').innerHTML = h;
+  progression();
+}
+function progression() {
+  const boites = [...document.querySelectorAll('#q_liste input[type=checkbox]')];
+  const n = boites.filter(b => b.checked).length;
+  document.getElementById('q_prog_txt').textContent = `${n} étape${n > 1 ? 's' : ''} sur ${boites.length}` + (n === boites.length && n ? ' · Retraitement complété ✅' : '');
+  document.getElementById('q_prog').style.width = boites.length ? (100 * n / boites.length) + '%' : '0';
+}
+
+/* ---------- Rendu : audit ---------- */
+function rendreAudit() {
+  let h = '';
+  for (const s of AUDIT) {
+    h += `<div class="check-section"><h4>${s.t}</h4>`;
+    for (const i of s.items) {
+      const v = etat['a_' + i.id] || '';
+      h += `<div class="audit-row${v === 'n' ? ' nc' : ''}" data-id="${i.id}"><div class="txt"><span class="q">${esc(i.x)} <span class="ref">(${i.p})</span></span><span class="tag ${i.o ? 'oblig' : 'recom'}">${i.o ? 'Obligatoire' : 'Recommandé'}</span></div>
+        <div class="choix"><button type="button" class="c${v === 'c' ? ' on' : ''}" data-v="c">Conforme</button><button type="button" class="n${v === 'n' ? ' on' : ''}" data-v="n">À corriger</button><button type="button" class="s${v === 's' ? ' on' : ''}" data-v="s">S. O.</button></div></div>`;
+    }
+    h += '</div>';
+  }
+  document.getElementById('a_liste').innerHTML = h;
+  resultat();
+}
+function resultat() {
+  const tous = AUDIT.flatMap(s => s.items);
+  const val = i => etat['a_' + i.id] || '';
+  const obl = tous.filter(i => i.o && (val(i) === 'c' || val(i) === 'n'));
+  const oblC = obl.filter(i => val(i) === 'c').length;
+  document.getElementById('s_pct').textContent = obl.length ? Math.round(100 * oblC / obl.length) + ' %' : '-';
+  document.getElementById('s_c').textContent = tous.filter(i => val(i) === 'c').length;
+  document.getElementById('s_n').textContent = tous.filter(i => val(i) === 'n').length;
+  document.getElementById('s_r').textContent = tous.filter(i => !val(i)).length;
+  const nc = tous.filter(i => val(i) === 'n').sort((a, b) => b.o - a.o);
+  const plan = document.getElementById('a_plan');
+  if (!nc.length) { plan.innerHTML = '<p class="vide">Aucun point à corriger pour le moment. Les points marqués « À corriger » s’ajouteront ici automatiquement.</p>'; return; }
+  plan.innerHTML = `<table class="plan"><thead><tr><th style="width:44%">Point à corriger</th><th>Priorité</th><th>Responsable</th><th>Échéance</th></tr></thead><tbody>${nc.map(i => `
+    <tr><td>${esc(i.x)} <span class="ref">(${i.p})</span></td><td><span class="tag ${i.o ? 'oblig' : 'recom'}">${i.o ? 'Obligatoire' : 'Recommandé'}</span></td>
+    <td><input type="text" data-k="ar_${i.id}" value="${esc(etat['ar_' + i.id] || '')}" aria-label="Responsable"></td><td><input type="date" data-k="ae_${i.id}" value="${esc(etat['ae_' + i.id] || '')}" aria-label="Échéance"></td></tr>`).join('')}</tbody></table>`;
+}
+
+/* ---------- Événements ---------- */
+function restaurerChamps() {
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const v = etat[el.dataset.k];
+    if (v === undefined) return;
+    if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
+  });
+}
+document.addEventListener('input', e => {
+  const el = e.target, k = el.dataset && el.dataset.k; if (!k) return;
+  etat[k] = el.type === 'checkbox' ? el.checked : el.value; sauver();
+  if (k === 'q_classe' || k === 'q_hebdo' || k === 'q_impl') rendreQuot();
+  else if (k.startsWith('qc_')) { el.closest('.check-row').classList.toggle('fait', el.checked); progression(); }
+});
+document.addEventListener('change', e => { if (e.target.tagName === 'SELECT' || e.target.type === 'checkbox') e.target.dispatchEvent(new Event('input', { bubbles: true })); });
+document.getElementById('a_liste').addEventListener('click', e => {
+  const b = e.target.closest('.choix button'); if (!b) return;
+  const id = b.closest('.audit-row').dataset.id, k = 'a_' + id;
+  etat[k] = etat[k] === b.dataset.v ? '' : b.dataset.v; sauver();
+  const row = b.closest('.audit-row');
+  row.querySelectorAll('button').forEach(x => x.classList.toggle('on', x.dataset.v === etat[k]));
+  row.classList.toggle('nc', etat[k] === 'n');
+  resultat();
+});
+let onglet = 'quot';
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  onglet = t.dataset.p;
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x === t));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === 'p-' + onglet));
+  desarmer();
+}));
+const btnReset = document.getElementById('btnReset'); let arme = null;
+function desarmer() { clearTimeout(arme); arme = null; btnReset.classList.remove('arme'); btnReset.textContent = 'Effacer cet onglet'; }
+btnReset.addEventListener('click', () => {
+  if (!arme) { btnReset.classList.add('arme'); btnReset.textContent = 'Cliquez encore pour confirmer'; arme = setTimeout(desarmer, 4000); return; }
+  const pref = onglet === 'quot' ? ['q_', 'qc_', 'qi_'] : ['a_', 'ar_', 'ae_'];
+  for (const k of Object.keys(etat)) if (pref.some(p => k.startsWith(p))) delete etat[k];
+  sauver(); desarmer();
+  document.querySelectorAll(`#p-${onglet} [data-k]`).forEach(el => { if (el.type === 'checkbox') el.checked = false; else if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; });
+  if (onglet === 'quot') { initDate('q_date'); rendreQuot(); } else { initDate('a_date'); rendreAudit(); }
+});
+function initDate(id) { if (!etat[id]) { const d = new Date(); const v = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); document.getElementById(id).value = v; etat[id] = v; sauver(); } }
+
+restaurerChamps(); initDate('q_date'); initDate('a_date');
+rendreQuot(); rendreAudit();
+</script>
+</body></html>
