@@ -18,7 +18,7 @@ jobs:
             "https://ghwlhrhigkiuyhfbwnzh.supabase.co/rest/v1/rpc/outil_get" \
             -H "apikey: sb_publishable_yhHJZkTrKuKawiX1JGOY8g_-V9eite5" \
             -H "Content-Type: application/json" \
-            -d '{"p_owner_token":"reveil-quotidien","p_outil":"reveil"}')
+            -d '{"p_owner_token":"00000000-0000-0000-0000-000000000000","p_outil":"reveil"}')
           echo "Code HTTP : $code"
           cat reponse.txt; echo
           if [ "$code" != "200" ]; then
