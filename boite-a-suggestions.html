@@ -92,6 +92,13 @@
   .mgr-note{flex:1;min-width:160px;}
   .mgr-note input{width:100%;border:1.5px solid var(--border);border-radius:5px;padding:4px 8px;font-size:.78rem;font-family:inherit;background:var(--light);}
   .empty-state{text-align:center;padding:36px;color:#8a9ab0;line-height:1.7;}
+  .share-box{margin:16px 28px 0;border:1.5px solid var(--border);border-radius:9px;padding:14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+  .share-box .txt{flex:1;min-width:240px;}
+  .share-box .ttl{font-size:.86rem;font-weight:700;color:var(--blue);margin-bottom:6px;}
+  .share-box .aide2{font-size:.76rem;color:#5a6a80;line-height:1.55;margin:6px 0 10px;}
+  .lien-row{display:flex;gap:8px;}
+  .lien-row input{flex:1;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;font-size:.78rem;font-family:inherit;background:#f7f9fb;min-width:0;}
+  #qrCanvas{width:130px;height:130px;border:1px solid var(--border);border-radius:8px;}
   .param-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .details-param{margin:0 28px 16px;border:1.5px solid var(--border);border-radius:9px;}
   .details-param summary{padding:10px 14px;font-size:.82rem;font-weight:700;color:var(--blue);cursor:pointer;}
@@ -102,12 +109,13 @@
   .sync-status.ok{background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
   .sync-status.saving{background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
   .sync-status.err{background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
-  @media print{body{background:white;}.page-header,.main-tabs,.mgr-bar,.btn-submit,.btn-new,.btn,.btn-del-s,.stats-row,.vote-btn,.details-param,.sync-status{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.cat-badge,.prio-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+  @media print{body{background:white;}.page-header,.main-tabs,.mgr-bar,.btn-submit,.btn-new,.btn,.btn-del-s,.stats-row,.vote-btn,.details-param,.share-box,.sync-status{display:none!important;}.container{box-shadow:none;margin:0;border-radius:0;}.cat-badge,.prio-chip{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
   @media(max-width:650px){.sugg-header{flex-wrap:wrap;}.vote-grid{flex-direction:column;}.form-wrap{padding:16px;}.sugg-list{padding:10px 14px;}.param-grid{grid-template-columns:1fr;}.details-param{margin:0 14px 14px;}.mgr-bar,.stats-row{padding:10px 14px;}.anon{margin-left:0;}}
 </style>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <div class="sync-status" id="syncStatus"></div>
 <div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">RH · Engagement de l'équipe</div></div>
 <div class="container">
@@ -190,6 +198,15 @@
 
     <!-- Contenu -->
     <div id="dashBS" style="display:none;">
+      <div class="share-box">
+        <div class="txt">
+          <div class="ttl">🔗 Lien pour vos employés</div>
+          <div class="lien-row"><input type="text" id="lienEmploye" readonly><button class="btn primary" id="btnCopier">📋 Copier</button></div>
+          <div class="aide2">Envoyez ce lien à votre équipe (texto, courriel, groupe de messagerie) ou affichez le code QR dans la salle des employés. Vos employés pourront déposer leurs suggestions de leur cellulaire. Le tableau de bord reste protégé par votre mot de passe.</div>
+          <button class="btn" id="btnQr">⬇️ Télécharger le code QR</button>
+        </div>
+        <canvas id="qrCanvas"></canvas>
+      </div>
       <details class="details-param" id="detailsParam" style="margin-top:16px;">
         <summary>⚙️ Paramètres (clinique, courriel de notification, mot de passe)</summary>
         <div class="inner">
@@ -388,6 +405,7 @@ async function chargerTableau(silencieux) {
     $('pinSaisi').value = '';
     afficherVerrouOuTableau();
     drawBS();
+    preparerPartage();
     return true;
   } catch (e) {
     console.error(e);
@@ -518,9 +536,33 @@ function brancher() {
   $('btnActualiser').addEventListener('click', async () => { statut('saving', '⏳ Actualisation...'); if (await chargerTableau(true)) statut('ok', '✅ À jour'); });
   $('btnArchiver').addEventListener('click', archiverTraitees);
   $('btnParam').addEventListener('click', enregistrerParametres);
+  $('btnCopier').addEventListener('click', copierLien);
+  $('btnQr').addEventListener('click', telechargerQr);
   $('filterCatBS').addEventListener('change', drawBS);
   $('filterStatBS').addEventListener('change', drawBS);
 }
+
+
+// ===================== LIEN EMPLOYÉS =====================
+function lienEmploye() { return location.origin + location.pathname + '?clinique=' + ownerToken; }
+function qrCanvas(texte, taille) {
+  const qr = qrcode(0, 'M'); qr.addData(texte); qr.make();
+  const n = qr.getModuleCount(), marge = 4, ech = Math.max(1, Math.floor(taille / (n + marge * 2)));
+  const c = document.createElement('canvas'); c.width = c.height = (n + marge * 2) * ech;
+  const ctx = c.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c.width, c.height); ctx.fillStyle = '#0d1b2a';
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (qr.isDark(r, k)) ctx.fillRect((k + marge) * ech, (r + marge) * ech, ech, ech);
+  return c;
+}
+function preparerPartage() {
+  const lien = lienEmploye(); $('lienEmploye').value = lien;
+  try { const q = qrCanvas(lien, 400), c = $('qrCanvas'); c.width = q.width; c.height = q.height; c.getContext('2d').drawImage(q, 0, 0); } catch (e) { console.error(e); }
+}
+async function copierLien() {
+  const el = $('lienEmploye');
+  try { await navigator.clipboard.writeText(el.value); } catch (e) { el.select(); document.execCommand('copy'); }
+  statut('ok', '📋 Lien copié');
+}
+function telechargerQr() { const a = document.createElement('a'); a.href = qrCanvas($('lienEmploye').value, 1200).toDataURL('image/png'); a.download = 'code-qr-boite-a-suggestions.png'; a.click(); }
 
 async function initPage() {
   brancher();
