@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grille RACI — Clinique dentaire | Gestion Mel</title>
+<title>Grille RACI : Clinique dentaire | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -70,9 +70,9 @@
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">RH — Rôles et responsabilités</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">RH : Rôles et responsabilités</div></div>
 <div class="container">
-  <div class="doc-header"><h1>📋 Grille RACI — Clinique dentaire</h1><p>Responsable · Approbateur · Consulté · Informé — Clarification des rôles par tâche</p></div>
+  <div class="doc-header"><h1>📋 Grille RACI : Clinique dentaire</h1><p>Responsable · Approbateur · Consulté · Informé : Clarification des rôles par tâche</p></div>
 
   <div class="top-bar">
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
@@ -87,10 +87,10 @@
 
   <div class="legend">
     <strong style="font-size:.78rem;color:#5a6a80;margin-right:4px;">Légende :</strong>
-    <div class="leg-item"><div class="leg-badge" style="background:var(--blue);">R</div><strong>Responsable</strong> — Fait le travail</div>
-    <div class="leg-item"><div class="leg-badge" style="background:var(--red);">A</div><strong>Approbateur</strong> — Décide et approuve</div>
-    <div class="leg-item"><div class="leg-badge" style="background:var(--green);">C</div><strong>Consulté</strong> — Donne son avis</div>
-    <div class="leg-item"><div class="leg-badge" style="background:var(--orange);">I</div><strong>Informé</strong> — Tenu au courant</div>
+    <div class="leg-item"><div class="leg-badge" style="background:var(--blue);">R</div><strong>Responsable</strong> : Fait le travail</div>
+    <div class="leg-item"><div class="leg-badge" style="background:var(--red);">A</div><strong>Approbateur</strong> : Décide et approuve</div>
+    <div class="leg-item"><div class="leg-badge" style="background:var(--green);">C</div><strong>Consulté</strong> : Donne son avis</div>
+    <div class="leg-item"><div class="leg-badge" style="background:var(--orange);">I</div><strong>Informé</strong> : Tenu au courant</div>
   </div>
 
   <div class="table-wrap">
@@ -98,7 +98,7 @@
   </div>
 
   <div class="actions"><button class="btn-top primary" onclick="window.print()">🖨️ Imprimer</button></div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com</div>
 </div>
 
 <script>
@@ -125,7 +125,7 @@ let TASKS = [
     { name:'Facturation et assurances', values:['I','','','','R',''] },
     { name:'Gestion des plaintes patients', values:['A','C','','','R','C'] },
     { name:'Confirmation des rendez-vous 48h', values:['I','','','','R',''] },
-    { name:'Plans de traitement — Communication', values:['I','C','R','R','I',''] },
+    { name:'Plans de traitement : Communication', values:['I','C','R','R','I',''] },
   ]},
   { cat:'Activités cliniques', tasks:[
     { name:'Examen et diagnostics', values:['','R','C','','',''] },
@@ -134,7 +134,7 @@ let TASKS = [
     { name:'Stérilisation des instruments', values:['I','','C','R','',''] },
     { name:'Gestion des urgences médicales', values:['R','A','C','C','I',''] },
     { name:'Protocoles d\'hygiène et PCI', values:['A','I','C','R','',''] },
-    { name:'Dossiers patients — Mise à jour', values:['I','C','R','R','R',''] },
+    { name:'Dossiers patients : Mise à jour', values:['I','C','R','R','R',''] },
   ]},
   { cat:'Stocks et équipements', tasks:[
     { name:'Commandes de fournitures cliniques', values:['A','','C','R','',''] },
@@ -164,7 +164,7 @@ function buildTable() {
       html += `<tr><td class="task-cell">${task.name}</td>`;
       ROLES.forEach((r, ri) => {
         const val = task.values[ri] || '';
-        html += `<td class="raci-cell"><select class="raci-select r-${val||'empty'}" onchange="setVal(${ci},${ti},${ri},this.value);this.className='raci-select r-'+(this.value||'empty')" title="${r}">${RACI_VALUES.map(v=>`<option value="${v}" ${v===val?'selected':''}>${v||'—'}</option>`).join('')}</select></td>`;
+        html += `<td class="raci-cell"><select class="raci-select r-${val||'empty'}" onchange="setVal(${ci},${ti},${ri},this.value);this.className='raci-select r-'+(this.value||'empty')" title="${r}">${RACI_VALUES.map(v=>`<option value="${v}" ${v===val?'selected':''}>${v||'-'}</option>`).join('')}</select></td>`;
       });
       html += '</tr>';
     });
@@ -175,7 +175,7 @@ function buildTable() {
     html += `<tr><td class="task-cell"><input type="text" value="${task.name}" placeholder="Nouvelle tâche..." oninput="customTasks[${i}].name=this.value;scheduleSave()" style="border:none;background:transparent;width:100%;font-family:inherit;font-size:.79rem;"></td>`;
     ROLES.forEach((r, ri) => {
       const val = task.values[ri] || '';
-      html += `<td class="raci-cell"><select class="raci-select r-${val||'empty'}" onchange="customTasks[${i}].values[${ri}]=this.value;scheduleSave();this.className='raci-select r-'+(this.value||'empty');">${RACI_VALUES.map(v=>`<option value="${v}" ${v===val?'selected':''}>${v||'—'}</option>`).join('')}</select></td>`;
+      html += `<td class="raci-cell"><select class="raci-select r-${val||'empty'}" onchange="customTasks[${i}].values[${ri}]=this.value;scheduleSave();this.className='raci-select r-'+(this.value||'empty');">${RACI_VALUES.map(v=>`<option value="${v}" ${v===val?'selected':''}>${v||'-'}</option>`).join('')}</select></td>`;
     });
     html += '</tr>';
   });

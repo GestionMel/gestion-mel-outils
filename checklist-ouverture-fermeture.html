@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checklist ouverture/fermeture — Gestion Mel</title>
+<title>Checklist ouverture/fermeture | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -88,7 +88,7 @@
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Opérations</div>
+  <div style="font-size:.79rem;opacity:.7;">Clinique dentaire : Opérations</div>
 </div>
 <div class="container">
   <div class="doc-header">
@@ -110,7 +110,7 @@
   </div>
 
   <div class="edit-banner" id="editBanner">
-    <span>✏️ <strong>Mode édition actif</strong> — Modifiez les tâches, rôles, ajoutez ou déplacez des éléments. Cliquez sur le texte d'une tâche pour le modifier.</span>
+    <span>✏️ <strong>Mode édition actif</strong> : Modifiez les tâches, rôles, ajoutez ou déplacez des éléments. Cliquez sur le texte d'une tâche pour le modifier.</span>
     <button class="btn on" onclick="toggleEdit()">✅ Terminer l'édition</button>
   </div>
 
@@ -156,7 +156,7 @@
     <span class="tl">Confirmer les RV du jour et lendemain</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t7&#39;)">×</button></div>
   </div><div class="ti" id="ti_t8">
     <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t8&#39;,this.checked)">
-    <span class="tl">Ouvrir la caisse — vérifier le fonds</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t8&#39;)">×</button></div>
+    <span class="tl">Ouvrir la caisse : vérifier le fonds</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t8&#39;)">×</button></div>
   </div><div class="ti" id="ti_t9">
     <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t9&#39;,this.checked)">
     <span class="tl">Préparer les formulaires d'assurance</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t9&#39;)">×</button></div>
@@ -192,7 +192,7 @@
     <span class="tl">Tester les équipements (aspiration, turbines)</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t16&#39;)">×</button></div>
   </div><div class="ti" id="ti_t17">
     <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t17&#39;,this.checked)">
-    <span class="tl">Vérifier l'autoclave — démarrer un cycle si requis</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t17&#39;)">×</button></div>
+    <span class="tl">Vérifier l'autoclave : démarrer un cycle si requis</span><span class="tb-imp">Important</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t17&#39;)">×</button></div>
   </div><div class="ti" id="ti_t18">
     <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t18&#39;,this.checked)">
     <span class="tl">Préparer les instruments spéciaux du jour</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t18&#39;)">×</button></div>
@@ -213,7 +213,7 @@
       <div class="role-body" id="rb_r3_0">
         <div class="ti" id="ti_t21">
     <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t21&#39;,this.checked)">
-    <span class="tl">Arriver avant l'équipe — accès sécurisé</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t21&#39;)">×</button></div>
+    <span class="tl">Arriver avant l'équipe : accès sécurisé</span><span class="tb-crit">Critique</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t21&#39;)">×</button></div>
   </div><div class="ti" id="ti_t22">
     <input type="checkbox" class="ti-cb" onchange="t_check(&#39;t22&#39;,this.checked)">
     <span class="tl">Vérifier le journal de bord et notes de la veille</span><div class="ti-tools"><button class="tt del" onclick="t_del(&#39;t22&#39;)">×</button></div>
@@ -349,7 +349,7 @@
     <button class="btn" style="color:var(--red);border-color:rgba(192,57,43,.25);" onclick="resetChecks()">↺ Réinitialiser les cases</button>
     <button class="btn primary" onclick="window.print()">🖨️ Imprimer</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com</div>
 </div>
 
 <script>
@@ -369,11 +369,11 @@ function init(){
   tasks=[]; tid=1;
   const O=0,F=1;
   // Ouverture Sec
-  [['Ouvrir les portes et désactiver l\'alarme','crit'],['Allumer lumières et équipements bureautiques',''],['Ouvrir le logiciel et vérifier l\'horaire','imp'],['Récupérer les messages vocaux',''],['Répondre aux courriels prioritaires',''],['Préparer les dossiers du jour','imp'],['Confirmer les RV du jour et lendemain','imp'],['Ouvrir la caisse — vérifier le fonds','crit'],['Préparer les formulaires d\'assurance',''],['Vérifier la liste de priorité (urgences)','']].forEach(([l,b])=>tasks.push(T('r1',O,l,b)));
+  [['Ouvrir les portes et désactiver l\'alarme','crit'],['Allumer lumières et équipements bureautiques',''],['Ouvrir le logiciel et vérifier l\'horaire','imp'],['Récupérer les messages vocaux',''],['Répondre aux courriels prioritaires',''],['Préparer les dossiers du jour','imp'],['Confirmer les RV du jour et lendemain','imp'],['Ouvrir la caisse : vérifier le fonds','crit'],['Préparer les formulaires d\'assurance',''],['Vérifier la liste de priorité (urgences)','']].forEach(([l,b])=>tasks.push(T('r1',O,l,b)));
   // Ouverture Ass/Hyg
-  [['Allumer les équipements cliniques et fauteuils',''],['Vérifier la stérilisation de la veille','crit'],['Préparer les salles selon l\'horaire du jour','imp'],['Vérifier niveaux de produits et fournitures',''],['Préparer les solutions désinfectantes (PCI)',''],['Tester les équipements (aspiration, turbines)',''],['Vérifier l\'autoclave — démarrer un cycle si requis','imp'],['Préparer les instruments spéciaux du jour',''],['Remplir les bonbonnes d\'eau distillée',''],['Préparer les documents cliniques patients','']].forEach(([l,b])=>tasks.push(T('r2',O,l,b)));
+  [['Allumer les équipements cliniques et fauteuils',''],['Vérifier la stérilisation de la veille','crit'],['Préparer les salles selon l\'horaire du jour','imp'],['Vérifier niveaux de produits et fournitures',''],['Préparer les solutions désinfectantes (PCI)',''],['Tester les équipements (aspiration, turbines)',''],['Vérifier l\'autoclave : démarrer un cycle si requis','imp'],['Préparer les instruments spéciaux du jour',''],['Remplir les bonbonnes d\'eau distillée',''],['Préparer les documents cliniques patients','']].forEach(([l,b])=>tasks.push(T('r2',O,l,b)));
   // Ouverture Gest
-  [['Arriver avant l\'équipe — accès sécurisé','crit'],['Vérifier le journal de bord et notes de la veille',''],['Vérifier absences et ajuster les responsabilités','imp'],['Confirmer la disponibilité du personnel',''],['Brief rapide avec l\'équipe (5 minutes)','imp'],['Vérifier les commandes reçues et distribuer',''],['Vérifier les demandes urgentes de fournisseurs','']].forEach(([l,b])=>tasks.push(T('r3',O,l,b)));
+  [['Arriver avant l\'équipe : accès sécurisé','crit'],['Vérifier le journal de bord et notes de la veille',''],['Vérifier absences et ajuster les responsabilités','imp'],['Confirmer la disponibilité du personnel',''],['Brief rapide avec l\'équipe (5 minutes)','imp'],['Vérifier les commandes reçues et distribuer',''],['Vérifier les demandes urgentes de fournisseurs','']].forEach(([l,b])=>tasks.push(T('r3',O,l,b)));
   // Fermeture Sec
   [['Balancer la fin de journée','crit'],['Rembourser la petite caisse et fermer la caisse','crit'],['Confirmer les RV du lendemain (48h)','imp'],['Mettre à jour les dossiers en attente',''],['Retourner tous les appels sans réponse',''],['Enregistrer le message de boîte vocale (soir)',''],['Préparer les dossiers du lendemain',''],['Fermer le logiciel dentaire correctement',''],['Éteindre ordinateurs et équipements de bureau',''],['Vérifier que la salle d\'attente est propre','']].forEach(([l,b])=>tasks.push(T('r1',F,l,b)));
   // Fermeture Ass/Hyg

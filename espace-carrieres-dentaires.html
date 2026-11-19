@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Espace Carrières Dentaires — Gestion Mel</title>
+<title>Espace Carrières Dentaires | Gestion Mel</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -429,10 +429,10 @@ body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min
       <button class="btn btn-ghost btn-sm" onclick="showView('home')">← Retour au site</button>
     </div>
     <div class="admin-tabs" id="admin-tabs">
-      <button class="nav-btn active" onclick="showAdminTab('pending-c',this)">En attente — Candidatures (<span id="ct-pc">0</span>)</button>
-      <button class="nav-btn" onclick="showAdminTab('pending-j',this)">En attente — Offres (<span id="ct-pj">0</span>)</button>
-      <button class="nav-btn" onclick="showAdminTab('approved-c',this)">Approuvées — Candidatures (<span id="ct-ac">0</span>)</button>
-      <button class="nav-btn" onclick="showAdminTab('approved-j',this)">Approuvées — Offres (<span id="ct-aj">0</span>)</button>
+      <button class="nav-btn active" onclick="showAdminTab('pending-c',this)">En attente : Candidatures (<span id="ct-pc">0</span>)</button>
+      <button class="nav-btn" onclick="showAdminTab('pending-j',this)">En attente : Offres (<span id="ct-pj">0</span>)</button>
+      <button class="nav-btn" onclick="showAdminTab('approved-c',this)">Approuvées : Candidatures (<span id="ct-ac">0</span>)</button>
+      <button class="nav-btn" onclick="showAdminTab('approved-j',this)">Approuvées : Offres (<span id="ct-aj">0</span>)</button>
     </div>
     <div id="admin-content">
       <div class="loading"><div class="spinner"></div> Chargement...</div>
@@ -469,7 +469,7 @@ body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min
       </div>
       <div class="form-group">
         <label class="form-label">Ville / Région <span class="req">*</span></label>
-        <input class="form-input" id="c-ville" placeholder="Ex: Québec, Montréal, Saguenay...">
+        <input class="form-input" id="c-ville" placeholder="Ex : Québec, Montréal, Saguenay...">
       </div>
 
       <div class="form-section-title">Votre profil professionnel</div>
@@ -689,7 +689,7 @@ body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--text);min
 <script>
 
 // ════════════════════════════════════════════════
-// ⚙️  CONFIGURATION — À REMPLIR UNE SEULE FOIS
+// ⚙️  CONFIGURATION - À REMPLIR UNE SEULE FOIS
 //     Suivez le guide d'installation fourni avec ce fichier
 // ════════════════════════════════════════════════
 const CONFIG = {
@@ -894,7 +894,7 @@ function showCandidateDetail(id) {
       </div>
       ${c.lienCV ? `<div style="text-align:center;margin-bottom:16px"><a href="${esc(c.lienCV)}" target="_blank" class="detail-link">📄 Consulter le CV</a></div>` : ''}
       <div style="text-align:center">
-        <a href="mailto:${esc(c.courriel)}?subject=Votre candidature — Espace carrières Gestion Mel"
+        <a href="mailto:${esc(c.courriel)}?subject=Votre candidature, Espace carrières Gestion Mel"
            class="btn btn-primary" style="text-decoration:none;display:inline-flex">
           ✉ Contacter cette candidate directement
         </a>
@@ -1049,9 +1049,9 @@ function showJobDetail(id) {
         ${j.telephone ? ` · <strong style="color:var(--text)">${esc(j.telephone)}</strong>` : ''}
       </div>
       <div style="text-align:center">
-        <a href="mailto:${esc(j.courriel)}?subject=Votre offre d'emploi — ${esc(j.poste)}"
+        <a href="mailto:${esc(j.courriel)}?subject=Votre offre d'emploi, ${esc(j.poste)}"
            class="btn btn-primary" style="text-decoration:none;display:inline-flex">
-          ✉ Je suis intéressée — Contacter la clinique directement
+          ✉ Je suis intéressée : Contacter la clinique directement
         </a>
       </div>
     ` : `
@@ -1059,7 +1059,7 @@ function showJobDetail(id) {
         <div style="color:var(--muted);font-size:.8rem;margin-bottom:10px">
           🔒 Cette clinique a choisi de ne pas afficher ses coordonnées publiquement. Gestion Mel vous mettra en relation.
         </div>
-        <a href="mailto:${esc(CONFIG.adminEmail)}?subject=Intérêt pour l'offre de ${esc(j.clinique)} — ${esc(j.poste)}&body=Bonjour Mélanie,%0D%0A%0D%0AJe suis intéressée par l'offre de ${esc(j.clinique)} pour le poste de ${esc(j.poste)}.%0D%0A%0D%0APouvez-vous me transmettre leurs coordonnées?%0D%0A%0D%0AMerci!"
+        <a href="mailto:${esc(CONFIG.adminEmail)}?subject=Intérêt pour l'offre de ${esc(j.clinique)}, ${esc(j.poste)}&body=Bonjour Mélanie,%0D%0A%0D%0AJe suis intéressée par l'offre de ${esc(j.clinique)} pour le poste de ${esc(j.poste)}.%0D%0A%0D%0APouvez-vous me transmettre leurs coordonnées?%0D%0A%0D%0AMerci!"
            class="btn btn-primary" style="text-decoration:none;display:inline-flex">
           ✉ Demander les coordonnées à Gestion Mel
         </a>
@@ -1100,15 +1100,15 @@ function sendEmailNotification(type, data) {
   const params = {
     to_email: CONFIG.adminEmail,
     subject: isCandidate
-      ? `🦷 Nouvelle candidature — ${data.nom} (${(data.postes||[]).join(', ')})`
-      : `💎 Nouvelle offre d'emploi — ${data.clinique} (${data.poste})`,
+      ? `🦷 Nouvelle candidature : ${data.nom} (${(data.postes||[]).join(', ')})`
+      : `💎 Nouvelle offre d'emploi : ${data.clinique} (${data.poste})`,
     message: isCandidate
-      ? `Nouvelle candidature reçue!\n\nNom: ${data.nom}\nCourriel: ${data.courriel}\nVille: ${data.ville}\nPoste(s): ${(data.postes||[]).join(', ')}\nDisponibilité: ${data.disponibilite}\nType: ${data.typeEmploi}\nExpérience: ${data.experience}\nAcadémie: ${data.academie}\nCV: ${data.lienCV||'Non fourni'}\n\nÀ propos: ${data.commentaires||'—'}\n\n→ Connectez-vous au panneau admin pour approuver.`
-      : `Nouvelle offre d'emploi reçue!\n\nClinique: ${data.clinique}\nVille: ${data.ville}\nCourriel: ${data.courriel}\nPoste: ${data.poste}\nType: ${data.typeEmploi}\n\nDescription: ${data.description}\n\nAvantages: ${data.avantages||'—'}\n\n→ Connectez-vous au panneau admin pour approuver.`
+      ? `Nouvelle candidature reçue!\n\nNom : ${data.nom}\nCourriel : ${data.courriel}\nVille : ${data.ville}\nPoste(s) : ${(data.postes||[]).join(', ')}\nDisponibilité : ${data.disponibilite}\nType : ${data.typeEmploi}\nExpérience : ${data.experience}\nAcadémie : ${data.academie}\nCV : ${data.lienCV||'Non fourni'}\n\nÀ propos : ${data.commentaires||'-'}\n\n→ Connectez-vous au panneau admin pour approuver.`
+      : `Nouvelle offre d'emploi reçue!\n\nClinique : ${data.clinique}\nVille : ${data.ville}\nCourriel : ${data.courriel}\nPoste : ${data.poste}\nType : ${data.typeEmploi}\n\nDescription : ${data.description}\n\nAvantages : ${data.avantages||'-'}\n\n→ Connectez-vous au panneau admin pour approuver.`
   };
 
   emailjs.send(CONFIG.emailjs.serviceId, CONFIG.emailjs.templateId, params)
-    .catch(err => console.warn('EmailJS non configuré:', err));
+    .catch(err => console.warn('EmailJS non configuré :', err));
 }
 
 // ═══════════════════════

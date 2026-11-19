@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulateur — Balance fin de journée | Académie Gestion Mel</title>
+<title>Simulateur : Balance fin de journée | Académie Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -88,14 +88,14 @@
 </style>
 </head>
 <body>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Académie — Formation secrétaire</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">Académie : Formation secrétaire</div></div>
 <div class="container">
-  <div class="doc-header"><h1>💰 Simulateur — Balance de fin de journée</h1><p>Pratiquez la conciliation des paiements avec des scénarios réels de clinique dentaire</p></div>
+  <div class="doc-header"><h1>💰 Simulateur : Balance de fin de journée</h1><p>Pratiquez la conciliation des paiements avec des scénarios réels de clinique dentaire</p></div>
 
   <div class="score-bar">
     <div class="score-chip"><span style="font-size:.9rem;">✅</span><span class="score-num" id="sc-ok">0</span><span style="color:#5a6a80;">correct(s)</span></div>
     <div class="score-chip"><span style="font-size:.9rem;">❌</span><span class="score-num" id="sc-err">0</span><span style="color:#5a6a80;">erreur(s)</span></div>
-    <div class="score-chip"><span style="font-size:.9rem;">📊</span><span class="score-num" id="sc-pct">—</span><span style="color:#5a6a80;">taux de réussite</span></div>
+    <div class="score-chip"><span style="font-size:.9rem;">📊</span><span class="score-num" id="sc-pct">-</span><span style="color:#5a6a80;">taux de réussite</span></div>
     <div style="margin-left:auto;font-size:.76rem;color:#8a9ab0;" id="sc-scenario">Scénario 1/2</div>
   </div>
 
@@ -111,11 +111,11 @@
   <div id="simView">
     <div class="sim-layout">
       <div class="sim-left">
-        <div class="sec-title" id="scNum">Scénario 1 — Difficulté : <span class="diff-badge d-facile">Facile</span></div>
+        <div class="sec-title" id="scNum">Scénario 1, Difficulté : <span class="diff-badge d-facile">Facile</span></div>
         <div id="scDesc" style="font-size:.84rem;color:#5a6a80;margin-bottom:10px;background:var(--light);padding:8px 12px;border-radius:6px;border-left:3px solid var(--accent);">Journée tranquille du lundi. Seulement des paiements directs des patients.</div>
         <div class="scenario-card">
           <div class="sc-title">📋 Transactions de la journée</div>
-          <div class="transactions" id="txList"><div class="tx-row"><span class="tx-type tx-comptant">💵 Comptant</span><span class="tx-desc">Mme Tremblay — nettoyage</span><span class="tx-amount">120 $</span></div><div class="tx-row"><span class="tx-type tx-debit">💳 Débit</span><span class="tx-desc">M. Gagnon — obturation</span><span class="tx-amount">250 $</span></div><div class="tx-row"><span class="tx-type tx-credit">💳 Crédit</span><span class="tx-desc">Mme Bouchard — consultation</span><span class="tx-amount">85 $</span></div></div>
+          <div class="transactions" id="txList"><div class="tx-row"><span class="tx-type tx-comptant">💵 Comptant</span><span class="tx-desc">Mme Tremblay : nettoyage</span><span class="tx-amount">120 $</span></div><div class="tx-row"><span class="tx-type tx-debit">💳 Débit</span><span class="tx-desc">M. Gagnon : obturation</span><span class="tx-amount">250 $</span></div><div class="tx-row"><span class="tx-type tx-credit">💳 Crédit</span><span class="tx-desc">Mme Bouchard : consultation</span><span class="tx-amount">85 $</span></div></div>
         </div>
         <div class="scenario-card" id="liquidCard" style="display:none;">
           <div class="sc-title">💵 Argent comptant (pièces et billets)</div>
@@ -161,7 +161,7 @@
   <div id="theoryView" style="display:none;">
     <div class="theory-section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-        <div style="font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;">📚 Théorie — Balance de fin de journée</div>
+        <div style="font-size:.82rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;">📚 Théorie : Balance de fin de journée</div>
         <button style="padding:6px 14px;border-radius:6px;border:1.5px solid var(--border);background:white;font-family:inherit;font-size:.78rem;cursor:pointer;color:#5a6a80;" onclick="showTheory(false)">← Retour aux exercices</button>
       </div>
       <div class="theory-card">
@@ -201,18 +201,18 @@
         <div class="tc-title">⚠️ Erreurs courantes</div>
         <div class="tc-content">
           <ul style="padding-left:18px;line-height:2.2;">
-            <li><strong>Oublier un paiement</strong> — toujours vérifier chaque rendez-vous de la journée</li>
-            <li><strong>Mal entrer un paiement</strong> — débit entré comme comptant, ou vice-versa</li>
-            <li><strong>Oublier les remboursements</strong> — tout remboursement réduit le total du dépôt</li>
-            <li><strong>Paiements d'assurance non comptabilisés</strong> — les dépôts directs doivent être saisis</li>
-            <li><strong>Erreur de saisie</strong> — toujours revérifier les gros montants</li>
+            <li><strong>Oublier un paiement</strong> : toujours vérifier chaque rendez-vous de la journée</li>
+            <li><strong>Mal entrer un paiement</strong> : débit entré comme comptant, ou vice-versa</li>
+            <li><strong>Oublier les remboursements</strong> : tout remboursement réduit le total du dépôt</li>
+            <li><strong>Paiements d'assurance non comptabilisés</strong> : les dépôts directs doivent être saisis</li>
+            <li><strong>Erreur de saisie</strong> : toujours revérifier les gros montants</li>
           </ul>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="footer-note">© Gestion Mel — Académie de formation | gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel | Académie de formation | gestionmel.com</div>
 </div>
 
 <script>
@@ -226,9 +226,9 @@ const SCENARIOS = {
   facile: [
     { desc:'Journée tranquille du lundi. Seulement des paiements directs des patients.',
       txs:[
-        {type:'comptant',desc:'Mme Tremblay — nettoyage',amount:120},
-        {type:'debit',desc:'M. Gagnon — obturation',amount:250},
-        {type:'credit',desc:'Mme Bouchard — consultation',amount:85},
+        {type:'comptant',desc:'Mme Tremblay : nettoyage',amount:120},
+        {type:'debit',desc:'M. Gagnon : obturation',amount:250},
+        {type:'credit',desc:'Mme Bouchard : consultation',amount:85},
       ],
       answer:{comptant:120,debit:250,credit:85,cheque:0,assurance:0,remboursement:0},
       depot:455,
@@ -236,9 +236,9 @@ const SCENARIOS = {
     },
     { desc:'Mercredi matin. Quelques paiements variés, facile à tracer.',
       txs:[
-        {type:'debit',desc:'M. Côté — couronne',amount:850},
-        {type:'comptant',desc:'Mme Fortin — examen',amount:95},
-        {type:'cheque',desc:'M. Simard — bridge',amount:1200},
+        {type:'debit',desc:'M. Côté : couronne',amount:850},
+        {type:'comptant',desc:'Mme Fortin : examen',amount:95},
+        {type:'cheque',desc:'M. Simard : bridge',amount:1200},
       ],
       answer:{comptant:95,debit:850,credit:0,cheque:1200,assurance:0,remboursement:0},
       depot:2145,
@@ -248,11 +248,11 @@ const SCENARIOS = {
   moyen: [
     { desc:'Journée chargée du jeudi. Mix de paiements patients et assurance reçue.',
       txs:[
-        {type:'debit',desc:'Mme Lavoie — nettoyage + radio',amount:175},
-        {type:'credit',desc:'M. Roy — implant acompte',amount:500},
-        {type:'assurance',desc:'Sun Life — paiement dossier Leblanc reçu',amount:320},
-        {type:'comptant',desc:'Mme Mercier — scellants enfant',amount:60},
-        {type:'cheque',desc:'M. Bergeron — prothèse partielle',amount:980},
+        {type:'debit',desc:'Mme Lavoie : nettoyage + radio',amount:175},
+        {type:'credit',desc:'M. Roy : implant acompte',amount:500},
+        {type:'assurance',desc:'Sun Life : paiement dossier Leblanc reçu',amount:320},
+        {type:'comptant',desc:'Mme Mercier : scellants enfant',amount:60},
+        {type:'cheque',desc:'M. Bergeron : prothèse partielle',amount:980},
       ],
       answer:{comptant:60,debit:175,credit:500,cheque:980,assurance:320,remboursement:0},
       depot:2035,
@@ -260,11 +260,11 @@ const SCENARIOS = {
     },
     { desc:'Vendredi avec remboursement. Attention à la direction des flux!',
       txs:[
-        {type:'debit',desc:'Mme Ouellet — couronne',amount:750},
-        {type:'assurance',desc:'Beneva — remboursement assurance reçu',amount:290},
-        {type:'remb',desc:'M. Leclerc — trop-perçu remboursé',amount:80},
-        {type:'credit',desc:'Mme Dion — blanchiment',amount:399},
-        {type:'comptant',desc:'M. Plante — urgence',amount:150},
+        {type:'debit',desc:'Mme Ouellet : couronne',amount:750},
+        {type:'assurance',desc:'Beneva : remboursement assurance reçu',amount:290},
+        {type:'remb',desc:'M. Leclerc : trop-perçu remboursé',amount:80},
+        {type:'credit',desc:'Mme Dion : blanchiment',amount:399},
+        {type:'comptant',desc:'M. Plante : urgence',amount:150},
       ],
       answer:{comptant:150,debit:750,credit:399,cheque:0,assurance:290,remboursement:80},
       depot:1509,
@@ -274,14 +274,14 @@ const SCENARIOS = {
   difficile: [
     { desc:'Journée complexe de fin de mois avec plusieurs modes de paiement et remboursements.',
       txs:[
-        {type:'comptant',desc:'M. Gauthier — nettoyage',amount:145},
-        {type:'debit',desc:'Mme Pelletier — endodontie acompte',amount:600},
-        {type:'credit',desc:'M. Harvey — couronne zircone',amount:1100},
-        {type:'assurance',desc:'Industrielle Alliance — Dumont reçu',amount:445},
-        {type:'assurance',desc:'Manulife — Champagne reçu',amount:280},
-        {type:'cheque',desc:'Mme Caron — prothèse complète',amount:2200},
-        {type:'remb',desc:'M. Bolduc — annulation trop-perçu',amount:95},
-        {type:'remb',desc:'Mme St-Pierre — remb. surestimé',amount:35},
+        {type:'comptant',desc:'M. Gauthier : nettoyage',amount:145},
+        {type:'debit',desc:'Mme Pelletier : endodontie acompte',amount:600},
+        {type:'credit',desc:'M. Harvey : couronne zircone',amount:1100},
+        {type:'assurance',desc:'Industrielle Alliance : Dumont reçu',amount:445},
+        {type:'assurance',desc:'Manulife : Champagne reçu',amount:280},
+        {type:'cheque',desc:'Mme Caron : prothèse complète',amount:2200},
+        {type:'remb',desc:'M. Bolduc : annulation trop-perçu',amount:95},
+        {type:'remb',desc:'Mme St-Pierre : remb. surestimé',amount:35},
       ],
       answer:{comptant:145,debit:600,credit:1100,cheque:2200,assurance:725,remboursement:130},
       depot:4640,
@@ -308,7 +308,7 @@ function loadScenario() {
   answered = false;
   document.getElementById('nextBtn').style.display = 'none';
   document.getElementById('hintBox').style.display = 'none';
-  document.getElementById('scNum').textContent = `Scénario ${currentIdx+1} — Difficulté : `;
+  document.getElementById('scNum').textContent = `Scénario ${currentIdx+1}, Difficulté : `;
   document.getElementById('scNum').innerHTML += `<span class="diff-badge d-${difficulty}">${difficulty.charAt(0).toUpperCase()+difficulty.slice(1)}</span>`;
   document.getElementById('scDesc').textContent = sc.desc;
   document.getElementById('sc-scenario').textContent = `Scénario ${currentIdx+1}/${list.length}`;
@@ -393,7 +393,7 @@ function updateScores() {
   const total = scores.ok + scores.err;
   document.getElementById('sc-ok').textContent = scores.ok;
   document.getElementById('sc-err').textContent = scores.err;
-  document.getElementById('sc-pct').textContent = total > 0 ? Math.round(scores.ok/total*100)+'%' : '—';
+  document.getElementById('sc-pct').textContent = total > 0 ? Math.round(scores.ok/total*100)+'%' : '-';
 }
 
 function showTheory(show=true) {

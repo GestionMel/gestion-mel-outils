@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Formulaire de suivi — Prothèses RCSD | Gestion Mel</title>
+<title>Formulaire de suivi : Prothèses RCSD | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--green:#1a9e5a;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -55,15 +55,15 @@
 <body>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Formulaire RCSD</div>
+  <div>Clinique dentaire : Formulaire RCSD</div>
 </div>
 <div class="container">
   <div class="doc-header">
-    <h1>Formulaire de suivi — Prothèses dentaires</h1>
-    <p>Régime canadien de soins dentaires (RCSD) — Historique des soins prothétiques</p>
+    <h1>Formulaire de suivi : Prothèses dentaires</h1>
+    <p>Régime canadien de soins dentaires (RCSD) : Historique des soins prothétiques</p>
   </div>
 
-  <!-- SECTION 1 — PATIENT -->
+  <!-- SECTION 1 - PATIENT -->
   <div class="section">
     <div class="section-title">1. Informations du patient</div>
     <div class="grid">
@@ -75,14 +75,14 @@
     </div>
   </div>
 
-  <!-- SECTION 2 — HISTORIQUE -->
+  <!-- SECTION 2 - HISTORIQUE -->
   <div class="section">
-    <div class="section-title">2. Historique des soins — 24 derniers mois</div>
+    <div class="section-title">2. Historique des soins : 24 derniers mois</div>
     <div class="tip-box">ℹ️ Veuillez répondre aux questions suivantes concernant vos prothèses actuelles au cours des <strong>24 derniers mois</strong>.</div>
 
     <!-- Q1 -->
     <div class="question-block">
-      <div class="q-titre">1. Avez-vous eu un regarnissage ou un rebasage de votre prothèse ?</div>
+      <div class="q-titre">1. Avez-vous eu un regarnissage ou un rebasage de votre prothèse?</div>
       <div class="radio-row">
         <label class="radio-opt"><input type="radio" name="q1" id="q1non" value="non" onchange="toggleDetail('q1detail', false)"> Non</label>
         <label class="radio-opt"><input type="radio" name="q1" id="q1oui" value="oui" onchange="toggleDetail('q1detail', true)"> Oui</label>
@@ -95,7 +95,7 @@
 
     <!-- Q2 -->
     <div class="question-block">
-      <div class="q-titre">2. Avez-vous fait effectuer une réparation ou un ajout de dents ?</div>
+      <div class="q-titre">2. Avez-vous fait effectuer une réparation ou un ajout de dents?</div>
       <div class="radio-row">
         <label class="radio-opt"><input type="radio" name="q2" id="q2non" value="non" onchange="toggleDetail('q2detail', false)"> Non</label>
         <label class="radio-opt"><input type="radio" name="q2" id="q2oui" value="oui" onchange="toggleDetail('q2detail', true)"> Oui</label>
@@ -108,7 +108,7 @@
 
     <!-- Q3 -->
     <div class="question-block">
-      <div class="q-titre">3. Avez-vous reçu une nouvelle prothèse complète ou partielle ?</div>
+      <div class="q-titre">3. Avez-vous reçu une nouvelle prothèse complète ou partielle?</div>
       <div class="radio-row">
         <label class="radio-opt"><input type="radio" name="q3" id="q3non" value="non" onchange="toggleDetail('q3detail', false)"> Non</label>
         <label class="radio-opt"><input type="radio" name="q3" id="q3oui" value="oui" onchange="toggleDetail('q3detail', true)"> Oui</label>
@@ -124,7 +124,7 @@
     <div class="initials-row"><span>✍️ Initiales du (de la) patient(e) :</span><input type="text" id="init1" maxlength="6" placeholder="___"></div>
   </div>
 
-  <!-- SECTION 3 — ATTESTATION -->
+  <!-- SECTION 3 - ATTESTATION -->
   <div class="section">
     <div class="section-title">3. Attestation et signature</div>
     <div class="avert-box">📋 Je certifie que les renseignements fournis ci-dessus sont exacts au meilleur de ma connaissance. Je comprends que ces informations sont nécessaires pour l'admissibilité aux prestations du RCSD.</div>
@@ -140,13 +140,13 @@
   </div>
 
   <div class="actions">
-    <span class="save-msg" id="saveMsg">✅ Données sauvegardées !</span>
+    <span class="save-msg" id="saveMsg">✅ Données sauvegardées!</span>
     <button class="btn btn-danger" onclick="clearAll()">🗑 Effacer</button>
     <button class="btn btn-secondary" onclick="saveData()">💾 Sauvegarder</button>
     <button class="btn btn-secondary" onclick="loadData()">📂 Charger</button>
     <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / PDF</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage clinique uniquement</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | Document confidentiel | usage clinique uniquement</div>
 </div>
 
 <script>
@@ -191,7 +191,7 @@ function loadData() {
 }
 
 function clearAll() {
-  if (!confirm('Effacer toutes les données du formulaire ?')) return;
+  if (!confirm('Effacer toutes les données du formulaire?')) return;
   TEXT_FIELDS.forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   RADIO_GROUPS.forEach(g => {
     document.querySelectorAll(`input[name=${g}]`).forEach(r => r.checked=false);

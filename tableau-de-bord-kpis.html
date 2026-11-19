@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tableau de bord — Clinique dentaire | Gestion Mel</title>
+<title>Tableau de bord : Clinique dentaire | Gestion Mel</title>
 <style>
   :root{
     --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
@@ -426,12 +426,12 @@ window.gmAcces = (function () {
 
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div style="font-size:.8rem;opacity:.7;">Tableau de bord — Clinique dentaire</div>
+  <div style="font-size:.8rem;opacity:.7;">Tableau de bord : Clinique dentaire</div>
 </div>
 
 <div class="selector-screen" id="selectorScreen">
   <div class="selector-box">
-    <h1>Tableau de bord — Périodes</h1>
+    <h1>Tableau de bord : Périodes</h1>
     <p>Choisissez un mois déjà enregistré pour le consulter ou le modifier, ou créez-en un nouveau. La comparaison avec le mois précédent se remplit automatiquement s'il a déjà été sauvegardé.</p>
     <button class="btn-new" onclick="creerNouveau()">+ Nouvelle période</button>
     <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
@@ -490,7 +490,7 @@ window.gmAcces = (function () {
     <div class="kpi-card" style="border-top-color:var(--purple);">
       <div class="kpi-icon">📊</div>
       <div class="kpi-label">Taux de collection</div>
-      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_taux_coll">—</span><span class="kpi-unit">%</span></div>
+      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_taux_coll">-</span><span class="kpi-unit">%</span></div>
       <div class="kpi-target" style="font-size:.75rem;color:#5a6a80;">Cible : ≥ 98%</div>
       <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_taux_coll" style="background:var(--purple);width:0%"></div></div>
       <span class="kpi-status" id="st_taux_coll"></span>
@@ -527,7 +527,7 @@ window.gmAcces = (function () {
     <div class="kpi-card" style="border-top-color:var(--red);">
       <div class="kpi-icon">❌</div>
       <div class="kpi-label">Taux de no-show/annulation</div>
-      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_noshow">—</span><span class="kpi-unit">%</span></div>
+      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_noshow">-</span><span class="kpi-unit">%</span></div>
       <div class="kpi-target" style="font-size:.75rem;color:#5a6a80;">Cible : ≤ 5%</div>
       <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_noshow" style="background:var(--red);width:0%"></div></div>
       <span class="kpi-status" id="st_noshow"></span>
@@ -535,7 +535,7 @@ window.gmAcces = (function () {
     <div class="kpi-card" style="border-top-color:var(--orange);">
       <div class="kpi-icon">🔔</div>
       <div class="kpi-label">Rappels hygiène (taux)</div>
-      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_rappels">—</span><span class="kpi-unit">%</span></div>
+      <div class="kpi-value-wrap"><span class="kpi-value" id="kpi_rappels">-</span><span class="kpi-unit">%</span></div>
       <input type="number" id="kpi_rappels_prises" placeholder="RV rappels pris" style="width:100%;border:1.5px solid var(--border);border-radius:6px;padding:5px 8px;font-size:.8rem;font-family:inherit;background:var(--light);margin-bottom:3px;" oninput="calcAll();scheduleSave()">
       <div class="kpi-target">Rappels dus : <input type="number" id="kpi_rappels_dus" placeholder="0" style="width:70px;" oninput="calcAll();scheduleSave()"> Cible : ≥ 85%</div>
       <div class="kpi-bar-wrap"><div class="kpi-bar" id="bar_rappels" style="background:var(--orange);width:0%"></div></div>
@@ -567,7 +567,7 @@ window.gmAcces = (function () {
   </div>
 
   <!-- COMPARAISON AVEC PÉRIODE PRÉCÉDENTE -->
-  <div class="sec-title">📊 Comparaison — Période précédente</div>
+  <div class="sec-title">📊 Comparaison : Période précédente</div>
   <div class="comp-card">
     <table class="comp-table">
       <thead><tr><th>Indicateur</th><th>Période actuelle</th><th>Période précédente</th><th>Variation</th></tr></thead>
@@ -663,7 +663,7 @@ function setBar(id, pct, color) {
   el.style.background = color;
 }
 
-function fmt(n) { return n ? n.toLocaleString('fr-CA') + ' $' : '—'; }
+function fmt(n) { return n ? n.toLocaleString('fr-CA') + ' $' : '-'; }
 
 function calcAll() {
   const prodBrut = getVal('kpi_prod_brut');
@@ -682,15 +682,15 @@ function calcAll() {
 
   // Taux collection
   const tauxColl = prodBrut > 0 ? Math.round(collection / prodBrut * 100) : null;
-  document.getElementById('kpi_taux_coll').textContent = tauxColl !== null ? tauxColl : '—';
+  document.getElementById('kpi_taux_coll').textContent = tauxColl !== null ? tauxColl : '-';
 
   // No-show rate
   const noshow = rvTotal > 0 ? Math.round((rvTotal - rvComp) / rvTotal * 100) : null;
-  document.getElementById('kpi_noshow').textContent = noshow !== null ? noshow : '—';
+  document.getElementById('kpi_noshow').textContent = noshow !== null ? noshow : '-';
 
   // Rappels
   const rappelsPct = rappelsDus > 0 ? Math.round(rappelsPrises / rappelsDus * 100) : null;
-  document.getElementById('kpi_rappels').textContent = rappelsPct !== null ? rappelsPct : '—';
+  document.getElementById('kpi_rappels').textContent = rappelsPct !== null ? rappelsPct : '-';
 
   // Status & bars
   if (objProdBrut) { setBar('prod_brut', prodBrut/objProdBrut*100, 'var(--green)'); setStatus('prod_brut', prodBrut, objProdBrut); }
@@ -711,11 +711,11 @@ function calcAll() {
 }
 
 function buildProgRow(label, val, target, higherBetter=true, unit='$') {
-  if (!val || !target) return `<div class="prog-row"><div class="prog-top"><span class="prog-lbl">${label}</span><span class="prog-val" style="color:#8a9ab0;">—</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#ddd;"></div></div></div>`;
+  if (!val || !target) return `<div class="prog-row"><div class="prog-top"><span class="prog-lbl">${label}</span><span class="prog-val" style="color:#8a9ab0;">-</span></div><div class="prog-track"><div class="prog-fill" style="width:0%;background:#ddd;"></div></div></div>`;
   const pct = Math.min(100, Math.round(val/target*100));
   const color = higherBetter ? (pct>=100?'var(--green)':pct>=85?'var(--orange)':'var(--red)') : (pct<=100?'var(--green)':pct<=115?'var(--orange)':'var(--red)');
   const label2 = unit === '$' ? (val.toLocaleString('fr-CA')+' / '+target.toLocaleString('fr-CA')+' $') : (val+' / '+target);
-  return `<div class="prog-row"><div class="prog-top"><span class="prog-lbl">${label}</span><span class="prog-val" style="color:${color};">${pct}% — ${label2}</span></div><div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${color};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div></div>`;
+  return `<div class="prog-row"><div class="prog-top"><span class="prog-lbl">${label}</span><span class="prog-val" style="color:${color};">${pct}% : ${label2}</span></div><div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${color};-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div></div></div>`;
 }
 
 function buildObjProd(prod, objProd, coll, objColl, tauxColl, ar, objAr) {
@@ -736,18 +736,18 @@ function buildObjPat(newPat, objNew, noshow, rappelsPct, rvComp, rvTotal) {
 
 function buildCompTable(prod, coll, newPat, noshow, tauxColl) {
   const rows = [
-    { label:'Production brute', cur:prod?fmt(prod):'—', prev:'', unit:'$' },
-    { label:'Collection', cur:coll?fmt(coll):'—', prev:'', unit:'$' },
-    { label:'Taux de collection', cur:tauxColl!==null?tauxColl+'%':'—', prev:'', unit:'%' },
-    { label:'Nouveaux patients', cur:newPat||'—', prev:'', unit:'' },
-    { label:'Taux no-show', cur:noshow!==null?noshow+'%':'—', prev:'', unit:'%' },
+    { label:'Production brute', cur:prod?fmt(prod):'-', prev:'', unit:'$' },
+    { label:'Collection', cur:coll?fmt(coll):'-', prev:'', unit:'$' },
+    { label:'Taux de collection', cur:tauxColl!==null?tauxColl+'%':'-', prev:'', unit:'%' },
+    { label:'Nouveaux patients', cur:newPat||'-', prev:'', unit:'' },
+    { label:'Taux no-show', cur:noshow!==null?noshow+'%':'-', prev:'', unit:'%' },
   ];
   document.getElementById('compBody').innerHTML = rows.map(r => `
     <tr>
       <td style="font-weight:600;">${r.label}</td>
       <td style="font-weight:700;color:var(--blue);">${r.cur}</td>
       <td><input type="text" placeholder="Période précédente..." class="comp-prev" style="border:1.5px solid var(--border);border-radius:5px;padding:4px 7px;font-size:.79rem;font-family:inherit;width:130px;background:var(--light);text-align:right;" oninput="updateVariation(this,'${r.unit}')"></td>
-      <td class="variation" style="font-weight:700;">—</td>
+      <td class="variation" style="font-weight:700;">-</td>
     </tr>`).join('');
 }
 
@@ -762,7 +762,7 @@ function updateVariation(input, unit) {
     const pct = Math.round((cur - prev) / prev * 100);
     const pos = pct >= 0;
     varTd.innerHTML = `<span class="${pos?'change-pos':'change-neg'}">${pos?'+':''}${pct}%</span>`;
-  } else { varTd.textContent = '—'; }
+  } else { varTd.textContent = '-'; }
 }
 
 function buildAlerts(tauxColl, noshow, rappels, ar, objAr) {
@@ -774,7 +774,7 @@ function buildAlerts(tauxColl, noshow, rappels, ar, objAr) {
   if (rappels !== null && rappels < 70) alerts.push({ msg:`Taux de rappels hygiène faible : ${rappels}% (cible ≥ 85%)`, level:'red' });
   else if (rappels !== null && rappels < 85) alerts.push({ msg:`Rappels hygiène à améliorer : ${rappels}%`, level:'orange' });
   if (ar && objAr && ar > objAr) alerts.push({ msg:`Comptes à recevoir dépassent le seuil d'alerte : ${ar.toLocaleString('fr-CA')} $`, level:'orange' });
-  if (alerts.length === 0 && (tauxColl||noshow||rappels)) alerts.push({ msg:'Tous les indicateurs sont dans les cibles — Excellent travail!', level:'green' });
+  if (alerts.length === 0 && (tauxColl||noshow||rappels)) alerts.push({ msg:'Tous les indicateurs sont dans les cibles : Excellent travail!', level:'green' });
   document.getElementById('alertsWrap').innerHTML = alerts.map(a => `<div class="alert-strip ${a.level}"><span style="font-size:1rem;">${a.level==='red'?'🔴':a.level==='orange'?'🟡':'✅'}</span>${a.msg}</div>`).join('');
 }
 
@@ -790,7 +790,7 @@ function setView(view, btn) {
   btn.classList.add('active');
 }
 
-// ===================== SUPABASE (modèle B — un enregistrement par mois) =====================
+// ===================== SUPABASE (modèle B - un enregistrement par mois) =====================
 const FIELD_IDS = ['nomClinique','kpi_prod_brut','obj_prod_brut','kpi_collection','obj_collection','kpi_ar','obj_ar','kpi_new_pat','obj_new_pat','kpi_rv_comp','obj_rv_total','kpi_rappels_prises','kpi_rappels_dus','notesPeriod'];
 
 const SUPABASE_URL = 'https://ghwlhrhigkiuyhfbwnzh.supabase.co';
@@ -815,7 +815,7 @@ function setStatus(state) {
   else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
   else el.textContent = '⚠️ Erreur de connexion';
 }
-function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+function showLien() { prompt("Voici votre lien personnel, enregistrez-le en favori :", window.location.href); }
 
 async function afficherListe() {
   document.getElementById('mainContainer').style.display = 'none';

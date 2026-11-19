@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registre incidents/accidents — Gestion Mel</title>
+<title>Registre incidents/accidents | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -342,9 +342,9 @@ window.gmAcces = (function () {
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">SST — Santé et sécurité</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">SST : Santé et sécurité</div></div>
 <div class="container">
-  <div class="doc-header"><h1>⚠️ Registre des incidents et accidents</h1><p>Conforme aux exigences de la CNESST — Loi sur la santé et la sécurité du travail (LSST)</p></div>
+  <div class="doc-header"><h1>⚠️ Registre des incidents et accidents</h1><p>Conforme aux exigences de la CNESST : Loi sur la santé et la sécurité du travail (LSST)</p></div>
   <div class="nav-tabs">
     <button class="tab-btn active" onclick="show(0,this)">📝 Rapport d'incident</button>
     <button class="tab-btn" onclick="show(1,this)">📋 Registre des événements</button>
@@ -355,7 +355,7 @@ window.gmAcces = (function () {
   <div class="tab-pane active" id="tp0">
 
     <div class="rapport-selector" id="rapportSelector">
-      <div class="info-box"><strong>Rapports d'incident</strong> — Choisissez un rapport déjà commencé, ou créez-en un nouveau pour un événement.</div>
+      <div class="info-box"><strong>Rapports d'incident</strong> : Choisissez un rapport déjà commencé, ou créez-en un nouveau pour un événement.</div>
       <button class="btn-new-rapport" onclick="creerNouveauRapport()">+ Nouveau rapport</button>
       <button class="btn-lien-r" onclick="showLienPersonnelR()">🔗 Mon lien personnel</button>
       <div class="rapport-list" id="rapportList"><div class="r-empty">Chargement...</div></div>
@@ -372,7 +372,7 @@ window.gmAcces = (function () {
       <div class="ff"><label>Heure</label><input type="time" id="rHeure" onchange="scheduleSaveR()"></div>
       <div class="ff"><label>Nom de l'employé(e) concerné(e)</label><input type="text" id="rNomEmploye" oninput="scheduleSaveR()" placeholder="Prénom et nom"></div>
       <div class="ff"><label>Poste occupé</label><input type="text" id="rPoste" oninput="scheduleSaveR()" placeholder="Titre du poste"></div>
-      <div class="ff"><label>Ancienneté</label><input type="text" id="rAnciennete" oninput="scheduleSaveR()" placeholder="Ex: 2 ans, 6 mois"></div>
+      <div class="ff"><label>Ancienneté</label><input type="text" id="rAnciennete" oninput="scheduleSaveR()" placeholder="Ex : 2 ans, 6 mois"></div>
     </div>
 
     <div class="sec-title" style="margin-top:16px;">Type et gravité de l'événement</div>
@@ -400,9 +400,9 @@ window.gmAcces = (function () {
 
     <div class="sec-title">Description de l'événement</div>
     <div class="grid3" style="margin-bottom:12px;">
-      <div class="ff"><label>Lieu précis dans la clinique</label><input type="text" id="rLieu" oninput="scheduleSaveR()" placeholder="Ex: Salle 2, salle de stérilisation..."></div>
-      <div class="ff"><label>Tâche effectuée au moment de l'accident</label><input type="text" id="rTache" oninput="scheduleSaveR()" placeholder="Ex: Stérilisation, assistance..."></div>
-      <div class="ff"><label>Partie du corps atteinte</label><input type="text" id="rPartieCorps" oninput="scheduleSaveR()" placeholder="Ex: Main droite, dos..."></div>
+      <div class="ff"><label>Lieu précis dans la clinique</label><input type="text" id="rLieu" oninput="scheduleSaveR()" placeholder="Ex : Salle 2, salle de stérilisation..."></div>
+      <div class="ff"><label>Tâche effectuée au moment de l'accident</label><input type="text" id="rTache" oninput="scheduleSaveR()" placeholder="Ex : Stérilisation, assistance..."></div>
+      <div class="ff"><label>Partie du corps atteinte</label><input type="text" id="rPartieCorps" oninput="scheduleSaveR()" placeholder="Ex : Main droite, dos..."></div>
     </div>
     <div class="ff" style="margin-bottom:12px;"><label>Description détaillée de l'événement</label><textarea id="rDescription" oninput="scheduleSaveR()" style="min-height:90px;" placeholder="Décrivez précisément ce qui s'est passé, dans quel contexte, avec quels outils ou produits, et comment la blessure ou l'incident s'est produit..."></textarea></div>
     <div class="ff" style="margin-bottom:12px;"><label>Causes identifiées</label><textarea id="rCauses" oninput="scheduleSaveR()" placeholder="Facteurs environnementaux, humains, organisationnels, équipements défectueux..."></textarea></div>
@@ -411,7 +411,7 @@ window.gmAcces = (function () {
     <div class="grid" style="margin-bottom:12px;">
       <div class="ff"><label>Premiers soins prodigués</label><textarea id="rPremiersSoins" oninput="scheduleSaveR()" placeholder="Traitement immédiat effectué..."></textarea></div>
       <div class="ff"><label>Soins médicaux requis?</label>
-        <select id="rSoinsMedicaux" onchange="scheduleSaveR()" style="margin-bottom:8px;"><option>Non — premiers soins suffisants</option><option>Oui — consultation médicale</option><option>Oui — urgence</option><option>Oui — hospitalisation</option></select>
+        <select id="rSoinsMedicaux" onchange="scheduleSaveR()" style="margin-bottom:8px;"><option>Non : premiers soins suffisants</option><option>Oui : consultation médicale</option><option>Oui : urgence</option><option>Oui : hospitalisation</option></select>
         <div class="ff"><label>Nom du professionnel de santé consulté</label><input type="text" id="rProfessionnelSante" oninput="scheduleSaveR()" placeholder="Médecin, clinique..."></div>
       </div>
       <div class="ff"><label>Absence du travail prévue</label>
@@ -422,12 +422,12 @@ window.gmAcces = (function () {
 
     <div class="sec-title">Témoins</div>
     <div class="grid3" style="margin-bottom:12px;">
-      <div class="ff"><label>Témoin 1 — Nom</label><input type="text" id="rT1Nom" oninput="scheduleSaveR()" placeholder="Nom du témoin"></div>
-      <div class="ff"><label>Témoin 1 — Poste</label><input type="text" id="rT1Poste" oninput="scheduleSaveR()" placeholder="Poste"></div>
-      <div class="ff"><label>Témoin 1 — Contact</label><input type="text" id="rT1Contact" oninput="scheduleSaveR()" placeholder="Téléphone..."></div>
-      <div class="ff"><label>Témoin 2 — Nom</label><input type="text" id="rT2Nom" oninput="scheduleSaveR()" placeholder="Nom du témoin"></div>
-      <div class="ff"><label>Témoin 2 — Poste</label><input type="text" id="rT2Poste" oninput="scheduleSaveR()" placeholder="Poste"></div>
-      <div class="ff"><label>Témoin 2 — Contact</label><input type="text" id="rT2Contact" oninput="scheduleSaveR()" placeholder="Téléphone..."></div>
+      <div class="ff"><label>Témoin 1 : Nom</label><input type="text" id="rT1Nom" oninput="scheduleSaveR()" placeholder="Nom du témoin"></div>
+      <div class="ff"><label>Témoin 1 : Poste</label><input type="text" id="rT1Poste" oninput="scheduleSaveR()" placeholder="Poste"></div>
+      <div class="ff"><label>Témoin 1 : Contact</label><input type="text" id="rT1Contact" oninput="scheduleSaveR()" placeholder="Téléphone..."></div>
+      <div class="ff"><label>Témoin 2 : Nom</label><input type="text" id="rT2Nom" oninput="scheduleSaveR()" placeholder="Nom du témoin"></div>
+      <div class="ff"><label>Témoin 2 : Poste</label><input type="text" id="rT2Poste" oninput="scheduleSaveR()" placeholder="Poste"></div>
+      <div class="ff"><label>Témoin 2 : Contact</label><input type="text" id="rT2Contact" oninput="scheduleSaveR()" placeholder="Téléphone..."></div>
     </div>
 
     <div class="sec-title">Mesures correctives et préventives</div>
@@ -436,7 +436,7 @@ window.gmAcces = (function () {
     <div class="grid3" style="margin-bottom:12px;">
       <div class="ff"><label>Responsable du suivi</label><input type="text" id="rResponsableSuivi" oninput="scheduleSaveR()" placeholder="Nom et titre"></div>
       <div class="ff"><label>Date limite des corrections</label><input type="date" id="rDateLimite" onchange="scheduleSaveR()"></div>
-      <div class="ff"><label>CNESST avisée?</label><select id="rCnesstAvisee" onchange="scheduleSaveR()"><option>Non — pas requis</option><option>Oui — avis transmis</option><option>En cours</option></select></div>
+      <div class="ff"><label>CNESST avisée?</label><select id="rCnesstAvisee" onchange="scheduleSaveR()"><option>Non, pas requis</option><option>Oui : avis transmis</option><option>En cours</option></select></div>
     </div>
 
     <div class="sig-section">
@@ -512,7 +512,7 @@ window.gmAcces = (function () {
   </div>
 
   <div class="actions"><button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button></div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com</div>
 </div>
 <script>
 function show(n,btn){document.querySelectorAll('.tab-pane').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===n));}
@@ -575,7 +575,7 @@ function renderRegistre(){
     <td><select onchange="updateEvenement(${e.id},'gravite',this.value)" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;">
       <option${e.gravite==='Presque-accident'?' selected':''}>Presque-accident</option><option${e.gravite==='Mineur'?' selected':''}>Mineur</option><option${e.gravite==='Grave'?' selected':''}>Grave</option>
     </select></td>
-    <td><input type="text" placeholder="Ex: main..." value="${e.partieCorps}" oninput="updateEvenement(${e.id},'partieCorps',this.value)" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:90px;"></td>
+    <td><input type="text" placeholder="Ex : main..." value="${e.partieCorps}" oninput="updateEvenement(${e.id},'partieCorps',this.value)" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:90px;"></td>
     <td><input type="number" min="0" placeholder="0" value="${e.joursAbsence}" oninput="updateEvenement(${e.id},'joursAbsence',this.value)" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 6px;font-size:.76rem;font-family:inherit;background:white;width:55px;text-align:center;"></td>
     <td style="text-align:center;"><input type="checkbox" ${e.cnesstAvisee?'checked':''} onchange="updateEvenement(${e.id},'cnesstAvisee',this.checked)" style="width:14px;height:14px;cursor:pointer;accent-color:var(--blue);"></td>
     <td><select onchange="updateEvenement(${e.id},'statut',this.value)" style="border:1.5px solid var(--border);border-radius:4px;padding:3px 5px;font-size:.73rem;font-family:inherit;">
@@ -617,7 +617,7 @@ function setStatus(state) {
 }
 
 function showLienPersonnelR() {
-  prompt("Voici votre lien personnel — enregistrez-le en favori pour toujours retrouver vos rapports, même sur un autre appareil :", window.location.href);
+  prompt("Voici votre lien personnel, enregistrez-le en favori pour toujours retrouver vos rapports, même sur un autre appareil :", window.location.href);
 }
 
 // --- Registre (tableau) ---

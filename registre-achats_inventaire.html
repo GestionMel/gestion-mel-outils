@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registre des achats — Gestion Mel</title>
+<title>Registre des achats | Gestion Mel</title>
 <style>
   :root{
     --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
@@ -159,7 +159,7 @@
 
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Gestion des achats</div>
+  <div>Clinique dentaire : Gestion des achats</div>
 </div>
 
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
@@ -415,7 +415,7 @@
     </div></div><div class="cat-section" id="cat_c4">
     <div class="cat-header" onclick="toggleCat(this)">
       <span class="cat-toggle">▼</span>
-      <input class="cat-name-input" value="EPI — Protection individuelle" onclick="event.stopPropagation()" onchange="cat.name=this.value;updateStats()">
+      <input class="cat-name-input" value="EPI : Protection individuelle" onclick="event.stopPropagation()" onchange="cat.name=this.value;updateStats()">
       <span class="cat-badge" style="background:var(--red)">1 urgent(s)</span><span class="cat-badge" style="background:var(--orange);margin-left:4px;">1 à surveiller</span>
       <div class="no-print" style="display:flex;gap:6px;" onclick="event.stopPropagation()">
         <button class="cat-btn" onclick="addItem(&#39;c4&#39;)">+ Article</button>
@@ -707,7 +707,7 @@
         <tr id="shop_i10">
           <td class="no-print" style="text-align:center;"><input type="checkbox" class="shop-check" onchange="this.closest(&#39;tr&#39;).classList.toggle(&#39;checked-row&#39;,this.checked)"></td>
           <td><strong>Gants nitrile M (boîte 100)</strong></td>
-          <td><span style="font-size:.72rem;background:#8e44ad;color:white;padding:2px 7px;border-radius:8px;">EPI — Protection individuelle</span></td>
+          <td><span style="font-size:.72rem;background:#8e44ad;color:white;padding:2px 7px;border-radius:8px;">EPI : Protection individuelle</span></td>
           <td>Sempermed</td>
           <td>Metro Medical</td>
           <td style="text-align:center;">18.00$</td>
@@ -741,7 +741,7 @@
           <td></td>
         </tr>
       </tbody>
-    </table></div><div class="shop-section shop-watch"><div class="shop-title">À surveiller — stock bas (1 article(s))</div>
+    </table></div><div class="shop-section shop-watch"><div class="shop-title">À surveiller : stock bas (1 article(s))</div>
     <table class="shop-table">
       <thead><tr>
         <th style="width:30px" class="no-print">✓</th>
@@ -759,7 +759,7 @@
         <tr id="shop_i9">
           <td class="no-print" style="text-align:center;"><input type="checkbox" class="shop-check" onchange="this.closest(&#39;tr&#39;).classList.toggle(&#39;checked-row&#39;,this.checked)"></td>
           <td><strong>Gants nitrile S (boîte 100)</strong></td>
-          <td><span style="font-size:.72rem;background:#8e44ad;color:white;padding:2px 7px;border-radius:8px;">EPI — Protection individuelle</span></td>
+          <td><span style="font-size:.72rem;background:#8e44ad;color:white;padding:2px 7px;border-radius:8px;">EPI : Protection individuelle</span></td>
           <td>Sempermed</td>
           <td>Metro Medical</td>
           <td style="text-align:center;">18.00$</td>
@@ -776,7 +776,7 @@
 
 <script>
 // ===================== DATA =====================
-// Modèle de départ pour une nouvelle clinique — exemples de catégories/fournisseurs,
+// Modèle de départ pour une nouvelle clinique - exemples de catégories/fournisseurs,
 // quantités à 0 pour que rien ne s'affiche comme urgent tant que la clinique n'a pas
 // entré ses vraies données.
 const STARTER_CATEGORIES = [
@@ -804,7 +804,7 @@ const STARTER_CATEGORIES = [
     ]
   },
   {
-    id: 'c4', name: 'EPI — Protection individuelle', color: '#8e44ad',
+    id: 'c4', name: 'EPI : Protection individuelle', color: '#8e44ad',
     items: [
       { id:'i9', num:'EPI-001', name:'Gants nitrile S (boîte 100)', supplier:'Sempermed', store:'Metro Medical', price:'18.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
       { id:'i10', num:'EPI-002', name:'Gants nitrile M (boîte 100)', supplier:'Sempermed', store:'Metro Medical', price:'18.00', qtyBought:'0', qtyMin:'0', qtyStock:'0', lastBuy:'', expiry:'', notes:'' },
@@ -863,7 +863,7 @@ function setStatus(state) {
 }
 
 function showLienPersonnel() {
-  prompt("Voici votre lien personnel — conservez-le ou partagez-le pour retrouver votre registre plus tard, même sur un autre appareil :", window.location.href);
+  prompt("Voici votre lien personnel, conservez-le ou partagez-le pour retrouver votre registre plus tard, même sur un autre appareil :", window.location.href);
 }
 
 function computeIdCounter(cats) {
@@ -885,7 +885,7 @@ function showWelcome() {
   div.id = 'welcomeOverlay';
   div.innerHTML = `<div class="welcome-box">
     <h2>Bienvenue dans votre registre d'achats et d'inventaire 👋</h2>
-    <p>Ce registre vous appartient et se sauvegarde automatiquement au fur et à mesure. Des catégories et articles d'exemple ont été ajoutés (quantités à 0) pour vous montrer comment l'utiliser — modifiez-les ou supprimez-les selon vos besoins réels. Utilisez le bouton « 🔗 Mon lien personnel » pour le retrouver plus tard, même sur un autre appareil.</p>
+    <p>Ce registre vous appartient et se sauvegarde automatiquement au fur et à mesure. Des catégories et articles d'exemple ont été ajoutés (quantités à 0) pour vous montrer comment l'utiliser : modifiez-les ou supprimez-les selon vos besoins réels. Utilisez le bouton « 🔗 Mon lien personnel » pour le retrouver plus tard, même sur un autre appareil.</p>
     <button class="btn-add-cat" onclick="document.getElementById('welcomeOverlay').remove()">Commencer</button>
   </div>`;
   document.body.appendChild(div);
@@ -965,7 +965,7 @@ function statusBadge(status) {
     urgent: '<span class="stock-badge sb-urgent">🔴 À commander</span>',
     watch:  '<span class="stock-badge sb-watch">🟡 À surveiller</span>',
     ok:     '<span class="stock-badge sb-ok">🟢 OK</span>',
-    na:     '<span class="stock-badge sb-na">— S/O</span>',
+    na:     '<span class="stock-badge sb-na">S/O</span>',
   };
   return map[status] || map.na;
 }
@@ -1115,7 +1115,7 @@ function renderShopList() {
     cont.appendChild(sec);
   }
   if (watchItems.length > 0) {
-    const sec = buildShopSection('À surveiller — stock bas', watchItems, 'shop-watch');
+    const sec = buildShopSection('À surveiller : stock bas', watchItems, 'shop-watch');
     cont.appendChild(sec);
   }
 }
@@ -1142,10 +1142,10 @@ function buildShopSection(title, items, cls) {
           <td class="no-print" style="text-align:center;"><input type="checkbox" class="shop-check" onchange="this.closest('tr').classList.toggle('checked-row',this.checked)"></td>
           <td><strong>${i.name}</strong></td>
           <td><span style="font-size:.72rem;background:${i.catColor};color:white;padding:2px 7px;border-radius:8px;">${i.catName}</span></td>
-          <td>${i.supplier||'—'}</td>
-          <td>${i.store||'—'}</td>
-          <td style="text-align:center;">${i.price ? i.price+'$' : '—'}</td>
-          <td style="text-align:center;font-weight:700;color:var(--blue);">${i.qtyBought||'—'}</td>
+          <td>${i.supplier||'-'}</td>
+          <td>${i.store||'-'}</td>
+          <td style="text-align:center;">${i.price ? i.price+'$' : '-'}</td>
+          <td style="text-align:center;font-weight:700;color:var(--blue);">${i.qtyBought||'-'}</td>
           <td style="text-align:center;font-weight:700;color:var(--red);">${i.qtyStock}</td>
           <td style="text-align:center;">${i.qtyMin}</td>
           <td>${i.notes||''}</td>

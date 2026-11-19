@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suivi d'apprentissage — Intégration | Gestion Mel</title>
+<title>Suivi d'apprentissage : Intégration | Gestion Mel</title>
 <style>
   :root{
     --blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;
@@ -428,12 +428,12 @@ window.gmAcces = (function () {
 
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Ressources humaines</div>
+  <div>Clinique dentaire : Ressources humaines</div>
 </div>
 
 <div class="selector-screen" id="selectorScreen">
   <div class="selector-box">
-    <h1>Suivi d'apprentissage — Intégration</h1>
+    <h1>Suivi d'apprentissage : Intégration</h1>
     <p>Choisissez un suivi déjà créé pour un(e) employé(e), ou créez-en un nouveau.</p>
     <button class="btn-new" onclick="creerNouveau()">+ Nouveau suivi</button>
     <button class="btn-lien" onclick="showLien()">🔗 Mon lien personnel</button>
@@ -445,7 +445,7 @@ window.gmAcces = (function () {
   <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header">
     <h1>Suivi de l'apprentissage en intégration</h1>
-    <p>Évaluation des éléments d'apprentissage par poste — Clinique dentaire</p>
+    <p>Évaluation des éléments d'apprentissage par poste : Clinique dentaire</p>
   </div>
 
   <div class="identity-bar">
@@ -465,7 +465,7 @@ window.gmAcces = (function () {
 
   <div class="progress-wrap">
     <div class="progress-top">
-      <span class="progress-lbl" id="progLabel">Progression — 0/40 atteint(s) · 0 en apprentissage</span>
+      <span class="progress-lbl" id="progLabel">Progression : 0/40 atteint(s) · 0 en apprentissage</span>
       <span class="progress-pct" id="progPct">0%</span>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
@@ -515,7 +515,7 @@ window.gmAcces = (function () {
     <button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button>
   </div>
 
-  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | info@gestionmel.com | 581-849-7425</div>
 </div>
 
 <script>
@@ -745,7 +745,7 @@ function updateProgress() {
   document.getElementById('progFill').style.width = pct + '%';
   document.getElementById('progPct').textContent = pct + '%';
   document.getElementById('progLabel').textContent =
-    `Progression — ${done}/${total} atteint(s) · ${inProgress} en apprentissage`;
+    `Progression : ${done}/${total} atteint(s) · ${inProgress} en apprentissage`;
 }
 
 function showPoste(n, btn) {
@@ -791,7 +791,7 @@ function applyItems(items) {
   updateProgress();
 }
 
-// ===================== SUPABASE (modèle B — un suivi par employé) =====================
+// ===================== SUPABASE (modèle B - un suivi par employé) =====================
 const SUPABASE_URL = 'https://ghwlhrhigkiuyhfbwnzh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_yhHJZkTrKuKawiX1JGOY8g_-V9eite5';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -814,7 +814,7 @@ function setStatus(state) {
   else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
   else el.textContent = '⚠️ Erreur de connexion';
 }
-function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+function showLien() { prompt("Voici votre lien personnel, enregistrez-le en favori :", window.location.href); }
 
 async function afficherListe() {
   document.getElementById('mainContainer').style.display = 'none';

@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Protocole urgences dentaires — Gestion Mel</title>
+<title>Protocole urgences dentaires | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -78,9 +78,9 @@
 </style>
 </head>
 <body>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Urgences</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.79rem;opacity:.7;">Clinique dentaire : Urgences</div></div>
 <div class="container">
-  <div class="doc-header"><h1>🚨 Protocole — Rendez-vous d'urgence</h1><p>Triage téléphonique · Questions à poser · Niveaux d'urgence · Registre</p></div>
+  <div class="doc-header"><h1>🚨 Protocole : Rendez-vous d'urgence</h1><p>Triage téléphonique · Questions à poser · Niveaux d'urgence · Registre</p></div>
   <div class="nav-tabs">
     <button class="tab-btn active" onclick="go(0,this)">🔍 Outil de triage</button>
     <button class="tab-btn" onclick="go(1,this)">📋 Types d'urgences</button>
@@ -92,7 +92,7 @@
   <div class="tab-pane active" id="tp0">
     <div class="warn-box">⚠️ <strong>Important :</strong> En cas de détresse respiratoire, saignement incontrôlable ou trauma facial grave, toujours diriger immédiatement vers le 911 ou l'urgence hospitalière.</div>
     <div class="triage-wrap">
-      <div class="triage-title">🔍 Outil de triage rapide — Posez ces questions au patient</div>
+      <div class="triage-title">🔍 Outil de triage rapide : Posez ces questions au patient</div>
 
       <div class="q-block">
         <span class="q-num">1</span><span class="q-text">Le patient a-t-il de la douleur en ce moment?</span>
@@ -149,27 +149,27 @@
       <!-- RESULT -->
       <div class="result-panel rp-red" id="res_extreme">
         <div class="rp-icon">🚨</div>
-        <div class="rp-title">URGENCE EXTRÊME — Référer au 911 ou à l'urgence hospitalière</div>
+        <div class="rp-title">URGENCE EXTRÊME : Référer au 911 ou à l'urgence hospitalière</div>
         <div class="rp-actions"><strong>Action immédiate :</strong><br>• Gonflement atteignant la gorge ou l'œil<br>• Difficulté à respirer ou avaler<br>• Saignement incontrôlable<br>• Trauma facial grave<br>→ Diriger vers l'urgence de l'hôpital le plus proche</div>
       </div>
       <div class="result-panel rp-red" id="res_urgent">
         <div class="rp-icon">🔴</div>
-        <div class="rp-title">URGENT — Rendez-vous aujourd'hui ou dans les 24 heures</div>
+        <div class="rp-title">URGENT : Rendez-vous aujourd'hui ou dans les 24 heures</div>
         <div class="rp-actions"><strong>Action requise :</strong> Offrir une plage d'urgence aujourd'hui ou au plus tôt demain matin. Aviser le dentiste de la situation.<br><br><strong>Symptômes concernés :</strong> Abcès avec gonflement, douleur sévère incontrôlable, dent fracturée avec douleur vive, dent avulsée (sortie de la gencive).</div>
       </div>
       <div class="result-panel rp-orange" id="res_bientot">
         <div class="rp-icon">🟡</div>
-        <div class="rp-title">SOUS-URGENT — Rendez-vous dans les 24-48 heures</div>
+        <div class="rp-title">SOUS-URGENT : Rendez-vous dans les 24-48 heures</div>
         <div class="rp-actions"><strong>Action requise :</strong> Offrir un rendez-vous dans les 2 prochains jours. Placer sur la liste d'attente prioritaire si pas de plage disponible.<br><br><strong>Conseils intérimaires :</strong> Ibuprofène (si toléré), rinçage à l'eau salée tiède, éviter les aliments chauds/froids.</div>
       </div>
       <div class="result-panel rp-green" id="res_normal">
         <div class="rp-icon">🟢</div>
-        <div class="rp-title">NON-URGENT — Rendez-vous dans la semaine</div>
+        <div class="rp-title">NON-URGENT : Rendez-vous dans la semaine</div>
         <div class="rp-actions"><strong>Action requise :</strong> Offrir un rendez-vous dans les 5-7 prochains jours. Si aucune plage disponible, placer sur la liste d'attente.<br><br><strong>Conseils en attendant :</strong> Analgésiques au besoin, hygiène bucco-dentaire soigneuse, appeler si la situation se détériore.</div>
       </div>
       <div class="result-panel rp-purple" id="res_conseil">
         <div class="rp-icon">💬</div>
-        <div class="rp-title">CONSEIL PAR TÉLÉPHONE — Pas besoin de RV immédiat</div>
+        <div class="rp-title">CONSEIL PAR TÉLÉPHONE, Pas besoin de RV immédiat</div>
         <div class="rp-actions"><strong>Exemples :</strong> Légère sensibilité, question sur un traitement récent stable, perte d'un scellant sans douleur.<br><br><strong>Action :</strong> Rassurer le patient, donner des conseils de base et proposer un RV de routine lors de la prochaine disponibilité.</div>
       </div>
     </div>
@@ -186,8 +186,8 @@
       </div>
       <div class="urg-card" style="background:#fef2f2;border-color:rgba(192,57,43,.25);">
         <div class="ug-title" style="color:var(--red);">🔴 Dent avulsée (sortie)</div>
-        <div class="ug-desc">Dent complètement sortie de son alvéole suite à un trauma. <strong>Urgence absolue — chaque minute compte!</strong><br><br>Instruction : conserver dans du lait, salive ou sérum physiologique — NE PAS nettoyer.</div>
-        <span class="ug-delai" style="background:var(--red);color:white;">Immédiatement — moins d'1h</span>
+        <div class="ug-desc">Dent complètement sortie de son alvéole suite à un trauma. <strong>Urgence absolue : chaque minute compte!</strong><br><br>Instruction : conserver dans du lait, salive ou sérum physiologique, NE PAS nettoyer.</div>
+        <span class="ug-delai" style="background:var(--red);color:white;">Immédiatement : moins d'1h</span>
       </div>
       <div class="urg-card" style="background:#fff8f0;border-color:rgba(230,126,34,.25);">
         <div class="ug-title" style="color:var(--orange);">🟡 Fracture dentaire douloureuse</div>
@@ -224,9 +224,9 @@
 
   <!-- SCRIPT -->
   <div class="tab-pane" id="tp2">
-    <div class="info-box">Ces questions sont à poser dans cet ordre pour évaluer rapidement le niveau d'urgence. Restez calme et professionnel — votre ton est aussi important que les mots.</div>
+    <div class="info-box">Ces questions sont à poser dans cet ordre pour évaluer rapidement le niveau d'urgence. Restez calme et professionnel : votre ton est aussi important que les mots.</div>
     <div class="script-card">
-      <div class="sc-title">📞 Script complet — Appel d'urgence dentaire</div>
+      <div class="sc-title">📞 Script complet : Appel d'urgence dentaire</div>
       <div class="sc-q">
         <span class="q">«Bonjour, Clinique [Nom], c'est [Votre prénom]. Comment puis-je vous aider?»</span><br><br>
         <span class="r">→ Le patient mentionne une douleur ou urgence :</span><br>
@@ -234,7 +234,7 @@
         <span class="q">1. «Pouvez-vous me décrire votre douleur? Où est-elle exactement?»</span><br>
         <span class="r">→ [Écouter, noter la zone et le type de douleur]</span><br><br>
         <span class="q">2. «Depuis combien de temps ressentez-vous cette douleur? Est-ce que ça empire?»</span><br>
-        <span class="r">→ [Évaluer l'évolution — stable vs aggravation rapide]</span><br><br>
+        <span class="r">→ [Évaluer l'évolution : stable vs aggravation rapide]</span><br><br>
         <span class="q">3. «Avez-vous du gonflement au visage, à la joue ou au cou? Avez-vous de la fièvre?»</span><br>
         <span class="r">→ [Gonflement + fièvre = urgence critique potentielle]</span><br><br>
         <span class="q">4. «Avez-vous eu un accident, une chute ou un coup récemment?»</span><br>
@@ -297,7 +297,7 @@
   </div>
 
   <div class="actions"><button class="btn primary" onclick="window.print()">🖨️ Imprimer</button></div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com</div>
 </div>
 <script>
 const answers={};

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Avertissement disciplinaire — Gestion Mel</title>
+<title>Avertissement disciplinaire | Gestion Mel</title>
 <style>
   :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --orange: #e67e22; --red: #c0392b; --green:#1a9e5a; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -343,7 +343,7 @@ window.gmAcces = (function () {
 <div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Gestion RH</div>
+  <div>Clinique dentaire : Gestion RH</div>
 </div>
 
 <div class="selector-screen" id="selectorScreen">
@@ -367,9 +367,9 @@ window.gmAcces = (function () {
   </div>
 
   <div class="doc-header n1" id="doc-header">
-    <h1 id="doc-title">Avertissement disciplinaire — 1er avertissement</h1>
+    <h1 id="doc-title">Avertissement disciplinaire : 1er avertissement</h1>
     <p>Document officiel à conserver au dossier de l'employé(e)</p>
-    <span class="badge" id="doc-badge">NIVEAU 1 — AVERTISSEMENT VERBAL / ÉCRIT</span>
+    <span class="badge" id="doc-badge">NIVEAU 1 : AVERTISSEMENT VERBAL / ÉCRIT</span>
   </div>
 
   <div class="section">
@@ -428,7 +428,7 @@ window.gmAcces = (function () {
   <div class="actions">
     <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | Document confidentiel | usage interne uniquement</div>
 </div>
 
 <script>
@@ -446,16 +446,16 @@ function setNiveau(n) {
   const wbox = document.getElementById('warning-box');
   if (n === 1) {
     header.className = 'doc-header n1';
-    title.textContent = 'Avertissement disciplinaire — 1er avertissement';
-    badge.textContent = 'NIVEAU 1 — AVERTISSEMENT VERBAL / ÉCRIT';
+    title.textContent = 'Avertissement disciplinaire : 1er avertissement';
+    badge.textContent = 'NIVEAU 1 : AVERTISSEMENT VERBAL / ÉCRIT';
     wbox.className = 'warning-box n1';
     wbox.innerHTML = '⚠️ <strong>1er avertissement :</strong> Cet avertissement est émis à titre de mise en garde formelle. Si la situation ne se corrige pas, un deuxième avertissement ou d\'autres mesures disciplinaires pourront être envisagés, pouvant mener jusqu\'au congédiement.';
   } else {
     header.className = 'doc-header n2';
-    title.textContent = 'Avertissement disciplinaire — 2e avertissement';
-    badge.textContent = 'NIVEAU 2 — AVERTISSEMENT FINAL';
+    title.textContent = 'Avertissement disciplinaire : 2e avertissement';
+    badge.textContent = 'NIVEAU 2 : AVERTISSEMENT FINAL';
     wbox.className = 'warning-box n2';
-    wbox.innerHTML = '🚨 <strong>2e avertissement — Avertissement final :</strong> Cet avertissement constitue un ultime avertissement formel. Tout manquement supplémentaire pourra entraîner une suspension ou un congédiement pour cause juste et suffisante, conformément à la Loi sur les normes du travail du Québec.';
+    wbox.innerHTML = '🚨 <strong>2e avertissement, Avertissement final :</strong> Cet avertissement constitue un ultime avertissement formel. Tout manquement supplémentaire pourra entraîner une suspension ou un congédiement pour cause juste et suffisante, conformément à la Loi sur les normes du travail du Québec.';
   }
   scheduleSave();
 }
@@ -482,7 +482,7 @@ function setStatus(state) {
   else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
   else el.textContent = '⚠️ Erreur de connexion';
 }
-function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+function showLien() { prompt("Voici votre lien personnel, enregistrez-le en favori :", window.location.href); }
 
 async function afficherListe() {
   document.getElementById('mainContainer').style.display = 'none';

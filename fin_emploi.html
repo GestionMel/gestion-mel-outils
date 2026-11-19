@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fin d'emploi — Gestion Mel</title>
+<title>Fin d'emploi | Gestion Mel</title>
 <style>
   :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green:#1a9e5a; --orange:#e67e22; --red:#c0392b; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -333,7 +333,7 @@ window.gmAcces = (function () {
 <div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Gestion RH</div>
+  <div>Clinique dentaire : Gestion RH</div>
 </div>
 
 <div class="selector-screen" id="selectorScreen">
@@ -350,7 +350,7 @@ window.gmAcces = (function () {
   <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header">
     <h1>Document de fin d'emploi</h1>
-    <p>À compléter lors de toute cessation d'emploi — conserver au dossier</p>
+    <p>À compléter lors de toute cessation d'emploi : conserver au dossier</p>
   </div>
 
   <div class="section">
@@ -391,7 +391,7 @@ window.gmAcces = (function () {
   </div>
 
   <div class="section">
-    <div class="section-title">Liste de vérification — Départ</div>
+    <div class="section-title">Liste de vérification : Départ</div>
     <div class="checklist-item"><input type="checkbox" id="c_cles" onchange="scheduleSave()"><span>Clés, carte d'accès ou badge remis</span></div>
     <div class="checklist-item"><input type="checkbox" id="c_equipement" onchange="scheduleSave()"><span>Équipement remis (tablette, téléphone, uniforme, etc.)</span></div>
     <div class="checklist-item"><input type="checkbox" id="c_acces" onchange="scheduleSave()"><span>Accès informatiques désactivés (logiciel dentaire, courriel, etc.)</span></div>
@@ -420,7 +420,7 @@ window.gmAcces = (function () {
   <div class="actions">
     <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage interne uniquement</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | Document confidentiel | usage interne uniquement</div>
 </div>
 
 <script>
@@ -449,7 +449,7 @@ function setStatus(state) {
   else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
   else el.textContent = '⚠️ Erreur de connexion';
 }
-function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+function showLien() { prompt("Voici votre lien personnel, enregistrez-le en favori :", window.location.href); }
 
 async function afficherListe() {
   document.getElementById('mainContainer').style.display = 'none';

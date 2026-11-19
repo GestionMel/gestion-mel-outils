@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plan de développement individuel — Gestion Mel</title>
+<title>Plan de développement individuel | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -373,7 +373,7 @@ window.gmAcces = (function () {
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">RH — Développement professionnel</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.8rem;opacity:.7;">RH : Développement professionnel</div></div>
 
 <div class="selector-screen" id="selectorScreen">
   <div class="selector-box">
@@ -396,7 +396,7 @@ window.gmAcces = (function () {
       <div class="ff"><label>Nom de l'employé(e)</label><input type="text" id="f_employe" placeholder="Prénom et nom"></div>
       <div class="ff"><label>Poste occupé</label><input type="text" id="f_poste" placeholder="Titre du poste"></div>
       <div class="ff"><label>Date de l'évaluation</label><input type="date" id="dateEval"></div>
-      <div class="ff"><label>Période couverte</label><input type="text" id="f_periode" placeholder="Ex: Janvier 2025 — Décembre 2025"></div>
+      <div class="ff"><label>Période couverte</label><input type="text" id="f_periode" placeholder="Ex : Janvier 2025, Décembre 2025"></div>
       <div class="ff"><label>Gestionnaire responsable</label><input type="text" id="f_gestionnaire" placeholder="Nom et prénom"></div>
     </div>
   </div>
@@ -422,7 +422,7 @@ window.gmAcces = (function () {
   <div class="section">
     <div class="sec-title">Objectifs de développement</div>
     <div class="obj-card" id="objCard1">
-      <div class="obj-num">Objectif 1 — Court terme (0-3 mois)</div>
+      <div class="obj-num">Objectif 1 : Court terme (0-3 mois)</div>
       <div class="obj-fields">
         <div class="ff obj-full"><label>Description de l'objectif</label><textarea placeholder="Décrivez l&#39;objectif de façon spécifique et mesurable..."></textarea></div>
         <div class="ff"><label>Indicateur de succès</label><input type="text" placeholder="Comment saurez-vous que c&#39;est atteint?"></div>
@@ -443,7 +443,7 @@ window.gmAcces = (function () {
       </div>
     </div>
     <div class="obj-card orange" id="objCard2">
-      <div class="obj-num orange">Objectif 2 — Moyen terme (3-6 mois)</div>
+      <div class="obj-num orange">Objectif 2 : Moyen terme (3-6 mois)</div>
       <div class="obj-fields">
         <div class="ff obj-full"><label>Description de l'objectif</label><textarea placeholder="Décrivez l&#39;objectif..."></textarea></div>
         <div class="ff"><label>Indicateur de succès</label><input type="text" placeholder="Comment saurez-vous que c&#39;est atteint?"></div>
@@ -464,7 +464,7 @@ window.gmAcces = (function () {
       </div>
     </div>
     <div class="obj-card purple" id="objCard3">
-      <div class="obj-num purple">Objectif 3 — Long terme (6-12 mois)</div>
+      <div class="obj-num purple">Objectif 3 : Long terme (6-12 mois)</div>
       <div class="obj-fields">
         <div class="ff obj-full"><label>Description de l'objectif</label><textarea placeholder="Décrivez l&#39;objectif..."></textarea></div>
         <div class="ff"><label>Indicateur de succès</label><input type="text" placeholder="Comment saurez-vous que c&#39;est atteint?"></div>
@@ -513,7 +513,7 @@ window.gmAcces = (function () {
   </div>
 
   <div class="actions"><button class="btn btn-print" onclick="window.print()">🖨️ Imprimer</button></div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com</div>
 </div>
 <script>
 function setStatus(btn, cls) {
@@ -535,7 +535,7 @@ function newFormation(){ return { id: formIdCnt++, nom:'', type:TYPES_FORM[0], f
 
 function renderFormations(){
   document.getElementById('formBody').innerHTML = formations.map(f => `<tr>
-    <td><input type="text" placeholder="Ex: Formation Dentitek avancé..." value="${f.nom}" oninput="updateForm(${f.id},'nom',this.value)"></td>
+    <td><input type="text" placeholder="Ex : Formation Dentitek avancé..." value="${f.nom}" oninput="updateForm(${f.id},'nom',this.value)"></td>
     <td><select onchange="updateForm(${f.id},'type',this.value)">${TYPES_FORM.map(t=>`<option ${t===f.type?'selected':''}>${t}</option>`).join('')}</select></td>
     <td><input type="text" placeholder="Fournisseur..." value="${f.fournisseur}" oninput="updateForm(${f.id},'fournisseur',this.value)"></td>
     <td><input type="date" value="${f.date}" onchange="updateForm(${f.id},'date',this.value)"></td>
@@ -584,7 +584,7 @@ function applyDetails(details) {
   });
 }
 
-// ===================== SUPABASE (modèle B — un PDI par employé/période) =====================
+// ===================== SUPABASE (modèle B - un PDI par employé/période) =====================
 const SUPABASE_URL = 'https://ghwlhrhigkiuyhfbwnzh.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_yhHJZkTrKuKawiX1JGOY8g_-V9eite5';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -607,7 +607,7 @@ function setStatusSync(state) {
   else if (state === 'saving') el.textContent = '⏳ Sauvegarde...';
   else el.textContent = '⚠️ Erreur de connexion';
 }
-function showLien() { prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href); }
+function showLien() { prompt("Voici votre lien personnel, enregistrez-le en favori :", window.location.href); }
 
 async function afficherListe() {
   document.getElementById('mainContainer').style.display = 'none';

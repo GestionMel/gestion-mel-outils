@@ -10,9 +10,9 @@
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire — Gestion de l'équipe</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div>Clinique dentaire : Gestion de l'équipe</div></div>
 <div class="container">
-  <div class="doc-header"><h1>🎂 C'est la fête à qui ?</h1><p>Calendrier des anniversaires de l'équipe — Cliquez sur un mois pour ajouter un membre</p></div>
+  <div class="doc-header"><h1>🎂 C'est la fête à qui?</h1><p>Calendrier des anniversaires de l'équipe : Cliquez sur un mois pour ajouter un membre</p></div>
   <div class="section">
     <div class="section-title">Gestion du calendrier</div>
     <div class="controls">
@@ -110,7 +110,7 @@ function afficherProchain(){
   let prochain=null,min=Infinity;
   for(let m=0;m<12;m++){(donnees[m]||[]).forEach(p=>{let d=(m-ma)*30+(p.j-ja);if(d<0)d+=365;if(d<min){min=d;prochain={n:p.n,m,j:p.j,d};}});}
   const b=document.getElementById('prochainBanner');
-  if(prochain){b.style.display='block';b.innerHTML=`🎉 <strong>Prochain anniversaire : ${prochain.n}</strong> — Le ${prochain.j} ${MOIS[prochain.m]}${prochain.d===0?' (aujourd\'hui !)':' — dans '+prochain.d+' jour'+(prochain.d>1?'s':'')}`;}
+  if(prochain){b.style.display='block';b.innerHTML=`🎉 <strong>Prochain anniversaire : ${prochain.n}</strong> : Le ${prochain.j} ${MOIS[prochain.m]}${prochain.d===0?' (aujourd\'hui!)':' : dans '+prochain.d+' jour'+(prochain.d>1?'s':'')}`;}
   else b.style.display='none';
 }
 function ouvrirModal(m){
@@ -125,10 +125,10 @@ function sauvegarder(){
   if(!donnees[m])donnees[m]=[];
   donnees[m].push({n,j});scheduleSave();fermerModal();rendreMois();
 }
-function supprimer(m,n,j){if(!confirm(`Supprimer l'anniversaire de ${n} ?`))return;donnees[m]=(donnees[m]||[]).filter(p=>!(p.n===n&&p.j===j));scheduleSave();rendreMois();}
+function supprimer(m,n,j){if(!confirm(`Supprimer l'anniversaire de ${n}?`))return;donnees[m]=(donnees[m]||[]).filter(p=>!(p.n===n&&p.j===j));scheduleSave();rendreMois();}
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target===document.getElementById('overlay'))fermerModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')fermerModal();});
 initPage();
 </script>
-<div class="footer-note">© Gestion Mel — gestionmel.com | Outil de gestion d'équipe — Les données sont sauvegardées localement</div>
+<div class="footer-note">© Gestion Mel | gestionmel.com | Outil de gestion d'équipe | Les données sont sauvegardées localement</div>
 </body></html>

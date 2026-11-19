@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculateur de taux de roulement — Gestion Mel</title>
+<title>Calculateur de taux de roulement | Gestion Mel</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -59,7 +59,7 @@ table.t input:focus{outline:1px solid #1a6fa8;border-radius:4px;background:white
   <div class="logo">Gestion<span>Mel</span></div>
   <div class="entete-titre">
     <h1>Calculateur de taux de roulement</h1>
-    <p>Clinique dentaire — suivi des départs et embauches</p>
+    <p>Clinique dentaire : suivi des départs et embauches</p>
   </div>
 </div>
 
@@ -67,34 +67,34 @@ table.t input:focus{outline:1px solid #1a6fa8;border-radius:4px;background:white
   <div class="card-title">Paramètres</div>
   <div class="grid2">
     <div class="field"><label>Période</label><input type="text" id="periode" value="Année 2026"></div>
-    <div class="field"><label>Effectif moyen</label><input type="number" id="effectif" placeholder="ex: 8" min="1"></div>
+    <div class="field"><label>Effectif moyen</label><input type="number" id="effectif" placeholder="ex : 8" min="1"></div>
   </div>
   <div class="grid3">
-    <div class="field"><label>Départs volontaires</label><input type="number" id="vol" placeholder="ex: 2" min="0"></div>
-    <div class="field"><label>Départs involontaires</label><input type="number" id="invol" placeholder="ex: 1" min="0"></div>
-    <div class="field"><label>Nouvelles embauches</label><input type="number" id="emb" placeholder="ex: 2" min="0"></div>
+    <div class="field"><label>Départs volontaires</label><input type="number" id="vol" placeholder="ex : 2" min="0"></div>
+    <div class="field"><label>Départs involontaires</label><input type="number" id="invol" placeholder="ex : 1" min="0"></div>
+    <div class="field"><label>Nouvelles embauches</label><input type="number" id="emb" placeholder="ex : 2" min="0"></div>
   </div>
   <button class="calc-btn" onclick="calculer()">Calculer</button>
 </div>
 
 <div id="results" style="display:none">
   <div class="card">
-    <div class="card-title">Résultats — <span id="res-periode"></span></div>
+    <div class="card-title">Résultats : <span id="res-periode"></span></div>
     <div class="metrics">
-      <div class="metric"><div class="metric-label">Taux de roulement</div><div class="metric-val" id="taux">—</div></div>
-      <div class="metric"><div class="metric-label">Total départs</div><div class="metric-val" id="departs">—</div></div>
-      <div class="metric"><div class="metric-label">Statut</div><div id="statut">—</div></div>
+      <div class="metric"><div class="metric-label">Taux de roulement</div><div class="metric-val" id="taux">-</div></div>
+      <div class="metric"><div class="metric-label">Total départs</div><div class="metric-val" id="departs">-</div></div>
+      <div class="metric"><div class="metric-label">Statut</div><div id="statut">-</div></div>
     </div>
     <div id="detail"></div>
     <div class="legend">
-      <div class="legend-item"><span class="dot" style="background:#1a8a5e"></span>Moins de 10% — sain</div>
-      <div class="legend-item"><span class="dot" style="background:#ba7517"></span>10% à 20% — à surveiller</div>
-      <div class="legend-item"><span class="dot" style="background:#c0392b"></span>Plus de 20% — préoccupant</div>
+      <div class="legend-item"><span class="dot" style="background:#1a8a5e"></span>Moins de 10% : sain</div>
+      <div class="legend-item"><span class="dot" style="background:#ba7517"></span>10% à 20% : à surveiller</div>
+      <div class="legend-item"><span class="dot" style="background:#c0392b"></span>Plus de 20% : préoccupant</div>
     </div>
   </div>
 </div>
 
-<div class="bas"><span class="bas-copy">© 2026 Gestion Mel — Tous droits réservés</span><div class="bas-logo">Gestion<span>Mel</span></div></div>
+<div class="bas"><span class="bas-copy">© Gestion Mel 2026. Tous droits réservés.</span><div class="bas-logo">Gestion<span>Mel</span></div></div>
 </div>
 <script>
 function badge(t,s){

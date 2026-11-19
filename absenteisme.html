@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculateur de taux d'absentéisme — Gestion Mel</title>
+<title>Calculateur de taux d'absentéisme | Gestion Mel</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
@@ -59,7 +59,7 @@ table.t input:focus{outline:1px solid #1a6fa8;border-radius:4px;background:white
   <div class="logo">Gestion<span>Mel</span></div>
   <div class="entete-titre">
     <h1>Calculateur de taux d'absentéisme</h1>
-    <p>Clinique dentaire — par employé et pour l'équipe complète</p>
+    <p>Clinique dentaire : par employé et pour l'équipe complète</p>
   </div>
 </div>
 
@@ -83,25 +83,25 @@ table.t input:focus{outline:1px solid #1a6fa8;border-radius:4px;background:white
 
 <div id="results" style="display:none">
   <div class="card">
-    <div class="card-title">Résultats — <span id="res-periode"></span></div>
+    <div class="card-title">Résultats : <span id="res-periode"></span></div>
     <div class="metrics">
-      <div class="metric"><div class="metric-label">Taux équipe</div><div class="metric-val" id="taux-equipe">—</div></div>
-      <div class="metric"><div class="metric-label">Total jours absents</div><div class="metric-val" id="total-abs">—</div></div>
-      <div class="metric"><div class="metric-label">Nb employés</div><div class="metric-val" id="nb-emp">—</div></div>
+      <div class="metric"><div class="metric-label">Taux équipe</div><div class="metric-val" id="taux-equipe">-</div></div>
+      <div class="metric"><div class="metric-label">Total jours absents</div><div class="metric-val" id="total-abs">-</div></div>
+      <div class="metric"><div class="metric-label">Nb employés</div><div class="metric-val" id="nb-emp">-</div></div>
     </div>
     <div>
       <div class="res-row res-head" style="grid-template-columns:1fr 80px 110px"><div>Employé</div><div>Jours absents</div><div>Taux</div></div>
       <div id="emp-liste"></div>
     </div>
     <div class="legend">
-      <div class="legend-item"><span class="dot" style="background:#1a8a5e"></span>Moins de 3% — normal</div>
-      <div class="legend-item"><span class="dot" style="background:#ba7517"></span>3% à 6% — à surveiller</div>
-      <div class="legend-item"><span class="dot" style="background:#c0392b"></span>Plus de 6% — préoccupant</div>
+      <div class="legend-item"><span class="dot" style="background:#1a8a5e"></span>Moins de 3% : normal</div>
+      <div class="legend-item"><span class="dot" style="background:#ba7517"></span>3% à 6% : à surveiller</div>
+      <div class="legend-item"><span class="dot" style="background:#c0392b"></span>Plus de 6% : préoccupant</div>
     </div>
   </div>
 </div>
 
-<div class="bas"><span class="bas-copy">© 2026 Gestion Mel — Tous droits réservés</span><div class="bas-logo">Gestion<span>Mel</span></div></div>
+<div class="bas"><span class="bas-copy">© Gestion Mel 2026. Tous droits réservés.</span><div class="bas-logo">Gestion<span>Mel</span></div></div>
 </div>
 <script>
 let emps=[{nom:"",abs:""},{nom:"",abs:""},{nom:"",abs:""}];

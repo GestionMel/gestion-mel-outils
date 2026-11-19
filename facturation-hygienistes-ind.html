@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Facturation Hygiéniste Indépendante — Gestion Mel</title>
+<title>Facturation Hygiéniste Indépendante | Gestion Mel</title>
 <style>
   :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --green:#1a9e5a; --orange:#e67e22; --red:#c0392b; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -343,12 +343,12 @@ window.gmAcces = (function () {
 <div class="sync-status ok" id="syncStatus" style="display:none;">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Outil de facturation</div>
+  <div>Clinique dentaire : Outil de facturation</div>
 </div>
 
 <div class="selector-screen" id="selectorScreen">
   <div class="selector-box">
-    <h1 id="selTitre">Factures — Hygiénistes indépendantes</h1>
+    <h1 id="selTitre">Factures : Hygiénistes indépendantes</h1>
     <p id="selTexte">Regroupées par hygiéniste pour suivre facilement les passages et les montants facturés dans le temps.</p>
     <button class="btn-new" onclick="creerNouveau()">+ Nouvelle facture</button>
     <button class="btn-lien" id="btnLienSel" onclick="showLien()">🔗 Mon lien personnel</button>
@@ -367,7 +367,7 @@ window.gmAcces = (function () {
   <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste</button>
   <div class="doc-header">
     <div>
-      <h1>Facture — Hygiéniste dentaire indépendante</h1>
+      <h1>Facture : Hygiéniste dentaire indépendante</h1>
       <p>Template de facturation pour travailleuse autonome</p>
     </div>
     <div class="facture-no">
@@ -378,7 +378,7 @@ window.gmAcces = (function () {
 
   <div class="parties">
     <div class="partie">
-      <div class="partie-title">Hygiéniste — Fournisseur de services</div>
+      <div class="partie-title">Hygiéniste : Fournisseur de services</div>
       <input type="text" id="f_hygNom" placeholder="Nom complet ou raison sociale">
       <input type="text" id="f_hygAdresse" placeholder="Adresse">
       <input type="text" id="f_hygVille" placeholder="Ville, Province, Code postal">
@@ -388,7 +388,7 @@ window.gmAcces = (function () {
       <input type="text" id="f_hygTvq" placeholder="No. de TVQ (si applicable)">
     </div>
     <div class="partie">
-      <div class="partie-title">Clinique — Client</div>
+      <div class="partie-title">Clinique : Client</div>
       <input type="text" id="f_cliNom" placeholder="Nom de la clinique">
       <input type="text" id="f_cliAdresse" placeholder="Adresse">
       <input type="text" id="f_cliVille" placeholder="Ville, Province, Code postal">
@@ -426,7 +426,7 @@ window.gmAcces = (function () {
 
   <div class="note-section">
     <label style="font-size:0.75rem; font-weight:600; color:#5a6a80; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:6px;">Notes / Instructions de paiement</label>
-    <textarea id="f_notes" placeholder="Ex. : Virement Interac à votrecourriel@exemple.com — Merci pour votre collaboration !"></textarea>
+    <textarea id="f_notes" placeholder="Ex. : Virement Interac à votrecourriel@exemple.com, Merci pour votre collaboration!"></textarea>
   </div>
 
   <div class="actions">
@@ -434,7 +434,7 @@ window.gmAcces = (function () {
     <button class="btn" id="btnLienFacture" style="display:none;background:white;color:var(--blue);border:1.5px solid var(--blue);" onclick="showLien()">🔗 Lien de ma facture</button>
     <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Template de facturation pour usage professionnel</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | Template de facturation pour usage professionnel</div>
 </div>
 
 <script>
@@ -514,7 +514,7 @@ function setStatus(state) {
 let modeHyg = false, ownerClinique = null;
 function showLien() {
   if (modeHyg && recordToken) { prompt("Voici le lien de votre facture. Enregistrez-le (en favori ou par courriel) pour la retrouver plus tard :", window.location.href); return; }
-  prompt("Voici votre lien personnel — enregistrez-le en favori :", window.location.href);
+  prompt("Voici votre lien personnel, enregistrez-le en favori :", window.location.href);
 }
 function preparerModeHyg(owner) {
   modeHyg = true; ownerClinique = owner;
@@ -555,7 +555,7 @@ async function afficherListe() {
     const noms = Object.keys(groupes).sort((a,b)=>a.localeCompare(b,'fr'));
     listEl.innerHTML = noms.map(nom => {
       const items = groupes[nom].map(row => `<div class="selector-item" style="margin-left:16px;" onclick="ouvrirFacture('${row.record_token}')">
-        <span class="sel-info" style="flex:1;">Facture ${gmAcces.esc(row.no_facture || '—')}</span>
+        <span class="sel-info" style="flex:1;">Facture ${gmAcces.esc(row.no_facture || '-')}</span>
         <span class="sel-info">${gmAcces.esc(row.date_facture || '')}</span>
       </div>`).join('');
       return `<div style="margin-top:14px;"><div style="font-weight:700;font-size:.85rem;color:var(--dark);padding:6px 0;border-bottom:2px solid var(--border);margin-bottom:6px;">👤 ${gmAcces.esc(nom)} <span style="font-weight:400;color:#8a9ab0;font-size:.78rem;">(${groupes[nom].length} facture${groupes[nom].length>1?'s':''})</span></div>${items}</div>`;
@@ -642,7 +642,7 @@ function majBoutonEnvoyer() {
 
 async function envoyerGestionnaire() {
   if (!document.getElementById('f_hygNom').value.trim()) { alert('Veuillez indiquer le nom de l\'hygiéniste avant d\'envoyer.'); return; }
-  if (!confirm('Envoyer cette facture à la gestionnaire ? Elle recevra un courriel de notification.')) return;
+  if (!confirm('Envoyer cette facture à la gestionnaire? Elle recevra un courriel de notification.')) return;
   envoyeeGestionnaire = true;
   majBoutonEnvoyer();
   await doSave();

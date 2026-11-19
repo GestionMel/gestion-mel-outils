@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liste téléphonique et courriel — Gestion Mel</title>
+<title>Liste téléphonique et courriel | Gestion Mel</title>
 <style>
 :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -151,7 +151,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text
       <div class="modal-grid">
         <div class="mfield"><label class="mlbl">Prénom</label><input class="minp" id="fPrenom" placeholder="Marie"></div>
         <div class="mfield"><label class="mlbl">Nom</label><input class="minp" id="fNom" placeholder="Tremblay"></div>
-        <div class="mfield full"><label class="mlbl">Titre / Rôle</label><input class="minp" id="fRole" placeholder="ex: Hygiéniste dentaire, Comptable..."></div>
+        <div class="mfield full"><label class="mlbl">Titre / Rôle</label><input class="minp" id="fRole" placeholder="ex : Hygiéniste dentaire, Comptable..."></div>
         <div class="mfield full">
           <label class="mlbl">Catégorie</label>
           <select class="minp" id="fCat">
@@ -165,14 +165,14 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#eef4fb;color:var(--text
           </select>
         </div>
         <div class="mfield"><label class="mlbl">Téléphone bureau</label><input class="minp" id="fTel" placeholder="514-555-1234" type="tel"></div>
-        <div class="mfield"><label class="mlbl">Poste</label><input class="minp" id="fPoste" placeholder="ex: 101"></div>
+        <div class="mfield"><label class="mlbl">Poste</label><input class="minp" id="fPoste" placeholder="ex : 101"></div>
         <div class="mfield"><label class="mlbl">Cellulaire</label><input class="minp" id="fCell" placeholder="514-555-5678" type="tel"></div>
         <div class="mfield"><label class="mlbl">Télécopieur</label><input class="minp" id="fFax" placeholder="514-555-9012" type="tel"></div>
         <div class="mfield full"><label class="mlbl">Courriel principal</label><input class="minp" id="fEmail" placeholder="marie.tremblay@clinique.com" type="email"></div>
         <div class="mfield full"><label class="mlbl">Courriel secondaire</label><input class="minp" id="fEmail2" placeholder="(optionnel)" type="email"></div>
         <div class="mfield full"><label class="mlbl">Adresse</label><input class="minp" id="fAdresse" placeholder="123 rue Principale, Québec, QC"></div>
         <div class="mfield full"><label class="mlbl">Site web</label><input class="minp" id="fWeb" placeholder="https://www.exemple.com" type="url"></div>
-        <div class="mfield full"><label class="mlbl">Notes</label><input class="minp" id="fNotes" placeholder="ex: Disponible 8h–17h, urgences par cell..."></div>
+        <div class="mfield full"><label class="mlbl">Notes</label><input class="minp" id="fNotes" placeholder="ex : Disponible 8h–17h, urgences par cell..."></div>
       </div>
     </div>
     <div class="modal-ft">
@@ -204,7 +204,7 @@ let activeFilter = '';
 
 // Sample / default contacts
 const DEFAULTS = [
-  {id:1,prenom:'Mélanie',nom:'Fortin',role:'Support et formation — Gestion Mel',cat:'Administration',tel:'581-849-7425',poste:'',cell:'',fax:'',email:'info@gestionmel.com',email2:'',adresse:'',web:'https://gestionmel.com',notes:'Questions sur vos outils ou votre formation Gestion Mel'},
+  {id:1,prenom:'Mélanie',nom:'Fortin',role:'Support et formation | Gestion Mel',cat:'Administration',tel:'581-849-7425',poste:'',cell:'',fax:'',email:'info@gestionmel.com',email2:'',adresse:'',web:'https://gestionmel.com',notes:'Questions sur vos outils ou votre formation Gestion Mel'},
 ];
 
 let ownerToken = null, saveTimer = null, isLoading = true;
@@ -272,19 +272,19 @@ function renderContact(c){
   const cellLink=c.cell?`<a href="tel:${c.cell.replace(/\D/g,'')}" class="quick-link">📱 ${c.cell}</a>`:'';
   const mailLink=c.email?`<a href="mailto:${c.email}" class="quick-link">✉️ ${c.email}</a>`:'';
 
-  const telDetail= c.tel?`<a href="tel:${c.tel.replace(/\D/g,'')}">${c.tel}${c.poste?' · poste '+c.poste:''}</a>`:'—';
-  const cellDetail=c.cell?`<a href="tel:${c.cell.replace(/\D/g,'')}">${c.cell}</a>`:'—';
-  const faxDetail= c.fax||'—';
-  const mailDetail=c.email?`<a href="mailto:${c.email}">${c.email}</a>`:'—';
-  const mail2Detail=c.email2?`<a href="mailto:${c.email2}">${c.email2}</a>`:'—';
-  const webDetail= c.web?`<a href="${c.web}" target="_blank">${c.web}</a>`:'—';
+  const telDetail= c.tel?`<a href="tel:${c.tel.replace(/\D/g,'')}">${c.tel}${c.poste?' · poste '+c.poste:''}</a>`:'-';
+  const cellDetail=c.cell?`<a href="tel:${c.cell.replace(/\D/g,'')}">${c.cell}</a>`:'-';
+  const faxDetail= c.fax||'-';
+  const mailDetail=c.email?`<a href="mailto:${c.email}">${c.email}</a>`:'-';
+  const mail2Detail=c.email2?`<a href="mailto:${c.email2}">${c.email2}</a>`:'-';
+  const webDetail= c.web?`<a href="${c.web}" target="_blank">${c.web}</a>`:'-';
 
   return `<div class="contact-card" id="card-${c.id}">
     <div class="card-head" onclick="toggleCard(${c.id})">
       <div class="avatar" style="background:${col}">${initials(c)}</div>
       <div class="card-info">
         <div class="card-name">${c.prenom} ${c.nom}</div>
-        <div class="card-role">${c.role||'—'}</div>
+        <div class="card-role">${c.role||'-'}</div>
       </div>
       <div class="card-quick">
         ${telLink}${cellLink}${mailLink}
@@ -418,7 +418,7 @@ function editContact(id,e){
 function deleteContact(id,e){
   e.stopPropagation();
   const c=contacts.find(x=>x.id===id);
-  if(!c||!confirm(`Supprimer ${c.prenom} ${c.nom} ?`)) return;
+  if(!c||!confirm(`Supprimer ${c.prenom} ${c.nom}?`)) return;
   contacts=contacts.filter(x=>x.id!==id);
   save(); renderAll();
 }

@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checklist fin d'emploi — Gestion Mel</title>
+<title>Checklist fin d'emploi | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -100,11 +100,11 @@
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Ressources humaines — Fin d'emploi</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Ressources humaines : Fin d'emploi</div></div>
 
 <div class="selector-screen" id="selectorScreen">
   <div class="selector-box">
-    <h1>Checklist — Fin d'emploi</h1>
+    <h1>Checklist : Fin d'emploi</h1>
     <p>Choisissez une checklist déjà commencée, ou créez-en une nouvelle pour un départ d'employé.</p>
     <button class="btn-new-checklist" onclick="creerNouvelleChecklist()">+ Nouvelle checklist</button>
     <button class="btn-lien" onclick="showLienPersonnel()" style="margin-left:10px;padding:10px 18px;border-radius:7px;border:1.5px solid var(--blue);background:white;color:var(--blue);font-family:inherit;font-size:.85rem;font-weight:600;cursor:pointer;">🔗 Mon lien personnel</button>
@@ -117,7 +117,7 @@
 <div class="container" id="mainContainer" style="display:none;">
   <div class="doc-header">
     <button class="btn-retour no-print" onclick="retourListe()">← Retour à la liste des checklists</button>
-    <h1>Checklist — Fin d'emploi</h1><p>Procédure complète lors du départ d'un(e) employé(e) — Clinique dentaire</p></div>
+    <h1>Checklist : Fin d'emploi</h1><p>Procédure complète lors du départ d'un(e) employé(e) : Clinique dentaire</p></div>
   <div class="info-bar">
     <div class="ib-field"><label>Clinique</label><input type="text" id="fClinique" placeholder="Clinique Dentaire..." oninput="scheduleSave()"></div>
     <div class="ib-field"><label>Nom de l'employé(e)</label><input type="text" id="nomEmp" placeholder="Prénom Nom" oninput="scheduleSave()"></div>
@@ -136,7 +136,7 @@
     <div class="ib-field"><label>Dernier jour de travail</label><input type="date" id="fDernierJour" onchange="scheduleSave()"></div>
   </div>
   <div class="progress-bar-wrap">
-    <div class="prog-top"><span class="prog-lbl" id="progLabel">Progression — 0 tâche complétée</span><span class="prog-pct" id="progPct">0%</span></div>
+    <div class="prog-top"><span class="prog-lbl" id="progLabel">Progression : 0 tâche complétée</span><span class="prog-pct" id="progPct">0%</span></div>
     <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
   </div>
   <div id="checklistContainer"></div>
@@ -152,7 +152,7 @@
     <button class="btn btn-reset" onclick="resetAll()">↺ Réinitialiser</button>
     <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | info@gestionmel.com | 581-849-7425</div>
 </div>
 <script>
 const SECTIONS = [
@@ -179,7 +179,7 @@ const SECTIONS = [
     { label:"Enlever les tâches relatives à cette personne dans Outlook (agenda, rappels, délégations)", required:true },
     { label:"Mettre à jour l'organigramme de la clinique", required:true },
     { label:"Remettre et recueillir le questionnaire de fin d'emploi", required:false },
-    { label:"Retirer l'employé(e) du logiciel dentaire (Dentitek / Progident) — accès et rappels", required:true },
+    { label:"Retirer l'employé(e) du logiciel dentaire (Dentitek / Progident) : accès et rappels", required:true },
     { label:"Désactiver l'accès au courriel professionnel", required:true },
     { label:"Désactiver l'accès aux plateformes et logiciels (comptabilité, paie, RH, etc.)", required:true },
     { label:"Retirer des groupes de communication (Teams, WhatsApp d'équipe, etc.)", required:false },
@@ -255,7 +255,7 @@ function updateProgress() {
   const pct = total > 0 ? Math.round(done/total*100) : 0;
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
-  document.getElementById('progLabel').textContent = `Progression — ${done}/${total} tâche(s) complétée(s)`;
+  document.getElementById('progLabel').textContent = `Progression : ${done}/${total} tâche(s) complétée(s)`;
 }
 
 function resetAll() {
@@ -289,7 +289,7 @@ function getOwnerToken() {
 }
 
 function showLienPersonnel() {
-  prompt("Voici votre lien personnel — enregistrez-le en favori pour toujours retrouver vos checklists, même sur un autre appareil ou navigateur :", window.location.href);
+  prompt("Voici votre lien personnel, enregistrez-le en favori pour toujours retrouver vos checklists, même sur un autre appareil ou navigateur :", window.location.href);
 }
 
 function setStatus(state) {

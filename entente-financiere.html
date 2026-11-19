@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0070)file:///C:/Users/Portable02/Downloads/entente_financiere_generale.html -->
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Entente financière — Traitements dentaires | Gestion Mel</title>
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Entente financière : Traitements dentaires | Gestion Mel</title>
 <style>
 :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--red:#c0392b;--green:#1a9e5a;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -97,13 +97,13 @@ p.desc{font-size:0.88rem;line-height:1.7;margin-bottom:10px;}
 <body>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Entente financière</div>
+  <div>Clinique dentaire : Entente financière</div>
 </div>
 
 <div class="container">
   <div class="doc-header">
-    <h1>Entente financière — Traitements dentaires</h1>
-    <p>Plan de traitement et modalités de paiement — Document confidentiel</p>
+    <h1>Entente financière : Traitements dentaires</h1>
+    <p>Plan de traitement et modalités de paiement : Document confidentiel</p>
   </div>
 
   <!-- Identification -->
@@ -152,7 +152,7 @@ p.desc{font-size:0.88rem;line-height:1.7;margin-bottom:10px;}
     <div class="montant-card" style="margin-top:18px;">
       <div>
         <div class="mc-label">Montant total à la charge du patient</div>
-        <div style="font-size:0.78rem;opacity:0.6;margin-top:4px;">Honoraires totaux — Part assurance</div>
+        <div style="font-size:0.78rem;opacity:0.6;margin-top:4px;">Honoraires totaux : Part assurance</div>
       </div>
       <div class="mc-val"><input type="text" placeholder="0,00 $"></div>
     </div>
@@ -163,7 +163,7 @@ p.desc{font-size:0.88rem;line-height:1.7;margin-bottom:10px;}
 
   <!-- Informations assurance -->
   <div class="section">
-    <div class="section-title">Informations — Assurance dentaire</div>
+    <div class="section-title">Informations : Assurance dentaire</div>
     <div class="grid">
       <div class="field"><label>Compagnie d'assurance principale</label><input type="text" placeholder="Sun Life, Desjardins, SSQ..."></div>
       <div class="field"><label>No de certificat / police</label><input type="text"></div>
@@ -180,7 +180,7 @@ p.desc{font-size:0.88rem;line-height:1.7;margin-bottom:10px;}
     <div class="option-card">
       <div class="option-header">
         <input type="radio" name="paiement" value="comptant">
-        <strong>Paiement comptant — Au moment du service</strong>
+        <strong>Paiement comptant : Au moment du service</strong>
       </div>
       <div class="option-body">
         <p style="font-size:0.87rem;color:#555;">Le paiement est effectué en totalité au moment de chaque rendez-vous. Les modes de paiement acceptés sont : argent comptant, chèque, débit, Visa, Mastercard.</p>
@@ -277,7 +277,7 @@ p.desc{font-size:0.88rem;line-height:1.7;margin-bottom:10px;}
   <div class="actions">
     <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — Outil de gestion clinique</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | Document confidentiel | Outil de gestion clinique</div>
 </div>
 
 <script>
@@ -305,7 +305,7 @@ function genererVersements() {
     const label = `${d.getDate().toString().padStart(2,'0')}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getFullYear()}`;
     const div = document.createElement('div');
     div.className = 'vers-item';
-    div.innerHTML = `<label>Versement ${i} — ${label}</label><input type="text" placeholder="0,00 $">`;
+    div.innerHTML = `<label>Versement ${i} : ${label}</label><input type="text" placeholder="0,00 $">`;
     grille.appendChild(div);
     date.setMonth(date.getMonth() + 1);
   }

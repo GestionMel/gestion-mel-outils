@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alerte dernier item — Inventaire | Gestion Mel</title>
+<title>Alerte dernier item : Inventaire | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -112,11 +112,11 @@
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div style="font-size:.79rem;opacity:.7;">Clinique dentaire — Gestion des stocks</div>
+  <div style="font-size:.79rem;opacity:.7;">Clinique dentaire : Gestion des stocks</div>
 </div>
 <div class="container">
   <div class="doc-header">
-    <h1>📦 Alerte — Dernier item inventaire</h1>
+    <h1>📦 Alerte : Dernier item inventaire</h1>
     <p>Signalez quand vous prenez le dernier item d'un produit · Commande automatiquement identifiée</p>
   </div>
 
@@ -146,8 +146,8 @@
         <div class="alert-card">
           <div class="ac-title">Ajouter un produit à la liste</div>
           <div class="form-grid">
-            <div class="ff" style="grid-column:1/-1;"><label>Nom du produit *</label><input class="big" type="text" id="f_nom" placeholder="Ex: Gants latex taille M, Bavettes bleues..."></div>
-            <div class="ff"><label>Numéro / Code produit</label><input type="text" id="f_code" placeholder="Ex: GL-MED-100, DEN-4892..."></div>
+            <div class="ff" style="grid-column:1/-1;"><label>Nom du produit *</label><input class="big" type="text" id="f_nom" placeholder="Ex : Gants latex taille M, Bavettes bleues..."></div>
+            <div class="ff"><label>Numéro / Code produit</label><input type="text" id="f_code" placeholder="Ex : GL-MED-100, DEN-4892..."></div>
             <div class="ff"><label>Catégorie</label>
               <select id="f_cat">
                 <option value="clin">🦷 Clinique / Soins</option>
@@ -160,11 +160,11 @@
             </div>
             <div class="ff"><label>Niveau d'urgence</label>
               <select id="f_urg">
-                <option value="norm">🟡 Normal — Commander sous peu</option>
-                <option value="urg">🔴 Urgent — Besoin dans 24-48h</option>
+                <option value="norm">🟡 Normal : Commander sous peu</option>
+                <option value="urg">🔴 Urgent : Besoin dans 24-48h</option>
               </select>
             </div>
-            <div class="ff"><label>Fournisseur habituel (optionnel)</label><input type="text" id="f_fourn" placeholder="Ex: Henry Schein, Patterson..."></div>
+            <div class="ff"><label>Fournisseur habituel (optionnel)</label><input type="text" id="f_fourn" placeholder="Ex : Henry Schein, Patterson..."></div>
             <div class="ff"><label>Note (optionnel)</label><input type="text" id="f_note" placeholder="Quantité habituelle, référence..."></div>
           </div>
           <button class="btn-new" style="width:100%;margin-top:12px;" onclick="ajouterAuPanier()">+ Ajouter ce produit à la liste</button>
@@ -383,11 +383,11 @@ function drawManager() {
     return `<tr class="${a.done?'done-row':''}">
       <td style="font-size:.79rem;white-space:nowrap;">${d.toLocaleDateString('fr-CA',{day:'numeric',month:'short'})}</td>
       <td><div class="prod-name" style="font-weight:700;font-size:.83rem;">${a.nom}</div></td>
-      <td class="c" style="font-size:.78rem;color:#5a6a80;font-family:monospace;">${a.code||'—'}</td>
+      <td class="c" style="font-size:.78rem;color:#5a6a80;font-family:monospace;">${a.code||'-'}</td>
       <td class="c"><span class="cat-badge ${ci.cls}">${ci.label}</span></td>
-      <td style="font-size:.79rem;color:#5a6a80;">${a.fourn||'—'}</td>
+      <td style="font-size:.79rem;color:#5a6a80;">${a.fourn||'-'}</td>
       <td class="c">${urgBadge}</td>
-      <td style="font-size:.78rem;color:#5a6a80;">${a.note||'—'}</td>
+      <td style="font-size:.78rem;color:#5a6a80;">${a.note||'-'}</td>
       <td class="c" style="font-weight:700;font-size:.84rem;letter-spacing:2px;">${a.init}</td>
       <td class="c">
         ${a.done

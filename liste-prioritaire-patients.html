@@ -3,7 +3,7 @@
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Liste de priorité — Patients en attente | Gestion Mel</title>
+<title>Liste de priorité : Patients en attente | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--green:#1a9e5a;--orange:#e67e22;--red:#c0392b;--purple:#8e44ad;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -384,9 +384,9 @@ window.gmAcces = (function () {
 <body>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <div class="sync-status ok" id="syncStatus">✅ Connecté</div>
-<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Clinique dentaire — Gestion des patients</div></div>
+<div class="page-header"><div class="brand">Gestion<span>Mel</span></div><div style="font-size:.82rem;opacity:.7;">Clinique dentaire : Gestion des patients</div></div>
 <div class="container">
-  <div class="doc-header"><h1>Liste de priorité d'attente — Patients</h1><p>Classement automatique par niveau d'urgence • Retrait automatique si la date de RV est passée</p></div>
+  <div class="doc-header"><h1>Liste de priorité d'attente : Patients</h1><p>Classement automatique par niveau d'urgence • Retrait automatique si la date de RV est passée</p></div>
 
   <div class="top-controls">
     <div class="tc-left">
@@ -415,7 +415,7 @@ window.gmAcces = (function () {
       <div class="fg fg-narrow"><label>No dossier</label><input type="text" id="f_dossier" placeholder="00000"></div>
       <div class="fg fg-narrow"><label>Téléphone</label><input type="tel" id="f_tel" placeholder="418-000-0000"></div>
       <div class="row-break"></div>
-      <div class="fg fg-wide"><label>Traitement à faire</label><input type="text" id="f_traitement" placeholder="ex: Extraction #36, Couronne..."></div>
+      <div class="fg fg-wide"><label>Traitement à faire</label><input type="text" id="f_traitement" placeholder="ex : Extraction #36, Couronne..."></div>
       <div class="fg"><label>Durée RV</label>
         <select id="f_duree">
           <option value="30">30 min</option>
@@ -475,7 +475,7 @@ window.gmAcces = (function () {
     <button class="btn btn-secondary" onclick="if(confirm('Vider toute la liste?')) { patients=[]; renderTable(); scheduleSave(); }">🗑️ Vider la liste</button>
     <button class="btn btn-secondary" onclick="window.print()">🖨️ Imprimer la liste</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | info@gestionmel.com | 581-849-7425</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | info@gestionmel.com | 581-849-7425</div>
 </div>
 
 <script>
@@ -498,12 +498,12 @@ function addPatient() {
   const p = {
     id: idCounter++,
     nom,
-    dossier: document.getElementById('f_dossier').value || '—',
-    traitement: document.getElementById('f_traitement').value || '—',
+    dossier: document.getElementById('f_dossier').value || '-',
+    traitement: document.getElementById('f_traitement').value || '-',
     duree: parseInt(document.getElementById('f_duree').value),
     urgence: parseInt(document.getElementById('f_urgence').value),
     dateRV,
-    tel: document.getElementById('f_tel').value || '—',
+    tel: document.getElementById('f_tel').value || '-',
     notes: '',
     added: new Date().toLocaleDateString('fr-CA'),
   };
@@ -555,7 +555,7 @@ function setFilter(f, btn) {
 
 function urgLabel(u) {
   const map = {1:'🔴 Urgent', 2:'🟠 Important', 3:'🟢 Routine', 4:'🔵 Rappel'};
-  return map[u] || '—';
+  return map[u] || '-';
 }
 function urgClass(u) {
   return ['','urg-1','urg-2','urg-3','urg-4'][u] || '';
@@ -615,7 +615,7 @@ function renderTable() {
       <td><span class="urg-badge ${urgClass(p.urgence)}">${urgLabel(p.urgence)}</span></td>
       <td>${rvStatusHtml(p)}</td>
       <td style="font-size:.8rem;">${p.tel}</td>
-      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${p.notes}">${p.notes || '—'}</td>
+      <td style="font-size:.78rem;color:#5a6a80;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${p.notes}">${p.notes || '-'}</td>
       <td style="text-align:center;font-size:.73rem;color:#8a9ab0;">${p.added}</td>
       <td class="no-print" style="text-align:center;">
         <div style="display:flex;gap:4px;justify-content:center;">

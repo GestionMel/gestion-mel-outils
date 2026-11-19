@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Consentement financier — RCSD | Gestion Mel</title>
+<title>Consentement financier : RCSD | Gestion Mel</title>
 <style>
   :root{--blue:#1a6abf;--dark:#0d1b2a;--accent:#2196f3;--light:#f4f8ff;--border:#d0dff0;--text:#1a2535;--orange:#e67e22;--green:#1a9e5a;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -41,12 +41,12 @@
 <body>
 <div class="page-header">
   <div class="brand">Gestion<span>Mel</span></div>
-  <div>Clinique dentaire — Formulaire RCSD</div>
+  <div>Clinique dentaire : Formulaire RCSD</div>
 </div>
 <div class="container">
   <div class="doc-header">
     <h1>Formulaire de consentement financier</h1>
-    <p>Régime canadien de soins dentaires (RCSD) — Modalités de facturation</p>
+    <p>Régime canadien de soins dentaires (RCSD) : Modalités de facturation</p>
   </div>
 
   <!-- IDENTIFICATION -->
@@ -98,13 +98,13 @@
   </div>
 
   <div class="actions">
-    <span class="save-msg" id="saveMsg">✅ Données sauvegardées !</span>
+    <span class="save-msg" id="saveMsg">✅ Données sauvegardées!</span>
     <button class="btn btn-danger" onclick="clearAll()">🗑 Effacer</button>
     <button class="btn btn-secondary" onclick="saveData()">💾 Sauvegarder</button>
     <button class="btn btn-secondary" onclick="loadData()">📂 Charger</button>
     <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / PDF</button>
   </div>
-  <div class="footer-note">© Gestion Mel — gestionmel.com | Document confidentiel — usage clinique uniquement</div>
+  <div class="footer-note">© Gestion Mel | gestionmel.com | Document confidentiel | usage clinique uniquement</div>
 </div>
 
 <script>
@@ -130,7 +130,7 @@ function loadData() {
 }
 
 function clearAll() {
-  if (!confirm('Effacer toutes les données du formulaire ?')) return;
+  if (!confirm('Effacer toutes les données du formulaire?')) return;
   FIELDS.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('dateSignature').value = new Date().toISOString().split('T')[0];
 }
