@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi des réclamations d'assurance | Gestion Mel</title>
+<style>
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --orange: #e67e22; --red: #c0392b; --green: #1a9e5a; --purple: #7b4fb8; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 1180px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.8; }
+  .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 0.73rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select, textarea { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.9rem; font-family: inherit; color: var(--text); background: var(--light); }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: white; }
+  textarea { resize: vertical; min-height: 60px; width: 100%; }
+  .kpis { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
+  .kpi { background: var(--light); border: 1px solid var(--border); border-radius: 10px; padding: 14px; cursor: pointer; text-align: left; font-family: inherit; color: inherit; }
+  .kpi:hover { border-color: var(--accent); }
+  .kpi .v { font-size: 1.4rem; font-weight: 700; white-space: nowrap; }
+  .kpi .m { font-size: .82rem; font-weight: 600; color: #3a4a5a; margin-top: 2px; white-space: nowrap; }
+  .kpi .l { font-size: 0.75rem; color: #5a6a80; margin-top: 4px; }
+  .k-blue .v { color: var(--blue); } .k-red .v { color: var(--red); } .k-orange .v { color: var(--orange); } .k-green .v { color: var(--green); } .k-purple .v { color: var(--purple); }
+  .aging { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-top: 14px; }
+  .age { border-radius: 8px; padding: 10px 12px; font-size: .8rem; }
+  .age b { display: block; font-size: 1.05rem; white-space: nowrap; }
+  .a1 { background: #e8f4fd; color: #0d3a6e; } .a2 { background: #fff8e1; color: #7a4400; } .a3 { background: #fdebd0; color: #8a3d00; } .a4 { background: #fce4e1; color: var(--red); }
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+  .filters input, .filters select { padding: 8px 10px; font-size: .86rem; }
+  .filters input[type=search] { flex: 1 1 220px; }
+  table { width: 100%; border-collapse: collapse; min-width: 1080px; }
+  th { background: var(--dark); color: white; padding: 9px 6px; font-size: 0.72rem; text-align: left; font-weight: 600; white-space: nowrap; }
+  td { padding: 5px 4px; border-bottom: 1px solid var(--border); font-size: 0.84rem; vertical-align: middle; }
+  td input, td select { width: 100%; padding: 6px 6px; font-size: 0.82rem; }
+  td.num input { text-align: right; }
+  tr.late td { background: #fff6f5; }
+  tr.done td { background: #f6fbf8; }
+  .stat-Payée { color: var(--green); font-weight: 700; }
+  .stat-Refusée { color: var(--red); font-weight: 700; }
+  .flag { display: inline-block; font-size: .68rem; font-weight: 700; padding: 2px 6px; border-radius: 8px; background: #fce4e1; color: var(--red); white-space: nowrap; margin-top: 2px; }
+  .add-row { color: var(--blue); cursor: pointer; font-size: 0.88rem; font-weight: 600; padding: 10px 4px; background: none; border: none; font-family: inherit; }
+  .del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 1rem; padding: 4px; }
+  .scroll { overflow-x: auto; }
+  .empty { text-align: center; color: #8a9ab0; padding: 18px; font-size: .88rem; }
+  .etape { display: flex; gap: 14px; margin-bottom: 14px; }
+  .etape-num { background: var(--blue); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+  .etape-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 2px; }
+  .etape-desc { font-size: 0.84rem; color: #3a4a5a; line-height: 1.6; }
+  .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: 6px; background: #d4f1e2; color: var(--green); }
+  .badge.o { background: #fdebd0; color: var(--orange); } .badge.r { background: #fce4e1; color: var(--red); }
+  .tip-box { background: #e8f4fd; border-left: 4px solid var(--blue); border-radius: 4px; padding: 10px 14px; font-size: 0.83rem; color: #0d3a6e; margin-top: 10px; line-height: 1.6; }
+  .tip-box ul { margin: 6px 0 0 18px; }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+  .btn { padding: 11px 26px; border-radius: 7px; font-size: 0.92rem; font-weight: 600; cursor: pointer; border: none; font-family: inherit; }
+  .btn-primary { background: var(--blue); color: white; }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; }
+  .small { font-size: .78rem; color: #5a6a80; }
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:none;align-items:center;gap:6px;}
+  .sync-status.ok{display:flex;background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{display:flex;background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{display:flex;background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  @media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, minmax(0,1fr)); } .aging { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 700px) { .grid { grid-template-columns: minmax(0,1fr); } .section, .doc-header, .actions { padding-left: 16px; padding-right: 16px; } .page-header { padding: 14px 16px; } }
+  @media print { body { background: white; } .page-header, .actions, .no-print, .del, .add-row, .filters, .sync-status { display: none !important; } .container { box-shadow: none; margin: 0; max-width: none; } table { min-width: 0; font-size: .72rem; } input, select { border: none; background: transparent; padding: 1px; font-size: .72rem; } }
+</style>
+<script>
+/* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
+window.gmAcces = (function () {
+  const DUREE = 8 * 60 * 60 * 1000;
+  const CACHE = 'gm_acces_v1';
+  const ORIGINES = { fiche: "Fiche d'information employé", conge: 'Demande de congé', boite: 'Boîte à suggestions' };
+  const OUBLI = 'Mot de passe oublié? Écrivez à <strong>info@gestionmel.com</strong> en indiquant le nom de votre clinique.';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function css() {
+    if (document.getElementById('gmAccesCss')) return;
+    const s = document.createElement('style');
+    s.id = 'gmAccesCss';
+    s.textContent = `
+      html.gma-ouvert body > *:not(#gmAccesOverlay){visibility:hidden!important;}
+      #gmAccesOverlay{position:fixed;inset:0;z-index:100000;background:#eef4fb;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:40px 16px;font-family:'Segoe UI',Arial,sans-serif;color:#1a2535;}
+      #gmAccesOverlay *{box-sizing:border-box;}
+      .gma-carte{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(13,27,42,.12);overflow:hidden;}
+      .gma-tete{background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);color:#fff;padding:18px 24px;}
+      .gma-tete .gma-marque{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.5px;margin-bottom:6px;}
+      .gma-tete .gma-marque span{color:#2196f3;}
+      .gma-tete h2{font-size:1.1rem;font-weight:700;margin:0;}
+      .gma-corps{padding:20px 24px 22px;}
+      .gma-texte{font-size:.86rem;line-height:1.6;color:#3a4a60;margin:0 0 14px;}
+      .gma-champ{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+      .gma-champ label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+      .gma-champ input{border:1.5px solid #d0dff0;border-radius:7px;padding:10px 12px;font-size:.95rem;font-family:inherit;background:#f4f8ff;color:#1a2535;width:100%;}
+      .gma-champ input:focus{outline:none;border-color:#2196f3;background:#fff;}
+      .gma-btn{display:block;width:100%;padding:11px 16px;border-radius:8px;border:none;background:#1a6abf;color:#fff;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;}
+      .gma-btn:hover{background:#155a9e;}
+      .gma-btn:disabled{opacity:.6;cursor:wait;}
+      .gma-btn2{display:block;width:100%;padding:10px 16px;border-radius:8px;border:1.5px solid #1a6abf;background:#fff;color:#1a6abf;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;margin-top:10px;}
+      .gma-lien{background:none;border:none;color:#1a6abf;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 0;margin-top:6px;text-decoration:underline;}
+      .gma-err{display:none;background:#fef2f2;border:1px solid rgba(192,57,43,.25);color:#c0392b;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-ok{display:none;background:#f0fdf4;border:1px solid rgba(26,158,90,.25);color:#1a9e5a;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-astuce{background:#e8f4fd;border-left:3px solid #1a6abf;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#0d3a6e;margin-bottom:14px;line-height:1.55;}
+      .gma-avert{background:#fff8e1;border-left:3px solid #e67e22;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-bottom:14px;line-height:1.55;}
+      .gma-pied{font-size:.74rem;color:#8a9ab0;text-align:center;margin-top:14px;line-height:1.6;}
+      .gma-sep{border:none;border-top:1px solid #d0dff0;margin:18px 0;}
+      .gma-sous{font-size:.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;}
+      #gmAccesBarre{position:fixed;left:16px;bottom:16px;z-index:9990;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0dff0;border-radius:22px;padding:5px 6px 5px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:'Segoe UI',Arial,sans-serif;font-size:.74rem;font-weight:600;color:#1a6abf;}
+      #gmAccesBarre button{border:1px solid #d0dff0;background:#f4f8ff;color:#1a2535;border-radius:16px;padding:4px 10px;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+      #gmAccesBarre button:hover{border-color:#2196f3;color:#1a6abf;}
+      @media(max-width:600px){#gmAccesBarre>span{display:none;}#gmAccesBarre{padding:4px;left:8px;bottom:12px;}}
+      @media print{#gmAccesBarre,#gmAccesOverlay{display:none!important;}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function lire() { try { return JSON.parse(sessionStorage.getItem(CACHE) || '{}') || {}; } catch (e) { return {}; } }
+  function ecrire(c) { try { sessionStorage.setItem(CACHE, JSON.stringify(c)); } catch (e) { } }
+  function enCache(owner) { const c = lire()[owner]; return (c && c.exp > Date.now()) ? c : null; }
+  function memoriser(owner, r) {
+    const c = lire(); const prev = (c[owner] && c[owner].exp > Date.now()) ? c[owner] : {};
+    const gest = r.cle_gest || prev.gest || null;
+    c[owner] = { gest, secr: r.cle_secr || prev.secr || null, estGest: !!gest, exp: Date.now() + DUREE };
+    ecrire(c);
+    return c[owner];
+  }
+  function oublier(owner) { const c = lire(); delete c[owner]; ecrire(c); }
+  function fixerOwner(owner) {
+    try { localStorage.setItem('gestionmel_clinique_token', owner); } catch (e) { }
+    const p = new URLSearchParams(location.search); p.set('clinique', owner);
+    history.replaceState({}, '', location.pathname + '?' + p.toString());
+  }
+
+  function ecran(html) {
+    css();
+    let o = document.getElementById('gmAccesOverlay');
+    if (!o) { o = document.createElement('div'); o.id = 'gmAccesOverlay'; document.body.appendChild(o); }
+    o.innerHTML = '<div class="gma-carte">' + html + '</div>';
+    document.documentElement.classList.add('gma-ouvert');
+    o.scrollTop = 0;
+    const premier = o.querySelector('input'); if (premier) setTimeout(() => premier.focus(), 50);
+    return o;
+  }
+  function fermer() {
+    const o = document.getElementById('gmAccesOverlay'); if (o) o.remove();
+    document.documentElement.classList.remove('gma-ouvert');
+  }
+  function tete(titre) {
+    return '<div class="gma-tete"><div class="gma-marque">Gestion<span>Mel</span></div><h2>' + titre + '</h2></div>';
+  }
+  function message(r) {
+    if (!r) return 'Une erreur est survenue. Vérifiez votre connexion et réessayez.';
+    switch (r.erreur) {
+      case 'mot_de_passe': return 'Mot de passe incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'code': return 'Code incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'bloque': return 'Trop d\'essais. Réessayez dans ' + (r.minutes || 15) + ' minute(s).';
+      case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 6 caractères.';
+      case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+      case 'code_identique': return 'Le code du secrétariat doit être différent du mot de passe gestionnaire.';
+      case 'pas_de_mot_de_passe': return 'Aucun mot de passe gestionnaire n\'est encore créé pour cette clinique.';
+      case 'limite': return 'Limite atteinte. Réessayez un peu plus tard.';
+      default: return 'Une erreur est survenue. Réessayez.';
+    }
+  }
+  async function appel(sb, nom, args) {
+    try { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+    catch (e) { console.error(e); return null; }
+  }
+
+  // Formulaire generique : valider(valeurs) retourne {erreur} ou {resultat}
+  function formulaire({ titre, texte, astuce, avert, champs, bouton, alternative, pied, valider }) {
+    return new Promise(resolve => {
+      const html = tete(titre) + '<form class="gma-corps" autocomplete="off">' +
+        (texte ? '<p class="gma-texte">' + texte + '</p>' : '') +
+        (avert ? '<div class="gma-avert">' + avert + '</div>' : '') +
+        (astuce ? '<div class="gma-astuce">' + astuce + '</div>' : '') +
+        '<div class="gma-err"></div>' +
+        champs.map(c => '<div class="gma-champ"><label>' + c.label + '</label><input name="' + c.nom + '" type="' + (c.type || 'password') + '"' +
+          (c.type === 'text' ? ' autocomplete="off"' : ' autocomplete="new-password"') + (c.max ? ' maxlength="' + c.max + '"' : '') + '></div>').join('') +
+        '<button type="submit" class="gma-btn">' + bouton + '</button>' +
+        (alternative ? '<p class="gma-texte" style="margin:16px 0 0;">' + alternative.texte + '</p><button type="button" class="gma-btn2" data-alt="1">' + alternative.bouton + '</button>' : '') +
+        (pied ? '<div class="gma-pied">' + pied + '</div>' : '') +
+        '</form>';
+      const o = ecran(html);
+      const f = o.querySelector('form'), err = o.querySelector('.gma-err'), btn = o.querySelector('.gma-btn');
+      const alt = o.querySelector('[data-alt]');
+      if (alt) alt.onclick = () => resolve({ alt: true });
+      f.onsubmit = async ev => {
+        ev.preventDefault();
+        const v = {}; champs.forEach(c => { v[c.nom] = f.elements[c.nom].value; });
+        err.style.display = 'none'; btn.disabled = true;
+        const r = await valider(v);
+        btn.disabled = false;
+        if (r && r.erreur) { err.textContent = r.erreur; err.style.display = 'block'; const i = f.querySelector('input'); if (i) { i.select(); i.focus(); } return; }
+        resolve(r.resultat);
+      };
+    });
+  }
+
+  function maintenance() {
+    ecran(tete('⏳ Mise à jour en cours') + '<div class="gma-corps"><p class="gma-texte">Cet outil est en cours de mise à jour pour mieux protéger vos données. Revenez dans quelques minutes, puis rafraîchissez la page.</p><div class="gma-pied">Le problème persiste? Écrivez à <strong>info@gestionmel.com</strong>.</div></div>');
+  }
+
+  function formDefinir(sb, owner, niveau) {
+    return formulaire({
+      titre: '🔐 Créez votre mot de passe gestionnaire',
+      texte: 'Cet outil contient des informations confidentielles. Choisissez un mot de passe que vous seule connaîtrez (au moins 6 caractères). Il servira pour tous les outils réservés à la gestion.',
+      avert: '<strong>Réservé à la gestionnaire.</strong> Si vous n\'êtes pas la gestionnaire de la clinique, ne créez pas de mot de passe : demandez-lui d\'ouvrir cet outil une première fois.',
+      astuce: niveau === 'secr' ? 'Vous pourrez ensuite créer un code pour vos secrétaires avec le bouton <strong>🔑 Accès</strong> en bas à gauche.' : '',
+      champs: [{ nom: 'p1', label: 'Nouveau mot de passe' }, { nom: 'p2', label: 'Confirmer le mot de passe' }],
+      bouton: 'Créer le mot de passe et ouvrir',
+      pied: 'Notez-le dans un endroit sûr.',
+      valider: async v => {
+        if (v.p1.length < 6) return { erreur: message({ erreur: 'mot_de_passe_court' }) };
+        if (v.p1 !== v.p2) return { erreur: 'Les deux mots de passe ne sont pas identiques.' };
+        const r = await appel(sb, 'acces_definir', { p_owner_token: owner, p_pin: v.p1 });
+        if (r && r.erreur === 'deja_defini') { location.reload(); return { erreur: 'Un mot de passe existe déjà. Rechargement...' }; }
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function formOuvrir(sb, owner, niveau, etat, opts) {
+    const secr = niveau === 'secr';
+    let astuce = '';
+    if (etat.origine && ORIGINES[etat.origine]) astuce = 'Le mot de passe gestionnaire est le même que celui de l\'outil <strong>' + ORIGINES[etat.origine] + '</strong>.';
+    if (secr && !etat.code_secr) astuce += (astuce ? '<br>' : '') + 'Le code du secrétariat n\'est pas encore créé. La gestionnaire peut le créer avec le bouton <strong>🔑 Accès</strong>, une fois l\'outil ouvert.';
+    return formulaire({
+      titre: secr ? '🔒 Outil réservé au secrétariat' : '🔒 Outil réservé à la gestion',
+      texte: secr ? 'Entrez le code du secrétariat ou le mot de passe de la gestionnaire.' : 'Entrez le mot de passe gestionnaire pour ouvrir cet outil.',
+      astuce,
+      champs: [{ nom: 'p', label: secr ? 'Code ou mot de passe' : 'Mot de passe gestionnaire' }],
+      bouton: 'Ouvrir',
+      alternative: opts.alternative,
+      pied: OUBLI,
+      valider: async v => {
+        if (!v.p) return { erreur: secr ? 'Entrez votre code.' : 'Entrez votre mot de passe.' };
+        const r = await appel(sb, 'acces_ouvrir', { p_owner_token: owner, p_niveau: niveau, p_pin: v.p });
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function barre(sb, owner, niveau) {
+    css();
+    const c = enCache(owner) || {};
+    let b = document.getElementById('gmAccesBarre');
+    if (!b) { b = document.createElement('div'); b.id = 'gmAccesBarre'; document.body.appendChild(b); }
+    b.innerHTML = '<span>' + (c.estGest ? '🔓 Gestion' : '🔓 Secrétariat') + '</span>' +
+      (c.estGest ? '<button type="button" data-a="acces" title="Mot de passe et code du secrétariat">🔑 Accès</button>' : '') +
+      '<button type="button" data-a="lock" title="Fermer la session sur cet appareil">🔒 Verrouiller</button>';
+    b.querySelector('[data-a="lock"]').onclick = () => { oublier(owner); location.reload(); };
+    const a = b.querySelector('[data-a="acces"]'); if (a) a.onclick = () => panneau(sb, owner);
+  }
+
+  async function panneau(sb, owner) {
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner }) || {};
+    const o = ecran(tete('🔑 Gérer les accès') + '<div class="gma-corps">' +
+      '<div class="gma-ok" id="gmaOk"></div><div class="gma-err" id="gmaErr"></div>' +
+      '<p class="gma-sous">Code du secrétariat</p>' +
+      '<p class="gma-texte">Les secrétaires entrent ce code pour ouvrir le Balancement de fin de journée, la Liste prioritaire, la Petite caisse et les Comptes à recevoir. Votre mot de passe gestionnaire fonctionne aussi dans ces outils.</p>' +
+      '<div class="gma-astuce" id="gmaEtatCode">' + (etat.code_secr ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.') + '</div>' +
+      '<div class="gma-champ"><label>Nouveau code du secrétariat (4 caractères et plus)</label><input id="gmaCode" type="text" autocomplete="off" maxlength="30"></div>' +
+      '<div class="gma-champ"><label>Votre mot de passe gestionnaire</label><input id="gmaPinC" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnCode">Enregistrer le code</button>' +
+      (etat.code_secr ? '<button type="button" class="gma-lien" id="gmaBtnRetirer">Retirer le code du secrétariat</button>' : '') +
+      '<hr class="gma-sep">' +
+      '<p class="gma-sous">Changer le mot de passe gestionnaire</p>' +
+      '<div class="gma-champ"><label>Mot de passe actuel</label><input id="gmaPinA" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Nouveau mot de passe (6 caractères et plus)</label><input id="gmaPinN" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Confirmer le nouveau mot de passe</label><input id="gmaPinN2" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnPin">Changer le mot de passe</button>' +
+      '<button type="button" class="gma-btn2" id="gmaFermer">Fermer</button>' +
+      '<div class="gma-pied">Le nouveau mot de passe s\'applique à tous les outils réservés à la gestion.</div>' +
+      '</div>');
+    const okEl = o.querySelector('#gmaOk'), errEl = o.querySelector('#gmaErr');
+    const montrer = (ok, txt) => { okEl.style.display = ok ? 'block' : 'none'; errEl.style.display = ok ? 'none' : 'block'; (ok ? okEl : errEl).textContent = txt; o.scrollTop = 0; };
+    o.querySelector('#gmaFermer').onclick = fermer;
+    const envoyerCode = async code => {
+      const pin = o.querySelector('#gmaPinC').value;
+      if (!pin) return montrer(false, 'Entrez votre mot de passe gestionnaire.');
+      if (code && code.trim().length < 4) return montrer(false, message({ erreur: 'code_court' }));
+      const r = await appel(sb, 'acces_code_secr', { p_owner_token: owner, p_pin: pin, p_code: code });
+      if (!r || !r.ok) return montrer(false, message(r));
+      memoriser(owner, r);
+      o.querySelector('#gmaCode').value = ''; o.querySelector('#gmaPinC').value = '';
+      o.querySelector('#gmaEtatCode').textContent = code ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.';
+      montrer(true, code ? 'Code du secrétariat enregistré. Transmettez-le à vos secrétaires.' : 'Code du secrétariat retiré.');
+    };
+    o.querySelector('#gmaBtnCode').onclick = () => {
+      const code = o.querySelector('#gmaCode').value.trim();
+      if (!code) return montrer(false, 'Entrez le nouveau code du secrétariat.');
+      envoyerCode(code);
+    };
+    const ret = o.querySelector('#gmaBtnRetirer');
+    if (ret) ret.onclick = () => { if (confirm('Retirer le code? Les secrétaires ne pourront plus ouvrir les outils du secrétariat.')) envoyerCode(''); };
+    o.querySelector('#gmaBtnPin').onclick = async () => {
+      const a = o.querySelector('#gmaPinA').value, n = o.querySelector('#gmaPinN').value, n2 = o.querySelector('#gmaPinN2').value;
+      if (!a) return montrer(false, 'Entrez votre mot de passe actuel.');
+      if (n.length < 6) return montrer(false, message({ erreur: 'mot_de_passe_court' }));
+      if (n !== n2) return montrer(false, 'Les deux nouveaux mots de passe ne sont pas identiques.');
+      const r = await appel(sb, 'acces_changer_pin', { p_owner_token: owner, p_pin: a, p_nouveau: n });
+      if (!r || !r.ok) return montrer(false, r && r.erreur === 'code_identique' ? 'Le nouveau mot de passe doit être différent du code du secrétariat.' : message(r));
+      memoriser(owner, r);
+      ['#gmaPinA', '#gmaPinN', '#gmaPinN2'].forEach(s => { o.querySelector(s).value = ''; });
+      montrer(true, 'Mot de passe gestionnaire modifié.');
+    };
+  }
+
+  // Point d'entree : retourne la cle de l'outil (ou null si "alternative" choisie)
+  async function ouvrir(sb, owner, niveau, opts) {
+    opts = opts || {};
+    let c = enCache(owner);
+    if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner });
+    if (!etat || !etat.ok) { maintenance(); return new Promise(() => { }); }
+    if (etat.owner_token && etat.owner_token !== owner) {
+      owner = etat.owner_token; fixerOwner(owner);
+      c = enCache(owner);
+      if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    }
+    const r = etat.configure ? await formOuvrir(sb, owner, niveau, etat, opts) : await formDefinir(sb, owner, niveau);
+    if (r && r.alt) { fermer(); return null; }
+    const m = memoriser(owner, r);
+    fermer();
+    barre(sb, owner, niveau);
+    return m[niveau];
+  }
+
+  function cle(owner, niveau) { const c = enCache(owner); return c ? c[niveau] || null : null; }
+
+  return { ouvrir, cle, esc, ecran, fermer, tete, message, appel, formulaire, oublier, maintenance, OUBLI };
+})();
+</script>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status" id="syncStatus">✅ Sauvegardé</div>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Administration : Encaisser et suivre</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Suivi des réclamations d'assurance</h1>
+    <p>Réclamations, prédéterminations et RCSD : ce qui est envoyé, ce qui est payé, ce qui est refusé et ce qu'il faut relancer</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Clinique</div>
+    <div class="grid">
+      <div class="field"><label for="f_clinique">Nom de la clinique</label><input type="text" id="f_clinique" placeholder="Clinique dentaire ..."></div>
+      <div class="field"><label for="f_responsable">Responsable du suivi</label><input type="text" id="f_responsable" placeholder="Nom de la secrétaire"></div>
+      <div class="field"><label for="f_delai">Relancer après (jours)</label><input type="number" id="f_delai" min="1" max="120" value="30"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Tableau de bord</div>
+    <div class="kpis" id="kpis"></div>
+    <div class="aging" id="aging"></div>
+    <p class="small" style="margin-top:8px">Montants en attente selon l'âge de la réclamation (depuis la date d'envoi). Cliquez sur une case du tableau de bord pour filtrer la liste.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Réclamations</div>
+    <div class="filters">
+      <input type="search" id="q" placeholder="🔍 Rechercher un patient, un dossier, un assureur...">
+      <select id="fStatut"><option value="">Tous les statuts</option><option value="ouvertes">À suivre (non réglées)</option><option value="relancer">À relancer maintenant</option></select>
+      <select id="fAssureur"><option value="">Tous les assureurs</option></select>
+      <select id="fType"><option value="">Tous les types</option></select>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Date de service</th><th>Patient</th><th>No dossier</th><th>Assureur</th><th>Type</th><th class="num">Réclamé</th><th class="num">Payé</th><th>Envoyée le</th><th>Statut</th><th>Relance</th><th>Notes / motif</th><th class="no-print"></th></tr></thead>
+        <tbody id="body"></tbody>
+      </table>
+    </div>
+    <button type="button" class="add-row" id="addRow">+ Ajouter une réclamation</button>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Procédure de suivi</div>
+    <div class="etape"><div class="etape-num">1</div><div><div class="etape-title">Le jour même <span class="badge">J+0</span></div><div class="etape-desc">Envoyer la réclamation électronique et l'inscrire ici. Pour une prédétermination, joindre les radiographies, les photos et le plan de traitement demandés par l'assureur.</div></div></div>
+    <div class="etape"><div class="etape-num">2</div><div><div class="etape-title">Vérifier la réponse <span class="badge">J+7 à J+14</span></div><div class="etape-desc">Consulter le rapport de l'assureur (paiement, demande d'information ou refus). Mettre à jour le statut et le montant payé.</div></div></div>
+    <div class="etape"><div class="etape-num">3</div><div><div class="etape-title">Relancer <span class="badge o">J+30</span></div><div class="etape-desc">Sans réponse, appeler l'assureur avec le numéro de contrat et la date de service. Noter le nom de l'agent et la date promise dans les notes.</div></div></div>
+    <div class="etape"><div class="etape-num">4</div><div><div class="etape-title">Traiter un refus <span class="badge r">dès réception</span></div><div class="etape-desc">Lire le motif, corriger (code, surface, dent, radiographie manquante, coordination des prestations) et resoumettre. Si le refus est final, informer le patient et transférer le solde dans les comptes à recevoir.</div></div></div>
+    <div class="tip-box">💡 <strong>Refus les plus fréquents :</strong>
+      <ul><li>code d'acte ou surfaces incomplets;</li><li>radiographies ou photos non jointes;</li><li>prédétermination exigée mais non faite;</li><li>fréquence dépassée (examen, détartrage, radiographies);</li><li>coordination des prestations avec le régime du conjoint non indiquée.</li></ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Notes</div>
+    <textarea id="f_notes" placeholder="Numéros des assureurs, particularités, rappels pour l'équipe..."></textarea>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">© Gestion Mel 2026. Tous droits réservés. | gestionmel.com | Document administratif confidentiel</div>
+</div>
+<script>
+{
+const ASSUREURS = ['Sun Life','Manuvie','Canada Vie','Desjardins Assurances','Beneva','iA Groupe financier','Croix Bleue','GreenShield','Empire Vie','RCSD (Sun Life)','Autre'];
+const TYPES = ['Réclamation','Prédétermination','RCSD','Resoumission'];
+const STATUTS = ['À envoyer','Envoyée','Information demandée','Refusée','Payée partiellement','Payée','Fermée'];
+const REGLES = ['Payée','Fermée'];
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const num = v => { const x = parseFloat(String(v == null ? '' : v).replace(',', '.').replace(/\s|\$/g, '')); return isNaN(x) ? 0 : x; };
+const fmt = v => v.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
+const today = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const iso = d => d.toISOString().slice(0, 10);
+const addDays = (s, n) => { if (!s) return ''; const d = new Date(s + 'T00:00:00'); d.setDate(d.getDate() + n); return iso(d); };
+const days = s => s ? Math.floor((today() - new Date(s + 'T00:00:00')) / 86400000) : null;
+
+ASSUREURS.forEach(a => $('fAssureur').insertAdjacentHTML('beforeend', `<option>${a}</option>`));
+TYPES.forEach(t => $('fType').insertAdjacentHTML('beforeend', `<option>${t}</option>`));
+STATUTS.forEach(s => $('fStatut').insertAdjacentHTML('beforeend', `<option>${s}</option>`));
+
+let rec = [], nextId = 1, filtreKpi = '';
+const delai = () => Math.max(1, parseInt($('f_delai').value, 10) || 30);
+const nouvelle = () => ({ id: nextId++, dateService: iso(today()), patient: '', dossier: '', assureur: '', type: 'Réclamation', reclame: '', paye: '', envoi: '', statut: 'À envoyer', relance: '', notes: '' });
+const reste = r => Math.max(0, num(r.reclame) - num(r.paye));
+const ouverte = r => !REGLES.includes(r.statut);
+const aRelancer = r => ouverte(r) && r.statut !== 'À envoyer' && r.relance && r.relance <= iso(today());
+
+function renderKpis() {
+  const ouv = rec.filter(r => ouverte(r) && r.statut !== 'À envoyer' && r.statut !== 'Refusée');
+  const ouvAge = rec.filter(r => ouverte(r) && r.statut !== 'À envoyer');
+  const rel = rec.filter(aRelancer), ref = rec.filter(r => r.statut === 'Refusée'), env = rec.filter(r => r.statut === 'À envoyer');
+  const m = new Date().toISOString().slice(0, 7);
+  const payes = rec.filter(r => (r.statut === 'Payée' || r.statut === 'Payée partiellement') && (r.datePaiement || '').slice(0, 7) === m);
+  const k = (cls, f, v, mt, l) => `<button type="button" class="kpi ${cls}" data-k="${f}"><div class="v">${v}</div><div class="m">${mt}</div><div class="l">${l}</div></button>`;
+  $('kpis').innerHTML =
+    k('k-orange', 'envoyer', env.length, fmt(env.reduce((s, r) => s + num(r.reclame), 0)), 'À envoyer') +
+    k('k-blue', 'ouvertes', ouv.length, fmt(ouv.reduce((s, r) => s + reste(r), 0)), 'En attente de paiement') +
+    k('k-red', 'relancer', rel.length, fmt(rel.reduce((s, r) => s + reste(r), 0)), 'À relancer maintenant') +
+    k('k-purple', 'Refusée', ref.length, fmt(ref.reduce((s, r) => s + reste(r), 0)), 'Refus à traiter') +
+    k('k-green', 'payees', payes.length, fmt(payes.reduce((s, r) => s + num(r.paye), 0)), 'Payé ce mois-ci');
+  const b = [0, 0, 0, 0];
+  ouvAge.forEach(r => { const d = days(r.envoi); if (d == null) return; b[d <= 30 ? 0 : d <= 60 ? 1 : d <= 90 ? 2 : 3] += reste(r); });
+  $('aging').innerHTML = [['a1', '0 à 30 jours'], ['a2', '31 à 60 jours'], ['a3', '61 à 90 jours'], ['a4', 'Plus de 90 jours']].map(([c, l], i) => `<div class="age ${c}"><b>${fmt(b[i])}</b>${l}</div>`).join('');
+}
+
+function visible(r) {
+  const q = $('q').value.trim().toLowerCase(), fs = $('fStatut').value, fa = $('fAssureur').value, ft = $('fType').value;
+  if (q && ![r.patient, r.dossier, r.assureur, r.notes].join(' ').toLowerCase().includes(q)) return false;
+  if (fs === 'ouvertes' && !ouverte(r)) return false;
+  if (fs === 'relancer' && !aRelancer(r)) return false;
+  if (fs && fs !== 'ouvertes' && fs !== 'relancer' && r.statut !== fs) return false;
+  if (fa && r.assureur !== fa) return false;
+  if (ft && r.type !== ft) return false;
+  if (filtreKpi === 'envoyer' && r.statut !== 'À envoyer') return false;
+  if (filtreKpi === 'payees' && !(r.statut === 'Payée' || r.statut === 'Payée partiellement')) return false;
+  return true;
+}
+function renderBody() {
+  const lignes = rec.filter(visible).sort((a, b) => (ouverte(b) - ouverte(a)) || String(a.relance || '9').localeCompare(String(b.relance || '9')) || String(b.dateService).localeCompare(String(a.dateService)));
+  $('body').innerHTML = lignes.length ? lignes.map(r => {
+    const late = aRelancer(r), cls = late ? 'late' : (ouverte(r) ? '' : 'done');
+    const opt = (arr, v) => `<option value=""></option>` + arr.map(x => `<option${x === v ? ' selected' : ''}>${x}</option>`).join('');
+    return `<tr class="${cls}" data-id="${r.id}">
+      <td><input type="date" data-f="dateService" value="${esc(r.dateService)}"></td>
+      <td><input type="text" data-f="patient" value="${esc(r.patient)}" placeholder="Nom, prénom" style="min-width:130px"></td>
+      <td><input type="text" data-f="dossier" value="${esc(r.dossier)}" placeholder="No" style="min-width:60px"></td>
+      <td><select data-f="assureur" style="min-width:120px">${opt(ASSUREURS, r.assureur)}</select></td>
+      <td><select data-f="type" style="min-width:110px">${TYPES.map(x => `<option${x === r.type ? ' selected' : ''}>${x}</option>`).join('')}</select></td>
+      <td class="num"><input type="text" inputmode="decimal" data-f="reclame" value="${esc(r.reclame)}" placeholder="0,00" style="min-width:70px"></td>
+      <td class="num"><input type="text" inputmode="decimal" data-f="paye" value="${esc(r.paye)}" placeholder="0,00" style="min-width:70px"></td>
+      <td><input type="date" data-f="envoi" value="${esc(r.envoi)}"></td>
+      <td><select data-f="statut" class="stat-${esc(r.statut.split(' ')[0])}" style="min-width:130px">${STATUTS.map(x => `<option${x === r.statut ? ' selected' : ''}>${x}</option>`).join('')}</select></td>
+      <td><input type="date" data-f="relance" value="${esc(r.relance)}">${late ? '<div class="flag">À relancer</div>' : ''}</td>
+      <td><input type="text" data-f="notes" value="${esc(r.notes)}" placeholder="Motif, agent, suivi..." style="min-width:150px"></td>
+      <td class="no-print"><button type="button" class="del" data-del="${r.id}" title="Supprimer">✕</button></td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="12" class="empty">${rec.length ? 'Aucune réclamation ne correspond aux filtres.' : 'Aucune réclamation pour le moment. Cliquez sur « + Ajouter une réclamation ».'}</td></tr>`;
+}
+function tout() { renderKpis(); renderBody(); }
+
+$('body').addEventListener('change', ev => {
+  const tr = ev.target.closest('tr'), f = ev.target.dataset.f; if (!tr || !f) return;
+  const r = rec.find(x => x.id === +tr.dataset.id); if (!r) return;
+  r[f] = ev.target.value;
+  if (f === 'envoi' && r.envoi) { if (r.statut === 'À envoyer') r.statut = 'Envoyée'; r.relance = addDays(r.envoi, delai()); }
+  if (f === 'statut') {
+    if (r.statut === 'Envoyée' && !r.envoi) { r.envoi = iso(today()); r.relance = addDays(r.envoi, delai()); }
+    if (r.statut === 'Information demandée' || r.statut === 'Refusée') r.relance = addDays(iso(today()), 7);
+    if (r.statut === 'Payée' && !num(r.paye)) r.paye = r.reclame;
+    if (r.statut === 'Payée' || r.statut === 'Payée partiellement') r.datePaiement = iso(today());
+    if (REGLES.includes(r.statut)) r.relance = '';
+  }
+  if (f === 'paye' && num(r.paye) > 0 && ouverte(r) && r.statut !== 'Refusée') { r.statut = num(r.paye) >= num(r.reclame) ? 'Payée' : 'Payée partiellement'; r.datePaiement = iso(today()); if (r.statut === 'Payée') r.relance = ''; }
+  tout(); planifier();
+});
+$('body').addEventListener('click', ev => {
+  const id = ev.target.dataset.del; if (!id) return;
+  const r = rec.find(x => x.id === +id);
+  if (r && (r.patient || r.reclame) && !confirm('Supprimer la réclamation de ' + (r.patient || 'ce patient') + '?')) return;
+  rec = rec.filter(x => x.id !== +id); tout(); planifier();
+});
+$('kpis').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-k]'); if (!b) return;
+  const k = b.dataset.k;
+  $('fStatut').value = ''; filtreKpi = '';
+  if (k === 'ouvertes' || k === 'relancer' || k === 'Refusée') $('fStatut').value = k; else filtreKpi = k;
+  renderBody(); $('body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+['q', 'fStatut', 'fAssureur', 'fType'].forEach(id => $(id).addEventListener('input', () => { filtreKpi = ''; renderBody(); }));
+$('addRow').addEventListener('click', () => { rec.unshift(nouvelle()); filtreKpi = ''; ['q','fStatut','fAssureur','fType'].forEach(id => $(id).value = ''); tout(); planifier(); });
+['f_clinique', 'f_responsable', 'f_notes', 'f_delai'].forEach(id => $(id).addEventListener('input', planifier));
+
+/* ---------- Supabase ---------- */
+const SUPABASE_URL = 'https://ghwlhrhigkiuyhfbwnzh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_yhHJZkTrKuKawiX1JGOY8g_-V9eite5';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(s) { const el = $('syncStatus'); el.className = 'sync-status ' + s; el.textContent = s === 'ok' ? '✅ Sauvegardé' : s === 'saving' ? '⏳ Sauvegarde...' : '⚠️ Erreur de connexion'; }
+function planifier() { if (isLoading) return; setStatus('saving'); clearTimeout(saveTimer); saveTimer = setTimeout(sauver, 800); }
+async function sauver() {
+  try {
+    const { error } = await sb.rpc('save_reclamations', { p_owner_token: ownerToken, p_clinique: $('f_clinique').value || null, p_responsable: $('f_responsable').value || null, p_notes: JSON.stringify({ texte: $('f_notes').value, delai: delai() }), p_reclamations: rec });
+    if (error) throw error; setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function init() {
+  ownerToken = await gmAcces.ouvrir(sb, getOwnerToken(), 'secr');
+  try {
+    const { data, error } = await sb.rpc('get_reclamations', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length) {
+      const d = data[0];
+      rec = Array.isArray(d.reclamations) ? d.reclamations : [];
+      $('f_clinique').value = d.clinique || ''; $('f_responsable').value = d.responsable || '';
+      try { const n = JSON.parse(d.notes || '{}'); $('f_notes').value = n.texte || ''; if (n.delai) $('f_delai').value = n.delai; } catch (e) { $('f_notes').value = d.notes || ''; }
+      nextId = rec.reduce((m, r) => Math.max(m, (r.id || 0) + 1), 1);
+    } else {
+      await sb.rpc('create_reclamations', { p_owner_token: ownerToken });
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+  tout();
+  isLoading = false;
+}
+init();
+}
+</script>
+</body>
+</html>

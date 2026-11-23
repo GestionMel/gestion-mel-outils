@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Échelle salariale et masse salariale | Gestion Mel</title>
+<style>
+  :root { --blue: #1a6abf; --dark: #0d1b2a; --accent: #2196f3; --light: #f4f8ff; --border: #d0dff0; --text: #1a2535; --orange: #e67e22; --red: #c0392b; --green: #1a9e5a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef4fb; color: var(--text); }
+  .page-header { background: var(--dark); color: white; padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .page-header .brand { font-size: 1.5rem; font-weight: 700; }
+  .page-header .brand span { color: var(--accent); }
+  .container { max-width: 1040px; margin: 30px auto; background: white; border-radius: 10px; box-shadow: 0 4px 24px rgba(26,106,191,0.10); overflow: hidden; }
+  .doc-header { background: linear-gradient(135deg, var(--dark) 0%, #1a3a5c 100%); color: white; padding: 28px 36px; }
+  .doc-header h1 { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+  .doc-header p { font-size: 0.85rem; opacity: 0.8; }
+  .tabs { display: flex; gap: 4px; padding: 12px 36px 0; background: var(--light); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .tab { padding: 10px 18px; border: 1px solid transparent; border-bottom: none; border-radius: 8px 8px 0 0; background: none; font: 600 0.88rem 'Segoe UI', Arial, sans-serif; color: #5a6a80; cursor: pointer; }
+  .tab.active { background: white; border-color: var(--border); color: var(--blue); margin-bottom: -1px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .section { padding: 22px 36px; border-bottom: 1px solid var(--border); }
+  .section-title { font-size: 0.8rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; display: block; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .intro { font-size: .86rem; color: #3a4a5a; margin-bottom: 12px; line-height: 1.6; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  label { font-size: 0.73rem; font-weight: 600; color: #5a6a80; text-transform: uppercase; letter-spacing: 0.5px; }
+  input, select { border: 1.5px solid var(--border); border-radius: 6px; padding: 9px 12px; font-size: 0.92rem; font-family: inherit; color: var(--text); background: var(--light); }
+  input:focus, select:focus { outline: none; border-color: var(--accent); background: white; }
+  .tip-box { background: #e8f4fd; border-left: 4px solid var(--blue); border-radius: 4px; padding: 10px 14px; font-size: 0.83rem; color: #0d3a6e; margin-top: 12px; line-height: 1.6; }
+  .warn-box { background: #fff8e1; border-left: 4px solid var(--orange); border-radius: 4px; padding: 10px 14px; font-size: 0.83rem; color: #7a4400; margin-top: 12px; line-height: 1.6; }
+  .scale-card { border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .scale-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .scale-head h3 { font-size: 1rem; }
+  .scale-head .median { font-size: 1.5rem; font-weight: 700; color: var(--blue); white-space: nowrap; }
+  .scale-sub { font-size: 0.8rem; color: #5a6a80; margin-bottom: 14px; }
+  .bar { position: relative; height: 38px; margin: 26px 8px 34px; }
+  .bar .track { position: absolute; left: 0; right: 0; top: 14px; height: 10px; border-radius: 6px; background: linear-gradient(90deg, #fde2d6 0%, #d7ecfb 50%, #d4f1e2 100%); }
+  .bar .iqr { position: absolute; top: 10px; height: 18px; border-radius: 5px; background: rgba(26,106,191,0.25); border: 1.5px solid var(--blue); }
+  .bar .tick { position: absolute; top: 6px; width: 2px; height: 26px; background: var(--dark); }
+  .bar .tick span { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); font-size: 0.72rem; white-space: nowrap; color: #3a4a5a; }
+  .bar .tick b { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.68rem; white-space: nowrap; color: #5a6a80; font-weight: 600; }
+  .bar .you { position: absolute; top: 2px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 0 2px var(--orange); background: var(--orange); }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: var(--dark); color: white; padding: 9px 8px; font-size: 0.74rem; text-align: left; font-weight: 600; }
+  td { padding: 6px 8px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  td input, td select { width: 100%; padding: 6px 7px; font-size: 0.84rem; }
+  tr.total td { font-weight: 700; background: var(--light); }
+  .pos { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 10px; white-space: nowrap; }
+  .pos-bas { background: #fce4e1; color: var(--red); }
+  .pos-sous { background: #fdebd0; color: var(--orange); }
+  .pos-mil { background: #d7ecfb; color: var(--blue); }
+  .pos-haut { background: #d4f1e2; color: var(--green); }
+  .pos-na { background: #eef1f5; color: #5a6a80; }
+  .add-row { color: var(--blue); cursor: pointer; font-size: 0.85rem; font-weight: 600; padding: 10px 4px; background: none; border: none; font-family: inherit; }
+  .del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 1rem; padding: 4px; }
+  .scroll { overflow-x: auto; }
+  .kpis { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
+  .kpi { background: var(--light); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .kpi .v { font-size: 1.35rem; font-weight: 700; color: var(--blue); white-space: nowrap; }
+  .kpi .l { font-size: 0.75rem; color: #5a6a80; margin-top: 2px; }
+  .kpi .d { font-size: 0.78rem; font-weight: 600; margin-top: 4px; }
+  .up { color: var(--red); } .down { color: var(--green); }
+  .actions { padding: 24px 36px; background: var(--light); display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+  .btn { padding: 11px 24px; border-radius: 7px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; font-family: inherit; }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-secondary { background: white; color: var(--blue); border: 1.5px solid var(--blue); }
+  .btn-green { background: var(--green); color: white; }
+  .footer-note { text-align: center; font-size: 0.75rem; color: #8a9ab0; padding: 12px; line-height: 1.6; }
+  .small { font-size: .78rem; color: #5a6a80; }
+  .sync-status{position:fixed;bottom:16px;right:16px;padding:8px 14px;border-radius:20px;font-size:.76rem;font-weight:600;box-shadow:0 2px 10px rgba(0,0,0,.12);z-index:999;display:none;align-items:center;gap:6px;}
+  .sync-status.ok{display:flex;background:#f0fdf4;color:var(--green);border:1px solid rgba(26,158,90,.25);}
+  .sync-status.saving{display:flex;background:#fff8f0;color:var(--orange);border:1px solid rgba(230,126,34,.25);}
+  .sync-status.err{display:flex;background:#fef2f2;color:var(--red);border:1px solid rgba(192,57,43,.25);}
+  .msg { display: none; margin-top: 12px; padding: 10px 14px; border-radius: 6px; font-size: .85rem; }
+  .msg.ok { display: block; background: #f0fdf4; color: var(--green); border: 1px solid rgba(26,158,90,.25); }
+  @media (max-width: 760px) { .grid, .grid4, .kpis { grid-template-columns: minmax(0,1fr); } .section, .doc-header, .actions, .tabs { padding-left: 16px; padding-right: 16px; } .page-header { padding: 14px 16px; } .bar .tick b { display: none; } }
+  @media print { body { background: white; } .page-header, .actions, .no-print, .del, .add-row, .tabs, .sync-status { display: none !important; } .panel { display: block !important; } .container { box-shadow: none; margin: 0; max-width: none; } .section { break-inside: avoid; } input, select { border: none; background: transparent; padding: 2px; } }
+</style>
+<script>
+/* Gestion Mel : acces protege (mot de passe gestionnaire / code secretariat) */
+window.gmAcces = (function () {
+  const DUREE = 8 * 60 * 60 * 1000;
+  const CACHE = 'gm_acces_v1';
+  const ORIGINES = { fiche: "Fiche d'information employé", conge: 'Demande de congé', boite: 'Boîte à suggestions' };
+  const OUBLI = 'Mot de passe oublié? Écrivez à <strong>info@gestionmel.com</strong> en indiquant le nom de votre clinique.';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function css() {
+    if (document.getElementById('gmAccesCss')) return;
+    const s = document.createElement('style');
+    s.id = 'gmAccesCss';
+    s.textContent = `
+      html.gma-ouvert body > *:not(#gmAccesOverlay){visibility:hidden!important;}
+      #gmAccesOverlay{position:fixed;inset:0;z-index:100000;background:#eef4fb;display:flex;justify-content:center;align-items:flex-start;overflow:auto;padding:40px 16px;font-family:'Segoe UI',Arial,sans-serif;color:#1a2535;}
+      #gmAccesOverlay *{box-sizing:border-box;}
+      .gma-carte{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:0 6px 30px rgba(13,27,42,.12);overflow:hidden;}
+      .gma-tete{background:linear-gradient(135deg,#0d1b2a 0%,#1a3a5c 100%);color:#fff;padding:18px 24px;}
+      .gma-tete .gma-marque{font-size:.78rem;font-weight:700;opacity:.75;letter-spacing:.5px;margin-bottom:6px;}
+      .gma-tete .gma-marque span{color:#2196f3;}
+      .gma-tete h2{font-size:1.1rem;font-weight:700;margin:0;}
+      .gma-corps{padding:20px 24px 22px;}
+      .gma-texte{font-size:.86rem;line-height:1.6;color:#3a4a60;margin:0 0 14px;}
+      .gma-champ{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+      .gma-champ label{font-size:.72rem;font-weight:700;color:#5a6a80;text-transform:uppercase;letter-spacing:.4px;}
+      .gma-champ input{border:1.5px solid #d0dff0;border-radius:7px;padding:10px 12px;font-size:.95rem;font-family:inherit;background:#f4f8ff;color:#1a2535;width:100%;}
+      .gma-champ input:focus{outline:none;border-color:#2196f3;background:#fff;}
+      .gma-btn{display:block;width:100%;padding:11px 16px;border-radius:8px;border:none;background:#1a6abf;color:#fff;font-family:inherit;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;}
+      .gma-btn:hover{background:#155a9e;}
+      .gma-btn:disabled{opacity:.6;cursor:wait;}
+      .gma-btn2{display:block;width:100%;padding:10px 16px;border-radius:8px;border:1.5px solid #1a6abf;background:#fff;color:#1a6abf;font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;margin-top:10px;}
+      .gma-lien{background:none;border:none;color:#1a6abf;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;padding:6px 0;margin-top:6px;text-decoration:underline;}
+      .gma-err{display:none;background:#fef2f2;border:1px solid rgba(192,57,43,.25);color:#c0392b;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-ok{display:none;background:#f0fdf4;border:1px solid rgba(26,158,90,.25);color:#1a9e5a;border-radius:7px;padding:9px 12px;font-size:.83rem;margin-bottom:12px;line-height:1.5;}
+      .gma-astuce{background:#e8f4fd;border-left:3px solid #1a6abf;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#0d3a6e;margin-bottom:14px;line-height:1.55;}
+      .gma-avert{background:#fff8e1;border-left:3px solid #e67e22;border-radius:4px;padding:9px 12px;font-size:.8rem;color:#7a4400;margin-bottom:14px;line-height:1.55;}
+      .gma-pied{font-size:.74rem;color:#8a9ab0;text-align:center;margin-top:14px;line-height:1.6;}
+      .gma-sep{border:none;border-top:1px solid #d0dff0;margin:18px 0;}
+      .gma-sous{font-size:.78rem;font-weight:700;color:#1a6abf;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;}
+      #gmAccesBarre{position:fixed;left:16px;bottom:16px;z-index:9990;display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0dff0;border-radius:22px;padding:5px 6px 5px 12px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:'Segoe UI',Arial,sans-serif;font-size:.74rem;font-weight:600;color:#1a6abf;}
+      #gmAccesBarre button{border:1px solid #d0dff0;background:#f4f8ff;color:#1a2535;border-radius:16px;padding:4px 10px;font-family:inherit;font-size:.72rem;font-weight:600;cursor:pointer;}
+      #gmAccesBarre button:hover{border-color:#2196f3;color:#1a6abf;}
+      @media(max-width:600px){#gmAccesBarre>span{display:none;}#gmAccesBarre{padding:4px;left:8px;bottom:12px;}}
+      @media print{#gmAccesBarre,#gmAccesOverlay{display:none!important;}}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function lire() { try { return JSON.parse(sessionStorage.getItem(CACHE) || '{}') || {}; } catch (e) { return {}; } }
+  function ecrire(c) { try { sessionStorage.setItem(CACHE, JSON.stringify(c)); } catch (e) { } }
+  function enCache(owner) { const c = lire()[owner]; return (c && c.exp > Date.now()) ? c : null; }
+  function memoriser(owner, r) {
+    const c = lire(); const prev = (c[owner] && c[owner].exp > Date.now()) ? c[owner] : {};
+    const gest = r.cle_gest || prev.gest || null;
+    c[owner] = { gest, secr: r.cle_secr || prev.secr || null, estGest: !!gest, exp: Date.now() + DUREE };
+    ecrire(c);
+    return c[owner];
+  }
+  function oublier(owner) { const c = lire(); delete c[owner]; ecrire(c); }
+  function fixerOwner(owner) {
+    try { localStorage.setItem('gestionmel_clinique_token', owner); } catch (e) { }
+    const p = new URLSearchParams(location.search); p.set('clinique', owner);
+    history.replaceState({}, '', location.pathname + '?' + p.toString());
+  }
+
+  function ecran(html) {
+    css();
+    let o = document.getElementById('gmAccesOverlay');
+    if (!o) { o = document.createElement('div'); o.id = 'gmAccesOverlay'; document.body.appendChild(o); }
+    o.innerHTML = '<div class="gma-carte">' + html + '</div>';
+    document.documentElement.classList.add('gma-ouvert');
+    o.scrollTop = 0;
+    const premier = o.querySelector('input'); if (premier) setTimeout(() => premier.focus(), 50);
+    return o;
+  }
+  function fermer() {
+    const o = document.getElementById('gmAccesOverlay'); if (o) o.remove();
+    document.documentElement.classList.remove('gma-ouvert');
+  }
+  function tete(titre) {
+    return '<div class="gma-tete"><div class="gma-marque">Gestion<span>Mel</span></div><h2>' + titre + '</h2></div>';
+  }
+  function message(r) {
+    if (!r) return 'Une erreur est survenue. Vérifiez votre connexion et réessayez.';
+    switch (r.erreur) {
+      case 'mot_de_passe': return 'Mot de passe incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'code': return 'Code incorrect.' + (r.restants != null && r.restants <= 3 ? ' Il reste ' + r.restants + ' essai(s) avant un blocage de 15 minutes.' : '');
+      case 'bloque': return 'Trop d\'essais. Réessayez dans ' + (r.minutes || 15) + ' minute(s).';
+      case 'mot_de_passe_court': return 'Le mot de passe doit contenir au moins 6 caractères.';
+      case 'code_court': return 'Le code doit contenir au moins 4 caractères.';
+      case 'code_identique': return 'Le code du secrétariat doit être différent du mot de passe gestionnaire.';
+      case 'pas_de_mot_de_passe': return 'Aucun mot de passe gestionnaire n\'est encore créé pour cette clinique.';
+      case 'limite': return 'Limite atteinte. Réessayez un peu plus tard.';
+      default: return 'Une erreur est survenue. Réessayez.';
+    }
+  }
+  async function appel(sb, nom, args) {
+    try { const { data, error } = await sb.rpc(nom, args); if (error) throw error; return data; }
+    catch (e) { console.error(e); return null; }
+  }
+
+  // Formulaire generique : valider(valeurs) retourne {erreur} ou {resultat}
+  function formulaire({ titre, texte, astuce, avert, champs, bouton, alternative, pied, valider }) {
+    return new Promise(resolve => {
+      const html = tete(titre) + '<form class="gma-corps" autocomplete="off">' +
+        (texte ? '<p class="gma-texte">' + texte + '</p>' : '') +
+        (avert ? '<div class="gma-avert">' + avert + '</div>' : '') +
+        (astuce ? '<div class="gma-astuce">' + astuce + '</div>' : '') +
+        '<div class="gma-err"></div>' +
+        champs.map(c => '<div class="gma-champ"><label>' + c.label + '</label><input name="' + c.nom + '" type="' + (c.type || 'password') + '"' +
+          (c.type === 'text' ? ' autocomplete="off"' : ' autocomplete="new-password"') + (c.max ? ' maxlength="' + c.max + '"' : '') + '></div>').join('') +
+        '<button type="submit" class="gma-btn">' + bouton + '</button>' +
+        (alternative ? '<p class="gma-texte" style="margin:16px 0 0;">' + alternative.texte + '</p><button type="button" class="gma-btn2" data-alt="1">' + alternative.bouton + '</button>' : '') +
+        (pied ? '<div class="gma-pied">' + pied + '</div>' : '') +
+        '</form>';
+      const o = ecran(html);
+      const f = o.querySelector('form'), err = o.querySelector('.gma-err'), btn = o.querySelector('.gma-btn');
+      const alt = o.querySelector('[data-alt]');
+      if (alt) alt.onclick = () => resolve({ alt: true });
+      f.onsubmit = async ev => {
+        ev.preventDefault();
+        const v = {}; champs.forEach(c => { v[c.nom] = f.elements[c.nom].value; });
+        err.style.display = 'none'; btn.disabled = true;
+        const r = await valider(v);
+        btn.disabled = false;
+        if (r && r.erreur) { err.textContent = r.erreur; err.style.display = 'block'; const i = f.querySelector('input'); if (i) { i.select(); i.focus(); } return; }
+        resolve(r.resultat);
+      };
+    });
+  }
+
+  function maintenance() {
+    ecran(tete('⏳ Mise à jour en cours') + '<div class="gma-corps"><p class="gma-texte">Cet outil est en cours de mise à jour pour mieux protéger vos données. Revenez dans quelques minutes, puis rafraîchissez la page.</p><div class="gma-pied">Le problème persiste? Écrivez à <strong>info@gestionmel.com</strong>.</div></div>');
+  }
+
+  function formDefinir(sb, owner, niveau) {
+    return formulaire({
+      titre: '🔐 Créez votre mot de passe gestionnaire',
+      texte: 'Cet outil contient des informations confidentielles. Choisissez un mot de passe que vous seule connaîtrez (au moins 6 caractères). Il servira pour tous les outils réservés à la gestion.',
+      avert: '<strong>Réservé à la gestionnaire.</strong> Si vous n\'êtes pas la gestionnaire de la clinique, ne créez pas de mot de passe : demandez-lui d\'ouvrir cet outil une première fois.',
+      astuce: niveau === 'secr' ? 'Vous pourrez ensuite créer un code pour vos secrétaires avec le bouton <strong>🔑 Accès</strong> en bas à gauche.' : '',
+      champs: [{ nom: 'p1', label: 'Nouveau mot de passe' }, { nom: 'p2', label: 'Confirmer le mot de passe' }],
+      bouton: 'Créer le mot de passe et ouvrir',
+      pied: 'Notez-le dans un endroit sûr.',
+      valider: async v => {
+        if (v.p1.length < 6) return { erreur: message({ erreur: 'mot_de_passe_court' }) };
+        if (v.p1 !== v.p2) return { erreur: 'Les deux mots de passe ne sont pas identiques.' };
+        const r = await appel(sb, 'acces_definir', { p_owner_token: owner, p_pin: v.p1 });
+        if (r && r.erreur === 'deja_defini') { location.reload(); return { erreur: 'Un mot de passe existe déjà. Rechargement...' }; }
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function formOuvrir(sb, owner, niveau, etat, opts) {
+    const secr = niveau === 'secr';
+    let astuce = '';
+    if (etat.origine && ORIGINES[etat.origine]) astuce = 'Le mot de passe gestionnaire est le même que celui de l\'outil <strong>' + ORIGINES[etat.origine] + '</strong>.';
+    if (secr && !etat.code_secr) astuce += (astuce ? '<br>' : '') + 'Le code du secrétariat n\'est pas encore créé. La gestionnaire peut le créer avec le bouton <strong>🔑 Accès</strong>, une fois l\'outil ouvert.';
+    return formulaire({
+      titre: secr ? '🔒 Outil réservé au secrétariat' : '🔒 Outil réservé à la gestion',
+      texte: secr ? 'Entrez le code du secrétariat ou le mot de passe de la gestionnaire.' : 'Entrez le mot de passe gestionnaire pour ouvrir cet outil.',
+      astuce,
+      champs: [{ nom: 'p', label: secr ? 'Code ou mot de passe' : 'Mot de passe gestionnaire' }],
+      bouton: 'Ouvrir',
+      alternative: opts.alternative,
+      pied: OUBLI,
+      valider: async v => {
+        if (!v.p) return { erreur: secr ? 'Entrez votre code.' : 'Entrez votre mot de passe.' };
+        const r = await appel(sb, 'acces_ouvrir', { p_owner_token: owner, p_niveau: niveau, p_pin: v.p });
+        if (!r || !r.ok) return { erreur: message(r) };
+        return { resultat: r };
+      }
+    });
+  }
+
+  function barre(sb, owner, niveau) {
+    css();
+    const c = enCache(owner) || {};
+    let b = document.getElementById('gmAccesBarre');
+    if (!b) { b = document.createElement('div'); b.id = 'gmAccesBarre'; document.body.appendChild(b); }
+    b.innerHTML = '<span>' + (c.estGest ? '🔓 Gestion' : '🔓 Secrétariat') + '</span>' +
+      (c.estGest ? '<button type="button" data-a="acces" title="Mot de passe et code du secrétariat">🔑 Accès</button>' : '') +
+      '<button type="button" data-a="lock" title="Fermer la session sur cet appareil">🔒 Verrouiller</button>';
+    b.querySelector('[data-a="lock"]').onclick = () => { oublier(owner); location.reload(); };
+    const a = b.querySelector('[data-a="acces"]'); if (a) a.onclick = () => panneau(sb, owner);
+  }
+
+  async function panneau(sb, owner) {
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner }) || {};
+    const o = ecran(tete('🔑 Gérer les accès') + '<div class="gma-corps">' +
+      '<div class="gma-ok" id="gmaOk"></div><div class="gma-err" id="gmaErr"></div>' +
+      '<p class="gma-sous">Code du secrétariat</p>' +
+      '<p class="gma-texte">Les secrétaires entrent ce code pour ouvrir le Balancement de fin de journée, la Liste prioritaire, la Petite caisse et les Comptes à recevoir. Votre mot de passe gestionnaire fonctionne aussi dans ces outils.</p>' +
+      '<div class="gma-astuce" id="gmaEtatCode">' + (etat.code_secr ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.') + '</div>' +
+      '<div class="gma-champ"><label>Nouveau code du secrétariat (4 caractères et plus)</label><input id="gmaCode" type="text" autocomplete="off" maxlength="30"></div>' +
+      '<div class="gma-champ"><label>Votre mot de passe gestionnaire</label><input id="gmaPinC" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnCode">Enregistrer le code</button>' +
+      (etat.code_secr ? '<button type="button" class="gma-lien" id="gmaBtnRetirer">Retirer le code du secrétariat</button>' : '') +
+      '<hr class="gma-sep">' +
+      '<p class="gma-sous">Changer le mot de passe gestionnaire</p>' +
+      '<div class="gma-champ"><label>Mot de passe actuel</label><input id="gmaPinA" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Nouveau mot de passe (6 caractères et plus)</label><input id="gmaPinN" type="password" autocomplete="new-password"></div>' +
+      '<div class="gma-champ"><label>Confirmer le nouveau mot de passe</label><input id="gmaPinN2" type="password" autocomplete="new-password"></div>' +
+      '<button type="button" class="gma-btn" id="gmaBtnPin">Changer le mot de passe</button>' +
+      '<button type="button" class="gma-btn2" id="gmaFermer">Fermer</button>' +
+      '<div class="gma-pied">Le nouveau mot de passe s\'applique à tous les outils réservés à la gestion.</div>' +
+      '</div>');
+    const okEl = o.querySelector('#gmaOk'), errEl = o.querySelector('#gmaErr');
+    const montrer = (ok, txt) => { okEl.style.display = ok ? 'block' : 'none'; errEl.style.display = ok ? 'none' : 'block'; (ok ? okEl : errEl).textContent = txt; o.scrollTop = 0; };
+    o.querySelector('#gmaFermer').onclick = fermer;
+    const envoyerCode = async code => {
+      const pin = o.querySelector('#gmaPinC').value;
+      if (!pin) return montrer(false, 'Entrez votre mot de passe gestionnaire.');
+      if (code && code.trim().length < 4) return montrer(false, message({ erreur: 'code_court' }));
+      const r = await appel(sb, 'acces_code_secr', { p_owner_token: owner, p_pin: pin, p_code: code });
+      if (!r || !r.ok) return montrer(false, message(r));
+      memoriser(owner, r);
+      o.querySelector('#gmaCode').value = ''; o.querySelector('#gmaPinC').value = '';
+      o.querySelector('#gmaEtatCode').textContent = code ? '✅ Un code du secrétariat est actif.' : 'Aucun code du secrétariat pour le moment.';
+      montrer(true, code ? 'Code du secrétariat enregistré. Transmettez-le à vos secrétaires.' : 'Code du secrétariat retiré.');
+    };
+    o.querySelector('#gmaBtnCode').onclick = () => {
+      const code = o.querySelector('#gmaCode').value.trim();
+      if (!code) return montrer(false, 'Entrez le nouveau code du secrétariat.');
+      envoyerCode(code);
+    };
+    const ret = o.querySelector('#gmaBtnRetirer');
+    if (ret) ret.onclick = () => { if (confirm('Retirer le code? Les secrétaires ne pourront plus ouvrir les outils du secrétariat.')) envoyerCode(''); };
+    o.querySelector('#gmaBtnPin').onclick = async () => {
+      const a = o.querySelector('#gmaPinA').value, n = o.querySelector('#gmaPinN').value, n2 = o.querySelector('#gmaPinN2').value;
+      if (!a) return montrer(false, 'Entrez votre mot de passe actuel.');
+      if (n.length < 6) return montrer(false, message({ erreur: 'mot_de_passe_court' }));
+      if (n !== n2) return montrer(false, 'Les deux nouveaux mots de passe ne sont pas identiques.');
+      const r = await appel(sb, 'acces_changer_pin', { p_owner_token: owner, p_pin: a, p_nouveau: n });
+      if (!r || !r.ok) return montrer(false, r && r.erreur === 'code_identique' ? 'Le nouveau mot de passe doit être différent du code du secrétariat.' : message(r));
+      memoriser(owner, r);
+      ['#gmaPinA', '#gmaPinN', '#gmaPinN2'].forEach(s => { o.querySelector(s).value = ''; });
+      montrer(true, 'Mot de passe gestionnaire modifié.');
+    };
+  }
+
+  // Point d'entree : retourne la cle de l'outil (ou null si "alternative" choisie)
+  async function ouvrir(sb, owner, niveau, opts) {
+    opts = opts || {};
+    let c = enCache(owner);
+    if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    const etat = await appel(sb, 'acces_etat', { p_owner_token: owner });
+    if (!etat || !etat.ok) { maintenance(); return new Promise(() => { }); }
+    if (etat.owner_token && etat.owner_token !== owner) {
+      owner = etat.owner_token; fixerOwner(owner);
+      c = enCache(owner);
+      if (c && c[niveau]) { barre(sb, owner, niveau); return c[niveau]; }
+    }
+    const r = etat.configure ? await formOuvrir(sb, owner, niveau, etat, opts) : await formDefinir(sb, owner, niveau);
+    if (r && r.alt) { fermer(); return null; }
+    const m = memoriser(owner, r);
+    fermer();
+    barre(sb, owner, niveau);
+    return m[niveau];
+  }
+
+  function cle(owner, niveau) { const c = enCache(owner); return c ? c[niveau] || null : null; }
+
+  return { ouvrir, cle, esc, ecran, fermer, tete, message, appel, formulaire, oublier, maintenance, OUBLI };
+})();
+</script>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div class="sync-status" id="syncStatus">✅ Sauvegardé</div>
+<div class="page-header">
+  <div class="brand">Gestion<span>Mel</span></div>
+  <div>Ressources humaines : Rémunération</div>
+</div>
+<div class="container">
+  <div class="doc-header">
+    <h1>Échelle salariale et masse salariale</h1>
+    <p>Situez vos salaires par rapport au marché de votre région, calculez le coût réel de votre équipe et suivez l'évolution d'une année à l'autre</p>
+  </div>
+  <div class="tabs no-print" role="tablist">
+    <button type="button" class="tab active" data-tab="marche">1. Marché</button>
+    <button type="button" class="tab" data-tab="equipe">2. Mon équipe</button>
+    <button type="button" class="tab" data-tab="masse">3. Masse salariale</button>
+    <button type="button" class="tab" data-tab="histo">4. Historique</button>
+  </div>
+
+  <!-- ============ 1. MARCHÉ ============ -->
+  <div class="panel active" id="p-marche">
+    <div class="section">
+      <div class="section-title">Votre clinique</div>
+      <div class="grid">
+        <div class="field"><label for="f_clinique">Nom de la clinique</label><input type="text" id="f_clinique" placeholder="Clinique dentaire ..."></div>
+        <div class="field"><label for="f_region">Région</label><select id="f_region"></select></div>
+        <div class="field"><label for="f_heures">Heures par semaine (par défaut)</label><input type="number" id="f_heures" min="1" max="60" step="0.5" value="35"></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">Échelle pour un poste</div>
+      <div class="grid" style="margin-bottom:16px">
+        <div class="field"><label for="f_poste">Poste</label><select id="f_poste"></select></div>
+        <div class="field"><label for="f_taux">Taux horaire à situer (facultatif)</label><input type="number" id="f_taux" min="0" step="0.01" placeholder="Ex. : 26,50"></div>
+      </div>
+      <div id="scaleBox"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Tous les postes dans la région</div>
+      <div class="scroll"><table>
+        <thead><tr><th>Poste</th><th class="num">Bas</th><th class="num">1er quartile</th><th class="num">Médian</th><th class="num">3e quartile</th><th class="num">Élevé</th><th class="num">Médian annuel*</th></tr></thead>
+        <tbody id="allBody"></tbody>
+      </table></div>
+      <p class="small" style="margin-top:8px">* Taux médian multiplié par vos heures par semaine et par 52 semaines.</p>
+      <div class="tip-box">
+        <strong>Bas :</strong> 10 % des personnes dans ce poste gagnent ce taux ou moins. <strong>1er quartile :</strong> 25 %. <strong>Médian :</strong> la moitié gagne plus, la moitié gagne moins; c'est le meilleur repère du marché. <strong>3e quartile :</strong> 75 %. <strong>Élevé :</strong> seulement 10 % gagnent plus.<br>
+        💡 Une employée d'expérience, polyvalente ou formatrice se situe normalement entre le médian et le 3e quartile. Une nouvelle employée commence souvent entre le 1er quartile et le médian. Un taux sous le 1er quartile augmente le risque de départ.
+      </div>
+      <div class="warn-box"><strong>À savoir :</strong> ces salaires couvrent l'ensemble de chaque profession (cliniques, hôpitaux, autres milieux). Pour la secrétaire dentaire, la catégorie utilisée est celle des adjointes administratives médicales; pour la coordonnatrice ou la gestionnaire, celle des agentes d'administration. Quand une région n'a pas assez de données, l'outil affiche les valeurs de l'ensemble du Québec et le signale.</div>
+    </div>
+  </div>
+
+  <!-- ============ 2. MON ÉQUIPE ============ -->
+  <div class="panel" id="p-equipe">
+    <div class="section">
+      <div class="section-title">Mon équipe</div>
+      <p class="intro">Inscrivez chaque employé avec son taux horaire actuel et ses heures par semaine. Mettez la liste à jour à chaque embauche, départ ou augmentation : tout est sauvegardé automatiquement. La colonne <strong>Nouveau taux</strong> sert à préparer les évaluations salariales : son effet apparaît dans l'onglet Masse salariale.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Employé</th><th>Poste</th><th class="num">Taux actuel</th><th class="num">H/sem.</th><th class="num">Salaire annuel</th><th class="num">Médian marché</th><th>Position</th><th class="num">Nouveau taux</th><th class="no-print"></th></tr></thead>
+        <tbody id="teamBody"></tbody>
+      </table></div>
+      <button type="button" class="add-row" id="addRow">+ Ajouter un employé (embauche)</button>
+      <div class="tip-box">Pour un départ, retirez simplement l'employé avec le ✕. Son historique reste dans les portraits annuels déjà enregistrés.</div>
+    </div>
+  </div>
+
+  <!-- ============ 3. MASSE SALARIALE ============ -->
+  <div class="panel" id="p-masse">
+    <div class="section">
+      <div class="section-title">Coût annuel de l'équipe</div>
+      <div class="kpis" id="kpis"></div>
+      <div class="scroll"><table>
+        <thead><tr><th>Élément</th><th class="num">Taux actuels</th><th class="num">Avec les nouveaux taux</th><th class="num">Différence</th></tr></thead>
+        <tbody id="masseBody"></tbody>
+      </table></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Par poste</div>
+      <div class="scroll"><table>
+        <thead><tr><th>Poste</th><th class="num">Employés</th><th class="num">Heures / sem.</th><th class="num">Taux moyen</th><th class="num">Salaires annuels</th><th class="num">Coût total employeur</th></tr></thead>
+        <tbody id="posteBody"></tbody>
+      </table></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Cotisations de l'employeur (Québec, 2026)</div>
+      <p class="intro">Les taux 2026 sont déjà inscrits. Complétez votre taux <strong>CNESST</strong> (sur votre avis de cotisation) et le pourcentage de vos <strong>avantages sociaux</strong> (assurance collective, REER collectif, primes, etc.).</p>
+      <div class="grid4">
+        <div class="field"><label for="t_rrq">RRQ (%)</label><input type="number" step="0.001" id="t_rrq"></div>
+        <div class="field"><label for="t_rrq2">RRQ 2e suppl. (%)</label><input type="number" step="0.001" id="t_rrq2"></div>
+        <div class="field"><label for="t_ae">Assurance-emploi (%)</label><input type="number" step="0.001" id="t_ae"></div>
+        <div class="field"><label for="t_rqap">RQAP (%)</label><input type="number" step="0.001" id="t_rqap"></div>
+        <div class="field"><label for="t_fss">FSS (%)</label><input type="number" step="0.001" id="t_fss"></div>
+        <div class="field"><label for="t_cnt">Normes du travail (%)</label><input type="number" step="0.001" id="t_cnt"></div>
+        <div class="field"><label for="t_cnesst">CNESST (%)</label><input type="number" step="0.001" id="t_cnesst" placeholder="Votre taux"></div>
+        <div class="field"><label for="t_av">Avantages sociaux (%)</label><input type="number" step="0.1" id="t_av" placeholder="0"></div>
+      </div>
+      <p class="small" style="margin-top:10px">Maximums 2026 utilisés : RRQ, exemption de 3 500 $ et maximum des gains admissibles de 74 600 $, puis 2e cotisation supplémentaire jusqu'à 85 000 $. Assurance-emploi : 68 900 $. RQAP, Normes du travail et CNESST : 103 000 $. FSS : 1,65 % si votre masse salariale totale est de 1 000 000 $ ou moins. Si la masse salariale dépasse 2 000 000 $, ajoutez la contribution de 1 % à la formation de la main-d'œuvre.</p>
+      <button type="button" class="add-row no-print" id="btnTauxDefaut">↺ Remettre les taux 2026</button>
+    </div>
+  </div>
+
+  <!-- ============ 4. HISTORIQUE ============ -->
+  <div class="panel" id="p-histo">
+    <div class="section">
+      <div class="section-title">Portrait annuel</div>
+      <p class="intro">Une fois par année (par exemple après les évaluations salariales), enregistrez le portrait de votre équipe. L'outil garde chaque année pour comparer l'évolution des salaires et de la masse salariale.</p>
+      <div class="grid" style="align-items:end">
+        <div class="field"><label for="h_annee">Année du portrait</label><input type="number" id="h_annee" min="2000" max="2100"></div>
+        <div class="field"><button type="button" class="btn btn-green" id="btnSnap">💾 Enregistrer le portrait de l'année</button></div>
+      </div>
+      <div class="msg" id="snapMsg"></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Évolution de la masse salariale</div>
+      <div class="scroll"><table>
+        <thead><tr><th>Année</th><th class="num">Employés</th><th class="num">Salaires annuels</th><th class="num">Coût total employeur</th><th class="num">Variation</th><th class="no-print"></th></tr></thead>
+        <tbody id="histoBody"></tbody>
+      </table></div>
+    </div>
+    <div class="section">
+      <div class="section-title">Évolution des taux par employé</div>
+      <div class="scroll" id="evoBox"></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+  </div>
+  <div class="footer-note">Salaires du marché : Guichet-Emplois, Emploi et Développement social Canada, salaires 2026 (période de référence 2024-2025), publiés le 18 novembre 2026. Cotisations : Revenu Québec, taux 2026. Mise à jour chaque année par Gestion Mel.<br>© Gestion Mel 2026. Tous droits réservés. | gestionmel.com | Document confidentiel</div>
+</div>
+<script>
+{
+/* ---------- Données du marché ---------- */
+const REGIONS = [['QC','Ensemble du Québec'],['20','Capitale-Nationale'],['40','Montréal'],['45','Laval'],['35','Montérégie'],['55','Laurentides'],['50','Lanaudière'],['25','Chaudière-Appalaches'],['30','Estrie'],['33','Centre-du-Québec'],['70','Mauricie'],['60','Outaouais'],['75','Saguenay–Lac-Saint-Jean'],['15','Bas-Saint-Laurent'],['10','Gaspésie–Îles-de-la-Madeleine'],['65','Abitibi-Témiscamingue'],['80','Côte-Nord'],['90','Nord-du-Québec']];
+const POSTES = [
+  ['33100','Assistante dentaire','CNP 33100 : assistants et assistantes dentaires'],
+  ['32111','Hygiéniste dentaire','CNP 32111 : hygiénistes et thérapeutes dentaires'],
+  ['13112','Secrétaire dentaire','CNP 13112 : adjointes administratives médicales'],
+  ['14101','Réceptionniste','CNP 14101 : réceptionnistes'],
+  ['13100','Coordonnatrice ou gestionnaire','CNP 13100 : agentes d\'administration'],
+  ['autre','Autre poste','Aucune donnée de marché']
+];
+const RAW = `13100,QC,23,30,43,25.44,35.5;13100,10,23,28.33,37.7,26,31.75;13100,15,22.28,28.05,41.61,25,34.1;13100,20,24.73,30.22,42.06,25.6,35.99;13100,25,25,31.87,43.96,27.5,35.71;13100,30,21.85,27.41,38.41,24.36,32.32;13100,33,21.75,27,36.4,24,31;13100,35,23.64,28,42,25.82,35;13100,40,22,27.77,41.41,24.04,35;13100,45,22.85,30,40.54,25.48,36.84;13100,50,23,25.44,42.31,24.73,34.22;13100,55,22.08,29,43,26.92,35.22;13100,60,25,34.87,49.23,27,41.21;13100,65,22.93,31.64,51.81,,;13100,70,23.28,32.13,44.28,,;13100,75,23.25,30,40,25,33.28;13100,80,23.72,31.62,46.34,,;13100,90,,,,,;13112,QC,20,25,29,22.36,27;13112,10,20,26,33,22.12,28.84;13112,15,21,24,25,23,25;13112,20,22,26,30,24,26.8;13112,25,21,26.53,30,23.35,27;13112,30,19.23,24.75,28,21,27;13112,33,21.85,26,27,23,27;13112,35,20,25,28.38,23,26.71;13112,40,19,24,29,21.3,26;13112,45,19,24.91,30,22.31,27;13112,50,20,25,27.35,24.3,26.3;13112,55,20,25,28,23.35,27;13112,60,19,24,30.86,21,28;13112,65,20,24,26,21.75,25.44;13112,70,21,25,27,22,26;13112,75,20,25,27.7,21.55,27;13112,80,21.82,28.39,31.94,,;13112,90,,,,,;14101,QC,16.6,20.5,27.2,18.5,24.72;14101,10,17.5,20.96,25,18.5,22.72;14101,15,17.66,21.95,25.28,,;14101,20,17.27,20.5,28,19.23,25;14101,25,16.6,22,27,19,26.14;14101,30,16.6,21,27.5,18,23.55;14101,33,18,21.62,27,19.75,24.88;14101,35,17.5,20,25.96,18.5,24.72;14101,40,16.6,21,27.44,17.05,24.5;14101,45,17.5,21.53,28.17,19.7,25;14101,50,18.3,21.44,27.63,,;14101,55,18,20,31,19.5,28.84;14101,60,16.6,20.11,28.49,,;14101,65,17.17,21.83,26.9,,;14101,70,17.25,19,27,17.25,20.5;14101,75,16.6,20,25,17,23;14101,80,17.49,22.75,28.04,,;14101,90,,,,,;32111,QC,35,44.1,52,38,49;32111,10,,,,,;32111,15,,,,,;32111,20,35,40,43.64,38,43;32111,25,36,41,45.5,38.5,43;32111,30,,,,,;32111,33,,,,,;32111,35,36.85,43,50,40,46;32111,40,,,,,;32111,45,20,42,49,38,44.5;32111,50,37.48,42,49.62,40,46;32111,55,37.77,44.59,50.98,41,48;32111,60,35.67,47,51.75,44.1,48;32111,65,,,,,;32111,70,37,39,40.45,37,39.5;32111,75,30,33.25,41,31,37.5;32111,80,,,,,;32111,90,,,,,;33100,QC,22,27,32,24.5,30;33100,10,,,,,;33100,15,22,25.08,30,23,27;33100,20,23,28,32.29,25,30.08;33100,25,23.32,27.42,32.88,25,30;33100,30,21.75,26.28,30.25,23.5,28.67;33100,33,21.85,25.2,28.5,23,27.3;33100,35,23,27.5,32.35,25,30;33100,40,21,25.4,31,23,28;33100,45,23,28,34,25,30;33100,50,23,27.02,31.31,25,30;33100,55,23,27.5,32,25,30;33100,60,22,29.18,36,26.25,32.22;33100,65,,,,,;33100,70,22,27,31.1,24.03,30;33100,75,21,25,29.11,23,27.04;33100,80,,,,,;33100,90,,,,,`;
+const DATA = {};
+RAW.split(';').forEach(l => { const [c,r,lo,me,hi,q1,q3] = l.split(','); const n = v => v === '' ? null : parseFloat(v); (DATA[c] = DATA[c] || {})[r] = { lo: n(lo), me: n(me), hi: n(hi), q1: n(q1), q3: n(q3) }; });
+
+/* ---------- Cotisations 2026 ---------- */
+const TAUX_DEFAUT = { rrq: 6.30, rrq2: 4.00, ae: 1.82, rqap: 0.602, fss: 1.65, cnt: 0.06, cnesst: '', av: '' };
+const MAX = { exempRRQ: 3500, mga: 74600, mga2: 85000, ae: 68900, rqap: 103000 };
+
+const $ = id => document.getElementById(id);
+const num = v => { const x = parseFloat(String(v == null ? '' : v).replace(',', '.').replace(/\s/g, '')); return isNaN(x) ? null : x; };
+const fmt = v => v == null ? 'n.d.' : v.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
+const fmt0 = v => v == null ? 'n.d.' : Math.round(v).toLocaleString('fr-CA') + ' $';
+const pct = v => (v >= 0 ? '+' : '') + v.toLocaleString('fr-CA', { maximumFractionDigits: 1 }) + ' %';
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+const nomPoste = c => (POSTES.find(p => p[0] === c) || ['', 'Autre poste'])[1];
+
+function get(code, reg) {
+  const d = DATA[code]; if (!d) return { repli: false };
+  const r = d[reg];
+  if (r && r.me != null) return { ...r, repli: false };
+  return { ...(d.QC || {}), repli: reg !== 'QC' };
+}
+function position(t, s) {
+  if (t == null || s.me == null) return ['pos-na', t == null ? 'À compléter' : 'Sans repère'];
+  const q1 = s.q1 != null ? s.q1 : (s.lo + s.me) / 2, q3 = s.q3 != null ? s.q3 : (s.me + s.hi) / 2;
+  if (t < q1) return ['pos-bas', 'Sous le 1er quartile'];
+  if (t < s.me) return ['pos-sous', 'Sous le médian'];
+  if (t <= q3) return ['pos-mil', 'Au-dessus du médian'];
+  return ['pos-haut', 'Haut du marché'];
+}
+
+/* ---------- État ---------- */
+let etat = { clinique: '', region: '20', heures: 35, taux: { ...TAUX_DEFAUT }, equipe: [] };
+let historique = [];
+let nextId = 1;
+const nouvel = () => ({ id: nextId++, nom: '', poste: '33100', taux: '', heures: '', nouveau: '' });
+const heuresDef = () => num(etat.heures) || 35;
+
+/* ---------- Calculs ---------- */
+function coutEmploye(salaire, T) {
+  const t = k => (num(T[k]) || 0) / 100;
+  const rrq = t('rrq') * Math.max(0, Math.min(salaire, MAX.mga) - MAX.exempRRQ) + t('rrq2') * Math.max(0, Math.min(salaire, MAX.mga2) - MAX.mga);
+  const ae = t('ae') * Math.min(salaire, MAX.ae);
+  const rqap = t('rqap') * Math.min(salaire, MAX.rqap);
+  const cnt = t('cnt') * Math.min(salaire, MAX.rqap);
+  const cnesst = t('cnesst') * Math.min(salaire, MAX.rqap);
+  const fss = t('fss') * salaire;
+  const av = t('av') * salaire;
+  return { salaire, rrq, ae, rqap, cnt, cnesst, fss, av, total: salaire + rrq + ae + rqap + cnt + cnesst + fss + av };
+}
+function totaux(utiliserNouveau) {
+  const s = { salaire: 0, rrq: 0, ae: 0, rqap: 0, cnt: 0, cnesst: 0, fss: 0, av: 0, total: 0, nb: 0, heures: 0 };
+  etat.equipe.forEach(e => {
+    const taux = utiliserNouveau && num(e.nouveau) != null ? num(e.nouveau) : num(e.taux);
+    if (taux == null) return;
+    const h = num(e.heures) || heuresDef();
+    const c = coutEmploye(taux * h * 52, etat.taux);
+    Object.keys(c).forEach(k => s[k] += c[k]); s.nb++; s.heures += h;
+  });
+  return s;
+}
+
+/* ---------- Rendu : marché ---------- */
+REGIONS.forEach(([c, n]) => $('f_region').insertAdjacentHTML('beforeend', `<option value="${c}">${n}</option>`));
+POSTES.filter(p => p[0] !== 'autre').forEach(([c, n]) => $('f_poste').insertAdjacentHTML('beforeend', `<option value="${c}">${n}</option>`));
+
+function renderScale() {
+  const reg = etat.region, code = $('f_poste').value;
+  const s = get(code, reg), p = POSTES.find(x => x[0] === code), rn = REGIONS.find(x => x[0] === reg)[1];
+  if (s.me == null) { $('scaleBox').innerHTML = '<p>Données non disponibles.</p>'; return; }
+  const min = s.lo != null ? s.lo : s.me * 0.8, max = s.hi != null ? s.hi : s.me * 1.2;
+  const span = Math.max(max - min, 0.01), pc = v => Math.min(100, Math.max(0, (v - min) / span * 100));
+  const t = num($('f_taux').value);
+  let ticks = [['Bas', s.lo], ['Médian', s.me], ['Élevé', s.hi]];
+  if (s.q1 != null) ticks.splice(1, 0, ['Q1', s.q1]);
+  if (s.q3 != null) ticks.splice(ticks.length - 1, 0, ['Q3', s.q3]);
+  const [cls, lab] = position(t, s);
+  $('scaleBox').innerHTML = `<div class="scale-card">
+    <div class="scale-head"><h3>${esc(p[1])} : ${esc(rn)}</h3><div class="median">${fmt(s.me)} / h</div></div>
+    <div class="scale-sub">${esc(p[2])}. Médian annuel estimé : ${fmt0(s.me * heuresDef() * 52)} pour ${heuresDef().toLocaleString('fr-CA')} h par semaine.</div>
+    <div class="bar"><div class="track"></div>
+      ${s.q1 != null && s.q3 != null ? `<div class="iqr" style="left:${pc(s.q1)}%;width:${Math.max(pc(s.q3) - pc(s.q1), 1)}%"></div>` : ''}
+      ${ticks.filter(x => x[1] != null).map(([n, v]) => `<div class="tick" style="left:${pc(v)}%"><b>${n}</b><span>${fmt(v)}</span></div>`).join('')}
+      ${t != null && t > 0 ? `<div class="you" style="left:${pc(t)}%" title="${fmt(t)}"></div>` : ''}
+    </div>
+    ${t != null && t > 0 ? `<p style="font-size:.88rem">Un taux de <strong>${fmt(t)}</strong> : <span class="pos ${cls}">${lab}</span> (écart de ${(t - s.me >= 0 ? '+' : '') + fmt(t - s.me)} par rapport au médian).</p>` : ''}
+    ${s.repli ? `<div class="warn-box">Pas assez de données pour ce poste dans la région ${esc(rn)} : les valeurs affichées sont celles de l'ensemble du Québec.</div>` : ''}
+  </div>`;
+}
+function renderAll() {
+  $('allBody').innerHTML = POSTES.filter(p => p[0] !== 'autre').map(([c, n]) => {
+    const s = get(c, etat.region);
+    return `<tr><td>${esc(n)}${s.repli ? ' <span class="small">(Québec)</span>' : ''}</td><td class="num">${fmt(s.lo)}</td><td class="num">${fmt(s.q1)}</td><td class="num"><strong>${fmt(s.me)}</strong></td><td class="num">${fmt(s.q3)}</td><td class="num">${fmt(s.hi)}</td><td class="num">${s.me != null ? fmt0(s.me * heuresDef() * 52) : 'n.d.'}</td></tr>`;
+  }).join('');
+}
+
+/* ---------- Rendu : équipe ---------- */
+function renderTeam() {
+  $('teamBody').innerHTML = etat.equipe.map(e => {
+    const s = get(e.poste, etat.region), t = num(e.taux), h = num(e.heures) || heuresDef();
+    const [cls, lab] = position(t, s);
+    return `<tr data-id="${e.id}">
+      <td><input type="text" data-f="nom" value="${esc(e.nom)}" placeholder="Prénom et nom" style="min-width:140px"></td>
+      <td><select data-f="poste" style="min-width:170px">${POSTES.map(([c, n]) => `<option value="${c}"${e.poste === c ? ' selected' : ''}>${n}</option>`).join('')}</select></td>
+      <td class="num"><input type="text" inputmode="decimal" data-f="taux" value="${esc(e.taux)}" placeholder="0,00" style="text-align:right;min-width:80px"></td>
+      <td class="num"><input type="text" inputmode="decimal" data-f="heures" value="${esc(e.heures)}" placeholder="${heuresDef()}" style="text-align:right;min-width:56px"></td>
+      <td class="num">${t != null ? fmt0(t * h * 52) : ''}</td>
+      <td class="num">${s.me != null ? fmt(s.me) : '-'}</td>
+      <td><span class="pos ${cls}">${lab}</span></td>
+      <td class="num"><input type="text" inputmode="decimal" data-f="nouveau" value="${esc(e.nouveau)}" placeholder="-" style="text-align:right;min-width:80px"></td>
+      <td class="no-print"><button type="button" class="del" data-del="${e.id}" title="Retirer (départ)">✕</button></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ---------- Rendu : masse salariale ---------- */
+function renderMasse() {
+  const a = totaux(false), n = totaux(true);
+  const diff = n.total - a.total, diffPct = a.total ? diff / a.total * 100 : 0;
+  $('kpis').innerHTML = `
+    <div class="kpi"><div class="v">${a.nb}</div><div class="l">Employés inscrits</div></div>
+    <div class="kpi"><div class="v">${fmt0(a.salaire)}</div><div class="l">Salaires annuels</div></div>
+    <div class="kpi"><div class="v">${fmt0(a.total)}</div><div class="l">Coût total employeur</div>${diff ? `<div class="d ${diff > 0 ? 'up' : 'down'}">${fmt0(n.total)} avec les nouveaux taux (${pct(diffPct)})</div>` : ''}</div>
+    <div class="kpi"><div class="v">${a.heures ? fmt(a.total / (a.heures * 52)) : 'n.d.'}</div><div class="l">Coût moyen par heure payée</div></div>`;
+  const lignes = [['Salaires annuels', 'salaire'], ['RRQ', 'rrq'], ['Assurance-emploi', 'ae'], ['RQAP', 'rqap'], ['FSS', 'fss'], ['Normes du travail', 'cnt'], ['CNESST', 'cnesst'], ['Avantages sociaux', 'av']];
+  $('masseBody').innerHTML = lignes.map(([l, k]) => `<tr><td>${l}</td><td class="num">${fmt0(a[k])}</td><td class="num">${fmt0(n[k])}</td><td class="num">${n[k] - a[k] ? fmt0(n[k] - a[k]) : '-'}</td></tr>`).join('') +
+    `<tr class="total"><td>Coût total employeur</td><td class="num">${fmt0(a.total)}</td><td class="num">${fmt0(n.total)}</td><td class="num">${diff ? fmt0(diff) : '-'}</td></tr>`;
+  const parPoste = {};
+  etat.equipe.forEach(e => { const t = num(e.taux); if (t == null) return; const h = num(e.heures) || heuresDef(); const p = parPoste[e.poste] = parPoste[e.poste] || { nb: 0, h: 0, sal: 0, tot: 0 }; const c = coutEmploye(t * h * 52, etat.taux); p.nb++; p.h += h; p.sal += c.salaire; p.tot += c.total; });
+  const keys = Object.keys(parPoste);
+  $('posteBody').innerHTML = keys.length ? keys.map(k => { const p = parPoste[k]; return `<tr><td>${esc(nomPoste(k))}</td><td class="num">${p.nb}</td><td class="num">${p.h.toLocaleString('fr-CA')}</td><td class="num">${fmt(p.sal / (p.h * 52))}</td><td class="num">${fmt0(p.sal)}</td><td class="num">${fmt0(p.tot)}</td></tr>`; }).join('') : '<tr><td colspan="6" class="small">Inscrivez votre équipe dans l\'onglet Mon équipe.</td></tr>';
+}
+
+/* ---------- Rendu : historique ---------- */
+function renderHisto() {
+  const h = [...historique].sort((x, y) => x.annee - y.annee);
+  $('histoBody').innerHTML = h.length ? h.map((p, i) => {
+    const prev = h[i - 1]; const v = prev && prev.totaux.total ? (p.totaux.total - prev.totaux.total) / prev.totaux.total * 100 : null;
+    return `<tr><td><strong>${p.annee}</strong> <span class="small">(${esc(p.date || '')})</span></td><td class="num">${p.totaux.nb}</td><td class="num">${fmt0(p.totaux.salaire)}</td><td class="num">${fmt0(p.totaux.total)}</td><td class="num">${v == null ? '-' : `<span class="${v > 0 ? 'up' : 'down'}">${pct(v)}</span>`}</td><td class="no-print"><button type="button" class="del" data-hdel="${p.annee}" title="Supprimer ce portrait">✕</button></td></tr>`;
+  }).join('') : '<tr><td colspan="6" class="small">Aucun portrait enregistré pour le moment.</td></tr>';
+  if (!h.length) { $('evoBox').innerHTML = '<p class="small">Les taux de chaque employé s\'afficheront ici après le premier portrait.</p>'; return; }
+  const noms = [];
+  h.forEach(p => p.equipe.forEach(e => { const k = (e.nom || '').trim() || '(sans nom)'; if (!noms.some(x => x.k === k)) noms.push({ k, poste: e.poste }); }));
+  $('evoBox').innerHTML = `<table><thead><tr><th>Employé</th><th>Poste</th>${h.map(p => `<th class="num">${p.annee}</th>`).join('')}<th class="num">Variation totale</th></tr></thead><tbody>${noms.map(({ k, poste }) => {
+    const vals = h.map(p => { const e = p.equipe.find(x => ((x.nom || '').trim() || '(sans nom)') === k); return e ? num(e.taux) : null; });
+    const pr = vals.find(v => v != null), de = [...vals].reverse().find(v => v != null);
+    return `<tr><td>${esc(k)}</td><td>${esc(nomPoste(poste))}</td>${vals.map(v => `<td class="num">${v == null ? '-' : fmt(v)}</td>`).join('')}<td class="num">${pr && de && pr !== de ? pct((de - pr) / pr * 100) : '-'}</td></tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function renderTout() { renderScale(); renderAll(); renderTeam(); renderMasse(); renderHisto(); }
+
+/* ---------- Événements ---------- */
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x === b));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'p-' + b.dataset.tab));
+}));
+$('f_clinique').addEventListener('input', () => { etat.clinique = $('f_clinique').value; planifier(); });
+$('f_region').addEventListener('change', () => { etat.region = $('f_region').value; renderTout(); planifier(); });
+$('f_heures').addEventListener('input', () => { etat.heures = $('f_heures').value; renderScale(); renderAll(); renderMasse(); planifier(); });
+$('f_heures').addEventListener('change', renderTeam);
+$('f_poste').addEventListener('change', renderScale);
+$('f_taux').addEventListener('input', renderScale);
+$('teamBody').addEventListener('change', ev => {
+  const tr = ev.target.closest('tr'), f = ev.target.dataset.f; if (!tr || !f) return;
+  const e = etat.equipe.find(x => x.id === +tr.dataset.id); if (!e) return;
+  e[f] = ev.target.value; renderTeam(); renderMasse(); planifier();
+});
+$('teamBody').addEventListener('click', ev => {
+  const id = ev.target.dataset.del; if (!id) return;
+  const e = etat.equipe.find(x => x.id === +id);
+  if (e && (e.nom || e.taux) && !confirm('Retirer ' + (e.nom || 'cet employé') + ' de l\'équipe (départ)?')) return;
+  etat.equipe = etat.equipe.filter(x => x.id !== +id); renderTeam(); renderMasse(); planifier();
+});
+$('addRow').addEventListener('click', () => { etat.equipe.push(nouvel()); renderTeam(); planifier(); });
+['rrq','rrq2','ae','rqap','fss','cnt','cnesst','av'].forEach(k => $('t_' + k).addEventListener('input', () => { etat.taux[k] = $('t_' + k).value; renderMasse(); planifier(); }));
+$('btnTauxDefaut').addEventListener('click', () => { const keep = { cnesst: etat.taux.cnesst, av: etat.taux.av }; etat.taux = { ...TAUX_DEFAUT, ...keep }; remplirTaux(); renderMasse(); planifier(); });
+$('btnSnap').addEventListener('click', () => {
+  const an = parseInt($('h_annee').value, 10); if (!an) return;
+  const t = totaux(false);
+  if (!t.nb) { alert('Inscrivez d\'abord votre équipe avec les taux actuels.'); return; }
+  if (historique.some(p => p.annee === an) && !confirm('Un portrait existe déjà pour ' + an + '. Le remplacer?')) return;
+  historique = historique.filter(p => p.annee !== an);
+  historique.push({ annee: an, date: new Date().toLocaleDateString('fr-CA'), region: etat.region,
+    equipe: etat.equipe.filter(e => num(e.taux) != null).map(e => ({ nom: e.nom, poste: e.poste, taux: num(e.taux), heures: num(e.heures) || heuresDef() })),
+    totaux: { nb: t.nb, salaire: Math.round(t.salaire), total: Math.round(t.total) } });
+  renderHisto(); planifier();
+  const m = $('snapMsg'); m.className = 'msg ok'; m.textContent = 'Portrait ' + an + ' enregistré.';
+  setTimeout(() => { m.className = 'msg'; }, 4000);
+});
+$('histoBody').addEventListener('click', ev => {
+  const an = ev.target.dataset.hdel; if (!an) return;
+  if (!confirm('Supprimer définitivement le portrait ' + an + '?')) return;
+  historique = historique.filter(p => p.annee !== +an); renderHisto(); planifier();
+});
+function remplirTaux() { ['rrq','rrq2','ae','rqap','fss','cnt','cnesst','av'].forEach(k => { $('t_' + k).value = etat.taux[k] == null ? '' : etat.taux[k]; }); }
+
+/* ---------- Supabase ---------- */
+const SUPABASE_URL = 'https://ghwlhrhigkiuyhfbwnzh.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_yhHJZkTrKuKawiX1JGOY8g_-V9eite5';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let ownerToken = null, saveTimer = null, isLoading = true;
+function getOwnerToken() {
+  const params = new URLSearchParams(window.location.search);
+  let token = params.get('clinique') || localStorage.getItem('gestionmel_clinique_token');
+  if (!token) token = crypto.randomUUID();
+  localStorage.setItem('gestionmel_clinique_token', token);
+  params.set('clinique', token);
+  window.history.replaceState({}, '', window.location.pathname + '?' + params.toString());
+  return token;
+}
+function setStatus(s) { const el = $('syncStatus'); el.className = 'sync-status ' + s; el.textContent = s === 'ok' ? '✅ Sauvegardé' : s === 'saving' ? '⏳ Sauvegarde...' : '⚠️ Erreur de connexion'; }
+function planifier() { if (isLoading) return; setStatus('saving'); clearTimeout(saveTimer); saveTimer = setTimeout(sauver, 800); }
+async function sauver() {
+  try {
+    const { error } = await sb.rpc('save_echelle_salariale', { p_owner_token: ownerToken, p_donnees: etat, p_historique: historique });
+    if (error) throw error; setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); }
+}
+async function init() {
+  $('h_annee').value = new Date().getFullYear();
+  ownerToken = await gmAcces.ouvrir(sb, getOwnerToken(), 'gest');
+  try {
+    const { data, error } = await sb.rpc('get_echelle_salariale', { p_owner_token: ownerToken });
+    if (error) throw error;
+    if (data && data.length && data[0].donnees && Object.keys(data[0].donnees).length) {
+      etat = { ...etat, ...data[0].donnees, taux: { ...TAUX_DEFAUT, ...(data[0].donnees.taux || {}) } };
+      historique = Array.isArray(data[0].historique) ? data[0].historique : [];
+      etat.equipe = Array.isArray(etat.equipe) ? etat.equipe : [];
+      nextId = etat.equipe.reduce((m, e) => Math.max(m, (e.id || 0) + 1), 1);
+    } else {
+      if (!data || !data.length) await sb.rpc('create_echelle_salariale', { p_owner_token: ownerToken });
+      etat.equipe = [nouvel(), nouvel(), nouvel()];
+    }
+    setStatus('ok');
+  } catch (e) { console.error(e); setStatus('err'); if (!etat.equipe.length) etat.equipe = [nouvel(), nouvel(), nouvel()]; }
+  $('f_clinique').value = etat.clinique || '';
+  $('f_region').value = etat.region || '20';
+  $('f_heures').value = etat.heures || 35;
+  remplirTaux();
+  renderTout();
+  isLoading = false;
+}
+init();
+}
+</script>
+</body>
+</html>
