@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mini-diagnostic gratuit : votre clinique perd-elle de l'argent? | Gestion Mel</title>
-<meta name="description" content="10 questions, 2 minutes : découvrez si votre clinique dentaire perd de l'argent et de bons employés sans le savoir. Gratuit, sans inscription.">
+<title>Mini-diagnostic gratuit : votre clinique est-elle bien structurée? | Gestion Mel</title>
+<meta name="description" content="10 questions, 2 minutes : découvrez si votre clinique dentaire est bien organisée et structurée pour bien performer. Gratuit, sans inscription.">
 <meta property="og:title" content="Mini-diagnostic gratuit de votre clinique dentaire">
 <meta property="og:description" content="10 questions, 2 minutes. Gratuit, sans inscription.">
 <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
@@ -66,11 +66,11 @@ footer a{color:var(--teal)}
 
   <!-- Accueil -->
   <section id="start">
-    <h1>Votre clinique perd-elle de l'argent sans le savoir?</h1>
+    <h1>Votre clinique est-elle bien structurée?</h1>
     <p class="lead">Le mini-diagnostic gratuit de votre clinique dentaire</p>
     <div class="card intro">
-      <p>Répondez à 10 questions simples sur votre clinique : 5 sur l'argent, 5 sur l'équipe.</p>
-      <p>Vous verrez tout de suite où votre clinique est solide, et où elle pourrait perdre de l'argent ou de bonnes employées sans que vous vous en rendiez compte.</p>
+      <p>Répondez à 10 questions simples sur votre clinique : 5 sur l'organisation et les finances, 5 sur l'équipe.</p>
+      <p>Vous verrez tout de suite où votre clinique est bien structurée, et où elle pourrait s'optimiser pour mieux performer et atteindre ses objectifs.</p>
       <div class="pills"><span class="pill">10 questions</span><span class="pill">2 minutes</span><span class="pill">Gratuit, sans inscription</span></div>
       <p class="center"><button class="btn" id="go" type="button">Commencer le mini-diagnostic</button></p>
     </div>
@@ -99,7 +99,7 @@ footer a{color:var(--teal)}
       <p class="verdict" id="verdict"></p>
       <p class="verdict-txt" id="vtxt"></p>
       <div class="bars">
-        <div class="bar"><b><span>L'argent</span><span id="sa"></span></b><div class="t"><i id="ba"></i></div></div>
+        <div class="bar"><b><span>Organisation et finances</span><span id="sa"></span></b><div class="t"><i id="ba"></i></div></div>
         <div class="bar"><b><span>L'équipe</span><span id="se"></span></b><div class="t"><i id="be"></i></div></div>
       </div>
       <div id="weakbox">
@@ -123,11 +123,11 @@ footer a{color:var(--teal)}
 <script>
 (function(){
 const Q=[
- ["L'argent","Les ouvertures dans l'horaire sont comblées rapidement, souvent la journée même.","Des ouvertures qui restent vides","Chaque ouverture non comblée, c'est un revenu perdu pour toujours. Une liste de patients disponibles à court préavis change tout."],
- ["L'argent","Vous savez combien de rendez-vous manqués et d'annulations de dernière minute vous avez chaque mois.","Les rendez-vous manqués ne sont pas mesurés","Ce qu'on ne mesure pas, on ne peut pas l'améliorer. Un suivi mensuel et des rappels efficaces réduisent vite les absences."],
- ["L'argent","Les comptes à recevoir de plus de 60 jours sont relancés selon une méthode précise.","Des comptes à recevoir qui vieillissent","Plus un solde vieillit, moins il a de chances d'être payé. Une procédure de relance claire protège vos encaissements."],
- ["L'argent","Les réclamations d'assurance refusées ou en attente sont suivies jusqu'au paiement.","Des réclamations d'assurance qui dorment","Une réclamation refusée qu'on ne relance pas, c'est un traitement fait gratuitement. Un suivi régulier évite ces pertes."],
- ["L'argent","Vous savez quelle part des plans de traitement présentés est acceptée par vos patients.","L'acceptation des plans de traitement n'est pas suivie","Un plan présenté mais jamais accepté, c'est un patient qui n'a pas reçu ses soins, et un revenu qui n'entre pas."],
+ ["Organisation et finances","Les ouvertures dans l'horaire sont comblées rapidement, souvent la journée même.","Des ouvertures qui restent vides","Chaque ouverture non comblée, c'est un revenu perdu pour toujours. Une liste de patients disponibles à court préavis change tout."],
+ ["Organisation et finances","Vous savez combien de rendez-vous manqués et d'annulations de dernière minute vous avez chaque mois.","Les rendez-vous manqués ne sont pas mesurés","Ce qu'on ne mesure pas, on ne peut pas l'améliorer. Un suivi mensuel et des rappels efficaces réduisent vite les absences."],
+ ["Organisation et finances","Les comptes à recevoir de plus de 60 jours sont relancés selon une méthode précise.","Des comptes à recevoir qui vieillissent","Plus un solde vieillit, moins il a de chances d'être payé. Une procédure de relance claire protège vos encaissements."],
+ ["Organisation et finances","Les réclamations d'assurance refusées ou en attente sont suivies jusqu'au paiement.","Des réclamations d'assurance qui dorment","Une réclamation refusée qu'on ne relance pas, c'est un traitement fait gratuitement. Un suivi régulier évite ces pertes."],
+ ["Organisation et finances","Vous savez quelle part des plans de traitement présentés est acceptée par vos patients.","L'acceptation des plans de traitement n'est pas suivie","Un plan présenté mais jamais accepté, c'est un patient qui n'a pas reçu ses soins, et un revenu qui n'entre pas."],
  ["L'équipe","Chaque membre de l'équipe connaît clairement ses tâches et ses responsabilités.","Des rôles qui ne sont pas clairs","Quand les rôles sont flous, certaines tâches sont faites deux fois, d'autres jamais, et les frustrations s'installent."],
  ["L'équipe","Une nouvelle employée suit un plan d'intégration écrit, et pas seulement « on va te montrer ».","L'intégration des nouvelles employées","Une intégration improvisée est l'une des premières causes de départ dans les premiers mois."],
  ["L'équipe","L'équipe prend quelques minutes chaque matin pour préparer la journée ensemble.","Pas de caucus le matin","5 minutes le matin évitent bien des imprévus, des retards et des malentendus pendant la journée."],
@@ -149,9 +149,9 @@ function result(){
   const sa=a.slice(0,5).reduce((s,v)=>s+v,0), se=a.slice(5).reduce((s,v)=>s+v,0), t=sa+se;
   $('total').textContent=t;
   let v,x;
-  if(t>=16){v='Votre clinique est bien structurée';x="Bravo! Vos bases sont solides. Il reste peut-être quelques détails à peaufiner pour aller encore plus loin."}
-  else if(t>=9){v='Quelques fuites à colmater';x="Votre clinique fonctionne, mais certaines choses vous font probablement perdre de l'argent ou de l'énergie chaque mois. La bonne nouvelle : ça se corrige."}
-  else{v="Votre clinique perd probablement de l'argent";x="Plusieurs signes montrent des pertes qui passent inaperçues, en argent comme en employées. Commencez par un ou deux points à la fois : chaque petit pas compte."}
+  if(t>=16){v='Votre clinique est bien structurée';x="Bravo! Vos bases sont solides. Il reste peut-être quelques détails à optimiser pour performer encore mieux."}
+  else if(t>=9){v='Une bonne base, à optimiser';x="Votre clinique fonctionne, mais certains aspects manquent de structure et vous font probablement perdre du temps, de l'énergie et des revenus. La bonne nouvelle : ça se corrige."}
+  else{v='Votre clinique a besoin de structure';x="Plusieurs aspects de votre clinique gagneraient à être mieux structurés, pour l'équipe comme pour les finances. Commencez par un ou deux points à la fois : chaque petit pas compte."}
   $('verdict').textContent=v;$('verdict').style.color=color(t/20);$('vtxt').textContent=x;
   $('sa').textContent=sa+' / 10';$('se').textContent=se+' / 10';
   $('ba').style.width=sa*10+'%';$('ba').style.background=color(sa/10);
