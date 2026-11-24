@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr-CA">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini-diagnostic gratuit : votre clinique perd-elle de l'argent? | Gestion Mel</title>
+<meta name="description" content="10 questions, 2 minutes : découvrez si votre clinique dentaire perd de l'argent et de bons employés sans le savoir. Gratuit, sans inscription.">
+<meta property="og:title" content="Mini-diagnostic gratuit de votre clinique dentaire">
+<meta property="og:description" content="10 questions, 2 minutes. Gratuit, sans inscription.">
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#010119;--card:#0a1236;--line:#1d2b5c;--blue:#00BFFF;--teal:#27ABC2;--b2:#2683E0;--ink:#F7F7F7;--muted:#a8b6d4;--ok:#2ecc8f;--mid:#f5b942;--bad:#ff6b6b}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 Poppins,system-ui,sans-serif;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:32px 18px 40px}
+.brand{text-align:center;margin-bottom:6px;font-family:'Kaushan Script',cursive;font-size:26px;color:var(--ink)}
+.brand span{color:var(--blue)}
+.slogan{text-align:center;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:28px}
+h1{font-family:'Kaushan Script',cursive;font-weight:400;color:var(--blue);font-size:clamp(30px,6vw,44px);line-height:1.15;text-align:center;margin-bottom:12px}
+.lead{text-align:center;color:var(--teal);font-weight:500;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+.intro p{margin-bottom:12px}
+.pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0 22px}
+.pill{border:1px solid var(--teal);color:var(--teal);border-radius:999px;padding:6px 14px;font-size:14px}
+.btn{display:inline-block;background:var(--blue);color:var(--bg);border:0;border-radius:999px;padding:14px 26px;font:600 16px Poppins,sans-serif;cursor:pointer;text-decoration:none;text-align:center;min-height:48px}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:transparent;color:var(--blue);border:2px solid var(--blue)}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid var(--teal);outline-offset:3px}
+.center{text-align:center}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:10px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--blue));transition:width .3s}
+.count{font-size:14px;color:var(--muted);margin-bottom:14px;display:flex;justify-content:space-between}
+.theme{color:var(--teal);font-weight:600}
+.q{font-size:19px;font-weight:500;margin-bottom:20px;min-height:84px}
+.opts{display:grid;gap:12px}
+.opt{background:transparent;border:2px solid var(--line);color:var(--ink);border-radius:14px;padding:14px 18px;font:500 16px Poppins,sans-serif;text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--blue);background:rgba(0,191,255,.06)}
+.back{background:none;border:0;color:var(--muted);font:14px Poppins,sans-serif;cursor:pointer;margin-top:16px;text-decoration:underline}
+.score{font-family:'Kaushan Script',cursive;font-size:64px;line-height:1;color:var(--blue);text-align:center;margin:8px 0}
+.score small{font-size:28px;color:var(--muted)}
+.verdict{text-align:center;font-size:22px;font-weight:600;margin-bottom:10px}
+.verdict-txt{text-align:center;margin-bottom:22px}
+.bars{display:grid;gap:14px;margin:10px 0 24px}
+.bar b{display:flex;justify-content:space-between;font-weight:500;margin-bottom:6px}
+.bar .t{height:12px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:99px}
+h2{font-family:'Kaushan Script',cursive;font-weight:400;color:var(--blue);font-size:28px;margin:26px 0 12px}
+.weak{list-style:none;display:grid;gap:12px}
+.weak li{border-left:4px solid var(--mid);background:rgba(255,255,255,.03);border-radius:0 12px 12px 0;padding:12px 14px}
+.weak li.no{border-left-color:var(--bad)}
+.weak li b{display:block;margin-bottom:4px}
+.weak li span{color:var(--muted);font-size:15px}
+.cta{margin-top:26px;text-align:center;border:1px solid var(--teal);border-radius:18px;padding:24px;background:linear-gradient(160deg,rgba(39,171,194,.12),rgba(0,191,255,.04))}
+.cta p{margin-bottom:16px}
+.cta .btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hidden{display:none}
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:34px}
+footer a{color:var(--teal)}
+@media print{body{background:#fff;color:#000}.card,.cta{border-color:#ccc;background:#fff}.btn,.back,#restart{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">Gestion <span>Mel</span></div>
+  <div class="slogan">Optimiser. Structurer. Performer.</div>
+
+  <!-- Accueil -->
+  <section id="start">
+    <h1>Votre clinique perd-elle de l'argent sans le savoir?</h1>
+    <p class="lead">Le mini-diagnostic gratuit de votre clinique dentaire</p>
+    <div class="card intro">
+      <p>Répondez à 10 questions simples sur votre clinique : 5 sur l'argent, 5 sur l'équipe.</p>
+      <p>Vous verrez tout de suite où votre clinique est solide, et où elle pourrait perdre de l'argent ou de bonnes employées sans que vous vous en rendiez compte.</p>
+      <div class="pills"><span class="pill">10 questions</span><span class="pill">2 minutes</span><span class="pill">Gratuit, sans inscription</span></div>
+      <p class="center"><button class="btn" id="go" type="button">Commencer le mini-diagnostic</button></p>
+    </div>
+  </section>
+
+  <!-- Questions -->
+  <section id="quiz" class="hidden" aria-live="polite">
+    <div class="card">
+      <div class="progress"><i id="bar"></i></div>
+      <div class="count"><span id="num"></span><span class="theme" id="theme"></span></div>
+      <p class="q" id="q"></p>
+      <div class="opts">
+        <button class="opt" type="button" data-v="2">Oui, c'est le cas</button>
+        <button class="opt" type="button" data-v="1">Parfois, ou à moitié</button>
+        <button class="opt" type="button" data-v="0">Non, pas vraiment</button>
+      </div>
+      <button class="back hidden" id="prev" type="button">Question précédente</button>
+    </div>
+  </section>
+
+  <!-- Résultat -->
+  <section id="result" class="hidden">
+    <div class="card">
+      <p class="center" style="color:var(--muted)">Votre résultat</p>
+      <div class="score"><span id="total"></span><small> / 20</small></div>
+      <p class="verdict" id="verdict"></p>
+      <p class="verdict-txt" id="vtxt"></p>
+      <div class="bars">
+        <div class="bar"><b><span>L'argent</span><span id="sa"></span></b><div class="t"><i id="ba"></i></div></div>
+        <div class="bar"><b><span>L'équipe</span><span id="se"></span></b><div class="t"><i id="be"></i></div></div>
+      </div>
+      <div id="weakbox">
+        <h2>Vos points à surveiller</h2>
+        <ul class="weak" id="weak"></ul>
+      </div>
+      <div class="cta">
+        <p><b>Et maintenant?</b><br>Le webinaire gratuit « 7 signes que votre clinique perd de l'argent et de bons employés sans le savoir » vous montre quoi faire pour chacun de ces points. Environ 25 minutes, à votre rythme.</p>
+        <div class="btns">
+          <a class="btn" href="https://academie.gestionmel.com/courses/webinaire-gratuit-7-signes" target="_blank" rel="noopener">Voir le webinaire gratuit</a>
+          <a class="btn sec" href="https://gestionmel.com/diagnostic-1" target="_blank" rel="noopener">Faire l'Auto-Diagnostic complet</a>
+        </div>
+      </div>
+      <p class="center" style="margin-top:20px"><button class="back" id="restart" type="button">Recommencer le mini-diagnostic</button></p>
+    </div>
+  </section>
+
+  <footer>Aucune réponse n'est enregistrée : votre résultat reste sur votre écran.<br><a href="https://gestionmel.com" target="_blank" rel="noopener">gestionmel.com</a> · © Gestion Mel 2026. Tous droits réservés.</footer>
+</div>
+
+<script>
+(function(){
+const Q=[
+ ["L'argent","Les ouvertures dans l'horaire sont comblées rapidement, souvent la journée même.","Des ouvertures qui restent vides","Chaque ouverture non comblée, c'est un revenu perdu pour toujours. Une liste de patients disponibles à court préavis change tout."],
+ ["L'argent","Vous savez combien de rendez-vous manqués et d'annulations de dernière minute vous avez chaque mois.","Les rendez-vous manqués ne sont pas mesurés","Ce qu'on ne mesure pas, on ne peut pas l'améliorer. Un suivi mensuel et des rappels efficaces réduisent vite les absences."],
+ ["L'argent","Les comptes à recevoir de plus de 60 jours sont relancés selon une méthode précise.","Des comptes à recevoir qui vieillissent","Plus un solde vieillit, moins il a de chances d'être payé. Une procédure de relance claire protège vos encaissements."],
+ ["L'argent","Les réclamations d'assurance refusées ou en attente sont suivies jusqu'au paiement.","Des réclamations d'assurance qui dorment","Une réclamation refusée qu'on ne relance pas, c'est un traitement fait gratuitement. Un suivi régulier évite ces pertes."],
+ ["L'argent","Vous savez quelle part des plans de traitement présentés est acceptée par vos patients.","L'acceptation des plans de traitement n'est pas suivie","Un plan présenté mais jamais accepté, c'est un patient qui n'a pas reçu ses soins, et un revenu qui n'entre pas."],
+ ["L'équipe","Chaque membre de l'équipe connaît clairement ses tâches et ses responsabilités.","Des rôles qui ne sont pas clairs","Quand les rôles sont flous, certaines tâches sont faites deux fois, d'autres jamais, et les frustrations s'installent."],
+ ["L'équipe","Une nouvelle employée suit un plan d'intégration écrit, et pas seulement « on va te montrer ».","L'intégration des nouvelles employées","Une intégration improvisée est l'une des premières causes de départ dans les premiers mois."],
+ ["L'équipe","L'équipe prend quelques minutes chaque matin pour préparer la journée ensemble.","Pas de caucus le matin","5 minutes le matin évitent bien des imprévus, des retards et des malentendus pendant la journée."],
+ ["L'équipe","Vous soulignez régulièrement les bons coups de votre équipe.","La reconnaissance est trop rare","Une employée qui ne se sent pas reconnue finit souvent par chercher ailleurs, même si elle aime son travail."],
+ ["L'équipe","Vous savez si votre équipe va vraiment bien (rencontres individuelles, sondage, discussions).","Le climat d'équipe n'est pas mesuré","Un départ s'annonce souvent bien avant la démission. Prendre le pouls de l'équipe permet de le voir venir."]
+];
+const $=id=>document.getElementById(id);
+let i=0,a=[];
+const show=id=>['start','quiz','result'].forEach(s=>$(s).classList.toggle('hidden',s!==id));
+function render(){
+  $('bar').style.width=(i/Q.length*100)+'%';
+  $('num').textContent='Question '+(i+1)+' sur '+Q.length;
+  $('theme').textContent=Q[i][0];
+  $('q').textContent=Q[i][1];
+  $('prev').classList.toggle('hidden',i===0);
+}
+function color(p){return p>=.8?'var(--ok)':p>=.5?'var(--mid)':'var(--bad)'}
+function result(){
+  const sa=a.slice(0,5).reduce((s,v)=>s+v,0), se=a.slice(5).reduce((s,v)=>s+v,0), t=sa+se;
+  $('total').textContent=t;
+  let v,x;
+  if(t>=16){v='Votre clinique est bien structurée';x="Bravo! Vos bases sont solides. Il reste peut-être quelques détails à peaufiner pour aller encore plus loin."}
+  else if(t>=9){v='Quelques fuites à colmater';x="Votre clinique fonctionne, mais certaines choses vous font probablement perdre de l'argent ou de l'énergie chaque mois. La bonne nouvelle : ça se corrige."}
+  else{v="Votre clinique perd probablement de l'argent";x="Plusieurs signes montrent des pertes qui passent inaperçues, en argent comme en employées. Commencez par un ou deux points à la fois : chaque petit pas compte."}
+  $('verdict').textContent=v;$('verdict').style.color=color(t/20);$('vtxt').textContent=x;
+  $('sa').textContent=sa+' / 10';$('se').textContent=se+' / 10';
+  $('ba').style.width=sa*10+'%';$('ba').style.background=color(sa/10);
+  $('be').style.width=se*10+'%';$('be').style.background=color(se/10);
+  const w=$('weak');w.innerHTML='';
+  const idx=a.map((v,k)=>[v,k]).filter(p=>p[0]<2).sort((p,q)=>p[0]-q[0]);
+  idx.forEach(([v,k])=>{const li=document.createElement('li');if(v===0)li.className='no';const b=document.createElement('b');b.textContent=Q[k][2];const s=document.createElement('span');s.textContent=Q[k][3];li.append(b,s);w.appendChild(li)});
+  $('weakbox').classList.toggle('hidden',idx.length===0);
+  show('result');window.scrollTo({top:0,behavior:'smooth'});
+}
+$('go').addEventListener('click',()=>{i=0;a=[];render();show('quiz')});
+document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{a[i]=+b.dataset.v;b.blur();if(i<Q.length-1){i++;render()}else{$('bar').style.width='100%';result()}}));
+$('prev').addEventListener('click',()=>{if(i>0){i--;render()}});
+$('restart').addEventListener('click',()=>{i=0;a=[];show('start');window.scrollTo({top:0})});
+})();
+</script>
+</body>
+</html>
